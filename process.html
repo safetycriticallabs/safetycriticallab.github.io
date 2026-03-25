@@ -670,6 +670,24 @@ const observer = new IntersectionObserver((entries) => {
 document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
 
 const phaseLinks = document.querySelectorAll('.phase-nav-item');
+const phaseBlocks = document.querySelectorAll('.phase-block');
+
+function setActivePhase(id) {
+  phaseLinks.forEach(l => {
+    l.classList.toggle('selected', l.getAttribute('href') === '#' + id);
+  });
+}
+
+const phaseObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      setActivePhase(entry.target.id);
+    }
+  });
+}, { rootMargin: '-20% 0px -60% 0px', threshold: 0 });
+
+phaseBlocks.forEach(block => phaseObserver.observe(block));
+
 phaseLinks.forEach(link => {
   link.addEventListener('click', () => {
     phaseLinks.forEach(l => l.classList.remove('selected'));

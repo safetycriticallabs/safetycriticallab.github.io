@@ -4,148 +4,17 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Expertise — Safety Critical Labs</title>
+<meta name="description" content="SCL assessments are conducted by practitioners with direct experience in safety-critical programs. Independent review at every phase. Domain specialist coverage across aerospace, aviation, medical, and automotive.">
+<meta property="og:title" content="Expertise — Safety Critical Labs">
+<meta property="og:description" content="Practitioner-built assessments with independent review at every phase and domain specialist coverage across regulated industries.">
+<meta property="og:url" content="https://safetycriticallabs.com/expertise.html">
+<meta property="og:type" content="website">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css">
 <style>
 /* ─── EXPERTISE PAGE STYLES ──────────────────────────────── */
-
-/* ═══ PAGE STYLES ═══ */
-
-/* ─── TEAM MODEL ──────────────────────────────────────────── */
-.team-grid {
-  display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px;
-  margin-top: 48px;
-}
-
-.team-col {
-  background: var(--white);
-  border: 1px solid var(--rule);
-  padding: 32px 28px;
-}
-
-.team-col-num {
-  font-family: var(--mono); font-size: 10px;
-  letter-spacing: 0.12em; text-transform: uppercase;
-  color: var(--red); margin-bottom: 12px;
-}
-
-.team-col-role {
-  font-size: 18px; font-weight: 600; color: var(--ink);
-  margin-bottom: 12px; line-height: 1.2;
-}
-
-.team-col-desc {
-  font-size: 14px; color: var(--ink-2); line-height: 1.7;
-  font-weight: 300; margin-bottom: 16px;
-}
-
-.team-col-qual {
-  font-family: var(--mono); font-size: 9px;
-  letter-spacing: 0.08em; text-transform: uppercase;
-  color: var(--ink-3); line-height: 1.7;
-  border-top: 1px solid var(--rule); padding-top: 14px;
-}
-
-/* ─── LEAD ASSESSOR ───────────────────────────────────────── */
-.assessor-grid {
-  display: grid; grid-template-columns: 1fr 1fr; gap: 72px; align-items: start;
-}
-
-.assessor-text p {
-  font-size: 16px; color: var(--ink-2); line-height: 1.85;
-  font-weight: 300; margin-bottom: 20px;
-}
-.assessor-text p strong { color: var(--ink); font-weight: 500; }
-
-.assessor-byline {
-  margin-top: 28px; padding-top: 28px; border-top: 1px solid var(--rule);
-}
-.assessor-name {
-  font-family: var(--mono); font-size: 12px; font-weight: 500;
-  letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink);
-  margin-bottom: 6px;
-}
-.assessor-meta {
-  font-family: var(--mono); font-size: 10px;
-  letter-spacing: 0.08em; text-transform: uppercase;
-  color: var(--ink-3); line-height: 1.8;
-}
-
-.assessor-links { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 16px; }
-.assessor-link {
-  font-family: var(--mono); font-size: 10px;
-  letter-spacing: 0.08em; text-transform: uppercase;
-  border: 1px solid var(--rule); padding: 6px 12px; border-radius: 2px;
-  color: var(--ink-2); text-decoration: none; transition: all 0.15s;
-}
-.assessor-link:hover { border-color: var(--red); color: var(--red); }
-
-/* experience timeline */
-.exp-timeline { display: flex; flex-direction: column; }
-
-.exp-entry {
-  display: grid; grid-template-columns: 80px 1fr;
-  gap: 20px; padding: 28px 0; border-top: 1px solid var(--rule);
-}
-.exp-entry:first-child { border-top: none; padding-top: 0; }
-
-.exp-year {
-  font-family: var(--mono); font-size: 10px;
-  letter-spacing: 0.08em; text-transform: uppercase;
-  color: var(--ink-3); padding-top: 4px; line-height: 1.4;
-}
-
-.exp-org {
-  font-family: var(--mono); font-size: 10px;
-  letter-spacing: 0.1em; text-transform: uppercase;
-  color: var(--red); margin-bottom: 5px;
-}
-.exp-role { font-size: 15px; font-weight: 600; color: var(--ink); margin-bottom: 8px; }
-.exp-body { font-size: 13px; color: var(--ink-2); line-height: 1.7; font-weight: 300; margin-bottom: 10px; }
-
-.exp-tags { display: flex; flex-wrap: wrap; gap: 6px; }
-.exp-tag {
-  font-family: var(--mono); font-size: 9px;
-  letter-spacing: 0.07em; text-transform: uppercase;
-  border: 1px solid var(--rule); padding: 3px 8px;
-  border-radius: 2px; color: var(--ink-3);
-}
-
-.award-pill {
-  display: inline-flex; align-items: center; gap: 6px;
-  margin-top: 10px;
-  background: var(--red-lt); border: 1px solid rgba(200,39,45,0.2);
-  color: var(--red); font-family: var(--mono); font-size: 9px;
-  letter-spacing: 0.08em; text-transform: uppercase;
-  padding: 4px 10px; border-radius: 2px;
-}
-
-/* ─── RECOGNITION ─────────────────────────────────────────── */
-.recognition-band { background: var(--ink); padding: 80px 40px; }
-.recognition-inner { max-width: 1140px; margin: 0 auto; }
-
-.recognition-grid {
-  display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 48px;
-}
-
-.rec-card {
-  background: rgba(255,255,255,0.05);
-  border: 1px solid rgba(255,255,255,0.07); border-radius: 4px;
-  padding: 28px; transition: border-color 0.2s;
-}
-.rec-card:hover { border-color: rgba(200,39,45,0.35); }
-
-.rec-icon { font-size: 28px; line-height: 1; }
-
-.rec-org {
-  font-family: var(--mono); font-size: 9px;
-  letter-spacing: 0.12em; text-transform: uppercase;
-  color: var(--red); margin-bottom: 8px;
-}
-.rec-name { font-size: 16px; font-weight: 600; color: #fff; margin-bottom: 10px; line-height: 1.2; }
-.rec-desc { font-size: 13px; color: rgba(255,255,255,0.45); line-height: 1.65; }
 
 /* ─── DOMAIN COVERAGE ─────────────────────────────────────── */
 .domain-grid {
@@ -156,10 +25,6 @@
 .domain-card {
   background: var(--white); border: 1px solid var(--rule);
   border-radius: 4px; padding: 24px;
-}
-
-.domain-icon {
-  font-size: 22px; margin-bottom: 14px; display: block;
 }
 
 .domain-title {
@@ -179,9 +44,9 @@
 
 /* ─── CREDIBILITY BAND ────────────────────────────────────── */
 .credibility-band {
-  background: var(--red-lt);
-  border-top: 1px solid rgba(200,39,45,0.12);
-  border-bottom: 1px solid rgba(200,39,45,0.12);
+  background: var(--white);
+  border-top: 1px solid var(--rule);
+  border-bottom: 1px solid var(--rule);
   padding: 72px 40px;
 }
 
@@ -199,7 +64,7 @@
 .cred-items { display: flex; flex-direction: column; gap: 12px; }
 
 .cred-item {
-  background: var(--white); border: 1px solid rgba(200,39,45,0.1);
+  background: var(--bg); border: 1px solid var(--rule);
   border-radius: 4px; padding: 18px 22px;
   display: flex; gap: 16px; align-items: flex-start;
 }
@@ -300,7 +165,7 @@
 <section class="page-section" style="background: var(--white);">
   <div class="section-inner">
     <div class="section-eyebrow">Domain coverage</div>
-    <h2 class="section-title">The framework is domain agnostic.<br><em>The assessment team is not.</em></h2>
+    <h2 class="section-title">The framework applies across domains.<br><em>The assessment team does not.</em></h2>
     <p class="section-lead">The requirement areas apply wherever AI failure has safety consequences. Domain specialists are brought in to ensure the assessment reflects the specific regulatory environment your system operates in.</p>
     <div class="domain-grid">
       <div class="domain-card fade-up">
@@ -332,7 +197,7 @@
   <div class="cred-inner">
     <div class="cred-left">
       <div class="section-eyebrow" style="color:rgba(200,39,45,0.6)">The institution</div>
-      <h2>Helping your <em style="font-style:italic; color:var(--red);">AI</em> meet<br>the regulatory world.</h2>
+      <h2>Built as an institution.<br><em>Not a practice.</em></h2>
       <p>
         The regulatory world is not waiting for AI to catch up. Standards are forming, procurement requirements are tightening, and organizations that cannot demonstrate rigorous, documented assessment are losing ground.
       </p>

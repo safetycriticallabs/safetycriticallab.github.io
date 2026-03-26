@@ -4,14 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Certification Process — Safety Critical Labs</title>
-<meta name="description" content="A four-phase certification process producing a formal determination and a quantified risk score. Every phase has a defined output before the next begins.">
-<meta property="og:title" content="Certification Process — Safety Critical Labs">
-<meta property="og:description" content="Four phases from applicability determination to certificate issuance. A formal determination and quantified risk score issued on completion.">
-<meta property="og:url" content="https://safetycriticallabs.com/process.html">
-<meta property="og:type" content="website">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=IBM+Plex+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css">
 <style>
 /* ─── PROCESS PAGE STYLES ────────────────────────────────── */
@@ -109,7 +104,12 @@
   color: var(--red); margin-bottom: 10px;
 }
 .tl-title { font-size: 15px; font-weight: 500; color: #fff; margin-bottom: 8px; line-height: 1.3; }
-
+.tl-duration {
+  font-family: var(--mono); font-size: 11px;
+  color: rgba(255,255,255,0.35); margin-bottom: 14px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid rgba(255,255,255,0.07);
+}
 .tl-output { font-size: 13px; color: rgba(255,255,255,0.4); line-height: 1.6; }
 .tl-output strong { color: rgba(255,255,255,0.7); font-weight: 500; }
 .tl-total {
@@ -283,10 +283,10 @@
 <nav class="global-nav">
   <a href="index.html" class="gn-wordmark">
     <svg class="gn-icon" viewBox="0 0 26 26" fill="none">
-      <circle cx="13" cy="13" r="12" stroke="rgba(255,255,255,0.28)" stroke-width="1"/>
-      <circle cx="13" cy="13" r="9.5" stroke="rgba(255,255,255,0.16)" stroke-width="0.75" stroke-dasharray="2.2 2.6"/>
-      <circle cx="13" cy="13" r="7" stroke="rgba(255,255,255,0.18)" stroke-width="0.75"/>
-      <circle cx="13" cy="13" r="4.5" stroke="rgba(255,255,255,0.18)" stroke-width="0.6"/>
+      <circle cx="13" cy="13" r="12" stroke="rgba(15,35,64,0.25)" stroke-width="1"/>
+      <circle cx="13" cy="13" r="9.5" stroke="rgba(15,35,64,0.15)" stroke-width="0.75" stroke-dasharray="2.2 2.6"/>
+      <circle cx="13" cy="13" r="7" stroke="rgba(15,35,64,0.18)" stroke-width="0.75"/>
+      <circle cx="13" cy="13" r="4.5" stroke="rgba(15,35,64,0.18)" stroke-width="0.6"/>
       <circle cx="13" cy="13" r="2.8" fill="#1B3A6B" stroke="rgba(180,130,42,0.65)" stroke-width="0.8"/>
       <line x1="8.5" y1="13" x2="17.5" y2="13" stroke="#C8272D" stroke-width="1.4" stroke-linecap="round"/>
       <circle cx="13" cy="13" r="1.2" fill="#C8272D"/>
@@ -480,14 +480,14 @@
           <div class="surv-inline" style="margin-top:24px; background: var(--ink); border-radius: 3px; padding: 20px;">
             <div class="surv-inline-card fade-up">
               <span class="si-tier">Safety-Critical</span>
-              <span class="si-desc"><strong>Annual surveillance audit.</strong> Full reassessment of drift metrics, OOD detection logs, and operational performance data since certification.</span>
+              <span class="si-desc"><strong>Annual surveillance audit.</strong> Full re-assessment of drift metrics, OOD detection logs, and operational performance data since certification.</span>
             </div>
             <div class="surv-inline-card fade-up">
               <span class="si-tier">Mission-Critical</span>
-              <span class="si-desc"><strong>Biennial surveillance audit.</strong> Focused reassessment of continuous validation records and any model updates made since the original certification.</span>
+              <span class="si-desc"><strong>Biennial surveillance audit.</strong> Focused re-assessment of continuous validation records and any model updates made since the original certification.</span>
             </div>
             <div class="surv-inline-card fade-up">
-              <span class="si-tier">Triggered reassessment</span>
+              <span class="si-tier">Triggered re-assessment</span>
               <span class="si-desc"><strong>Required for any of:</strong> model version change, significant operational environment change, defined drift threshold breach, or incident involving an AI-assisted decision with safety consequences.</span>
             </div>
           </div>
@@ -502,7 +502,7 @@
 <div class="outputs-section">
   <div class="outputs-inner">
     <div class="section-eyebrow" style="color:rgba(255,255,255,0.3)">What the assessment produces</div>
-    <h2 class="section-title" style="color:#fff;">A determination.<br><em>And a number to go with it.</em></h2>
+    <h2 class="section-title" style="color:#fff;">Two things most audits<br><em>never give you.</em></h2>
     <p style="font-size:16px;color:rgba(255,255,255,0.4);font-weight:300;line-height:1.75;max-width:580px;margin-bottom:0;">
       A certification determination tells you whether your system met the standard. A risk score tells you where it sits on the risk spectrum. Together they give your team something to act on and something to show.
     </p>
@@ -520,7 +520,7 @@
                 <span class="score-sub">Reproducible. Documented.<br>Issued with every certificate.</span>
               </div>
             </div>
-            <div class="output-card-desc">A number derived from assessed failure modes, operational consequences, and human oversight effectiveness. A reproducible score your leadership, regulators, and procurement officers can read without parsing a findings report.</div>
+            <div class="output-card-desc">A number derived from assessed failure modes, operational consequences, and human oversight effectiveness. <strong>Not a gut check.</strong> A reproducible score your leadership, regulators, and procurement officers can read without parsing a findings report.</div>
           </div>
           <div class="output-card fade-up">
             <div class="output-card-label">Certification determination</div>
@@ -638,7 +638,7 @@
 <footer class="site-footer">
   <a href="index.html" class="footer-wordmark">
     <svg width="22" height="22" viewBox="0 0 26 26" fill="none">
-      <circle cx="13" cy="13" r="12" stroke="rgba(255,255,255,0.18)" stroke-width="1"/>
+      <circle cx="13" cy="13" r="12" stroke="rgba(15,35,64,0.18)" stroke-width="1"/>
       <circle cx="13" cy="13" r="9.5" stroke="rgba(255,255,255,0.1)" stroke-width="0.75" stroke-dasharray="2.2 2.6"/>
       <circle cx="13" cy="13" r="7" stroke="rgba(255,255,255,0.12)" stroke-width="0.75"/>
       <circle cx="13" cy="13" r="4.5" stroke="rgba(255,255,255,0.12)" stroke-width="0.6"/>
@@ -670,24 +670,6 @@ const observer = new IntersectionObserver((entries) => {
 document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
 
 const phaseLinks = document.querySelectorAll('.phase-nav-item');
-const phaseBlocks = document.querySelectorAll('.phase-block');
-
-function setActivePhase(id) {
-  phaseLinks.forEach(l => {
-    l.classList.toggle('selected', l.getAttribute('href') === '#' + id);
-  });
-}
-
-const phaseObserver = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      setActivePhase(entry.target.id);
-    }
-  });
-}, { rootMargin: '-20% 0px -60% 0px', threshold: 0 });
-
-phaseBlocks.forEach(block => phaseObserver.observe(block));
-
 phaseLinks.forEach(link => {
   link.addEventListener('click', () => {
     phaseLinks.forEach(l => l.classList.remove('selected'));

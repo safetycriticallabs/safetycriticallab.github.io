@@ -6,15 +6,11 @@
 <link rel="shortcut icon" href="favicon.svg">
 <meta name="theme-color" content="#111110">
 <meta name="description" content="Start a conversation with Safety Critical Labs. Reach out to discuss certification for your AI system.">
-<meta property="og:title" content="Contact — Safety Critical Labs">
-<meta property="og:description" content="Begin a certification assessment or readiness evaluation for your AI system. Safety Critical Labs conducts assessments worldwide.">
-<meta property="og:url" content="https://safetycriticallabs.com/contact.html">
-<meta property="og:type" content="website">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Contact — Safety Critical Labs</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=IBM+Plex+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css">
 <style>
 /* ─── CONTACT PAGE STYLES ────────────────────────────────── */
@@ -115,6 +111,28 @@
   line-height: 1.75; font-weight: 300;
 }
 
+/* ─── FRAMEWORK BAND ──────────────────────────────────────── */
+.framework-plug {
+  background: var(--red-lt);
+  border-top: 1px solid rgba(200,39,45,0.12);
+  padding: 60px 40px;
+}
+
+.fp-inner {
+  max-width: 1140px; margin: 0 auto;
+  display: flex; justify-content: space-between; align-items: center;
+  gap: 40px; flex-wrap: wrap;
+}
+
+.fp-inner h2 {
+  font-family: var(--serif); font-size: clamp(24px,2.5vw,34px);
+  font-weight: 400; color: var(--ink); line-height: 1.2;
+}
+
+.fp-inner p {
+  font-size: 15px; color: var(--ink-2); line-height: 1.7;
+  font-weight: 300; max-width: 400px; margin-top: 8px;
+}
 
 @media (max-width: 880px) {
   .contact-layout { grid-template-columns: 1fr; gap: 48px; }
@@ -130,10 +148,10 @@
 <nav class="global-nav">
   <a href="index.html" class="gn-wordmark">
     <svg class="gn-icon" viewBox="0 0 26 26" fill="none">
-      <circle cx="13" cy="13" r="12" stroke="rgba(255,255,255,0.28)" stroke-width="1"/>
-      <circle cx="13" cy="13" r="9.5" stroke="rgba(255,255,255,0.16)" stroke-width="0.75" stroke-dasharray="2.2 2.6"/>
-      <circle cx="13" cy="13" r="7" stroke="rgba(255,255,255,0.18)" stroke-width="0.75"/>
-      <circle cx="13" cy="13" r="4.5" stroke="rgba(255,255,255,0.18)" stroke-width="0.6"/>
+      <circle cx="13" cy="13" r="12" stroke="rgba(15,35,64,0.25)" stroke-width="1"/>
+      <circle cx="13" cy="13" r="9.5" stroke="rgba(15,35,64,0.15)" stroke-width="0.75" stroke-dasharray="2.2 2.6"/>
+      <circle cx="13" cy="13" r="7" stroke="rgba(15,35,64,0.18)" stroke-width="0.75"/>
+      <circle cx="13" cy="13" r="4.5" stroke="rgba(15,35,64,0.18)" stroke-width="0.6"/>
       <circle cx="13" cy="13" r="2.8" fill="#1B3A6B" stroke="rgba(180,130,42,0.65)" stroke-width="0.8"/>
       <line x1="8.5" y1="13" x2="17.5" y2="13" stroke="#C8272D" stroke-width="1.4" stroke-linecap="round"/>
       <circle cx="13" cy="13" r="1.2" fill="#C8272D"/>
@@ -159,10 +177,10 @@
         <a href="index.html">Safety Critical Labs</a>
         <span>/</span> Contact
       </div>
-      <h1>Begin with a conversation<br>about your <em>AI system.</em></h1>
+      <h1>Let's talk about<br>your <em>AI system.</em></h1>
     </div>
     <p class="inner-hero-lead">
-      Whether you're preparing for regulatory scrutiny, responding to a procurement requirement, or building responsible AI practices before you're required to, the right starting point is a conversation.
+      Whether you're preparing for regulatory scrutiny, responding to a procurement requirement, or building responsible AI practices before you're required to &mdash; the right starting point is a conversation.
     </p>
   </div>
 </div>
@@ -175,10 +193,10 @@
         <div class="section-eyebrow">Get in touch</div>
         <h2>Ready to certify<br>your <em>AI system?</em></h2>
         <p>
-          Safety Critical Labs conducts assessments for organizations at all stages of AI development, from early-stage integration through pre-launch certification and post-deployment surveillance. Every engagement begins with a conversation about your system, your timeline, and your regulatory context.
+          Safety Critical Labs conducts assessments for organizations at all stages &mdash; from early-stage AI integration through pre-launch certification and post-deployment surveillance. Every engagement begins with a conversation about your system, your timeline, and your regulatory context.
         </p>
         <p>
-          <strong>Not sure if you're ready to certify?</strong> Ask about a readiness assessment. A lower-commitment engagement that tells you exactly where you stand against the framework before committing to a full certification cycle.
+          <strong>Not sure if you're ready to certify?</strong> Ask about a readiness assessment &mdash; a lower-commitment engagement that tells you exactly where you stand against the framework before committing to a full certification cycle.
         </p>
 
         <div class="contact-info-list">
@@ -199,26 +217,26 @@
           <div class="pathway fade-up">
             <div class="pathway-tag">Most common starting point</div>
             <div class="pathway-title">Initial certification assessment</div>
-            <div class="pathway-desc">Your AI system goes through the full four-phase process and receives a formal SCL certificate. This is the primary product. A determination that your system was assessed against a defined standard at a defined classification level.</div>
-            <a href="process.html" class="pathway-cta">How the process works &rarr;</a>
+            <div class="pathway-desc">Your AI system goes through the full four-phase process and receives a formal SCL certificate. This is the primary product &mdash; a determination that your system was assessed against a defined standard at a defined classification level.</div>
+            <a href="process.html" class="pathway-cta">How the process works</a>
           </div>
           <div class="pathway fade-up">
             <div class="pathway-tag">Not sure you're ready?</div>
             <div class="pathway-title">Readiness assessment</div>
-            <div class="pathway-desc">A lower-commitment engagement for organizations that want to understand where they stand against the framework before committing to a full certification cycle. Produces a gap analysis against each applicable AI-1 through AI-9 requirement with specific remediation guidance. Clients who certify should be clients who are ready.</div>
-            <a href="mailto:contact@safetycriticallabs.com" class="pathway-cta">Ask about a readiness assessment &rarr;</a>
+            <div class="pathway-desc">A lower-commitment engagement for organizations that want to understand where they stand against the framework before committing to a full certification cycle. Produces a gap analysis against each applicable AI-1 through AI-9 requirement with specific remediation guidance. Protects the certification pass rate &mdash; clients who certify should be clients who are ready.</div>
+            <a href="mailto:contact@safetycriticallabs.com" class="pathway-cta">Ask about a readiness assessment</a>
           </div>
           <div class="pathway fade-up">
             <div class="pathway-tag">Maintaining your certificate</div>
             <div class="pathway-title">Surveillance audit</div>
-            <div class="pathway-desc">Required to maintain certificate validity. Safety-Critical systems: annual. Mission-Critical: biennial. AI systems drift. A certificate issued at deployment is not a certificate valid at month six, and the standard reflects that.</div>
-            <a href="process.html#phase4" class="pathway-cta">About surveillance audits &rarr;</a>
+            <div class="pathway-desc">Required to maintain certificate validity. Safety-Critical systems: annual. Mission-Critical: biennial. AI systems drift &mdash; a certificate issued at deployment is not a certificate valid at month six, and the standard reflects that.</div>
+            <a href="process.html#phase4" class="pathway-cta">About surveillance audits</a>
           </div>
           <div class="pathway fade-up">
             <div class="pathway-tag">Organizations &amp; agencies</div>
             <div class="pathway-title">Framework licensing</div>
             <div class="pathway-desc">Regulatory bodies, large primes, and government agencies interested in adopting the SCL framework internally or referencing it in procurement requirements. The most scalable path to domain-wide AI certification standards.</div>
-            <a href="mailto:contact@safetycriticallabs.com" class="pathway-cta">Get in touch &rarr;</a>
+            <a href="mailto:contact@safetycriticallabs.com" class="pathway-cta">Get in touch</a>
           </div>
         </div>
       </div>
@@ -235,15 +253,15 @@
 
       <div class="expect-item fade-up">
         <div class="expect-q">What do I need to prepare before starting?</div>
-        <div class="expect-a">The most important preparation is understanding your system boundary and having your test documentation organized. The Phase 1 applicability determination is designed to be conducted before your evidence package is complete. It tells you exactly what you need to submit for Phase 2.</div>
+        <div class="expect-a">The most important preparation is understanding your system boundary and having your test documentation organized. The Phase 1 applicability determination is designed to be conducted before your evidence package is complete &mdash; it tells you exactly what you need to submit for Phase 2.</div>
       </div>
       <div class="expect-item fade-up">
         <div class="expect-q">Is the framework specific to spaceflight?</div>
-        <div class="expect-a">No. The framework was developed in spaceflight, where the regulatory gap was most clearly defined. But the requirement areas (AI-1 through AI-9) address failure modes that apply to any AI system in any safety-critical domain. The classification levels and tailoring process adapt it to your context.</div>
+        <div class="expect-a">No. The framework was developed in spaceflight because that's where the regulatory gap was clearest. But the requirement areas (AI-1 through AI-9) address failure modes that apply to any AI system in any safety-critical domain. The classification levels and tailoring process adapt it to your context.</div>
       </div>
       <div class="expect-item fade-up">
         <div class="expect-q">What if my system doesn't pass?</div>
-        <div class="expect-a">Findings are graded as Pass, Conditional Pass (with defined remediation), or Fail. Conditional Pass findings come with specific remediation guidance and reassessment criteria. Remediation paths are built into the process. The goal is to help systems meet the standard, not to generate failures.</div>
+        <div class="expect-a">Findings are graded as Pass, Conditional Pass (with defined remediation), or Fail. Conditional Pass findings come with specific remediation guidance and re-assessment criteria. We build remediation paths into the process &mdash; the goal is to help systems meet the standard, not to generate failures.</div>
       </div>
       <div class="expect-item fade-up">
         <div class="expect-q">How is SCL different from a general AI audit?</div>
@@ -251,11 +269,11 @@
       </div>
       <div class="expect-item fade-up">
         <div class="expect-q">Will this satisfy a regulator?</div>
-        <div class="expect-a">Certification bodies and their marks gain regulatory recognition over time through demonstrated rigor and first-mover presence in regulatory processes. SCL is pursuing formal accreditation under ISO/IEC 17065. An SCL certificate provides a documented record of rigorous assessment against a published standard. That is the foundation regulators build on.</div>
+        <div class="expect-a">Certification bodies and their marks gain regulatory recognition over time through demonstrated rigor and first-mover presence in regulatory processes. SCL is pursuing formal accreditation under ISO/IEC 17065. An SCL certificate provides a documented record of rigorous assessment against a published standard &mdash; the foundation regulators build on.</div>
       </div>
       <div class="expect-item fade-up">
         <div class="expect-q">What's the cost?</div>
-        <div class="expect-a">Pricing reflects the value of the determination, not the cost of the audit labor. This is consistent with how UL and DNV approach certification pricing. Contact us to discuss your system and timeline and we'll provide a specific engagement proposal.</div>
+        <div class="expect-a">Pricing reflects the value of the determination, not the cost of the audit labor &mdash; consistent with how UL and DNV approach certification pricing. Contact us to discuss your system and timeline and we'll provide a specific engagement proposal.</div>
       </div>
       <div class="expect-item fade-up">
         <div class="expect-q">Can SCL certify systems outside the US?</div>
@@ -272,7 +290,7 @@
 <footer class="site-footer">
   <a href="index.html" class="footer-wordmark">
     <svg width="22" height="22" viewBox="0 0 26 26" fill="none">
-      <circle cx="13" cy="13" r="12" stroke="rgba(255,255,255,0.18)" stroke-width="1"/>
+      <circle cx="13" cy="13" r="12" stroke="rgba(15,35,64,0.18)" stroke-width="1"/>
       <circle cx="13" cy="13" r="9.5" stroke="rgba(255,255,255,0.1)" stroke-width="0.75" stroke-dasharray="2.2 2.6"/>
       <circle cx="13" cy="13" r="7" stroke="rgba(255,255,255,0.12)" stroke-width="0.75"/>
       <circle cx="13" cy="13" r="4.5" stroke="rgba(255,255,255,0.12)" stroke-width="0.6"/>

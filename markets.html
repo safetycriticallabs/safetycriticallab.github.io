@@ -4,14 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Markets — Safety Critical Labs</title>
-<meta name="description" content="SCL certifies AI systems in aerospace, aviation, medical devices, and automotive. The framework is domain-agnostic and applicable wherever the consequence of AI failure is measured in lives or missions.">
-<meta property="og:title" content="Markets — Safety Critical Labs">
-<meta property="og:description" content="AI certification for aerospace, aviation, medical devices, and automotive. Domain-agnostic. Applicable wherever AI failure has consequence.">
-<meta property="og:url" content="https://safetycriticallabs.com/markets.html">
-<meta property="og:type" content="website">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=IBM+Plex+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css">
 <style>
 /* ─── MARKET DETAIL BLOCKS ────────────────────────────────── */
@@ -30,6 +25,8 @@
   display: flex; align-items: center; gap: 8px;
 }
 .market-seq::before { content: ''; display: inline-block; width: 14px; height: 1px; background: currentColor; }
+
+.market-icon-lg { font-size: 40px; display: block; margin-bottom: 16px; }
 
 .market-name {
   font-family: var(--serif); font-size: 32px;
@@ -92,6 +89,12 @@
   line-height: 1.8; font-weight: 300; margin-bottom: 16px;
 }
 .ag-left p strong { color: #fff; font-weight: 500; }
+
+.ag-quote {
+  font-family: var(--serif); font-size: 20px; font-style: italic;
+  color: rgba(255,255,255,0.7); line-height: 1.55;
+  border-left: 2px solid var(--red); padding-left: 20px; margin: 28px 0;
+}
 
 .ag-right { display: flex; flex-direction: column; gap: 10px; }
 
@@ -156,10 +159,10 @@
 <nav class="global-nav">
   <a href="index.html" class="gn-wordmark">
     <svg class="gn-icon" viewBox="0 0 26 26" fill="none">
-      <circle cx="13" cy="13" r="12" stroke="rgba(255,255,255,0.28)" stroke-width="1"/>
-      <circle cx="13" cy="13" r="9.5" stroke="rgba(255,255,255,0.16)" stroke-width="0.75" stroke-dasharray="2.2 2.6"/>
-      <circle cx="13" cy="13" r="7" stroke="rgba(255,255,255,0.18)" stroke-width="0.75"/>
-      <circle cx="13" cy="13" r="4.5" stroke="rgba(255,255,255,0.18)" stroke-width="0.6"/>
+      <circle cx="13" cy="13" r="12" stroke="rgba(15,35,64,0.25)" stroke-width="1"/>
+      <circle cx="13" cy="13" r="9.5" stroke="rgba(15,35,64,0.15)" stroke-width="0.75" stroke-dasharray="2.2 2.6"/>
+      <circle cx="13" cy="13" r="7" stroke="rgba(15,35,64,0.18)" stroke-width="0.75"/>
+      <circle cx="13" cy="13" r="4.5" stroke="rgba(15,35,64,0.18)" stroke-width="0.6"/>
       <circle cx="13" cy="13" r="2.8" fill="#1B3A6B" stroke="rgba(180,130,42,0.65)" stroke-width="0.8"/>
       <line x1="8.5" y1="13" x2="17.5" y2="13" stroke="#C8272D" stroke-width="1.4" stroke-linecap="round"/>
       <circle cx="13" cy="13" r="1.2" fill="#C8272D"/>
@@ -188,7 +191,7 @@
       <h1>Certification that<br>follows <em>AI</em><br>wherever it goes.</h1>
     </div>
     <p class="inner-hero-lead">
-      The SCL framework is explicitly domain-agnostic. Developed in spaceflight but applicable wherever the consequence of AI failure is measured in lives, missions, or critical infrastructure. We go where AI goes.
+      The SCL framework is explicitly domain-agnostic &mdash; developed in spaceflight but applicable wherever the consequence of AI failure is measured in lives, missions, or critical infrastructure. We go where AI goes.
     </p>
   </div>
 </div>
@@ -201,6 +204,7 @@
     <div class="market-block">
       <div class="market-label-col">
         <div class="market-seq">Aerospace &amp; Defense</div>
+        <span class="market-icon-lg">&#128760;</span>
         <div class="market-name">Aerospace &amp; Defense</div>
         <div class="market-timeline">Where the framework was built</div>
         <div class="market-regulators">
@@ -214,15 +218,15 @@
       <div class="market-content">
         <p class="market-body" style="font-size:14px;color:var(--ink-3);margin-bottom:16px;font-weight:400;">If you are building or deploying AI on human-rated spacecraft, autonomous defense systems, launch vehicles, or crew-support platforms, this is the market the SCL framework was written for.</p>
         <p class="market-body">
-          The SCL framework was developed from inside a government human spaceflight program to address exactly this problem for crewed vehicles where the consequence of an incorrect AI output cannot be undone.
+          The SCL framework was developed from inside a government human spaceflight program to address exactly this problem — for crewed vehicles where the consequence of an incorrect AI output cannot be undone.
         </p>
         <p class="market-body">
-          <strong>No AI-specific certification path currently exists</strong> for human-rated spacecraft. The governing software standard covers deterministic systems. The AI requirements developed inside the spaceflight program are a direct response to that gap. The SCL framework is the continuation of that work in the commercial and defense sectors.
+          <strong>No AI-specific certification path currently exists</strong> for human-rated spacecraft. The governing software standard covers deterministic systems. The AI requirements developed inside the spaceflight program are a direct response to that gap &mdash; and the SCL framework is the continuation of that work in the commercial and defense sectors.
         </p>
         <div class="market-gaps">
           <div class="market-gap fade-up">
             <span class="mg-standard">NPR 7150.2D</span>
-            <span class="mg-gap"><strong>V&amp;V occurs at delivery.</strong> AI systems on crew vehicles may be in operation for months to years. Drift detection and revalidation requirements don't exist in the current standard.</span>
+            <span class="mg-gap"><strong>V&amp;V occurs at delivery</strong> &mdash; AI systems on crew vehicles may be in operation for months to years. Drift detection and revalidation requirements don't exist in the current standard.</span>
           </div>
           <div class="market-gap fade-up">
             <span class="mg-standard">NASA-STD-8739.8</span>
@@ -233,7 +237,7 @@
             <span class="mg-gap"><strong>No recognition of hallucination</strong> as a failure mode. Confident, plausible, incorrect outputs are not in the taxonomy of any current spaceflight software standard.</span>
           </div>
         </div>
-        <a href="contact.html" class="btn btn-solid">Begin an assessment for your program &rarr;</a>
+        <a href="contact.html" class="btn btn-solid">Talk to us about your program</a>
       </div>
     </div>
 
@@ -241,6 +245,7 @@
     <div class="market-block">
       <div class="market-label-col">
         <div class="market-seq">Aviation</div>
+        <span class="market-icon-lg">&#9992;</span>
         <div class="market-name">Aviation</div>
         <div class="market-timeline">FAA Roadmap forming now</div>
         <div class="market-regulators">
@@ -254,10 +259,10 @@
       <div class="market-content">
         <p class="market-body" style="font-size:14px;color:var(--ink-3);margin-bottom:16px;font-weight:400;">If you are an avionics supplier, aircraft OEM, or air traffic management provider deploying AI in certified airspace, the regulatory window to establish a certification record is open now.</p>
         <p class="market-body">
-          The FAA has explicitly acknowledged in its AI Safety Roadmap that it lacks standards for AI in aviation. <strong>Certification frameworks established before regulation arrives often become the basis for regulation.</strong> Organizations certifying now are building the record that regulators will reference.
+          The FAA has explicitly acknowledged in its AI Safety Roadmap that it lacks standards for AI in aviation. <strong>Certification frameworks that exist before regulation arrives become the regulation.</strong> First movers write the requirements.
         </p>
         <p class="market-body">
-          The DO-178C ecosystem already has a deeply established certification culture. Aerospace organizations know what certification means, why it matters, and how to prepare for it. That culture is ready for an AI-specific layer. The SCL framework is designed to sit alongside DO-178C and address the AI failure modes that existing avionics software standards do not cover.
+          The DO-178C ecosystem already has a deeply established certification culture &mdash; aerospace organizations know what certification means, why it matters, and how to prepare for it. That culture is ready for an AI-specific layer. The SCL framework is designed to sit alongside DO-178C and address the AI failure modes that existing avionics software standards do not cover.
         </p>
         <div class="market-gaps">
           <div class="market-gap fade-up">
@@ -273,7 +278,7 @@
             <span class="mg-gap"><strong>Roadmap acknowledges gaps</strong> but the certification criteria to fill them are not yet defined. Organizations certifying now are establishing the precedent.</span>
           </div>
         </div>
-        <a href="contact.html" class="btn btn-solid">Begin an assessment for your aircraft program &rarr;</a>
+        <a href="contact.html" class="btn btn-solid">Talk to us about your aircraft program</a>
       </div>
     </div>
 
@@ -281,6 +286,7 @@
     <div class="market-block">
       <div class="market-label-col">
         <div class="market-seq">Medical Devices</div>
+        <span class="market-icon-lg">&#9877;</span>
         <div class="market-name">Medical Devices</div>
         <div class="market-timeline">FDA SaMD guidance evolving</div>
         <div class="market-regulators">
@@ -293,7 +299,7 @@
       <div class="market-content">
         <p class="market-body" style="font-size:14px;color:var(--ink-3);margin-bottom:16px;font-weight:400;">If you are a medical device manufacturer, clinical AI developer, or health system deploying AI in diagnostic, therapeutic, or patient monitoring applications, the SaMD regulatory environment is moving faster than most organizations are prepared for.</p>
         <p class="market-body">
-          FDA's Software as a Medical Device framework is evolving rapidly to address AI and ML in clinical decision support, diagnostic imaging, and patient monitoring. <strong>AI-specific validation requirements remain underspecified.</strong> Organizations that establish certification records now will hold lasting regulatory position as FDA's requirements solidify.
+          FDA's Software as a Medical Device framework is evolving rapidly to address AI and ML in clinical decision support, diagnostic imaging, and patient monitoring. <strong>AI-specific validation requirements remain underspecified</strong> &mdash; organizations that establish certification records now will hold lasting regulatory position as FDA's requirements solidify.
         </p>
         <p class="market-body">
           The failure modes are identical to spaceflight AI: distributional drift in deployed models, hallucination in clinical language models, out-of-distribution inputs when patient populations differ from training data, and the absence of explainability when a clinician needs to understand an AI recommendation. <strong>The SCL framework addresses all of them.</strong>
@@ -312,7 +318,7 @@
             <span class="mg-gap"><strong>Risk management</strong> framework does not recognize AI hallucination, adversarial vulnerability, or distributional shift as named risk categories requiring specific mitigation.</span>
           </div>
         </div>
-        <a href="contact.html" class="btn btn-solid">Begin an assessment for your SaMD &rarr;</a>
+        <a href="contact.html" class="btn btn-solid">Talk to us about your SaMD</a>
       </div>
     </div>
 
@@ -320,6 +326,7 @@
     <div class="market-block">
       <div class="market-label-col">
         <div class="market-seq">Automotive</div>
+        <span class="market-icon-lg">&#128663;</span>
         <div class="market-name">Automotive</div>
         <div class="market-timeline">ISO 26262 / SOTIF gaps</div>
         <div class="market-regulators">
@@ -336,7 +343,7 @@
           ISO 26262 defines functional safety requirements for automotive electrical and electronic systems. ISO 21448 (SOTIF) addresses safety of the intended functionality. <strong>Neither was designed for the probabilistic, distributional behavioral characteristics of neural network-based systems</strong> operating in the open-world conditions of public road environments.
         </p>
         <p class="market-body">
-          The automotive market has the largest installed base of safety-critical AI systems in the world. The gap between current certification practice and what AI systems actually require is substantial. SOTIF's "unknown unsafe scenarios" are, in AI terms, the out-of-distribution problem. SCL's AI-6 requirement formalizes what SOTIF acknowledges but does not specify.
+          The automotive market has the largest installed base of safety-critical AI systems in the world &mdash; and the largest gap between current certification practice and what AI systems actually require. SOTIF's "unknown unsafe scenarios" are, in AI terms, the out-of-distribution problem. SCL's AI-6 requirement formalizes what SOTIF acknowledges but does not specify.
         </p>
         <div class="market-gaps">
           <div class="market-gap fade-up">
@@ -349,10 +356,10 @@
           </div>
           <div class="market-gap fade-up">
             <span class="mg-standard">SOTIF</span>
-            <span class="mg-gap"><strong>Operational design domain</strong> definitions exist in concept but lack quantitative boundary enforcement. This is what SCL addresses through out-of-distribution detection with defined escalation paths.</span>
+            <span class="mg-gap"><strong>Operational design domain</strong> definitions exist in concept but lack quantitative boundary enforcement &mdash; what SCL calls out-of-distribution detection with defined escalation paths.</span>
           </div>
         </div>
-        <a href="contact.html" class="btn btn-solid">Begin an assessment for your AV program &rarr;</a>
+        <a href="contact.html" class="btn btn-solid">Talk to us about your AV program</a>
       </div>
     </div>
 
@@ -370,7 +377,7 @@
           A language model in a cockpit that hallucinates a clearance. A diagnostic imaging model in an operating room that misclassifies a scan. A perception system in an autonomous vehicle that fails to detect an out-of-distribution object. <strong>The failure mode is the same. The consequence differs only in specifics.</strong>
         </p>
         <p>
-          The SCL framework was developed in spaceflight, where the requirements pressure was greatest and the regulatory gap was most clearly defined. But hallucination doesn't care what industry you're in. Distributional drift happens in every deployed model. The framework is explicitly algorithm-agnostic and applicable to neural networks, decision trees, reinforcement learning systems, and hybrid architectures.
+          The SCL framework was developed in spaceflight because that's where the requirements pressure was greatest and the regulatory gap was clearest. But hallucination doesn't care what industry you're in. Distributional drift happens in every deployed model. The framework is explicitly algorithm-agnostic &mdash; applicable to neural networks, decision trees, reinforcement learning systems, and hybrid architectures.
         </p>
 
       </div>
@@ -403,7 +410,7 @@
 <footer class="site-footer">
   <a href="index.html" class="footer-wordmark">
     <svg width="22" height="22" viewBox="0 0 26 26" fill="none">
-      <circle cx="13" cy="13" r="12" stroke="rgba(255,255,255,0.18)" stroke-width="1"/>
+      <circle cx="13" cy="13" r="12" stroke="rgba(15,35,64,0.18)" stroke-width="1"/>
       <circle cx="13" cy="13" r="9.5" stroke="rgba(255,255,255,0.1)" stroke-width="0.75" stroke-dasharray="2.2 2.6"/>
       <circle cx="13" cy="13" r="7" stroke="rgba(255,255,255,0.12)" stroke-width="0.75"/>
       <circle cx="13" cy="13" r="4.5" stroke="rgba(255,255,255,0.12)" stroke-width="0.6"/>

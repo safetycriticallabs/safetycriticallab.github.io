@@ -116,7 +116,60 @@
 }
 
 
-@media (max-width: 880px) {
+/* ─── CONTACT FORM ────────────────────────────────────────── */
+.contact-form {
+  display: flex; flex-direction: column; gap: 12px;
+}
+
+.form-row {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 12px;
+}
+
+.form-field {
+  display: flex; flex-direction: column; gap: 6px;
+}
+
+.form-label {
+  font-family: var(--mono); font-size: 9px;
+  letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--ink-3);
+}
+
+.form-input,
+.form-textarea {
+  font-family: var(--sans); font-size: 14px;
+  color: var(--ink); background: var(--white);
+  border: 1px solid var(--rule); border-radius: 4px;
+  padding: 11px 14px;
+  transition: border-color 0.15s;
+  outline: none; width: 100%;
+}
+.form-input:focus,
+.form-textarea:focus { border-color: var(--ink); }
+
+.form-textarea { resize: vertical; min-height: 100px; line-height: 1.6; }
+
+.form-submit {
+  display: inline-block;
+  background: var(--ink); color: #fff;
+  font-family: var(--sans); font-size: 14px; font-weight: 500;
+  padding: 13px 28px; border-radius: 980px;
+  border: none; cursor: pointer;
+  transition: background 0.15s; width: 100%;
+  margin-top: 4px;
+}
+.form-submit:hover { background: var(--red); }
+
+.form-success {
+  display: none;
+  padding: 16px 20px;
+  background: var(--white); border: 1px solid var(--rule);
+  border-radius: 4px;
+  font-size: 14px; color: var(--ink-2); line-height: 1.6;
+}
+.form-success.visible { display: block; }
+
+
   .contact-layout { grid-template-columns: 1fr; gap: 48px; }
   .ci-row { grid-template-columns: 1fr; gap: 4px; }
   .expect-section { padding: 60px 24px; }
@@ -182,10 +235,6 @@
 
         <div class="contact-info-list">
           <div class="ci-row">
-            <span class="ci-label">Email</span>
-            <span class="ci-value"><a href="/cdn-cgi/l/email-protection#b2d1dddcc6d3d1c6f2c1d3d4d7c6cbd1c0dbc6dbd1d3deded3d0c19cd1dddf"><span class="__cf_email__" data-cfemail="70131f1e0411130430031116150409130219041913111c1c1112035e131f1d">[email&#160;protected]</span></a></span>
-          </div>
-          <div class="ci-row">
             <span class="ci-label">Location</span>
             <span class="ci-value">Remote and on-site assessments available worldwide</span>
           </div>
@@ -193,32 +242,39 @@
       </div>
 
       <div>
-        <div class="section-eyebrow">How to engage</div>
-        <div class="pathways">
-          <div class="pathway fade-up">
-            <div class="pathway-tag">Most common starting point</div>
-            <div class="pathway-title">Initial certification assessment</div>
-            <div class="pathway-desc">Your AI system goes through the full four-phase process and receives a formal SCL certificate. This is the primary product. A determination that your system was assessed against a defined standard at a defined classification level.</div>
-            <a href="process.html" class="pathway-cta">How the process works</a>
+        <div class="section-eyebrow">Send a message</div>
+        <form
+          class="contact-form"
+          id="contactForm"
+          action="https://formspree.io/f/YOUR_FORM_ID"
+          method="POST"
+        >
+          <div class="form-row">
+            <div class="form-field">
+              <label class="form-label" for="name">Name</label>
+              <input class="form-input" type="text" id="name" name="name" required placeholder="Your name">
+            </div>
+            <div class="form-field">
+              <label class="form-label" for="email">Email</label>
+              <input class="form-input" type="email" id="email" name="email" required placeholder="your@email.com">
+            </div>
           </div>
-          <div class="pathway fade-up">
-            <div class="pathway-tag">Not sure you're ready?</div>
-            <div class="pathway-title">Readiness assessment</div>
-            <div class="pathway-desc">A lower-commitment engagement for organizations that want to understand where they stand against the framework before committing to a full certification cycle. Produces a gap analysis against each applicable AI-1 through AI-9 requirement with specific remediation guidance. Clients who certify should be clients who are ready.</div>
-            <a href="/cdn-cgi/l/email-protection#fa9995948e9b998eba899b9c9f8e839988938e93999b96969b9889d4999597" class="pathway-cta">Ask about a readiness assessment</a>
+          <div class="form-field">
+            <label class="form-label" for="organization">Organization</label>
+            <input class="form-input" type="text" id="organization" name="organization" placeholder="Organization name">
           </div>
-          <div class="pathway fade-up">
-            <div class="pathway-tag">Maintaining your certificate</div>
-            <div class="pathway-title">Surveillance audit</div>
-            <div class="pathway-desc">Required to maintain certificate validity. Safety-Critical systems: annual. Mission-Critical: biennial. AI systems drift. A certificate issued at deployment is not a certificate valid at month six, and the standard reflects that.</div>
-            <a href="process.html#phase4" class="pathway-cta">About surveillance audits</a>
+          <div class="form-field">
+            <label class="form-label" for="system">System description</label>
+            <input class="form-input" type="text" id="system" name="system" placeholder="Brief description of your AI system">
           </div>
-          <div class="pathway fade-up">
-            <div class="pathway-tag">Organizations &amp; agencies</div>
-            <div class="pathway-title">Framework licensing</div>
-            <div class="pathway-desc">Regulatory bodies, large primes, and government agencies interested in adopting the SCL framework internally or referencing it in procurement requirements. The most scalable path to domain-wide AI certification standards.</div>
-            <a href="/cdn-cgi/l/email-protection#1f7c70716b7e7c6b5f6c7e797a6b667c6d766b767c7e73737e7d6c317c7072" class="pathway-cta">Get in touch</a>
+          <div class="form-field">
+            <label class="form-label" for="message">Message</label>
+            <textarea class="form-textarea" id="message" name="message" placeholder="How can we help?"></textarea>
           </div>
+          <button type="submit" class="form-submit">Send message</button>
+        </form>
+        <div class="form-success" id="formSuccess">
+          Your message has been received. A member of the SCL team will be in touch shortly.
         </div>
       </div>
     </div>
@@ -301,6 +357,24 @@ const observer = new IntersectionObserver((entries) => {
   });
 }, { threshold: 0.1 });
 document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+
+const form = document.getElementById('contactForm');
+const success = document.getElementById('formSuccess');
+if (form) {
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const data = new FormData(form);
+    const response = await fetch(form.action, {
+      method: 'POST',
+      body: data,
+      headers: { 'Accept': 'application/json' }
+    });
+    if (response.ok) {
+      form.style.display = 'none';
+      success.classList.add('visible');
+    }
+  });
+}
 </script>
 </body>
 </html>

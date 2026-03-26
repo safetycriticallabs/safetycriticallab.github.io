@@ -4,6 +4,11 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>The Framework — Safety Critical Labs</title>
+<meta name="description" content="The SCL AI Requirements Framework covers nine requirement areas for AI-specific failure modes. Algorithm-agnostic, domain-applicable, and openly published under a citable DOI.">
+<meta property="og:title" content="The Framework — Safety Critical Labs">
+<meta property="og:description" content="Nine requirement areas covering every AI-specific failure mode. Openly published under a citable DOI.">
+<meta property="og:url" content="https://safetycriticallabs.com/framework.html">
+<meta property="og:type" content="website">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=IBM+Plex+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
@@ -123,9 +128,9 @@
 
 /* ─── OPEN STANDARD BAND ──────────────────────────────────── */
 .open-standard-band {
-  background: var(--red-lt);
-  border-top: 1px solid rgba(200,39,45,0.15);
-  border-bottom: 1px solid rgba(200,39,45,0.15);
+  background: var(--bg);
+  border-top: 1px solid var(--rule);
+  border-bottom: 1px solid var(--rule);
   padding: 60px 40px;
 }
 
@@ -135,9 +140,9 @@
 }
 
 .os-left h2 {
-  font-family: var(--serif);
+  font-family: var(--sans);
   font-size: clamp(28px, 3vw, 38px);
-  font-weight: 400; color: var(--ink); margin-bottom: 16px; line-height: 1.2;
+  font-weight: 600; color: var(--ink); margin-bottom: 16px; line-height: 1.1; letter-spacing: -0.02em;
 }
 .os-left p { font-size: 15px; color: var(--ink-2); line-height: 1.8; font-weight: 300; margin-bottom: 16px; }
 
@@ -191,12 +196,12 @@
 .inner-hero-breadcrumb a:hover { color: rgba(255,255,255,0.6); }
 .inner-hero-breadcrumb span { color: rgba(255,255,255,0.15); }
 .inner-hero h1 {
-  font-family: var(--serif);
+  font-family: var(--sans);
   font-size: clamp(38px, 4.5vw, 60px);
-  font-weight: 400; line-height: 1.1;
-  color: #fff; letter-spacing: -0.01em;
+  font-weight: 600; line-height: 1.05;
+  color: #fff; letter-spacing: -0.025em;
 }
-.inner-hero h1 em { font-style: italic; color: var(--red); }
+.inner-hero h1 em { font-style: italic; color: var(--red); font-family: var(--serif); font-weight: 400; font-size: 1.05em; }
 .inner-hero-lead {
   font-size: 17px; color: rgba(255,255,255,0.5);
   font-weight: 300; line-height: 1.75;
@@ -278,13 +283,13 @@
       <div class="fw-card fade-up">
         <div class="fw-card-id">AI-3</div>
         <div class="fw-card-title">ML test coverage</div>
-        <div class="fw-card-body">A defined test matrix as the ML equivalent of code coverage &mdash; spanning nominal performance, edge cases, failure mode injection, and distributional boundary testing.</div>
+        <div class="fw-card-body">A defined test matrix serving as the ML equivalent of code coverage. Covers nominal performance, edge cases, failure mode injection, and distributional boundary testing.</div>
         <div class="fw-scope">All classifications</div>
       </div>
       <div class="fw-card fade-up">
         <div class="fw-card-id">AI-4</div>
         <div class="fw-card-title">Continuous validation</div>
-        <div class="fw-card-body">Post-deployment drift detection with defined thresholds, revalidation triggers, and escalation paths. Closes the single largest gap in existing spaceflight and aviation standards.</div>
+        <div class="fw-card-body">Post-deployment drift detection with defined thresholds, revalidation triggers, and escalation paths. Addresses a gap not covered by existing safety-critical software standards.</div>
         <div class="fw-scope">All classifications</div>
       </div>
       <div class="fw-card fade-up">
@@ -296,7 +301,7 @@
       <div class="fw-card fade-up">
         <div class="fw-card-id">AI-6</div>
         <div class="fw-card-title">Out-of-distribution detection</div>
-        <div class="fw-card-body">Detection, logging, and escalation of inputs outside the training distribution &mdash; the condition under which AI behavior is least predictable.</div>
+        <div class="fw-card-body">Detection, logging, and escalation of inputs outside the training distribution. This is the condition under which AI behavior is least predictable.</div>
         <div class="fw-scope">All classifications</div>
       </div>
       <div class="fw-card fade-up">
@@ -364,7 +369,7 @@
       <div class="struct-col fade-up">
         <div class="struct-col-title">Tier 3</div>
         <div class="struct-col-name">Mission Support</div>
-        <div class="struct-col-desc">AI systems supporting mission operations where failure has recoverable consequences with operational workarounds available. Explainability (AI-8) and human-AI teaming (AI-9) requirements may be scoped to the specific operational context.</div>
+        <div class="struct-col-desc">AI systems supporting mission operations where failure has recoverable consequences with operational workarounds available. Explainability (AI-8) and human AI teaming (AI-9) requirements may be scoped to the specific operational context.</div>
         <div class="struct-reqs">
           <span class="struct-req-tag">AI-1</span>
           <span class="struct-req-tag">AI-2</span>
@@ -390,10 +395,7 @@
       <p>
         The standard is publicly available so you can read every requirement before engaging with SCL. That transparency is deliberate. A certification is only defensible to regulators and procurement officers if anyone can verify what it was measured against.
       </p>
-      <div style="margin-top: 24px; display:flex; gap: 12px; flex-wrap: wrap; align-items: center;">
-        <a href="process.html" class="btn btn-solid">How assessment works</a>
-        <a href="https://github.com/kevinjohnwilliams/AI_Requirements_Framework" style="font-family:var(--mono);font-size:10px;letter-spacing:0.08em;text-transform:uppercase;color:var(--ink-3);text-decoration:none;" target="_blank">View standard on GitHub</a>
-      </div>
+
     </div>
     <div class="os-right">
       <div class="os-item" style="border-left: 3px solid #2D7A3A;">
@@ -406,7 +408,7 @@
       </div>
       <div class="os-item" style="border-left: 3px solid var(--red);">
         <span class="os-item-label">Not Certified</span>
-        <span class="os-item-val">One or more requirements not met. Findings documented. Remediation required before re-assessment. A Determination Document is issued regardless of outcome.</span>
+        <span class="os-item-val">One or more requirements not met. Findings documented. Remediation required before reassessment. A Determination Document is issued regardless of outcome.</span>
       </div>
       <p style="font-size:12px;color:var(--ink-3);line-height:1.6;margin-top:4px;font-family:var(--mono);letter-spacing:0.02em;">
         A Conditional Certification is not a lesser certificate. It is a certificate with specific, documented, time-bound conditions. It requires a closure review within the agreed timeframe.
@@ -424,9 +426,9 @@
   <a href="index.html" class="footer-wordmark">
     <svg width="22" height="22" viewBox="0 0 26 26" fill="none">
       <circle cx="13" cy="13" r="12" stroke="rgba(15,35,64,0.18)" stroke-width="1"/>
-      <circle cx="13" cy="13" r="9.5" stroke="rgba(255,255,255,0.1)" stroke-width="0.75" stroke-dasharray="2.2 2.6"/>
-      <circle cx="13" cy="13" r="7" stroke="rgba(255,255,255,0.12)" stroke-width="0.75"/>
-      <circle cx="13" cy="13" r="4.5" stroke="rgba(255,255,255,0.12)" stroke-width="0.6"/>
+      <circle cx="13" cy="13" r="9.5" stroke="rgba(15,35,64,0.12)" stroke-width="0.75" stroke-dasharray="2.2 2.6"/>
+      <circle cx="13" cy="13" r="7" stroke="rgba(15,35,64,0.14)" stroke-width="0.75"/>
+      <circle cx="13" cy="13" r="4.5" stroke="rgba(15,35,64,0.14)" stroke-width="0.6"/>
       <circle cx="13" cy="13" r="2.8" fill="#1B3A6B" stroke="rgba(180,130,42,0.45)" stroke-width="0.8"/>
       <line x1="8.5" y1="13" x2="17.5" y2="13" stroke="#C8272D" stroke-width="1.4" stroke-linecap="round"/>
       <circle cx="13" cy="13" r="1.2" fill="#C8272D"/>

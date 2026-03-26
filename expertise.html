@@ -4,14 +4,14 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Expertise — Safety Critical Labs</title>
-<meta name="description" content="SCL assessments are conducted by practitioners with direct experience in safety-critical programs. Independent review at every phase. Domain specialist coverage across aerospace, aviation, medical, and automotive.">
+<meta name="description" content="SCL assessments are conducted by practitioners with direct experience in safety-critical AI programs. Structured independence at every phase. A defensible record against a published standard.">
 <meta property="og:title" content="Expertise — Safety Critical Labs">
-<meta property="og:description" content="Practitioner-built assessments with independent review at every phase and domain specialist coverage across regulated industries.">
+<meta property="og:description" content="Practitioner-built assessments. Structurally independent. A defensible record against a published standard.">
 <meta property="og:url" content="https://safetycriticallabs.com/expertise.html">
 <meta property="og:type" content="website">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=IBM+Plex+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css">
 <style>
 /* ─── EXPERTISE PAGE STYLES ──────────────────────────────── */
@@ -44,7 +44,7 @@
 
 /* ─── CREDIBILITY BAND ────────────────────────────────────── */
 .credibility-band {
-  background: var(--white);
+  background: var(--bg);
   border-top: 1px solid var(--rule);
   border-bottom: 1px solid var(--rule);
   padding: 72px 40px;
@@ -56,15 +56,15 @@
 }
 
 .cred-left h2 {
-  font-family: var(--serif); font-size: clamp(28px,3vw,40px);
-  font-weight: 400; color: var(--ink); margin-bottom: 20px; line-height: 1.2;
+  font-family: var(--sans); font-size: clamp(28px,3vw,40px);
+  font-weight: 600; color: var(--ink); margin-bottom: 20px; line-height: 1.1; letter-spacing: -0.02em;
 }
 .cred-left p { font-size: 15px; color: var(--ink-2); line-height: 1.8; font-weight: 300; margin-bottom: 16px; }
 
 .cred-items { display: flex; flex-direction: column; gap: 12px; }
 
 .cred-item {
-  background: var(--bg); border: 1px solid var(--rule);
+  background: var(--white); border: 1px solid var(--rule);
   border-radius: 4px; padding: 18px 22px;
   display: flex; gap: 16px; align-items: flex-start;
 }
@@ -73,16 +73,12 @@
 .cred-text strong { color: var(--ink); font-weight: 500; }
 
 @media (max-width: 880px) {
-  .team-grid { grid-template-columns: 1fr; }
-  .assessor-grid { grid-template-columns: 1fr; gap: 40px; }
-  .recognition-grid { grid-template-columns: 1fr; }
   .domain-grid { grid-template-columns: 1fr 1fr; }
   .cred-inner { grid-template-columns: 1fr; gap: 36px; }
-  .recognition-band, .credibility-band { padding: 60px 24px; }
+  .credibility-band { padding: 60px 24px; }
 }
 @media (max-width: 580px) {
   .domain-grid { grid-template-columns: 1fr; }
-  .rec-card { grid-template-columns: 1fr; gap: 12px; }
 }
 </style>
 </head>
@@ -91,10 +87,10 @@
 <nav class="global-nav">
   <a href="index.html" class="gn-wordmark">
     <svg class="gn-icon" viewBox="0 0 26 26" fill="none">
-      <circle cx="13" cy="13" r="12" stroke="rgba(255,255,255,0.28)" stroke-width="1"/>
-      <circle cx="13" cy="13" r="9.5" stroke="rgba(255,255,255,0.16)" stroke-width="0.75" stroke-dasharray="2.2 2.6"/>
-      <circle cx="13" cy="13" r="7" stroke="rgba(255,255,255,0.18)" stroke-width="0.75"/>
-      <circle cx="13" cy="13" r="4.5" stroke="rgba(255,255,255,0.18)" stroke-width="0.6"/>
+      <circle cx="13" cy="13" r="12" stroke="rgba(15,35,64,0.25)" stroke-width="1"/>
+      <circle cx="13" cy="13" r="9.5" stroke="rgba(15,35,64,0.15)" stroke-width="0.75" stroke-dasharray="2.2 2.6"/>
+      <circle cx="13" cy="13" r="7" stroke="rgba(15,35,64,0.18)" stroke-width="0.75"/>
+      <circle cx="13" cy="13" r="4.5" stroke="rgba(15,35,64,0.18)" stroke-width="0.6"/>
       <circle cx="13" cy="13" r="2.8" fill="#1B3A6B" stroke="rgba(180,130,42,0.65)" stroke-width="0.8"/>
       <line x1="8.5" y1="13" x2="17.5" y2="13" stroke="#C8272D" stroke-width="1.4" stroke-linecap="round"/>
       <circle cx="13" cy="13" r="1.2" fill="#C8272D"/>
@@ -165,7 +161,7 @@
 <section class="page-section" style="background: var(--white);">
   <div class="section-inner">
     <div class="section-eyebrow">Domain coverage</div>
-    <h2 class="section-title">The framework applies across domains.<br><em>The assessment team does not.</em></h2>
+    <h2 class="section-title">The framework is domain agnostic.<br><em>The assessment team is not.</em></h2>
     <p class="section-lead">The requirement areas apply wherever AI failure has safety consequences. Domain specialists are brought in to ensure the assessment reflects the specific regulatory environment your system operates in.</p>
     <div class="domain-grid">
       <div class="domain-card fade-up">
@@ -197,7 +193,7 @@
   <div class="cred-inner">
     <div class="cred-left">
       <div class="section-eyebrow" style="color:rgba(200,39,45,0.6)">The institution</div>
-      <h2>Built as an institution.<br><em>Not a practice.</em></h2>
+      <h2>Helping your <em style="font-style:italic; color:var(--red);">AI</em> meet<br>the regulatory world.</h2>
       <p>
         The regulatory world is not waiting for AI to catch up. Standards are forming, procurement requirements are tightening, and organizations that cannot demonstrate rigorous, documented assessment are losing ground.
       </p>
@@ -233,10 +229,10 @@
 <footer class="site-footer">
   <a href="index.html" class="footer-wordmark">
     <svg width="22" height="22" viewBox="0 0 26 26" fill="none">
-      <circle cx="13" cy="13" r="12" stroke="rgba(255,255,255,0.18)" stroke-width="1"/>
-      <circle cx="13" cy="13" r="9.5" stroke="rgba(255,255,255,0.1)" stroke-width="0.75" stroke-dasharray="2.2 2.6"/>
-      <circle cx="13" cy="13" r="7" stroke="rgba(255,255,255,0.12)" stroke-width="0.75"/>
-      <circle cx="13" cy="13" r="4.5" stroke="rgba(255,255,255,0.12)" stroke-width="0.6"/>
+      <circle cx="13" cy="13" r="12" stroke="rgba(15,35,64,0.18)" stroke-width="1"/>
+      <circle cx="13" cy="13" r="9.5" stroke="rgba(15,35,64,0.12)" stroke-width="0.75" stroke-dasharray="2.2 2.6"/>
+      <circle cx="13" cy="13" r="7" stroke="rgba(15,35,64,0.14)" stroke-width="0.75"/>
+      <circle cx="13" cy="13" r="4.5" stroke="rgba(15,35,64,0.14)" stroke-width="0.6"/>
       <circle cx="13" cy="13" r="2.8" fill="#1B3A6B" stroke="rgba(180,130,42,0.45)" stroke-width="0.8"/>
       <line x1="8.5" y1="13" x2="17.5" y2="13" stroke="#C8272D" stroke-width="1.4" stroke-linecap="round"/>
       <circle cx="13" cy="13" r="1.2" fill="#C8272D"/>

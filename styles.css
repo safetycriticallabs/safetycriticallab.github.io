@@ -5,17 +5,17 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
-  --bg:       #F8F8F6;
+  --bg:       #FAFAF8;
   --white:    #FFFFFF;
-  --ink:      #111110;
-  --ink-2:    #484844;
-  --ink-3:    #888884;
+  --ink:      #0F2340;
+  --ink-2:    #3D5068;
+  --ink-3:    #7A8FA6;
   --red:      #C8272D;
   --red-dk:   #A01E23;
   --red-lt:   #F9ECEC;
-  --rule:     #E0E0DC;
+  --rule:     #E4E8EC;
   --serif:    'Instrument Serif', Georgia, serif;
-  --sans:     'IBM Plex Sans', system-ui, sans-serif;
+  --sans:     'DM Sans', system-ui, sans-serif;
   --mono:     'IBM Plex Mono', monospace;
 }
 
@@ -33,22 +33,24 @@ body {
 .global-nav {
   position: fixed; top: 0; left: 0; right: 0; z-index: 200;
   height: 56px;
-  background: var(--ink);
+  background: rgba(250,250,248,0.94);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   display: flex; align-items: center;
   padding: 0 40px;
-  border-bottom: 1px solid rgba(255,255,255,0.08);
+  border-bottom: 1px solid var(--rule);
 }
 
 .gn-wordmark {
   display: flex; align-items: center; gap: 10px;
-  text-decoration: none; color: #fff; flex-shrink: 0;
+  text-decoration: none; color: var(--ink); flex-shrink: 0;
 }
 
 .gn-icon { width: 34px; height: 34px; }
 
 .gn-text {
   font-family: var(--mono); font-size: 12px;
-  font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; color: #fff;
+  font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink);
 }
 .gn-text em { color: var(--red); font-style: normal; }
 
@@ -58,24 +60,25 @@ body {
 }
 
 .gn-links a {
-  font-family: var(--mono); font-size: 10px;
-  letter-spacing: 0.1em; text-transform: uppercase;
-  color: rgba(255,255,255,0.4); text-decoration: none;
-  padding: 6px 12px; border-radius: 2px;
+  font-family: var(--sans); font-size: 13px;
+  font-weight: 400;
+  color: var(--ink-3); text-decoration: none;
+  padding: 6px 12px; border-radius: 980px;
   transition: color 0.15s, background 0.15s;
 }
-.gn-links a:hover { color: #fff; background: rgba(255,255,255,0.06); }
-.gn-links a.active { color: #fff; }
+.gn-links a:hover { color: var(--ink); background: rgba(15,35,64,0.06); }
+.gn-links a.active { color: var(--ink); }
 
 .gn-cta {
-  background: var(--red) !important;
+  background: var(--ink) !important;
   color: #fff !important;
-  padding: 7px 16px !important;
-  border-radius: 2px;
+  padding: 7px 18px !important;
+  border-radius: 980px !important;
+  font-weight: 500 !important;
   transition: background 0.15s !important;
   margin-left: 8px;
 }
-.gn-cta:hover { background: var(--red-dk) !important; }
+.gn-cta:hover { background: var(--red) !important; }
 
 /* ─── PAGE SHELL ──────────────────────────────────────────── */
 .page-shell { margin-top: 56px; }
@@ -108,12 +111,12 @@ body {
 .inner-hero-breadcrumb span { color: rgba(255,255,255,0.15); }
 
 .inner-hero h1 {
-  font-family: var(--serif);
+  font-family: var(--sans);
   font-size: clamp(38px, 4.5vw, 60px);
-  font-weight: 400; line-height: 1.1;
-  color: #fff; letter-spacing: -0.01em;
+  font-weight: 600; line-height: 1.05;
+  color: #fff; letter-spacing: -0.025em;
 }
-.inner-hero h1 em { font-style: italic; color: var(--red); }
+.inner-hero h1 em { font-style: italic; color: var(--red); font-family: var(--serif); font-weight: 400; font-size: 1.05em; }
 
 .inner-hero-lead {
   font-size: 17px; color: rgba(255,255,255,0.5);
@@ -138,12 +141,13 @@ body {
 }
 
 h2.section-title {
-  font-family: var(--serif);
+  font-family: var(--sans);
   font-size: clamp(28px, 3vw, 42px);
-  font-weight: 400; line-height: 1.15;
+  font-weight: 600; line-height: 1.1;
   color: var(--ink); margin-bottom: 16px;
+  letter-spacing: -0.02em;
 }
-h2.section-title em { font-style: italic; color: var(--red); }
+h2.section-title em { font-style: italic; color: var(--red); font-family: var(--serif); font-size: 1.05em; font-weight: 400; }
 
 .section-lead {
   font-size: 17px; color: var(--ink-2);
@@ -153,9 +157,9 @@ h2.section-title em { font-style: italic; color: var(--red); }
 
 /* ─── BUTTONS ─────────────────────────────────────────────── */
 .btn {
-  font-family: var(--mono); font-size: 11px;
-  letter-spacing: 0.1em; text-transform: uppercase;
-  padding: 12px 24px; border-radius: 2px;
+  font-family: var(--sans); font-size: 14px;
+  font-weight: 500;
+  padding: 12px 24px; border-radius: 980px;
   text-decoration: none; transition: all 0.15s;
   display: inline-block; cursor: pointer;
   border: none;
@@ -168,28 +172,27 @@ h2.section-title em { font-style: italic; color: var(--red); }
   border: 1px solid var(--rule); color: var(--ink-2);
   background: transparent;
 }
-.btn-outline:hover { border-color: var(--red); color: var(--red); }
+.btn-outline:hover { border-color: var(--ink); color: var(--ink); }
 .btn-outline-white {
-  border: 1px solid rgba(255,255,255,0.2);
-  color: rgba(255,255,255,0.6); background: transparent;
+  border: 1px solid rgba(255,255,255,0.25);
+  color: rgba(255,255,255,0.7); background: transparent;
 }
-.btn-outline-white:hover { border-color: rgba(255,255,255,0.5); color: #fff; }
+.btn-outline-white:hover { border-color: rgba(255,255,255,0.6); color: #fff; }
 
 .btn-white {
-  background: #fff; color: var(--red);
-  font-family: var(--mono); font-size: 11px;
-  letter-spacing: 0.1em; text-transform: uppercase;
-  padding: 13px 28px; border-radius: 2px;
-  text-decoration: none; transition: all 0.15s;
+  background: #fff; color: var(--ink);
+  font-family: var(--sans); font-size: 14px;
   font-weight: 500;
+  padding: 13px 28px; border-radius: 980px;
+  text-decoration: none; transition: all 0.15s;
 }
-.btn-white:hover { background: var(--ink); color: #fff; }
+.btn-white:hover { background: var(--bg); }
 
 .btn-ghost-white {
   border: 1px solid rgba(255,255,255,0.4); color: rgba(255,255,255,0.8);
-  font-family: var(--mono); font-size: 11px;
-  letter-spacing: 0.1em; text-transform: uppercase;
-  padding: 13px 28px; border-radius: 2px;
+  font-family: var(--sans); font-size: 14px;
+  font-weight: 500;
+  padding: 13px 28px; border-radius: 980px;
   text-decoration: none; transition: all 0.15s;
 }
 .btn-ghost-white:hover { border-color: #fff; color: #fff; }
@@ -547,7 +550,7 @@ h2.section-title em { font-style: italic; color: var(--red); }
 
 /* ─── HOME CTA ────────────────────────────────────────────── */
 .home-cta {
-  background: var(--red);
+  background: var(--ink);
   padding: 72px 40px;
   text-align: center;
 }

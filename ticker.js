@@ -13,7 +13,7 @@
   var LOGOS = {
     us: '<img src="img/federal-register.svg" alt="Federal Register" style="width:100%;height:100%;object-fit:contain;border-radius:50%;">',
     eu: '<img src="img/eu-flag.svg" alt="EU" style="width:100%;height:100%;object-fit:cover;border-radius:2px;">',
-    nist: '<img src="img/nist.svg" alt="NIST" style="width:100%;height:100%;object-fit:contain;filter:invert(1);">'
+    nist: '<img src="img/nist.svg" alt="NIST" style="width:100%;height:100%;object-fit:contain;border-radius:50%;">'
   };
 
   function formatDate(dateStr) {

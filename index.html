@@ -926,7 +926,7 @@ document.querySelector('.gn-hamburger').addEventListener('click', function() {
   var LOGOS = {
     us: '<img src="img/federal-register.svg" alt="Federal Register" style="width:100%;height:100%;object-fit:contain;border-radius:50%;">',
     eu: '<img src="img/eu-flag.svg" alt="EU" style="width:100%;height:100%;object-fit:cover;border-radius:2px;">',
-    nist: '<img src="img/nist.svg" alt="NIST" style="width:100%;height:100%;object-fit:contain;border-radius:50%;">'
+    nist: '<img src="img/nist.svg" alt="NIST" style="height:100%;object-fit:contain;">'
   };
 
   /* ── Ticker builder ────────────────────────────────── */
@@ -1077,6 +1077,14 @@ document.querySelector('.gn-hamburger').addEventListener('click', function() {
   /* ── NIST (News + Drafts combined) ─────────────────── */
   var nistAiKeywords = /artificial intelligence|AI |AI-|machine learning|cybersecurity framework|risk management framework|AI agent|agentic|neural network/i;
 
+  var nistFallback = [
+    { title: 'Announcing the "AI Agent Standards Initiative" for Interoperable and Secure Innovation', url: 'https://www.nist.gov/news-events/news/2026/02/announcing-ai-agent-standards-initiative', date: formatDate('2026-02-17'), type: 'NIST News' },
+    { title: 'CAISI Issues Request for Information About Securing AI Agent Systems', url: 'https://www.nist.gov/news-events/news/2026/01/caisi-issues-request-information-about-securing-ai-agent-systems', date: formatDate('2026-01-28'), type: 'NIST News' },
+    { title: 'NIST Launches Centers for AI in Manufacturing and Critical Infrastructure', url: 'https://www.nist.gov/news-events/news/2026/01/nist-launches-centers-ai-manufacturing-and-critical-infrastructure', date: formatDate('2026-01-15'), type: 'NIST News' },
+    { title: 'Accelerating the Adoption of Software and AI Agent Identity and Authorization', url: 'https://csrc.nist.gov/pubs/other/2025/02/accelerating-the-adoption-of-sw-and-ai-agent-iden/final', date: formatDate('2025-02-05'), type: 'Concept Paper' },
+    { title: 'NIST AI Risk Management Framework (AI RMF 1.0)', url: 'https://www.nist.gov/artificial-intelligence/executive-order-safe-secure-and-trustworthy-artificial-intelligence', date: formatDate('2025-01-26'), type: 'AI Framework' }
+  ];
+
   var nistNewsUrl = 'https://www.nist.gov/news-events/news/rss.xml';
   var nistDraftsUrl = 'https://csrc.nist.gov/CSRC/media/feeds/pubs/drafts-open-for-comment.json';
 
@@ -1087,7 +1095,7 @@ document.querySelector('.gn-hamburger').addEventListener('click', function() {
     var items = [];
 
     /* Parse news RSS */
-    if (results[0]) {
+    if (results[0] && results[0].indexOf('<item') !== -1) {
       var parser = new DOMParser();
       var doc = parser.parseFromString(results[0], 'text/xml');
       var rssItems = doc.querySelectorAll('item');
@@ -1109,7 +1117,7 @@ document.querySelector('.gn-hamburger').addEventListener('click', function() {
     }
 
     /* Parse drafts JSON */
-    if (results[1]) {
+    if (results[1] && results[1].indexOf('"entries"') !== -1) {
       var clean = results[1].replace(/^\uFEFF/, '');
       try {
         var data = JSON.parse(clean);
@@ -1129,8 +1137,13 @@ document.querySelector('.gn-hamburger').addEventListener('click', function() {
       } catch (e) { /* skip bad JSON */ }
     }
 
+    /* Fall back to curated list if feeds returned nothing */
+    if (items.length === 0) {
+      nistFallback.forEach(function (item) { items.push(item); });
+    }
+
     /* Sort by date descending, take top 5 */
-    items.sort(function (a, b) { return b.sortDate - a.sortDate; });
+    items.sort(function (a, b) { return (b.sortDate || 0) - (a.sortDate || 0); });
     items = items.slice(0, 5);
 
     /* Remove sortDate before render */
@@ -1146,7 +1159,13 @@ document.querySelector('.gn-hamburger').addEventListener('click', function() {
       });
     });
     tickerSources.nist = true; tryBuildTicker();
-  }).catch(function () { renderError('reg-feed-nist'); tickerSources.nist = true; tryBuildTicker(); });
+  }).catch(function () {
+    renderItems('reg-feed-nist', nistFallback);
+    nistFallback.slice(0, 3).forEach(function (item) {
+      tickerItems.push({ title: item.title, url: item.url, date: item.date, source: 'NIST', logo: LOGOS.nist, sortDate: new Date(item.date).getTime() });
+    });
+    tickerSources.nist = true; tryBuildTicker();
+  });
 
 })();
 </script>

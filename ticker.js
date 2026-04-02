@@ -65,16 +65,17 @@
   /* ── Fetch fresh data ──────────────────────────────────── */
   var tickerItems = [];
   var tickerSources = { us: false, eu: false, nist: false };
+  var cacheWasUsed = !!cached;
 
   function tryFinalize() {
     if (!tickerSources.us || !tickerSources.eu || !tickerSources.nist) return;
-    renderTicker(tickerItems);
-    try {
-      var payload = JSON.stringify({ ts: Date.now(), items: tickerItems });
-      sessionStorage.setItem(CACHE_KEY, payload);
-    } catch (e) {
-      console.error('Ticker cache error:', e);
+    /* Only re-render if cache wasn't already shown — avoids animation restart */
+    if (!cacheWasUsed) {
+      renderTicker(tickerItems);
     }
+    try {
+      sessionStorage.setItem(CACHE_KEY, JSON.stringify({ ts: Date.now(), items: tickerItems }));
+    } catch (e) { /* storage full or unavailable */ }
   }
 
   /* ── US Federal Register ───────────────────────────── */

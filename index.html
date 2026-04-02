@@ -475,7 +475,7 @@
 
 <!-- NAV -->
 <nav class="global-nav">
-  <a href="index.html" class="gn-wordmark">
+  <a href="/" class="gn-wordmark">
     <svg class="gn-icon" width="26" height="26" viewBox="0 0 200 200" fill="none">
       <circle cx="100" cy="100" r="97" stroke="#1B3A6B" stroke-width=".6" opacity=".25"/>
       <circle cx="100" cy="100" r="93" stroke="#1B3A6B" stroke-width="2.8" stroke-dasharray="3.2 3.8" opacity=".55"/>
@@ -516,11 +516,11 @@
     <span></span><span></span><span></span>
   </button>
   <ul class="gn-links">
-    <li><a href="framework.html">Framework</a></li>
-    <li><a href="process.html">Process</a></li>
-    <li><a href="expertise.html">Expertise</a></li>
-    <li><a href="markets.html">Markets</a></li>
-    <li><a href="contact.html" class="gn-cta">Get Certified</a></li>
+    <li><a href="/framework">Framework</a></li>
+    <li><a href="/process">Process</a></li>
+    <li><a href="/expertise">Expertise</a></li>
+    <li><a href="/markets">Markets</a></li>
+    <li><a href="/contact" class="gn-cta">Get Certified</a></li>
   </ul>
 </nav>
 
@@ -542,7 +542,7 @@
         <p class="hero-body">
           Safety Critical Labs evaluates AI systems operating in aerospace, aviation, medical, and automotive environments. Assessments are conducted against a published standard. A formal determination is issued and placed on record.
         </p>
-        <a href="contact.html" class="btn btn-solid">Begin an assessment</a>
+        <a href="/contact" class="btn btn-solid">Begin an assessment</a>
       </div>
 
       <div class="cert-stage">
@@ -700,7 +700,7 @@
       <div>
         <div class="section-eyebrow">Explore</div>
         <div class="nav-cards">
-          <a href="framework.html" class="nav-card">
+          <a href="/framework" class="nav-card">
             <span class="nav-card-num">01</span>
             <div class="nav-card-body">
               <div class="nav-card-title">The Framework</div>
@@ -708,7 +708,7 @@
             </div>
             <span class="nav-card-arrow">&rarr;</span>
           </a>
-          <a href="process.html" class="nav-card">
+          <a href="/process" class="nav-card">
             <span class="nav-card-num">02</span>
             <div class="nav-card-body">
               <div class="nav-card-title">Certification Process</div>
@@ -716,7 +716,7 @@
             </div>
             <span class="nav-card-arrow">&rarr;</span>
           </a>
-          <a href="expertise.html" class="nav-card">
+          <a href="/expertise" class="nav-card">
             <span class="nav-card-num">03</span>
             <div class="nav-card-body">
               <div class="nav-card-title">Our Expertise</div>
@@ -724,7 +724,7 @@
             </div>
             <span class="nav-card-arrow">&rarr;</span>
           </a>
-          <a href="markets.html" class="nav-card">
+          <a href="/markets" class="nav-card">
             <span class="nav-card-num">04</span>
             <div class="nav-card-body">
               <div class="nav-card-title">Markets We Serve</div>
@@ -846,12 +846,12 @@
 <div class="home-cta">
   <h2>Begin a certification assessment.</h2>
   <p>Contact Safety Critical Labs to discuss your system, the applicable classification level, and the assessment process.</p>
-  <a href="contact.html" class="btn-white">Get in touch</a>
+  <a href="/contact" class="btn-white">Get in touch</a>
 </div>
 
 <!-- FOOTER -->
 <footer class="site-footer">
-  <a href="index.html" class="footer-wordmark">
+  <a href="/" class="footer-wordmark">
     <svg width="26" height="26" viewBox="0 0 200 200" fill="none">
       <circle cx="100" cy="100" r="97" stroke="#1B3A6B" stroke-width=".6" opacity=".25"/>
       <circle cx="100" cy="100" r="93" stroke="#1B3A6B" stroke-width="2.8" stroke-dasharray="3.2 3.8" opacity=".55"/>
@@ -889,11 +889,11 @@
     <span class="footer-wordmark-text"><em>Safety Critical</em> Labs</span>
   </a>
   <ul class="footer-links">
-    <li><a href="framework.html">Framework</a></li>
-    <li><a href="process.html">Process</a></li>
-    <li><a href="expertise.html">Expertise</a></li>
-    <li><a href="markets.html">Markets</a></li>
-    <li><a href="contact.html">Contact</a></li>
+    <li><a href="/framework">Framework</a></li>
+    <li><a href="/process">Process</a></li>
+    <li><a href="/expertise">Expertise</a></li>
+    <li><a href="/markets">Markets</a></li>
+    <li><a href="/contact">Contact</a></li>
   </ul>
   <div class="footer-meta">Framework v1.0 &middot; Est. 2025<br>safetycriticallabs.com</div>
 </footer>
@@ -985,30 +985,49 @@ document.querySelector('.gn-hamburger').addEventListener('click', function() {
   }
 
   /* ── US Federal Register ───────────────────────────── */
-  fetch('https://www.federalregister.gov/api/v1/documents.json?conditions%5Bterm%5D=%22artificial+intelligence%22&order=newest&per_page=5&fields%5B%5D=title&fields%5B%5D=publication_date&fields%5B%5D=html_url&fields%5B%5D=type')
+  var frAiKeywords = /artificial intelligence|AI safety|AI system|AI risk|machine learning|algorithmic|autonomous|neural network|AI governance|AI regulation/i;
+
+  var frFallback = [
+    { title: 'Executive Order on Safe, Secure, and Trustworthy Artificial Intelligence', url: 'https://www.federalregister.gov/documents/2023/11/01/2023-24283/safe-secure-and-trustworthy-development-and-use-of-artificial-intelligence', date: formatDate('2023-10-30'), type: 'Executive Order' },
+    { title: 'Request for Comment on AI Accountability Policy', url: 'https://www.federalregister.gov/documents/2023/04/13/2023-07776/ai-accountability-policy-request-for-comment', date: formatDate('2023-04-13'), type: 'Notice' },
+    { title: 'National AI Initiative Office Request for Information', url: 'https://www.federalregister.gov/documents/2023/05/23/2023-10718/request-for-information-national-artificial-intelligence-research-resource', date: formatDate('2023-05-23'), type: 'Notice' }
+  ];
+
+  fetch('https://www.federalregister.gov/api/v1/documents.json?conditions%5Bterm%5D=%22artificial+intelligence%22&order=newest&per_page=100&fields%5B%5D=title&fields%5B%5D=publication_date&fields%5B%5D=html_url&fields%5B%5D=type')
     .then(function (r) { return r.json(); })
     .then(function (data) {
-      var items = data.results.slice(0, 5).map(function (doc) {
-        return {
-          title: escapeHtml(doc.title),
-          url: doc.html_url,
-          date: formatDate(doc.publication_date),
-          type: doc.type || 'Document'
-        };
-      });
+      var filtered = [];
+      for (var i = 0; i < data.results.length && filtered.length < 5; i++) {
+        var doc = data.results[i];
+        if (frAiKeywords.test(doc.title)) {
+          filtered.push({
+            title: escapeHtml(doc.title),
+            url: doc.html_url,
+            date: formatDate(doc.publication_date),
+            type: doc.type || 'Document'
+          });
+        }
+      }
+      var items = filtered.length > 0 ? filtered : frFallback;
       renderItems('reg-feed-us', items);
       /* Feed ticker */
-      data.results.slice(0, 3).forEach(function (doc) {
+      items.slice(0, 3).forEach(function (item) {
         tickerItems.push({
-          title: escapeHtml(doc.title), url: doc.html_url,
-          date: formatDate(doc.publication_date), source: 'Federal Register',
+          title: item.title, url: item.url,
+          date: item.date, source: 'Federal Register',
           logo: LOGOS.us,
-          sortDate: new Date(doc.publication_date).getTime()
+          sortDate: new Date(item.date).getTime()
         });
       });
       tickerSources.us = true; tryBuildTicker();
     })
-    .catch(function () { renderError('reg-feed-us'); tickerSources.us = true; tryBuildTicker(); });
+    .catch(function () {
+      renderItems('reg-feed-us', frFallback);
+      frFallback.slice(0, 3).forEach(function (item) {
+        tickerItems.push({ title: item.title, url: item.url, date: item.date, source: 'Federal Register', logo: LOGOS.us, sortDate: new Date(item.date).getTime() });
+      });
+      tickerSources.us = true; tryBuildTicker();
+    });
 
   /* ── EUR-Lex (EU AI Act) ────────────────────────────── */
   var euAiKeywords = /artificial intelligence|AI Act|2024\/1689|high-risk AI|AI system|AI regulation|machine learning|algorithmic|AI agent|2025\/454/i;

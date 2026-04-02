@@ -1,20 +1,21 @@
 /* ─── CREDIBILITY TICKER ─────────────────────────────────────
    Pulls recent AI regulatory activity from Federal Register,
    EUR-Lex (EU AI Act), and NIST, and renders a scrolling
-   ticker bar. Include this script on any page with:
-   <div class="reg-ticker" id="reg-ticker"><div class="reg-ticker-track" id="reg-ticker-track"></div></div>
+   ticker bar. Caches results in sessionStorage for instant
+   rendering on subsequent page navigations.
    ──────────────────────────────────────────────────────────── */
 (function () {
   var CORS_PROXY = 'https://corsproxy.io/?';
-  var tickerItems = [];
-  var tickerSources = { us: false, eu: false, nist: false };
+  var CACHE_KEY = 'scl_ticker_cache';
+  var CACHE_MAX_AGE = 10 * 60 * 1000; /* 10 minutes */
 
-  /* ── Agency logos (inline SVG) ─────────────────────── */
   var LOGOS = {
     us: '<img src="img/federal-register.svg" alt="Federal Register" style="width:100%;height:100%;object-fit:contain;border-radius:50%;">',
     eu: '<img src="img/eu-flag.svg" alt="EU" style="width:100%;height:100%;object-fit:cover;border-radius:2px;">',
     nist: '<img src="img/nist.svg" alt="NIST" style="height:100%;object-fit:contain;">'
   };
+
+  var logoMap = { 'Federal Register': LOGOS.us, 'EU': LOGOS.eu, 'NIST': LOGOS.nist };
 
   function formatDate(dateStr) {
     var d = new Date(dateStr);
@@ -27,47 +28,81 @@
     return div.innerHTML;
   }
 
-  function tryBuildTicker() {
-    if (!tickerSources.us || !tickerSources.eu || !tickerSources.nist) return;
+  function renderTicker(items) {
     var track = document.getElementById('reg-ticker-track');
-    if (!track || tickerItems.length === 0) return;
+    if (!track || items.length === 0) return;
 
-    tickerItems.sort(function (a, b) { return (b.sortDate || 0) - (a.sortDate || 0); });
+    items.sort(function (a, b) { return (b.sortDate || 0) - (a.sortDate || 0); });
 
     var html = '';
-    function itemHtml(item) {
-      return '<a class="reg-ticker-item" href="' + item.url + '" target="_blank" rel="noopener">'
-        + '<span class="reg-ticker-icon">' + item.logo + '</span>'
+    for (var i = 0; i < items.length; i++) {
+      var item = items[i];
+      var logo = logoMap[item.source] || '';
+      html += '<a class="reg-ticker-item" href="' + item.url + '" target="_blank" rel="noopener">'
+        + '<span class="reg-ticker-icon">' + logo + '</span>'
         + '<span class="reg-ticker-source">' + item.source + '</span>'
         + '<span class="reg-ticker-text">' + item.title + '</span>'
         + '<span class="reg-ticker-date">' + item.date + '</span>'
         + '</a><span class="reg-ticker-sep"></span>';
     }
-    for (var i = 0; i < tickerItems.length; i++) html += itemHtml(tickerItems[i]);
     track.innerHTML = html + html;
   }
 
+  /* ── Try loading from sessionStorage for instant render ── */
+  var cached = null;
+  try {
+    var raw = sessionStorage.getItem(CACHE_KEY);
+    if (raw) {
+      cached = JSON.parse(raw);
+      if (Date.now() - cached.ts < CACHE_MAX_AGE) {
+        renderTicker(cached.items);
+      } else {
+        cached = null;
+      }
+    }
+  } catch (e) { cached = null; }
+
+  /* ── Fetch fresh data ──────────────────────────────────── */
+  var tickerItems = [];
+  var tickerSources = { us: false, eu: false, nist: false };
+
+  function tryFinalize() {
+    if (!tickerSources.us || !tickerSources.eu || !tickerSources.nist) return;
+    renderTicker(tickerItems);
+    try {
+      var payload = JSON.stringify({ ts: Date.now(), items: tickerItems });
+      sessionStorage.setItem(CACHE_KEY, payload);
+    } catch (e) {
+      console.error('Ticker cache error:', e);
+    }
+  }
+
   /* ── US Federal Register ───────────────────────────── */
-  fetch('https://www.federalregister.gov/api/v1/documents.json?conditions%5Bterm%5D=%22artificial+intelligence%22&order=newest&per_page=3&fields%5B%5D=title&fields%5B%5D=publication_date&fields%5B%5D=html_url&fields%5B%5D=type')
+  var frAiKeywords = /artificial intelligence|AI safety|AI system|AI risk|machine learning|algorithmic|autonomous|neural network|AI governance|AI regulation/i;
+
+  fetch('https://www.federalregister.gov/api/v1/documents.json?conditions%5Bterm%5D=%22artificial+intelligence%22&order=newest&per_page=100&fields%5B%5D=title&fields%5B%5D=publication_date&fields%5B%5D=html_url&fields%5B%5D=type')
     .then(function (r) { return r.json(); })
     .then(function (data) {
-      data.results.slice(0, 3).forEach(function (doc) {
+      var filtered = [];
+      for (var i = 0; i < data.results.length && filtered.length < 3; i++) {
+        if (frAiKeywords.test(data.results[i].title)) filtered.push(data.results[i]);
+      }
+      filtered.forEach(function (doc) {
         tickerItems.push({
           title: escapeHtml(doc.title), url: doc.html_url,
           date: formatDate(doc.publication_date), source: 'Federal Register',
-          logo: LOGOS.us,
           sortDate: new Date(doc.publication_date).getTime()
         });
       });
-      tickerSources.us = true; tryBuildTicker();
+      tickerSources.us = true; tryFinalize();
     })
-    .catch(function () { tickerSources.us = true; tryBuildTicker(); });
+    .catch(function () { tickerSources.us = true; tryFinalize(); });
 
   /* ── EUR-Lex (EU AI Act) ───────────────────────────── */
   var euAiFallback = [
-    { title: 'Proposal amending Regulation (EU) 2024/1689 — Digital Omnibus on AI', url: 'https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:52025PC0836', date: formatDate('2025-11-19'), type: 'Legislative Proposal' },
-    { title: 'European Strategy for Artificial Intelligence — Communication from the Commission', url: 'https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:52025DC0724', date: formatDate('2025-10-08'), type: 'Commission Communication' },
-    { title: 'Commission Implementing Regulation (EU) 2025/454 — Rules for the application of the AI Act', url: 'https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32025R0454', date: formatDate('2025-03-07'), type: 'Implementing Regulation' }
+    { title: 'Proposal amending Regulation (EU) 2024/1689 — Digital Omnibus on AI', url: 'https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:52025PC0836', date: formatDate('2025-11-19') },
+    { title: 'European Strategy for Artificial Intelligence — Communication from the Commission', url: 'https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:52025DC0724', date: formatDate('2025-10-08') },
+    { title: 'Commission Implementing Regulation (EU) 2025/454 — Rules for the application of the AI Act', url: 'https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32025R0454', date: formatDate('2025-03-07') }
   ];
 
   var euAiKeywords = /artificial intelligence|AI Act|2024\/1689|high-risk AI|AI system|AI regulation|machine learning|algorithmic|AI agent|2025\/454/i;
@@ -92,23 +127,15 @@
       }
       var euItems = filtered.length > 0 ? filtered : euAiFallback;
       euItems.forEach(function (item) {
-        tickerItems.push({
-          title: item.title, url: item.url, date: item.date,
-          source: 'EU', logo: LOGOS.eu,
-          sortDate: new Date(item.date).getTime()
-        });
+        tickerItems.push({ title: item.title, url: item.url, date: item.date, source: 'EU', sortDate: new Date(item.date).getTime() });
       });
-      tickerSources.eu = true; tryBuildTicker();
+      tickerSources.eu = true; tryFinalize();
     })
     .catch(function () {
       euAiFallback.forEach(function (item) {
-        tickerItems.push({
-          title: item.title, url: item.url, date: item.date,
-          source: 'EU', logo: LOGOS.eu,
-          sortDate: new Date(item.date).getTime()
-        });
+        tickerItems.push({ title: item.title, url: item.url, date: item.date, source: 'EU', sortDate: new Date(item.date).getTime() });
       });
-      tickerSources.eu = true; tryBuildTicker();
+      tickerSources.eu = true; tryFinalize();
     });
 
   /* ── NIST (News + Drafts) ──────────────────────────── */
@@ -120,7 +147,7 @@
   ]).then(function (results) {
     var nistItems = [];
 
-    if (results[0]) {
+    if (results[0] && results[0].indexOf('<item') !== -1) {
       var parser = new DOMParser();
       var doc = parser.parseFromString(results[0], 'text/xml');
       var rssItems = doc.querySelectorAll('item');
@@ -135,7 +162,7 @@
       }
     }
 
-    if (results[1]) {
+    if (results[1] && results[1].indexOf('"entries"') !== -1) {
       try {
         var data = JSON.parse(results[1].replace(/^\uFEFF/, ''));
         (data.entries || []).forEach(function (entry) {
@@ -147,13 +174,9 @@
 
     nistItems.sort(function (a, b) { return b.sortDate - a.sortDate; });
     nistItems.slice(0, 3).forEach(function (item) {
-      tickerItems.push({
-        title: item.title, url: item.url, date: item.date,
-        source: 'NIST', logo: LOGOS.nist,
-        sortDate: item.sortDate
-      });
+      tickerItems.push({ title: item.title, url: item.url, date: item.date, source: 'NIST', sortDate: item.sortDate });
     });
-    tickerSources.nist = true; tryBuildTicker();
-  }).catch(function () { tickerSources.nist = true; tryBuildTicker(); });
+    tickerSources.nist = true; tryFinalize();
+  }).catch(function () { tickerSources.nist = true; tryFinalize(); });
 
 })();

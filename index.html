@@ -1023,28 +1023,57 @@ document.querySelector('.gn-hamburger').addEventListener('click', function() {
     nist: '<img src="img/nist.svg" alt="NIST" style="height:100%;object-fit:contain;">'
   };
 
-  /* ── Ticker builder ────────────────────────────────── */
+  /* ── Ticker cache + builder ─────────────────────────── */
+  var CACHE_KEY = 'scl_ticker_cache';
+  var CACHE_MAX_AGE = 10 * 60 * 1000;
+  var logoMap = { 'Federal Register': LOGOS.us, 'EU': LOGOS.eu, 'NIST': LOGOS.nist };
+
   var tickerItems = [];
   var tickerSources = { us: false, eu: false, nist: false };
+  var cacheWasUsed = false;
 
-  function tryBuildTicker() {
-    if (!tickerSources.us || !tickerSources.eu || !tickerSources.nist) return;
+  function renderTickerHtml(items) {
     var track = document.getElementById('reg-ticker-track');
-    if (!track || tickerItems.length === 0) return;
-
-    tickerItems.sort(function (a, b) { return (b.sortDate || 0) - (a.sortDate || 0); });
-
+    if (!track || items.length === 0) return;
+    items.sort(function (a, b) { return (b.sortDate || 0) - (a.sortDate || 0); });
     var html = '';
-    function itemHtml(item) {
-      return '<a class="reg-ticker-item" href="' + item.url + '" target="_blank" rel="noopener">'
-        + '<span class="reg-ticker-icon">' + item.logo + '</span>'
+    for (var i = 0; i < items.length; i++) {
+      var item = items[i];
+      var logo = item.logo || logoMap[item.source] || '';
+      html += '<a class="reg-ticker-item" href="' + item.url + '" target="_blank" rel="noopener">'
+        + '<span class="reg-ticker-icon">' + logo + '</span>'
         + '<span class="reg-ticker-source">' + item.source + '</span>'
         + '<span class="reg-ticker-text">' + item.title + '</span>'
         + '<span class="reg-ticker-date">' + item.date + '</span>'
         + '</a><span class="reg-ticker-sep"></span>';
     }
-    for (var i = 0; i < tickerItems.length; i++) html += itemHtml(tickerItems[i]);
     track.innerHTML = html + html;
+  }
+
+  /* Try loading from sessionStorage for instant render */
+  try {
+    var raw = sessionStorage.getItem(CACHE_KEY);
+    if (raw) {
+      var cached = JSON.parse(raw);
+      if (Date.now() - cached.ts < CACHE_MAX_AGE) {
+        renderTickerHtml(cached.items);
+        cacheWasUsed = true;
+      }
+    }
+  } catch (e) { /* ignore */ }
+
+  function tryBuildTicker() {
+    if (!tickerSources.us || !tickerSources.eu || !tickerSources.nist) return;
+    if (!cacheWasUsed) {
+      renderTickerHtml(tickerItems);
+    }
+    /* Save to cache for other pages */
+    try {
+      var cacheItems = tickerItems.map(function (item) {
+        return { title: item.title, url: item.url, date: item.date, source: item.source, sortDate: item.sortDate };
+      });
+      sessionStorage.setItem(CACHE_KEY, JSON.stringify({ ts: Date.now(), items: cacheItems }));
+    } catch (e) { /* storage full */ }
   }
 
   function formatDate(dateStr) {

@@ -46,6 +46,10 @@
         + '</a><span class="reg-ticker-sep"></span>';
     }
     track.innerHTML = html + html;
+    /* Force animation restart */
+    track.classList.remove('scrolling');
+    void track.offsetWidth;
+    track.classList.add('scrolling');
   }
 
   /* ── Try loading from sessionStorage for instant render ── */

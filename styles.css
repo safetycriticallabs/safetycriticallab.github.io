@@ -32,7 +32,7 @@ body {
 
 /* ─── GLOBAL NAV ──────────────────────────────────────────── */
 .global-nav {
-  position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+  position: fixed; top: 32px; left: 0; right: 0; z-index: 200;
   height: 56px;
   background: rgba(250,250,248,0.94);
   backdrop-filter: blur(12px);
@@ -102,8 +102,83 @@ body {
 .gn-hamburger.open span:nth-child(2) { opacity: 0; }
 .gn-hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
 
+/* ─── CREDIBILITY TICKER ─────────────────────────────────── */
+.reg-ticker {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 201;
+  height: 32px;
+  background: var(--ink);
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  overflow: hidden;
+  display: flex; align-items: center;
+}
+
+.reg-ticker-track {
+  display: flex; align-items: center;
+  animation: ticker-scroll 40s linear infinite;
+  white-space: nowrap;
+}
+
+.reg-ticker:hover .reg-ticker-track { animation-play-state: paused; }
+
+.reg-ticker-item {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 0 32px;
+  text-decoration: none;
+  flex-shrink: 0;
+}
+
+.reg-ticker-logo {
+  width: 14px; height: 14px; object-fit: contain;
+  border-radius: 2px; flex-shrink: 0;
+  opacity: 0.9;
+}
+
+.reg-ticker-icon {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 16px; height: 16px; flex-shrink: 0;
+  border-radius: 2px; opacity: 0.9;
+  overflow: hidden;
+}
+.reg-ticker-icon svg {
+  width: 100%; height: 100%; display: block;
+}
+
+.reg-ticker-source {
+  font-family: var(--mono); font-size: 9px;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  color: rgba(255,255,255,0.4);
+}
+
+.reg-ticker-text {
+  font-family: var(--sans); font-size: 11px;
+  font-weight: 400; color: rgba(255,255,255,0.75);
+  max-width: 360px; overflow: hidden;
+  text-overflow: ellipsis; white-space: nowrap;
+}
+
+.reg-ticker-item:hover .reg-ticker-text { color: #fff; }
+
+.reg-ticker-date {
+  font-family: var(--mono); font-size: 9px;
+  color: rgba(255,255,255,0.25);
+  letter-spacing: 0.04em;
+}
+
+.reg-ticker-sep {
+  display: inline-block;
+  width: 3px; height: 3px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.15);
+  flex-shrink: 0;
+}
+
+@keyframes ticker-scroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
 /* ─── PAGE SHELL ──────────────────────────────────────────── */
-.page-shell { margin-top: 56px; }
+.page-shell { margin-top: 88px; }
 
 /* ─── INNER PAGE HERO ─────────────────────────────────────── */
 .inner-hero {

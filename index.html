@@ -21,7 +21,7 @@
 /* ─── HOME HERO ───────────────────────────────────────────── */
 .home-hero {
   background: var(--bg);
-  min-height: calc(100vh - 56px);
+  min-height: calc(100vh - 88px);
   display: flex; align-items: center;
   padding: 80px 40px;
   border-bottom: 1px solid var(--rule);
@@ -323,6 +323,137 @@
 }
 .btn-white:hover { background: var(--bg); }
 
+/* ─── REGULATORY LANDSCAPE ───────────────────────────────── */
+.reg-landscape {
+  background: var(--white);
+  border-top: 1px solid var(--rule);
+}
+
+.reg-header {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 60px; align-items: end; margin-bottom: 40px;
+}
+
+.reg-lead {
+  font-size: 16px; color: var(--ink-2);
+  font-weight: 300; line-height: 1.75;
+  border-left: 2px solid var(--rule);
+  padding-left: 20px; align-self: end;
+}
+
+.reg-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 1px; background: var(--rule);
+  border: 1px solid var(--rule);
+}
+
+.reg-column {
+  background: var(--bg);
+  display: flex; flex-direction: column;
+}
+
+.reg-col-header {
+  padding: 20px 24px 16px;
+  border-bottom: 1px solid var(--rule);
+  background: var(--white);
+}
+
+.reg-col-flag {
+  font-family: var(--mono); font-size: 9px;
+  letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--red); margin-bottom: 4px;
+  display: flex; align-items: center; gap: 8px;
+}
+
+.reg-col-flag .flag-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--red); opacity: 0.5;
+}
+
+.reg-col-name {
+  font-size: 14px; font-weight: 500;
+  color: var(--ink); line-height: 1.35;
+}
+
+.reg-col-desc {
+  font-size: 11px; color: var(--ink-3);
+  line-height: 1.5; margin-top: 4px;
+}
+
+.reg-items {
+  padding: 0; flex: 1;
+  list-style: none;
+}
+
+.reg-item {
+  padding: 16px 24px;
+  border-bottom: 1px solid var(--rule);
+  transition: background 0.15s;
+}
+.reg-item:last-child { border-bottom: none; }
+.reg-item:hover { background: var(--white); }
+
+.reg-item a {
+  text-decoration: none; color: inherit;
+  display: block;
+}
+
+.reg-item-type {
+  font-family: var(--mono); font-size: 9px;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--ink-3); margin-bottom: 4px;
+}
+
+.reg-item-title {
+  font-size: 13px; font-weight: 400;
+  color: var(--ink); line-height: 1.5;
+  margin-bottom: 6px;
+  display: -webkit-box; -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical; overflow: hidden;
+}
+
+.reg-item a:hover .reg-item-title { color: var(--red); }
+
+.reg-item-date {
+  font-family: var(--mono); font-size: 10px;
+  color: var(--ink-3); letter-spacing: 0.04em;
+}
+
+.reg-item-skeleton {
+  padding: 16px 24px;
+  border-bottom: 1px solid var(--rule);
+}
+.reg-item-skeleton:last-child { border-bottom: none; }
+
+.skel-line {
+  height: 10px; background: var(--rule);
+  border-radius: 2px; margin-bottom: 8px;
+  animation: shimmer 1.5s ease-in-out infinite alternate;
+}
+.skel-line:nth-child(1) { width: 40%; }
+.skel-line:nth-child(2) { width: 90%; }
+.skel-line:nth-child(3) { width: 70%; }
+.skel-line:nth-child(4) { width: 30%; margin-bottom: 0; }
+
+@keyframes shimmer {
+  from { opacity: 0.5; }
+  to { opacity: 1; }
+}
+
+.reg-unavailable {
+  padding: 24px;
+  font-family: var(--mono); font-size: 11px;
+  color: var(--ink-3); text-align: center;
+  letter-spacing: 0.04em;
+}
+
+.reg-footer-note {
+  margin-top: 20px;
+  font-family: var(--mono); font-size: 10px;
+  color: var(--ink-3); letter-spacing: 0.04em;
+  text-align: right;
+}
+
 /* RESPONSIVE */
 @media (max-width: 880px) {
   .home-hero { padding: 60px 24px; }
@@ -331,6 +462,8 @@
   .what-grid { grid-template-columns: 1fr; gap: 40px; }
   .produces-header { grid-template-columns: 1fr; gap: 20px; }
   .produces-grid { grid-template-columns: 1fr; }
+  .reg-header { grid-template-columns: 1fr; gap: 20px; }
+  .reg-grid { grid-template-columns: 1fr; }
   .home-cta { padding: 60px 24px; }
 }
 @media (max-width: 580px) {
@@ -391,8 +524,13 @@
   </ul>
 </nav>
 
+<!-- CREDIBILITY TICKER -->
+<div class="reg-ticker" id="reg-ticker" aria-label="Recent regulatory activity">
+  <div class="reg-ticker-track" id="reg-ticker-track"></div>
+</div>
+
 <!-- HERO -->
-<div style="background: var(--bg);">
+<div style="background: var(--bg); margin-top: 88px;">
   <section class="home-hero">
     <div class="home-hero-inner">
       <div>
@@ -645,6 +783,65 @@
   </div>
 </section>
 
+<!-- REGULATORY LANDSCAPE -->
+<section class="page-section reg-landscape">
+  <div class="section-inner">
+    <div class="reg-header">
+      <div>
+        <div class="section-eyebrow">Regulatory landscape</div>
+        <h2 class="section-title">Government activity<br>on <em>AI safety.</em></h2>
+      </div>
+      <p class="reg-lead">Recent regulatory actions, draft standards, and legislative developments from authorities shaping the governance of AI in safety-critical domains.</p>
+    </div>
+    <div class="reg-grid">
+
+      <!-- US Federal Register -->
+      <div class="reg-column">
+        <div class="reg-col-header">
+          <div class="reg-col-flag"><span class="flag-dot"></span>United States</div>
+          <div class="reg-col-name">Federal Register</div>
+          <div class="reg-col-desc">Rules, proposed rules, and executive orders on AI</div>
+        </div>
+        <ul class="reg-items" id="reg-feed-us">
+          <li class="reg-item-skeleton"><div class="skel-line"></div><div class="skel-line"></div><div class="skel-line"></div><div class="skel-line"></div></li>
+          <li class="reg-item-skeleton"><div class="skel-line"></div><div class="skel-line"></div><div class="skel-line"></div><div class="skel-line"></div></li>
+          <li class="reg-item-skeleton"><div class="skel-line"></div><div class="skel-line"></div><div class="skel-line"></div><div class="skel-line"></div></li>
+        </ul>
+      </div>
+
+      <!-- EU AI Act -->
+      <div class="reg-column">
+        <div class="reg-col-header">
+          <div class="reg-col-flag"><span class="flag-dot"></span>European Union</div>
+          <div class="reg-col-name">EU AI Act</div>
+          <div class="reg-col-desc">Key legislation and implementing acts under the AI Act</div>
+        </div>
+        <ul class="reg-items" id="reg-feed-eu">
+          <li class="reg-item-skeleton"><div class="skel-line"></div><div class="skel-line"></div><div class="skel-line"></div><div class="skel-line"></div></li>
+          <li class="reg-item-skeleton"><div class="skel-line"></div><div class="skel-line"></div><div class="skel-line"></div><div class="skel-line"></div></li>
+          <li class="reg-item-skeleton"><div class="skel-line"></div><div class="skel-line"></div><div class="skel-line"></div><div class="skel-line"></div></li>
+        </ul>
+      </div>
+
+      <!-- NIST -->
+      <div class="reg-column">
+        <div class="reg-col-header">
+          <div class="reg-col-flag"><span class="flag-dot"></span>NIST</div>
+          <div class="reg-col-name">AI Standards &amp; News</div>
+          <div class="reg-col-desc">AI safety standards, frameworks, and draft publications</div>
+        </div>
+        <ul class="reg-items" id="reg-feed-nist">
+          <li class="reg-item-skeleton"><div class="skel-line"></div><div class="skel-line"></div><div class="skel-line"></div><div class="skel-line"></div></li>
+          <li class="reg-item-skeleton"><div class="skel-line"></div><div class="skel-line"></div><div class="skel-line"></div><div class="skel-line"></div></li>
+          <li class="reg-item-skeleton"><div class="skel-line"></div><div class="skel-line"></div><div class="skel-line"></div><div class="skel-line"></div></li>
+        </ul>
+      </div>
+
+    </div>
+    <div class="reg-footer-note">Sources updated on page load from official government APIs</div>
+  </div>
+</section>
+
 <!-- HOME CTA -->
 <div class="home-cta">
   <h2>Begin a certification assessment.</h2>
@@ -718,6 +915,240 @@ document.querySelector('.gn-hamburger').addEventListener('click', function() {
   this.setAttribute('aria-expanded', this.classList.contains('open'));
   document.body.style.overflow = this.classList.contains('open') ? 'hidden' : '';
 });
+</script>
+
+<script>
+/* ─── REGULATORY LANDSCAPE FEEDS ─────────────────────────── */
+(function () {
+  const CORS_PROXY = 'https://corsproxy.io/?';
+
+  /* ── Agency logos (inline SVG) ─────────────────────── */
+  var LOGOS = {
+    us: '<img src="img/federal-register.svg" alt="Federal Register" style="width:100%;height:100%;object-fit:contain;border-radius:50%;">',
+    eu: '<img src="img/eu-flag.svg" alt="EU" style="width:100%;height:100%;object-fit:cover;border-radius:2px;">',
+    nist: '<img src="img/nist.svg" alt="NIST" style="width:100%;height:100%;object-fit:contain;filter:invert(1);">'
+  };
+
+  /* ── Ticker builder ────────────────────────────────── */
+  var tickerItems = [];
+  var tickerSources = { us: false, eu: false, nist: false };
+
+  function tryBuildTicker() {
+    if (!tickerSources.us || !tickerSources.eu || !tickerSources.nist) return;
+    var track = document.getElementById('reg-ticker-track');
+    if (!track || tickerItems.length === 0) return;
+
+    tickerItems.sort(function (a, b) { return (b.sortDate || 0) - (a.sortDate || 0); });
+
+    var html = '';
+    function itemHtml(item) {
+      return '<a class="reg-ticker-item" href="' + item.url + '" target="_blank" rel="noopener">'
+        + '<span class="reg-ticker-icon">' + item.logo + '</span>'
+        + '<span class="reg-ticker-source">' + item.source + '</span>'
+        + '<span class="reg-ticker-text">' + item.title + '</span>'
+        + '<span class="reg-ticker-date">' + item.date + '</span>'
+        + '</a><span class="reg-ticker-sep"></span>';
+    }
+    for (var i = 0; i < tickerItems.length; i++) html += itemHtml(tickerItems[i]);
+    track.innerHTML = html + html;
+  }
+
+  function formatDate(dateStr) {
+    const d = new Date(dateStr);
+    return d.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+  }
+
+  function renderItems(containerId, items) {
+    const el = document.getElementById(containerId);
+    if (!items || items.length === 0) {
+      el.innerHTML = '<li class="reg-unavailable">No recent items available</li>';
+      return;
+    }
+    el.innerHTML = items.map(function (item) {
+      return '<li class="reg-item"><a href="' + item.url + '" target="_blank" rel="noopener">'
+        + '<div class="reg-item-type">' + item.type + '</div>'
+        + '<div class="reg-item-title">' + item.title + '</div>'
+        + '<div class="reg-item-date">' + item.date + '</div>'
+        + '</a></li>';
+    }).join('');
+  }
+
+  function renderError(containerId) {
+    document.getElementById(containerId).innerHTML =
+      '<li class="reg-unavailable">Currently unavailable</li>';
+  }
+
+  function escapeHtml(str) {
+    var div = document.createElement('div');
+    div.textContent = str;
+    return div.innerHTML;
+  }
+
+  /* ── US Federal Register ───────────────────────────── */
+  fetch('https://www.federalregister.gov/api/v1/documents.json?conditions%5Bterm%5D=%22artificial+intelligence%22&order=newest&per_page=5&fields%5B%5D=title&fields%5B%5D=publication_date&fields%5B%5D=html_url&fields%5B%5D=type')
+    .then(function (r) { return r.json(); })
+    .then(function (data) {
+      var items = data.results.slice(0, 5).map(function (doc) {
+        return {
+          title: escapeHtml(doc.title),
+          url: doc.html_url,
+          date: formatDate(doc.publication_date),
+          type: doc.type || 'Document'
+        };
+      });
+      renderItems('reg-feed-us', items);
+      /* Feed ticker */
+      data.results.slice(0, 3).forEach(function (doc) {
+        tickerItems.push({
+          title: escapeHtml(doc.title), url: doc.html_url,
+          date: formatDate(doc.publication_date), source: 'Federal Register',
+          logo: LOGOS.us,
+          sortDate: new Date(doc.publication_date).getTime()
+        });
+      });
+      tickerSources.us = true; tryBuildTicker();
+    })
+    .catch(function () { renderError('reg-feed-us'); tickerSources.us = true; tryBuildTicker(); });
+
+  /* ── EUR-Lex (EU AI Act) ────────────────────────────── */
+  var euAiKeywords = /artificial intelligence|AI Act|2024\/1689|high-risk AI|AI system|AI regulation|machine learning|algorithmic|AI agent|2025\/454/i;
+
+  /* Key EU AI Act documents — always-available fallback */
+  var euAiFallback = [
+    { title: 'Proposal amending Regulation (EU) 2024/1689 — Digital Omnibus on AI', url: 'https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:52025PC0836', date: formatDate('2025-11-19'), type: 'Legislative Proposal' },
+    { title: 'European Strategy for Artificial Intelligence — Communication from the Commission', url: 'https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:52025DC0724', date: formatDate('2025-10-08'), type: 'Commission Communication' },
+    { title: 'Commission Implementing Regulation (EU) 2025/454 — Rules for the application of the AI Act', url: 'https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32025R0454', date: formatDate('2025-03-07'), type: 'Implementing Regulation' },
+    { title: 'Regulation (EU) 2024/1689 — Harmonised rules on artificial intelligence (AI Act)', url: 'https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32024R1689', date: formatDate('2024-07-12'), type: 'EU AI Act' },
+    { title: 'Corrigendum to the AI Act — Regulation (EU) 2024/1689', url: 'https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32024R1689R(01)', date: formatDate('2024-10-29'), type: 'Corrigendum' }
+  ];
+
+  var eurLexUrl = 'https://eur-lex.europa.eu/EN/display-feed.rss?rssId=162';
+  fetch(CORS_PROXY + encodeURIComponent(eurLexUrl))
+    .then(function (r) { return r.text(); })
+    .then(function (xml) {
+      var parser = new DOMParser();
+      var doc = parser.parseFromString(xml, 'text/xml');
+      var rssItems = doc.querySelectorAll('item');
+      var filtered = [];
+      for (var i = 0; i < rssItems.length && filtered.length < 5; i++) {
+        var title = rssItems[i].querySelector('title') ? rssItems[i].querySelector('title').textContent : '';
+        var desc = rssItems[i].querySelector('description') ? rssItems[i].querySelector('description').textContent : '';
+        if (euAiKeywords.test(title) || euAiKeywords.test(desc)) {
+          var link = rssItems[i].querySelector('link') ? rssItems[i].querySelector('link').textContent : '';
+          var pubDate = rssItems[i].querySelector('pubDate') ? rssItems[i].querySelector('pubDate').textContent : '';
+          var creator = '';
+          var dcCreator = rssItems[i].getElementsByTagNameNS('http://purl.org/dc/elements/1.1/', 'creator');
+          if (dcCreator.length > 0) creator = dcCreator[0].textContent;
+          var cleanTitle = title.replace(/^CELEX:\S+:\s*/, '').replace(/^CELEX:\S+\s*/, '');
+          if (!cleanTitle || cleanTitle.length < 5) cleanTitle = title;
+          filtered.push({
+            title: escapeHtml(cleanTitle),
+            url: link,
+            date: pubDate ? formatDate(pubDate) : '',
+            type: creator ? escapeHtml(creator.replace(/,\s*$/, '')) : 'EU Legislation'
+          });
+        }
+      }
+      /* If RSS had AI matches, use them; otherwise show key AI Act documents */
+      var euItems = filtered.length > 0 ? filtered : euAiFallback;
+      renderItems('reg-feed-eu', euItems);
+      /* Feed ticker */
+      euItems.slice(0, 3).forEach(function (item) {
+        tickerItems.push({
+          title: item.title, url: item.url, date: item.date,
+          source: 'EU', logo: LOGOS.eu,
+          sortDate: new Date(item.date).getTime()
+        });
+      });
+      tickerSources.eu = true; tryBuildTicker();
+    })
+    .catch(function () {
+      renderItems('reg-feed-eu', euAiFallback);
+      euAiFallback.slice(0, 3).forEach(function (item) {
+        tickerItems.push({
+          title: item.title, url: item.url, date: item.date,
+          source: 'EU', logo: LOGOS.eu,
+          sortDate: new Date(item.date).getTime()
+        });
+      });
+      tickerSources.eu = true; tryBuildTicker();
+    });
+
+  /* ── NIST (News + Drafts combined) ─────────────────── */
+  var nistAiKeywords = /artificial intelligence|AI |AI-|machine learning|cybersecurity framework|risk management framework|AI agent|agentic|neural network/i;
+
+  var nistNewsUrl = 'https://www.nist.gov/news-events/news/rss.xml';
+  var nistDraftsUrl = 'https://csrc.nist.gov/CSRC/media/feeds/pubs/drafts-open-for-comment.json';
+
+  Promise.all([
+    fetch(CORS_PROXY + encodeURIComponent(nistNewsUrl)).then(function (r) { return r.text(); }).catch(function () { return ''; }),
+    fetch(CORS_PROXY + encodeURIComponent(nistDraftsUrl)).then(function (r) { return r.text(); }).catch(function () { return ''; })
+  ]).then(function (results) {
+    var items = [];
+
+    /* Parse news RSS */
+    if (results[0]) {
+      var parser = new DOMParser();
+      var doc = parser.parseFromString(results[0], 'text/xml');
+      var rssItems = doc.querySelectorAll('item');
+      for (var i = 0; i < rssItems.length && items.length < 8; i++) {
+        var title = rssItems[i].querySelector('title') ? rssItems[i].querySelector('title').textContent : '';
+        var desc = rssItems[i].querySelector('description') ? rssItems[i].querySelector('description').textContent : '';
+        if (nistAiKeywords.test(title) || nistAiKeywords.test(desc)) {
+          var link = rssItems[i].querySelector('link') ? rssItems[i].querySelector('link').textContent : '';
+          var pubDate = rssItems[i].querySelector('pubDate') ? rssItems[i].querySelector('pubDate').textContent : '';
+          items.push({
+            title: escapeHtml(title),
+            url: link,
+            date: pubDate ? formatDate(pubDate) : '',
+            type: 'NIST News',
+            sortDate: pubDate ? new Date(pubDate) : new Date(0)
+          });
+        }
+      }
+    }
+
+    /* Parse drafts JSON */
+    if (results[1]) {
+      var clean = results[1].replace(/^\uFEFF/, '');
+      try {
+        var data = JSON.parse(clean);
+        var entries = data.entries || [];
+        for (var j = 0; j < entries.length; j++) {
+          var dTitle = entries[j].title || '';
+          var cleanTitle = dTitle.replace(/^(SP|IR|FIPS|Other)\s*\[.*?\]\s*/i, '').replace(/Initial Public Draft\s*$/i, '').replace(/Final Public Draft\s*$/i, '').trim();
+          var commentDue = entries[j].content || '';
+          items.push({
+            title: escapeHtml(cleanTitle),
+            url: entries[j].link || entries[j].id || '',
+            date: entries[j].published ? formatDate(entries[j].published) : '',
+            type: commentDue ? escapeHtml(commentDue) : 'Draft Publication',
+            sortDate: entries[j].published ? new Date(entries[j].published) : new Date(0)
+          });
+        }
+      } catch (e) { /* skip bad JSON */ }
+    }
+
+    /* Sort by date descending, take top 5 */
+    items.sort(function (a, b) { return b.sortDate - a.sortDate; });
+    items = items.slice(0, 5);
+
+    /* Remove sortDate before render */
+    items.forEach(function (item) { delete item.sortDate; });
+
+    renderItems('reg-feed-nist', items);
+    /* Feed ticker */
+    items.slice(0, 3).forEach(function (item) {
+      tickerItems.push({
+        title: item.title, url: item.url, date: item.date,
+        source: 'NIST', logo: LOGOS.nist,
+        sortDate: new Date(item.date).getTime()
+      });
+    });
+    tickerSources.nist = true; tryBuildTicker();
+  }).catch(function () { renderError('reg-feed-nist'); tickerSources.nist = true; tryBuildTicker(); });
+
+})();
 </script>
 </body>
 </html>

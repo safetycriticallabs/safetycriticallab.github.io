@@ -681,8 +681,8 @@ h2.section-title em { font-style: italic; color: var(--red); font-family: var(--
   .gn-links {
     display: none;
     position: fixed;
-    top: 96px; left: 0; right: 0;
-    height: calc(100vh - 96px);
+    top: 64px; left: 0; right: 0;
+    height: calc(100vh - 64px);
     background: #fafaf8;
     flex-direction: column;
     align-items: stretch;

@@ -164,6 +164,8 @@
 .os-item-val a:hover { text-decoration: underline; }
 
 @media (max-width: 880px) {
+  .inner-hero-inner { grid-template-columns: 1fr !important; gap: 24px !important; }
+  .pub-standard-grid { grid-template-columns: 1fr !important; gap: 40px !important; }
   .fw-full-grid { grid-template-columns: 1fr 1fr; }
   .struct-grid { grid-template-columns: 1fr; }
   .os-inner { grid-template-columns: 1fr; gap: 36px; }
@@ -419,7 +421,7 @@
 
 <!-- PUBLISHED STANDARD BAND -->
 <div style="background: var(--ink); padding: 72px 40px; border-top: 1px solid rgba(255,255,255,0.06);">
-  <div style="max-width: 1140px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center;">
+  <div class="pub-standard-grid" style="max-width: 1140px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center;">
     <div>
       <div class="section-eyebrow" style="color: rgba(255,255,255,0.3);">Published standard</div>
       <h2 style="font-family: var(--sans); font-size: clamp(28px, 3vw, 40px); font-weight: 600; color: #fff; line-height: 1.1; letter-spacing: -0.02em; margin-bottom: 20px;">

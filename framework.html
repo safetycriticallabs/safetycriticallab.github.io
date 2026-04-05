@@ -12,6 +12,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=IBM+Plex+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 <link rel="stylesheet" href="styles.css">
 <style>
 /* ─── CLASSIFICATION KEY ──────────────────────────────────── */
@@ -258,7 +260,7 @@
 <!-- CLASSIFICATION KEY + FRAMEWORK -->
 <section class="page-section" style="background: var(--bg);">
   <div class="section-inner">
-    <div class="section-eyebrow">Framework v1.0</div>
+    <div class="section-eyebrow">Framework v1.0.3</div>
     <div style="display:flex; justify-content:space-between; align-items:flex-end; gap: 32px; margin-bottom: 48px; flex-wrap: wrap;">
       <h2 class="section-title" style="margin-bottom:0;">AI-1 through AI-9</h2>
       <div class="class-key">
@@ -268,56 +270,56 @@
       </div>
     </div>
 
-    <div class="fw-full-grid">
-      <div class="fw-card fade-up">
+    <div class="fw-full-grid stagger-in">
+      <div class="fw-card">
         <div class="fw-card-id">AI-1</div>
         <div class="fw-card-title">Data partitioning &amp; classification</div>
         <div class="fw-card-body">Training/validation/test separation with documented provenance. CUI and ITAR classification inheritance through AI output channels.</div>
         <div class="fw-scope">All classifications</div>
       </div>
-      <div class="fw-card fade-up">
+      <div class="fw-card">
         <div class="fw-card-id">AI-2</div>
         <div class="fw-card-title">Bias detection &amp; mitigation</div>
         <div class="fw-card-body">Baseline performance across user classes and operational contexts. Bias-free training data requirements with verifiable inspection criteria.</div>
         <div class="fw-scope">All classifications</div>
       </div>
-      <div class="fw-card fade-up">
+      <div class="fw-card">
         <div class="fw-card-id">AI-3</div>
         <div class="fw-card-title">ML test coverage</div>
         <div class="fw-card-body">A defined test matrix serving as the ML equivalent of code coverage. Covers nominal performance, edge cases, failure mode injection, and distributional boundary testing.</div>
         <div class="fw-scope">All classifications</div>
       </div>
-      <div class="fw-card fade-up">
+      <div class="fw-card">
         <div class="fw-card-id">AI-4</div>
         <div class="fw-card-title">Continuous validation</div>
         <div class="fw-card-body">Post-deployment drift detection with defined thresholds, revalidation triggers, and escalation paths. Addresses a gap not covered by existing safety-critical software standards.</div>
         <div class="fw-scope">All classifications</div>
       </div>
-      <div class="fw-card fade-up">
+      <div class="fw-card">
         <div class="fw-card-id">AI-5</div>
         <div class="fw-card-title">Hallucination prevention</div>
         <div class="fw-card-body">Output confidence bounding with defined thresholds for safety-critical decisions. Graceful degradation to human override below threshold.</div>
         <div class="fw-scope">All classifications</div>
       </div>
-      <div class="fw-card fade-up">
+      <div class="fw-card">
         <div class="fw-card-id">AI-6</div>
         <div class="fw-card-title">Out-of-distribution detection</div>
         <div class="fw-card-body">Detection, logging, and escalation of inputs outside the training distribution. This is the condition under which AI behavior is least predictable.</div>
         <div class="fw-scope">All classifications</div>
       </div>
-      <div class="fw-card fade-up">
+      <div class="fw-card">
         <div class="fw-card-id">AI-7</div>
         <div class="fw-card-title">Adversarial robustness</div>
         <div class="fw-card-body">Adversarial testing protocols, defined robustness bounds, and specified behavioral requirements under adversarial input conditions.</div>
         <div class="fw-scope">Safety-critical only</div>
       </div>
-      <div class="fw-card fade-up">
+      <div class="fw-card">
         <div class="fw-card-id">AI-8</div>
         <div class="fw-card-title">Explainability</div>
         <div class="fw-card-body">Operator-accessible decision reasoning with traceable decision basis. Required for any AI system where a traditional safety case would demand logical inspection.</div>
         <div class="fw-scope">Safety &amp; mission critical</div>
       </div>
-      <div class="fw-card fade-up">
+      <div class="fw-card">
         <div class="fw-card-id">AI-9</div>
         <div class="fw-card-title">Human-AI teaming</div>
         <div class="fw-card-body">Defined AI authority limits, human override requirements, trust calibration testing, and interaction audit trails.</div>
@@ -335,8 +337,8 @@
     <p style="font-size:16px;color:rgba(255,255,255,0.45);font-weight:300;line-height:1.75;max-width:560px;margin-top:0;">
       The framework applies all nine requirement areas at different depths depending on the classification of your AI system. Classification is determined during Phase 1 of the assessment.
     </p>
-    <div class="struct-grid">
-      <div class="struct-col fade-up">
+    <div class="struct-grid stagger-in">
+      <div class="struct-col">
         <div class="struct-col-title">Tier 1</div>
         <div class="struct-col-name">Safety-Critical</div>
         <div class="struct-col-desc">AI systems where failure could result in loss of human life, loss of the vehicle, or catastrophic mission failure with no recovery path. Full requirement set applies. Surveillance audits required annually.</div>
@@ -352,7 +354,7 @@
           <span class="struct-req-tag">AI-9</span>
         </div>
       </div>
-      <div class="struct-col fade-up">
+      <div class="struct-col">
         <div class="struct-col-title">Tier 2</div>
         <div class="struct-col-name">Mission-Critical</div>
         <div class="struct-col-desc">AI systems where failure would compromise mission objectives or require significant mission replanning, but with recoverable consequences. Adversarial robustness requirement (AI-7) may be tailored based on threat environment.</div>
@@ -367,7 +369,7 @@
           <span class="struct-req-tag">AI-9</span>
         </div>
       </div>
-      <div class="struct-col fade-up">
+      <div class="struct-col">
         <div class="struct-col-title">Tier 3</div>
         <div class="struct-col-name">Mission Support</div>
         <div class="struct-col-desc">AI systems supporting mission operations where failure has recoverable consequences with operational workarounds available. Explainability (AI-8) and human AI teaming (AI-9) requirements may be scoped to the specific operational context.</div>
@@ -466,38 +468,38 @@
 <footer class="site-footer">
   <a href="/" class="footer-wordmark">
     <svg width="120" height="120" viewBox="0 0 200 200" fill="none">
-      <circle cx="100" cy="100" r="97" stroke="#1B3A6B" stroke-width=".6" opacity=".25"/>
-      <circle cx="100" cy="100" r="93" stroke="#1B3A6B" stroke-width="2.8" stroke-dasharray="3.2 3.8" opacity=".55"/>
-      <circle cx="100" cy="100" r="89" stroke="#1B3A6B" stroke-width=".8" opacity=".3"/>
+      <circle cx="100" cy="100" r="97" stroke="#4A6A8A" stroke-width=".6" opacity=".35"/>
+      <circle cx="100" cy="100" r="93" stroke="#4A6A8A" stroke-width="2.8" stroke-dasharray="3.2 3.8" opacity=".65"/>
+      <circle cx="100" cy="100" r="89" stroke="#4A6A8A" stroke-width=".8" opacity=".4"/>
       <path id="ft-top-arc" d="M 21,100 A 79,79 0 0,1 179,100" fill="none"/>
-      <text font-family="'IBM Plex Mono',monospace" font-size="9.2" font-weight="500" letter-spacing="4.8" fill="#1B3A6B" opacity=".85">
+      <text font-family="'IBM Plex Mono',monospace" font-size="9.2" font-weight="500" letter-spacing="4.8" fill="#4A6A8A" opacity=".9">
         <textPath href="#ft-top-arc" startOffset="50%" text-anchor="middle">SAFETY CRITICAL LABS</textPath>
       </text>
       <path id="ft-bot-arc" d="M 16,100 A 84,84 0 0,0 184,100" fill="none"/>
-      <text font-family="'IBM Plex Mono',monospace" font-size="8" font-weight="400" letter-spacing="3.2" fill="#1B3A6B" opacity=".6">
+      <text font-family="'IBM Plex Mono',monospace" font-size="8" font-weight="400" letter-spacing="3.2" fill="#4A6A8A" opacity=".7">
         <textPath href="#ft-bot-arc" startOffset="50%" text-anchor="middle">AI CERTIFICATION AUTHORITY</textPath>
       </text>
       <text x="14" y="103" text-anchor="middle" font-size="5" fill="#B4822A" opacity=".8">&#x2726;</text>
       <text x="186" y="103" text-anchor="middle" font-size="5" fill="#B4822A" opacity=".8">&#x2726;</text>
-      <circle cx="100" cy="100" r="73" stroke="#1B3A6B" stroke-width=".8" opacity=".2"/>
-      <circle cx="100" cy="100" r="70" stroke="#1B3A6B" stroke-width=".4" opacity=".15"/>
-      <circle cx="100" cy="100" r="67" fill="#EAF0F8" stroke="#1B3A6B" stroke-width=".5" opacity=".9"/>
-      <circle cx="100" cy="100" r="50" stroke="#1B3A6B" stroke-width="1" fill="none" opacity=".35"/>
-      <circle cx="100" cy="100" r="38" stroke="#1B3A6B" stroke-width=".8" fill="none" opacity=".4"/>
-      <circle cx="100" cy="100" r="27" stroke="#1B3A6B" stroke-width=".7" fill="none" opacity=".45"/>
-      <line x1="100" y1="70" x2="100" y2="75.5" stroke="#1B3A6B" stroke-width="1.2" stroke-linecap="round" opacity=".5"/>
-      <line x1="100" y1="124.5" x2="100" y2="130" stroke="#1B3A6B" stroke-width="1.2" stroke-linecap="round" opacity=".5"/>
-      <line x1="70" y1="100" x2="75.5" y2="100" stroke="#1B3A6B" stroke-width="1.2" stroke-linecap="round" opacity=".5"/>
-      <line x1="124.5" y1="100" x2="130" y2="100" stroke="#1B3A6B" stroke-width="1.2" stroke-linecap="round" opacity=".5"/>
-      <line x1="78.8" y1="78.8" x2="82.7" y2="82.7" stroke="#1B3A6B" stroke-width="1" stroke-linecap="round" opacity=".35"/>
-      <line x1="117.3" y1="117.3" x2="121.2" y2="121.2" stroke="#1B3A6B" stroke-width="1" stroke-linecap="round" opacity=".35"/>
-      <line x1="121.2" y1="78.8" x2="117.3" y2="82.7" stroke="#1B3A6B" stroke-width="1" stroke-linecap="round" opacity=".35"/>
-      <line x1="82.7" y1="117.3" x2="78.8" y2="121.2" stroke="#1B3A6B" stroke-width="1" stroke-linecap="round" opacity=".35"/>
-      <circle cx="100" cy="100" r="17" fill="#1B3A6B" stroke="#B4822A" stroke-width="1.4"/>
-      <circle cx="100" cy="100" r="11" fill="#1B3A6B" stroke="#B4822A" stroke-width=".6" opacity=".5"/>
+      <circle cx="100" cy="100" r="73" stroke="#4A6A8A" stroke-width=".8" opacity=".3"/>
+      <circle cx="100" cy="100" r="70" stroke="#4A6A8A" stroke-width=".4" opacity=".25"/>
+      <circle cx="100" cy="100" r="67" fill="#162D4E" stroke="#4A6A8A" stroke-width=".5" opacity="1"/>
+      <circle cx="100" cy="100" r="50" stroke="#4A6A8A" stroke-width="1" fill="none" opacity=".45"/>
+      <circle cx="100" cy="100" r="38" stroke="#4A6A8A" stroke-width=".8" fill="none" opacity=".5"/>
+      <circle cx="100" cy="100" r="27" stroke="#4A6A8A" stroke-width=".7" fill="none" opacity=".55"/>
+      <line x1="100" y1="70" x2="100" y2="75.5" stroke="#4A6A8A" stroke-width="1.2" stroke-linecap="round" opacity=".6"/>
+      <line x1="100" y1="124.5" x2="100" y2="130" stroke="#4A6A8A" stroke-width="1.2" stroke-linecap="round" opacity=".6"/>
+      <line x1="70" y1="100" x2="75.5" y2="100" stroke="#4A6A8A" stroke-width="1.2" stroke-linecap="round" opacity=".6"/>
+      <line x1="124.5" y1="100" x2="130" y2="100" stroke="#4A6A8A" stroke-width="1.2" stroke-linecap="round" opacity=".6"/>
+      <line x1="78.8" y1="78.8" x2="82.7" y2="82.7" stroke="#4A6A8A" stroke-width="1" stroke-linecap="round" opacity=".45"/>
+      <line x1="117.3" y1="117.3" x2="121.2" y2="121.2" stroke="#4A6A8A" stroke-width="1" stroke-linecap="round" opacity=".45"/>
+      <line x1="121.2" y1="78.8" x2="117.3" y2="82.7" stroke="#4A6A8A" stroke-width="1" stroke-linecap="round" opacity=".45"/>
+      <line x1="82.7" y1="117.3" x2="78.8" y2="121.2" stroke="#4A6A8A" stroke-width="1" stroke-linecap="round" opacity=".45"/>
+      <circle cx="100" cy="100" r="17" fill="#0F2340" stroke="#B4822A" stroke-width="1.4"/>
+      <circle cx="100" cy="100" r="11" fill="#0F2340" stroke="#B4822A" stroke-width=".6" opacity=".6"/>
       <line x1="86" y1="100" x2="114" y2="100" stroke="#C8272D" stroke-width="2.2" stroke-linecap="round"/>
       <circle cx="100" cy="100" r="4.5" fill="#C8272D"/>
-      <text x="100" y="157" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="7" font-weight="500" letter-spacing="4" fill="#1B3A6B" opacity=".5">SCL</text>
+      <text x="100" y="157" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="7" font-weight="500" letter-spacing="4" fill="#4A6A8A" opacity=".6">SCL</text>
     </svg>
     <span class="footer-wordmark-text"><em>Safety Critical</em> Labs</span>
   </a>
@@ -508,19 +510,84 @@
     <li><a href="/markets">Markets</a></li>
     <li><a href="/contact">Contact</a></li>
   </ul>
-  <div class="footer-meta">Framework v1.0 &middot; Est. 2025<br>safetycriticallabs.com</div>
+  <div class="footer-meta">Framework v1.0.3 &middot; Est. 2025<br>safetycriticallabs.com</div>
 </footer>
 
 <script>
-const observer = new IntersectionObserver((entries) => {
-  entries.forEach((e, i) => {
-    if (e.isIntersecting) {
-      setTimeout(() => e.target.classList.add('visible'), i * 70);
-      observer.unobserve(e.target);
+/* ─── GSAP SCROLL ANIMATIONS ─────────────────────────────── */
+gsap.registerPlugin(ScrollTrigger);
+
+/* Fade-up elements */
+gsap.utils.toArray('.fade-up').forEach(function(el, i) {
+  gsap.fromTo(el,
+    { opacity: 0, y: 40 },
+    { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out',
+      scrollTrigger: {
+        trigger: el,
+        start: 'top 88%',
+        once: true
+      }
     }
-  });
-}, { threshold: 0.1 });
-document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+  );
+});
+
+/* Stagger children (grids, lists) */
+gsap.utils.toArray('.stagger-in').forEach(function(container) {
+  gsap.fromTo(container.children,
+    { opacity: 0, y: 30 },
+    { opacity: 1, y: 0, duration: 0.7, ease: 'power3.out',
+      stagger: 0.12,
+      scrollTrigger: {
+        trigger: container,
+        start: 'top 85%',
+        once: true
+      }
+    }
+  );
+});
+
+/* Scale-in elements (cards, images) */
+gsap.utils.toArray('.scale-in').forEach(function(el) {
+  gsap.fromTo(el,
+    { opacity: 0, scale: 0.95, y: 20 },
+    { opacity: 1, scale: 1, y: 0, duration: 0.9, ease: 'power3.out',
+      scrollTrigger: {
+        trigger: el,
+        start: 'top 85%',
+        once: true
+      }
+    }
+  );
+});
+
+/* Slide from left */
+gsap.utils.toArray('.slide-left').forEach(function(el) {
+  gsap.fromTo(el,
+    { opacity: 0, x: -60 },
+    { opacity: 1, x: 0, duration: 0.9, ease: 'power3.out',
+      scrollTrigger: {
+        trigger: el,
+        start: 'top 85%',
+        once: true
+      }
+    }
+  );
+});
+
+/* Slide from right */
+gsap.utils.toArray('.slide-right').forEach(function(el) {
+  gsap.fromTo(el,
+    { opacity: 0, x: 60 },
+    { opacity: 1, x: 0, duration: 0.9, ease: 'power3.out',
+      scrollTrigger: {
+        trigger: el,
+        start: 'top 85%',
+        once: true
+      }
+    }
+  );
+});
+
 // Mobile menu toggle
 document.querySelector('.gn-hamburger').addEventListener('click', function() {
   this.classList.toggle('open');

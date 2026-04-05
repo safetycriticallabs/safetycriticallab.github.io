@@ -25,58 +25,67 @@
   background: var(--bg);
   min-height: calc(100vh - 88px);
   display: flex; align-items: center;
-  padding: 80px 40px 100px;
+  padding: 100px 40px 80px;
   position: relative;
+  overflow: hidden;
 }
 .home-hero::after {
   content: ''; position: absolute; bottom: 0; left: 0; right: 0;
-  height: 80px;
+  height: 120px;
   background: linear-gradient(to bottom, transparent, var(--white));
   pointer-events: none;
+  z-index: 2;
 }
 
 .home-hero-inner {
-  max-width: 1140px; margin: 0 auto; width: 100%;
+  max-width: 1200px; margin: 0 auto; width: 100%;
   display: grid; grid-template-columns: 1fr 1fr;
-  gap: 80px; align-items: center;
+  align-items: center;
+  gap: 0;
+}
+
+.hero-text {
+  position: relative; z-index: 2;
+  margin-right: -120px;
 }
 
 .hero-eyebrow {
-  font-family: var(--mono); font-size: 10px;
-  letter-spacing: 0.16em; text-transform: uppercase;
-  color: var(--ink-3); margin-bottom: 24px;
-  display: flex; align-items: center; gap: 10px;
+  font-family: var(--mono); font-size: 11px;
+  letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--ink-3); margin-bottom: 28px;
+  display: flex; align-items: center; gap: 12px;
 }
-.hero-eyebrow::before { content: ''; display: inline-block; width: 16px; height: 1px; background: var(--red); }
+.hero-eyebrow::before { content: ''; display: inline-block; width: 20px; height: 1px; background: var(--red); }
 
 .home-hero h1 {
   font-family: var(--sans);
-  font-size: clamp(44px, 5.5vw, 72px);
-  font-weight: 600; line-height: 1.05;
-  color: var(--ink); letter-spacing: -0.025em;
-  margin-bottom: 28px;
+  font-size: clamp(48px, 5.5vw, 76px);
+  font-weight: 600; line-height: 1.04;
+  color: var(--ink); letter-spacing: -0.03em;
+  margin-bottom: 32px;
 }
 .home-hero h1 em { font-style: italic; color: var(--red); font-family: var(--serif); font-weight: 400; font-size: 1.05em; }
 
 .hero-body {
-  font-size: 17px; color: var(--ink-2);
-  font-weight: 300; line-height: 1.75; margin-bottom: 36px;
-  max-width: 460px;
+  font-size: 18px; color: var(--ink-2);
+  font-weight: 300; line-height: 1.8; margin-bottom: 40px;
+  max-width: 480px;
 }
 
 /* ─── CERTIFICATE DISPLAY ─────────────────────────────────── */
 .cert-stage {
   display: flex; align-items: center; justify-content: center;
-  padding: 16px 0;
+  position: relative; z-index: 1;
+  margin-left: -80px;
 }
 
 .cert-doc {
   background: #fff;
   border: 1px solid #d4cfc4;
-  width: 100%; max-width: 400px;
+  width: 100%; max-width: 440px;
   padding: 24px 28px;
   position: relative;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.06), 0 16px 48px rgba(0,0,0,0.09);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.04), 0 20px 60px rgba(0,0,0,0.06);
   font-family: var(--serif);
 }
 
@@ -232,128 +241,132 @@
 .section-wwd {
   background: var(--white);
   position: relative;
+  padding: 104px 40px;
 }
 .section-wwd::after {
   content: ''; position: absolute; bottom: 0; left: 0; right: 0;
-  height: 120px;
+  height: 160px;
   background: linear-gradient(to bottom, transparent, var(--bg));
   pointer-events: none;
 }
 .section-produces {
   background: var(--bg);
   position: relative;
+  padding: 104px 40px;
 }
 .section-produces::before {
   content: ''; position: absolute; top: 0; left: 50%; transform: translateX(-50%);
-  width: 60px; height: 3px; background: var(--red); border-radius: 2px; opacity: 0.3;
+  width: 48px; height: 2px; background: var(--red); border-radius: 2px; opacity: 0.25;
 }
 .section-produces::after {
   content: ''; position: absolute; bottom: 0; left: 0; right: 0;
-  height: 120px;
-  background: linear-gradient(to bottom, transparent, var(--white));
+  height: 160px;
+  background: linear-gradient(to bottom, transparent, #F0F2F5);
   pointer-events: none;
 }
 
 /* ─── WHAT WE DO ──────────────────────────────────────────── */
 .what-grid {
   display: grid; grid-template-columns: 1fr 1fr;
-  gap: 64px; align-items: start;
+  gap: 80px; align-items: start;
 }
 
 .what-body p {
-  font-size: 16px; color: var(--ink-2); line-height: 1.8;
-  font-weight: 300; margin-bottom: 18px;
+  font-size: 17px; color: var(--ink-2); line-height: 1.85;
+  font-weight: 300; margin-bottom: 22px;
 }
 .what-body p strong { color: var(--ink); font-weight: 500; }
 
 .nav-cards {
   display: flex; flex-direction: column;
   border: 1px solid var(--rule);
+  border-radius: 6px; overflow: hidden;
 }
 
 .nav-card {
-  display: flex; align-items: center; gap: 16px;
-  padding: 16px 20px; background: var(--white);
+  display: flex; align-items: center; gap: 18px;
+  padding: 20px 24px; background: var(--white);
   border-bottom: 1px solid var(--rule);
   text-decoration: none; color: inherit;
-  transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+  transition: background 0.25s, transform 0.25s, box-shadow 0.25s;
 }
 .nav-card:last-child { border-bottom: none; }
 .nav-card:hover {
-  background: var(--white);
+  background: #FAFBFC;
   transform: translateX(4px);
   box-shadow: -4px 0 0 var(--red);
 }
 
 .nav-card-num {
-  font-family: var(--mono); font-size: 10px;
-  color: var(--red); flex-shrink: 0; min-width: 24px;
+  font-family: var(--mono); font-size: 11px;
+  color: var(--red); flex-shrink: 0; min-width: 28px;
 }
 .nav-card-body { flex: 1; }
-.nav-card-title { font-size: 13px; font-weight: 500; color: var(--ink); margin-bottom: 2px; }
-.nav-card-desc { font-size: 12px; color: var(--ink-3); line-height: 1.5; }
-.nav-card-arrow { color: var(--rule); font-size: 13px; flex-shrink: 0; transition: color 0.15s; }
-.nav-card:hover .nav-card-arrow { color: var(--red); }
+.nav-card-title { font-size: 14px; font-weight: 500; color: var(--ink); margin-bottom: 3px; }
+.nav-card-desc { font-size: 13px; color: var(--ink-3); line-height: 1.55; }
+.nav-card-arrow { color: var(--rule); font-size: 14px; flex-shrink: 0; transition: color 0.2s, transform 0.2s; }
+.nav-card:hover .nav-card-arrow { color: var(--red); transform: translateX(2px); }
 
 /* ─── WHAT CERTIFICATION PRODUCES ────────────────────────── */
 .produces-header {
   display: grid; grid-template-columns: 1fr 1fr;
-  gap: 60px; align-items: end; margin-bottom: 40px;
+  gap: 72px; align-items: end; margin-bottom: 56px;
 }
 
 .produces-lead {
-  font-size: 16px; color: var(--ink-2);
-  font-weight: 300; line-height: 1.75;
+  font-size: 17px; color: var(--ink-2);
+  font-weight: 300; line-height: 1.8;
   border-left: 2px solid var(--rule);
-  padding-left: 20px; align-self: end;
+  padding-left: 24px; align-self: end;
 }
 
 .produces-grid {
   display: grid; grid-template-columns: repeat(3, 1fr);
-  gap: 16px; background: transparent;
+  gap: 20px; background: transparent;
 }
 
 .produces-card {
   background: var(--white);
-  padding: 28px 24px;
+  padding: 32px 28px;
   border: 1px solid var(--rule);
-  border-radius: 4px;
-  transition: transform 0.2s, box-shadow 0.2s;
+  border-radius: 6px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 .produces-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 16px rgba(15,35,64,0.08);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(15,35,64,0.08);
 }
 
 .produces-card-label {
-  font-family: var(--mono); font-size: 9px;
+  font-family: var(--mono); font-size: 10px;
   letter-spacing: 0.14em; text-transform: uppercase;
-  color: var(--red); margin-bottom: 10px;
+  color: var(--red); margin-bottom: 12px;
 }
 .produces-card-title {
-  font-size: 14px; font-weight: 500;
-  color: var(--ink); margin-bottom: 8px; line-height: 1.35;
+  font-size: 15px; font-weight: 500;
+  color: var(--ink); margin-bottom: 10px; line-height: 1.4;
 }
-.produces-card-desc { font-size: 13px; color: var(--ink-2); line-height: 1.6; }
+.produces-card-desc { font-size: 14px; color: var(--ink-2); line-height: 1.65; }
 
 /* ─── HOME CTA ────────────────────────────────────────────── */
 .home-cta {
   background: var(--white);
-  padding: 72px 40px;
+  padding: 96px 40px;
   text-align: center;
+  position: relative;
 }
 
 .home-cta h2 {
   font-family: var(--serif);
-  font-size: clamp(28px, 3vw, 40px);
+  font-size: clamp(30px, 3.5vw, 44px);
   color: var(--ink); font-weight: 400;
-  margin-bottom: 16px; line-height: 1.15;
+  margin-bottom: 20px; line-height: 1.15;
 }
 
 .home-cta p {
-  font-size: 16px; color: var(--ink-2);
-  font-weight: 300; max-width: 480px;
-  margin: 0 auto 32px; line-height: 1.75;
+  font-size: 17px; color: var(--ink-2);
+  font-weight: 300; max-width: 500px;
+  margin: 0 auto 36px; line-height: 1.8;
 }
 
 .btn-white {
@@ -370,19 +383,19 @@
 /* ─── ALIGNED WITH STRIP ──────────────────────────────────── */
 .aligned-strip {
   background: var(--bg);
-  padding: 48px 40px;
+  padding: 56px 40px;
   border-top: 1px solid var(--rule);
   border-bottom: 1px solid var(--rule);
 }
 .aligned-inner {
-  max-width: 1140px; margin: 0 auto;
+  max-width: 1200px; margin: 0 auto;
   text-align: center;
 }
 .aligned-label {
-  font-family: var(--mono); font-size: 10px;
-  letter-spacing: 0.18em; text-transform: uppercase;
+  font-family: var(--mono); font-size: 11px;
+  letter-spacing: 0.2em; text-transform: uppercase;
   color: var(--ink-3);
-  display: block; margin-bottom: 20px;
+  display: block; margin-bottom: 24px;
 }
 .aligned-logos {
   display: flex; align-items: center; gap: 0;
@@ -392,58 +405,72 @@
   font-family: var(--mono); font-size: 12px;
   font-weight: 500; letter-spacing: 0.06em;
   color: var(--ink);
-  transition: color 0.25s, border-color 0.25s;
+  transition: color 0.3s ease, border-color 0.3s ease, background 0.3s ease;
   cursor: default; white-space: nowrap;
-  padding: 8px 20px;
+  padding: 10px 24px;
   border: 1px solid var(--rule);
   border-radius: 980px;
-  margin: 5px 6px;
+  margin: 6px 7px;
 }
 .aligned-item:hover {
   color: var(--red);
   border-color: var(--red);
+  background: rgba(200,39,45,0.03);
 }
 .aligned-sep { display: none; }
 
 /* ─── REGULATORY LANDSCAPE ───────────────────────────────── */
 .reg-landscape {
-  background: var(--white);
-  border-top: 1px solid var(--rule);
+  background: #F0F2F5;
+  border-top: none;
+  padding-top: 104px; padding-bottom: 104px;
 }
 
 .reg-header {
-  display: grid; grid-template-columns: 1fr 1fr;
-  gap: 60px; align-items: end; margin-bottom: 40px;
+  text-align: center; margin-bottom: 56px;
 }
 
+.reg-header .section-eyebrow { margin-bottom: 14px; }
+
+.reg-header .section-title { margin-bottom: 20px; }
+
 .reg-lead {
-  font-size: 16px; color: var(--ink-2);
-  font-weight: 300; line-height: 1.75;
-  border-left: 2px solid var(--rule);
-  padding-left: 20px; align-self: end;
+  font-size: 17px; color: var(--ink-2);
+  font-weight: 300; line-height: 1.8;
+  max-width: 620px; margin: 0 auto;
+  border-left: none; padding-left: 0;
 }
 
 .reg-grid {
   display: grid; grid-template-columns: repeat(3, 1fr);
-  gap: 1px; background: var(--rule);
-  border: 1px solid var(--rule);
+  gap: 24px; background: none;
+  border: none;
 }
 
 .reg-column {
-  background: var(--bg);
+  background: var(--white);
   display: flex; flex-direction: column;
+  border-radius: 8px;
+  border-left: 3px solid var(--red);
+  box-shadow: 0 2px 12px rgba(15,35,64,0.06);
+  overflow: hidden;
+  transition: transform 0.25s, box-shadow 0.25s;
+}
+.reg-column:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(15,35,64,0.1);
 }
 
 .reg-col-header {
-  padding: 20px 24px 16px;
+  padding: 28px 28px 20px;
   border-bottom: 1px solid var(--rule);
   background: var(--white);
 }
 
 .reg-col-flag {
-  font-family: var(--mono); font-size: 9px;
+  font-family: var(--mono); font-size: 10px;
   letter-spacing: 0.14em; text-transform: uppercase;
-  color: var(--red); margin-bottom: 4px;
+  color: var(--red); margin-bottom: 6px;
   display: flex; align-items: center; gap: 8px;
 }
 
@@ -453,13 +480,13 @@
 }
 
 .reg-col-name {
-  font-size: 14px; font-weight: 500;
+  font-size: 17px; font-weight: 600;
   color: var(--ink); line-height: 1.35;
 }
 
 .reg-col-desc {
-  font-size: 11px; color: var(--ink-3);
-  line-height: 1.5; margin-top: 4px;
+  font-size: 13px; color: var(--ink-3);
+  line-height: 1.55; margin-top: 6px;
 }
 
 .reg-items {
@@ -468,12 +495,12 @@
 }
 
 .reg-item {
-  padding: 16px 24px;
+  padding: 18px 28px;
   border-bottom: 1px solid var(--rule);
-  transition: background 0.15s;
+  transition: background 0.2s ease;
 }
 .reg-item:last-child { border-bottom: none; }
-.reg-item:hover { background: var(--white); }
+.reg-item:hover { background: #F8F9FB; }
 
 .reg-item a {
   text-decoration: none; color: inherit;
@@ -487,9 +514,9 @@
 }
 
 .reg-item-title {
-  font-size: 13px; font-weight: 400;
-  color: var(--ink); line-height: 1.5;
-  margin-bottom: 6px;
+  font-size: 14px; font-weight: 400;
+  color: var(--ink); line-height: 1.55;
+  margin-bottom: 8px;
   display: -webkit-box; -webkit-line-clamp: 3;
   -webkit-box-orient: vertical; overflow: hidden;
 }
@@ -530,26 +557,31 @@
 }
 
 .reg-footer-note {
-  margin-top: 20px;
+  margin-top: 24px;
   font-family: var(--mono); font-size: 10px;
   color: var(--ink-3); letter-spacing: 0.04em;
-  text-align: right;
+  text-align: center;
 }
 
 /* RESPONSIVE */
 @media (max-width: 880px) {
-  .home-hero { padding: 60px 24px; }
-  .home-hero-inner { grid-template-columns: 1fr; gap: 40px; }
-  .cert-stage { padding: 0; }
-  .what-grid { grid-template-columns: 1fr; gap: 40px; }
-  .produces-header { grid-template-columns: 1fr; gap: 20px; }
+  .home-hero { padding: 72px 24px 80px; }
+  .home-hero-inner { grid-template-columns: 1fr; }
+  .hero-text { margin-right: 0; }
+  .cert-stage { display: none; }
+  .section-wwd { padding: 72px 24px; }
+  .what-grid { grid-template-columns: 1fr; gap: 48px; }
+  .section-produces { padding: 72px 24px; }
+  .produces-header { grid-template-columns: 1fr; gap: 24px; margin-bottom: 40px; }
   .produces-grid { grid-template-columns: 1fr; }
-  .reg-header { grid-template-columns: 1fr; gap: 20px; }
-  .reg-grid { grid-template-columns: 1fr; }
-  .home-cta { padding: 60px 24px; }
+  .reg-landscape { padding-top: 72px; padding-bottom: 72px; }
+  .reg-header { text-align: center; }
+  .reg-grid { grid-template-columns: 1fr; gap: 20px; }
+  .home-cta { padding: 72px 24px; }
+  .aligned-strip { padding: 40px 24px; }
 }
 @media (max-width: 580px) {
-  .cert-doc { max-width: 100%; }
+  .home-hero h1 { font-size: clamp(36px, 8vw, 48px); }
 }
 </style>
 </head>
@@ -581,7 +613,7 @@
 <div style="background: var(--bg); margin-top: 88px;">
   <section class="home-hero">
     <div class="home-hero-inner">
-      <div>
+      <div class="hero-text">
         <h1>
           AI Certification<br>
           for <em>Safety-Critical</em><br>
@@ -593,7 +625,7 @@
         <a href="/contact" class="btn btn-solid">Begin an assessment</a>
       </div>
 
-      <div class="cert-stage scale-in">
+      <div class="cert-stage">
         <div class="cert-doc">
 
           <div class="cert-corner cert-corner-tl">
@@ -714,8 +746,8 @@
                 <line x1="83" y1="117" x2="79" y2="121" stroke="#1B3A6B" stroke-width="1" stroke-linecap="round" opacity="0.3"/>
                 <circle cx="100" cy="100" r="17" fill="#1B3A6B" stroke="#B4822A" stroke-width="1.5"/>
                 <circle cx="100" cy="100" r="11" fill="#1B3A6B" stroke="#B4822A" stroke-width="0.6" opacity="0.4"/>
-                <line x1="86" y1="100" x2="114" y2="100" stroke="#C8272D" stroke-width="2.5" stroke-linecap="round"/>
-                <circle cx="100" cy="100" r="4.5" fill="#C8272D"/>
+                <line x1="86" y1="100" x2="114" y2="100" stroke="#2E6DB4" stroke-width="2.5" stroke-linecap="round"/>
+                <circle cx="100" cy="100" r="4.5" fill="#2E6DB4"/>
               </svg>
             </div>
             <div class="cert-foot-text" style="text-align:right;">Issued: [DD Month YYYY]<br>Surveillance Due: [DD Month YYYY]</div>
@@ -732,7 +764,7 @@
     <span class="aligned-label">Framework aligned with</span>
     <div class="aligned-logos">
       <span class="aligned-item">NIST</span>
-      <span class="aligned-item">FDA</span>
+      <span class="aligned-item">FAA</span>
       <span class="aligned-item">NASA</span>
       <span class="aligned-item">ISO</span>
       <span class="aligned-item">EU AI Act</span>
@@ -850,10 +882,8 @@
 <section class="page-section reg-landscape">
   <div class="section-inner">
     <div class="reg-header">
-      <div>
-        <div class="section-eyebrow">Regulatory landscape</div>
-        <h2 class="section-title">Government activity<br>on <em>AI safety.</em></h2>
-      </div>
+      <div class="section-eyebrow">Regulatory landscape</div>
+      <h2 class="section-title">Government activity on <em>AI safety.</em></h2>
       <p class="reg-lead">Recent regulatory actions, draft standards, and legislative developments from authorities shaping the governance of AI in safety-critical domains.</p>
     </div>
     <div class="reg-grid">
@@ -914,51 +944,61 @@
 
 <!-- FOOTER -->
 <footer class="site-footer">
-  <a href="/" class="footer-wordmark">
-    <svg width="120" height="120" viewBox="0 0 200 200" fill="none">
-      <circle cx="100" cy="100" r="97" stroke="#4A6A8A" stroke-width=".6" opacity=".35"/>
-      <circle cx="100" cy="100" r="93" stroke="#4A6A8A" stroke-width="2.8" stroke-dasharray="3.2 3.8" opacity=".65"/>
-      <circle cx="100" cy="100" r="89" stroke="#4A6A8A" stroke-width=".8" opacity=".4"/>
-      <path id="ft-top-arc" d="M 21,100 A 79,79 0 0,1 179,100" fill="none"/>
-      <text font-family="'IBM Plex Mono',monospace" font-size="9.2" font-weight="500" letter-spacing="4.8" fill="#4A6A8A" opacity=".9">
-        <textPath href="#ft-top-arc" startOffset="50%" text-anchor="middle">SAFETY CRITICAL LABS</textPath>
-      </text>
-      <path id="ft-bot-arc" d="M 16,100 A 84,84 0 0,0 184,100" fill="none"/>
-      <text font-family="'IBM Plex Mono',monospace" font-size="8" font-weight="400" letter-spacing="3.2" fill="#4A6A8A" opacity=".7">
-        <textPath href="#ft-bot-arc" startOffset="50%" text-anchor="middle">AI CERTIFICATION AUTHORITY</textPath>
-      </text>
-      <text x="14" y="103" text-anchor="middle" font-size="5" fill="#B4822A" opacity=".8">&#x2726;</text>
-      <text x="186" y="103" text-anchor="middle" font-size="5" fill="#B4822A" opacity=".8">&#x2726;</text>
-      <circle cx="100" cy="100" r="73" stroke="#4A6A8A" stroke-width=".8" opacity=".3"/>
-      <circle cx="100" cy="100" r="70" stroke="#4A6A8A" stroke-width=".4" opacity=".25"/>
-      <circle cx="100" cy="100" r="67" fill="#162D4E" stroke="#4A6A8A" stroke-width=".5" opacity="1"/>
-      <circle cx="100" cy="100" r="50" stroke="#4A6A8A" stroke-width="1" fill="none" opacity=".45"/>
-      <circle cx="100" cy="100" r="38" stroke="#4A6A8A" stroke-width=".8" fill="none" opacity=".5"/>
-      <circle cx="100" cy="100" r="27" stroke="#4A6A8A" stroke-width=".7" fill="none" opacity=".55"/>
-      <line x1="100" y1="70" x2="100" y2="75.5" stroke="#4A6A8A" stroke-width="1.2" stroke-linecap="round" opacity=".6"/>
-      <line x1="100" y1="124.5" x2="100" y2="130" stroke="#4A6A8A" stroke-width="1.2" stroke-linecap="round" opacity=".6"/>
-      <line x1="70" y1="100" x2="75.5" y2="100" stroke="#4A6A8A" stroke-width="1.2" stroke-linecap="round" opacity=".6"/>
-      <line x1="124.5" y1="100" x2="130" y2="100" stroke="#4A6A8A" stroke-width="1.2" stroke-linecap="round" opacity=".6"/>
-      <line x1="78.8" y1="78.8" x2="82.7" y2="82.7" stroke="#4A6A8A" stroke-width="1" stroke-linecap="round" opacity=".45"/>
-      <line x1="117.3" y1="117.3" x2="121.2" y2="121.2" stroke="#4A6A8A" stroke-width="1" stroke-linecap="round" opacity=".45"/>
-      <line x1="121.2" y1="78.8" x2="117.3" y2="82.7" stroke="#4A6A8A" stroke-width="1" stroke-linecap="round" opacity=".45"/>
-      <line x1="82.7" y1="117.3" x2="78.8" y2="121.2" stroke="#4A6A8A" stroke-width="1" stroke-linecap="round" opacity=".45"/>
-      <circle cx="100" cy="100" r="17" fill="#0F2340" stroke="#B4822A" stroke-width="1.4"/>
-      <circle cx="100" cy="100" r="11" fill="#0F2340" stroke="#B4822A" stroke-width=".6" opacity=".6"/>
-      <line x1="86" y1="100" x2="114" y2="100" stroke="#C8272D" stroke-width="2.2" stroke-linecap="round"/>
-      <circle cx="100" cy="100" r="4.5" fill="#C8272D"/>
-      <text x="100" y="157" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="7" font-weight="500" letter-spacing="4" fill="#4A6A8A" opacity=".6">SCL</text>
-    </svg>
-    <span class="footer-wordmark-text"><em>Safety Critical</em> Labs</span>
-  </a>
-  <ul class="footer-links">
-    <li><a href="/framework">Framework</a></li>
-    <li><a href="/process">Process</a></li>
-    <li><a href="/expertise">Expertise</a></li>
-    <li><a href="/markets">Markets</a></li>
-    <li><a href="/contact">Contact</a></li>
-  </ul>
-  <div class="footer-meta">Framework v1.0.3 &middot; Est. 2025<br>safetycriticallabs.com</div>
+  <div class="footer-inner">
+    <div class="footer-top">
+      <a href="/" class="footer-seal-link">
+        <svg class="footer-seal" width="260" height="260" viewBox="0 0 200 200" fill="none">
+          <circle cx="100" cy="100" r="97" stroke="#4A6A8A" stroke-width=".6" opacity=".35"/>
+          <circle cx="100" cy="100" r="93" stroke="#4A6A8A" stroke-width="2.8" stroke-dasharray="3.2 3.8" opacity=".65"/>
+          <circle cx="100" cy="100" r="89" stroke="#4A6A8A" stroke-width=".8" opacity=".4"/>
+          <path id="ft-top-arc" d="M 21,100 A 79,79 0 0,1 179,100" fill="none"/>
+          <text font-family="'IBM Plex Mono',monospace" font-size="9.2" font-weight="500" letter-spacing="4.8" fill="#4A6A8A" opacity=".9">
+            <textPath href="#ft-top-arc" startOffset="50%" text-anchor="middle">SAFETY CRITICAL LABS</textPath>
+          </text>
+          <path id="ft-bot-arc" d="M 16,100 A 84,84 0 0,0 184,100" fill="none"/>
+          <text font-family="'IBM Plex Mono',monospace" font-size="8" font-weight="400" letter-spacing="3.2" fill="#4A6A8A" opacity=".7">
+            <textPath href="#ft-bot-arc" startOffset="50%" text-anchor="middle">AI CERTIFICATION AUTHORITY</textPath>
+          </text>
+          <text x="14" y="103" text-anchor="middle" font-size="5" fill="#B4822A" opacity=".8">&#x2726;</text>
+          <text x="186" y="103" text-anchor="middle" font-size="5" fill="#B4822A" opacity=".8">&#x2726;</text>
+          <circle cx="100" cy="100" r="73" stroke="#4A6A8A" stroke-width=".8" opacity=".3"/>
+          <circle cx="100" cy="100" r="70" stroke="#4A6A8A" stroke-width=".4" opacity=".25"/>
+          <circle cx="100" cy="100" r="67" fill="#162D4E" stroke="#4A6A8A" stroke-width=".5" opacity="1"/>
+          <circle cx="100" cy="100" r="50" stroke="#4A6A8A" stroke-width="1" fill="none" opacity=".45"/>
+          <circle cx="100" cy="100" r="38" stroke="#4A6A8A" stroke-width=".8" fill="none" opacity=".5"/>
+          <circle cx="100" cy="100" r="27" stroke="#4A6A8A" stroke-width=".7" fill="none" opacity=".55"/>
+          <line x1="100" y1="70" x2="100" y2="75.5" stroke="#4A6A8A" stroke-width="1.2" stroke-linecap="round" opacity=".6"/>
+          <line x1="100" y1="124.5" x2="100" y2="130" stroke="#4A6A8A" stroke-width="1.2" stroke-linecap="round" opacity=".6"/>
+          <line x1="70" y1="100" x2="75.5" y2="100" stroke="#4A6A8A" stroke-width="1.2" stroke-linecap="round" opacity=".6"/>
+          <line x1="124.5" y1="100" x2="130" y2="100" stroke="#4A6A8A" stroke-width="1.2" stroke-linecap="round" opacity=".6"/>
+          <line x1="78.8" y1="78.8" x2="82.7" y2="82.7" stroke="#4A6A8A" stroke-width="1" stroke-linecap="round" opacity=".45"/>
+          <line x1="117.3" y1="117.3" x2="121.2" y2="121.2" stroke="#4A6A8A" stroke-width="1" stroke-linecap="round" opacity=".45"/>
+          <line x1="121.2" y1="78.8" x2="117.3" y2="82.7" stroke="#4A6A8A" stroke-width="1" stroke-linecap="round" opacity=".45"/>
+          <line x1="82.7" y1="117.3" x2="78.8" y2="121.2" stroke="#4A6A8A" stroke-width="1" stroke-linecap="round" opacity=".45"/>
+          <circle cx="100" cy="100" r="17" fill="#0F2340" stroke="#B4822A" stroke-width="1.4"/>
+          <circle cx="100" cy="100" r="11" fill="#0F2340" stroke="#B4822A" stroke-width=".6" opacity=".6"/>
+          <line x1="86" y1="100" x2="114" y2="100" stroke="#2E6DB4" stroke-width="2.2" stroke-linecap="round"/>
+          <circle cx="100" cy="100" r="4.5" fill="#2E6DB4"/>
+          <text x="103" y="161" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="7" font-weight="500" letter-spacing="4" fill="#4A6A8A" opacity=".6">SCL</text>
+        </svg>
+      </a>
+      <div class="footer-content">
+        <div class="footer-nav-row">
+          <a href="/framework">Framework</a>
+          <a href="/process">Process</a>
+          <a href="/expertise">Expertise</a>
+          <a href="/markets">Markets</a>
+          <a href="/contact">Contact</a>
+        </div>
+        <p class="footer-tagline">AI certification authority for safety-critical systems.<br>Formal determinations issued against a published, citable standard.</p>
+      </div>
+    </div>
+    <div class="footer-divider"></div>
+    <div class="footer-bottom">
+      <span class="footer-copyright">&copy; 2025 Safety Critical Labs. All rights reserved.</span>
+      <span class="footer-version">Framework v1.0.3</span>
+    </div>
+  </div>
 </footer>
 
 <script>
@@ -1035,6 +1075,24 @@ gsap.utils.toArray('.slide-right').forEach(function(el) {
     }
   );
 });
+
+/* Hero slide-together animation */
+(function() {
+  var heroText = document.querySelector('.hero-text');
+  var certStage = document.querySelector('.cert-stage');
+  if (heroText && certStage) {
+    var tl = gsap.timeline({ delay: 0.3 });
+    tl.fromTo(heroText,
+      { opacity: 0, x: -80 },
+      { opacity: 1, x: 0, duration: 1.2, ease: 'power3.out' }
+    );
+    tl.fromTo(certStage,
+      { opacity: 0, x: 80 },
+      { opacity: 1, x: 0, duration: 1.2, ease: 'power3.out' },
+      '<0.15'
+    );
+  }
+})();
 
 // Mobile menu toggle
 document.querySelector('.gn-hamburger').addEventListener('click', function() {

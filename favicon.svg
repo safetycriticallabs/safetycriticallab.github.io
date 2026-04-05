@@ -42,9 +42,9 @@
   <circle cx="100" cy="100" r="17" fill="#0A1828" stroke="#C9943A" stroke-width="1.4"/>
   <circle cx="100" cy="100" r="11" fill="#0A1828" stroke="#C9943A" stroke-width=".6" opacity=".5"/>
   <!-- Compliance line — red -->
-  <line x1="86" y1="100" x2="114" y2="100" stroke="#C8272D" stroke-width="2.2" stroke-linecap="round"/>
+  <line x1="86" y1="100" x2="114" y2="100" stroke="#2E6DB4" stroke-width="2.2" stroke-linecap="round"/>
   <!-- Pupil -->
-  <circle cx="100" cy="100" r="4.5" fill="#C8272D"/>
+  <circle cx="100" cy="100" r="4.5" fill="#2E6DB4"/>
   <!-- SCL monogram -->
-  <text x="100" y="157" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="7" font-weight="500" letter-spacing="4" fill="#4A7AB0" opacity=".4">SCL</text>
+  <text x="103" y="161" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="7" font-weight="500" letter-spacing="4" fill="#4A7AB0" opacity=".4">SCL</text>
 </svg>

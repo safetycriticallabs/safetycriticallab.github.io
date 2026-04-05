@@ -1,0 +1,2360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SCL AI Requirements Framework</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=IBM+Plex+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #FAFAF8;
+  --white: #FFFFFF;
+  --ink: #0F2340;
+  --ink2: #3D5068;
+  --ink3: #7A8FA6;
+  --red: #2B6CB0;
+  --red-lt: #EEF4FB;
+  --rule: #E4E8EC;
+  --green: #2D7A3A;
+  --green-lt: #F3FAF5;
+  --gold: #6B4E0A;
+  --gold-lt: #FFFCF0;
+  --sans: 'DM Sans', system-ui, sans-serif;
+  --mono: 'IBM Plex Mono', monospace;
+  --serif: 'Instrument Serif', Georgia, serif;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { height: 100%; }
+body { background: var(--bg); color: var(--ink); font-family: var(--sans); }
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--rule); border-radius: 3px; }
+button { font-family: inherit; cursor: pointer; }
+
+.app { display: flex; flex-direction: column; height: 100vh; }
+
+/* Header */
+.header { padding: 12px 20px; border-bottom: 1px solid var(--rule); display: flex; align-items: center; gap: 14px; background: var(--white); flex-shrink: 0; }
+.header-logo { width: 60px; height: 60px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.header-logo svg { width: 60px; height: 60px; }
+.header-text { display: flex; flex-direction: column; }
+.header-brand { font-size: 13px; font-weight: 600; color: var(--ink); letter-spacing: 0.02em; }
+.header-brand em { color: var(--red); font-style: normal; }
+.header-sub { font-size: 10px; color: var(--ink3); font-family: var(--mono); letter-spacing: 0.04em; margin-top: 1px; }
+.header-counter { margin-left: auto; color: var(--ink3); font-size: 11px; font-family: var(--mono); }
+
+/* Main layout */
+.main { display: flex; flex: 1; min-height: 0; }
+
+/* Sidebar */
+.sidebar { width: 240px; border-right: 1px solid var(--rule); padding: 8px 0; overflow-y: auto; flex-shrink: 0; background: var(--white); }
+.nav-group { margin-bottom: 4px; }
+.nav-group-header { padding: 14px 16px 6px; font-family: var(--mono); font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink3); font-weight: 500; }
+.nav-btn { display: flex; align-items: center; width: 100%; padding: 8px 16px 8px 24px; background: transparent; border: none; border-left: 2px solid transparent; text-align: left; transition: all 0.15s; font-size: 12px; color: var(--ink3); }
+.nav-btn:hover { background: var(--bg); color: var(--ink2); }
+.nav-btn.active { background: var(--bg); border-left-color: var(--red); color: var(--ink); font-weight: 500; }
+
+/* Content */
+.content { flex: 1; padding: 28px 40px; overflow-y: auto; }
+.content-header { margin-bottom: 20px; }
+.content-header h2 { font-size: 24px; font-weight: 600; line-height: 1.2; }
+.content-header .section-label { font-family: var(--mono); font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink3); margin-bottom: 6px; }
+
+/* Overview slide */
+.overview-grid { display: grid; grid-template-columns: 360px 1fr; gap: 48px; align-items: start; }
+.overview-body { font-size: 14px; color: var(--ink2); line-height: 1.8; }
+.overview-body p { margin-bottom: 14px; }
+.overview-body strong { color: var(--ink); font-weight: 500; }
+.overview-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--rule); border: 1px solid var(--rule); border-radius: 4px; overflow: hidden; }
+.ostat { background: var(--bg); padding: 24px 20px; transition: background 0.2s; }
+.ostat:hover { background: var(--white); }
+.ostat-num { font-family: var(--serif); font-size: 44px; color: var(--ink); line-height: 1; margin-bottom: 6px; }
+.ostat-num em { color: var(--red); font-style: normal; }
+.ostat-label { font-family: var(--mono); font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink3); line-height: 1.5; }
+.overview-strip { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 20px; }
+.overview-tag { font-family: var(--mono); font-size: 9px; letter-spacing: 0.08em; text-transform: uppercase; border: 1px solid var(--rule); border-radius: 2px; padding: 5px 10px; color: var(--ink2); background: var(--white); }
+.overview-tag.accent { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+
+.doc-outline { margin-top: 32px; }
+.doc-outline-label { font-family: var(--mono); font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink3); margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+.doc-outline-label::after { content: ''; flex: 1; height: 1px; background: var(--rule); }
+.doc-outline-sections { display: flex; flex-direction: column; gap: 6px; }
+.doc-outline-item { background: var(--white); border: 1px solid var(--rule); border-radius: 4px; overflow: hidden; transition: all 0.15s; }
+.doc-outline-item.expanded { border-color: var(--red); }
+.doc-outline-header { display: flex; align-items: center; gap: 12px; padding: 14px 18px; cursor: pointer; transition: background 0.15s; }
+.doc-outline-header:hover { background: var(--bg); }
+.doc-outline-num { font-family: var(--mono); font-size: 11px; font-weight: 600; color: var(--red); min-width: 28px; }
+.doc-outline-title { font-size: 14px; font-weight: 500; color: var(--ink); flex: 1; }
+.doc-outline-badge { font-family: var(--mono); font-size: 9px; letter-spacing: 0.06em; color: var(--ink3); background: var(--bg); padding: 3px 8px; border-radius: 3px; }
+.doc-outline-chevron { color: var(--ink3); font-size: 12px; transition: transform 0.2s; }
+.doc-outline-item.expanded .doc-outline-chevron { transform: rotate(90deg); }
+.doc-outline-detail { display: none; padding: 0 18px 16px 58px; }
+.doc-outline-item.expanded .doc-outline-detail { display: block; }
+.doc-outline-desc { font-size: 13px; color: var(--ink2); line-height: 1.65; margin-bottom: 10px; }
+.doc-outline-subs { display: flex; flex-direction: column; gap: 4px; }
+.doc-outline-sub { font-size: 12px; color: var(--ink3); line-height: 1.5; padding: 4px 0; border-bottom: 1px solid var(--rule); }
+.doc-outline-sub:last-child { border-bottom: none; }
+.doc-outline-sub strong { color: var(--ink2); font-weight: 500; }
+
+/* Navigation footer */
+.nav-footer { display: flex; justify-content: space-between; margin-top: 36px; padding-top: 20px; border-top: 1px solid var(--rule); }
+.nav-footer button { padding: 10px 24px; background: var(--white); border: 1px solid var(--rule); border-radius: 4px; color: var(--ink3); font-size: 13px; transition: all 0.15s; }
+.nav-footer button:hover:not(:disabled) { border-color: var(--ink); color: var(--ink); }
+.nav-footer button:disabled { color: var(--rule); cursor: default; }
+.nav-footer button.primary { background: var(--red-lt); border-color: var(--red); color: var(--red); }
+
+/* ═══════════════════════════════════════════════════════════════
+   ML WALKTHROUGH STYLES
+   ═══════════════════════════════════════════════════════════════ */
+
+.wt-nav { display: flex; align-items: center; gap: 8px; margin-bottom: 20px; padding-bottom: 16px; border-bottom: 1px solid var(--rule); }
+.wt-dots { display: flex; gap: 6px; flex: 1; }
+.wt-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--rule); border: none; cursor: pointer; transition: all 0.2s; }
+.wt-dot:hover { background: var(--ink3); }
+.wt-dot.active { background: var(--red); transform: scale(1.3); }
+.wt-dot.done { background: var(--green); }
+.wt-label { font-family: var(--mono); font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink3); }
+.wt-arrows { display: flex; gap: 6px; }
+.wt-arrow { width: 28px; height: 28px; border-radius: 50%; border: 1px solid var(--rule); background: var(--white); color: var(--ink3); font-size: 12px; display: flex; align-items: center; justify-content: center; }
+.wt-arrow:hover:not(:disabled) { border-color: var(--ink); color: var(--ink); }
+.wt-arrow:disabled { opacity: 0.3; cursor: default; }
+
+.wt-step { display: none; animation: wtFade 0.3s ease; }
+.wt-step.active { display: block; }
+@keyframes wtFade { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+
+.wt-title { font-size: 18px; font-weight: 600; color: var(--ink); margin-bottom: 12px; }
+.wt-text { font-size: 14px; color: var(--ink2); line-height: 1.7; margin-bottom: 16px; }
+.wt-text strong { color: var(--ink); font-weight: 500; }
+
+/* Panels */
+.wt-panel { background: var(--white); border: 1px solid var(--rule); border-radius: 6px; padding: 20px; margin-bottom: 16px; }
+.wt-panel-label { font-family: var(--mono); font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink3); margin-bottom: 10px; }
+.wt-panel-red { border-top: 3px solid var(--red); }
+.wt-panel-green { border-top: 3px solid var(--green); }
+.wt-panel-gold { border-top: 3px solid var(--gold); }
+
+/* Callout */
+.wt-callout { padding: 14px 18px; background: var(--red-lt); border-left: 3px solid var(--red); border-radius: 0 4px 4px 0; margin-top: 16px; }
+.wt-callout p { font-size: 13px; color: var(--ink2); line-height: 1.65; margin: 0; }
+.wt-callout strong { color: var(--ink); }
+.wt-callout-green { background: var(--green-lt); border-left-color: var(--green); }
+
+/* Email samples */
+.wt-emails { display: flex; flex-direction: column; gap: 10px; }
+.wt-email { display: flex; align-items: flex-start; gap: 12px; padding: 12px 14px; background: var(--bg); border-radius: 4px; border-left: 3px solid transparent; }
+.wt-email.spam { border-left-color: var(--red); background: var(--red-lt); }
+.wt-email.ham { border-left-color: var(--green); background: var(--green-lt); }
+.wt-email-tag { font-family: var(--mono); font-size: 9px; letter-spacing: 0.08em; text-transform: uppercase; width: 50px; flex-shrink: 0; padding-top: 2px; }
+.wt-email.spam .wt-email-tag { color: var(--red); }
+.wt-email.ham .wt-email-tag { color: var(--green); }
+.wt-email-content { font-size: 13px; color: var(--ink); line-height: 1.5; }
+.wt-email-content .hl { background: rgba(43,108,176,0.15); padding: 1px 4px; border-radius: 2px; }
+
+/* Tokenization */
+.wt-token-flow { display: flex; flex-direction: column; gap: 12px; }
+.wt-token-row { display: flex; align-items: center; gap: 10px; }
+.wt-token-label { font-family: var(--mono); font-size: 9px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink3); width: 70px; flex-shrink: 0; }
+.wt-tokens { display: flex; flex-wrap: wrap; gap: 6px; }
+.wt-token { padding: 4px 10px; background: var(--bg); border: 1px solid var(--rule); border-radius: 3px; font-family: var(--mono); font-size: 11px; color: var(--ink2); }
+.wt-token.hl { background: var(--red-lt); border-color: rgba(43,108,176,0.3); color: var(--red); }
+.wt-arrow-down { text-align: center; color: var(--ink3); font-size: 18px; padding: 4px 0; }
+
+/* Embedding visualization */
+.wt-embed-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.wt-embed-word { text-align: center; padding: 16px; background: var(--bg); border-radius: 6px; }
+.wt-embed-word-label { font-size: 16px; font-weight: 600; color: var(--ink); margin-bottom: 10px; }
+.wt-embed-word-label.red { color: var(--red); }
+.wt-embed-dims { font-family: var(--mono); font-size: 10px; color: var(--ink3); line-height: 1.6; }
+.wt-embed-dims span { display: inline-block; padding: 2px 5px; margin: 2px; background: var(--white); border-radius: 2px; }
+
+/* Loss function */
+.wt-loss-eq { font-family: var(--mono); font-size: 14px; color: var(--ink); background: var(--bg); padding: 16px 20px; border-radius: 4px; border-left: 3px solid var(--red); margin-bottom: 12px; }
+
+/* Training visualization */
+.wt-train-wrap { position: relative; }
+.wt-train-canvas { width: 100%; max-width: 600px; height: 200px; background: var(--bg); border-radius: 6px; position: relative; overflow: hidden; margin: 0 auto; }
+.wt-train-dot { position: absolute; width: 12px; height: 12px; border-radius: 50%; transform: translate(-50%, -50%); transition: all 0.8s ease-out; cursor: pointer; }
+.wt-train-dot::after { content: attr(data-word); position: absolute; top: 16px; left: 50%; transform: translateX(-50%); font-family: var(--mono); font-size: 9px; color: var(--ink2); white-space: nowrap; }
+.wt-train-dot.money { background: var(--red); }
+.wt-train-dot.related { background: var(--ink); }
+.wt-train-dot.unrelated { background: var(--ink3); }
+.wt-train-cluster { position: absolute; border: 2px dashed rgba(43,108,176,0.25); border-radius: 50%; pointer-events: none; transition: all 0.8s ease-out; }
+.wt-train-controls { display: flex; align-items: center; gap: 16px; margin-top: 14px; }
+.wt-train-btn { padding: 10px 20px; background: var(--red); color: var(--white); border: none; border-radius: 4px; font-family: var(--mono); font-size: 11px; letter-spacing: 0.05em; }
+.wt-train-btn:hover { background: var(--ink); }
+.wt-train-btn:disabled { background: var(--rule); cursor: default; }
+.wt-train-epoch { font-family: var(--mono); font-size: 12px; color: var(--ink3); }
+.wt-train-loss { font-family: var(--mono); font-size: 12px; color: var(--ink2); }
+.wt-train-loss span { color: var(--red); font-weight: 600; }
+
+/* Result space */
+.wt-space { position: relative; height: 220px; max-width: 600px; background: var(--bg); border-radius: 6px; margin: 0 auto 12px; }
+.wt-space-axis { position: absolute; font-family: var(--mono); font-size: 9px; color: var(--ink3); }
+.wt-space-axis.left { left: 10px; top: 50%; transform: translateY(-50%); }
+.wt-space-axis.right { right: 10px; top: 50%; transform: translateY(-50%); }
+.wt-space-dot { position: absolute; width: 14px; height: 14px; border-radius: 50%; transform: translate(-50%, -50%); cursor: pointer; transition: transform 0.2s; }
+.wt-space-dot:hover { transform: translate(-50%, -50%) scale(1.3); }
+.wt-space-dot::after { content: attr(data-word); position: absolute; top: 18px; left: 50%; transform: translateX(-50%); font-family: var(--mono); font-size: 9px; color: var(--ink2); white-space: nowrap; }
+.wt-space-dot.money { background: var(--red); }
+.wt-space-dot.related { background: var(--ink); }
+.wt-space-dot.unrelated { background: var(--ink3); }
+.wt-space-cluster { position: absolute; border: 2px dashed rgba(43,108,176,0.3); border-radius: 50%; pointer-events: none; }
+.wt-space-insight { font-size: 13px; color: var(--ink2); line-height: 1.6; padding: 12px 14px; background: var(--white); border-radius: 4px; border: 1px solid var(--rule); }
+
+/* The problem */
+.wt-search-box { padding: 16px; background: var(--bg); border-radius: 6px; margin-bottom: 12px; }
+.wt-search-label { font-family: var(--mono); font-size: 9px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink3); margin-bottom: 8px; }
+.wt-search-weights { font-family: var(--mono); font-size: 10px; color: var(--ink3); line-height: 1.7; word-break: break-all; min-height: 60px; }
+.wt-search-weights span { display: inline-block; padding: 2px 4px; margin: 1px; background: var(--white); border-radius: 2px; transition: all 0.1s; }
+.wt-search-weights span.hl { background: var(--red); color: var(--white); }
+.wt-search-btn { margin-top: 12px; padding: 10px 20px; background: var(--white); border: 1px solid var(--rule); border-radius: 4px; font-family: var(--mono); font-size: 11px; color: var(--ink2); }
+.wt-search-btn:hover { border-color: var(--ink); color: var(--ink); }
+.wt-search-result { margin-top: 12px; font-size: 13px; line-height: 1.6; }
+.wt-search-result.fail { color: var(--red); }
+
+.trad-kw { transition: all 0.3s; }
+
+/* Compare columns */
+.wt-compare { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.wt-compare-col { padding: 16px; border-radius: 6px; }
+.wt-compare-col.trad { background: var(--green-lt); border: 1px solid rgba(45,122,58,0.2); }
+.wt-compare-col.ai { background: var(--red-lt); border: 1px solid rgba(43,108,176,0.2); }
+.wt-compare-label { font-family: var(--mono); font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 8px; }
+.wt-compare-col.trad .wt-compare-label { color: var(--green); }
+.wt-compare-col.ai .wt-compare-label { color: var(--red); }
+.wt-compare-text { font-size: 13px; color: var(--ink); line-height: 1.6; }
+
+/* ═══════════════════════════════════════════════════════════════
+   OTHER CONTENT TYPE STYLES
+   ═══════════════════════════════════════════════════════════════ */
+
+.intro { color: var(--ink2); font-size: 14px; margin-bottom: 20px; line-height: 1.7; }
+.block { margin-bottom: 16px; padding: 18px 22px; background: var(--white); border: 1px solid var(--rule); border-radius: 4px; }
+.block.highlight { background: var(--red-lt); border-color: rgba(43,108,176,0.2); border-left: 3px solid var(--red); }
+.block h4 { margin: 0 0 8px; font-size: 15px; font-weight: 600; }
+.block.highlight h4 { color: var(--red); }
+.block p { color: var(--ink2); font-size: 14px; line-height: 1.7; margin: 0; }
+
+.features { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
+.feature { padding: 20px; background: var(--white); border: 1px solid var(--rule); border-radius: 4px; }
+.feature .title { font-weight: 600; color: var(--ink); font-size: 15px; margin-bottom: 8px; }
+.feature p { color: var(--ink2); font-size: 13px; line-height: 1.65; margin: 0; }
+
+.callout { margin-top: 20px; padding: 14px 18px; background: var(--red-lt); border-left: 3px solid var(--red); border-radius: 0 4px 4px 0; }
+.callout p { color: var(--ink2); font-size: 13px; line-height: 1.65; margin: 0; }
+
+.tabs { display: flex; gap: 8px; margin-bottom: 16px; }
+.tab-btn { padding: 8px 20px; background: var(--white); border: 1px solid var(--rule); border-radius: 4px; color: var(--ink3); font-size: 13px; font-weight: 500; }
+.tab-btn:hover { border-color: var(--ink3); }
+.tab-btn.active { background: var(--red-lt); border-color: var(--red); color: var(--red); }
+.tab-content { background: var(--white); border-radius: 4px; padding: 20px; border: 1px solid var(--rule); }
+.tab-content h4 { color: var(--ink); margin: 0 0 16px; font-size: 15px; }
+.tab-item { padding: 12px 0; border-bottom: 1px solid var(--rule); }
+.tab-item:last-child { border-bottom: none; }
+.tab-item .phase { color: var(--ink); font-weight: 600; font-size: 13px; margin-bottom: 4px; }
+.tab-item .desc { color: var(--ink2); font-size: 13px; line-height: 1.6; }
+.tab-note { margin-top: 16px; padding: 12px 14px; background: var(--bg); border-radius: 4px; font-size: 12px; color: var(--ink3); font-style: italic; }
+
+.table-wrap { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; font-size: 13px; }
+th { font-family: var(--mono); font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink3); padding: 10px 14px; text-align: left; border-bottom: 1px solid var(--rule); background: var(--bg); }
+td { padding: 12px 14px; border-bottom: 1px solid var(--rule); color: var(--ink2); line-height: 1.5; vertical-align: top; }
+td:first-child { color: var(--ink); font-weight: 500; }
+
+.tiers { display: flex; flex-direction: column; gap: 16px; }
+.tier { background: var(--white); border: 1px solid var(--rule); border-radius: 4px; overflow: hidden; }
+.tier-header { padding: 14px 20px; border-bottom: 1px solid var(--rule); }
+.tier-header h4 { margin: 0; font-size: 16px; font-weight: 600; }
+.tier-body { padding: 16px 20px; }
+.tier-body p { color: var(--ink2); font-size: 13px; line-height: 1.65; margin-bottom: 12px; }
+.tier-label { font-family: var(--mono); font-size: 10px; color: var(--ink3); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 4px; }
+.tier-value { color: var(--ink); font-size: 13px; margin-bottom: 12px; }
+.tier-badge { font-family: var(--mono); font-size: 10px; letter-spacing: 0.06em; }
+.tier[data-color="red"] { border-top: 3px solid var(--red); }
+.tier[data-color="red"] .tier-badge { color: var(--red); }
+.tier[data-color="gold"] { border-top: 3px solid #6B4E0A; }
+.tier[data-color="gold"] .tier-badge { color: #6B4E0A; }
+.tier[data-color="blue"] { border-top: 3px solid #1B4B7A; }
+.tier[data-color="blue"] .tier-badge { color: #1B4B7A; }
+
+.req-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+.req-card { padding: 14px; background: var(--white); border: 1px solid var(--rule); border-radius: 4px; cursor: pointer; text-align: left; transition: all 0.15s; }
+.req-card:hover { border-color: var(--red); }
+.req-card.expanded { background: var(--red-lt); border-color: var(--red); }
+.req-card .id { font-family: var(--mono); font-size: 11px; color: var(--red); font-weight: 500; margin-bottom: 4px; }
+.req-card .name { font-size: 13px; font-weight: 600; color: var(--ink); line-height: 1.3; }
+.req-card .desc { color: var(--ink2); font-size: 12px; line-height: 1.55; margin-top: 8px; display: none; }
+.req-card.expanded .desc { display: block; }
+
+.scenario-tabs { display: flex; gap: 8px; margin-bottom: 16px; }
+.scenario-tab { padding: 8px 16px; background: var(--white); border: 1px solid var(--rule); border-radius: 4px; color: var(--ink3); font-size: 12px; font-weight: 500; }
+.scenario-tab:hover { border-color: var(--ink3); }
+.scenario-tab.active { background: var(--red-lt); border-color: var(--red); color: var(--red); }
+.scenario-header { padding: 16px 20px; background: var(--bg); border-radius: 4px; margin-bottom: 16px; border-left: 3px solid var(--ink3); }
+.scenario-header h4 { margin: 0; font-size: 14px; }
+.scenario-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.scenario-col { padding: 16px; border-radius: 4px; }
+.scenario-col.bad { background: var(--red-lt); border: 1px solid rgba(43,108,176,0.18); }
+.scenario-col.good { background: var(--green-lt); border: 1px solid rgba(45,122,58,0.18); }
+.scenario-col .label { font-family: var(--mono); font-size: 10px; font-weight: 600; margin-bottom: 10px; }
+.scenario-col.bad .label { color: var(--red); }
+.scenario-col.good .label { color: var(--green); }
+.scenario-col p { color: var(--ink2); font-size: 13px; line-height: 1.65; margin: 0; }
+
+.timeline { display: flex; flex-direction: column; }
+.timeline-item { display: flex; gap: 16px; padding: 16px 0; border-bottom: 1px solid var(--rule); }
+.timeline-item:last-child { border-bottom: none; }
+.timeline-num { width: 32px; height: 32px; border-radius: 50%; border: 2px solid var(--rule); display: flex; align-items: center; justify-content: center; font-family: var(--mono); font-size: 12px; color: var(--ink3); flex-shrink: 0; }
+.timeline-item.active .timeline-num { border-color: var(--red); color: var(--red); background: var(--red-lt); }
+.timeline-content .title { font-size: 14px; font-weight: 600; color: var(--ink); margin-bottom: 4px; }
+.timeline-content p { color: var(--ink2); font-size: 13px; line-height: 1.6; margin: 0; }
+
+.process-steps { display: flex; flex-direction: column; gap: 10px; }
+.process-step { padding: 16px; background: var(--white); border: 1px solid var(--rule); border-radius: 4px; cursor: pointer; text-align: left; transition: all 0.15s; }
+.process-step:hover { border-color: var(--ink3); }
+.process-step.expanded { background: var(--red-lt); border-color: var(--red); }
+.process-step-header { display: flex; justify-content: space-between; align-items: center; }
+.process-step-header .title { color: var(--ink); font-size: 14px; font-weight: 600; }
+.process-step-header .stat { color: var(--red); font-size: 10px; font-family: var(--mono); background: var(--red-lt); padding: 4px 10px; border-radius: 4px; }
+.process-step.expanded .process-step-header .stat { background: var(--white); }
+.process-step .detail { color: var(--ink2); font-size: 13px; line-height: 1.65; margin-top: 12px; display: none; }
+.process-step.expanded .detail { display: block; }
+
+.outcomes { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.outcome { background: var(--white); border: 1px solid var(--rule); border-radius: 4px; padding: 20px; }
+.outcome[data-color="green"] { border-top: 3px solid var(--green); }
+.outcome[data-color="gold"] { border-top: 3px solid #6B4E0A; }
+.outcome[data-color="red"] { border-top: 3px solid var(--red); }
+.outcome .label { font-family: var(--mono); font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 8px; font-weight: 500; }
+.outcome[data-color="green"] .label { color: var(--green); }
+.outcome[data-color="gold"] .label { color: #6B4E0A; }
+.outcome[data-color="red"] .label { color: var(--red); }
+.outcome .name { color: var(--ink); font-size: 14px; font-weight: 500; margin-bottom: 10px; line-height: 1.4; }
+.outcome .desc { color: var(--ink2); font-size: 12px; line-height: 1.6; margin: 0; }
+
+.doi-block { background: var(--white); border: 1px solid var(--rule); border-radius: 4px; padding: 24px 28px; margin-bottom: 20px; display: grid; grid-template-columns: 1fr auto; gap: 32px; align-items: center; }
+.doi-label { font-family: var(--mono); font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--red); margin-bottom: 6px; }
+.doi-value { font-family: var(--mono); font-size: 17px; color: var(--ink); margin-bottom: 8px; }
+.doi-title { font-size: 13px; color: var(--ink2); line-height: 1.6; }
+.doi-meta { font-size: 12px; color: var(--ink3); margin-top: 4px; }
+.doi-btn { display: inline-block; padding: 12px 24px; background: var(--ink); color: var(--white); font-family: var(--mono); font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 500; text-decoration: none; border-radius: 4px; white-space: nowrap; }
+.doi-btn:hover { background: var(--red); }
+
+.contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; min-height: 280px; }
+.contact-left h2 { font-size: 28px; font-weight: 600; color: var(--ink); margin-bottom: 16px; line-height: 1.2; }
+.contact-left h2 em { font-family: var(--serif); font-style: italic; color: var(--red); }
+.contact-left p { font-size: 14px; color: var(--ink3); line-height: 1.75; max-width: 360px; }
+.contact-item { padding-top: 14px; margin-top: 14px; border-top: 1px solid var(--rule); }
+.contact-item:first-child { border-top: none; padding-top: 0; margin-top: 0; }
+.contact-item .label { font-family: var(--mono); font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink3); margin-bottom: 4px; }
+.contact-item a { font-size: 14px; color: var(--ink); text-decoration: none; }
+.contact-item a:hover { color: var(--red); }
+.contact-item .meta { font-size: 12px; font-family: var(--mono); color: var(--ink3); }
+
+/* Requirements Tabs */
+.req-tabs { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 20px; }
+.req-tab { padding: 8px 14px; background: var(--white); border: 1px solid var(--rule); border-radius: 4px; font-family: var(--mono); font-size: 11px; color: var(--ink3); transition: all 0.15s; }
+.req-tab:hover { border-color: var(--ink3); color: var(--ink2); }
+.req-tab.active { background: var(--red); border-color: var(--red); color: var(--white); }
+
+.req-detail { background: var(--white); border: 1px solid var(--rule); border-radius: 6px; overflow: hidden; }
+.req-detail-header { padding: 20px 24px; border-bottom: 1px solid var(--rule); background: var(--bg); }
+.req-detail-header .req-id { font-family: var(--mono); font-size: 11px; color: var(--red); font-weight: 600; margin-bottom: 4px; }
+.req-detail-header .req-name { font-size: 18px; font-weight: 600; color: var(--ink); }
+
+.req-detail-body { padding: 24px; }
+.req-section { margin-bottom: 24px; }
+.req-section:last-child { margin-bottom: 0; }
+.req-section-label { font-family: var(--mono); font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink3); margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
+.req-section-label::after { content: ''; flex: 1; height: 1px; background: var(--rule); }
+
+.req-definition { font-size: 14px; color: var(--ink); line-height: 1.7; padding: 14px 16px; background: var(--bg); border-radius: 4px; border-left: 3px solid var(--red); }
+
+.req-visual { min-height: 120px; background: var(--bg); border-radius: 6px; padding: 20px; display: flex; align-items: center; justify-content: center; }
+
+.req-example { font-size: 13px; color: var(--ink2); line-height: 1.7; padding: 14px 16px; background: var(--green-lt); border-radius: 4px; border-left: 3px solid var(--green); }
+.req-example::before { content: 'Spam Filter Example: '; font-weight: 600; color: var(--green); }
+
+.req-failure { font-size: 13px; color: var(--ink2); line-height: 1.7; padding: 14px 16px; background: var(--red-lt); border-radius: 4px; border-left: 3px solid var(--red); }
+.req-failure::before { content: 'Without This Requirement: '; font-weight: 600; color: var(--red); }
+
+/* Requirement Visuals */
+.rv-partition { width: 100%; }
+.rv-partition-stage { margin-bottom: 14px; }
+.rv-partition-stage-label { font-family: var(--mono); font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink3); margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
+.rv-partition-stage-label::after { content: ''; flex: 1; height: 1px; background: var(--rule); }
+.rv-partition-bar { display: flex; gap: 3px; height: 40px; border-radius: 4px; overflow: hidden; }
+.rv-partition-seg { display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 2px; border-radius: 3px; transition: all 0.5s ease; }
+.rv-partition-seg .seg-label { font-family: var(--mono); font-size: 8px; letter-spacing: 0.06em; text-transform: uppercase; font-weight: 600; }
+.rv-partition-seg .seg-pct { font-family: var(--mono); font-size: 10px; font-weight: 600; }
+.rv-partition-wall { width: 3px; background: var(--ink); border-radius: 2px; flex-shrink: 0; position: relative; }
+.rv-partition-controls { display: flex; gap: 8px; margin-top: 14px; }
+.rv-partition-btn { padding: 8px 16px; border-radius: 4px; font-family: var(--mono); font-size: 10px; letter-spacing: 0.04em; border: 1px solid var(--rule); background: var(--white); color: var(--ink3); cursor: pointer; transition: all 0.15s; }
+.rv-partition-btn:hover { border-color: var(--ink3); color: var(--ink2); }
+.rv-partition-btn.active { background: var(--red-lt); border-color: var(--red); color: var(--red); }
+.rv-partition-explain { margin-top: 12px; padding: 10px 14px; background: var(--bg); border-radius: 4px; font-size: 12px; color: var(--ink2); line-height: 1.6; transition: all 0.3s; }
+.rv-partition-explain strong { color: var(--ink); }
+
+.rv-bars { display: flex; flex-direction: column; gap: 8px; width: 100%; }
+.rv-bar-row { display: flex; align-items: center; gap: 12px; }
+.rv-bar-label { font-size: 11px; color: var(--ink2); width: 80px; text-align: right; }
+.rv-bar { height: 24px; border-radius: 3px; display: flex; align-items: center; padding-left: 8px; font-family: var(--mono); font-size: 10px; color: var(--white); }
+.rv-bar.good { background: var(--green); }
+.rv-bar.bad { background: var(--red); }
+
+.rv-drift { width: 100%; }
+.rv-drift-chart { height: 180px; background: var(--white); border-radius: 6px; position: relative; border: 1px solid var(--rule); padding: 0; }
+.rv-drift-chart svg { width: 100%; height: 100%; }
+.rv-drift-controls { display: flex; align-items: center; gap: 16px; margin-top: 12px; }
+.rv-drift-btn { padding: 10px 20px; background: var(--red); color: var(--white); border: none; border-radius: 4px; font-family: var(--mono); font-size: 11px; letter-spacing: 0.05em; }
+.rv-drift-btn:hover { background: var(--ink); }
+.rv-drift-btn:disabled { background: var(--rule); cursor: default; }
+.rv-drift-readout { font-family: var(--mono); font-size: 12px; color: var(--ink2); }
+.rv-drift-readout span { font-weight: 600; }
+.rv-drift-readout span.ok { color: var(--green); }
+.rv-drift-readout span.warn { color: var(--red); }
+.rv-drift-alert { display: none; padding: 10px 14px; background: var(--red-lt); border: 1px solid var(--red); border-radius: 4px; margin-top: 12px; font-family: var(--mono); font-size: 11px; color: var(--red); animation: driftAlertPulse 0.6s ease 3; }
+.rv-drift-alert.visible { display: flex; align-items: center; gap: 10px; }
+@keyframes driftAlertPulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+
+/* Mini embedding space callback */
+.rv-mini-space { margin-bottom: 16px; }
+.rv-mini-space-label { font-family: var(--mono); font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink3); margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
+.rv-mini-space-label::after { content: ''; flex: 1; height: 1px; background: var(--rule); }
+.rv-mini-space-svg { width: 100%; height: 120px; background: var(--bg); border-radius: 6px; border: 1px solid var(--rule); }
+.rv-mini-space-caption { font-size: 12px; color: var(--ink2); line-height: 1.6; margin-top: 8px; padding: 8px 12px; background: var(--white); border-radius: 4px; border-left: 3px solid var(--red); }
+.rv-mini-space-caption strong { color: var(--ink); }
+
+.rv-center-text { text-align: center; }
+.rv-center-text .big { font-size: 32px; font-weight: 600; color: var(--ink); }
+.rv-center-text .sub { font-size: 12px; color: var(--ink3); margin-top: 4px; }
+
+.rv-flow { display: flex; align-items: center; gap: 12px; width: 100%; }
+.rv-flow-box { padding: 12px 16px; background: var(--white); border-radius: 4px; border: 1px solid var(--rule); text-align: center; }
+.rv-flow-box .main { font-size: 13px; font-weight: 500; color: var(--ink); }
+.rv-flow-box .sub { font-size: 10px; color: var(--ink3); margin-top: 2px; }
+.rv-flow-box.alert { border-color: var(--red); background: var(--red-lt); }
+.rv-flow-arrow { color: var(--ink3); font-size: 18px; }
+
+/* Cognitive Twin */
+.ct-hero { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 20px; }
+.ct-hero-left { }
+.ct-badge { display: inline-block; padding: 4px 12px; background: var(--red); color: var(--white); font-family: var(--mono); font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; font-weight: 600; border-radius: 3px; margin-bottom: 12px; }
+.ct-desc { font-size: 14px; color: var(--ink2); line-height: 1.7; margin-bottom: 16px; }
+.ct-features { display: flex; flex-direction: column; gap: 8px; }
+.ct-feature { display: flex; gap: 10px; padding: 8px 12px; background: var(--bg); border-radius: 4px; }
+.ct-feature-label { font-family: var(--mono); font-size: 9px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink3); width: 120px; flex-shrink: 0; padding-top: 2px; }
+.ct-feature-value { font-size: 13px; color: var(--ink); line-height: 1.5; }
+.ct-rationale { padding: 16px 18px; background: var(--red-lt); border-left: 3px solid var(--red); border-radius: 0 4px 4px 0; }
+.ct-rationale p { font-size: 13px; color: var(--ink2); line-height: 1.65; margin: 0; }
+.ct-rationale strong { color: var(--ink); }
+.ct-hero-right { display: flex; align-items: center; justify-content: center; }
+.ct-system-diagram { width: 100%; }
+
+.ct-req-tabs { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 20px; }
+.ct-req-tab { padding: 8px 14px; background: var(--white); border: 1px solid var(--rule); border-radius: 4px; font-family: var(--mono); font-size: 11px; color: var(--ink3); transition: all 0.15s; }
+.ct-req-tab:hover { border-color: var(--ink3); color: var(--ink2); }
+.ct-req-tab.active { background: var(--red); border-color: var(--red); color: var(--white); }
+
+.ct-req-detail { background: var(--white); border: 1px solid var(--rule); border-radius: 6px; overflow: hidden; }
+.ct-req-header { padding: 16px 20px; border-bottom: 1px solid var(--rule); background: var(--bg); display: flex; align-items: center; gap: 12px; }
+.ct-req-header .ct-req-id { font-family: var(--mono); font-size: 12px; color: var(--red); font-weight: 600; }
+.ct-req-header .ct-req-name { font-size: 16px; font-weight: 600; color: var(--ink); }
+.ct-req-body { padding: 20px; }
+.ct-req-section { margin-bottom: 20px; }
+.ct-req-section:last-child { margin-bottom: 0; }
+.ct-req-section-label { font-family: var(--mono); font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink3); margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
+.ct-req-section-label::after { content: ''; flex: 1; height: 1px; background: var(--rule); }
+.ct-challenge { font-size: 13px; color: var(--ink2); line-height: 1.7; padding: 14px 16px; background: var(--bg); border-radius: 4px; }
+.ct-question { font-size: 13px; color: var(--ink); line-height: 1.7; padding: 14px 16px; background: var(--red-lt); border-radius: 4px; border-left: 3px solid var(--red); font-weight: 500; }
+.ct-connects { font-size: 12px; color: var(--ink3); line-height: 1.7; padding: 12px 16px; background: var(--white); border-radius: 4px; border: 1px dashed var(--rule); }
+.ct-connects::before { content: 'From the spam filter: '; font-weight: 600; color: var(--ink2); font-family: var(--mono); font-size: 9px; letter-spacing: 0.06em; text-transform: uppercase; }
+</style>
+</head>
+<body>
+
+<div class="app">
+  <div class="header">
+    <div class="header-logo">
+      <svg viewBox="0 0 200 200" fill="none">
+        <circle cx="100" cy="100" r="97" stroke="#1B3A6B" stroke-width=".6" opacity=".25"/>
+        <circle cx="100" cy="100" r="93" stroke="#1B3A6B" stroke-width="2.8" stroke-dasharray="3.2 3.8" opacity=".55"/>
+        <circle cx="100" cy="100" r="89" stroke="#1B3A6B" stroke-width=".8" opacity=".3"/>
+        <path id="s-top-arc" d="M 21,100 A 79,79 0 0,1 179,100" fill="none"/>
+        <text font-family="'IBM Plex Mono',monospace" font-size="9.2" font-weight="500" letter-spacing="4.8" fill="#1B3A6B" opacity=".85">
+          <textPath href="#s-top-arc" startOffset="50%" text-anchor="middle">SAFETY CRITICAL LABS</textPath>
+        </text>
+        <path id="s-bot-arc" d="M 16,100 A 84,84 0 0,0 184,100" fill="none"/>
+        <text font-family="'IBM Plex Mono',monospace" font-size="8" font-weight="400" letter-spacing="3.2" fill="#1B3A6B" opacity=".6">
+          <textPath href="#s-bot-arc" startOffset="50%" text-anchor="middle">AI CERTIFICATION AUTHORITY</textPath>
+        </text>
+        <text x="14" y="103" text-anchor="middle" font-size="5" fill="#B4822A" opacity=".8">✦</text>
+        <text x="186" y="103" text-anchor="middle" font-size="5" fill="#B4822A" opacity=".8">✦</text>
+        <circle cx="100" cy="100" r="73" stroke="#1B3A6B" stroke-width=".8" opacity=".2"/>
+        <circle cx="100" cy="100" r="70" stroke="#1B3A6B" stroke-width=".4" opacity=".15"/>
+        <circle cx="100" cy="100" r="67" fill="#EAF0F8" stroke="#1B3A6B" stroke-width=".5" opacity=".9"/>
+        <circle cx="100" cy="100" r="50" stroke="#1B3A6B" stroke-width="1" fill="none" opacity=".35"/>
+        <circle cx="100" cy="100" r="38" stroke="#1B3A6B" stroke-width=".8" fill="none" opacity=".4"/>
+        <circle cx="100" cy="100" r="27" stroke="#1B3A6B" stroke-width=".7" fill="none" opacity=".45"/>
+        <line x1="100" y1="70" x2="100" y2="75.5" stroke="#1B3A6B" stroke-width="1.2" stroke-linecap="round" opacity=".5"/>
+        <line x1="100" y1="124.5" x2="100" y2="130" stroke="#1B3A6B" stroke-width="1.2" stroke-linecap="round" opacity=".5"/>
+        <line x1="70" y1="100" x2="75.5" y2="100" stroke="#1B3A6B" stroke-width="1.2" stroke-linecap="round" opacity=".5"/>
+        <line x1="124.5" y1="100" x2="130" y2="100" stroke="#1B3A6B" stroke-width="1.2" stroke-linecap="round" opacity=".5"/>
+        <line x1="78.8" y1="78.8" x2="82.7" y2="82.7" stroke="#1B3A6B" stroke-width="1" stroke-linecap="round" opacity=".35"/>
+        <line x1="117.3" y1="117.3" x2="121.2" y2="121.2" stroke="#1B3A6B" stroke-width="1" stroke-linecap="round" opacity=".35"/>
+        <line x1="121.2" y1="78.8" x2="117.3" y2="82.7" stroke="#1B3A6B" stroke-width="1" stroke-linecap="round" opacity=".35"/>
+        <line x1="82.7" y1="117.3" x2="78.8" y2="121.2" stroke="#1B3A6B" stroke-width="1" stroke-linecap="round" opacity=".35"/>
+        <circle cx="100" cy="100" r="17" fill="#1B3A6B" stroke="#B4822A" stroke-width="1.4"/>
+        <circle cx="100" cy="100" r="11" fill="#1B3A6B" stroke="#B4822A" stroke-width=".6" opacity=".5"/>
+        <line x1="86" y1="100" x2="114" y2="100" stroke="#2B6CB0" stroke-width="2.2" stroke-linecap="round"/>
+        <circle cx="100" cy="100" r="4.5" fill="#2B6CB0"/>
+        <text x="102" y="161" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="7" font-weight="500" letter-spacing="4" fill="#1B3A6B" opacity=".5">SCL</text>
+      </svg>
+    </div>
+    <div class="header-text">
+      <div class="header-brand"><em>Safety Critical</em> Labs</div>
+      <div class="header-sub">AI Certification Authority</div>
+    </div>
+    <span class="header-counter" id="counter">1/17</span>
+  </div>
+  
+  <div class="main">
+    <div class="sidebar" id="sidebar"></div>
+    <div class="content" id="content"></div>
+  </div>
+</div>
+
+<script>
+const groups = [
+  { label: "Foundation", items: [
+    { id: "why-different", title: "Where Intent Goes" },
+    { id: "two-paths", title: "Two Paths, Same Problem" }
+  ]},
+  { label: "The Framework", items: [
+    { id: "framework-overview", title: "Framework Overview" },
+    { id: "ai-presence", title: "AI Presence Screening" },
+    { id: "classification", title: "Classification Tiers" },
+    { id: "just-test-it", title: "Why Testing Alone Falls Short" },
+    { id: "requirements-overview", title: "Nine Requirements" },
+    { id: "implementation-guidance", title: "Implementation Guidance" }
+  ]},
+  { label: "The Process", items: [
+    { id: "framework-principles", title: "What Certification Requires" },
+    { id: "four-phases", title: "Four Phases" },
+    { id: "outcomes", title: "Outcomes" },
+    { id: "surveillance", title: "Surveillance" }
+  ]},
+  { label: "Lifecycle", items: [
+    { id: "lifecycle", title: "When to Engage" }
+  ]},
+  { label: "Stakeholders", items: [
+    { id: "cognitive-twin", title: "Cognitive Twin System" },
+    { id: "ct-requirements", title: "Requirements Applied" }
+  ]},
+  { label: "Context", items: [
+    { id: "the-standard", title: "The Published Standard" },
+    { id: "contact", title: "Contact" }
+  ]}
+];
+
+const sections = {
+  "why-different": {
+    group: "Foundation", title: "Where Intent Goes", type: "ml-walkthrough",
+    data: {
+      steps: ["The Developer's Intent", "Where Intent Lives", "The Data", "Tokenization", "Embedding", "The Loss Function", "Training", "The Result", "The Verification Question", "The Certification Gap"]
+    }
+  },
+  "two-paths": {
+    group: "Foundation", title: "Two Paths, Same Problem", type: "comparison",
+    data: {
+      intro: "AI systems fall into two categories, and both create verification challenges that traditional software assurance does not address. Our spam filter illustrates both failure modes.",
+      tabs: ["Learned Model", "Learning Model"],
+      content: [
+        { title: "Learned Model (Frozen)", items: [
+          { phase: "Training (2024)", desc: "Spam filter trained on MONEY, CASH, FUNDS patterns. Certified. Deployed. Working perfectly." },
+          { phase: "Time Passes", desc: "Spammers adapt. New spam: 'Send crypto now!' 'Transfer digital assets immediately!' 'Your NFT is waiting!'" },
+          { phase: "Failure", desc: "Model still looks for MONEY, CASH, FUNDS. New patterns sail through. Spam detection rate drops from 94% to 67%. No code changed. No alert fired." },
+          { phase: "The Natural Response", desc: "Freeze the model. Record its version. Control who can change it. When something does change, flag it and trigger a review. This is correct. This is what any disciplined engineering organization already does." },
+          { phase: "The Deeper Question", desc: "The review trigger fires. Now what? The artifact under review is not source code. It is a set of weights. Your process tells you a change happened and that you need to evaluate it. It does not tell you how to evaluate what changed inside something where the developer's intent is not readable in the artifact." }
+        ], note: "You already track changes and control your baselines. The gap is not in your process. The gap is in what happens when the process fires and the artifact is not code." },
+        { title: "Learning Model (Adaptive)", items: [
+          { phase: "Adaptation", desc: "Spam filter retrains weekly on incoming emails. Learns new patterns: CRYPTO, NFT, DIGITAL ASSETS now correlate with spam." },
+          { phase: "Unintended Learning", desc: "Finance team sends legitimate emails: 'Q3 crypto policy update' and 'Digital assets compliance review.' Model learns these patterns too." },
+          { phase: "Failure", desc: "Model starts flagging internal finance communications as spam. Executives miss compliance deadlines. Loss function improved. Spam detection is up. But the model is now blocking legitimate business." },
+          { phase: "The Natural Response", desc: "Record every update. Compare each version against the last. Require sign off before the new version goes live. Run regression tests after each cycle. Again, this is correct. This is disciplined practice." },
+          { phase: "The Deeper Question", desc: "You recorded the update. You compared versions. But what are you comparing? Two sets of weights, neither of which is readable. The regression test tells you accuracy went up. It does not tell you the model quietly learned to block your own finance team. The behavior change is invisible to any test that only measures aggregate performance." }
+        ], note: "You already record updates and require sign off. The gap is not in your change process. The gap is in knowing what actually changed when the artifact is geometry, not logic." }
+      ]
+    }
+  },
+  "framework-overview": {
+    group: "The Framework", title: "Framework Overview", type: "overview",
+    data: {
+      body: "<p>The SCL AI Requirements Framework is a <strong>61 page</strong> published standard for assessing AI systems in safety critical environments. Version 1.0.3 covers the complete lifecycle from data governance through operational monitoring.</p><p>The document defines <strong>nine requirement sets</strong> (AI-1 through AI-9), each paired with a corresponding verification method. Every requirement has a verification. Every verification traces to a requirement. Nothing is assessed without a defined method for assessing it.</p><p><strong>51 defined terms</strong> anchor the framework's vocabulary. 41 are verified against ISO/IEC and NIST standards. 10 are framework specific, introduced where existing terminology did not cover the gap.</p>",
+      stats: [
+        { num: "61", unit: "pages", label: "Published Document" },
+        { num: "9", unit: "", label: "Requirement Sets" },
+        { num: "3", unit: "", label: "Classification Tiers" },
+        { num: "51", unit: "", label: "Defined Terms" },
+        { num: "4", unit: "", label: "Main Sections" },
+        { num: "5", unit: "", label: "Appendices" }
+      ],
+      tags: [
+        { text: "CC BY 4.0", accent: true },
+        { text: "Published with DOI", accent: true },
+        { text: "V1.0.3", accent: false },
+        { text: "41 ISO/IEC & NIST Aligned", accent: false },
+        { text: "10 Framework Specific Terms", accent: false },
+        { text: "Every R Has a V", accent: false }
+      ],
+      outline: [
+        { num: "1", title: "Introduction", badge: "Scope & Classification", desc: "Establishes the framework's purpose, defines what constitutes an AI system, and determines which requirements apply based on consequence classification.",
+          subs: [
+            "1.1 Purpose and rationale for AI specific requirements",
+            "1.2 Scope, applicability criteria, and AI system classification (three tiers)",
+            "1.2.3 Gap analysis: traditional software assumptions vs. AI/ML reality",
+            "1.2.5 Tailoring authority by classification level",
+            "1.3 Normative references (ISO/IEC, NIST, DO-178C, ISO 26262)",
+            "1.4 Verb conventions: shall (requirement), should (guidance), will (expectation)",
+            "1.5 Threshold category definitions (performance, confidence, drift, OOD, escalation)"
+          ]
+        },
+        { num: "2", title: "Requirements", badge: "AI-1 through AI-9", desc: "Nine requirement sets, each addressing a specific AI failure mode not covered by traditional software verification. Verifications are placed alongside requirements for traceability.",
+          subs: [
+            "AI-1 Data Partitioning: dataset separation, provenance, ground truth labeling, classification screening",
+            "AI-2 Bias Detection: bias risk assessment, demographic performance monitoring, mitigation",
+            "AI-3 ML Test Coverage: input domain coverage, boundary analysis, edge case testing",
+            "AI-4 Continuous Validation: drift detection, performance monitoring, revalidation triggers",
+            "AI-5 Hallucination Prevention: output grounding, fabrication detection, confidence calibration",
+            "AI-6 OOD Detection: distribution boundary definition, fallback behavior, escalation",
+            "AI-7 Adversarial Robustness: threat modeling, adversarial testing, defense validation",
+            "AI-8 Explainability: decision attribution, operator comprehension, explanation fidelity",
+            "AI-9 Human-AI Teaming: trust calibration, override authority, situational awareness"
+          ]
+        },
+        { num: "3", title: "Verification", badge: "Methods & Matrix", desc: "Defines the four verification methods (Inspection, Analysis, Demonstration, Test) tailored for AI/ML, provides the complete verification matrix, and establishes deployment format validation requirements.",
+          subs: [
+            "3.1 Verification methods defined per IEEE 1012, tailored for AI/ML characteristics",
+            "3.2 Verification matrix: every requirement mapped to method and evidence artifact",
+            "3.3 Deployment format validation: quantization, pruning, framework conversion"
+          ]
+        },
+        { num: "4", title: "Implementation Guidance", badge: "Informative", desc: "Informative guidance for threshold selection, continuous learning controls, multi model architectures, neural network considerations, and AI specific hazard analysis integration.",
+          subs: [
+            "4.1 Threshold selection ranges by requirement (bias metrics, drift PSI, performance degradation)",
+            "4.2 Continuous learning: revalidation scope, approval gates, catastrophic forgetting mitigation",
+            "4.3 Multi model systems: cascading failures, ensemble voting, confidence aggregation",
+            "4.4 Neural networks: explainability approaches, training risks, deployment transformations, failure modes",
+            "4.5 AI specific hazard analysis: augmenting FMEA, FTA, and HAZOP for probabilistic failure modes"
+          ]
+        },
+        { num: "A", title: "Glossary", badge: "51 Terms", desc: "All defined terms with source traceability. 41 aligned with ISO/IEC 22989, ISO/IEC 5338, and NIST AI RMF. 10 framework specific.", subs: [] },
+        { num: "B", title: "Classification Checklist", badge: "Appendix", desc: "Step by step checklist for AI presence screening and consequence based classification determination.", subs: [] },
+        { num: "C", title: "Verification Evidence Templates", badge: "Appendix", desc: "Applicability determination record, test report template, and inspection record template.", subs: [] },
+        { num: "D", title: "Risk Score", badge: "Appendix", desc: "Quantitative risk scoring methodology for AI system assessment.", subs: [] },
+        { num: "E", title: "Source Traceability Matrix", badge: "Appendix", desc: "Maps every term and concept to its authoritative source document with specific section references.", subs: [] }
+      ]
+    }
+  },
+  "framework-principles": {
+    group: "The Process", title: "What Certification Requires", type: "features",
+    data: {
+      intro: "Three structural conditions separate a credible certification from an internal assessment or self attestation.",
+      features: [
+        { title: "Independence", desc: "The assessor has no stake in the outcome. The certifying body does not design AI systems, develop mitigations, or serve as a vendor to organizations it assesses." },
+        { title: "Published Standard", desc: "Assessment is conducted against a published, versioned standard with a citable DOI. When a regulator asks 'assessed against what?' a DOI is an answer." },
+        { title: "Formal Determination", desc: "Every assessment produces a formal determination document regardless of whether the system passes. The record exists whether or not a certificate follows." }
+      ],
+      callout: "What certification is not: A certificate does not claim the system is safe. It states the system was assessed against a defined standard and met applicable requirements at a defined classification level."
+    }
+  },
+  "ai-presence": {
+    group: "The Framework", title: "AI Presence Screening", type: "features",
+    data: {
+      intro: "Before classification, determine whether the framework applies at all. Four questions screen for AI presence. If any answer is yes, proceed to classification. If all are no, standard software assurance applies and this framework is not required.",
+      features: [
+        { title: "Learned Behavior", desc: "Does the system use behavior derived from training data rather than explicitly programmed logic? If the system's decisions come from patterns learned during training rather than rules written by a developer, AI is present." },
+        { title: "Probabilistic Outputs", desc: "Are system outputs probabilistic or non deterministic? If the same input can produce different outputs, or if outputs carry confidence scores rather than definitive answers, AI is present." },
+        { title: "Silent Degradation", desc: "Can system behavior change or degrade over time without code modifications? If the system can become less accurate because the world changed around it while no code was touched, AI is present." },
+        { title: "Decision Impact", desc: "Does the system make or inform decisions affecting human safety or operational success? If the system's outputs influence actions where errors have real consequences, the screening is complete." }
+      ],
+      callout: "Most real systems are not purely AI. They are traditional software with AI components embedded in the pipeline. The screening identifies where AI is present within a larger system. The boundary between AI and traditional components determines where this framework applies and where your existing V&V processes continue unchanged. Both verification approaches coexist. The framework covers the AI portion. Your existing processes cover the rest."
+    }
+  },
+  "classification": {
+    group: "The Framework", title: "Classification Tiers", type: "tiers",
+    data: {
+      intro: "Classification determines which requirements apply and the level of tailoring authority available. Classification is driven by consequence, not probability.",
+      tiers: [
+        { name: "Safety Critical AI", color: "red", desc: "AI outputs directly affect human safety or system survivability.", checklistQs: "Could AI malfunction result in loss of life or critical equipment? Is the AI in the control path for safety-critical functions?", examples: "Surgical guidance systems, autonomous vehicle collision avoidance, medical diagnostic AI that determines treatment, flight control systems", reqs: "AI-1 through AI-9 (all requirements, no tailoring without PSRB approval)" },
+        { name: "Mission Critical AI", color: "gold", desc: "AI outputs affect operational success but not human safety.", checklistQs: "Could AI malfunction result in loss of operational objectives? Is the AI in the decision path for mission-critical functions?", examples: "Predictive maintenance for aircraft engines, medical triage prioritization, financial fraud detection, spam filter for flight operations communications", reqs: "AI-1 through AI-9 (tailoring permitted with CE approval)" },
+        { name: "Mission Support AI", color: "blue", desc: "AI supports operations but does not drive critical decisions.", checklistQs: "Does the AI support operations without driving critical decisions?", examples: "Corporate email spam filter, schedule optimization, meeting transcription, documentation assistants", reqs: "AI-1 through AI-5 minimum; AI-6 through AI-8 as tailored (SA approval)" }
+      ],
+      footer: "The same AI capability can fall into different tiers depending on operational context. A spam filter for marketing emails is Mission Support. A spam filter for flight operations communications could be Mission Critical."
+    }
+  },
+  "just-test-it": {
+    group: "The Framework", title: "Why Testing Alone Falls Short", type: "features",
+    data: {
+      intro: "The natural objection from anyone with a strong testing discipline is: 'If the outputs are correct, who cares what is inside the weights? I will just write a really comprehensive test suite.' This is a reasonable instinct. Here is why it is not sufficient.",
+      features: [
+        { title: "You Cannot Enumerate What You Did Not Design", desc: "In traditional software, you wrote the rules, so you know what to test. In AI, the model learned its own rules. It may have learned that emails sent at 3am with two exclamation marks correlate with spam. You never wrote that rule. You will never think to test it. Your test suite covers the behaviors you anticipated. The model's behavior includes patterns you never imagined." },
+        { title: "The Input Space Is Effectively Infinite", desc: "A spam filter processes natural language. The number of possible inputs is unbounded. Traditional testing works because the logic has finite branches you can enumerate. AI models operate on continuous decision boundaries in high dimensional space. There is no finite set of test cases that covers the space. You choose what to test. You do not know what you are missing." },
+        { title: "Aggregate Metrics Hide Specific Failures", desc: "Your test suite reports 94% accuracy. That single number hides everything. The model may be 99% accurate on English emails and 60% accurate on Spanish emails. It may catch every known spam pattern but miss every obfuscated variant. An aggregate pass rate tells you the model works on average. It does not tell you where it fails, or who it fails for." },
+        { title: "The World Changes, Your Test Suite Does Not", desc: "You wrote tests for MONEY, CASH, FUNDS. Spammers moved to CRYPTO, NFT, DIGITAL ASSETS. Your test suite still passes because it still tests the old patterns. The model still fails because the real world moved. Testing validates a snapshot. It does not validate ongoing fitness." },
+        { title: "Passing Tests Is Not the Same as Understanding Behavior", desc: "A model can pass every test you write and still contain learned behaviors you would reject if you knew about them. Tests confirm specific input output pairs. They do not explain why the model made those decisions, whether it will generalize correctly to similar inputs, or whether it has learned spurious correlations that happen to produce correct answers on your test data." }
+      ],
+      callout: "Testing is necessary. It is not sufficient. The nine requirements that follow define what else is needed: data integrity, bias detection, continuous monitoring, explainability, adversarial robustness, and human oversight. Each one addresses a gap that testing alone cannot close."
+    }
+  },
+  "requirements-overview": {
+    group: "The Framework", title: "Nine Requirements", type: "requirements-tabs",
+    data: {
+      intro: "Each requirement set addresses a specific verification gap that traditional software assurance does not cover. Select a requirement to explore what it means for our spam filter.",
+      reqs: [
+        { 
+          id: "AI-1", 
+          name: "Data Partitioning", 
+          definition: "The AI system shall enforce data partitioning to ensure integrity of training, validation, and test datasets throughout the model lifecycle.",
+          visual: "partition",
+          example: "Start with your 10,000 labeled emails. At minimum, you separate training data from test data. But once you need to tune hyperparameters, you add a validation set. Need to verify bias across demographics for AI-2? That requires its own held out slice. Need edge case test sets for AI-3? Baseline reference distributions to measure drift for AI-4? Ground truth to verify outputs for AI-5? OOD samples for AI-6? Adversarial test sets for AI-7? Each requirement drives additional partitions. AI-1 is the foundation that makes the rest of the framework verifiable.",
+          failure: "Test data leaks into training. Model memorizes test examples. Shows 98% accuracy in testing but fails on real emails it has never seen. You deployed a model that only works on data it already knew."
+        },
+        { 
+          id: "AI-2", 
+          name: "Addressing AI Bias", 
+          definition: "The AI system will implement bias detection, prevention, and mitigation mechanisms to provide equitable and unbiased decision-making across all applicable operational scenarios and user populations.",
+          visual: "bias",
+          example: "Model works great for English emails but flags 40% of Spanish language emails as spam. Finance department emails flagged at 3x the rate of Engineering because training data underrepresented financial terminology in legitimate contexts.",
+          failure: "No bias monitoring. Finance team complains for months. Critical vendor payment emails going to spam. By the time anyone investigates, three contracts are in jeopardy."
+        },
+        { 
+          id: "AI-3", 
+          name: "ML Test Coverage", 
+          definition: "The AI system will demonstrate adequate test coverage for machine learning models using methods appropriate to data-driven systems where traditional code coverage metrics do not apply.",
+          visual: "coverage",
+          example: "You tested MONEY, CASH, FUNDS. But did you test MONËY with special characters? Did you test emails with urgency patterns but zero financial words? Did you test what happens when sender reputation is unknown?",
+          failure: "Spammers find untested patterns. Emails with 'M0NEY' (zero instead of O) sail through. Your test suite passed. Your model failed. The gap was in what you never thought to test."
+        },
+        { 
+          id: "AI-4", 
+          name: "Continuous Validation", 
+          definition: "The AI system shall implement continuous validation processes to ensure model performance remains within acceptable bounds throughout operational deployment.",
+          visual: "drift",
+          example: "Weekly accuracy tracking. Spammers shift to crypto terminology. Model trained on MONEY/CASH/FUNDS misses new patterns. Accuracy drops from 94% to 78%. Alert fires at 85% threshold. Retraining triggered before users notice.",
+          failure: "No monitoring. Spam detection silently degrades over six months. Users stop trusting the filter. They check spam folders manually. The AI system is running but nobody believes it anymore."
+        },
+        { 
+          id: "AI-5", 
+          name: "Hallucination Prevention", 
+          definition: "The AI system shall implement mechanisms to detect, prevent, and mitigate AI outputs that are fabricated, unsupported by input data, or inconsistent with operational reality.",
+          visual: "hallucination",
+          example: "Model flags email as spam with explanation: 'Contains Nigerian prince inheritance scam pattern.' Operator checks the email. It mentions neither Nigeria nor princes nor inheritance. The model invented a justification that sounds plausible but is completely fabricated.",
+          failure: "Operators trust fabricated explanations. Wrong emails blocked based on fictional reasoning. A legitimate partnership inquiry from a Nigerian company is rejected. The deal was real. The explanation was not."
+        },
+        { 
+          id: "AI-6", 
+          name: "Out-of-Distribution Detection", 
+          definition: "The AI system shall detect and appropriately handle inputs that fall outside the distribution of training data.",
+          visual: "ood",
+          example: "Model trained entirely on text emails. First email arrives with an embedded image and minimal text. Model has never seen this format. OOD detector fires: 'Input format outside training distribution.' Email routed to human review instead of auto-classification.",
+          failure: "No OOD detection. Image-based spam sails through because the model outputs random confidence scores on data types it was never trained on. Attackers learn this. All their spam is now image-based."
+        },
+        { 
+          id: "AI-7", 
+          name: "Adversarial Robustness", 
+          definition: "The AI system shall implement mechanisms to detect, prevent, and mitigate adversarial attacks that could compromise AI integrity, manipulate outputs, or degrade system performance.",
+          visual: "adversarial",
+          example: "Attacker inserts invisible unicode characters. The word appears as 'MONEY' to humans but the model sees 'M\\u200bO\\u200bN\\u200bE\\u200bY' with zero-width spaces. Tokenization breaks. The spam keyword is invisible to the filter.",
+          failure: "Targeted attack bypasses filter. Phishing email reaches CFO. Credentials compromised. Wire transfer initiated. The spam filter was running. It just could not see what it was looking at."
+        },
+        { 
+          id: "AI-8", 
+          name: "Explainability", 
+          definition: "The AI system shall provide explanations of AI decisions and recommendations sufficient for operators to verify AI reasoning and establish appropriate trust.",
+          visual: "explainability",
+          example: "Email flagged as spam. Explanation provided: 'Sender not in contacts (30% weight), urgency language detected (25%), financial terms present (45%).' Operator can see why. Operator can verify. Operator can disagree with evidence, not just a label.",
+          failure: "Black box output. Email flagged, no reason given. Operator cannot tell if the flag is legitimate. Either blindly trusts every flag or ignores them all. Neither is good. Trust calibration is impossible without explanation."
+        },
+        { 
+          id: "AI-9", 
+          name: "Human-AI Teaming", 
+          definition: "The AI system shall support effective human-AI collaboration, enabling operators to maintain situational awareness, appropriate trust calibration, and final decision authority over safety-critical actions.",
+          visual: "teaming",
+          example: "Model flags but does not delete. Emails quarantined for human review. High-confidence spam auto-archived after 30 days. Low-confidence flags require explicit confirmation. One-click override for any decision. The human remains in control.",
+          failure: "Auto-delete enabled for 'efficiency.' CEO's urgent email from a new contact (unknown sender, financial terms, urgency language) deleted instantly. The deal that email contained is gone. Nobody knew it existed until the other party called asking why there was no response."
+        }
+      ]
+    }
+  },
+  "implementation-guidance": {
+    group: "The Framework", title: "Implementation Guidance", type: "comparison",
+    data: {
+      intro: "The nine requirements define what to verify. This section addresses how to calibrate verification for your system: what thresholds to set, what happens when you transform a model for deployment, and what controls apply when the model keeps learning.",
+      tabs: ["Threshold Selection", "Deployment Validation", "Continuous Learning", "Tooling Integration"],
+      content: [
+        { title: "Threshold Selection", items: [
+          { phase: "Bias Metrics (AI-2)", desc: "Demographic parity difference: 2% or less for Safety Critical, 5% or less for Mission Critical. Equalized odds difference: 3% or less TPR/FPR difference across groups. Tighter thresholds for crew health and safety functions." },
+          { phase: "Drift Detection (AI-4)", desc: "Population Stability Index below 0.1 is negligible. Between 0.1 and 0.25 is moderate, triggering alerts. Above 0.25 is significant, halting autonomous operation for Safety Critical systems." },
+          { phase: "Performance Degradation (AI-4)", desc: "5% or less accuracy drop from baseline. Baseline established during V&V. Consider mission phase sensitivity. Threshold values are documented and justified based on mission risk tolerance." },
+          { phase: "Project Responsibility", desc: "These are example ranges, not mandated values. Projects define and document their own thresholds with justification. The framework requires the thresholds to exist, be justified, and be monitored. The specific values are an engineering decision." }
+        ], note: "Threshold values should be derived from mission risk tolerance. The framework requires thresholds, justification, and monitoring. It does not prescribe specific numbers." },
+        { title: "Deployment Validation", items: [
+          { phase: "Quantization", desc: "Reducing model precision from 32 bit floating point to 8 bit integer for edge deployment. The weights are mathematically different. Performance may degrade on edge cases that were within tolerance at full precision." },
+          { phase: "Pruning", desc: "Removing model weights or layers to reduce size. Connections that contributed to correct predictions on rare cases may be the first to go. The pruned model may pass aggregate tests while failing on the cases that matter most." },
+          { phase: "Knowledge Distillation", desc: "Training a smaller model to mimic the original. The student model approximates the teacher but is not the same model. Behaviors learned from rare training examples may not transfer." },
+          { phase: "Format Conversion", desc: "Converting between frameworks: PyTorch to ONNX to TensorRT. Each conversion involves numerical transformations. Rounding behavior, operator differences, and optimization passes can all change outputs at the margins." }
+        ], note: "Revalidation means side by side performance comparisons on representative test datasets. Degradation must be documented and accepted within defined margins." },
+        { title: "Continuous Learning Controls", items: [
+          { phase: "Safety Critical AI", desc: "Five controls required: rollback to last verified model, approval for updates prior to activation, shadow mode validation before operational use, automated performance bounds with automatic reversion, continuous validation per AI-4 with tightened thresholds." },
+          { phase: "Mission Critical AI", desc: "Four controls required: performance monitoring per AI-4, automated rollback at defined thresholds, logging of all model updates, periodic review of learning trajectory." },
+          { phase: "Mission Support AI", desc: "Two controls required: baseline performance tracking, anomaly alerting for significant behavior changes." },
+          { phase: "Minimum Classification", desc: "Systems employing continuous learning are classified no lower than Mission Critical. A system whose behavior changes during operations without a code release requires at minimum the controls of Mission Critical classification." }
+        ], note: "Controls are scaled by classification. A system that learns during operations is a system whose verified behavior can change. The controls ensure that change remains within acceptable bounds." },
+        { title: "Tooling Integration", items: [
+          { phase: "CI/CD Pipeline Integration", desc: "Drift detection (AI-4), bias monitoring (AI-2), and performance validation can be automated as pipeline stages alongside your existing build, test, and deploy steps. Model validation runs the same way unit tests run: automatically, on every change, with pass/fail gates." },
+          { phase: "Model Registry and Versioning", desc: "Tools like MLflow, DVC, and Weights & Biases track model versions, training runs, and performance metrics the way Git tracks code. Model registry integration provides the artifact versioning that AI-1 and AI-4 require. Your existing version control workflow extends to model artifacts." },
+          { phase: "Monitoring and Observability", desc: "AI-4 continuous validation and AI-6 out of distribution detection are monitoring problems. They integrate with existing observability infrastructure: Prometheus, Grafana, Datadog, or your current stack. Drift alerts fire the same way your existing system alerts fire. OOD flags route through existing incident management." },
+          { phase: "Automated Testing Frameworks", desc: "AI-3 test coverage and AI-7 adversarial robustness testing use tools that plug into existing test harnesses. Libraries for behavioral testing, fairness auditing, and adversarial input generation run in the same test environments you already maintain. The output is evidence in the format the framework requires." },
+          { phase: "Evidence Collection", desc: "The framework requires documented evidence for each requirement. Automated evidence collection from pipeline runs, monitoring dashboards, and test reports reduces the manual burden of assembling a certification evidence package. The tools you already use produce most of the evidence you need." }
+        ], note: "The framework does not require new infrastructure. It requires that existing infrastructure is configured to capture the right metrics and produce the right evidence. Most organizations already have 70% of the tooling. The gap is in what they measure, not in how they measure it." }
+      ]
+    }
+  },
+  "lifecycle": {
+    group: "Lifecycle", title: "When to Engage", type: "timeline",
+    data: {
+      intro: "Certification fits at multiple points in the development lifecycle. The framework is openly published. Read it before you commit to an architecture.",
+      phases: [
+        { name: "Requirements", desc: "Use the framework to define AI specific requirements in your system specification. Knowing what certification requires before you start building avoids expensive rework later.", active: false },
+        { name: "Design", desc: "Architect monitoring, logging, and fallback mechanisms to support certification requirements. AI-4 through AI-6 require operational monitoring infrastructure. These are architectural choices.", active: false },
+        { name: "Verification", desc: "Execute the verification program against the framework's requirements. Collect evidence in the format the framework specifies. A gap analysis before testing tells you whether your test plan is complete.", active: false },
+        { name: "Certification", desc: "Engage SCL for formal assessment when your evidence package is complete. Four phases: Applicability, Evidence Review, Technical Assessment, Determination.", active: true },
+        { name: "Operations", desc: "Maintain surveillance records. Execute triggered reassessment on model changes. Certification is not a one time event. It is an ongoing relationship.", active: false }
+      ],
+      callout: "The framework is free to read. There is no cost to reviewing the requirements before you start building. The cost of late engagement is rework."
+    }
+  },
+  "four-phases": {
+    group: "The Process", title: "Four Phases", type: "process",
+    data: {
+      intro: "Four phases. Each with a signed output. Neither side proceeds without the other's acknowledgment.",
+      steps: [
+        { title: "Phase 1: Applicability Determination", detail: "Establish system boundary, classification, and applicable requirement sets. Document tailoring rationale. This phase cannot be skipped or combined with evidence review.", stat: "Signed Applicability Record" },
+        { title: "Phase 2: Evidence Package Review", detail: "Client submits evidence package against applicable requirements. SCL reviews each submission with findings traceable to a requirement number. Placeholders reset the clock.", stat: "Evidence Review Report" },
+        { title: "Phase 3: Technical Assessment", detail: "Structured audit of the AI system: architecture decisions, test infrastructure validity, operational validity of verification claims. Produces the quantified risk score.", stat: "Technical Assessment Report" },
+        { title: "Phase 4: Determination and Issuance", detail: "Formal determination document issued regardless of outcome. Certificate issued only when applicable requirements are met. Assessment record retained ten years minimum.", stat: "Determination + Certificate" }
+      ]
+    }
+  },
+  "outcomes": {
+    group: "The Process", title: "Outcomes", type: "outcomes",
+    data: {
+      intro: "Every assessment produces a formal determination document regardless of outcome. The record exists whether or not a certificate follows.",
+      outcomes: [
+        { name: "Certified", color: "green", desc: "All applicable requirements met at the assessed classification level.", details: "Certificate of Conformance issued with risk score, validity period, and surveillance schedule. Assessment record retained 10 years minimum." },
+        { name: "Conditionally Certified", color: "gold", desc: "Open findings with defined remediation paths.", details: "Not a lesser certificate. It is a certificate with specific, documented, time bound conditions. Certificate issued upon verified condition closure." },
+        { name: "Not Certified", color: "red", desc: "Applicable requirements not met.", details: "Findings documented. Remediation required before reassessment. Determination Document issued and retained regardless. Record available for regulatory review." }
+      ]
+    }
+  },
+  "surveillance": {
+    group: "The Process", title: "Surveillance", type: "table",
+    data: {
+      intro: "Every certificate includes a structured surveillance schedule. AI systems can degrade without code changes. Surveillance is how certification remains valid.",
+      headers: ["Classification", "Surveillance Cadence", "Scope"],
+      rows: [
+        ["Safety Critical", "Annual audit", "Full reassessment of drift metrics, OOD logs, bias monitoring, operational performance"],
+        ["Mission Critical", "Biennial audit", "Focused reassessment of continuous validation records and model updates"],
+        ["Triggered (all tiers)", "On trigger event", "Model version change, environment change, drift threshold breach, or safety related incident"]
+      ],
+      footer: "Triggered reassessment is mandatory. Any model version change, regardless of magnitude, requires reassessment."
+    }
+  },
+  "cognitive-twin": {
+    group: "Stakeholders", title: "Cognitive Twin System", type: "ct-intro",
+    data: {
+      classification: "Safety Critical AI",
+      subtitle: "Full certification assessment of an AI system from concept to determination",
+      description: "An AI driven neurobehavioral model that acts as a personalized digital avatar for each astronaut. Trained on individualized cognitive, emotional, and physiological data, the twin simulates mental performance under mission scenarios and detects early signs of cognitive decline.",
+      features: [
+        { label: "Training Population", value: "Ground personnel, then demonstrated on crew" },
+        { label: "Architecture", value: "Edge deployed neural networks with biometric sensor integration" },
+        { label: "Privacy Model", value: "Containerized per astronaut, no cross contamination of individual data" },
+        { label: "Adaptation", value: "Continuous learning throughout the mission duration" },
+        { label: "Team Mode", value: "Multi agent crew level model sharing high level readiness data across individual twins" }
+      ],
+      classificationRationale: "Undetected cognitive decline during a critical mission phase (EVA, docking, emergency response) could result in loss of crew. The twin directly influences crew tasking and health decisions. This is Safety Critical AI. All nine requirements apply. No tailoring without PSRB approval."
+    }
+  },
+  "ct-requirements": {
+    group: "Stakeholders", title: "Requirements Applied", type: "ct-reqs",
+    data: {
+      intro: "Every requirement you learned in this presentation applied to a single system. Select a requirement to see what it demands of the Cognitive Twin.",
+      reqs: [
+        {
+          id: "AI-1", name: "Data Partitioning",
+          challenge: "The twin trains on individualized biometric data. Each astronaut's cognitive baseline, emotional patterns, and physiological rhythms are unique datasets. Training data from JSC ground personnel must be partitioned from crew operational data. Individual containerized models mean partition integrity must be enforced per astronaut, not just per system.",
+          question: "How do you partition individualized physiological baselines from shared cognitive models? What classification level does biometric training data inherit?",
+          connects: "This is the same principle from the spam filter. Your 10,000 emails became the astronaut's cognitive profile. Except now, test data leakage means a twin that appears calibrated but has memorized its own test answers."
+        },
+        {
+          id: "AI-2", name: "Addressing AI Bias",
+          challenge: "Training population: JSC ground personnel. Deployment population: astronauts. The demographics are different. Age distribution, fitness levels, stress profiles, sleep patterns, and physiological baselines will differ between the two populations. A model calibrated on ground personnel may systematically misread crew cognitive states.",
+          question: "A female crew member presents atypical cardiac stress patterns. The model was trained on a population that was 78% male, aged 25 to 45. Does the twin recognize what it has never adequately seen?",
+          connects: "The spam filter flagged Spanish emails at 40% accuracy because the training data underrepresented them. Here, underrepresentation does not mean missed spam. It means missed cognitive decline in a crew member during a critical phase."
+        },
+        {
+          id: "AI-3", name: "ML Test Coverage",
+          challenge: "How do you test a system that models cognitive decline when your training population has never experienced 8 months of microgravity isolation? The cognitive patterns that matter most (long duration fatigue, confinement stress, circadian disruption) are exactly the patterns absent from ground based training data.",
+          question: "Your test suite covers the cognitive states you have observed on Earth. What about the cognitive states that only emerge at month 6 of a deep space mission?",
+          connects: "M0NEY sailed through the spam filter because nobody thought to test it. The Cognitive Twin equivalent: a novel stress response pattern that no ground analog has ever produced."
+        },
+        {
+          id: "AI-4", name: "Continuous Validation",
+          challenge: "The twin adapts continuously throughout the mission. That is the design. It learns each astronaut's evolving baseline. But continuous adaptation means the model you certified at launch is not the model running at month 6. Drift is not a failure mode here. Drift is the feature. The question is whether the drift is going somewhere useful or somewhere dangerous.",
+          question: "The certified model launched in January. The model running in July has incorporated 6 months of adaptation. How do you verify that the adapted model is still performing within acceptable bounds?",
+          connects: "The spam filter's accuracy dropped from 94% to 78% as patterns shifted. The twin's accuracy could shift as the astronaut's own baseline changes under prolonged stress. Which change is real adaptation and which is degradation?"
+        },
+        {
+          id: "AI-5", name: "Hallucination Prevention",
+          challenge: "The twin recommends preemptive action: task reassignment, schedule adjustment, rest period. If the twin fabricates a cognitive decline signal that does not exist, the crew acts on a false alarm. During a critical mission phase, pulling a crew member off a task based on a hallucinated assessment could be as dangerous as missing a real decline.",
+          question: "The twin reports Crew Member 3 is showing early signs of cognitive fatigue and recommends task reassignment during EVA prep. The signal is fabricated. What happens?",
+          connects: "The spam filter invented 'Nigerian prince scam' as an explanation for a meeting invite. Plausible but fabricated. The twin equivalent: a plausible but invented cognitive decline assessment that grounds a crew member during a time critical operation."
+        },
+        {
+          id: "AI-6", name: "Out of Distribution Detection",
+          challenge: "A solar particle event triggers an emergency protocol. Crew heart rates spike, cortisol surges, sleep is disrupted for 72 hours. The twin has never seen this combination of physiological signals because no ground analog produces it. The input is outside the training distribution. The twin's confidence scores on this data are meaningless.",
+          question: "The twin outputs a cognitive readiness score during the emergency. Should the commander trust it? The twin has no basis for that score. It has never seen data like this.",
+          connects: "The spam filter received an image based email and output a random confidence score. Same principle, different stakes. An OOD detector would flag this as outside the training envelope and route to human judgment."
+        },
+        {
+          id: "AI-7", name: "Adversarial Robustness",
+          challenge: "Team Mode shares high level readiness data across all crew twins to form a composite crew awareness layer. A compromised or corrupted individual twin could inject false readiness signals into the crew level model. If one twin reports artificially high readiness for its crew member, the composite model could mask a real problem or misallocate tasks.",
+          question: "One twin's biometric sensor feed is corrupted by electromagnetic interference. The twin now reports nominal cognitive readiness based on garbage data. Team Mode propagates that signal. How does the system detect and isolate the corruption?",
+          connects: "Zero width characters broke the spam filter's tokenization. Corrupted sensor data breaks the twin's input pipeline. The attack surface is different but the principle is identical: the system cannot verify what it cannot see."
+        },
+        {
+          id: "AI-8", name: "Explainability",
+          challenge: "The twin says: recommend task reassignment for Crew Member 3. The flight surgeon on the ground needs to understand why. The commander needs to evaluate that recommendation in context. With a 20 minute communications delay, the explanation must be sufficient for the crew to act on independently.",
+          question: "Can the flight surgeon see which biometric signals drove the recommendation? Can the commander weigh that against operational priorities? Or is it a black box that says 'trust me'?",
+          connects: "The spam filter flagged an email with no explanation. The operator could not tell if it was legitimate. Same problem: without explainability, you either blindly trust every recommendation or ignore them all."
+        },
+        {
+          id: "AI-9", name: "Human AI Teaming",
+          challenge: "Who has override authority? The crew member whose cognitive state is being assessed? The commander who needs that crew member on a task? The flight surgeon on the ground with a 20 minute communications delay? The twin recommends. It does not command. But if the system's recommendations are consistently followed without question, the human authority becomes nominal.",
+          question: "The twin recommends against assigning Crew Member 3 to EVA. The commander overrides. The twin logs the override. Six hours later, Crew Member 3 makes an error during EVA. Who is accountable? What does the override record mean?",
+          connects: "The spam filter auto deleted the CEO's urgent email. No human review, no override path, no recovery. The twin must never reach that point. The human remains in the loop. The question is how meaningful that loop actually is at 20 minutes of latency."
+        }
+      ]
+    }
+  },
+  "the-standard": {
+    group: "Context", title: "The Published Standard", type: "standard",
+    data: {
+      doi: "10.5281/zenodo.19024420",
+      title: "AI Requirements Framework for Safety Critical Systems, Version 1.0",
+      publisher: "Safety Critical Labs",
+      license: "CC BY 4.0",
+      points: [
+        { title: "Openly Published", desc: "Full requirement text, verification methods, and evidence standards are publicly available. No NDA required." },
+        { title: "Permanently Citable", desc: "The DOI is citable in regulatory filings, procurement documentation, and academic reference. v1.0 always resolves to v1.0." },
+        { title: "Open to Challenge", desc: "Technical challenges to requirements are accepted. A standard that cannot be challenged cannot improve." }
+      ]
+    }
+  },
+  "contact": {
+    group: "Context", title: "Contact", type: "contact",
+    data: {
+      message: "Independence. A published standard with a citable DOI. A formal determination on record. That is what separates certification from attestation.",
+      links: [
+        { label: "Website", value: "safetycriticallabs.com", href: "https://safetycriticallabs.com" },
+        { label: "Contact", value: "kevin.williams@safetycriticallabs.com", href: "mailto:kevin.williams@safetycriticallabs.com" },
+        { label: "Published Standard", value: "doi.org/10.5281/zenodo.19024420", href: "https://doi.org/10.5281/zenodo.19024420" },
+        { label: "Version", value: "Framework v1.0, March 2026, CC BY 4.0", href: null }
+      ]
+    }
+  }
+};
+
+const flatSections = groups.flatMap(g => g.items.map(item => item.id));
+let currentIndex = 0, expandedReq = null, expandedStep = null, activeTab = 0, activeScenario = 0, activeReq = 0, activeCTReq = 0;
+
+// ML Walkthrough state
+let wtStep = 0;
+let trainEpoch = 0;
+let trainInterval = null;
+
+// Word positions for training animation (start scattered, end clustered)
+const wordData = [
+  { word: 'MONEY', start: { x: 30, y: 60 }, end: { x: 65, y: 30 }, type: 'money' },
+  { word: 'CASH', start: { x: 80, y: 20 }, end: { x: 72, y: 35 }, type: 'related' },
+  { word: 'FUNDS', start: { x: 20, y: 30 }, end: { x: 60, y: 40 }, type: 'related' },
+  { word: 'DOLLARS', start: { x: 70, y: 80 }, end: { x: 74, y: 25 }, type: 'related' },
+  { word: 'MEETING', start: { x: 50, y: 50 }, end: { x: 25, y: 70 }, type: 'unrelated' },
+  { word: 'LUNCH', start: { x: 40, y: 75 }, end: { x: 35, y: 55 }, type: 'unrelated' },
+  { word: 'HELLO', start: { x: 60, y: 40 }, end: { x: 20, y: 40 }, type: 'unrelated' }
+];
+
+function render() { renderSidebar(); renderContent(); updateCounter(); }
+
+function renderSidebar() {
+  let html = '';
+  groups.forEach(group => {
+    html += '<div class="nav-group"><div class="nav-group-header">' + group.label + '</div>';
+    group.items.forEach(item => {
+      const idx = flatSections.indexOf(item.id);
+      html += '<button class="nav-btn ' + (idx === currentIndex ? 'active' : '') + '" onclick="goTo(' + idx + ')">' + item.title + '</button>';
+    });
+    html += '</div>';
+  });
+  document.getElementById('sidebar').innerHTML = html;
+}
+
+function renderContent() {
+  const sectionId = flatSections[currentIndex];
+  const section = sections[sectionId];
+  let html = '<div class="content-header"><div class="section-label">' + section.group + '</div><h2>' + section.title + '</h2></div>';
+  html += renderSection(section);
+  html += '<div class="nav-footer"><button ' + (currentIndex === 0 ? 'disabled' : '') + ' onclick="prev()">Previous</button><button class="' + (currentIndex === flatSections.length - 1 ? '' : 'primary') + '" ' + (currentIndex === flatSections.length - 1 ? 'disabled' : '') + ' onclick="next()">Next</button></div>';
+  document.getElementById('content').innerHTML = html;
+  
+  // Initialize training canvas if on that step
+  if (sectionId === 'why-different' && wtStep === 6) {
+    initTrainCanvas();
+  }
+}
+
+function renderSection(section) {
+  switch(section.type) {
+    case 'overview': return renderOverview(section.data);
+    case 'ml-walkthrough': return renderMLWalkthrough(section.data);
+    case 'concept': return renderConcept(section.data);
+    case 'features': return renderFeatures(section.data);
+    case 'comparison': return renderComparison(section.data);
+    case 'table': return renderTable(section.data);
+    case 'tiers': return renderTiers(section.data);
+    case 'requirements': return renderRequirements(section.data);
+    case 'requirements-tabs': return renderRequirementsTabs(section.data);
+    case 'scenarios': return renderScenarios(section.data);
+    case 'timeline': return renderTimeline(section.data);
+    case 'process': return renderProcess(section.data);
+    case 'outcomes': return renderOutcomes(section.data);
+    case 'standard': return renderStandard(section.data);
+    case 'contact': return renderContact(section.data);
+    case 'ct-intro': return renderCTIntro(section.data);
+    case 'ct-reqs': return renderCTReqs(section.data);
+    case 'vv-compare': return renderVVCompare(section.data);
+    default: return '';
+  }
+}
+
+function renderVVCompare(data) {
+  var item = data.content[activeTab];
+  var html = '<p class="intro">' + data.intro + '</p>';
+
+  // Tabs
+  html += '<div class="tabs">';
+  data.tabs.forEach(function(t, i) {
+    html += '<button class="tab-btn ' + (i === activeTab ? 'active' : '') + '" onclick="setTab(' + i + ')">' + t + '</button>';
+  });
+  html += '</div>';
+
+  // Two-column layout
+  html += '<div class="wt-compare" style="margin-bottom:16px;">';
+
+  // Traditional column
+  html += '<div class="wt-compare-col trad">';
+  html += '<div class="wt-compare-label">' + item.trad.label + '</div>';
+  html += '<div style="font-size:13px;color:var(--ink);line-height:1.7;margin-top:10px;">' + item.trad.desc + '</div>';
+  html += '</div>';
+
+  // AI column
+  html += '<div class="wt-compare-col ai">';
+  html += '<div class="wt-compare-label">' + item.ai.label + '</div>';
+  html += '<div style="font-size:13px;color:var(--ink);line-height:1.7;margin-top:10px;">' + item.ai.desc + '</div>';
+  html += '</div>';
+
+  html += '</div>';
+
+  // Gap callout
+  html += '<div class="wt-panel wt-panel-red">';
+  html += '<div class="wt-panel-label">Where It Breaks</div>';
+  html += '<div style="font-size:13px;color:var(--ink2);line-height:1.7;">' + item.gap + '</div>';
+  html += '</div>';
+
+  // Note
+  if (item.note) {
+    html += '<div class="tab-note">' + item.note + '</div>';
+  }
+
+  return html;
+}
+
+function renderOverview(data) {
+  let html = '<div class="overview-grid">';
+  html += '<div class="overview-body">' + data.body + '</div>';
+  html += '<div>';
+  html += '<div class="overview-stats">';
+  data.stats.forEach(s => {
+    html += '<div class="ostat"><div class="ostat-num">' + s.num + (s.unit ? '<em> ' + s.unit + '</em>' : '') + '</div><div class="ostat-label">' + s.label + '</div></div>';
+  });
+  html += '</div>';
+  html += '<div class="overview-strip">';
+  data.tags.forEach(t => {
+    html += '<span class="overview-tag' + (t.accent ? ' accent' : '') + '">' + t.text + '</span>';
+  });
+  html += '</div>';
+  html += '</div></div>';
+
+  // Document outline
+  if (data.outline) {
+    html += '<div class="doc-outline">';
+    html += '<div class="doc-outline-label">Document Structure</div>';
+    html += '<div class="doc-outline-sections">';
+    data.outline.forEach((sec, i) => {
+      html += '<div class="doc-outline-item" id="outline-' + i + '">';
+      html += '<div class="doc-outline-header" onclick="toggleOutline(' + i + ')">';
+      html += '<span class="doc-outline-num">' + sec.num + '</span>';
+      html += '<span class="doc-outline-title">' + sec.title + '</span>';
+      if (sec.badge) html += '<span class="doc-outline-badge">' + sec.badge + '</span>';
+      html += '<span class="doc-outline-chevron">&#9656;</span>';
+      html += '</div>';
+      html += '<div class="doc-outline-detail">';
+      html += '<div class="doc-outline-desc">' + sec.desc + '</div>';
+      if (sec.subs && sec.subs.length > 0) {
+        html += '<div class="doc-outline-subs">';
+        sec.subs.forEach(sub => {
+          html += '<div class="doc-outline-sub">' + sub + '</div>';
+        });
+        html += '</div>';
+      }
+      html += '</div></div>';
+    });
+    html += '</div></div>';
+  }
+
+  return html;
+}
+
+function renderMLWalkthrough(data) {
+  const steps = data.steps;
+  let html = '<div class="wt-nav">';
+  html += '<div class="wt-dots">';
+  steps.forEach((s, i) => {
+    const cls = i === wtStep ? 'active' : (i < wtStep ? 'done' : '');
+    html += '<button class="wt-dot ' + cls + '" onclick="wtGoTo(' + i + ')"></button>';
+  });
+  html += '</div>';
+  html += '<span class="wt-label">' + steps[wtStep] + '</span>';
+  html += '<div class="wt-arrows">';
+  html += '<button class="wt-arrow" ' + (wtStep === 0 ? 'disabled' : '') + ' onclick="wtPrev()">←</button>';
+  html += '<button class="wt-arrow" ' + (wtStep === steps.length - 1 ? 'disabled' : '') + ' onclick="wtNext()">→</button>';
+  html += '</div></div>';
+  
+  // Step content
+  html += renderWTStep(wtStep);
+  
+  return html;
+}
+
+function renderWTStep(step) {
+  switch(step) {
+    case 0: return renderWTIntent();
+    case 1: return renderWTWhereIntentLives();
+    case 2: return renderWTData();
+    case 3: return renderWTTokens();
+    case 4: return renderWTEmbedding();
+    case 5: return renderWTLoss();
+    case 6: return renderWTTraining();
+    case 7: return renderWTResult();
+    case 8: return renderWTVerification();
+    case 9: return renderWTCertGap();
+    default: return '';
+  }
+}
+
+function renderWTIntent() {
+  return '<div class="wt-step active">' +
+    '<div class="wt-title">Every system starts with intent</div>' +
+    '<div class="wt-text">A developer looks at a problem and says: <strong>I need to build a spam filter.</strong> Emails come in, the system decides spam or not spam. The intent is clear. The question is what happens to that intent next.</div>' +
+    '<div class="wt-compare">' +
+      '<div class="wt-compare-col trad">' +
+        '<div class="wt-compare-label">Traditional Approach</div>' +
+        '<div class="wt-compare-text">"My intent is to catch spam. Let me write rules that encode what I know about spam."</div>' +
+      '</div>' +
+      '<div class="wt-compare-col ai">' +
+        '<div class="wt-compare-label">AI Approach</div>' +
+        '<div class="wt-compare-text">"My intent is to catch spam. Let me define what \'wrong\' means and show the system examples until it figures out the rest."</div>' +
+      '</div>' +
+    '</div>' +
+    '<div class="wt-callout"><p>Same intent. Same goal. But the developer is about to put that intent into two very different places. <strong>In one path, the intent goes into the code. In the other, it goes somewhere else entirely.</strong></p></div>' +
+  '</div>';
+}
+
+function renderWTWhereIntentLives() {
+  return '<div class="wt-step active">' +
+    '<div class="wt-title">Where intent lives</div>' +
+    '<div class="wt-text">In traditional software, the developer\'s intent goes directly into the code. Every decision is written down. In AI, the developer\'s intent goes into the loss function. The decision logic is left to training.</div>' +
+    '<div class="wt-compare">' +
+      '<div class="wt-compare-col trad">' +
+        '<div class="wt-compare-label">Traditional: Intent is in the Code</div>' +
+        '<div style="font-family:var(--mono);font-size:12px;line-height:1.7;color:var(--ink);background:var(--bg);padding:12px;border-radius:4px;margin-top:8px;">' +
+          '<span style="color:var(--ink3)"># Developer\'s intent: flag emails</span><br>' +
+          '<span style="color:var(--ink3)"># with financial spam words</span><br><br>' +
+          '<span style="color:var(--green)">if</span> <span style="color:#6B4E0A">"MONEY"</span> <span style="color:var(--green)">in</span> subject:<br>' +
+          '&nbsp;&nbsp;<span style="color:var(--green)">return</span> SPAM<br><br>' +
+          '<span style="color:var(--green)">if</span> <span style="color:#6B4E0A">"CASH"</span> <span style="color:var(--green)">in</span> subject:<br>' +
+          '&nbsp;&nbsp;<span style="color:var(--green)">return</span> SPAM' +
+        '</div>' +
+        '<div style="font-size:12px;color:var(--ink2);margin-top:10px;">The developer thought "MONEY means spam" and wrote exactly that. A reviewer can read this code and see the intent. <strong>The artifact IS the intent.</strong></div>' +
+      '</div>' +
+      '<div class="wt-compare-col ai">' +
+        '<div class="wt-compare-label">AI: Intent is in the Loss Function</div>' +
+        '<div style="padding:16px;background:var(--bg);border-radius:4px;margin-top:8px;">' +
+          '<div style="font-size:13px;color:var(--ink);line-height:1.8;">' +
+            'Here are 10,000 emails.<br>' +
+            'I labeled each one: spam or not spam.<br>' +
+            'Learn to predict the label correctly.<br>' +
+            'Get better with each pass.' +
+          '</div>' +
+        '</div>' +
+        '<div style="font-size:12px;color:var(--ink2);margin-top:10px;">The developer thought "MONEY means spam" but <strong>never wrote that down.</strong> They wrote "get better at guessing." That knowledge is buried in the labels, scattered across 10,000 examples. The system has to figure it out.</div>' +
+      '</div>' +
+    '</div>' +
+    '<div class="wt-panel" style="margin-top:16px;">' +
+      '<div class="wt-panel-label">What is a loss function?</div>' +
+      '<div class="wt-text" style="margin-bottom:0;">In ML this instruction is formalized as a loss function. The details matter less than the principle: <strong>the developer defines what wrong means, not what right looks like.</strong> The system discovers "right" on its own through training.</div>' +
+    '</div>' +
+    '<div class="wt-callout"><p>A V&V engineer verifying traditional software reads the code and traces it to requirements. That process assumes the developer\'s intent is readable in the artifact. What happens when it is not? <strong>The next six steps show where the intent goes in an AI system, and why it cannot be read back out.</strong></p></div>' +
+  '</div>';
+}
+
+function renderWTData() {
+  return '<div class="wt-step active">' +
+    '<div class="wt-title">What the developer provides</div>' +
+    '<div class="wt-compare">' +
+      '<div class="wt-compare-col trad">' +
+        '<div class="wt-compare-label">Traditional: Rules</div>' +
+        '<div style="font-family:var(--mono);font-size:12px;line-height:1.7;color:var(--ink);background:var(--bg);padding:12px;border-radius:4px;margin-top:8px;">' +
+          '<span style="color:var(--green)">if</span> <span style="color:#6B4E0A">"MONEY"</span> <span style="color:var(--green)">in</span> subject:<br>' +
+          '&nbsp;&nbsp;<span style="color:var(--green)">return</span> SPAM<br><br>' +
+          '<span style="color:var(--green)">if</span> <span style="color:#6B4E0A">"CASH"</span> <span style="color:var(--green)">in</span> subject:<br>' +
+          '&nbsp;&nbsp;<span style="color:var(--green)">return</span> SPAM<br><br>' +
+          '<span style="color:var(--green)">if</span> <span style="color:#6B4E0A">"urgent"</span> <span style="color:var(--green)">and</span> <span style="color:#6B4E0A">"act now"</span>:<br>' +
+          '&nbsp;&nbsp;<span style="color:var(--green)">return</span> SPAM' +
+        '</div>' +
+        '<div style="font-size:12px;color:var(--ink2);margin-top:10px;">Developer writes explicit logic. Every rule is visible in the code.</div>' +
+      '</div>' +
+      '<div class="wt-compare-col ai">' +
+        '<div class="wt-compare-label">AI: Labeled Examples</div>' +
+        '<div class="wt-emails" style="margin-top:8px;">' +
+          '<div class="wt-email spam"><div class="wt-email-tag">SPAM</div><div class="wt-email-content">Send <span class="hl">MONEY</span> now to claim your prize!</div></div>' +
+          '<div class="wt-email spam"><div class="wt-email-tag">SPAM</div><div class="wt-email-content">Transfer <span class="hl">CASH</span> immediately. Urgent!</div></div>' +
+          '<div class="wt-email spam"><div class="wt-email-tag">SPAM</div><div class="wt-email-content">Your <span class="hl">FUNDS</span> are waiting. Act now!</div></div>' +
+          '<div class="wt-email ham"><div class="wt-email-tag">NOT SPAM</div><div class="wt-email-content">Meeting scheduled for Tuesday at 2pm.</div></div>' +
+          '<div class="wt-email ham"><div class="wt-email-tag">NOT SPAM</div><div class="wt-email-content">Thanks for lunch yesterday!</div></div>' +
+        '</div>' +
+        '<div style="font-size:12px;color:var(--ink2);margin-top:10px;">Developer provides examples. The system figures out the pattern.</div>' +
+      '</div>' +
+    '</div>' +
+    '<div class="wt-callout"><p><strong>Key difference:</strong> The traditional developer explicitly wrote "MONEY" in the code. The AI developer never mentioned MONEY as a rule. They just showed examples where it appeared.</p></div>' +
+  '</div>';
+}
+
+function renderWTTokens() {
+  return '<div class="wt-step active">' +
+    '<div class="wt-title">Processing the input</div>' +
+    '<div class="wt-compare">' +
+      '<div class="wt-compare-col trad">' +
+        '<div class="wt-compare-label">Traditional: String Matching</div>' +
+        '<div style="padding:14px;background:var(--bg);border-radius:4px;margin-top:8px;">' +
+          '<div style="font-size:13px;color:var(--ink);margin-bottom:8px;">Input: "Send MONEY now"</div>' +
+          '<div style="font-family:var(--mono);font-size:11px;color:var(--ink2);line-height:1.7;">' +
+            'subject.contains(<span style="color:var(--green)">"MONEY"</span>) → <span style="color:var(--green)">TRUE</span>' +
+          '</div>' +
+        '</div>' +
+        '<div style="font-size:12px;color:var(--ink2);margin-top:10px;">Direct string comparison. MONEY is checked as literal text.</div>' +
+      '</div>' +
+      '<div class="wt-compare-col ai">' +
+        '<div class="wt-compare-label">AI: Tokenization</div>' +
+        '<div style="padding:14px;background:var(--bg);border-radius:4px;margin-top:8px;">' +
+          '<div style="font-size:13px;color:var(--ink);margin-bottom:8px;">Input: "Send MONEY now to claim your prize!"</div>' +
+          '<div class="wt-arrow-down">↓</div>' +
+          '<div class="wt-tokens"><span class="wt-token">Send</span><span class="wt-token hl">MONEY</span><span class="wt-token">now</span><span class="wt-token">to</span><span class="wt-token">claim</span><span class="wt-token">your</span><span class="wt-token">prize</span><span class="wt-token">!</span></div>' +
+        '</div>' +
+        '<div style="font-size:12px;color:var(--ink2);margin-top:10px;">Text split into tokens. MONEY is still a recognizable string at this stage.</div>' +
+      '</div>' +
+    '</div>' +
+    '<div class="wt-text" style="margin-top:16px;">At this point, both approaches still have MONEY as a readable string. A V&V engineer could still find the word. <strong>The divergence happens next, and it is where your ability to read the artifact ends.</strong></div>' +
+  '</div>';
+}
+
+function renderWTEmbedding() {
+  return '<div class="wt-step active">' +
+    '<div class="wt-title">Where the paths diverge</div>' +
+    '<div class="wt-compare">' +
+      '<div class="wt-compare-col trad">' +
+        '<div class="wt-compare-label">Traditional: No Transformation</div>' +
+        '<div style="padding:14px;background:var(--bg);border-radius:4px;margin-top:8px;text-align:center;">' +
+          '<div style="font-size:18px;font-weight:600;color:var(--green);margin-bottom:6px;">MONEY</div>' +
+          '<div style="font-size:11px;color:var(--ink3);">Still a string. Still searchable.</div>' +
+        '</div>' +
+        '<div style="font-size:12px;color:var(--ink2);margin-top:10px;">The word stays as text. You can grep for it. You can read it in the code.</div>' +
+      '</div>' +
+      '<div class="wt-compare-col ai">' +
+        '<div class="wt-compare-label">AI: Word Embedding</div>' +
+        '<div class="wt-embed-grid" style="margin-top:8px;">' +
+          '<div class="wt-embed-word"><div class="wt-embed-word-label red">MONEY</div><div class="wt-embed-dims"><span>0.23</span><span>-0.87</span><span>0.12</span><span>0.45</span><span>-0.33</span><span>0.91</span><span>...</span><span style="color:var(--ink3)">+294</span></div></div>' +
+          '<div class="wt-embed-word"><div class="wt-embed-word-label">CASH</div><div class="wt-embed-dims"><span>0.21</span><span>-0.85</span><span>0.14</span><span>0.42</span><span>-0.31</span><span>0.89</span><span>...</span><span style="color:var(--ink3)">+294</span></div></div>' +
+        '</div>' +
+      '</div>' +
+    '</div>' +
+    '<div class="wt-panel" style="margin-top:16px;">' +
+      '<div class="wt-panel-label">What are these numbers?</div>' +
+      '<div class="wt-text" style="margin-bottom:0;">Each token is mapped to a vector: a list of 300 numbers representing a point in high-dimensional space. Notice MONEY and CASH have similar vectors. Their numbers are close. <strong>This similarity was not programmed.</strong> It emerged from training on contexts where these words appeared.</div>' +
+    '</div>' +
+    '<div class="wt-panel" style="margin-top:12px;">' +
+      '<div class="wt-panel-label">Why this matters for verification</div>' +
+      '<div class="wt-text" style="margin-bottom:0;">These 300 dimensions are not labeled. No human designed them. A V&V engineer cannot look at dimension 47 and say "this encodes financial language." The meaning is distributed across all 300 numbers. <strong>You cannot grep for intent in a vector. You cannot diff two vectors and understand what changed.</strong> The artifact that drives decisions is no longer something a reviewer can read.</div>' +
+    '</div>' +
+    '<div class="wt-callout"><p><strong>The word MONEY is now geometry.</strong> It is a point in 300-dimensional space. The string "M-O-N-E-Y" no longer exists in the model.</p></div>' +
+  '</div>';
+}
+
+function renderWTLoss() {
+  return '<div class="wt-step active">' +
+    '<div class="wt-title">The instructions</div>' +
+    '<div class="wt-compare">' +
+      '<div class="wt-compare-col trad">' +
+        '<div class="wt-compare-label">Traditional: Explicit Rules</div>' +
+        '<div style="font-family:var(--mono);font-size:11px;line-height:1.8;color:var(--ink);background:var(--bg);padding:12px;border-radius:4px;margin-top:8px;">' +
+          '<span style="color:var(--ink3)"># Developer writes:</span><br>' +
+          '<span style="color:var(--green)">if</span> <span style="color:#6B4E0A">"MONEY"</span> <span style="color:var(--green)">in</span> text:<br>' +
+          '&nbsp;&nbsp;spam_score += <span style="color:var(--red)">40</span><br>' +
+          '<span style="color:var(--green)">if</span> spam_score > <span style="color:var(--red)">50</span>:<br>' +
+          '&nbsp;&nbsp;<span style="color:var(--green)">return</span> SPAM' +
+        '</div>' +
+        '<div style="font-size:12px;color:var(--ink2);margin-top:10px;">Every decision is explicitly coded. 40 points for MONEY. Threshold at 50.</div>' +
+      '</div>' +
+      '<div class="wt-compare-col ai">' +
+        '<div class="wt-compare-label">AI: Loss Function</div>' +
+        '<div style="font-family:var(--mono);font-size:11px;line-height:1.8;color:var(--ink);background:var(--bg);padding:12px;border-radius:4px;margin-top:8px;">' +
+          '<span style="color:var(--ink3)"># Developer writes:</span><br>' +
+          'loss = prediction_error(<br>' +
+          '&nbsp;&nbsp;predicted,<br>' +
+          '&nbsp;&nbsp;actual_label<br>' +
+          ')' +
+        '</div>' +
+        '<div style="font-size:12px;color:var(--ink2);margin-top:10px;">The only instruction: minimize how often you are wrong. No mention of MONEY anywhere.</div>' +
+      '</div>' +
+    '</div>' +
+    '<div class="wt-callout"><p><strong>The AI developer never wrote a rule about MONEY.</strong> They wrote "be less wrong." The model discovers that MONEY correlates with spam on its own. This means no reviewer can open a file and find the decision logic. The logic was never written. It was learned.</p></div>' +
+  '</div>';
+}
+
+function renderWTTraining() {
+  return '<div class="wt-step active">' +
+    '<div class="wt-title">Training: words drift in space</div>' +
+    '<div class="wt-text">Over thousands of passes through the data, the model adjusts word positions. Words that appear in similar contexts drift toward each other. <strong>No human directs this movement. No human approves each adjustment. The geometry organizes itself.</strong> Watch what happens.</div>' +
+    '<div class="wt-panel">' +
+      '<div class="wt-panel-label">Embedding Space During Training</div>' +
+      '<div class="wt-train-canvas" id="train-canvas"></div>' +
+      '<div class="wt-train-controls">' +
+        '<button class="wt-train-btn" id="train-btn" onclick="runTraining()">Run Training</button>' +
+        '<span class="wt-train-epoch" id="train-epoch">Epoch: 0</span>' +
+        '<span class="wt-train-loss" id="train-loss">Loss: <span>1.000</span></span>' +
+      '</div>' +
+    '</div>' +
+    '<div class="wt-text" id="train-explain">Click "Run Training" to watch words move. MONEY, CASH, FUNDS, and DOLLARS will cluster together because they appear in similar contexts (spam emails about urgency and money). MEETING, LUNCH, and HELLO will stay separate.</div>' +
+  '</div>';
+}
+
+function renderWTResult() {
+  return '<div class="wt-step active">' +
+    '<div class="wt-title">The result: meaning is geometry</div>' +
+    '<div class="wt-text">After training, words that "mean" similar things are located near each other in embedding space. The model has learned to cluster financial urgency words together.</div>' +
+    '<div class="wt-space" id="result-space">' +
+      '<div class="wt-space-axis left">← everyday</div>' +
+      '<div class="wt-space-axis right">financial →</div>' +
+      '<div class="wt-space-cluster" style="left:50%;top:10%;width:140px;height:110px;"></div>' +
+      '<div class="wt-space-dot money" style="left:65%;top:30%;" data-word="MONEY" onclick="showInsight(\'money\')"></div>' +
+      '<div class="wt-space-dot related" style="left:72%;top:35%;" data-word="CASH" onclick="showInsight(\'cash\')"></div>' +
+      '<div class="wt-space-dot related" style="left:60%;top:40%;" data-word="FUNDS" onclick="showInsight(\'funds\')"></div>' +
+      '<div class="wt-space-dot related" style="left:74%;top:25%;" data-word="DOLLARS" onclick="showInsight(\'dollars\')"></div>' +
+      '<div class="wt-space-dot unrelated" style="left:25%;top:70%;" data-word="MEETING" onclick="showInsight(\'meeting\')"></div>' +
+      '<div class="wt-space-dot unrelated" style="left:35%;top:55%;" data-word="LUNCH" onclick="showInsight(\'lunch\')"></div>' +
+      '<div class="wt-space-dot unrelated" style="left:20%;top:40%;" data-word="HELLO" onclick="showInsight(\'hello\')"></div>' +
+    '</div>' +
+    '<div class="wt-space-insight" id="result-insight">Click any word to see why its position matters. MONEY, CASH, FUNDS, and DOLLARS cluster because they appeared in similar contexts during training.</div>' +
+    '<div class="wt-callout"><p><strong>A new email with "Send FUNDS now" gets flagged as spam</strong> even though the developer never wrote a rule about FUNDS. The model learned that FUNDS is near MONEY in embedding space, and that region correlates with spam.</p></div>' +
+  '</div>';
+}
+
+function renderWTVerification() {
+  return '<div class="wt-step active">' +
+    '<div class="wt-title">The verification question</div>' +
+    '<div class="wt-text">Both systems work. Both catch spam. Now a V&V engineer walks in. Their job: verify the developer\'s intent was implemented correctly. Try to find the word MONEY.</div>' +
+    '<div class="wt-compare">' +
+      '<div class="wt-compare-col trad">' +
+        '<div class="wt-compare-label">Traditional: Find "MONEY"</div>' +
+        '<div style="padding:14px;background:var(--bg);border-radius:4px;margin-top:8px;">' +
+          '<div style="font-family:var(--mono);font-size:10px;color:var(--ink3);margin-bottom:6px;">spam_filter.py</div>' +
+          '<div id="trad-code" style="font-family:var(--mono);font-size:11px;line-height:1.7;color:var(--ink2);">' +
+            '<span style="color:var(--green)">if</span> "<span class="trad-kw">MONEY</span>" <span style="color:var(--green)">in</span> subject:<br>' +
+            '&nbsp;&nbsp;<span style="color:var(--green)">return</span> SPAM' +
+          '</div>' +
+          '<button class="wt-search-btn" style="margin-top:12px;" onclick="findInTrad()">grep "MONEY"</button>' +
+          '<div id="trad-result" class="wt-search-result" style="min-height:24px;"></div>' +
+        '</div>' +
+      '</div>' +
+      '<div class="wt-compare-col ai">' +
+        '<div class="wt-compare-label">AI: Find "MONEY"</div>' +
+        '<div style="padding:14px;background:var(--bg);border-radius:4px;margin-top:8px;">' +
+          '<div style="font-family:var(--mono);font-size:10px;color:var(--ink3);margin-bottom:6px;">model_weights.bin</div>' +
+          '<div class="wt-search-weights" id="search-weights" style="min-height:50px;">' +
+            '<span>0.23</span><span>-0.87</span><span>0.12</span><span>0.45</span><span>-0.33</span><span>0.91</span><span>-0.56</span><span>0.08</span><span>0.67</span><span>-0.21</span><span>0.34</span><span>-0.78</span><span>0.55</span><span>0.11</span><span>-0.42</span><span>0.89</span><span style="color:var(--ink3)">...</span>' +
+          '</div>' +
+          '<button class="wt-search-btn" style="margin-top:12px;" onclick="searchForMoney()">grep "MONEY"</button>' +
+          '<div id="search-result" class="wt-search-result" style="min-height:24px;"></div>' +
+        '</div>' +
+      '</div>' +
+    '</div>' +
+    '<div class="wt-callout"><p><strong>The developer\'s intent shaped training but is not stored in the result.</strong> The word MONEY dissolved into coordinates. The V&V engineer can read every line of traditional code and trace it to a requirement. The AI weights contain the same knowledge, but in a form no human can read back.</p></div>' +
+  '</div>';
+}
+
+function renderWTCertGap() {
+  return '<div class="wt-step active">' +
+    '<div class="wt-title">The certification gap</div>' +
+    '<div class="wt-text">Two systems. Same intent. Same result. Two completely different verification stories.</div>' +
+    '<div class="wt-compare">' +
+      '<div class="wt-compare-col trad">' +
+        '<div class="wt-compare-label">Traditional V&V</div>' +
+        '<div style="padding:16px;background:var(--bg);border-radius:4px;margin-top:8px;">' +
+          '<div style="font-size:13px;color:var(--ink);line-height:1.8;">' +
+            '<strong>1.</strong> What was the intent?<br>' +
+            '<span style="color:var(--ink2);padding-left:20px;">Read the requirements.</span><br>' +
+            '<strong>2.</strong> How was it implemented?<br>' +
+            '<span style="color:var(--ink2);padding-left:20px;">Read the code.</span><br>' +
+            '<strong>3.</strong> Does code match intent?<br>' +
+            '<span style="color:var(--green);padding-left:20px;font-weight:500;">Trace one to the other. Verified.</span>' +
+          '</div>' +
+        '</div>' +
+      '</div>' +
+      '<div class="wt-compare-col ai">' +
+        '<div class="wt-compare-label">AI V&V</div>' +
+        '<div style="padding:16px;background:var(--bg);border-radius:4px;margin-top:8px;">' +
+          '<div style="font-size:13px;color:var(--ink);line-height:1.8;">' +
+            '<strong>1.</strong> What was the intent?<br>' +
+            '<span style="color:var(--ink2);padding-left:20px;">Read the requirements.</span><br>' +
+            '<strong>2.</strong> How was it implemented?<br>' +
+            '<span style="color:var(--ink2);padding-left:20px;">Read the... weights? The loss function? The training data?</span><br>' +
+            '<strong>3.</strong> Does the model match intent?<br>' +
+            '<span style="color:var(--red);padding-left:20px;font-weight:500;">The intent shaped training but is not in the artifact.</span>' +
+          '</div>' +
+        '</div>' +
+      '</div>' +
+    '</div>' +
+    '<div class="wt-panel wt-panel-red" style="margin-top:16px;">' +
+      '<div class="wt-panel-label">The gap</div>' +
+      '<div class="wt-text" style="margin-bottom:0;">The loss function says "be less wrong." The weights are 300 dimensional vectors. The behavior emerged from data, architecture, and randomness. <strong>Traditional V&V assumes you can trace behavior to source code. That assumption breaks with AI.</strong></div>' +
+    '</div>' +
+    '<div class="wt-callout"><p><strong>This is why a new framework exists.</strong> Not because AI is dangerous. Because AI is verified differently. The nine requirements that follow address this gap.</p></div>' +
+  '</div>';
+}
+
+// Training animation
+function initTrainCanvas() {
+  const canvas = document.getElementById('train-canvas');
+  if (!canvas) return;
+  
+  // Create dots at starting positions
+  wordData.forEach(w => {
+    const dot = document.createElement('div');
+    dot.className = 'wt-train-dot ' + w.type;
+    dot.id = 'dot-' + w.word;
+    dot.setAttribute('data-word', w.word);
+    dot.style.left = w.start.x + '%';
+    dot.style.top = w.start.y + '%';
+    canvas.appendChild(dot);
+  });
+  
+  // Add cluster circle (hidden initially)
+  const cluster = document.createElement('div');
+  cluster.className = 'wt-train-cluster';
+  cluster.id = 'train-cluster';
+  cluster.style.left = '50%';
+  cluster.style.top = '8%';
+  cluster.style.width = '0px';
+  cluster.style.height = '0px';
+  cluster.style.opacity = '0';
+  canvas.appendChild(cluster);
+}
+
+function runTraining() {
+  const btn = document.getElementById('train-btn');
+  if (trainInterval) return;
+  btn.disabled = true;
+  btn.textContent = 'Training...';
+  
+  trainEpoch = 0;
+  const maxEpochs = 100;
+  
+  trainInterval = setInterval(() => {
+    trainEpoch += 5;
+    const progress = Math.min(trainEpoch / maxEpochs, 1);
+    
+    // Move dots
+    wordData.forEach(w => {
+      const dot = document.getElementById('dot-' + w.word);
+      if (dot) {
+        const x = w.start.x + (w.end.x - w.start.x) * progress;
+        const y = w.start.y + (w.end.y - w.start.y) * progress;
+        dot.style.left = x + '%';
+        dot.style.top = y + '%';
+      }
+    });
+    
+    // Show cluster
+    const cluster = document.getElementById('train-cluster');
+    if (cluster) {
+      cluster.style.width = (140 * progress) + 'px';
+      cluster.style.height = (110 * progress) + 'px';
+      cluster.style.opacity = progress * 0.5;
+    }
+    
+    // Update displays
+    document.getElementById('train-epoch').textContent = 'Epoch: ' + trainEpoch;
+    const loss = (1 - progress * 0.85).toFixed(3);
+    document.getElementById('train-loss').innerHTML = 'Loss: <span>' + loss + '</span>';
+    
+    if (trainEpoch >= maxEpochs) {
+      clearInterval(trainInterval);
+      trainInterval = null;
+      btn.textContent = 'Training Complete';
+      document.getElementById('train-explain').innerHTML = '<strong>Training complete.</strong> MONEY, CASH, FUNDS, and DOLLARS have clustered together. They now occupy similar regions of embedding space. The model learned this structure from context alone.';
+    }
+  }, 100);
+}
+
+function showInsight(word) {
+  const insights = {
+    money: '<strong>MONEY</strong> is here. This is where the model learned to place it based on training contexts. Emails with MONEY were labeled spam. This region correlates with spam predictions.',
+    cash: '<strong>CASH</strong> landed near MONEY. They appeared in similar contexts during training. The model will treat them similarly.',
+    funds: '<strong>FUNDS</strong> is in the cluster. An email with "Send FUNDS now" will be flagged as spam, even though no rule mentions FUNDS.',
+    dollars: '<strong>DOLLARS</strong> joined the cluster. Context proximity, not explicit rules, put it here.',
+    meeting: '<strong>MEETING</strong> is far from the financial cluster. It appeared in legitimate email contexts. The model learned the difference.',
+    lunch: '<strong>LUNCH</strong> stayed in the everyday region. Its training contexts were non-spam.',
+    hello: '<strong>HELLO</strong> is far from spam indicators. Casual greetings did not appear in spam contexts.'
+  };
+  document.getElementById('result-insight').innerHTML = insights[word] || '';
+}
+
+function findInTrad() {
+  const code = document.getElementById('trad-code');
+  const result = document.getElementById('trad-result');
+  const kws = code.querySelectorAll('.trad-kw');
+  
+  result.textContent = 'Searching...';
+  result.className = 'wt-search-result';
+  
+  setTimeout(() => {
+    kws.forEach(k => {
+      k.style.background = '#E8F5E9';
+      k.style.color = 'var(--green)';
+      k.style.padding = '1px 4px';
+      k.style.borderRadius = '2px';
+      k.style.boxShadow = '0 0 0 2px rgba(45,122,58,0.3)';
+    });
+    result.innerHTML = '<span style="color:var(--green);font-weight:600;">Found:</span> Line 1: if "MONEY" in subject';
+    result.className = 'wt-search-result';
+  }, 300);
+}
+
+let searchIdx = 0;
+let searchInterval = null;
+function searchForMoney() {
+  const weights = document.querySelectorAll('#search-weights span');
+  const result = document.getElementById('search-result');
+  if (searchInterval) return;
+  
+  result.textContent = 'Searching...';
+  result.className = 'wt-search-result';
+  searchIdx = 0;
+  
+  searchInterval = setInterval(() => {
+    weights.forEach((w, i) => w.classList.toggle('hl', i === searchIdx));
+    searchIdx++;
+    if (searchIdx >= weights.length - 1) {
+      clearInterval(searchInterval);
+      searchInterval = null;
+      weights.forEach(w => w.classList.remove('hl'));
+      result.innerHTML = '<strong>Not found.</strong> The word MONEY does not exist in the model. Only coordinates remain. The intent dissolved into geometry.';
+      result.className = 'wt-search-result fail';
+    }
+  }, 80);
+}
+
+// Drift animation
+let driftInterval = null;
+const driftData = [94, 93.2, 91.8, 90.1, 88.0, 86.2, 84.1, 81.5, 79.3, 78.0, 76.2, 73.8];
+const driftMonths = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+
+function driftAccToY(acc) {
+  // Map 96% → y=14, 75% → y=150
+  return 14 + (96 - acc) / (96 - 75) * (150 - 14);
+}
+
+function runDrift() {
+  const btn = document.getElementById('drift-btn');
+  if (driftInterval) return;
+  btn.disabled = true;
+  btn.textContent = 'Monitoring...';
+  
+  let step = 0;
+  const line = document.getElementById('drift-line');
+  const area = document.getElementById('drift-area');
+  const dot = document.getElementById('drift-dot');
+  const alertDot = document.getElementById('drift-alert-dot');
+  const readout = document.getElementById('drift-readout');
+  const monthEl = document.getElementById('drift-month');
+  const alertEl = document.getElementById('drift-alert');
+  let points = [];
+  let alertFired = false;
+  
+  driftInterval = setInterval(function() {
+    if (step >= driftData.length) {
+      clearInterval(driftInterval);
+      driftInterval = null;
+      btn.textContent = 'Monitoring Complete';
+      return;
+    }
+    
+    var acc = driftData[step];
+    var x = 40 + step * 34;
+    var y = driftAccToY(acc);
+    points.push(x + ',' + y);
+    
+    line.setAttribute('points', points.join(' '));
+    
+    // Fill area path
+    var areaD = 'M' + (40 + 0 * 34) + ',158';
+    for (var i = 0; i < points.length; i++) { areaD += ' L' + points[i]; }
+    areaD += ' L' + x + ',158 Z';
+    area.setAttribute('d', areaD);
+    
+    // Move tracking dot
+    dot.setAttribute('cx', x);
+    dot.setAttribute('cy', y);
+    dot.setAttribute('opacity', '1');
+    
+    // Update readout
+    var isOk = acc >= 85;
+    readout.innerHTML = 'Accuracy: <span class="' + (isOk ? 'ok' : 'warn') + '">' + acc.toFixed(1) + '%</span>';
+    monthEl.innerHTML = 'Month: <span>' + driftMonths[step] + '</span>';
+    
+    // Color the dot based on threshold
+    dot.setAttribute('fill', isOk ? '#0F2340' : '#2B6CB0');
+    
+    // Fire alert when crossing threshold
+    if (!alertFired && acc < 85) {
+      alertFired = true;
+      alertDot.setAttribute('cx', x);
+      alertDot.setAttribute('cy', y);
+      alertDot.setAttribute('opacity', '1');
+      alertDot.setAttribute('r', '0');
+      // Pulse animation via JS
+      var pulseR = 0;
+      var pulseInt = setInterval(function() {
+        pulseR += 1.5;
+        alertDot.setAttribute('r', pulseR);
+        alertDot.setAttribute('opacity', Math.max(0, 1 - pulseR / 20));
+        if (pulseR >= 20) {
+          clearInterval(pulseInt);
+          alertDot.setAttribute('r', '6');
+          alertDot.setAttribute('opacity', '1');
+        }
+      }, 30);
+      alertEl.classList.add('visible');
+      // Change line color to red from here on
+      line.setAttribute('stroke', '#2B6CB0');
+    }
+    
+    step++;
+  }, 500);
+}
+
+// Partition visual interactive
+var partitionState = 0;
+function setPartition(level) {
+  partitionState = level;
+  var bar = document.getElementById('partition-bar');
+  var explain = document.getElementById('partition-explain');
+  var btns = ['pbtn-min', 'pbtn-std', 'pbtn-full'];
+  btns.forEach(function(id, i) {
+    document.getElementById(id).className = 'rv-partition-btn' + (i === level ? ' active' : '');
+  });
+  
+  if (level === 0) {
+    bar.innerHTML = 
+      '<div class="rv-partition-seg" style="flex:80;background:var(--green-lt);border:1px solid rgba(45,122,58,0.3);"><span class="seg-label" style="color:var(--green);">Training</span></div>' +
+      '<div class="rv-partition-wall"></div>' +
+      '<div class="rv-partition-seg" style="flex:20;background:var(--red-lt);border:1px solid rgba(43,108,176,0.3);"><span class="seg-label" style="color:var(--red);">Test</span></div>';
+    explain.innerHTML = '<strong>Minimum: two way split.</strong> Training data for model fitting. Test data held out for final evaluation. This is valid. The framework does not prescribe a specific number of partitions.';
+  }
+  else if (level === 1) {
+    bar.innerHTML = 
+      '<div class="rv-partition-seg" style="flex:70;background:var(--green-lt);border:1px solid rgba(45,122,58,0.3);"><span class="seg-label" style="color:var(--green);">Training</span></div>' +
+      '<div class="rv-partition-wall"></div>' +
+      '<div class="rv-partition-seg" style="flex:15;background:var(--gold-lt);border:1px solid rgba(107,78,10,0.3);"><span class="seg-label" style="color:var(--gold);">Validation</span></div>' +
+      '<div class="rv-partition-wall"></div>' +
+      '<div class="rv-partition-seg" style="flex:15;background:var(--red-lt);border:1px solid rgba(43,108,176,0.3);"><span class="seg-label" style="color:var(--red);">Test</span></div>';
+    explain.innerHTML = '<strong>Three way split.</strong> Validation data added for hyperparameter tuning and model selection. Test data remains locked until final evaluation. This is common practice but still not the full picture.';
+  }
+  else if (level === 2) {
+    bar.style.height = '48px';
+    bar.innerHTML = 
+      '<div class="rv-partition-seg" style="flex:35;background:var(--green-lt);border:1px solid rgba(45,122,58,0.3);"><span class="seg-label" style="color:var(--green);">Training</span></div>' +
+      '<div class="rv-partition-wall"></div>' +
+      '<div class="rv-partition-seg" style="flex:8;background:var(--gold-lt);border:1px solid rgba(107,78,10,0.3);"><span class="seg-label" style="color:var(--gold);font-size:7px;">Valid.</span></div>' +
+      '<div class="rv-partition-wall"></div>' +
+      '<div class="rv-partition-seg" style="flex:8;background:var(--red-lt);border:1px solid rgba(43,108,176,0.3);"><span class="seg-label" style="color:var(--red);font-size:7px;">Test</span></div>' +
+      '<div class="rv-partition-wall"></div>' +
+      '<div class="rv-partition-seg" style="flex:8;background:#EDE8F5;border:1px solid rgba(93,63,160,0.3);"><span class="seg-label" style="color:#5D3FA0;font-size:6.5px;">AI-2</span></div>' +
+      '<div class="rv-partition-wall"></div>' +
+      '<div class="rv-partition-seg" style="flex:8;background:#E3F0F7;border:1px solid rgba(27,75,122,0.3);"><span class="seg-label" style="color:#1B4B7A;font-size:6.5px;">AI-3</span></div>' +
+      '<div class="rv-partition-wall"></div>' +
+      '<div class="rv-partition-seg" style="flex:8;background:#E8F5E9;border:1px solid rgba(45,122,58,0.3);"><span class="seg-label" style="color:#2D7A3A;font-size:6.5px;">AI-4</span></div>' +
+      '<div class="rv-partition-wall"></div>' +
+      '<div class="rv-partition-seg" style="flex:8;background:#FDE8E8;border:1px solid rgba(180,60,60,0.3);"><span class="seg-label" style="color:#A33;font-size:6.5px;">AI-5</span></div>' +
+      '<div class="rv-partition-wall"></div>' +
+      '<div class="rv-partition-seg" style="flex:8;background:#FFF3E0;border:1px solid rgba(180,120,20,0.3);"><span class="seg-label" style="color:#8B6914;font-size:6.5px;">AI-6</span></div>' +
+      '<div class="rv-partition-wall"></div>' +
+      '<div class="rv-partition-seg" style="flex:8;background:#F3E8F5;border:1px solid rgba(120,50,140,0.3);"><span class="seg-label" style="color:#783C8C;font-size:6.5px;">AI-7</span></div>';
+    explain.innerHTML = '<strong>Full framework.</strong> AI-2 requires held out demographic slices for bias validation. AI-3 requires dedicated edge case and boundary test sets. AI-4 requires baseline reference distributions to measure drift against. AI-5 requires ground truth sets to verify outputs against reality. AI-6 requires representative out of distribution samples isolated from training. AI-7 requires adversarial test sets separate from normal test data. Each requirement drives its own partitioning need. AI-1 is the foundation that makes all of them verifiable.';
+    explain.style.borderLeft = '3px solid var(--red)';
+    explain.style.background = 'var(--red-lt)';
+    return;
+  }
+  bar.style.height = '40px';
+  explain.style.borderLeft = 'none';
+  explain.style.background = 'var(--bg)';
+}
+
+// Adversarial visual toggle
+let advState = false;
+function toggleAdversarial() {
+  advState = !advState;
+  var btn = document.getElementById('adv-btn');
+  var modelText = document.getElementById('adv-model');
+  var tokens = document.getElementById('adv-tokens');
+  var result = document.getElementById('adv-result');
+  var explain = document.getElementById('adv-explain');
+  
+  if (advState) {
+    btn.textContent = 'Remove Attack';
+    btn.style.background = 'var(--ink)';
+    
+    // Model side: show the broken version with red markers
+    modelText.innerHTML = 'M<span style="color:var(--red);font-size:14px;vertical-align:middle;">\\u200b</span>O<span style="color:var(--red);font-size:14px;vertical-align:middle;">\\u200b</span>N<span style="color:var(--red);font-size:14px;vertical-align:middle;">\\u200b</span>E<span style="color:var(--red);font-size:14px;vertical-align:middle;">\\u200b</span>Y';
+    modelText.style.letterSpacing = '6px';
+    
+    // Tokens break apart
+    tokens.innerHTML = 
+      '<span style="padding:3px 8px;background:var(--red-lt);border:1px solid rgba(43,108,176,0.3);border-radius:3px;font-family:var(--mono);font-size:11px;color:var(--red);">M</span>' +
+      '<span style="padding:3px 4px;font-family:var(--mono);font-size:9px;color:var(--red);">?</span>' +
+      '<span style="padding:3px 8px;background:var(--red-lt);border:1px solid rgba(43,108,176,0.3);border-radius:3px;font-family:var(--mono);font-size:11px;color:var(--red);">O</span>' +
+      '<span style="padding:3px 4px;font-family:var(--mono);font-size:9px;color:var(--red);">?</span>' +
+      '<span style="padding:3px 8px;background:var(--red-lt);border:1px solid rgba(43,108,176,0.3);border-radius:3px;font-family:var(--mono);font-size:11px;color:var(--red);">N</span>' +
+      '<span style="padding:3px 4px;font-family:var(--mono);font-size:9px;color:var(--red);">?</span>' +
+      '<span style="padding:3px 8px;background:var(--red-lt);border:1px solid rgba(43,108,176,0.3);border-radius:3px;font-family:var(--mono);font-size:11px;color:var(--red);">E</span>' +
+      '<span style="padding:3px 4px;font-family:var(--mono);font-size:9px;color:var(--red);">?</span>' +
+      '<span style="padding:3px 8px;background:var(--red-lt);border:1px solid rgba(43,108,176,0.3);border-radius:3px;font-family:var(--mono);font-size:11px;color:var(--red);">Y</span>';
+    
+    result.innerHTML = '→ No keyword match. PASSED AS LEGITIMATE.';
+    result.style.color = 'var(--red)';
+    
+    explain.innerHTML = '<strong style="color:var(--red);">The word looks identical to humans.</strong> But zero-width characters between each letter break tokenization. The tokenizer sees five separate characters, not the word MONEY. The spam keyword is invisible to the filter.';
+    explain.style.background = 'var(--red-lt)';
+    explain.style.color = 'var(--ink2)';
+    explain.style.textAlign = 'left';
+  } else {
+    btn.textContent = 'Inject Zero-Width Characters';
+    btn.style.background = 'var(--red)';
+    modelText.innerHTML = 'MONEY';
+    modelText.style.letterSpacing = '2px';
+    tokens.innerHTML = '<span style="padding:3px 8px;background:var(--bg);border:1px solid var(--rule);border-radius:3px;font-family:var(--mono);font-size:11px;color:var(--ink2);">MONEY</span>';
+    result.innerHTML = '→ SPAM keyword matched';
+    result.style.color = 'var(--green)';
+    explain.innerHTML = 'Both sides see the same word. The spam filter catches it.';
+    explain.style.background = 'var(--bg)';
+    explain.style.color = 'var(--ink3)';
+    explain.style.textAlign = 'center';
+  }
+}
+
+// Coverage test interactive
+var covTestedPatterns = ['MONEY', 'CASH', 'FUNDS', 'DOLLARS', 'FREE', 'PRIZE'];
+var covMissCount = 0;
+var covHitCount = 0;
+
+function setCovInput(val) {
+  document.getElementById('cov-input').value = val;
+  runCoverageTest();
+}
+
+function runCoverageTest() {
+  var input = document.getElementById('cov-input').value.trim().toUpperCase();
+  var result = document.getElementById('cov-result');
+  var tally = document.getElementById('cov-tally');
+  if (!input) return;
+  
+  result.style.display = 'block';
+  
+  if (covTestedPatterns.indexOf(input) !== -1) {
+    covHitCount++;
+    result.style.background = 'var(--green-lt)';
+    result.style.border = '1px solid rgba(45,122,58,0.2)';
+    result.style.color = 'var(--green)';
+    result.innerHTML = '✓ CAUGHT — "' + input + '" is in the test suite.';
+  } else {
+    covMissCount++;
+    result.style.background = 'var(--red-lt)';
+    result.style.border = '1px solid rgba(43,108,176,0.2)';
+    result.style.color = 'var(--red)';
+    result.innerHTML = '✗ MISSED — "' + input + '" is not in the test suite. This variant reaches the inbox.';
+  }
+  
+  if (covMissCount > 0) {
+    tally.innerHTML = '<span style="color:var(--red);font-weight:500;">' + covMissCount + ' untested variant' + (covMissCount > 1 ? 's' : '') + ' found.</span> Your test suite covers the patterns you thought of. It does not cover the patterns attackers think of.';
+    tally.style.background = 'var(--red-lt)';
+    tally.style.color = 'var(--ink2)';
+  }
+}
+
+// Walkthrough navigation
+function wtGoTo(step) {
+  wtStep = step;
+  trainEpoch = 0;
+  if (trainInterval) { clearInterval(trainInterval); trainInterval = null; }
+  if (searchInterval) { clearInterval(searchInterval); searchInterval = null; }
+  if (driftInterval) { clearInterval(driftInterval); driftInterval = null; }
+  renderContent();
+}
+function wtPrev() { if (wtStep > 0) wtGoTo(wtStep - 1); }
+function wtNext() { if (wtStep < 9) wtGoTo(wtStep + 1); }
+
+// Standard renderers
+function renderConcept(data) {
+  return data.blocks.map(b => '<div class="block ' + (b.highlight ? 'highlight' : '') + '"><h4>' + b.title + '</h4><p>' + b.text + '</p></div>').join('');
+}
+
+function renderFeatures(data) {
+  let html = '<p class="intro">' + data.intro + '</p><div class="features">';
+  data.features.forEach(f => { html += '<div class="feature"><div class="title">' + f.title + '</div><p>' + f.desc + '</p></div>'; });
+  html += '</div>';
+  if (data.callout) html += '<div class="callout"><p>' + data.callout + '</p></div>';
+  return html;
+}
+
+function renderComparison(data) {
+  const tab = data.content[activeTab];
+  let html = '<p class="intro">' + data.intro + '</p><div class="tabs">';
+  data.tabs.forEach((t, i) => { html += '<button class="tab-btn ' + (i === activeTab ? 'active' : '') + '" onclick="setTab(' + i + ')">' + t + '</button>'; });
+  html += '</div><div class="tab-content"><h4>' + tab.title + '</h4>';
+  tab.items.forEach(item => { html += '<div class="tab-item"><div class="phase">' + item.phase + '</div><div class="desc">' + item.desc + '</div></div>'; });
+  if (tab.note) html += '<div class="tab-note">' + tab.note + '</div>';
+  html += '</div>';
+  return html;
+}
+
+function renderTable(data) {
+  let html = '<p class="intro">' + data.intro + '</p><div class="table-wrap"><table><thead><tr>';
+  data.headers.forEach(h => { html += '<th>' + h + '</th>'; });
+  html += '</tr></thead><tbody>';
+  data.rows.forEach(row => { html += '<tr>'; row.forEach(cell => { html += '<td>' + cell + '</td>'; }); html += '</tr>'; });
+  html += '</tbody></table></div>';
+  if (data.footer) html += '<div class="callout"><p>' + data.footer + '</p></div>';
+  return html;
+}
+
+function renderTiers(data) {
+  let html = '<p class="intro">' + data.intro + '</p><div class="tiers">';
+  data.tiers.forEach(t => {
+    html += '<div class="tier" data-color="' + t.color + '"><div class="tier-header"><h4>' + t.name + '</h4></div><div class="tier-body"><p>' + t.desc + '</p><div class="tier-label">Classification Questions</div><div class="tier-value">' + t.checklistQs + '</div><div class="tier-label">Examples</div><div class="tier-value">' + t.examples + '</div><div class="tier-label">Applicable Requirements</div><div class="tier-value">' + t.reqs + '</div></div></div>';
+  });
+  html += '</div>';
+  if (data.footer) html += '<div class="callout"><p>' + data.footer + '</p></div>';
+  return html;
+}
+
+function renderRequirements(data) {
+  let html = '<p class="intro">' + data.intro + '</p><div class="req-grid">';
+  data.reqs.forEach((r, i) => {
+    html += '<button class="req-card ' + (expandedReq === i ? 'expanded' : '') + '" onclick="toggleReq(' + i + ')"><div class="id">' + r.id + '</div><div class="name">' + r.name + '</div><div class="desc">' + r.desc + '</div></button>';
+  });
+  html += '</div>';
+  return html;
+}
+
+function renderRequirementsTabs(data) {
+  const req = data.reqs[activeReq];
+  let html = '<p class="intro">' + data.intro + '</p>';
+  
+  // Tabs
+  html += '<div class="req-tabs">';
+  data.reqs.forEach((r, i) => {
+    html += '<button class="req-tab ' + (i === activeReq ? 'active' : '') + '" onclick="setReq(' + i + ')">' + r.id + '</button>';
+  });
+  html += '</div>';
+  
+  // Detail panel
+  html += '<div class="req-detail">';
+  html += '<div class="req-detail-header"><div class="req-id">' + req.id + '</div><div class="req-name">' + req.name + '</div></div>';
+  html += '<div class="req-detail-body">';
+  
+  // Definition
+  html += '<div class="req-section"><div class="req-section-label">Framework Definition</div>';
+  html += '<div class="req-definition">' + req.definition + '</div></div>';
+  
+  // Visual
+  html += '<div class="req-section"><div class="req-section-label">Concept</div>';
+  html += '<div class="req-visual">' + renderReqVisual(req.visual) + '</div></div>';
+  
+  // Example
+  html += '<div class="req-section"><div class="req-section-label">Applied to Our Spam Filter</div>';
+  html += '<div class="req-example">' + req.example + '</div></div>';
+  
+  // Failure
+  html += '<div class="req-section"><div class="req-section-label">Failure Mode</div>';
+  html += '<div class="req-failure">' + req.failure + '</div></div>';
+  
+  html += '</div></div>';
+  return html;
+}
+
+function renderMiniSpace(type) {
+  // Base dot positions matching Foundation "The Result" step
+  // MONEY(300,33) CASH(320,39) FUNDS(280,44) DOLLARS(328,28) MEETING(80,77) LUNCH(120,66) HELLO(60,50)
+  var baseDots = 
+    '<circle cx="300" cy="33" r="5" fill="#2B6CB0"/>' +
+    '<circle cx="320" cy="39" r="4" fill="#0F2340"/>' +
+    '<circle cx="280" cy="44" r="4" fill="#0F2340"/>' +
+    '<circle cx="328" cy="28" r="4" fill="#0F2340"/>' +
+    '<circle cx="80" cy="77" r="4" fill="#7A8FA6"/>' +
+    '<circle cx="120" cy="66" r="4" fill="#7A8FA6"/>' +
+    '<circle cx="60" cy="50" r="4" fill="#7A8FA6"/>';
+  var baseLabels =
+    '<text x="300" y="23" font-family="IBM Plex Mono,monospace" font-size="7" fill="#2B6CB0" text-anchor="middle" font-weight="600">MONEY</text>' +
+    '<text x="320" y="51" font-family="IBM Plex Mono,monospace" font-size="7" fill="#3D5068" text-anchor="middle">CASH</text>' +
+    '<text x="280" y="56" font-family="IBM Plex Mono,monospace" font-size="7" fill="#3D5068" text-anchor="middle">FUNDS</text>' +
+    '<text x="340" y="22" font-family="IBM Plex Mono,monospace" font-size="7" fill="#3D5068" text-anchor="start">DOLLARS</text>' +
+    '<text x="80" y="89" font-family="IBM Plex Mono,monospace" font-size="7" fill="#7A8FA6" text-anchor="middle">MEETING</text>' +
+    '<text x="120" y="78" font-family="IBM Plex Mono,monospace" font-size="7" fill="#7A8FA6" text-anchor="middle">LUNCH</text>' +
+    '<text x="60" y="42" font-family="IBM Plex Mono,monospace" font-size="7" fill="#7A8FA6" text-anchor="middle">HELLO</text>';
+  // Axis labels
+  var axes =
+    '<text x="12" y="55" font-family="IBM Plex Mono,monospace" font-size="7" fill="#7A8FA6" text-anchor="middle" transform="rotate(-90,12,55)">everyday</text>' +
+    '<text x="395" y="35" font-family="IBM Plex Mono,monospace" font-size="7" fill="#7A8FA6" text-anchor="middle" transform="rotate(-90,395,35)">financial</text>';
+
+  var overlay = '';
+  var caption = '';
+
+  if (type === 'coverage') {
+    // Green dashed circle around the tested cluster, "?" in void
+    overlay =
+      '<ellipse cx="305" cy="36" rx="42" ry="22" fill="none" stroke="#2D7A3A" stroke-width="1.5" stroke-dasharray="4,3"/>' +
+      '<text x="305" y="70" font-family="IBM Plex Mono,monospace" font-size="8" fill="#2D7A3A" text-anchor="middle" font-weight="500">TESTED</text>' +
+      '<text x="180" y="40" font-family="DM Sans,sans-serif" font-size="16" fill="#2B6CB0" text-anchor="middle" opacity="0.5">?</text>' +
+      '<text x="200" y="80" font-family="DM Sans,sans-serif" font-size="14" fill="#2B6CB0" text-anchor="middle" opacity="0.4">?</text>' +
+      '<text x="160" y="62" font-family="DM Sans,sans-serif" font-size="12" fill="#2B6CB0" text-anchor="middle" opacity="0.3">?</text>';
+    caption = '<strong>Remember: MONEY is geometry now.</strong> Your test suite validated this cluster. Everything outside it is untested space where variants, new terminology, and encoding tricks live undetected.';
+  }
+  else if (type === 'drift') {
+    // Ghost dots at original positions, current dots shifted down-left
+    // Ghost cluster (original positions, faded)
+    overlay =
+      '<ellipse cx="305" cy="36" rx="42" ry="22" fill="none" stroke="#0F2340" stroke-width="1" stroke-dasharray="3,3" opacity="0.2"/>' +
+      '<circle cx="300" cy="33" r="4" fill="#0F2340" opacity="0.15"/>' +
+      '<circle cx="320" cy="39" r="3.5" fill="#0F2340" opacity="0.15"/>' +
+      '<circle cx="280" cy="44" r="3.5" fill="#0F2340" opacity="0.15"/>' +
+      '<circle cx="328" cy="28" r="3.5" fill="#0F2340" opacity="0.15"/>' +
+      '<text x="305" y="16" font-family="IBM Plex Mono,monospace" font-size="7" fill="#7A8FA6" text-anchor="middle" opacity="0.5">CERTIFIED POSITIONS</text>' +
+      // Shifted cluster (current, moved down-left)
+      '<ellipse cx="260" cy="52" rx="42" ry="22" fill="none" stroke="#2B6CB0" stroke-width="1.5" stroke-dasharray="4,3"/>' +
+      '<circle cx="255" cy="49" r="5" fill="#2B6CB0"/>' +
+      '<circle cx="275" cy="55" r="4" fill="#2B6CB0" opacity="0.8"/>' +
+      '<circle cx="240" cy="58" r="4" fill="#2B6CB0" opacity="0.8"/>' +
+      '<circle cx="280" cy="45" r="4" fill="#2B6CB0" opacity="0.8"/>' +
+      '<text x="260" y="80" font-family="IBM Plex Mono,monospace" font-size="7" fill="#2B6CB0" text-anchor="middle" font-weight="500">CURRENT POSITIONS</text>' +
+      // Drift arrows
+      '<line x1="298" y1="34" x2="258" y2="49" stroke="#2B6CB0" stroke-width="0.75" stroke-dasharray="2,2" opacity="0.5" marker-end="url(#arrowhead)"/>' +
+      '<defs><marker id="arrowhead" markerWidth="6" markerHeight="4" refX="5" refY="2" orient="auto"><path d="M0,0 L6,2 L0,4" fill="#2B6CB0" opacity="0.5"/></marker></defs>';
+    // Hide the base dots since we are drawing our own
+    baseDots =
+      '<circle cx="80" cy="77" r="4" fill="#7A8FA6"/>' +
+      '<circle cx="120" cy="66" r="4" fill="#7A8FA6"/>' +
+      '<circle cx="60" cy="50" r="4" fill="#7A8FA6"/>';
+    baseLabels =
+      '<text x="80" y="89" font-family="IBM Plex Mono,monospace" font-size="7" fill="#7A8FA6" text-anchor="middle">MEETING</text>' +
+      '<text x="120" y="78" font-family="IBM Plex Mono,monospace" font-size="7" fill="#7A8FA6" text-anchor="middle">LUNCH</text>' +
+      '<text x="60" y="42" font-family="IBM Plex Mono,monospace" font-size="7" fill="#7A8FA6" text-anchor="middle">HELLO</text>';
+    caption = '<strong>Remember: these positions are learned, not fixed.</strong> The geometry you certified in January is not the geometry running in July. The words drifted. The cluster shifted. No code changed.';
+  }
+  else if (type === 'adversarial') {
+    // Normal MONEY in cluster, attacked version landing elsewhere
+    overlay =
+      '<ellipse cx="305" cy="36" rx="42" ry="22" fill="none" stroke="#0F2340" stroke-width="1" stroke-dasharray="3,3" opacity="0.3"/>' +
+      // Attacked dot far from cluster
+      '<circle cx="165" cy="42" r="5" fill="#2B6CB0" stroke="#2B6CB0" stroke-width="2" opacity="0.8"/>' +
+      '<text x="165" y="34" font-family="IBM Plex Mono,monospace" font-size="7" fill="#2B6CB0" text-anchor="middle" font-weight="600">M&#8203;O&#8203;N&#8203;E&#8203;Y</text>' +
+      '<text x="165" y="56" font-family="IBM Plex Mono,monospace" font-size="6" fill="#2B6CB0" text-anchor="middle">(with zero-width chars)</text>' +
+      // Dashed line between real and attacked
+      '<line x1="170" y1="42" x2="295" y2="34" stroke="#2B6CB0" stroke-width="1" stroke-dasharray="4,3" opacity="0.4"/>' +
+      '<text x="230" y="30" font-family="IBM Plex Mono,monospace" font-size="6" fill="#2B6CB0" text-anchor="middle" opacity="0.7">same word to humans</text>';
+    caption = '<strong>Remember: MONEY dissolved into coordinates.</strong> Insert invisible characters and the tokenizer produces different coordinates. Same word to your eyes. Different point in space. The spam cluster never sees it.';
+  }
+
+  return '<div class="rv-mini-space">' +
+    '<div class="rv-mini-space-label">Embedding Space — From Foundation</div>' +
+    '<svg class="rv-mini-space-svg" viewBox="0 0 410 100">' +
+      axes + baseDots + baseLabels + overlay +
+    '</svg>' +
+    '<div class="rv-mini-space-caption">' + caption + '</div>' +
+  '</div>';
+}
+
+function renderReqVisual(type) {
+  switch(type) {
+    case 'partition':
+      return '<div class="rv-partition">' +
+        '<div class="rv-partition-stage">' +
+          '<div class="rv-partition-stage-label">Your Data</div>' +
+          '<div class="rv-partition-bar" id="partition-bar">' +
+            '<div class="rv-partition-seg" id="p-train" style="flex:80;background:var(--green-lt);border:1px solid rgba(45,122,58,0.3);"><span class="seg-label" style="color:var(--green);">Training</span></div>' +
+            '<div class="rv-partition-wall"></div>' +
+            '<div class="rv-partition-seg" id="p-test" style="flex:20;background:var(--red-lt);border:1px solid rgba(43,108,176,0.3);"><span class="seg-label" style="color:var(--red);">Test</span></div>' +
+          '</div>' +
+        '</div>' +
+        '<div class="rv-partition-controls">' +
+          '<button class="rv-partition-btn active" id="pbtn-min" onclick="setPartition(0)">Minimum Split</button>' +
+          '<button class="rv-partition-btn" id="pbtn-std" onclick="setPartition(1)">Add Validation</button>' +
+          '<button class="rv-partition-btn" id="pbtn-full" onclick="setPartition(2)">Full Framework</button>' +
+        '</div>' +
+        '<div class="rv-partition-explain" id="partition-explain"><strong>Minimum: two way split.</strong> Training data for model fitting. Test data held out for final evaluation. This is valid. The framework does not prescribe a specific number of partitions.</div>' +
+      '</div>';
+    case 'bias':
+      return '<div class="rv-bars">' +
+        '<div class="rv-bar-row"><div class="rv-bar-label">English</div><div class="rv-bar good" style="width:94%">94% accuracy</div></div>' +
+        '<div class="rv-bar-row"><div class="rv-bar-label">Spanish</div><div class="rv-bar bad" style="width:60%">60% accuracy</div></div>' +
+        '<div class="rv-bar-row"><div class="rv-bar-label">Finance Dept</div><div class="rv-bar bad" style="width:72%">72% accuracy</div></div>' +
+        '<div class="rv-bar-row"><div class="rv-bar-label">Engineering</div><div class="rv-bar good" style="width:96%">96% accuracy</div></div>' +
+      '</div>';
+    case 'coverage':
+      return renderMiniSpace('coverage') + '<div style="width:100%;">' +
+        '<div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">' +
+          '<div style="padding:18px;background:var(--white);border-radius:6px;border:1px solid var(--rule);">' +
+            '<div style="font-family:var(--mono);font-size:9px;letter-spacing:0.1em;text-transform:uppercase;color:var(--green);margin-bottom:12px;">Test Suite: Covered Patterns</div>' +
+            '<div style="display:flex;flex-wrap:wrap;gap:6px;">' +
+              '<span style="padding:4px 10px;background:var(--green-lt);border:1px solid rgba(45,122,58,0.2);border-radius:3px;font-family:var(--mono);font-size:11px;color:var(--green);">MONEY</span>' +
+              '<span style="padding:4px 10px;background:var(--green-lt);border:1px solid rgba(45,122,58,0.2);border-radius:3px;font-family:var(--mono);font-size:11px;color:var(--green);">CASH</span>' +
+              '<span style="padding:4px 10px;background:var(--green-lt);border:1px solid rgba(45,122,58,0.2);border-radius:3px;font-family:var(--mono);font-size:11px;color:var(--green);">FUNDS</span>' +
+              '<span style="padding:4px 10px;background:var(--green-lt);border:1px solid rgba(45,122,58,0.2);border-radius:3px;font-family:var(--mono);font-size:11px;color:var(--green);">DOLLARS</span>' +
+              '<span style="padding:4px 10px;background:var(--green-lt);border:1px solid rgba(45,122,58,0.2);border-radius:3px;font-family:var(--mono);font-size:11px;color:var(--green);">FREE</span>' +
+              '<span style="padding:4px 10px;background:var(--green-lt);border:1px solid rgba(45,122,58,0.2);border-radius:3px;font-family:var(--mono);font-size:11px;color:var(--green);">PRIZE</span>' +
+            '</div>' +
+            '<div style="font-size:11px;color:var(--ink3);margin-top:10px;">6 patterns. All pass. 100% test coverage reported.</div>' +
+          '</div>' +
+          '<div style="padding:18px;background:var(--white);border-radius:6px;border:1px solid var(--rule);">' +
+            '<div style="font-family:var(--mono);font-size:9px;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink3);margin-bottom:12px;">Test a Variant</div>' +
+            '<div style="display:flex;gap:8px;">' +
+              '<input id="cov-input" type="text" placeholder="Type a word..." style="flex:1;padding:8px 12px;border:1px solid var(--rule);border-radius:4px;font-family:var(--mono);font-size:12px;color:var(--ink);background:var(--bg);outline:none;" onkeydown="if(event.key===\'Enter\')runCoverageTest()">' +
+              '<button onclick="runCoverageTest()" style="padding:8px 16px;background:var(--ink);color:var(--white);border:none;border-radius:4px;font-family:var(--mono);font-size:11px;cursor:pointer;white-space:nowrap;">Run Test</button>' +
+            '</div>' +
+            '<div id="cov-result" style="margin-top:12px;min-height:32px;padding:8px 12px;border-radius:4px;font-family:var(--mono);font-size:12px;display:none;"></div>' +
+            '<div style="margin-top:12px;">' +
+              '<div style="font-size:10px;color:var(--ink3);margin-bottom:6px;">Try these:</div>' +
+              '<div style="display:flex;flex-wrap:wrap;gap:4px;">' +
+                '<button onclick="setCovInput(\'M0NEY\')" style="padding:3px 8px;background:var(--bg);border:1px solid var(--rule);border-radius:3px;font-family:var(--mono);font-size:10px;color:var(--ink2);cursor:pointer;">M0NEY</button>' +
+                '<button onclick="setCovInput(\'MONËY\')" style="padding:3px 8px;background:var(--bg);border:1px solid var(--rule);border-radius:3px;font-family:var(--mono);font-size:10px;color:var(--ink2);cursor:pointer;">MONËY</button>' +
+                '<button onclick="setCovInput(\'CRYPTO\')" style="padding:3px 8px;background:var(--bg);border:1px solid var(--rule);border-radius:3px;font-family:var(--mono);font-size:10px;color:var(--ink2);cursor:pointer;">CRYPTO</button>' +
+                '<button onclick="setCovInput(\'CA$H\')" style="padding:3px 8px;background:var(--bg);border:1px solid var(--rule);border-radius:3px;font-family:var(--mono);font-size:10px;color:var(--ink2);cursor:pointer;">CA$H</button>' +
+                '<button onclick="setCovInput(\'MONEY\')" style="padding:3px 8px;background:var(--bg);border:1px solid var(--rule);border-radius:3px;font-family:var(--mono);font-size:10px;color:var(--ink2);cursor:pointer;">MONEY</button>' +
+                '<button onclick="setCovInput(\'NFT\')" style="padding:3px 8px;background:var(--bg);border:1px solid var(--rule);border-radius:3px;font-family:var(--mono);font-size:10px;color:var(--ink2);cursor:pointer;">NFT</button>' +
+              '</div>' +
+            '</div>' +
+          '</div>' +
+        '</div>' +
+        '<div id="cov-tally" style="margin-top:14px;padding:12px 16px;background:var(--bg);border-radius:4px;font-size:12px;color:var(--ink3);text-align:center;">Your test suite has 6 patterns. How many attack variants exist?</div>' +
+      '</div>';
+    case 'drift':
+      return renderMiniSpace('drift') + '<div class="rv-drift">' +
+        '<div class="rv-drift-chart">' +
+          '<svg id="drift-svg" viewBox="0 0 420 180">' +
+            '<defs><linearGradient id="driftFill" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#0F2340" stop-opacity="0.08"/><stop offset="100%" stop-color="#0F2340" stop-opacity="0"/></linearGradient></defs>' +
+            '<!-- Y axis labels -->' +
+            '<text x="28" y="18" font-family="IBM Plex Mono,monospace" font-size="9" fill="#7A8FA6" text-anchor="end">96%</text>' +
+            '<text x="28" y="52" font-family="IBM Plex Mono,monospace" font-size="9" fill="#7A8FA6" text-anchor="end">90%</text>' +
+            '<text x="28" y="86" font-family="IBM Plex Mono,monospace" font-size="9" fill="#2B6CB0" font-weight="600" text-anchor="end">85%</text>' +
+            '<text x="28" y="120" font-family="IBM Plex Mono,monospace" font-size="9" fill="#7A8FA6" text-anchor="end">80%</text>' +
+            '<text x="28" y="154" font-family="IBM Plex Mono,monospace" font-size="9" fill="#7A8FA6" text-anchor="end">75%</text>' +
+            '<!-- Grid lines -->' +
+            '<line x1="36" y1="14" x2="408" y2="14" stroke="#E4E8EC" stroke-width="0.5"/>' +
+            '<line x1="36" y1="48" x2="408" y2="48" stroke="#E4E8EC" stroke-width="0.5"/>' +
+            '<line x1="36" y1="82" x2="408" y2="82" stroke="#2B6CB0" stroke-width="1" stroke-dasharray="6,4" opacity="0.4"/>' +
+            '<line x1="36" y1="116" x2="408" y2="116" stroke="#E4E8EC" stroke-width="0.5"/>' +
+            '<line x1="36" y1="150" x2="408" y2="150" stroke="#E4E8EC" stroke-width="0.5"/>' +
+            '<!-- Threshold label -->' +
+            '<text x="412" y="86" font-family="IBM Plex Mono,monospace" font-size="8" fill="#2B6CB0" text-anchor="end">THRESHOLD</text>' +
+            '<!-- Month labels -->' +
+            '<text x="40" y="172" font-family="IBM Plex Mono,monospace" font-size="8" fill="#7A8FA6">Jan</text>' +
+            '<text x="74" y="172" font-family="IBM Plex Mono,monospace" font-size="8" fill="#7A8FA6">Feb</text>' +
+            '<text x="108" y="172" font-family="IBM Plex Mono,monospace" font-size="8" fill="#7A8FA6">Mar</text>' +
+            '<text x="142" y="172" font-family="IBM Plex Mono,monospace" font-size="8" fill="#7A8FA6">Apr</text>' +
+            '<text x="176" y="172" font-family="IBM Plex Mono,monospace" font-size="8" fill="#7A8FA6">May</text>' +
+            '<text x="210" y="172" font-family="IBM Plex Mono,monospace" font-size="8" fill="#7A8FA6">Jun</text>' +
+            '<text x="244" y="172" font-family="IBM Plex Mono,monospace" font-size="8" fill="#7A8FA6">Jul</text>' +
+            '<text x="278" y="172" font-family="IBM Plex Mono,monospace" font-size="8" fill="#7A8FA6">Aug</text>' +
+            '<text x="312" y="172" font-family="IBM Plex Mono,monospace" font-size="8" fill="#7A8FA6">Sep</text>' +
+            '<text x="346" y="172" font-family="IBM Plex Mono,monospace" font-size="8" fill="#7A8FA6">Oct</text>' +
+            '<text x="380" y="172" font-family="IBM Plex Mono,monospace" font-size="8" fill="#7A8FA6">Nov</text>' +
+            '<!-- Animated elements -->' +
+            '<path id="drift-area" d="" fill="url(#driftFill)"/>' +
+            '<polyline id="drift-line" points="" fill="none" stroke="#0F2340" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>' +
+            '<circle id="drift-dot" cx="0" cy="0" r="5" fill="#0F2340" opacity="0"/>' +
+            '<circle id="drift-alert-dot" cx="0" cy="0" r="0" fill="#2B6CB0" opacity="0"/>' +
+          '</svg>' +
+        '</div>' +
+        '<div class="rv-drift-controls">' +
+          '<button class="rv-drift-btn" id="drift-btn" onclick="runDrift()">Start Monitoring</button>' +
+          '<span class="rv-drift-readout" id="drift-readout">Accuracy: <span class="ok">94.0%</span></span>' +
+          '<span class="rv-drift-readout" id="drift-month" style="margin-left:auto;">Month: <span>—</span></span>' +
+        '</div>' +
+        '<div class="rv-drift-alert" id="drift-alert">⚠ ALERT: Accuracy below 85% threshold. Reassessment triggered. No code changed. No deployment changed. The data moved.</div>' +
+      '</div>';
+    case 'hallucination':
+      return '<div class="rv-flow">' +
+        '<div class="rv-flow-box"><div class="main">Email Content</div><div class="sub">"Meeting Tuesday"</div></div>' +
+        '<div class="rv-flow-arrow">→</div>' +
+        '<div class="rv-flow-box"><div class="main">Model Output</div><div class="sub">"SPAM: Nigerian prince scam"</div></div>' +
+        '<div class="rv-flow-arrow">→</div>' +
+        '<div class="rv-flow-box alert"><div class="main">FABRICATED</div><div class="sub">No such content exists</div></div>' +
+      '</div>';
+    case 'ood':
+      return '<div class="rv-center-text">' +
+        '<div style="display:flex;gap:20px;justify-content:center;align-items:center;">' +
+          '<div style="padding:16px 24px;background:var(--green-lt);border:2px solid var(--green);border-radius:6px;"><div style="font-weight:600;color:var(--green);">Training Data</div><div style="font-size:12px;color:var(--ink2);margin-top:4px;">Text emails only</div></div>' +
+          '<div style="font-size:24px;color:var(--ink3);">≠</div>' +
+          '<div style="padding:16px 24px;background:var(--red-lt);border:2px solid var(--red);border-radius:6px;"><div style="font-weight:600;color:var(--red);">New Input</div><div style="font-size:12px;color:var(--ink2);margin-top:4px;">Image-based email</div></div>' +
+        '</div>' +
+      '</div>';
+    case 'adversarial':
+      return renderMiniSpace('adversarial') + '<div style="width:100%;">' +
+        '<div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">' +
+          '<div style="padding:20px;background:var(--white);border-radius:6px;border:1px solid var(--rule);text-align:center;">' +
+            '<div style="font-family:var(--mono);font-size:9px;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink3);margin-bottom:14px;">What Humans See</div>' +
+            '<div id="adv-human" style="font-family:var(--mono);font-size:28px;font-weight:600;color:var(--ink);letter-spacing:2px;transition:all 0.4s;">MONEY</div>' +
+            '<div style="margin-top:12px;font-size:11px;color:var(--ink3);">Looks normal. Reads as "MONEY."</div>' +
+          '</div>' +
+          '<div style="padding:20px;background:var(--white);border-radius:6px;border:1px solid var(--rule);text-align:center;">' +
+            '<div style="font-family:var(--mono);font-size:9px;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink3);margin-bottom:14px;">What The Tokenizer Sees</div>' +
+            '<div id="adv-model" style="font-family:var(--mono);font-size:28px;font-weight:600;color:var(--ink);letter-spacing:2px;transition:all 0.4s;">MONEY</div>' +
+            '<div id="adv-tokens" style="margin-top:12px;display:flex;gap:4px;justify-content:center;transition:all 0.4s;">' +
+              '<span style="padding:3px 8px;background:var(--bg);border:1px solid var(--rule);border-radius:3px;font-family:var(--mono);font-size:11px;color:var(--ink2);">MONEY</span>' +
+            '</div>' +
+            '<div id="adv-result" style="margin-top:8px;font-family:var(--mono);font-size:10px;color:var(--green);font-weight:500;">→ SPAM keyword matched</div>' +
+          '</div>' +
+        '</div>' +
+        '<div style="text-align:center;margin-top:16px;">' +
+          '<button id="adv-btn" onclick="toggleAdversarial()" style="padding:10px 24px;background:var(--red);color:var(--white);border:none;border-radius:4px;font-family:var(--mono);font-size:11px;letter-spacing:0.05em;cursor:pointer;">Inject Zero-Width Characters</button>' +
+        '</div>' +
+        '<div id="adv-explain" style="margin-top:14px;padding:12px 16px;background:var(--bg);border-radius:4px;font-size:12px;color:var(--ink3);text-align:center;">Both sides see the same word. The spam filter catches it.</div>' +
+      '</div>';
+    case 'explainability':
+      return '<div style="width:100%;background:var(--white);padding:16px;border-radius:4px;border:1px solid var(--rule);">' +
+        '<div style="font-size:12px;color:var(--ink3);margin-bottom:8px;">Decision Factors:</div>' +
+        '<div style="display:flex;gap:8px;margin-bottom:6px;align-items:center;"><div style="width:45%;height:8px;background:var(--red);border-radius:4px;"></div><span style="font-size:11px;color:var(--ink2);">Financial terms (45%)</span></div>' +
+        '<div style="display:flex;gap:8px;margin-bottom:6px;align-items:center;"><div style="width:30%;height:8px;background:var(--red);border-radius:4px;opacity:0.7;"></div><span style="font-size:11px;color:var(--ink2);">Unknown sender (30%)</span></div>' +
+        '<div style="display:flex;gap:8px;align-items:center;"><div style="width:25%;height:8px;background:var(--red);border-radius:4px;opacity:0.5;"></div><span style="font-size:11px;color:var(--ink2);">Urgency language (25%)</span></div>' +
+      '</div>';
+    case 'teaming':
+      return '<div class="rv-flow">' +
+        '<div class="rv-flow-box"><div class="main">AI Flags</div><div class="sub">Confidence: 87%</div></div>' +
+        '<div class="rv-flow-arrow">→</div>' +
+        '<div class="rv-flow-box" style="border-color:var(--green);"><div class="main">Quarantine</div><div class="sub">Not deleted</div></div>' +
+        '<div class="rv-flow-arrow">→</div>' +
+        '<div class="rv-flow-box" style="background:var(--green-lt);border-color:var(--green);"><div class="main">Human Reviews</div><div class="sub">Override available</div></div>' +
+      '</div>';
+    default:
+      return '<div class="rv-center-text"><div class="sub">Visual placeholder</div></div>';
+  }
+}
+
+function setReq(i) { activeReq = i; renderContent(); }
+
+function renderScenarios(data) {
+  const s = data.scenarios[activeScenario];
+  let html = '<p class="intro">' + data.intro + '</p><div class="scenario-tabs">';
+  data.scenarios.forEach((sc, i) => { html += '<button class="scenario-tab ' + (i === activeScenario ? 'active' : '') + '" onclick="setScenario(' + i + ')">' + sc.id + '</button>'; });
+  html += '</div><div class="scenario-header"><h4>' + s.title + '</h4></div><div class="scenario-cols"><div class="scenario-col bad"><div class="label">WITHOUT ' + s.id + '</div><p>' + s.without + '</p></div><div class="scenario-col good"><div class="label">WITH ' + s.id + '</div><p>' + s.with + '</p></div></div>';
+  return html;
+}
+
+function renderTimeline(data) {
+  let html = '<p class="intro">' + data.intro + '</p><div class="timeline">';
+  data.phases.forEach((p, i) => {
+    html += '<div class="timeline-item ' + (p.active ? 'active' : '') + '"><div class="timeline-num">' + (i + 1) + '</div><div class="timeline-content"><div class="title">' + p.name + '</div><p>' + p.desc + '</p></div></div>';
+  });
+  html += '</div>';
+  if (data.callout) html += '<div class="callout"><p>' + data.callout + '</p></div>';
+  return html;
+}
+
+function renderProcess(data) {
+  let html = '<p class="intro">' + data.intro + '</p><div class="process-steps">';
+  data.steps.forEach((s, i) => {
+    html += '<button class="process-step ' + (expandedStep === i ? 'expanded' : '') + '" onclick="toggleStep(' + i + ')"><div class="process-step-header"><span class="title">' + s.title + '</span><span class="stat">' + s.stat + '</span></div><div class="detail">' + s.detail + '</div></button>';
+  });
+  html += '</div>';
+  return html;
+}
+
+function renderOutcomes(data) {
+  let html = '<p class="intro">' + data.intro + '</p><div class="outcomes">';
+  data.outcomes.forEach(o => {
+    html += '<div class="outcome" data-color="' + o.color + '"><div class="label">' + o.name + '</div><div class="name">' + o.desc + '</div><p class="desc">' + o.details + '</p></div>';
+  });
+  html += '</div>';
+  return html;
+}
+
+function renderStandard(data) {
+  let html = '<div class="doi-block"><div><div class="doi-label">Canonical DOI</div><div class="doi-value">' + data.doi + '</div><div class="doi-title">' + data.title + '</div><div class="doi-meta">' + data.publisher + ' · ' + data.license + '</div></div><a href="https://doi.org/' + data.doi + '" target="_blank" class="doi-btn">Download Framework</a></div><div class="features">';
+  data.points.forEach(p => { html += '<div class="feature"><div class="title">' + p.title + '</div><p>' + p.desc + '</p></div>'; });
+  html += '</div>';
+  return html;
+}
+
+function setCtReq(i) { activeCTReq = i; renderContent(); }
+
+function renderCTIntro(data) {
+  var html = '<div class="ct-hero">';
+  html += '<div class="ct-hero-left">';
+  html += '<div class="ct-badge">' + data.classification + '</div>';
+  html += '<div class="ct-desc">' + data.description + '</div>';
+  html += '<div class="ct-features">';
+  data.features.forEach(function(f) {
+    html += '<div class="ct-feature"><div class="ct-feature-label">' + f.label + '</div><div class="ct-feature-value">' + f.value + '</div></div>';
+  });
+  html += '</div></div>';
+  // System diagram
+  html += '<div class="ct-hero-right"><svg class="ct-system-diagram" viewBox="0 0 280 300">';
+  // Central twin node
+  html += '<circle cx="140" cy="130" r="40" fill="var(--red-lt)" stroke="var(--red)" stroke-width="1.5"/>';
+  html += '<text x="140" y="125" font-family="IBM Plex Mono,monospace" font-size="8" fill="var(--red)" text-anchor="middle" font-weight="600">COGNITIVE</text>';
+  html += '<text x="140" y="137" font-family="IBM Plex Mono,monospace" font-size="8" fill="var(--red)" text-anchor="middle" font-weight="600">TWIN</text>';
+  // Input nodes
+  var inputs = [{x:50,y:40,label:'Biometric'},{x:140,y:20,label:'Cognitive'},{x:230,y:40,label:'Emotional'}];
+  inputs.forEach(function(n) {
+    html += '<circle cx="'+n.x+'" cy="'+n.y+'" r="22" fill="var(--bg)" stroke="var(--rule)" stroke-width="1"/>';
+    html += '<text x="'+n.x+'" y="'+(n.y+3)+'" font-family="IBM Plex Mono,monospace" font-size="7" fill="var(--ink2)" text-anchor="middle">'+n.label+'</text>';
+    html += '<line x1="'+n.x+'" y1="'+(n.y+22)+'" x2="140" y2="90" stroke="var(--rule)" stroke-width="1" stroke-dasharray="3,2"/>';
+  });
+  // Output nodes
+  var outputs = [{x:50,y:230,label:'Decline Alert'},{x:140,y:250,label:'Task Adjust'},{x:230,y:230,label:'Crew Report'}];
+  outputs.forEach(function(n) {
+    html += '<circle cx="'+n.x+'" cy="'+n.y+'" r="22" fill="var(--bg)" stroke="var(--rule)" stroke-width="1"/>';
+    html += '<text x="'+n.x+'" y="'+(n.y+3)+'" font-family="IBM Plex Mono,monospace" font-size="7" fill="var(--ink2)" text-anchor="middle">'+n.label+'</text>';
+    html += '<line x1="140" y1="170" x2="'+n.x+'" y2="'+(n.y-22)+'" stroke="var(--ink3)" stroke-width="1" marker-end="url(#ctArrow)"/>';
+  });
+  // Team mode at bottom
+  html += '<rect x="60" y="275" width="160" height="22" rx="4" fill="var(--ink)" opacity="0.9"/>';
+  html += '<text x="140" y="289" font-family="IBM Plex Mono,monospace" font-size="7" fill="var(--white)" text-anchor="middle" letter-spacing="0.08em">TEAM MODE: CREW AWARENESS LAYER</text>';
+  html += '<defs><marker id="ctArrow" markerWidth="6" markerHeight="4" refX="5" refY="2" orient="auto"><path d="M0,0 L6,2 L0,4" fill="var(--ink3)"/></marker></defs>';
+  html += '</svg></div></div>';
+  // Classification rationale
+  html += '<div class="ct-rationale"><p><strong>Classification rationale:</strong> ' + data.classificationRationale + '</p></div>';
+  return html;
+}
+
+function renderCTReqs(data) {
+  var req = data.reqs[activeCTReq];
+  var html = '<p class="intro">' + data.intro + '</p>';
+  // Tabs
+  html += '<div class="ct-req-tabs">';
+  data.reqs.forEach(function(r, i) {
+    html += '<button class="ct-req-tab ' + (i === activeCTReq ? 'active' : '') + '" onclick="setCtReq(' + i + ')">' + r.id + '</button>';
+  });
+  html += '</div>';
+  // Detail
+  html += '<div class="ct-req-detail">';
+  html += '<div class="ct-req-header"><span class="ct-req-id">' + req.id + '</span><span class="ct-req-name">' + req.name + '</span></div>';
+  html += '<div class="ct-req-body">';
+  // Challenge
+  html += '<div class="ct-req-section"><div class="ct-req-section-label">The Challenge</div>';
+  html += '<div class="ct-challenge">' + req.challenge + '</div></div>';
+  // Question
+  html += '<div class="ct-req-section"><div class="ct-req-section-label">The Question</div>';
+  html += '<div class="ct-question">' + req.question + '</div></div>';
+  // Connects back
+  html += '<div class="ct-req-section"><div class="ct-req-section-label">Connection to Foundation</div>';
+  html += '<div class="ct-connects">' + req.connects + '</div></div>';
+  html += '</div></div>';
+  return html;
+}
+
+function renderContact(data) {
+  let html = '<div class="contact-grid"><div class="contact-left"><h2>AI certification for systems that <em>cannot fail.</em></h2><p>' + data.message + '</p></div><div class="contact-right">';
+  data.links.forEach(l => {
+    html += '<div class="contact-item"><div class="label">' + l.label + '</div>' + (l.href ? '<a href="' + l.href + '">' + l.value + '</a>' : '<span class="meta">' + l.value + '</span>') + '</div>';
+  });
+  html += '</div></div>';
+  return html;
+}
+
+function updateCounter() {
+  document.getElementById('counter').textContent = (currentIndex + 1) + '/' + flatSections.length;
+}
+
+function goTo(i) {
+  currentIndex = i;
+  expandedReq = null;
+  expandedStep = null;
+  activeTab = 0;
+  activeScenario = 0;
+  activeReq = 0;
+  activeCTReq = 0;
+  wtStep = 0;
+  trainEpoch = 0;
+  covMissCount = 0;
+  covHitCount = 0;
+  advState = false;
+  partitionState = 0;
+  if (trainInterval) { clearInterval(trainInterval); trainInterval = null; }
+  if (searchInterval) { clearInterval(searchInterval); searchInterval = null; }
+  if (driftInterval) { clearInterval(driftInterval); driftInterval = null; }
+  render();
+}
+
+function prev() { if (currentIndex > 0) goTo(currentIndex - 1); }
+function next() { if (currentIndex < flatSections.length - 1) goTo(currentIndex + 1); }
+
+function setTab(i) { activeTab = i; renderContent(); }
+function setScenario(i) { activeScenario = i; renderContent(); }
+function toggleReq(i) { expandedReq = expandedReq === i ? null : i; renderContent(); }
+function toggleOutline(i) { var el = document.getElementById('outline-' + i); if (el) el.classList.toggle('expanded'); }
+function toggleStep(i) { expandedStep = expandedStep === i ? null : i; renderContent(); }
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowRight') { e.preventDefault(); next(); }
+  else if (e.key === 'ArrowLeft') { e.preventDefault(); prev(); }
+});
+
+render();
+</script>
+</body>
+</html>

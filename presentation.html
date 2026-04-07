@@ -97,6 +97,14 @@ button { font-family: inherit; cursor: pointer; }
 .doc-outline-sub { font-size: 12px; color: var(--ink3); line-height: 1.5; padding: 4px 0; border-bottom: 1px solid var(--rule); }
 .doc-outline-sub:last-child { border-bottom: none; }
 .doc-outline-sub strong { color: var(--ink2); font-weight: 500; }
+.doc-outline-sub.clickable { cursor: pointer; padding: 6px 8px; border-radius: 3px; border-bottom: none; margin-bottom: 2px; transition: background 0.15s; }
+.doc-outline-sub.clickable:hover { background: var(--bg); }
+.doc-outline-sub.clickable.active { background: var(--red-lt); }
+.doc-outline-sub-text { display: flex; align-items: center; gap: 6px; }
+.doc-outline-sub-chevron { color: var(--ink3); font-size: 10px; transition: transform 0.2s; flex-shrink: 0; }
+.doc-outline-sub.active .doc-outline-sub-chevron { transform: rotate(90deg); color: var(--red); }
+.doc-outline-sub-summary { display: none; font-size: 12px; color: var(--ink2); line-height: 1.65; padding: 8px 0 4px 16px; border-left: 2px solid var(--red); margin: 6px 0 2px 4px; }
+.doc-outline-sub.active .doc-outline-sub-summary { display: block; }
 
 /* Navigation footer */
 .nav-footer { display: flex; justify-content: space-between; margin-top: 36px; padding-top: 20px; border-top: 1px solid var(--rule); }
@@ -472,6 +480,75 @@ td:first-child { color: var(--ink); font-weight: 500; }
 .ct-question { font-size: 13px; color: var(--ink); line-height: 1.7; padding: 14px 16px; background: var(--red-lt); border-radius: 4px; border-left: 3px solid var(--red); font-weight: 500; }
 .ct-connects { font-size: 12px; color: var(--ink3); line-height: 1.7; padding: 12px 16px; background: var(--white); border-radius: 4px; border: 1px dashed var(--rule); }
 .ct-connects::before { content: 'From the spam filter: '; font-weight: 600; color: var(--ink2); font-family: var(--mono); font-size: 9px; letter-spacing: 0.06em; text-transform: uppercase; }
+
+/* Interactive: Email Labeling */
+.label-email { display: flex; align-items: center; gap: 12px; padding: 12px 14px; background: var(--bg); border-radius: 4px; border-left: 3px solid var(--rule); margin-bottom: 10px; transition: all 0.3s ease; }
+.label-email.revealed-spam { border-left-color: var(--red); background: var(--red-lt); }
+.label-email.revealed-ham { border-left-color: var(--green); background: var(--green-lt); }
+.label-email-text { flex: 1; font-size: 13px; color: var(--ink); line-height: 1.5; }
+.label-btns { display: flex; gap: 6px; flex-shrink: 0; }
+.label-btn { padding: 4px 10px; border: 1px solid var(--rule); border-radius: 980px; font-family: var(--mono); font-size: 9px; letter-spacing: 0.06em; text-transform: uppercase; background: var(--white); color: var(--ink3); cursor: pointer; transition: all 0.2s ease; }
+.label-btn:hover { border-color: var(--ink3); color: var(--ink2); }
+.label-btn.picked-spam { background: var(--red); border-color: var(--red); color: var(--white); }
+.label-btn.picked-ham { background: var(--green); border-color: var(--green); color: var(--white); }
+.label-btn:disabled { opacity: 0.5; cursor: default; }
+.label-result { font-size: 11px; margin-top: 4px; font-family: var(--mono); letter-spacing: 0.04em; }
+.label-result.match { color: var(--green); }
+.label-result.mismatch { color: var(--red); }
+.label-score { padding: 14px 16px; border-radius: 4px; font-size: 13px; color: var(--ink); line-height: 1.7; margin-top: 16px; display: none; }
+
+/* Interactive: Tokenizer Input */
+.tok-input-wrap { margin-top: 16px; }
+.tok-input { width: 100%; padding: 10px 14px; border: 1px solid var(--rule); border-radius: 4px; font-size: 13px; color: var(--ink); background: var(--white); font-family: inherit; outline: none; transition: border-color 0.2s; }
+.tok-input:focus { border-color: var(--ink3); }
+.tok-input::placeholder { color: var(--ink3); }
+.tok-output { margin-top: 12px; min-height: 40px; }
+.tok-output .wt-tokens { justify-content: flex-start; }
+.tok-output .wt-token.spam-word { background: var(--red-lt); border-color: rgba(200,39,45,0.3); color: var(--red); }
+
+/* Interactive: Embedding Comparison */
+.embed-picker { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+.embed-word-btn { padding: 6px 14px; border: 1px solid var(--rule); border-radius: 980px; font-size: 12px; color: var(--ink2); background: var(--white); cursor: pointer; transition: all 0.2s ease; font-family: inherit; }
+.embed-word-btn:hover { border-color: var(--ink3); }
+.embed-word-btn.selected { background: var(--ink); border-color: var(--ink); color: var(--white); }
+.embed-word-btn.selected.slot-a { background: var(--red); border-color: var(--red); }
+.embed-compare-result { margin-top: 16px; display: none; }
+.embed-sim-bar-track { height: 8px; background: var(--bg); border-radius: 4px; overflow: hidden; margin: 10px 0; }
+.embed-sim-bar-fill { height: 100%; border-radius: 4px; transition: width 0.6s ease, background 0.6s ease; }
+.embed-sim-label { font-family: var(--mono); font-size: 11px; color: var(--ink3); }
+.embed-sim-reading { font-size: 13px; color: var(--ink); line-height: 1.6; margin-top: 8px; }
+.embed-scatter { width: 100%; aspect-ratio: 4/3; background: var(--bg); border-radius: 6px; border: 1px solid var(--rule); overflow: hidden; margin-bottom: 16px; }
+
+/* Readiness Assessment Slide */
+.ra-flow { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-top: 24px; }
+.ra-step { background: var(--white); border: 1px solid var(--rule); border-radius: 4px; padding: 20px 16px; position: relative; transition: border-color 0.2s; cursor: pointer; }
+.ra-step:hover { border-color: var(--ink3); }
+.ra-step.active { border-color: var(--red); }
+.ra-step-num { font-family: var(--mono); font-size: 10px; letter-spacing: 0.1em; color: var(--red); margin-bottom: 8px; }
+.ra-step-title { font-size: 14px; font-weight: 600; color: var(--ink); margin-bottom: 6px; }
+.ra-step-desc { font-size: 12px; color: var(--ink2); line-height: 1.55; }
+.ra-step-reqs { font-family: var(--mono); font-size: 9px; letter-spacing: 0.08em; color: var(--ink3); margin-top: 10px; padding-top: 8px; border-top: 1px solid var(--rule); }
+.ra-step-arrow { position: absolute; right: -10px; top: 50%; transform: translateY(-50%); color: var(--ink3); font-size: 14px; z-index: 1; }
+.ra-output { margin-top: 24px; }
+.ra-output-label { font-family: var(--mono); font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink3); margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+.ra-output-label::after { content: ''; flex: 1; height: 1px; background: var(--rule); }
+.ra-report { background: var(--white); border: 1px solid var(--rule); border-radius: 4px; padding: 24px; }
+.ra-report-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.ra-req-card { padding: 10px 12px; border-radius: 3px; border-left: 3px solid var(--rule); background: var(--bg); }
+.ra-req-card-id { font-family: var(--mono); font-size: 9px; letter-spacing: 0.06em; color: var(--ink3); }
+.ra-req-card-name { font-size: 12px; font-weight: 500; color: var(--ink); margin-top: 2px; }
+.ra-req-card-status { font-family: var(--mono); font-size: 9px; letter-spacing: 0.06em; margin-top: 4px; }
+.ra-req-card.s-strong { border-left-color: #2D7A3A; }
+.ra-req-card.s-strong .ra-req-card-status { color: #2D7A3A; }
+.ra-req-card.s-partial { border-left-color: #C8861A; }
+.ra-req-card.s-partial .ra-req-card-status { color: #C8861A; }
+.ra-req-card.s-gap { border-left-color: #C8272D; }
+.ra-req-card.s-gap .ra-req-card-status { color: #C8272D; }
+.ra-key { display: flex; gap: 16px; margin-top: 14px; }
+.ra-key-item { display: flex; align-items: center; gap: 6px; font-size: 11px; color: var(--ink3); }
+.ra-key-dot { width: 8px; height: 8px; border-radius: 2px; flex-shrink: 0; }
+.ra-link { display: inline-block; margin-top: 16px; font-family: var(--mono); font-size: 11px; letter-spacing: 0.06em; color: var(--red); text-decoration: none; padding: 10px 20px; border: 1px solid var(--red); border-radius: 980px; transition: all 0.2s; }
+.ra-link:hover { background: var(--red); color: var(--white); }
 </style>
 </head>
 <body>
@@ -548,7 +625,8 @@ const groups = [
     { id: "surveillance", title: "Surveillance" }
   ]},
   { label: "Lifecycle", items: [
-    { id: "lifecycle", title: "When to Engage" }
+    { id: "lifecycle", title: "When to Engage" },
+    { id: "readiness-assess", title: "Readiness Assessment" }
   ]},
   { label: "Stakeholders", items: [
     { id: "cognitive-twin", title: "Cognitive Twin System" },
@@ -613,42 +691,42 @@ const sections = {
       outline: [
         { num: "1", title: "Introduction", badge: "Scope & Classification", desc: "Establishes the framework's purpose, defines what constitutes an AI system, and determines which requirements apply based on consequence classification.",
           subs: [
-            "1.1 Purpose and rationale for AI specific requirements",
-            "1.2 Scope, applicability criteria, and AI system classification (three tiers)",
-            "1.2.3 Gap analysis: traditional software assumptions vs. AI/ML reality",
-            "1.2.5 Tailoring authority by classification level",
-            "1.3 Normative references (ISO/IEC, NIST, DO-178C, ISO 26262)",
-            "1.4 Verb conventions: shall (requirement), should (guidance), will (expectation)",
-            "1.5 Threshold category definitions (performance, confidence, drift, OOD, escalation)"
+            { text: "1.1 Purpose and rationale for AI specific requirements", summary: "AI behavior emerges from training data rather than explicit code. This breaks the traceability assumption that underpins traditional verification. The framework exists because existing software assurance standards were written for systems where a reviewer can read the artifact and trace it to a requirement." },
+            { text: "1.2 Scope, applicability criteria, and AI system classification (three tiers)", summary: "Defines what qualifies as an AI system and assigns it to one of three classification tiers (Safety Critical, Mission Critical, Mission Support) based on consequence of failure. Classification drives which requirements apply and how much tailoring is permitted." },
+            { text: "1.2.3 Gap analysis: traditional software assumptions vs. AI/ML reality", summary: "Maps nine specific ways traditional software assumptions break with AI: traceability, determinism, test coverage, static behavior, predictable outputs, distribution sensitivity, adversarial vulnerability, decision opacity, and operator trust. Each gap traces to the requirement set that addresses it." },
+            { text: "1.2.5 Tailoring authority by classification level", summary: "Defines who can approve tailoring (reducing or modifying requirements) at each tier. Safety Critical requires a Project Safety Review Board. Mission Critical requires a Chief Engineer. Mission Support allows a System Administrator." },
+            { text: "1.3 Normative references (ISO/IEC, NIST, DO-178C, ISO 26262)", summary: "Lists the external standards the framework aligns with: ISO/IEC 22989, ISO/IEC 5338, NIST AI RMF, DO-178C, ISO 26262, and IEEE 1012. Defines how the framework relates to each and where it extends beyond them." },
+            { text: "1.4 Verb conventions: shall (requirement), should (guidance), will (expectation)", summary: "Three verbs carry specific meaning. 'Shall' denotes a requirement with a formal verification in Section 2. 'Should' denotes informative guidance in Section 4 with no verification requirement. 'Will' denotes an expectation met by the sum of its supporting 'shall' statements." },
+            { text: "1.5 Threshold category definitions (performance, confidence, drift, OOD, escalation)", summary: "Five threshold categories every AI system must document regardless of classification: performance degradation, confidence, data drift, out of distribution detection, and human escalation. The categories are mandatory. The actual values are project defined. Section 4.1 provides example ranges." }
           ]
         },
         { num: "2", title: "Requirements", badge: "AI-1 through AI-9", desc: "Nine requirement sets, each addressing a specific AI failure mode not covered by traditional software verification. Verifications are placed alongside requirements for traceability.",
           subs: [
-            "AI-1 Data Partitioning: dataset separation, provenance, ground truth labeling, classification screening",
-            "AI-2 Bias Detection: bias risk assessment, demographic performance monitoring, mitigation",
-            "AI-3 ML Test Coverage: input domain coverage, boundary analysis, edge case testing",
-            "AI-4 Continuous Validation: drift detection, performance monitoring, revalidation triggers",
-            "AI-5 Hallucination Prevention: output grounding, fabrication detection, confidence calibration",
-            "AI-6 OOD Detection: distribution boundary definition, fallback behavior, escalation",
-            "AI-7 Adversarial Robustness: threat modeling, adversarial testing, defense validation",
-            "AI-8 Explainability: decision attribution, operator comprehension, explanation fidelity",
-            "AI-9 Human-AI Teaming: trust calibration, override authority, situational awareness"
+            { text: "AI-1 Data Partitioning", summary: "Ensures training, validation, and test datasets are separated with technical controls. Prevents data leakage that inflates performance metrics. Includes sub requirements for dataset separation, partition use restriction, data provenance documentation, ground truth labeling quality, and classification screening." },
+            { text: "AI-2 Bias Detection", summary: "Requires bias risk assessment identifying protected classes and demographic groups, performance monitoring across those groups, and documented mitigation when disparities are found. Ensures the model performs equitably across all operational populations." },
+            { text: "AI-3 ML Test Coverage", summary: "Defines test coverage methods for ML models where traditional code coverage metrics do not apply. Covers input domain coverage, boundary analysis, and edge case testing. Requires documented coverage criteria appropriate to the AI function." },
+            { text: "AI-4 Continuous Validation", summary: "Requires ongoing monitoring for performance degradation and data drift after deployment. Defines revalidation triggers when thresholds are exceeded. Establishes surveillance intervals based on classification level." },
+            { text: "AI-5 Hallucination Prevention", summary: "Requires defined criteria for what constitutes a hallucination for each AI function, detection mechanisms, response procedures (quarantine, block autonomous execution, trigger human review), and event logging. Safety Critical systems require independent output validation using dissimilar methods." },
+            { text: "AI-6 OOD Detection", summary: "Requires statistical characterization of the training data distribution, runtime detection of inputs falling outside that distribution, defined fallback behavior when OOD inputs are detected, and event logging for trend analysis." },
+            { text: "AI-7 Adversarial Robustness", summary: "Requires threat modeling for adversarial attacks on inputs, training data, and model parameters. Includes adversarial testing and defense validation. Applies fully to Safety Critical systems. Tailored for Mission Critical." },
+            { text: "AI-8 Explainability", summary: "Requires decision explanations sufficient for operators to verify AI reasoning and establish appropriate trust. Covers decision attribution methods, operator comprehension validation, and explanation fidelity (ensuring explanations accurately reflect the model's actual reasoning)." },
+            { text: "AI-9 Human AI Teaming", summary: "Requires support for effective human oversight: trust calibration mechanisms, override authority for safety critical actions, and maintained situational awareness. The human remains the final authority. The AI supports, informs, and defers." }
           ]
         },
         { num: "3", title: "Verification", badge: "Methods & Matrix", desc: "Defines the four verification methods (Inspection, Analysis, Demonstration, Test) tailored for AI/ML, provides the complete verification matrix, and establishes deployment format validation requirements.",
           subs: [
-            "3.1 Verification methods defined per IEEE 1012, tailored for AI/ML characteristics",
-            "3.2 Verification matrix: every requirement mapped to method and evidence artifact",
-            "3.3 Deployment format validation: quantization, pruning, framework conversion"
+            { text: "3.1 Verification methods defined per IEEE 1012, tailored for AI/ML", summary: "Four methods: Inspection (review of documentation and artifacts), Analysis (evaluation using analytical techniques), Demonstration (functional exercise under defined conditions), and Test (execution with defined inputs and expected outputs). Each is adapted from IEEE 1012 for AI/ML characteristics." },
+            { text: "3.2 Verification matrix: requirements mapped to methods and evidence", summary: "The complete traceability matrix mapping every requirement to its verification method and the evidence artifact that satisfies it. Every requirement has a verification. Every verification traces to a requirement. Nothing is assessed without a defined method." },
+            { text: "3.3 Deployment format validation", summary: "Validates that the model is not corrupted or degraded during deployment conversion. Covers quantization, pruning, and framework conversion. Ensures the deployed model matches the verified model." }
           ]
         },
         { num: "4", title: "Implementation Guidance", badge: "Informative", desc: "Informative guidance for threshold selection, continuous learning controls, multi model architectures, neural network considerations, and AI specific hazard analysis integration.",
           subs: [
-            "4.1 Threshold selection ranges by requirement (bias metrics, drift PSI, performance degradation)",
-            "4.2 Continuous learning: revalidation scope, approval gates, catastrophic forgetting mitigation",
-            "4.3 Multi model systems: cascading failures, ensemble voting, confidence aggregation",
-            "4.4 Neural networks: explainability approaches, training risks, deployment transformations, failure modes",
-            "4.5 AI specific hazard analysis: augmenting FMEA, FTA, and HAZOP for probabilistic failure modes"
+            { text: "4.1 Threshold selection ranges by requirement", summary: "Provides example threshold ranges for bias metrics, drift PSI values, performance degradation limits, and other categories defined in Section 1.5. Informative, not prescriptive. Organizations select values appropriate to their operational context." },
+            { text: "4.2 Continuous learning: revalidation scope, approval gates, catastrophic forgetting", summary: "Guidance for systems that continue learning after deployment. Covers how much of the verification must be repeated after each update, approval workflows for model changes, and mitigation of catastrophic forgetting where new learning degrades previously validated capabilities." },
+            { text: "4.3 Multi model systems: cascading failures, ensemble voting, confidence aggregation", summary: "Addresses architectures where multiple AI models interact. Covers cascading failure analysis (one model's error propagating through others), ensemble voting strategies, and how to aggregate confidence scores from multiple models." },
+            { text: "4.4 Neural networks: explainability, training risks, deployment transformations", summary: "Neural network specific considerations including approaches to explainability (gradient based, attention based, concept based), training risks (overfitting, underfitting, mode collapse), and effects of deployment transformations on model behavior." },
+            { text: "4.5 AI specific hazard analysis: augmenting FMEA, FTA, and HAZOP", summary: "How to extend traditional hazard analysis methods for AI failure modes. Traditional FMEA assumes deterministic failure. AI failure modes are probabilistic, context dependent, and may emerge from data rather than component malfunction." }
           ]
         },
         { num: "A", title: "Glossary", badge: "51 Terms", desc: "All defined terms with source traceability. 41 aligned with ISO/IEC 22989, ISO/IEC 5338, and NIST AI RMF. 10 framework specific.", subs: [] },
@@ -836,6 +914,26 @@ const sections = {
         { name: "Operations", desc: "Maintain surveillance records. Execute triggered reassessment on model changes. Certification is not a one time event. It is an ongoing relationship.", active: false }
       ],
       callout: "The framework is free to read. There is no cost to reviewing the requirements before you start building. The cost of late engagement is rework."
+    }
+  },
+  "readiness-assess": {
+    group: "Lifecycle", title: "Readiness Assessment", type: "readiness",
+    data: {
+      intro: "Before engaging SCL for formal certification, a free self-assessment covers all nine requirement areas. It takes about five minutes, requires no account, and your answers stay in your browser.",
+      steps: [
+        { num: "1", title: "Classification", desc: "Domain, consequence of failure, and human override capability. Determines your classification tier and which requirements apply.", reqs: "Tier Assignment" },
+        { num: "2", title: "Data & Testing", desc: "Dataset separation, provenance, bias monitoring, and test coverage. Maps to three foundational requirement sets.", reqs: "AI-1, AI-2, AI-3" },
+        { num: "3", title: "Runtime Safety", desc: "Drift monitoring, hallucination detection, confidence calibration, and out of distribution handling.", reqs: "AI-4, AI-5, AI-6" },
+        { num: "4", title: "Robustness & Oversight", desc: "Adversarial testing, decision explainability, and human oversight mechanisms. Applicability varies by classification.", reqs: "AI-7, AI-8, AI-9" }
+      ],
+      statuses: [
+        { label: "Strong", color: "#2D7A3A", desc: "Evidence and processes are in place." },
+        { label: "Partial", color: "#C8861A", desc: "Some coverage, but gaps remain." },
+        { label: "Gap", color: "#C8272D", desc: "Not addressed or significant shortfall." },
+        { label: "N/A", color: "#8E99A4", desc: "Requirement does not apply at this tier." }
+      ],
+      callout: "The readiness assessment is not a substitute for formal certification. It is a preparation tool. It shows you where you stand so you know what to prioritize before the real assessment begins.",
+      link: "https://safetycriticallabs.com/assess"
     }
   },
   "four-phases": {
@@ -1048,6 +1146,7 @@ function renderSection(section) {
     case 'ct-intro': return renderCTIntro(section.data);
     case 'ct-reqs': return renderCTReqs(section.data);
     case 'vv-compare': return renderVVCompare(section.data);
+    case 'readiness': return renderReadiness(section.data);
     default: return '';
   }
 }
@@ -1127,8 +1226,15 @@ function renderOverview(data) {
       html += '<div class="doc-outline-desc">' + sec.desc + '</div>';
       if (sec.subs && sec.subs.length > 0) {
         html += '<div class="doc-outline-subs">';
-        sec.subs.forEach(sub => {
-          html += '<div class="doc-outline-sub">' + sub + '</div>';
+        sec.subs.forEach((sub, j) => {
+          if (typeof sub === 'string') {
+            html += '<div class="doc-outline-sub">' + sub + '</div>';
+          } else {
+            html += '<div class="doc-outline-sub clickable" onclick="toggleSubSummary(this)">';
+            html += '<div class="doc-outline-sub-text"><span class="doc-outline-sub-chevron">&#9656;</span>' + sub.text + '</div>';
+            html += '<div class="doc-outline-sub-summary">' + sub.summary + '</div>';
+            html += '</div>';
+          }
         });
         html += '</div>';
       }
@@ -1251,17 +1357,33 @@ function renderWTData() {
       '</div>' +
       '<div class="wt-compare-col ai">' +
         '<div class="wt-compare-label">AI: Labeled Examples</div>' +
-        '<div class="wt-emails" style="margin-top:8px;">' +
-          '<div class="wt-email spam"><div class="wt-email-tag">SPAM</div><div class="wt-email-content">Send <span class="hl">MONEY</span> now to claim your prize!</div></div>' +
-          '<div class="wt-email spam"><div class="wt-email-tag">SPAM</div><div class="wt-email-content">Transfer <span class="hl">CASH</span> immediately. Urgent!</div></div>' +
-          '<div class="wt-email spam"><div class="wt-email-tag">SPAM</div><div class="wt-email-content">Your <span class="hl">FUNDS</span> are waiting. Act now!</div></div>' +
-          '<div class="wt-email ham"><div class="wt-email-tag">NOT SPAM</div><div class="wt-email-content">Meeting scheduled for Tuesday at 2pm.</div></div>' +
-          '<div class="wt-email ham"><div class="wt-email-tag">NOT SPAM</div><div class="wt-email-content">Thanks for lunch yesterday!</div></div>' +
+        '<div style="font-size:12px;color:var(--ink2);margin-top:8px;margin-bottom:10px;">The AI developer labels emails instead of writing rules. Try it yourself. Label each one:</div>' +
+        '<div id="label-emails">' +
+          '<div class="label-email" id="le-0">' +
+            '<div class="label-email-text">Claim your FREE CASH reward now!</div>' +
+            '<div class="label-btns"><button class="label-btn" onclick="labelEmail(0,\'spam\')">Spam</button><button class="label-btn" onclick="labelEmail(0,\'ham\')">Not Spam</button></div>' +
+          '</div>' +
+          '<div class="label-email" id="le-1">' +
+            '<div class="label-email-text">Your MONEY transfer of $500 has been confirmed.</div>' +
+            '<div class="label-btns"><button class="label-btn" onclick="labelEmail(1,\'spam\')">Spam</button><button class="label-btn" onclick="labelEmail(1,\'ham\')">Not Spam</button></div>' +
+          '</div>' +
+          '<div class="label-email" id="le-2">' +
+            '<div class="label-email-text">Meeting moved to Thursday. Lunch after?</div>' +
+            '<div class="label-btns"><button class="label-btn" onclick="labelEmail(2,\'spam\')">Spam</button><button class="label-btn" onclick="labelEmail(2,\'ham\')">Not Spam</button></div>' +
+          '</div>' +
+          '<div class="label-email" id="le-3">' +
+            '<div class="label-email-text">URGENT: Your account will be suspended. Send FUNDS to verify.</div>' +
+            '<div class="label-btns"><button class="label-btn" onclick="labelEmail(3,\'spam\')">Spam</button><button class="label-btn" onclick="labelEmail(3,\'ham\')">Not Spam</button></div>' +
+          '</div>' +
+          '<div class="label-email" id="le-4">' +
+            '<div class="label-email-text">Hi, your PayPal receipt for $29.99 is attached.</div>' +
+            '<div class="label-btns"><button class="label-btn" onclick="labelEmail(4,\'spam\')">Spam</button><button class="label-btn" onclick="labelEmail(4,\'ham\')">Not Spam</button></div>' +
+          '</div>' +
         '</div>' +
-        '<div style="font-size:12px;color:var(--ink2);margin-top:10px;">Developer provides examples. The system figures out the pattern.</div>' +
+        '<div class="label-score" id="label-score"></div>' +
       '</div>' +
     '</div>' +
-    '<div class="wt-callout"><p><strong>Key difference:</strong> The traditional developer explicitly wrote "MONEY" in the code. The AI developer never mentioned MONEY as a rule. They just showed examples where it appeared.</p></div>' +
+    '<div class="wt-callout" id="label-callout"><p><strong>Key difference:</strong> The traditional developer explicitly wrote "MONEY" in the code. The AI developer never mentioned MONEY as a rule. They just showed examples where it appeared.</p></div>' +
   '</div>';
 }
 
@@ -1281,15 +1403,22 @@ function renderWTTokens() {
       '</div>' +
       '<div class="wt-compare-col ai">' +
         '<div class="wt-compare-label">AI: Tokenization</div>' +
-        '<div style="padding:14px;background:var(--bg);border-radius:4px;margin-top:8px;">' +
+        '<div style="padding:14px;background:var(--bg);border-radius:4px;margin-top:8px;text-align:center;">' +
           '<div style="font-size:13px;color:var(--ink);margin-bottom:8px;">Input: "Send MONEY now to claim your prize!"</div>' +
           '<div class="wt-arrow-down">↓</div>' +
-          '<div class="wt-tokens"><span class="wt-token">Send</span><span class="wt-token hl">MONEY</span><span class="wt-token">now</span><span class="wt-token">to</span><span class="wt-token">claim</span><span class="wt-token">your</span><span class="wt-token">prize</span><span class="wt-token">!</span></div>' +
+          '<div class="wt-tokens" style="justify-content:center;"><span class="wt-token">Send</span><span class="wt-token hl">MONEY</span><span class="wt-token">now</span><span class="wt-token">to</span><span class="wt-token">claim</span><span class="wt-token">your</span><span class="wt-token">prize</span><span class="wt-token">!</span></div>' +
         '</div>' +
         '<div style="font-size:12px;color:var(--ink2);margin-top:10px;">Text split into tokens. MONEY is still a recognizable string at this stage.</div>' +
       '</div>' +
     '</div>' +
     '<div class="wt-text" style="margin-top:16px;">At this point, both approaches still have MONEY as a readable string. A V&V engineer could still find the word. <strong>The divergence happens next, and it is where your ability to read the artifact ends.</strong></div>' +
+    '<div class="wt-panel" style="margin-top:16px;">' +
+      '<div class="wt-panel-label">Try it yourself</div>' +
+      '<div class="tok-input-wrap">' +
+        '<input class="tok-input" id="tok-input" type="text" placeholder="Type a phrase and watch it tokenize... try \'Fr33 M0NEY\' vs \'Free MONEY\'" oninput="tokenizeInput()">' +
+        '<div class="tok-output" id="tok-output"><div style="font-size:12px;color:var(--ink3);">Type something above to see it tokenized.</div></div>' +
+      '</div>' +
+    '</div>' +
   '</div>';
 }
 
@@ -1307,10 +1436,20 @@ function renderWTEmbedding() {
       '</div>' +
       '<div class="wt-compare-col ai">' +
         '<div class="wt-compare-label">AI: Word Embedding</div>' +
-        '<div class="wt-embed-grid" style="margin-top:8px;">' +
-          '<div class="wt-embed-word"><div class="wt-embed-word-label red">MONEY</div><div class="wt-embed-dims"><span>0.23</span><span>-0.87</span><span>0.12</span><span>0.45</span><span>-0.33</span><span>0.91</span><span>...</span><span style="color:var(--ink3)">+294</span></div></div>' +
-          '<div class="wt-embed-word"><div class="wt-embed-word-label">CASH</div><div class="wt-embed-dims"><span>0.21</span><span>-0.85</span><span>0.14</span><span>0.42</span><span>-0.31</span><span>0.89</span><span>...</span><span style="color:var(--ink3)">+294</span></div></div>' +
+        '<div style="font-size:12px;color:var(--ink2);margin-top:8px;margin-bottom:6px;">Pick any two words to compare their vectors:</div>' +
+        '<div class="embed-picker">' +
+          '<button class="embed-word-btn" data-word="MONEY" onclick="pickEmbedWord(\'MONEY\')">MONEY</button>' +
+          '<button class="embed-word-btn" data-word="CASH" onclick="pickEmbedWord(\'CASH\')">CASH</button>' +
+          '<button class="embed-word-btn" data-word="FUNDS" onclick="pickEmbedWord(\'FUNDS\')">FUNDS</button>' +
+          '<button class="embed-word-btn" data-word="DOLLARS" onclick="pickEmbedWord(\'DOLLARS\')">DOLLARS</button>' +
+          '<button class="embed-word-btn" data-word="PRIZE" onclick="pickEmbedWord(\'PRIZE\')">PRIZE</button>' +
+          '<button class="embed-word-btn" data-word="FREE" onclick="pickEmbedWord(\'FREE\')">FREE</button>' +
+          '<button class="embed-word-btn" data-word="URGENT" onclick="pickEmbedWord(\'URGENT\')">URGENT</button>' +
+          '<button class="embed-word-btn" data-word="MEETING" onclick="pickEmbedWord(\'MEETING\')">MEETING</button>' +
+          '<button class="embed-word-btn" data-word="LUNCH" onclick="pickEmbedWord(\'LUNCH\')">LUNCH</button>' +
+          '<button class="embed-word-btn" data-word="HELLO" onclick="pickEmbedWord(\'HELLO\')">HELLO</button>' +
         '</div>' +
+        '<div class="embed-compare-result" id="embed-compare-result"></div>' +
       '</div>' +
     '</div>' +
     '<div class="wt-panel" style="margin-top:16px;">' +
@@ -1599,7 +1738,251 @@ function searchForMoney() {
   }, 80);
 }
 
-// Drift animation
+// Interactive: Email Labeling
+const labelAnswers = [
+  { answer: 'spam', reason: 'Classic bait: free + cash + reward + urgency.' },
+  { answer: 'ham', reason: 'This is a legitimate bank confirmation. But "MONEY transfer" pattern overlaps with spam. A model trained on your labels would learn from your judgment here.' },
+  { answer: 'ham', reason: 'Everyday workplace email. No financial keywords, no urgency.' },
+  { answer: 'spam', reason: 'Urgency + threat + financial action. Classic social engineering.' },
+  { answer: 'ham', reason: 'Legitimate receipt. But notice the overlap with spam patterns. The word "PayPal" and dollar amounts appear in both real and fraudulent emails.' }
+];
+let labelPicks = [null, null, null, null, null];
+let labelCount = 0;
+
+function labelEmail(idx, pick) {
+  if (labelPicks[idx] !== null) return;
+  labelPicks[idx] = pick;
+  labelCount++;
+  
+  const el = document.getElementById('le-' + idx);
+  const btns = el.querySelectorAll('.label-btn');
+  btns.forEach(b => { b.disabled = true; });
+  if (pick === 'spam') btns[0].classList.add('picked-spam');
+  else btns[1].classList.add('picked-ham');
+  
+  if (labelCount === 5) revealLabels();
+}
+
+function revealLabels() {
+  let matches = 0;
+  for (let i = 0; i < 5; i++) {
+    const el = document.getElementById('le-' + i);
+    const a = labelAnswers[i];
+    const agreed = labelPicks[i] === a.answer;
+    if (agreed) matches++;
+    
+    el.classList.add(a.answer === 'spam' ? 'revealed-spam' : 'revealed-ham');
+    
+    const result = document.createElement('div');
+    result.className = 'label-result ' + (agreed ? 'match' : 'mismatch');
+    result.innerHTML = agreed
+      ? '✓ You agreed with the training set. ' + a.reason
+      : '✗ You labeled ' + labelPicks[i] + '. Training set says ' + a.answer + '. ' + a.reason;
+    el.appendChild(result);
+  }
+  
+  const score = document.getElementById('label-score');
+  score.style.display = 'block';
+  if (matches === 5) {
+    score.style.background = 'var(--green-lt)';
+    score.innerHTML = '<strong>5/5 agreement.</strong> Your labels matched the training set. But another person might have labeled #2 or #5 differently. The model would learn a different boundary from different labels.';
+  } else {
+    score.style.background = 'var(--red-lt)';
+    score.innerHTML = '<strong>' + matches + '/5 agreement.</strong> You and the training set disagreed on ' + (5 - matches) + '. This is the point: the model learns from these labels, including the ambiguous ones. Different labels, different model. <strong>The developer\'s judgment is baked into the data, not the code.</strong>';
+  }
+  
+  const callout = document.getElementById('label-callout');
+  if (callout) {
+    callout.innerHTML = '<p><strong>You just did what the AI developer does.</strong> Every label is a judgment call. The model learns from those judgments, including the close calls. No rule was written. The intent lives in the labels.</p>';
+  }
+}
+
+// Interactive: Live Tokenizer
+const spamWords = ['money','cash','free','urgent','funds','prize','claim','reward','dollars','win','congratulations','offer','act','winner','lottery'];
+
+function tokenizeInput() {
+  const input = document.getElementById('tok-input');
+  const output = document.getElementById('tok-output');
+  const text = input.value.trim();
+  
+  if (!text) {
+    output.innerHTML = '<div style="font-size:12px;color:var(--ink3);">Type something above to see it tokenized.</div>';
+    return;
+  }
+  
+  // Simple whitespace + punctuation tokenization
+  const tokens = text.match(/[\w]+|[^\s\w]/g) || [];
+  let html = '<div class="wt-tokens">';
+  tokens.forEach(t => {
+    const isSpam = spamWords.includes(t.toLowerCase());
+    html += '<span class="wt-token' + (isSpam ? ' spam-word' : '') + '">' + t + '</span>';
+  });
+  html += '</div>';
+  
+  const spamFound = tokens.filter(t => spamWords.includes(t.toLowerCase()));
+  if (spamFound.length > 0) {
+    html += '<div style="font-size:11px;color:var(--red);margin-top:8px;font-family:var(--mono);">' + spamFound.length + ' token' + (spamFound.length > 1 ? 's' : '') + ' associated with spam patterns highlighted.</div>';
+  }
+  
+  output.innerHTML = html;
+}
+
+// Interactive: Embedding Comparison
+const embedVectors = {
+  'MONEY':   { v: [0.23,-0.87,0.12,0.45,-0.33,0.91], cluster: 'financial', x: 72, y: 28 },
+  'CASH':    { v: [0.21,-0.85,0.14,0.42,-0.31,0.89], cluster: 'financial', x: 78, y: 32 },
+  'FUNDS':   { v: [0.19,-0.82,0.16,0.40,-0.29,0.87], cluster: 'financial', x: 68, y: 35 },
+  'DOLLARS': { v: [0.22,-0.84,0.11,0.44,-0.32,0.90], cluster: 'financial', x: 75, y: 24 },
+  'PRIZE':   { v: [0.18,-0.60,0.30,0.35,-0.20,0.65], cluster: 'incentive', x: 58, y: 52 },
+  'FREE':    { v: [0.15,-0.55,0.33,0.30,-0.18,0.60], cluster: 'incentive', x: 52, y: 56 },
+  'MEETING': { v: [-0.45,0.30,0.67,-0.12,0.55,-0.20], cluster: 'everyday', x: 22, y: 68 },
+  'LUNCH':   { v: [-0.42,0.35,0.70,-0.15,0.52,-0.18], cluster: 'everyday', x: 28, y: 74 },
+  'HELLO':   { v: [-0.50,0.40,0.60,-0.10,0.48,-0.25], cluster: 'everyday', x: 18, y: 62 },
+  'URGENT':  { v: [0.10,-0.70,0.25,0.50,-0.40,0.75], cluster: 'pressure', x: 62, y: 42 }
+};
+
+let embedSelections = [null, null];
+
+function pickEmbedWord(word) {
+  if (embedSelections[0] === word) {
+    embedSelections[0] = null;
+  } else if (embedSelections[1] === word) {
+    embedSelections[1] = null;
+  } else if (embedSelections[0] === null) {
+    embedSelections[0] = word;
+  } else if (embedSelections[1] === null) {
+    embedSelections[1] = word;
+  } else {
+    embedSelections[1] = word;
+  }
+  
+  // Update button states
+  document.querySelectorAll('.embed-word-btn').forEach(btn => {
+    btn.classList.remove('selected', 'slot-a');
+    if (btn.dataset.word === embedSelections[0]) btn.classList.add('selected', 'slot-a');
+    else if (btn.dataset.word === embedSelections[1]) btn.classList.add('selected');
+  });
+  
+  if (embedSelections[0] && embedSelections[1]) {
+    showEmbedComparison();
+  } else {
+    document.getElementById('embed-compare-result').style.display = 'none';
+  }
+}
+
+function cosineSim(a, b) {
+  let dot = 0, magA = 0, magB = 0;
+  for (let i = 0; i < a.length; i++) {
+    dot += a[i] * b[i];
+    magA += a[i] * a[i];
+    magB += b[i] * b[i];
+  }
+  return dot / (Math.sqrt(magA) * Math.sqrt(magB));
+}
+
+function showEmbedComparison() {
+  const w1 = embedSelections[0], w2 = embedSelections[1];
+  const v1 = embedVectors[w1], v2 = embedVectors[w2];
+  const sim = cosineSim(v1.v, v2.v);
+  const pct = Math.round(((sim + 1) / 2) * 100);
+  
+  const result = document.getElementById('embed-compare-result');
+  result.style.display = 'block';
+  
+  // Scatter plot SVG
+  const W = 400, H = 300, pad = 40;
+  const clusterColors = { financial: '#C8272D', incentive: '#D4A017', everyday: '#2D8A56', pressure: '#6B4E0A' };
+  
+  let svg = '<div class="embed-scatter"><svg viewBox="0 0 ' + W + ' ' + H + '" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;">';
+  
+  // Axes
+  svg += '<line x1="' + pad + '" y1="' + (H - pad) + '" x2="' + (W - 20) + '" y2="' + (H - pad) + '" stroke="#E4E8EC" stroke-width="1"/>';
+  svg += '<line x1="' + pad + '" y1="20" x2="' + pad + '" y2="' + (H - pad) + '" stroke="#E4E8EC" stroke-width="1"/>';
+  svg += '<text x="' + (W / 2) + '" y="' + (H - 8) + '" text-anchor="middle" font-size="9" fill="#8E99A4" font-family="IBM Plex Mono,monospace" letter-spacing="0.06em">DIMENSION 1</text>';
+  svg += '<text x="12" y="' + (H / 2) + '" text-anchor="middle" font-size="9" fill="#8E99A4" font-family="IBM Plex Mono,monospace" letter-spacing="0.06em" transform="rotate(-90,12,' + (H / 2) + ')">DIMENSION 2</text>';
+  
+  // Connection line between selected words
+  const x1 = pad + v1.x / 100 * (W - pad - 20);
+  const y1 = 20 + v1.y / 100 * (H - pad - 20);
+  const x2 = pad + v2.x / 100 * (W - pad - 20);
+  const y2 = 20 + v2.y / 100 * (H - pad - 20);
+  const lineColor = pct > 75 ? '#C8272D' : pct > 40 ? '#D4A017' : '#2D8A56';
+  svg += '<line x1="' + x1 + '" y1="' + y1 + '" x2="' + x2 + '" y2="' + y2 + '" stroke="' + lineColor + '" stroke-width="1.5" stroke-dasharray="4,3" opacity="0.6"/>';
+  
+  // Distance label at midpoint
+  const mx = (x1 + x2) / 2, my = (y1 + y2) / 2;
+  svg += '<rect x="' + (mx - 18) + '" y="' + (my - 8) + '" width="36" height="16" rx="3" fill="white" stroke="' + lineColor + '" stroke-width="0.5"/>';
+  svg += '<text x="' + mx + '" y="' + (my + 3) + '" text-anchor="middle" font-size="8" fill="' + lineColor + '" font-family="IBM Plex Mono,monospace" font-weight="600">' + pct + '%</text>';
+  
+  // Cluster regions (subtle ellipses)
+  const clusters = {};
+  Object.entries(embedVectors).forEach(([word, data]) => {
+    if (!clusters[data.cluster]) clusters[data.cluster] = [];
+    clusters[data.cluster].push({ x: pad + data.x / 100 * (W - pad - 20), y: 20 + data.y / 100 * (H - pad - 20) });
+  });
+  Object.entries(clusters).forEach(([name, pts]) => {
+    const cx = pts.reduce((s, p) => s + p.x, 0) / pts.length;
+    const cy = pts.reduce((s, p) => s + p.y, 0) / pts.length;
+    const rx = Math.max(30, ...pts.map(p => Math.abs(p.x - cx))) + 18;
+    const ry = Math.max(25, ...pts.map(p => Math.abs(p.y - cy))) + 18;
+    svg += '<ellipse cx="' + cx + '" cy="' + cy + '" rx="' + rx + '" ry="' + ry + '" fill="' + clusterColors[name] + '" fill-opacity="0.06" stroke="' + clusterColors[name] + '" stroke-width="0.5" stroke-dasharray="3,3" opacity="0.8"/>';
+    svg += '<text x="' + cx + '" y="' + (cy + ry + 12) + '" text-anchor="middle" font-size="8" fill="' + clusterColors[name] + '" font-family="IBM Plex Mono,monospace" letter-spacing="0.05em" opacity="0.7">' + name.toUpperCase() + '</text>';
+  });
+  
+  // All dots
+  Object.entries(embedVectors).forEach(([word, data]) => {
+    const px = pad + data.x / 100 * (W - pad - 20);
+    const py = 20 + data.y / 100 * (H - pad - 20);
+    const isSelected = word === w1 || word === w2;
+    const r = isSelected ? 5 : 3.5;
+    const fillColor = isSelected ? (word === w1 ? '#C8272D' : '#0F2340') : clusterColors[data.cluster];
+    const opacity = isSelected ? 1 : 0.5;
+    
+    if (isSelected) {
+      svg += '<circle cx="' + px + '" cy="' + py + '" r="' + (r + 4) + '" fill="' + fillColor + '" opacity="0.12"/>';
+    }
+    svg += '<circle cx="' + px + '" cy="' + py + '" r="' + r + '" fill="' + fillColor + '" opacity="' + opacity + '"/>';
+    svg += '<text x="' + (px + 8) + '" y="' + (py + (isSelected ? -8 : 3)) + '" font-size="' + (isSelected ? '10' : '8') + '" fill="' + fillColor + '" font-family="DM Sans,sans-serif" font-weight="' + (isSelected ? '600' : '400') + '" opacity="' + (isSelected ? 1 : 0.6) + '">' + word + '</text>';
+  });
+  
+  svg += '</svg></div>';
+  
+  let html = svg;
+  
+  // Vectors side by side
+  html += '<div class="wt-embed-grid">';
+  html += '<div class="wt-embed-word"><div class="wt-embed-word-label red">' + w1 + '</div><div class="wt-embed-dims">';
+  v1.v.forEach(n => { html += '<span>' + n.toFixed(2) + '</span>'; });
+  html += '<span>...</span><span style="color:var(--ink3)">+294</span></div></div>';
+  html += '<div class="wt-embed-word"><div class="wt-embed-word-label">' + w2 + '</div><div class="wt-embed-dims">';
+  v2.v.forEach(n => { html += '<span>' + n.toFixed(2) + '</span>'; });
+  html += '<span>...</span><span style="color:var(--ink3)">+294</span></div></div>';
+  html += '</div>';
+  
+  // Similarity bar
+  const barColor = pct > 75 ? 'var(--red)' : pct > 40 ? '#D4A017' : 'var(--green)';
+  html += '<div style="margin-top:16px;">';
+  html += '<div class="embed-sim-label">Cosine similarity: ' + (sim).toFixed(3) + ' (' + pct + '%)</div>';
+  html += '<div class="embed-sim-bar-track"><div class="embed-sim-bar-fill" style="width:' + pct + '%;background:' + barColor + ';"></div></div>';
+  
+  // Plain English
+  let reading = '';
+  if (pct > 85) reading = '<strong>Same neighborhood.</strong> These words appear in nearly identical contexts during training. The model treats them as interchangeable. If one triggers spam, the other likely will too.';
+  else if (pct > 65) reading = '<strong>Same district.</strong> These words share significant overlap in their usage contexts. The model sees a relationship but not equivalence.';
+  else if (pct > 40) reading = '<strong>Same city, different neighborhoods.</strong> Some contextual overlap but the model has learned meaningful distinctions between them.';
+  else reading = '<strong>Different zip codes.</strong> These words appear in completely different contexts. The model treats them as unrelated concepts.';
+  
+  if (v1.cluster === v2.cluster) {
+    reading += ' Both live in the <em>' + v1.cluster + '</em> cluster.';
+  } else {
+    reading += ' They live in different clusters: <em>' + v1.cluster + '</em> vs <em>' + v2.cluster + '</em>.';
+  }
+  
+  html += '<div class="embed-sim-reading">' + reading + '</div>';
+  html += '</div>';
+  
+  result.innerHTML = html;
+}
 let driftInterval = null;
 const driftData = [94, 93.2, 91.8, 90.1, 88.0, 86.2, 84.1, 81.5, 79.3, 78.0, 76.2, 73.8];
 const driftMonths = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
@@ -1843,6 +2226,9 @@ function wtGoTo(step) {
   if (trainInterval) { clearInterval(trainInterval); trainInterval = null; }
   if (searchInterval) { clearInterval(searchInterval); searchInterval = null; }
   if (driftInterval) { clearInterval(driftInterval); driftInterval = null; }
+  labelPicks = [null, null, null, null, null];
+  labelCount = 0;
+  embedSelections = [null, null];
   renderContent();
 }
 function wtPrev() { if (wtStep > 0) wtGoTo(wtStep - 1); }
@@ -2346,7 +2732,68 @@ function next() { if (currentIndex < flatSections.length - 1) goTo(currentIndex 
 function setTab(i) { activeTab = i; renderContent(); }
 function setScenario(i) { activeScenario = i; renderContent(); }
 function toggleReq(i) { expandedReq = expandedReq === i ? null : i; renderContent(); }
+function renderReadiness(data) {
+  let html = '<p class="intro">' + data.intro + '</p>';
+  
+  // 4-step flow
+  html += '<div class="ra-flow">';
+  data.steps.forEach((s, i) => {
+    html += '<div class="ra-step">';
+    html += '<div class="ra-step-num">STEP ' + s.num + '</div>';
+    html += '<div class="ra-step-title">' + s.title + '</div>';
+    html += '<div class="ra-step-desc">' + s.desc + '</div>';
+    html += '<div class="ra-step-reqs">' + s.reqs + '</div>';
+    if (i < data.steps.length - 1) html += '<div class="ra-step-arrow">&#9656;</div>';
+    html += '</div>';
+  });
+  html += '</div>';
+  
+  // Output preview
+  html += '<div class="ra-output">';
+  html += '<div class="ra-output-label">Sample Output: Readiness Report</div>';
+  html += '<div class="ra-report">';
+  html += '<div class="ra-report-grid">';
+  
+  var sampleReqs = [
+    { id: 'AI-1', name: 'Data Partitioning', status: 'strong', label: 'Strong' },
+    { id: 'AI-2', name: 'Bias Detection', status: 'partial', label: 'Partial' },
+    { id: 'AI-3', name: 'ML Test Coverage', status: 'strong', label: 'Strong' },
+    { id: 'AI-4', name: 'Continuous Validation', status: 'partial', label: 'Partial' },
+    { id: 'AI-5', name: 'Hallucination Prevention', status: 'gap', label: 'Gap' },
+    { id: 'AI-6', name: 'OOD Detection', status: 'gap', label: 'Gap' },
+    { id: 'AI-7', name: 'Adversarial Robustness', status: 'partial', label: 'Partial' },
+    { id: 'AI-8', name: 'Explainability', status: 'strong', label: 'Strong' },
+    { id: 'AI-9', name: 'Human AI Teaming', status: 'strong', label: 'Strong' }
+  ];
+  
+  sampleReqs.forEach(r => {
+    html += '<div class="ra-req-card s-' + r.status + '">';
+    html += '<div class="ra-req-card-id">' + r.id + '</div>';
+    html += '<div class="ra-req-card-name">' + r.name + '</div>';
+    html += '<div class="ra-req-card-status">' + r.label + '</div>';
+    html += '</div>';
+  });
+  
+  html += '</div>';
+  
+  // Key
+  html += '<div class="ra-key">';
+  data.statuses.forEach(s => {
+    html += '<div class="ra-key-item"><div class="ra-key-dot" style="background:' + s.color + '"></div>' + s.label + '</div>';
+  });
+  html += '</div>';
+  
+  html += '</div></div>';
+  
+  // Callout and link
+  html += '<div class="wt-callout" style="margin-top:20px;"><p>' + data.callout + '</p></div>';
+  html += '<div style="text-align:center;margin-top:16px;"><a class="ra-link" href="' + data.link + '" target="_blank">Take the Readiness Assessment</a></div>';
+  
+  return html;
+}
+
 function toggleOutline(i) { var el = document.getElementById('outline-' + i); if (el) el.classList.toggle('expanded'); }
+function toggleSubSummary(el) { el.classList.toggle('active'); }
 function toggleStep(i) { expandedStep = expandedStep === i ? null : i; renderContent(); }
 
 document.addEventListener('keydown', e => {

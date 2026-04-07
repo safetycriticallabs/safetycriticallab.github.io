@@ -59,6 +59,9 @@ body {
   display: flex; gap: 4px; align-items: center;
   margin-left: 48px; list-style: none;
 }
+.gn-links li {
+  display: flex; align-items: center;
+}
 
 .gn-links a {
   font-family: var(--sans); font-size: 13px;
@@ -855,11 +858,10 @@ h2.section-title em { font-style: italic; color: var(--red); font-family: var(--
   position: relative;
 }
 .gn-dropdown-toggle {
-  display: inline-flex; align-items: center; gap: 5px;
+  display: flex; align-items: center; gap: 5px;
   cursor: pointer;
   border: none; outline: none;
   background: none;
-  vertical-align: middle;
 }
 .gn-dropdown-toggle.has-active { color: var(--bg); font-weight: 500; }
 .gn-dropdown-arrow {

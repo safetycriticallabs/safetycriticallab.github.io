@@ -266,6 +266,39 @@ button { font-family: inherit; cursor: pointer; }
 .tab-item .desc { color: var(--ink2); font-size: 13px; line-height: 1.6; }
 .tab-note { margin-top: 16px; padding: 12px 14px; background: var(--bg); border-radius: 4px; font-size: 12px; color: var(--ink3); font-style: italic; }
 
+/* Visual Comparison Timeline */
+.comp-timeline { position: relative; margin-top: 20px; }
+.comp-phase { display: flex; gap: 20px; align-items: flex-start; padding: 16px 0; border-bottom: 1px solid var(--rule); position: relative; opacity: 0.35; transition: opacity 0.4s ease; }
+.comp-phase.revealed { opacity: 1; }
+.comp-phase:last-child { border-bottom: none; }
+.comp-phase-marker { width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 14px; border: 2px solid var(--rule); background: var(--white); transition: all 0.4s ease; }
+.comp-phase.revealed .comp-phase-marker { border-color: currentColor; }
+.comp-phase-marker.status-ok { color: #2D7A3A; }
+.comp-phase.revealed .comp-phase-marker.status-ok { background: rgba(45,122,58,0.08); }
+.comp-phase-marker.status-warn { color: #C8861A; }
+.comp-phase.revealed .comp-phase-marker.status-warn { background: rgba(200,134,26,0.08); }
+.comp-phase-marker.status-fail { color: var(--red); }
+.comp-phase.revealed .comp-phase-marker.status-fail { background: var(--red-lt); }
+.comp-phase-marker.status-process { color: var(--ink2); }
+.comp-phase.revealed .comp-phase-marker.status-process { background: var(--bg); }
+.comp-phase-body { flex: 1; }
+.comp-phase-name { font-size: 13px; font-weight: 600; color: var(--ink); margin-bottom: 4px; }
+.comp-phase-desc { font-size: 13px; color: var(--ink2); line-height: 1.6; }
+.comp-deeper { margin-top: 16px; padding: 16px 20px; background: var(--red-lt); border-left: 3px solid var(--red); border-radius: 0 4px 4px 0; opacity: 0.35; transition: opacity 0.4s ease; }
+.comp-deeper.revealed { opacity: 1; }
+.comp-deeper-label { font-family: var(--mono); font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--red); margin-bottom: 6px; }
+.comp-deeper-text { font-size: 13px; color: var(--ink); line-height: 1.65; }
+.comp-gauge-wrap { display: flex; gap: 16px; margin-top: 16px; margin-bottom: 8px; }
+.comp-gauge { flex: 1; background: var(--white); border: 1px solid var(--rule); border-radius: 4px; padding: 14px 16px; text-align: center; }
+.comp-gauge-label { font-family: var(--mono); font-size: 9px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink3); margin-bottom: 8px; }
+.comp-gauge-value { font-size: 28px; font-weight: 600; color: var(--ink); transition: color 0.4s; }
+.comp-gauge-value span { font-size: 14px; font-weight: 400; color: var(--ink3); }
+.comp-gauge-bar { height: 4px; background: var(--rule); border-radius: 2px; margin-top: 8px; overflow: hidden; }
+.comp-gauge-fill { height: 100%; border-radius: 2px; transition: width 0.6s ease, background 0.6s ease; }
+.comp-step-btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; border: 1px solid var(--rule); border-radius: 980px; background: var(--white); color: var(--ink2); font-size: 12px; font-family: var(--mono); letter-spacing: 0.06em; cursor: pointer; transition: all 0.2s; margin-top: 12px; }
+.comp-step-btn:hover { border-color: var(--ink3); color: var(--ink); }
+.comp-step-btn:disabled { opacity: 0.4; cursor: default; }
+
 .table-wrap { overflow-x: auto; }
 table { width: 100%; border-collapse: collapse; font-size: 13px; }
 th { font-family: var(--mono); font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink3); padding: 10px 14px; text-align: left; border-bottom: 1px solid var(--rule); background: var(--bg); }
@@ -652,19 +685,17 @@ const sections = {
       tabs: ["Learned Model", "Learning Model"],
       content: [
         { title: "Learned Model (Frozen)", items: [
-          { phase: "Training (2024)", desc: "Spam filter trained on MONEY, CASH, FUNDS patterns. Certified. Deployed. Working perfectly." },
-          { phase: "Time Passes", desc: "Spammers adapt. New spam: 'Send crypto now!' 'Transfer digital assets immediately!' 'Your NFT is waiting!'" },
-          { phase: "Failure", desc: "Model still looks for MONEY, CASH, FUNDS. New patterns sail through. Spam detection rate drops from 94% to 67%. No code changed. No alert fired." },
-          { phase: "The Natural Response", desc: "Freeze the model. Record its version. Control who can change it. When something does change, flag it and trigger a review. This is correct. This is what any disciplined engineering organization already does." },
-          { phase: "The Deeper Question", desc: "The review trigger fires. Now what? The artifact under review is not source code. It is a set of weights. Your process tells you a change happened and that you need to evaluate it. It does not tell you how to evaluate what changed inside something where the developer's intent is not readable in the artifact." }
-        ], note: "You already track changes and control your baselines. The gap is not in your process. The gap is in what happens when the process fires and the artifact is not code." },
+          { phase: "Training (2024)", desc: "Spam filter trained on MONEY, CASH, FUNDS patterns. Certified. Deployed. Working perfectly.", status: "ok", icon: "&#10003;", metrics: { accuracy: 94, blocked: 0 } },
+          { phase: "Time Passes", desc: "Spammers adapt. New spam: 'Send crypto now!' 'Transfer digital assets immediately!' 'Your NFT is waiting!'", status: "warn", icon: "&#9202;", metrics: { accuracy: 86, blocked: 0 } },
+          { phase: "Failure", desc: "Model still looks for MONEY, CASH, FUNDS. New patterns sail through. Spam detection rate drops from 94% to 67%. No code changed. No alert fired.", status: "fail", icon: "&#10007;", metrics: { accuracy: 67, blocked: 0 } },
+          { phase: "The Natural Response", desc: "Freeze the model. Record its version. Control who can change it. When something does change, flag it and trigger a review. This is correct. This is what any disciplined engineering organization already does.", status: "process", icon: "&#8635;", metrics: { accuracy: 67, blocked: 0 } }
+        ], deeper: "The review trigger fires. Now what? The artifact under review is not source code. It is a set of weights. Your process tells you a change happened and that you need to evaluate it. It does not tell you how to evaluate what changed inside something where the developer's intent is not readable in the artifact.", note: "You already track changes and control your baselines. The gap is not in your process. The gap is in what happens when the process fires and the artifact is not code.", gaugeLabels: ["Spam Detection Rate", ""] },
         { title: "Learning Model (Adaptive)", items: [
-          { phase: "Adaptation", desc: "Spam filter retrains weekly on incoming emails. Learns new patterns: CRYPTO, NFT, DIGITAL ASSETS now correlate with spam." },
-          { phase: "Unintended Learning", desc: "Finance team sends legitimate emails: 'Q3 crypto policy update' and 'Digital assets compliance review.' Model learns these patterns too." },
-          { phase: "Failure", desc: "Model starts flagging internal finance communications as spam. Executives miss compliance deadlines. Loss function improved. Spam detection is up. But the model is now blocking legitimate business." },
-          { phase: "The Natural Response", desc: "Record every update. Compare each version against the last. Require sign off before the new version goes live. Run regression tests after each cycle. Again, this is correct. This is disciplined practice." },
-          { phase: "The Deeper Question", desc: "You recorded the update. You compared versions. But what are you comparing? Two sets of weights, neither of which is readable. The regression test tells you accuracy went up. It does not tell you the model quietly learned to block your own finance team. The behavior change is invisible to any test that only measures aggregate performance." }
-        ], note: "You already record updates and require sign off. The gap is not in your change process. The gap is in knowing what actually changed when the artifact is geometry, not logic." }
+          { phase: "Adaptation", desc: "Spam filter retrains weekly on incoming emails. Learns new patterns: CRYPTO, NFT, DIGITAL ASSETS now correlate with spam.", status: "ok", icon: "&#10003;", metrics: { accuracy: 97, blocked: 0 } },
+          { phase: "Unintended Learning", desc: "Finance team sends legitimate emails: 'Q3 crypto policy update' and 'Digital assets compliance review.' Model learns these patterns too.", status: "warn", icon: "&#9888;", metrics: { accuracy: 97, blocked: 12 } },
+          { phase: "Failure", desc: "Model starts flagging internal finance communications as spam. Executives miss compliance deadlines. Loss function improved. Spam detection is up. But the model is now blocking legitimate business.", status: "fail", icon: "&#10007;", metrics: { accuracy: 99, blocked: 38 } },
+          { phase: "The Natural Response", desc: "Record every update. Compare each version against the last. Require sign off before the new version goes live. Run regression tests after each cycle. Again, this is correct. This is disciplined practice.", status: "process", icon: "&#8635;", metrics: { accuracy: 99, blocked: 38 } }
+        ], deeper: "You recorded the update. You compared versions. But what are you comparing? Two sets of weights, neither of which is readable. The regression test tells you accuracy went up. It does not tell you the model quietly learned to block your own finance team. The behavior change is invisible to any test that only measures aggregate performance.", note: "You already record updates and require sign off. The gap is not in your change process. The gap is in knowing what actually changed when the artifact is geometry, not logic.", gaugeLabels: ["Spam Detection Rate", "Legitimate Emails Blocked"] }
       ]
     }
   },
@@ -2250,12 +2281,79 @@ function renderFeatures(data) {
 function renderComparison(data) {
   const tab = data.content[activeTab];
   let html = '<p class="intro">' + data.intro + '</p><div class="tabs">';
-  data.tabs.forEach((t, i) => { html += '<button class="tab-btn ' + (i === activeTab ? 'active' : '') + '" onclick="setTab(' + i + ')">' + t + '</button>'; });
-  html += '</div><div class="tab-content"><h4>' + tab.title + '</h4>';
-  tab.items.forEach(item => { html += '<div class="tab-item"><div class="phase">' + item.phase + '</div><div class="desc">' + item.desc + '</div></div>'; });
-  if (tab.note) html += '<div class="tab-note">' + tab.note + '</div>';
+  data.tabs.forEach((t, i) => { html += '<button class="tab-btn ' + (i === activeTab ? 'active' : '') + '" onclick="setTab(' + i + ');compRevealStep=0;render();">' + t + '</button>'; });
+  html += '</div>';
+  
+  html += '<div class="tab-content"><h4>' + tab.title + '</h4>';
+  
+  // Gauges
+  const showSecondGauge = activeTab === 1;
+  const currentMetrics = tab.items[Math.min(compRevealStep, tab.items.length - 1)].metrics;
+  const accColor = currentMetrics.accuracy >= 90 ? '#2D7A3A' : currentMetrics.accuracy >= 75 ? '#C8861A' : '#C8272D';
+  
+  html += '<div class="comp-gauge-wrap">';
+  html += '<div class="comp-gauge">';
+  html += '<div class="comp-gauge-label">' + tab.gaugeLabels[0] + '</div>';
+  html += '<div class="comp-gauge-value" style="color:' + accColor + '">' + currentMetrics.accuracy + '<span>%</span></div>';
+  html += '<div class="comp-gauge-bar"><div class="comp-gauge-fill" style="width:' + currentMetrics.accuracy + '%;background:' + accColor + '"></div></div>';
+  html += '</div>';
+  
+  if (showSecondGauge) {
+    const blkColor = currentMetrics.blocked === 0 ? '#2D7A3A' : currentMetrics.blocked < 20 ? '#C8861A' : '#C8272D';
+    html += '<div class="comp-gauge">';
+    html += '<div class="comp-gauge-label">' + tab.gaugeLabels[1] + '</div>';
+    html += '<div class="comp-gauge-value" style="color:' + blkColor + '">' + currentMetrics.blocked + '<span>%</span></div>';
+    html += '<div class="comp-gauge-bar"><div class="comp-gauge-fill" style="width:' + currentMetrics.blocked + '%;background:' + blkColor + '"></div></div>';
+    html += '</div>';
+  }
+  html += '</div>';
+  
+  // Timeline
+  html += '<div class="comp-timeline">';
+  tab.items.forEach((item, i) => {
+    const revealed = i <= compRevealStep;
+    html += '<div class="comp-phase' + (revealed ? ' revealed' : '') + '">';
+    html += '<div class="comp-phase-marker status-' + item.status + '">' + item.icon + '</div>';
+    html += '<div class="comp-phase-body">';
+    html += '<div class="comp-phase-name">' + item.phase + '</div>';
+    html += '<div class="comp-phase-desc">' + item.desc + '</div>';
+    html += '</div></div>';
+  });
+  html += '</div>';
+  
+  // Deeper question breakout
+  const deeperRevealed = compRevealStep >= tab.items.length;
+  html += '<div class="comp-deeper' + (deeperRevealed ? ' revealed' : '') + '">';
+  html += '<div class="comp-deeper-label">The Deeper Question</div>';
+  html += '<div class="comp-deeper-text">' + tab.deeper + '</div>';
+  html += '</div>';
+  
+  // Step button
+  const maxSteps = tab.items.length; // items.length reveals deeper
+  if (compRevealStep <= maxSteps) {
+    const btnLabel = compRevealStep < tab.items.length ? 'Next: ' + (compRevealStep < tab.items.length - 1 ? tab.items[compRevealStep + 1].phase : 'The Deeper Question') : '';
+    if (compRevealStep === 0) {
+      html += '<button class="comp-step-btn" onclick="advanceComp()">Step through the story &#9656;</button>';
+    } else if (compRevealStep <= maxSteps - 1) {
+      html += '<button class="comp-step-btn" onclick="advanceComp()">' + btnLabel + ' &#9656;</button>';
+    }
+  }
+  
+  // Note
+  if (deeperRevealed && tab.note) html += '<div class="tab-note">' + tab.note + '</div>';
+  
   html += '</div>';
   return html;
+}
+
+var compRevealStep = 0;
+function advanceComp() {
+  const tab = sections['two-paths'];
+  const maxSteps = tab.data.content[activeTab].items.length;
+  if (compRevealStep <= maxSteps) {
+    compRevealStep++;
+    renderContent();
+  }
 }
 
 function renderTable(data) {
@@ -2720,6 +2818,7 @@ function goTo(i) {
   covHitCount = 0;
   advState = false;
   partitionState = 0;
+  compRevealStep = 0;
   if (trainInterval) { clearInterval(trainInterval); trainInterval = null; }
   if (searchInterval) { clearInterval(searchInterval); searchInterval = null; }
   if (driftInterval) { clearInterval(driftInterval); driftInterval = null; }

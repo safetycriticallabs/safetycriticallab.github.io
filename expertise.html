@@ -93,10 +93,16 @@
   <button class="gn-hamburger" aria-label="Menu" aria-expanded="false">
     <span></span><span></span><span></span>
   </button>
-  <ul class="gn-links">
+<ul class="gn-links">
     <li><a href="/">Home</a></li>
-    <li><a href="/framework">Framework</a></li>
-    <li><a href="/process">Process</a></li>
+    <li class="gn-dropdown">
+      <button class="gn-dropdown-toggle">Certification <span class="gn-dropdown-arrow"></span></button>
+      <ul class="gn-dropdown-menu">
+        <li><a href="/framework">Framework</a></li>
+        <li><a href="/process">Process</a></li>
+        <li><a href="/assess">Assess</a></li>
+      </ul>
+    </li>
     <li><a href="/expertise" class="active">Expertise</a></li>
     <li><a href="/markets">Markets</a></li>
     <li><a href="/contact" class="gn-cta">Get Certified</a></li>
@@ -272,6 +278,7 @@
           <a href="/process">Process</a>
           <a href="/expertise">Expertise</a>
           <a href="/markets">Markets</a>
+          <a href="/assess">Assess</a>
           <a href="/contact">Contact</a>
         </div>
         <p class="footer-tagline">AI certification authority for safety-critical systems.<br>Formal determinations issued against a published, citable standard.</p>
@@ -366,6 +373,20 @@ document.querySelector('.gn-hamburger').addEventListener('click', function() {
   document.querySelector('.gn-links').classList.toggle('open');
   this.setAttribute('aria-expanded', this.classList.contains('open'));
   document.body.style.overflow = this.classList.contains('open') ? 'hidden' : '';
+
+/* Dropdown nav toggle */
+document.querySelectorAll(".gn-dropdown-toggle").forEach(function(btn) {
+  btn.addEventListener("click", function(e) {
+    e.stopPropagation();
+    var dd = this.closest(".gn-dropdown");
+    var isOpen = dd.classList.contains("open");
+    document.querySelectorAll(".gn-dropdown").forEach(function(d) { d.classList.remove("open"); });
+    if (!isOpen) dd.classList.add("open");
+  });
+});
+document.addEventListener("click", function() {
+  document.querySelectorAll(".gn-dropdown").forEach(function(d) { d.classList.remove("open"); });
+});
 });
 </script>
 <script src="ticker.js"></script>

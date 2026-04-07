@@ -1,0 +1,1152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Readiness Assessment — Safety Critical Labs</title>
+<meta name="description" content="Evaluate your AI system's certification readiness against the SCL framework. Free self-assessment covering all nine requirement areas.">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=IBM+Plex+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<link rel="stylesheet" href="styles.css">
+<style>
+/* ─── ASSESS PAGE ─────────────────────────────────────────── */
+
+/* INNER PAGE HERO — dark */
+.inner-hero {
+  background: var(--ink) !important;
+  padding: 72px 40px 64px;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  position: relative; overflow: hidden;
+}
+.inner-hero-inner {
+  max-width: 1140px; margin: 0 auto; position: relative; z-index: 1;
+  display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: end;
+}
+.inner-hero-breadcrumb {
+  font-family: var(--mono); font-size: 10px;
+  letter-spacing: 0.14em; text-transform: uppercase;
+  color: rgba(255,255,255,0.3); margin-bottom: 12px;
+  display: flex; align-items: center; gap: 8px;
+}
+.inner-hero-breadcrumb a { color: rgba(255,255,255,0.3); text-decoration: none; }
+.inner-hero-breadcrumb a:hover { color: rgba(255,255,255,0.6); }
+.inner-hero-breadcrumb span { color: rgba(255,255,255,0.15); }
+.inner-hero h1 {
+  font-family: var(--sans);
+  font-size: clamp(38px, 4.5vw, 60px);
+  font-weight: 600; line-height: 1.05;
+  color: #fff; letter-spacing: -0.025em;
+}
+.inner-hero h1 em { font-style: italic; color: var(--red); font-family: var(--serif); font-weight: 400; font-size: 1.05em; }
+.inner-hero-lead {
+  font-size: 17px; color: rgba(255,255,255,0.5);
+  font-weight: 300; line-height: 1.75;
+  border-left: 2px solid var(--red); padding-left: 20px;
+  align-self: end;
+}
+
+/* ─── ASSESSMENT TOOL ─────────────────────────────────────── */
+.assess-section {
+  background: var(--bg);
+  padding: 80px 40px;
+  min-height: 60vh;
+}
+.assess-inner {
+  max-width: 760px;
+  margin: 0 auto;
+}
+
+/* Progress bar */
+.assess-progress {
+  display: flex; align-items: center; gap: 16px;
+  margin-bottom: 48px;
+}
+.assess-progress-bar {
+  flex: 1; height: 4px;
+  background: var(--rule); border-radius: 2px;
+  overflow: hidden;
+}
+.assess-progress-fill {
+  height: 100%; background: var(--red);
+  border-radius: 2px;
+  transition: width 0.4s ease;
+  width: 0%;
+}
+.assess-progress-label {
+  font-family: var(--mono); font-size: 11px;
+  letter-spacing: 0.08em; color: var(--ink-3);
+  white-space: nowrap;
+}
+
+/* Step container */
+.assess-step {
+  display: none;
+}
+.assess-step.active {
+  display: block;
+}
+
+/* Step header */
+.step-eyebrow {
+  font-family: var(--mono); font-size: 11px;
+  letter-spacing: 0.16em; text-transform: uppercase;
+  color: var(--red); margin-bottom: 16px;
+}
+.step-title {
+  font-family: var(--sans);
+  font-size: clamp(24px, 3vw, 34px);
+  font-weight: 600; color: var(--ink);
+  line-height: 1.15; letter-spacing: -0.02em;
+  margin-bottom: 12px;
+}
+.step-desc {
+  font-size: 16px; color: var(--ink-2);
+  line-height: 1.7; font-weight: 300;
+  margin-bottom: 36px;
+  max-width: 600px;
+}
+
+/* Question card */
+.q-card {
+  background: var(--white);
+  border: 1px solid var(--rule);
+  border-radius: 4px;
+  padding: 28px 32px;
+  margin-bottom: 20px;
+}
+.q-label {
+  font-size: 15px; font-weight: 500;
+  color: var(--ink); line-height: 1.5;
+  margin-bottom: 20px;
+}
+.q-sublabel {
+  font-size: 13px; color: var(--ink-3);
+  line-height: 1.5; margin-top: 6px;
+  font-weight: 300;
+}
+
+/* Radio options */
+.q-options {
+  display: flex; flex-direction: column; gap: 8px;
+}
+.q-option {
+  display: flex; align-items: center; gap: 14px;
+  padding: 14px 18px;
+  border: 1px solid var(--rule);
+  border-radius: 4px;
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s;
+}
+.q-option:hover {
+  border-color: rgba(46,109,180,0.3);
+  background: rgba(46,109,180,0.03);
+}
+.q-option.selected {
+  border-color: var(--red);
+  background: var(--red-lt);
+}
+.q-option input { display: none; }
+.q-radio {
+  width: 18px; height: 18px;
+  border-radius: 50%; border: 2px solid var(--rule);
+  flex-shrink: 0; position: relative;
+  transition: border-color 0.2s;
+}
+.q-option.selected .q-radio {
+  border-color: var(--red);
+}
+.q-option.selected .q-radio::after {
+  content: '';
+  position: absolute;
+  top: 3px; left: 3px;
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--red);
+}
+.q-option-text {
+  font-size: 14px; color: var(--ink-2);
+  line-height: 1.4;
+}
+.q-option.selected .q-option-text {
+  color: var(--ink);
+  font-weight: 500;
+}
+
+/* Select dropdown */
+.q-select {
+  width: 100%;
+  padding: 14px 18px;
+  border: 1px solid var(--rule);
+  border-radius: 4px;
+  font-family: var(--sans);
+  font-size: 14px;
+  color: var(--ink);
+  background: var(--white);
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23999' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 16px center;
+}
+.q-select:focus {
+  outline: none;
+  border-color: var(--red);
+}
+
+/* Navigation buttons */
+.assess-nav {
+  display: flex; justify-content: space-between;
+  align-items: center;
+  margin-top: 40px;
+  padding-top: 32px;
+  border-top: 1px solid var(--rule);
+}
+.assess-btn {
+  font-family: var(--mono); font-size: 12px;
+  letter-spacing: 0.08em; text-transform: uppercase;
+  padding: 14px 32px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: opacity 0.2s, background 0.2s;
+  border: none;
+  text-decoration: none;
+}
+.assess-btn:hover { opacity: 0.85; }
+.assess-btn-back {
+  background: none;
+  color: var(--ink-3);
+  border: 1px solid var(--rule);
+}
+.assess-btn-back:hover {
+  background: var(--white);
+  color: var(--ink-2);
+}
+.assess-btn-next {
+  background: var(--red);
+  color: #fff;
+}
+.assess-btn-next:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+.assess-btn-next:disabled:hover {
+  opacity: 0.4;
+}
+
+/* ─── RESULTS ─────────────────────────────────────────────── */
+.results-section {
+  display: none;
+  background: var(--bg);
+  padding: 80px 40px;
+}
+.results-inner {
+  max-width: 900px;
+  margin: 0 auto;
+}
+.results-header {
+  text-align: center;
+  margin-bottom: 56px;
+}
+.results-header .step-eyebrow {
+  text-align: center;
+}
+.results-score-ring {
+  width: 160px; height: 160px;
+  margin: 0 auto 24px;
+  position: relative;
+}
+.results-score-ring svg {
+  width: 100%; height: 100%;
+  transform: rotate(-90deg);
+}
+.ring-bg {
+  fill: none;
+  stroke: var(--rule);
+  stroke-width: 8;
+}
+.ring-fill {
+  fill: none;
+  stroke: var(--red);
+  stroke-width: 8;
+  stroke-linecap: round;
+  stroke-dasharray: 408;
+  stroke-dashoffset: 408;
+  transition: stroke-dashoffset 1.5s ease;
+}
+.results-score-num {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  font-family: var(--sans);
+  font-size: 42px; font-weight: 600;
+  color: var(--ink);
+}
+.results-score-num span {
+  font-size: 20px; color: var(--ink-3);
+  font-weight: 400;
+}
+.results-classification {
+  font-family: var(--mono); font-size: 12px;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--ink-2); margin-bottom: 8px;
+}
+.results-summary {
+  font-size: 16px; color: var(--ink-2);
+  line-height: 1.7; font-weight: 300;
+  max-width: 560px; margin: 0 auto;
+}
+
+/* Requirement cards */
+.results-grid {
+  display: grid; grid-template-columns: 1fr 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 56px;
+}
+.result-card {
+  background: var(--white);
+  border: 1px solid var(--rule);
+  border-radius: 4px;
+  padding: 24px;
+  position: relative;
+  overflow: hidden;
+}
+.result-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+}
+.result-card.status-strong::before { background: #2D7A3A; }
+.result-card.status-partial::before { background: #C8861A; }
+.result-card.status-gap::before { background: #C8272D; }
+.result-card.status-na::before { background: var(--ink-3); }
+
+.result-card-id {
+  font-family: var(--mono); font-size: 11px;
+  letter-spacing: 0.1em; color: var(--ink-3);
+  margin-bottom: 8px;
+}
+.result-card-title {
+  font-size: 14px; font-weight: 600;
+  color: var(--ink); line-height: 1.3;
+  margin-bottom: 10px;
+}
+.result-card-status {
+  font-family: var(--mono); font-size: 10px;
+  letter-spacing: 0.08em; text-transform: uppercase;
+  padding: 4px 10px; border-radius: 2px;
+  display: inline-block;
+}
+.status-strong .result-card-status {
+  background: rgba(45,122,58,0.1); color: #2D7A3A;
+}
+.status-partial .result-card-status {
+  background: rgba(200,134,26,0.1); color: #C8861A;
+}
+.status-gap .result-card-status {
+  background: rgba(200,39,45,0.1); color: #C8272D;
+}
+.status-na .result-card-status {
+  background: rgba(0,0,0,0.04); color: var(--ink-3);
+}
+
+/* Key for results */
+.results-key {
+  display: flex; gap: 24px; justify-content: center;
+  margin-bottom: 40px; flex-wrap: wrap;
+}
+.results-key-item {
+  display: flex; align-items: center; gap: 8px;
+  font-family: var(--mono); font-size: 10px;
+  letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--ink-3);
+}
+.results-key-dot {
+  width: 10px; height: 3px; border-radius: 1px;
+}
+
+/* CTA band */
+.results-cta {
+  background: var(--ink);
+  border-radius: 6px;
+  padding: 48px;
+  text-align: center;
+}
+.results-cta h3 {
+  font-family: var(--sans);
+  font-size: 24px; font-weight: 600;
+  color: #fff; margin-bottom: 12px;
+}
+.results-cta p {
+  font-size: 15px; color: rgba(255,255,255,0.5);
+  line-height: 1.7; font-weight: 300;
+  margin-bottom: 28px;
+  max-width: 480px; margin-left: auto; margin-right: auto;
+}
+.results-cta-btn {
+  display: inline-block;
+  background: var(--red); color: #fff;
+  font-family: var(--mono); font-size: 12px;
+  letter-spacing: 0.08em; text-transform: uppercase;
+  padding: 16px 36px; border-radius: 4px;
+  text-decoration: none;
+  transition: opacity 0.2s;
+}
+.results-cta-btn:hover { opacity: 0.85; }
+
+/* Responsive */
+@media (max-width: 880px) {
+  .inner-hero-inner { grid-template-columns: 1fr !important; gap: 24px !important; }
+  .results-grid { grid-template-columns: 1fr 1fr; }
+  .q-card { padding: 24px; }
+}
+@media (max-width: 580px) {
+  .assess-section { padding: 48px 20px; }
+  .results-section { padding: 48px 20px; }
+  .results-grid { grid-template-columns: 1fr; }
+  .results-cta { padding: 32px 24px; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="global-nav">
+  <a href="/" class="gn-wordmark">
+    <span class="gn-text"><em>Safety Critical</em> Labs</span>
+  </a>
+  <button class="gn-hamburger" aria-label="Menu" aria-expanded="false">
+    <span></span><span></span><span></span>
+  </button>
+<ul class="gn-links">
+    <li><a href="/">Home</a></li>
+    <li class="gn-dropdown">
+      <button class="gn-dropdown-toggle has-active">Certification <span class="gn-dropdown-arrow"></span></button>
+      <ul class="gn-dropdown-menu">
+        <li><a href="/framework">Framework</a></li>
+        <li><a href="/process">Process</a></li>
+        <li><a href="/assess" class="active">Assess</a></li>
+      </ul>
+    </li>
+    <li><a href="/expertise">Expertise</a></li>
+    <li><a href="/markets">Markets</a></li>
+    <li><a href="/contact" class="gn-cta">Get Certified</a></li>
+  </ul>
+</nav>
+
+<!-- CREDIBILITY TICKER -->
+<div class="reg-ticker" id="reg-ticker" aria-label="Recent regulatory activity">
+  <div class="reg-ticker-track" id="reg-ticker-track"></div>
+</div>
+
+<div class="page-shell">
+
+<!-- HERO -->
+<div class="inner-hero">
+  <div class="inner-hero-inner">
+    <div>
+      <div class="inner-hero-breadcrumb">
+        <a href="/">Safety Critical Labs</a>
+        <span>/</span> Readiness Assessment
+      </div>
+      <h1>How ready is<br>your AI system<br>to <em>certify?</em></h1>
+    </div>
+    <p class="inner-hero-lead">
+      Answer questions across the nine SCL requirement areas to see where you stand. Takes about 5 minutes. No account required. Your answers stay in your browser.
+    </p>
+  </div>
+</div>
+
+<!-- ASSESSMENT TOOL -->
+<div class="assess-section" id="assessSection">
+  <div class="assess-inner">
+
+    <!-- Progress -->
+    <div class="assess-progress">
+      <div class="assess-progress-bar">
+        <div class="assess-progress-fill" id="progressFill"></div>
+      </div>
+      <div class="assess-progress-label" id="progressLabel">Step 1 of 4</div>
+    </div>
+
+    <!-- STEP 1: Classification -->
+    <div class="assess-step active" id="step-1">
+      <div class="step-eyebrow">Step 1 — Classification</div>
+      <div class="step-title">What kind of system are you building?</div>
+      <div class="step-desc">These questions help determine which classification tier applies and which requirement areas are relevant to your system.</div>
+
+      <div class="q-card">
+        <div class="q-label">What is the primary domain of your AI system?</div>
+        <select class="q-select" id="q-domain">
+          <option value="" disabled selected>Select your domain</option>
+          <option value="aviation">Aviation / Aerospace</option>
+          <option value="automotive">Automotive</option>
+          <option value="medical">Medical Devices</option>
+          <option value="defense">Defense / National Security</option>
+          <option value="industrial">Industrial / Manufacturing</option>
+          <option value="energy">Energy / Utilities</option>
+          <option value="other">Other safety-critical application</option>
+        </select>
+      </div>
+
+      <div class="q-card">
+        <div class="q-label">What is the worst-case consequence if your AI system fails or produces incorrect output?</div>
+        <div class="q-options" data-name="q-consequence">
+          <label class="q-option">
+            <input type="radio" name="q-consequence" value="3">
+            <span class="q-radio"></span>
+            <span class="q-option-text">Loss of life, loss of vehicle, or catastrophic failure with no recovery</span>
+          </label>
+          <label class="q-option">
+            <input type="radio" name="q-consequence" value="2">
+            <span class="q-radio"></span>
+            <span class="q-option-text">Mission failure or significant impact, but consequences are recoverable</span>
+          </label>
+          <label class="q-option">
+            <input type="radio" name="q-consequence" value="1">
+            <span class="q-radio"></span>
+            <span class="q-option-text">Operational degradation with workarounds available</span>
+          </label>
+        </div>
+      </div>
+
+      <div class="q-card">
+        <div class="q-label">Does a human operator have the ability to override AI decisions in real time?</div>
+        <div class="q-options" data-name="q-override">
+          <label class="q-option">
+            <input type="radio" name="q-override" value="yes">
+            <span class="q-radio"></span>
+            <span class="q-option-text">Yes — a human can always intervene before the AI acts</span>
+          </label>
+          <label class="q-option">
+            <input type="radio" name="q-override" value="partial">
+            <span class="q-radio"></span>
+            <span class="q-option-text">Partially — override exists but response time may be insufficient</span>
+          </label>
+          <label class="q-option">
+            <input type="radio" name="q-override" value="no">
+            <span class="q-radio"></span>
+            <span class="q-option-text">No — the AI operates autonomously with no real-time human override</span>
+          </label>
+        </div>
+      </div>
+
+      <div class="assess-nav">
+        <div></div>
+        <button class="assess-btn assess-btn-next" id="btn-next-1">Continue</button>
+      </div>
+    </div>
+
+    <!-- STEP 2: Data & Testing (AI-1, AI-2, AI-3) -->
+    <div class="assess-step" id="step-2">
+      <div class="step-eyebrow">Step 2 — Data &amp; Testing</div>
+      <div class="step-title">Training data and test coverage</div>
+      <div class="step-desc">These questions map to AI-1 (data partitioning), AI-2 (bias detection), and AI-3 (ML test coverage).</div>
+
+      <div class="q-card">
+        <div class="q-label">
+          AI-1: Data Partitioning
+          <div class="q-sublabel">Do you maintain documented, separated training, validation, and test datasets with recorded provenance?</div>
+        </div>
+        <div class="q-options" data-name="q-ai1">
+          <label class="q-option">
+            <input type="radio" name="q-ai1" value="3">
+            <span class="q-radio"></span>
+            <span class="q-option-text">Fully documented — partitions are enforced, provenance is tracked, and data lineage is auditable</span>
+          </label>
+          <label class="q-option">
+            <input type="radio" name="q-ai1" value="2">
+            <span class="q-radio"></span>
+            <span class="q-option-text">Partially — we separate data but documentation or provenance tracking is incomplete</span>
+          </label>
+          <label class="q-option">
+            <input type="radio" name="q-ai1" value="1">
+            <span class="q-radio"></span>
+            <span class="q-option-text">Minimal — no formal partitioning or documentation process</span>
+          </label>
+        </div>
+      </div>
+
+      <div class="q-card">
+        <div class="q-label">
+          AI-2: Bias Detection
+          <div class="q-sublabel">Have you tested for performance disparities across user classes, operational contexts, or demographic groups?</div>
+        </div>
+        <div class="q-options" data-name="q-ai2">
+          <label class="q-option">
+            <input type="radio" name="q-ai2" value="3">
+            <span class="q-radio"></span>
+            <span class="q-option-text">Yes — systematic bias testing with documented baselines and mitigation procedures</span>
+          </label>
+          <label class="q-option">
+            <input type="radio" name="q-ai2" value="2">
+            <span class="q-radio"></span>
+            <span class="q-option-text">Some testing done, but not comprehensive or not formally documented</span>
+          </label>
+          <label class="q-option">
+            <input type="radio" name="q-ai2" value="1">
+            <span class="q-radio"></span>
+            <span class="q-option-text">No formal bias testing has been conducted</span>
+          </label>
+        </div>
+      </div>
+
+      <div class="q-card">
+        <div class="q-label">
+          AI-3: ML Test Coverage
+          <div class="q-sublabel">Do you have a defined test matrix covering nominal performance, edge cases, failure mode injection, and distributional boundaries?</div>
+        </div>
+        <div class="q-options" data-name="q-ai3">
+          <label class="q-option">
+            <input type="radio" name="q-ai3" value="3">
+            <span class="q-radio"></span>
+            <span class="q-option-text">Comprehensive test matrix with documented coverage across all categories</span>
+          </label>
+          <label class="q-option">
+            <input type="radio" name="q-ai3" value="2">
+            <span class="q-radio"></span>
+            <span class="q-option-text">We test for accuracy and some edge cases, but don't have a formal coverage matrix</span>
+          </label>
+          <label class="q-option">
+            <input type="radio" name="q-ai3" value="1">
+            <span class="q-radio"></span>
+            <span class="q-option-text">Testing is ad hoc — no structured test matrix or coverage tracking</span>
+          </label>
+        </div>
+      </div>
+
+      <div class="assess-nav">
+        <button class="assess-btn assess-btn-back" id="btn-back-2">Back</button>
+        <button class="assess-btn assess-btn-next" id="btn-next-2">Continue</button>
+      </div>
+    </div>
+
+    <!-- STEP 3: Runtime Safety (AI-4, AI-5, AI-6) -->
+    <div class="assess-step" id="step-3">
+      <div class="step-eyebrow">Step 3 — Runtime Safety</div>
+      <div class="step-title">Monitoring, confidence, and edge detection</div>
+      <div class="step-desc">These questions map to AI-4 (continuous validation), AI-5 (hallucination prevention), and AI-6 (out-of-distribution detection).</div>
+
+      <div class="q-card">
+        <div class="q-label">
+          AI-4: Continuous Validation
+          <div class="q-sublabel">Do you monitor your model in production for performance drift with defined thresholds and revalidation triggers?</div>
+        </div>
+        <div class="q-options" data-name="q-ai4">
+          <label class="q-option">
+            <input type="radio" name="q-ai4" value="3">
+            <span class="q-radio"></span>
+            <span class="q-option-text">Yes — automated drift detection with documented thresholds, triggers, and escalation paths</span>
+          </label>
+          <label class="q-option">
+            <input type="radio" name="q-ai4" value="2">
+            <span class="q-radio"></span>
+            <span class="q-option-text">We monitor some metrics, but thresholds and triggers aren't formally defined</span>
+          </label>
+          <label class="q-option">
+            <input type="radio" name="q-ai4" value="1">
+            <span class="q-radio"></span>
+            <span class="q-option-text">No post-deployment monitoring in place</span>
+          </label>
+        </div>
+      </div>
+
+      <div class="q-card">
+        <div class="q-label">
+          AI-5: Hallucination Prevention
+          <div class="q-sublabel">Does your system bound output confidence and degrade gracefully to human override when confidence is low?</div>
+        </div>
+        <div class="q-options" data-name="q-ai5">
+          <label class="q-option">
+            <input type="radio" name="q-ai5" value="3">
+            <span class="q-radio"></span>
+            <span class="q-option-text">Yes — confidence thresholds defined, low-confidence outputs trigger human review or safe fallback</span>
+          </label>
+          <label class="q-option">
+            <input type="radio" name="q-ai5" value="2">
+            <span class="q-radio"></span>
+            <span class="q-option-text">We have confidence scores but no formal thresholds or degradation procedures</span>
+          </label>
+          <label class="q-option">
+            <input type="radio" name="q-ai5" value="1">
+            <span class="q-radio"></span>
+            <span class="q-option-text">No confidence bounding or graceful degradation in place</span>
+          </label>
+        </div>
+      </div>
+
+      <div class="q-card">
+        <div class="q-label">
+          AI-6: Out-of-Distribution Detection
+          <div class="q-sublabel">Can your system detect when it receives inputs outside its training distribution, and does it log and escalate these events?</div>
+        </div>
+        <div class="q-options" data-name="q-ai6">
+          <label class="q-option">
+            <input type="radio" name="q-ai6" value="3">
+            <span class="q-radio"></span>
+            <span class="q-option-text">Yes — OOD detection with logging, alerting, and defined escalation procedures</span>
+          </label>
+          <label class="q-option">
+            <input type="radio" name="q-ai6" value="2">
+            <span class="q-radio"></span>
+            <span class="q-option-text">Some detection capability, but logging or escalation is inconsistent</span>
+          </label>
+          <label class="q-option">
+            <input type="radio" name="q-ai6" value="1">
+            <span class="q-radio"></span>
+            <span class="q-option-text">No out-of-distribution detection implemented</span>
+          </label>
+        </div>
+      </div>
+
+      <div class="assess-nav">
+        <button class="assess-btn assess-btn-back" id="btn-back-3">Back</button>
+        <button class="assess-btn assess-btn-next" id="btn-next-3">Continue</button>
+      </div>
+    </div>
+
+    <!-- STEP 4: Advanced Requirements (AI-7, AI-8, AI-9) -->
+    <div class="assess-step" id="step-4">
+      <div class="step-eyebrow">Step 4 — Robustness &amp; Oversight</div>
+      <div class="step-title">Adversarial testing, explainability, and human teaming</div>
+      <div class="step-desc">These requirements apply based on your classification level. Answer based on your current state — if a requirement doesn't apply to your tier, you can select "Not applicable."</div>
+
+      <div class="q-card">
+        <div class="q-label">
+          AI-7: Adversarial Robustness
+          <div class="q-sublabel">Have you conducted adversarial testing with defined robustness bounds and behavioral requirements under adversarial inputs?</div>
+        </div>
+        <div class="q-options" data-name="q-ai7">
+          <label class="q-option">
+            <input type="radio" name="q-ai7" value="3">
+            <span class="q-radio"></span>
+            <span class="q-option-text">Yes — formal adversarial testing with documented bounds and specified behavioral requirements</span>
+          </label>
+          <label class="q-option">
+            <input type="radio" name="q-ai7" value="2">
+            <span class="q-radio"></span>
+            <span class="q-option-text">Some adversarial testing done, but not comprehensive or formally documented</span>
+          </label>
+          <label class="q-option">
+            <input type="radio" name="q-ai7" value="1">
+            <span class="q-radio"></span>
+            <span class="q-option-text">No adversarial testing conducted</span>
+          </label>
+          <label class="q-option">
+            <input type="radio" name="q-ai7" value="0">
+            <span class="q-radio"></span>
+            <span class="q-option-text">Not applicable to my system's classification</span>
+          </label>
+        </div>
+      </div>
+
+      <div class="q-card">
+        <div class="q-label">
+          AI-8: Explainability
+          <div class="q-sublabel">Can operators access decision reasoning with a traceable decision basis for your AI system's outputs?</div>
+        </div>
+        <div class="q-options" data-name="q-ai8">
+          <label class="q-option">
+            <input type="radio" name="q-ai8" value="3">
+            <span class="q-radio"></span>
+            <span class="q-option-text">Yes — operator-facing explanations with traceable decision basis for all critical outputs</span>
+          </label>
+          <label class="q-option">
+            <input type="radio" name="q-ai8" value="2">
+            <span class="q-radio"></span>
+            <span class="q-option-text">Some explainability, but not systematic or not available for all decision paths</span>
+          </label>
+          <label class="q-option">
+            <input type="radio" name="q-ai8" value="1">
+            <span class="q-radio"></span>
+            <span class="q-option-text">No explainability mechanisms in place</span>
+          </label>
+          <label class="q-option">
+            <input type="radio" name="q-ai8" value="0">
+            <span class="q-radio"></span>
+            <span class="q-option-text">Not applicable to my system's classification</span>
+          </label>
+        </div>
+      </div>
+
+      <div class="q-card">
+        <div class="q-label">
+          AI-9: Human-AI Teaming
+          <div class="q-sublabel">Are AI authority limits, human override requirements, and interaction audit trails formally defined?</div>
+        </div>
+        <div class="q-options" data-name="q-ai9">
+          <label class="q-option">
+            <input type="radio" name="q-ai9" value="3">
+            <span class="q-radio"></span>
+            <span class="q-option-text">Yes — defined authority limits, override procedures, trust calibration testing, and audit trails</span>
+          </label>
+          <label class="q-option">
+            <input type="radio" name="q-ai9" value="2">
+            <span class="q-radio"></span>
+            <span class="q-option-text">Some procedures exist, but not all components are formally defined or tested</span>
+          </label>
+          <label class="q-option">
+            <input type="radio" name="q-ai9" value="1">
+            <span class="q-radio"></span>
+            <span class="q-option-text">No formal human-AI teaming framework in place</span>
+          </label>
+          <label class="q-option">
+            <input type="radio" name="q-ai9" value="0">
+            <span class="q-radio"></span>
+            <span class="q-option-text">Not applicable to my system's classification</span>
+          </label>
+        </div>
+      </div>
+
+      <div class="assess-nav">
+        <button class="assess-btn assess-btn-back" id="btn-back-4">Back</button>
+        <button class="assess-btn assess-btn-next" id="btn-next-4">See Results</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- RESULTS -->
+<div class="results-section" id="resultsSection">
+  <div class="results-inner">
+
+    <div class="results-header">
+      <div class="step-eyebrow">Your Readiness Report</div>
+      <div class="results-score-ring">
+        <svg viewBox="0 0 140 140">
+          <circle class="ring-bg" cx="70" cy="70" r="65"/>
+          <circle class="ring-fill" id="ringFill" cx="70" cy="70" r="65"/>
+        </svg>
+        <div class="results-score-num" id="scoreNum">0<span>%</span></div>
+      </div>
+      <div class="results-classification" id="resultsClassification"></div>
+      <p class="results-summary" id="resultsSummary"></p>
+    </div>
+
+    <div class="results-key">
+      <div class="results-key-item"><span class="results-key-dot" style="background:#2D7A3A;"></span>Strong</div>
+      <div class="results-key-item"><span class="results-key-dot" style="background:#C8861A;"></span>Partial</div>
+      <div class="results-key-item"><span class="results-key-dot" style="background:#C8272D;"></span>Gap</div>
+      <div class="results-key-item"><span class="results-key-dot" style="background:var(--ink-3);"></span>Not applicable</div>
+    </div>
+
+    <div class="results-grid" id="resultsGrid"></div>
+
+    <div class="results-cta">
+      <h3>Ready to close the gaps?</h3>
+      <p>Start a conversation with the SCL team about your system, your timeline, and your regulatory context. Every engagement begins with a scoping call.</p>
+      <a href="/contact" class="results-cta-btn">Talk to SCL</a>
+    </div>
+
+  </div>
+</div>
+
+</div><!-- /page-shell -->
+
+<!-- FOOTER -->
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-top">
+      <a href="/" class="footer-seal-link">
+        <svg class="footer-seal" width="260" height="260" viewBox="0 0 200 200" fill="none">
+          <circle cx="100" cy="100" r="97" stroke="#4A6A8A" stroke-width=".6" opacity=".35"/>
+          <circle cx="100" cy="100" r="93" stroke="#4A6A8A" stroke-width="2.8" stroke-dasharray="3.2 3.8" opacity=".65"/>
+          <circle cx="100" cy="100" r="89" stroke="#4A6A8A" stroke-width=".8" opacity=".4"/>
+          <path id="ft-top-arc" d="M 21,100 A 79,79 0 0,1 179,100" fill="none"/>
+          <text font-family="'IBM Plex Mono',monospace" font-size="9.2" font-weight="500" letter-spacing="4.8" fill="#4A6A8A" opacity=".9">
+            <textPath href="#ft-top-arc" startOffset="50%" text-anchor="middle">SAFETY CRITICAL LABS</textPath>
+          </text>
+          <path id="ft-bot-arc" d="M 16,100 A 84,84 0 0,0 184,100" fill="none"/>
+          <text font-family="'IBM Plex Mono',monospace" font-size="8" font-weight="400" letter-spacing="3.2" fill="#4A6A8A" opacity=".7">
+            <textPath href="#ft-bot-arc" startOffset="50%" text-anchor="middle">AI CERTIFICATION AUTHORITY</textPath>
+          </text>
+          <text x="14" y="103" text-anchor="middle" font-size="5" fill="#B4822A" opacity=".8">&#x2726;</text>
+          <text x="186" y="103" text-anchor="middle" font-size="5" fill="#B4822A" opacity=".8">&#x2726;</text>
+          <circle cx="100" cy="100" r="73" stroke="#4A6A8A" stroke-width=".8" opacity=".3"/>
+          <circle cx="100" cy="100" r="70" stroke="#4A6A8A" stroke-width=".4" opacity=".25"/>
+          <circle cx="100" cy="100" r="67" fill="#162D4E" stroke="#4A6A8A" stroke-width=".5" opacity="1"/>
+          <circle cx="100" cy="100" r="50" stroke="#4A6A8A" stroke-width="1" fill="none" opacity=".45"/>
+          <circle cx="100" cy="100" r="38" stroke="#4A6A8A" stroke-width=".8" fill="none" opacity=".5"/>
+          <circle cx="100" cy="100" r="27" stroke="#4A6A8A" stroke-width=".7" fill="none" opacity=".55"/>
+          <line x1="100" y1="70" x2="100" y2="75.5" stroke="#4A6A8A" stroke-width="1.2" stroke-linecap="round" opacity=".6"/>
+          <line x1="100" y1="124.5" x2="100" y2="130" stroke="#4A6A8A" stroke-width="1.2" stroke-linecap="round" opacity=".6"/>
+          <line x1="70" y1="100" x2="75.5" y2="100" stroke="#4A6A8A" stroke-width="1.2" stroke-linecap="round" opacity=".6"/>
+          <line x1="124.5" y1="100" x2="130" y2="100" stroke="#4A6A8A" stroke-width="1.2" stroke-linecap="round" opacity=".6"/>
+          <line x1="78.8" y1="78.8" x2="82.7" y2="82.7" stroke="#4A6A8A" stroke-width="1" stroke-linecap="round" opacity=".45"/>
+          <line x1="117.3" y1="117.3" x2="121.2" y2="121.2" stroke="#4A6A8A" stroke-width="1" stroke-linecap="round" opacity=".45"/>
+          <line x1="121.2" y1="78.8" x2="117.3" y2="82.7" stroke="#4A6A8A" stroke-width="1" stroke-linecap="round" opacity=".45"/>
+          <line x1="82.7" y1="117.3" x2="78.8" y2="121.2" stroke="#4A6A8A" stroke-width="1" stroke-linecap="round" opacity=".45"/>
+          <circle cx="100" cy="100" r="17" fill="#0F2340" stroke="#B4822A" stroke-width="1.4"/>
+          <circle cx="100" cy="100" r="11" fill="#0F2340" stroke="#B4822A" stroke-width=".6" opacity=".6"/>
+          <line x1="86" y1="100" x2="114" y2="100" stroke="#2E6DB4" stroke-width="2.2" stroke-linecap="round"/>
+          <circle cx="100" cy="100" r="4.5" fill="#2E6DB4"/>
+          <text x="103" y="161" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="7" font-weight="500" letter-spacing="4" fill="#4A6A8A" opacity=".6">SCL</text>
+        </svg>
+      </a>
+      <div class="footer-content">
+        <div class="footer-nav-row">
+          <a href="/framework">Framework</a>
+          <a href="/process">Process</a>
+          <a href="/expertise">Expertise</a>
+          <a href="/markets">Markets</a>
+          <a href="/assess">Assess</a>
+          <a href="/contact">Contact</a>
+        </div>
+        <p class="footer-tagline">AI certification authority for safety-critical systems.<br>Formal determinations issued against a published, citable standard.</p>
+      </div>
+    </div>
+    <div class="footer-divider"></div>
+    <div class="footer-bottom">
+      <span class="footer-copyright">&copy; 2025 Safety Critical Labs. All rights reserved.</span>
+      <span class="footer-version">Framework v1.0.3</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* ─── ASSESSMENT ENGINE ───────────────────────────────────── */
+(function() {
+  'use strict';
+
+  var TOTAL_STEPS = 4;
+  var currentStep = 1;
+
+  var reqMeta = {
+    'ai1': { id: 'AI-1', title: 'Data partitioning & classification' },
+    'ai2': { id: 'AI-2', title: 'Bias detection & mitigation' },
+    'ai3': { id: 'AI-3', title: 'ML test coverage' },
+    'ai4': { id: 'AI-4', title: 'Continuous validation' },
+    'ai5': { id: 'AI-5', title: 'Hallucination prevention' },
+    'ai6': { id: 'AI-6', title: 'Out-of-distribution detection' },
+    'ai7': { id: 'AI-7', title: 'Adversarial robustness' },
+    'ai8': { id: 'AI-8', title: 'Explainability' },
+    'ai9': { id: 'AI-9', title: 'Human-AI teaming' }
+  };
+
+  /* ── Radio selection handling ─────────────────── */
+  document.querySelectorAll('.q-option').forEach(function(opt) {
+    opt.addEventListener('click', function() {
+      var input = this.querySelector('input');
+      if (!input) return;
+      input.checked = true;
+      var siblings = this.closest('.q-options').querySelectorAll('.q-option');
+      siblings.forEach(function(s) { s.classList.remove('selected'); });
+      this.classList.add('selected');
+    });
+  });
+
+  /* ── Progress bar ────────────────────────────── */
+  function updateProgress() {
+    var pct = ((currentStep - 1) / TOTAL_STEPS) * 100;
+    document.getElementById('progressFill').style.width = pct + '%';
+    document.getElementById('progressLabel').textContent = 'Step ' + currentStep + ' of ' + TOTAL_STEPS;
+  }
+
+  /* ── Step navigation ─────────────────────────── */
+  function showStep(n) {
+    document.querySelectorAll('.assess-step').forEach(function(s) { s.classList.remove('active'); });
+    var step = document.getElementById('step-' + n);
+    if (step) {
+      step.classList.add('active');
+      currentStep = n;
+      updateProgress();
+      window.scrollTo({ top: document.getElementById('assessSection').offsetTop - 20, behavior: 'smooth' });
+    }
+  }
+
+  /* ── Validation ──────────────────────────────── */
+  function validateStep(n) {
+    if (n === 1) {
+      var domain = document.getElementById('q-domain').value;
+      var consequence = document.querySelector('input[name="q-consequence"]:checked');
+      var override = document.querySelector('input[name="q-override"]:checked');
+      return domain && consequence && override;
+    }
+    if (n === 2) {
+      return document.querySelector('input[name="q-ai1"]:checked')
+        && document.querySelector('input[name="q-ai2"]:checked')
+        && document.querySelector('input[name="q-ai3"]:checked');
+    }
+    if (n === 3) {
+      return document.querySelector('input[name="q-ai4"]:checked')
+        && document.querySelector('input[name="q-ai5"]:checked')
+        && document.querySelector('input[name="q-ai6"]:checked');
+    }
+    if (n === 4) {
+      return document.querySelector('input[name="q-ai7"]:checked')
+        && document.querySelector('input[name="q-ai8"]:checked')
+        && document.querySelector('input[name="q-ai9"]:checked');
+    }
+    return false;
+  }
+
+  /* ── Determine classification ────────────────── */
+  function getClassification() {
+    var consequence = parseInt(document.querySelector('input[name="q-consequence"]:checked').value);
+    var override = document.querySelector('input[name="q-override"]:checked').value;
+
+    if (consequence === 3 || override === 'no') return { tier: 1, label: 'Safety-Critical', desc: 'Your system classification is Tier 1 — Safety-Critical. All nine requirement areas (AI-1 through AI-9) apply. Annual surveillance audits required.' };
+    if (consequence === 2 || override === 'partial') return { tier: 2, label: 'Mission-Critical', desc: 'Your system classification is Tier 2 — Mission-Critical. AI-1 through AI-6, AI-8, and AI-9 apply. AI-7 (adversarial robustness) may be tailored based on threat environment.' };
+    return { tier: 3, label: 'Mission Support', desc: 'Your system classification is Tier 3 — Mission Support. AI-1 through AI-6 apply. AI-8 and AI-9 may be scoped to your specific operational context.' };
+  }
+
+  /* ── Calculate results ───────────────────────── */
+  function calculateResults() {
+    var classification = getClassification();
+    var domain = document.getElementById('q-domain').value;
+    var scores = {};
+    var totalApplicable = 0;
+    var totalScore = 0;
+
+    ['ai1','ai2','ai3','ai4','ai5','ai6','ai7','ai8','ai9'].forEach(function(key) {
+      var input = document.querySelector('input[name="q-' + key + '"]:checked');
+      var val = input ? parseInt(input.value) : 0;
+
+      if (val === 0) {
+        scores[key] = { value: 0, status: 'na', label: 'Not applicable' };
+      } else {
+        totalApplicable++;
+        totalScore += val;
+        if (val === 3) {
+          scores[key] = { value: 3, status: 'strong', label: 'Strong' };
+        } else if (val === 2) {
+          scores[key] = { value: 2, status: 'partial', label: 'Partial' };
+        } else {
+          scores[key] = { value: 1, status: 'gap', label: 'Gap identified' };
+        }
+      }
+    });
+
+    var pct = totalApplicable > 0 ? Math.round((totalScore / (totalApplicable * 3)) * 100) : 0;
+
+    return {
+      classification: classification,
+      domain: domain,
+      scores: scores,
+      percentage: pct,
+      totalApplicable: totalApplicable
+    };
+  }
+
+  /* ── Render results ──────────────────────────── */
+  function showResults() {
+    var r = calculateResults();
+
+    // Hide assessment, show results
+    document.getElementById('assessSection').style.display = 'none';
+    document.getElementById('resultsSection').style.display = 'block';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+
+    // Classification label
+    document.getElementById('resultsClassification').textContent =
+      'Tier ' + r.classification.tier + ' — ' + r.classification.label;
+
+    // Summary
+    var gaps = [];
+    var strengths = [];
+    Object.keys(r.scores).forEach(function(key) {
+      if (r.scores[key].status === 'gap') gaps.push(reqMeta[key].id);
+      if (r.scores[key].status === 'strong') strengths.push(reqMeta[key].id);
+    });
+
+    var summary = r.classification.desc;
+    if (gaps.length > 0) {
+      summary += ' Key gaps identified in ' + gaps.join(', ') + '.';
+    }
+    if (strengths.length > 0 && gaps.length > 0) {
+      summary += ' Strongest areas: ' + strengths.join(', ') + '.';
+    }
+    document.getElementById('resultsSummary').textContent = summary;
+
+    // Score ring animation
+    var ringFill = document.getElementById('ringFill');
+    var circumference = 2 * Math.PI * 65;
+    ringFill.style.strokeDasharray = circumference;
+    ringFill.style.strokeDashoffset = circumference;
+
+    setTimeout(function() {
+      var offset = circumference - (r.percentage / 100) * circumference;
+      ringFill.style.strokeDashoffset = offset;
+
+      // Animate number
+      var numEl = document.getElementById('scoreNum');
+      var current = 0;
+      var target = r.percentage;
+      var step = Math.ceil(target / 40);
+      var counter = setInterval(function() {
+        current += step;
+        if (current >= target) {
+          current = target;
+          clearInterval(counter);
+        }
+        numEl.innerHTML = current + '<span>%</span>';
+      }, 30);
+    }, 200);
+
+    // Render requirement cards
+    var grid = document.getElementById('resultsGrid');
+    grid.innerHTML = '';
+    ['ai1','ai2','ai3','ai4','ai5','ai6','ai7','ai8','ai9'].forEach(function(key) {
+      var s = r.scores[key];
+      var m = reqMeta[key];
+      var card = document.createElement('div');
+      card.className = 'result-card status-' + s.status;
+      card.innerHTML =
+        '<div class="result-card-id">' + m.id + '</div>' +
+        '<div class="result-card-title">' + m.title + '</div>' +
+        '<div class="result-card-status">' + s.label + '</div>';
+      grid.appendChild(card);
+    });
+  }
+
+  /* ── Button wiring ───────────────────────────── */
+  document.getElementById('btn-next-1').addEventListener('click', function() {
+    if (validateStep(1)) showStep(2);
+  });
+  document.getElementById('btn-next-2').addEventListener('click', function() {
+    if (validateStep(2)) showStep(3);
+  });
+  document.getElementById('btn-next-3').addEventListener('click', function() {
+    if (validateStep(3)) showStep(4);
+  });
+  document.getElementById('btn-next-4').addEventListener('click', function() {
+    if (validateStep(4)) showResults();
+  });
+  document.getElementById('btn-back-2').addEventListener('click', function() { showStep(1); });
+  document.getElementById('btn-back-3').addEventListener('click', function() { showStep(2); });
+  document.getElementById('btn-back-4').addEventListener('click', function() { showStep(3); });
+
+  // Initialize
+  updateProgress();
+
+  // Mobile menu toggle
+  document.querySelector('.gn-hamburger').addEventListener('click', function() {
+    this.classList.toggle('open');
+    document.querySelector('.gn-links').classList.toggle('open');
+    this.setAttribute('aria-expanded', this.classList.contains('open'));
+    document.body.style.overflow = this.classList.contains('open') ? 'hidden' : '';
+
+/* Dropdown nav toggle */
+document.querySelectorAll(".gn-dropdown-toggle").forEach(function(btn) {
+  btn.addEventListener("click", function(e) {
+    e.stopPropagation();
+    var dd = this.closest(".gn-dropdown");
+    var isOpen = dd.classList.contains("open");
+    document.querySelectorAll(".gn-dropdown").forEach(function(d) { d.classList.remove("open"); });
+    if (!isOpen) dd.classList.add("open");
+  });
+});
+document.addEventListener("click", function() {
+  document.querySelectorAll(".gn-dropdown").forEach(function(d) { d.classList.remove("open"); });
+});
+  });
+})();
+</script>
+<script src="ticker.js"></script>
+</body>
+</html>

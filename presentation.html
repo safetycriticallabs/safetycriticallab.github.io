@@ -550,7 +550,7 @@ td:first-child { color: var(--ink); font-weight: 500; }
 .embed-sim-bar-fill { height: 100%; border-radius: 4px; transition: width 0.6s ease, background 0.6s ease; }
 .embed-sim-label { font-family: var(--mono); font-size: 11px; color: var(--ink3); }
 .embed-sim-reading { font-size: 13px; color: var(--ink); line-height: 1.6; margin-top: 8px; }
-.embed-scatter { width: 100%; aspect-ratio: 4/3; background: var(--bg); border-radius: 6px; border: 1px solid var(--rule); overflow: hidden; margin-bottom: 16px; }
+.embed-scatter { width: 100%; aspect-ratio: 1/1; background: var(--bg); border-radius: 6px; border: 1px solid var(--rule); overflow: hidden; margin-bottom: 16px; }
 
 /* Readiness Assessment Slide */
 .ra-flow { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-top: 24px; }
@@ -1860,16 +1860,16 @@ function tokenizeInput() {
 
 // Interactive: Embedding Comparison
 const embedVectors = {
-  'MONEY':   { v: [0.23,-0.87,0.12,0.45,-0.33,0.91], cluster: 'financial', x: 78, y: 12 },
-  'CASH':    { v: [0.21,-0.85,0.14,0.42,-0.31,0.89], cluster: 'financial', x: 88, y: 22 },
-  'FUNDS':   { v: [0.19,-0.82,0.16,0.40,-0.29,0.87], cluster: 'financial', x: 72, y: 26 },
-  'DOLLARS': { v: [0.22,-0.84,0.11,0.44,-0.32,0.90], cluster: 'financial', x: 84, y: 8 },
-  'PRIZE':   { v: [0.18,-0.60,0.30,0.35,-0.20,0.65], cluster: 'incentive', x: 65, y: 52 },
+  'MONEY':   { v: [0.23,-0.87,0.12,0.45,-0.33,0.91], cluster: 'financial', x: 72, y: 6 },
+  'CASH':    { v: [0.21,-0.85,0.14,0.42,-0.31,0.89], cluster: 'financial', x: 92, y: 20 },
+  'FUNDS':   { v: [0.19,-0.82,0.16,0.40,-0.29,0.87], cluster: 'financial', x: 64, y: 28 },
+  'DOLLARS': { v: [0.22,-0.84,0.11,0.44,-0.32,0.90], cluster: 'financial', x: 88, y: 4 },
+  'PRIZE':   { v: [0.18,-0.60,0.30,0.35,-0.20,0.65], cluster: 'incentive', x: 68, y: 54 },
   'FREE':    { v: [0.15,-0.55,0.33,0.30,-0.18,0.60], cluster: 'incentive', x: 54, y: 60 },
   'MEETING': { v: [-0.45,0.30,0.67,-0.12,0.55,-0.20], cluster: 'everyday', x: 16, y: 72 },
-  'LUNCH':   { v: [-0.42,0.35,0.70,-0.15,0.52,-0.18], cluster: 'everyday', x: 26, y: 84 },
-  'HELLO':   { v: [-0.50,0.40,0.60,-0.10,0.48,-0.25], cluster: 'everyday', x: 10, y: 58 },
-  'URGENT':  { v: [0.10,-0.70,0.25,0.50,-0.40,0.75], cluster: 'pressure', x: 50, y: 38 }
+  'LUNCH':   { v: [-0.42,0.35,0.70,-0.15,0.52,-0.18], cluster: 'everyday', x: 28, y: 86 },
+  'HELLO':   { v: [-0.50,0.40,0.60,-0.10,0.48,-0.25], cluster: 'everyday', x: 8, y: 56 },
+  'URGENT':  { v: [0.10,-0.70,0.25,0.50,-0.40,0.75], cluster: 'pressure', x: 48, y: 40 }
 };
 
 let embedSelections = [null, null];
@@ -1921,7 +1921,7 @@ function showEmbedComparison() {
   result.style.display = 'block';
   
   // Scatter plot SVG
-  const W = 440, H = 320, pad = 44;
+  const W = 480, H = 380, pad = 48;
   const clusterColors = { financial: '#C8272D', incentive: '#D4A017', everyday: '#2D8A56', pressure: '#6B4E0A' };
   
   let svg = '<div class="embed-scatter"><svg viewBox="0 0 ' + W + ' ' + H + '" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;">';
@@ -1944,7 +1944,7 @@ function showEmbedComparison() {
   const mx = (x1 + x2) / 2, my = (y1 + y2) / 2;
   const dx = x2 - x1, dy = y2 - y1;
   const len = Math.sqrt(dx*dx + dy*dy) || 1;
-  const offX = -(dy/len) * 16, offY = (dx/len) * 16;
+  const offX = -(dy/len) * 24, offY = (dx/len) * 24;
   const lx = mx + offX, ly = my + offY;
   svg += '<rect x="' + (lx - 20) + '" y="' + (ly - 9) + '" width="40" height="18" rx="3" fill="white" stroke="' + lineColor + '" stroke-width="0.5"/>';
   svg += '<text x="' + lx + '" y="' + (ly + 4) + '" text-anchor="middle" font-size="9" fill="' + lineColor + '" font-family="IBM Plex Mono,monospace" font-weight="600">' + pct + '%</text>';
@@ -1958,10 +1958,12 @@ function showEmbedComparison() {
   Object.entries(clusters).forEach(([name, pts]) => {
     const cx = pts.reduce((s, p) => s + p.x, 0) / pts.length;
     const cy = pts.reduce((s, p) => s + p.y, 0) / pts.length;
-    const rx = Math.max(30, ...pts.map(p => Math.abs(p.x - cx))) + 18;
-    const ry = Math.max(25, ...pts.map(p => Math.abs(p.y - cy))) + 18;
+    const rx = Math.max(28, ...pts.map(p => Math.abs(p.x - cx))) + 12;
+    const ry = Math.max(22, ...pts.map(p => Math.abs(p.y - cy))) + 12;
     svg += '<ellipse cx="' + cx + '" cy="' + cy + '" rx="' + rx + '" ry="' + ry + '" fill="' + clusterColors[name] + '" fill-opacity="0.06" stroke="' + clusterColors[name] + '" stroke-width="0.5" stroke-dasharray="3,3" opacity="0.8"/>';
-    svg += '<text x="' + cx + '" y="' + (cy + ry + 12) + '" text-anchor="middle" font-size="8" fill="' + clusterColors[name] + '" font-family="IBM Plex Mono,monospace" letter-spacing="0.05em" opacity="0.7">' + name.toUpperCase() + '</text>';
+    const labelBelow = name !== 'pressure';
+    const labelY = labelBelow ? cy + ry + 12 : cy - ry - 6;
+    svg += '<text x="' + cx + '" y="' + labelY + '" text-anchor="middle" font-size="8" fill="' + clusterColors[name] + '" font-family="IBM Plex Mono,monospace" letter-spacing="0.05em" opacity="0.7">' + name.toUpperCase() + '</text>';
   });
   
   // All dots - per-word label offsets to avoid overlap

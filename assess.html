@@ -8,7 +8,7 @@
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=DM+Mono:wght@300;400;500&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=IBM+Plex+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&family=Syne:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=IBM+Plex+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
@@ -1165,270 +1165,604 @@ document.addEventListener("click", function() {
 </script>
 
 <script>
-/* ─── PDF CERTIFICATE GENERATION ────────────────────────────── */
+/* ─── PDF ASSESSMENT REPORT GENERATION ──────────────────────── */
 (function() {
   'use strict';
 
-  var reqMeta = {
-    'ai1': { id: 'AI-1', title: 'Data Partitioning' },
-    'ai2': { id: 'AI-2', title: 'Bias Detection' },
-    'ai3': { id: 'AI-3', title: 'ML Test Coverage' },
-    'ai4': { id: 'AI-4', title: 'Continuous Validation' },
-    'ai5': { id: 'AI-5', title: 'Hallucination Prevention' },
-    'ai6': { id: 'AI-6', title: 'OOD Detection' },
-    'ai7': { id: 'AI-7', title: 'Adversarial Robustness' },
-    'ai8': { id: 'AI-8', title: 'Explainability' },
-    'ai9': { id: 'AI-9', title: 'Human-AI Teaming' }
+  /* ── Reference data ─────────────────────────────── */
+  var REQ_DATA = {
+    ai1: {
+      id: 'AI-1', title: 'Data Partitioning & Classification',
+      question: 'Do you maintain documented, separated training, validation, and test datasets with recorded provenance?',
+      context: 'AI-1 addresses the separation and documentation of datasets used to train, validate, and test AI models. In safety-critical environments, data provenance and lineage must be auditable to ensure training data has not been contaminated and that test datasets have not leaked into training sets. This requirement also covers CUI and ITAR classification inheritance through AI output channels.',
+      answers: {
+        '3': 'Fully documented \u2014 partitions are enforced, provenance is tracked, and data lineage is auditable',
+        '2': 'Partially \u2014 data is separated but documentation or provenance tracking is incomplete',
+        '1': 'Minimal \u2014 no formal partitioning or documentation process'
+      }
+    },
+    ai2: {
+      id: 'AI-2', title: 'Bias Detection & Mitigation',
+      question: 'Have you tested for performance disparities across user classes, operational contexts, or demographic groups?',
+      context: 'AI-2 requires baseline performance measurement across user classes and operational contexts. Bias-free training data requirements with verifiable inspection criteria are established. In regulated domains, undetected bias can result in discriminatory outcomes with direct safety or mission impact.',
+      answers: {
+        '3': 'Systematic bias testing with documented baselines and mitigation procedures',
+        '2': 'Some testing done, but not comprehensive or not formally documented',
+        '1': 'No formal bias testing has been conducted'
+      }
+    },
+    ai3: {
+      id: 'AI-3', title: 'ML Test Coverage',
+      question: 'Do you have a defined test matrix covering nominal performance, edge cases, failure mode injection, and distributional boundaries?',
+      context: 'AI-3 establishes the ML equivalent of code coverage. A defined test matrix must cover nominal performance, edge cases, failure mode injection, and distributional boundary testing. This requirement ensures that the system has been evaluated not just on average-case inputs but across the full range of conditions it may encounter in deployment.',
+      answers: {
+        '3': 'Comprehensive test matrix with documented coverage across all categories',
+        '2': 'Testing for accuracy and some edge cases, but no formal coverage matrix',
+        '1': 'Ad hoc testing \u2014 no structured test matrix or coverage tracking'
+      }
+    },
+    ai4: {
+      id: 'AI-4', title: 'Continuous Validation',
+      question: 'Do you monitor your model in production for performance drift with defined thresholds and revalidation triggers?',
+      context: 'AI-4 addresses post-deployment model monitoring. Performance drift must be detected using defined thresholds, with documented revalidation triggers and escalation paths. In safety-critical systems, undetected model degradation can introduce failures that were not present during initial testing.',
+      answers: {
+        '3': 'Automated drift detection with documented thresholds, triggers, and escalation paths',
+        '2': 'Some metrics monitored, but thresholds and triggers are not formally defined',
+        '1': 'No post-deployment monitoring in place'
+      }
+    },
+    ai5: {
+      id: 'AI-5', title: 'Hallucination Prevention',
+      question: 'Does your system bound output confidence and degrade gracefully to human override when confidence is low?',
+      context: 'AI-5 requires confidence bounding and graceful degradation. When model confidence falls below defined thresholds, the system must defer to human judgment or a safe fallback state. This is critical in domains where an incorrect output presented with high confidence can lead to catastrophic decisions.',
+      answers: {
+        '3': 'Confidence thresholds defined, low-confidence outputs trigger human review or safe fallback',
+        '2': 'Confidence scores available but no formal thresholds or degradation procedures',
+        '1': 'No confidence bounding or graceful degradation in place'
+      }
+    },
+    ai6: {
+      id: 'AI-6', title: 'Out-of-Distribution Detection',
+      question: 'Can your system detect when it receives inputs outside its training distribution, and does it log and escalate these events?',
+      context: 'AI-6 evaluates the system\'s ability to recognize inputs it was not designed to handle. OOD detection with logging, alerting, and defined escalation procedures ensures the system does not silently produce unreliable outputs when encountering novel or unexpected data.',
+      answers: {
+        '3': 'OOD detection with logging, alerting, and defined escalation procedures',
+        '2': 'Some detection capability, but logging or escalation is inconsistent',
+        '1': 'No out-of-distribution detection implemented'
+      }
+    },
+    ai7: {
+      id: 'AI-7', title: 'Adversarial Robustness',
+      question: 'Have you conducted adversarial testing with defined robustness bounds and behavioral requirements under adversarial inputs?',
+      context: 'AI-7 addresses formal adversarial testing. The system must have documented robustness bounds and specified behavioral requirements under adversarial conditions. This requirement is most critical for Safety-Critical (Tier 1) classifications where adversarial manipulation could have direct safety consequences.',
+      answers: {
+        '3': 'Formal adversarial testing with documented bounds and specified behavioral requirements',
+        '2': 'Some adversarial testing done, but not comprehensive or formally documented',
+        '1': 'No adversarial testing conducted',
+        '0': 'Not applicable to this system\'s classification'
+      }
+    },
+    ai8: {
+      id: 'AI-8', title: 'Explainability',
+      question: 'Can operators access decision reasoning with a traceable decision basis for your AI system\'s outputs?',
+      context: 'AI-8 requires operator-facing explainability. Operators must be able to access decision reasoning with a traceable decision basis. In regulated environments, the inability to explain why an AI system made a particular decision can render the system unsuitable for deployment.',
+      answers: {
+        '3': 'Operator-facing explanations with traceable decision basis for all critical outputs',
+        '2': 'Some explainability, but not systematic or not available for all decision paths',
+        '1': 'No explainability mechanisms in place',
+        '0': 'Not applicable to this system\'s classification'
+      }
+    },
+    ai9: {
+      id: 'AI-9', title: 'Human-AI Teaming',
+      question: 'Are AI authority limits, human override requirements, and interaction audit trails formally defined?',
+      context: 'AI-9 addresses the formal definition of human-AI interaction boundaries. Authority limits, override procedures, trust calibration testing, and audit trails must be established. This requirement ensures there is clarity about what the AI can decide autonomously versus what requires human authorization.',
+      answers: {
+        '3': 'Defined authority limits, override procedures, trust calibration testing, and audit trails',
+        '2': 'Some procedures exist, but not all components are formally defined or tested',
+        '1': 'No formal human-AI teaming framework in place',
+        '0': 'Not applicable to this system\'s classification'
+      }
+    }
   };
 
-  var domainLabels = {
-    'aviation': 'Aviation AI System',
-    'automotive': 'Automotive AI System',
-    'medical': 'Medical AI System',
-    'defense': 'Defense AI System',
-    'industrial': 'Industrial AI System',
-    'energy': 'Energy AI System',
-    'other': 'AI System'
+  var DOMAIN_LABELS = {
+    'aviation': 'Aviation / Aerospace',
+    'automotive': 'Automotive',
+    'medical': 'Medical Devices',
+    'defense': 'Defense / National Security',
+    'industrial': 'Industrial / Manufacturing',
+    'energy': 'Energy / Utilities',
+    'other': 'Other safety-critical application'
   };
 
-  var consequenceLabels = {
-    '1': { score: '1', desc: 'Operational degradation' },
-    '2': { score: '2', desc: 'Mission failure \u00b7 Recoverable' },
-    '3': { score: '3', desc: 'Loss of life \u00b7 Catastrophic' }
+  var CONSEQUENCE_LABELS = {
+    '3': 'Loss of life, loss of vehicle, or catastrophic failure with no recovery',
+    '2': 'Mission failure or significant impact, but consequences are recoverable',
+    '1': 'Operational degradation with workarounds available'
   };
 
-  var overrideLabels = {
-    'yes': 'Full human override capability',
-    'partial': 'Partial human override',
-    'no': 'No human override capability'
+  var OVERRIDE_LABELS = {
+    'yes': 'Yes \u2014 a human can always intervene before the AI acts',
+    'partial': 'Partially \u2014 override exists but response time may be insufficient',
+    'no': 'No \u2014 the AI operates autonomously with no real-time human override'
   };
 
-  function generateCertNumber() {
+  /* ── Helpers ────────────────────────────────────── */
+  function genReportId() {
     var now = new Date();
-    var yyyy = now.getFullYear();
     var hex = Math.random().toString(16).substr(2, 4).toUpperCase();
-    return 'SCL-SA-' + yyyy + '-' + hex;
+    return 'SCL-SA-' + now.getFullYear() + '-' + hex;
   }
 
-  function formatDate(d) {
+  function fmtDate(d) {
     var months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
     return d.getDate() + ' ' + months[d.getMonth()] + ' ' + d.getFullYear();
   }
 
-  function getStatusColor(status) {
-    if (status === 'strong') return '#2D7A3A';
-    if (status === 'partial') return '#C8861A';
-    if (status === 'gap') return '#C8272D';
-    return '#6b6b80';
+  function statusColor(status) {
+    if (status === 'strong') return [45, 122, 58];
+    if (status === 'partial') return [200, 134, 26];
+    if (status === 'gap') return [200, 39, 45];
+    return [107, 107, 128];
   }
 
-  function getStatusLabel(status) {
-    if (status === 'strong') return 'Strong';
-    if (status === 'partial') return 'Partial';
-    if (status === 'gap') return 'Gap identified';
-    return 'Not applicable';
+  function statusLabel(status) {
+    if (status === 'strong') return 'STRONG';
+    if (status === 'partial') return 'PARTIAL';
+    if (status === 'gap') return 'GAP IDENTIFIED';
+    return 'NOT APPLICABLE';
   }
 
-  /* Pre-render the SVG seal to an image (html2canvas cannot handle textPath) */
-  function renderSealImage(callback) {
-    var svgString = '<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 200 200" fill="none">'
-      + '<circle cx="100" cy="100" r="97" stroke="#1B3A6B" stroke-width="0.8" opacity="0.2"/>'
-      + '<circle cx="100" cy="100" r="93" stroke="#1B3A6B" stroke-width="4" stroke-dasharray="3.2 3.8" opacity="0.5"/>'
-      + '<circle cx="100" cy="100" r="89" stroke="#1B3A6B" stroke-width="1" opacity="0.25"/>'
-      + '<defs><path id="sa-top" d="M 21,100 A 79,79 0 0,1 179,100"/><path id="sa-bot" d="M 18,100 A 82,82 0 0,0 182,100"/></defs>'
-      + '<text font-family="monospace" font-size="9.5" font-weight="500" letter-spacing="4.8" fill="#1B3A6B" opacity="0.85"><textPath href="#sa-top" startOffset="50%" text-anchor="middle">SAFETY CRITICAL LABS</textPath></text>'
-      + '<text font-family="monospace" font-size="8" font-weight="400" letter-spacing="3" fill="#1B3A6B" opacity="0.6"><textPath href="#sa-bot" startOffset="50%" text-anchor="middle">AI CERTIFICATION AUTHORITY</textPath></text>'
-      + '<text x="14" y="104" text-anchor="middle" font-size="6" fill="#B4822A" opacity="0.8">&#10022;</text>'
-      + '<text x="186" y="104" text-anchor="middle" font-size="6" fill="#B4822A" opacity="0.8">&#10022;</text>'
-      + '<circle cx="100" cy="100" r="73" stroke="#1B3A6B" stroke-width="0.8" opacity="0.18"/>'
-      + '<circle cx="100" cy="100" r="70" stroke="#1B3A6B" stroke-width="0.4" opacity="0.12"/>'
-      + '<circle cx="100" cy="100" r="67" fill="#EEF3F9" stroke="#1B3A6B" stroke-width="0.5" opacity="0.9"/>'
-      + '<circle cx="100" cy="100" r="50" stroke="#1B3A6B" stroke-width="1" fill="none" opacity="0.3"/>'
-      + '<circle cx="100" cy="100" r="38" stroke="#1B3A6B" stroke-width="0.8" fill="none" opacity="0.35"/>'
-      + '<circle cx="100" cy="100" r="27" stroke="#1B3A6B" stroke-width="0.7" fill="none" opacity="0.4"/>'
-      + '<line x1="100" y1="70" x2="100" y2="75" stroke="#1B3A6B" stroke-width="1.2" stroke-linecap="round" opacity="0.45"/>'
-      + '<line x1="100" y1="125" x2="100" y2="130" stroke="#1B3A6B" stroke-width="1.2" stroke-linecap="round" opacity="0.45"/>'
-      + '<line x1="70" y1="100" x2="75" y2="100" stroke="#1B3A6B" stroke-width="1.2" stroke-linecap="round" opacity="0.45"/>'
-      + '<line x1="125" y1="100" x2="130" y2="100" stroke="#1B3A6B" stroke-width="1.2" stroke-linecap="round" opacity="0.45"/>'
-      + '<line x1="79" y1="79" x2="83" y2="83" stroke="#1B3A6B" stroke-width="1" stroke-linecap="round" opacity="0.3"/>'
-      + '<line x1="117" y1="117" x2="121" y2="121" stroke="#1B3A6B" stroke-width="1" stroke-linecap="round" opacity="0.3"/>'
-      + '<line x1="121" y1="79" x2="117" y2="83" stroke="#1B3A6B" stroke-width="1" stroke-linecap="round" opacity="0.3"/>'
-      + '<line x1="83" y1="117" x2="79" y2="121" stroke="#1B3A6B" stroke-width="1" stroke-linecap="round" opacity="0.3"/>'
-      + '<circle cx="100" cy="100" r="17" fill="#1B3A6B" stroke="#B4822A" stroke-width="1.5"/>'
-      + '<circle cx="100" cy="100" r="11" fill="#1B3A6B" stroke="#B4822A" stroke-width="0.6" opacity="0.4"/>'
-      + '<line x1="86" y1="100" x2="114" y2="100" stroke="#2E6DB4" stroke-width="2.5" stroke-linecap="round"/>'
-      + '<circle cx="100" cy="100" r="4.5" fill="#2E6DB4"/>'
-      + '</svg>';
-
-    var img = new Image();
-    img.onload = function() {
-      var canvas = document.createElement('canvas');
-      canvas.width = 400;
-      canvas.height = 400;
-      var ctx = canvas.getContext('2d');
-      ctx.drawImage(img, 0, 0, 400, 400);
-      callback(canvas.toDataURL('image/png'));
-    };
-    img.onerror = function() { callback(null); };
-    img.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svgString);
-  }
-
-  function populateCertificate() {
+  /* ── Gather assessment data ─────────────────────── */
+  function gatherData() {
     var domain = document.getElementById('q-domain').value;
     var consequence = document.querySelector('input[name="q-consequence"]:checked').value;
     var override = document.querySelector('input[name="q-override"]:checked').value;
+    var cq = parseInt(consequence);
 
     var classification;
-    var cq = parseInt(consequence);
     if (cq === 3 || override === 'no') {
-      classification = { tier: 1, label: 'Safety-Critical' };
+      classification = { tier: 1, label: 'Safety-Critical', desc: 'All nine requirement areas (AI-1 through AI-9) apply. Annual surveillance audits required.' };
     } else if (cq === 2 || override === 'partial') {
-      classification = { tier: 2, label: 'Mission-Critical' };
+      classification = { tier: 2, label: 'Mission-Critical', desc: 'AI-1 through AI-6, AI-8, and AI-9 apply. AI-7 (adversarial robustness) may be tailored based on threat environment.' };
     } else {
-      classification = { tier: 3, label: 'Mission Support' };
+      classification = { tier: 3, label: 'Mission Support', desc: 'AI-1 through AI-6 apply. AI-8 and AI-9 may be scoped to your specific operational context.' };
     }
 
     var scores = {};
     var totalApplicable = 0;
     var totalScore = 0;
-    ['ai1','ai2','ai3','ai4','ai5','ai6','ai7','ai8','ai9'].forEach(function(key) {
+    var keys = ['ai1','ai2','ai3','ai4','ai5','ai6','ai7','ai8','ai9'];
+    keys.forEach(function(key) {
       var input = document.querySelector('input[name="q-' + key + '"]:checked');
       var val = input ? parseInt(input.value) : 0;
       if (val === 0) {
-        scores[key] = { value: 0, status: 'na', label: 'Not applicable' };
+        scores[key] = { value: 0, status: 'na' };
       } else {
         totalApplicable++;
         totalScore += val;
-        if (val === 3) scores[key] = { value: 3, status: 'strong', label: 'Strong' };
-        else if (val === 2) scores[key] = { value: 2, status: 'partial', label: 'Partial' };
-        else scores[key] = { value: 1, status: 'gap', label: 'Gap identified' };
+        if (val === 3) scores[key] = { value: 3, status: 'strong' };
+        else if (val === 2) scores[key] = { value: 2, status: 'partial' };
+        else scores[key] = { value: 1, status: 'gap' };
       }
     });
 
     var pct = totalApplicable > 0 ? Math.round((totalScore / (totalApplicable * 3)) * 100) : 0;
-    var certNum = generateCertNumber();
-    var now = new Date();
 
-    // Populate certificate fields
-    document.getElementById('cert-number').textContent = certNum;
-    document.getElementById('cert-number-footer').textContent = certNum;
-    document.getElementById('cert-domain').textContent = domainLabels[domain] || 'AI System';
-    document.getElementById('cert-date-line').textContent = 'Self-Assessment \u00b7 ' + formatDate(now);
-    document.getElementById('cert-classification').textContent = 'Tier ' + classification.tier + ' \u2014 ' + classification.label;
-    document.getElementById('cert-score').textContent = pct + '%';
-    document.getElementById('cert-consequence').textContent = consequenceLabels[consequence].score;
-    document.getElementById('cert-consequence-desc').textContent = consequenceLabels[consequence].desc;
-    document.getElementById('cert-override').textContent = overrideLabels[override];
-    document.getElementById('cert-issued-date').textContent = 'Issued: ' + formatDate(now);
-
-    // Requirement tags
-    var tagsHtml = '';
-    ['ai1','ai2','ai3','ai4','ai5','ai6','ai7','ai8','ai9'].forEach(function(key) {
-      var s = scores[key];
-      var m = reqMeta[key];
-      var bg = getStatusColor(s.status);
-      var textColor = s.status === 'na' ? '#6b6b80' : '#ffffff';
-      var borderColor = s.status === 'na' ? '#c8c4b8' : bg;
-      tagsHtml += '<div style="font-family:\'DM Mono\',monospace;font-size:10px;font-weight:500;letter-spacing:0.1em;'
-        + 'color:' + textColor + ';border:1px solid ' + borderColor + ';padding:5px 10px;'
-        + 'background:' + (s.status === 'na' ? 'transparent' : bg) + ';">'
-        + m.id + ' ' + m.title + ' \u2014 ' + getStatusLabel(s.status) + '</div>';
-    });
-    document.getElementById('cert-req-tags').innerHTML = tagsHtml;
-
-    // Detailed findings
-    var detailsHtml = '';
-    var gaps = [];
-    var partials = [];
-    var strengths = [];
-    ['ai1','ai2','ai3','ai4','ai5','ai6','ai7','ai8','ai9'].forEach(function(key) {
-      var s = scores[key];
-      var m = reqMeta[key];
-      if (s.status === 'gap') gaps.push(m.id + ' ' + m.title);
-      if (s.status === 'partial') partials.push(m.id + ' ' + m.title);
-      if (s.status === 'strong') strengths.push(m.id + ' ' + m.title);
-    });
-
-    if (gaps.length > 0) {
-      detailsHtml += '<div style="margin-bottom:12px;"><strong style="font-weight:500;color:#C8272D;">Gaps identified:</strong> ' + gaps.join(', ') + '</div>';
-    }
-    if (partials.length > 0) {
-      detailsHtml += '<div style="margin-bottom:12px;"><strong style="font-weight:500;color:#C8861A;">Partial coverage:</strong> ' + partials.join(', ') + '</div>';
-    }
-    if (strengths.length > 0) {
-      detailsHtml += '<div style="margin-bottom:12px;"><strong style="font-weight:500;color:#2D7A3A;">Strong areas:</strong> ' + strengths.join(', ') + '</div>';
-    }
-    document.getElementById('cert-details').innerHTML = detailsHtml;
-
-    return certNum;
+    return {
+      domain: domain,
+      domainLabel: DOMAIN_LABELS[domain] || domain,
+      consequence: consequence,
+      consequenceLabel: CONSEQUENCE_LABELS[consequence],
+      override: override,
+      overrideLabel: OVERRIDE_LABELS[override],
+      classification: classification,
+      scores: scores,
+      percentage: pct,
+      totalApplicable: totalApplicable,
+      totalScore: totalScore
+    };
   }
 
-  function generatePDF() {
-    var btn = document.getElementById('downloadCertBtn');
+  /* ── PDF drawing helpers ────────────────────────── */
+  var INK = [10, 10, 15];
+  var INK_MID = [42, 42, 58];
+  var INK_LIGHT = [107, 107, 128];
+  var NAVY = [15, 35, 64];
+  var RULE = [216, 212, 200];
+  var BG_LIGHT = [247, 245, 240];
+  var WHITE = [255, 255, 255];
+  var GOLD = [139, 115, 64];
+
+  function checkPage(pdf, y, needed, margin, pageH) {
+    if (y + needed > pageH - margin) {
+      pdf.addPage();
+      return margin + 10;
+    }
+    return y;
+  }
+
+  function drawRule(pdf, x, y, w) {
+    pdf.setDrawColor(216, 212, 200);
+    pdf.setLineWidth(0.3);
+    pdf.line(x, y, x + w, y);
+  }
+
+  function wrapText(pdf, text, maxW) {
+    return pdf.splitTextToSize(text, maxW);
+  }
+
+  /* ── Build the PDF ──────────────────────────────── */
+  function generateReport() {
+    var btn = document.getElementById('downloadReportBtn');
     var originalText = btn.textContent;
     btn.textContent = 'Generating...';
     btn.disabled = true;
 
-    var certNum = populateCertificate();
+    var data = gatherData();
+    var reportId = genReportId();
+    var now = new Date();
 
-    // Pre-render the seal SVG to an image
-    renderSealImage(function(sealDataUrl) {
-      var sealContainer = document.getElementById('cert-seal-container');
-      if (sealDataUrl) {
-        sealContainer.innerHTML = '<img src="' + sealDataUrl + '" width="96" height="96" style="display:block;">';
+    try {
+      var jsPDF = window.jspdf.jsPDF;
+      var pdf = new jsPDF('p', 'mm', 'a4');
+
+      var PW = 210, PH = 297;
+      var ML = 24, MR = 24, MT = 24;
+      var CW = PW - ML - MR;
+      var y;
+
+      /* ─────────────────────────────────────────────
+         PAGE 1: Cover / Summary
+         ───────────────────────────────────────────── */
+
+      /* Dark header band */
+      pdf.setFillColor(15, 35, 64);
+      pdf.rect(0, 0, PW, 52, 'F');
+
+      /* Wordmark */
+      pdf.setFont('helvetica', 'bold');
+      pdf.setFontSize(10);
+      pdf.setTextColor(255, 255, 255);
+      pdf.text('SAFETY CRITICAL LABS', ML, 20);
+
+      /* Report ID */
+      pdf.setFont('courier', 'normal');
+      pdf.setFontSize(8);
+      pdf.setTextColor(180, 200, 220);
+      pdf.text('Report ' + reportId, PW - MR, 18, { align: 'right' });
+      pdf.text(fmtDate(now), PW - MR, 23, { align: 'right' });
+
+      /* Title */
+      pdf.setFont('helvetica', 'normal');
+      pdf.setFontSize(16);
+      pdf.setTextColor(255, 255, 255);
+      pdf.text('AI Readiness Assessment Report', ML, 38);
+
+      pdf.setFontSize(9);
+      pdf.setTextColor(180, 200, 220);
+      pdf.text('SCL AI Requirements Framework v1.0.3', ML, 46);
+
+      y = 66;
+
+      /* Preamble */
+      pdf.setFont('helvetica', 'normal');
+      pdf.setFontSize(9);
+      pdf.setTextColor(INK_MID[0], INK_MID[1], INK_MID[2]);
+      var preamble = 'This report documents the self-assessment responses submitted against the SCL AI Requirements Framework v1.0.3. It captures the respondent\u2019s evaluation of their AI system across nine requirement areas. This report has not been independently verified by Safety Critical Labs and does not constitute a formal certification or determination.';
+      var pLines = wrapText(pdf, preamble, CW);
+      pdf.text(pLines, ML, y);
+      y += pLines.length * 4.2 + 10;
+
+      /* ── System Overview box ── */
+      drawRule(pdf, ML, y, CW);
+      y += 8;
+
+      pdf.setFont('courier', 'bold');
+      pdf.setFontSize(8);
+      pdf.setTextColor(INK_LIGHT[0], INK_LIGHT[1], INK_LIGHT[2]);
+      pdf.text('SYSTEM OVERVIEW', ML, y);
+      y += 8;
+
+      var overviewItems = [
+        ['Domain', data.domainLabel],
+        ['Classification', 'Tier ' + data.classification.tier + ' \u2014 ' + data.classification.label],
+        ['Consequence Level', data.consequenceLabel],
+        ['Human Override', data.overrideLabel],
+        ['Overall Readiness', data.percentage + '%'],
+        ['Applicable Requirements', data.totalApplicable + ' of 9']
+      ];
+
+      overviewItems.forEach(function(item) {
+        pdf.setFont('courier', 'normal');
+        pdf.setFontSize(7.5);
+        pdf.setTextColor(INK_LIGHT[0], INK_LIGHT[1], INK_LIGHT[2]);
+        pdf.text(item[0].toUpperCase(), ML, y);
+
+        pdf.setFont('helvetica', 'normal');
+        pdf.setFontSize(10);
+        pdf.setTextColor(INK[0], INK[1], INK[2]);
+        pdf.text(item[1], ML + 52, y);
+        y += 7;
+      });
+
+      y += 4;
+
+      /* Classification detail */
+      pdf.setFont('helvetica', 'italic');
+      pdf.setFontSize(8.5);
+      pdf.setTextColor(INK_MID[0], INK_MID[1], INK_MID[2]);
+      var classLines = wrapText(pdf, data.classification.desc, CW);
+      pdf.text(classLines, ML, y);
+      y += classLines.length * 3.8 + 8;
+
+      drawRule(pdf, ML, y, CW);
+      y += 10;
+
+      /* ── Results Summary ── */
+      pdf.setFont('courier', 'bold');
+      pdf.setFontSize(8);
+      pdf.setTextColor(INK_LIGHT[0], INK_LIGHT[1], INK_LIGHT[2]);
+      pdf.text('RESULTS AT A GLANCE', ML, y);
+      y += 8;
+
+      var keys = ['ai1','ai2','ai3','ai4','ai5','ai6','ai7','ai8','ai9'];
+      keys.forEach(function(key) {
+        y = checkPage(pdf, y, 8, MT, PH);
+        var r = REQ_DATA[key];
+        var s = data.scores[key];
+        var sc = statusColor(s.status);
+        var sl = statusLabel(s.status);
+
+        /* Status dot */
+        pdf.setFillColor(sc[0], sc[1], sc[2]);
+        pdf.circle(ML + 2, y - 1.2, 1.5, 'F');
+
+        /* Requirement ID + Title */
+        pdf.setFont('helvetica', 'bold');
+        pdf.setFontSize(9);
+        pdf.setTextColor(INK[0], INK[1], INK[2]);
+        pdf.text(r.id + '  ' + r.title, ML + 7, y);
+
+        /* Status label */
+        pdf.setFont('courier', 'normal');
+        pdf.setFontSize(7.5);
+        pdf.setTextColor(sc[0], sc[1], sc[2]);
+        pdf.text(sl, PW - MR, y, { align: 'right' });
+
+        y += 7;
+      });
+
+      y += 6;
+
+      /* ── Readiness score bar ── */
+      y = checkPage(pdf, y, 16, MT, PH);
+      pdf.setFillColor(BG_LIGHT[0], BG_LIGHT[1], BG_LIGHT[2]);
+      pdf.roundedRect(ML, y, CW, 12, 2, 2, 'F');
+
+      var barW = (data.percentage / 100) * CW;
+      if (barW > 0) {
+        var barColor = data.percentage >= 70 ? [45,122,58] : data.percentage >= 40 ? [200,134,26] : [200,39,45];
+        pdf.setFillColor(barColor[0], barColor[1], barColor[2]);
+        pdf.roundedRect(ML, y, barW, 12, 2, 2, 'F');
       }
 
-      // Wait for fonts to load
-      document.fonts.ready.then(function() {
-        var container = document.getElementById('certContainer');
+      pdf.setFont('helvetica', 'bold');
+      pdf.setFontSize(10);
+      pdf.setTextColor(INK[0], INK[1], INK[2]);
+      pdf.text('Overall Readiness: ' + data.percentage + '%', ML + CW / 2, y + 8, { align: 'center' });
 
-        // Determine scale based on device
-        var scale = window.innerWidth < 768 ? 2 : 3;
+      y += 22;
 
-        html2canvas(container, {
-          scale: scale,
-          useCORS: true,
-          backgroundColor: '#faf9f6',
-          logging: false,
-          width: 860,
-          windowWidth: 860
-        }).then(function(canvas) {
-          var jsPDF = window.jspdf.jsPDF;
-          var pdf = new jsPDF('p', 'mm', 'a4');
+      /* ── Footer on page 1 ── */
+      pdf.setFont('courier', 'normal');
+      pdf.setFontSize(7);
+      pdf.setTextColor(INK_LIGHT[0], INK_LIGHT[1], INK_LIGHT[2]);
+      pdf.text('Safety Critical Labs \u00b7 safetycriticallabs.com \u00b7 Framework v1.0.3', ML, PH - 12);
+      pdf.text('Report ' + reportId + ' \u00b7 Page 1', PW - MR, PH - 12, { align: 'right' });
 
-          var pageWidth = 210;
-          var pageHeight = 297;
-          var margin = 10;
-          var contentWidth = pageWidth - (margin * 2);
+      /* ─────────────────────────────────────────────
+         PAGE 2+: Detailed Responses
+         ───────────────────────────────────────────── */
+      pdf.addPage();
+      var pageNum = 2;
 
-          var imgRatio = canvas.height / canvas.width;
-          var contentHeight = contentWidth * imgRatio;
+      /* Page header */
+      function drawPageHeader() {
+        pdf.setFillColor(15, 35, 64);
+        pdf.rect(0, 0, PW, 18, 'F');
+        pdf.setFont('helvetica', 'bold');
+        pdf.setFontSize(8);
+        pdf.setTextColor(255, 255, 255);
+        pdf.text('SAFETY CRITICAL LABS', ML, 12);
+        pdf.setFont('courier', 'normal');
+        pdf.setFontSize(7);
+        pdf.setTextColor(180, 200, 220);
+        pdf.text('Report ' + reportId, PW - MR, 12, { align: 'right' });
+      }
 
-          // If the content is taller than one page, scale to fit
-          if (contentHeight > pageHeight - (margin * 2)) {
-            contentHeight = pageHeight - (margin * 2);
-            contentWidth = contentHeight / imgRatio;
-            margin = (pageWidth - contentWidth) / 2;
-          }
+      function drawPageFooter() {
+        pdf.setFont('courier', 'normal');
+        pdf.setFontSize(7);
+        pdf.setTextColor(INK_LIGHT[0], INK_LIGHT[1], INK_LIGHT[2]);
+        pdf.text('Safety Critical Labs \u00b7 safetycriticallabs.com \u00b7 Framework v1.0.3', ML, PH - 12);
+        pdf.text('Report ' + reportId + ' \u00b7 Page ' + pageNum, PW - MR, PH - 12, { align: 'right' });
+      }
 
-          var imgData = canvas.toDataURL('image/jpeg', 0.95);
-          pdf.addImage(imgData, 'JPEG', margin, margin, contentWidth, contentHeight);
-          pdf.save('SCL-Assessment-' + certNum + '.pdf');
+      drawPageHeader();
+      y = 30;
 
-          btn.textContent = originalText;
-          btn.disabled = false;
-        }).catch(function(err) {
-          console.error('PDF generation failed:', err);
-          btn.textContent = originalText;
-          btn.disabled = false;
-          alert('PDF generation failed. Please try again.');
-        });
+      pdf.setFont('courier', 'bold');
+      pdf.setFontSize(8);
+      pdf.setTextColor(INK_LIGHT[0], INK_LIGHT[1], INK_LIGHT[2]);
+      pdf.text('DETAILED ASSESSMENT RESPONSES', ML, y);
+      y += 4;
+
+      pdf.setFont('helvetica', 'normal');
+      pdf.setFontSize(8);
+      pdf.setTextColor(INK_MID[0], INK_MID[1], INK_MID[2]);
+      pdf.text('Each section below shows the question asked, the response selected, and relevant SCL framework context.', ML, y);
+      y += 10;
+
+      keys.forEach(function(key) {
+        var r = REQ_DATA[key];
+        var s = data.scores[key];
+        var sc = statusColor(s.status);
+        var sl = statusLabel(s.status);
+        var selectedAnswer = r.answers[String(s.value)] || 'Not applicable to this system\'s classification';
+
+        /* Estimate space needed for this block */
+        var contextLines = wrapText(pdf, r.context, CW - 6);
+        var answerLines = wrapText(pdf, selectedAnswer, CW - 12);
+        var blockHeight = 52 + (contextLines.length * 3.5) + (answerLines.length * 3.5);
+
+        /* Check if we need a new page */
+        if (y + blockHeight > PH - 20) {
+          drawPageFooter();
+          pdf.addPage();
+          pageNum++;
+          drawPageHeader();
+          y = 30;
+        }
+
+        /* Status bar */
+        pdf.setFillColor(sc[0], sc[1], sc[2]);
+        pdf.rect(ML, y, CW, 1.2, 'F');
+        y += 5;
+
+        /* Requirement header row */
+        pdf.setFont('courier', 'bold');
+        pdf.setFontSize(9);
+        pdf.setTextColor(sc[0], sc[1], sc[2]);
+        pdf.text(r.id, ML, y);
+
+        pdf.setFont('helvetica', 'bold');
+        pdf.setFontSize(10);
+        pdf.setTextColor(INK[0], INK[1], INK[2]);
+        pdf.text(r.title, ML + 14, y);
+
+        pdf.setFont('courier', 'normal');
+        pdf.setFontSize(7.5);
+        pdf.setTextColor(sc[0], sc[1], sc[2]);
+        pdf.text(sl, PW - MR, y, { align: 'right' });
+        y += 7;
+
+        /* Question */
+        pdf.setFont('helvetica', 'italic');
+        pdf.setFontSize(8.5);
+        pdf.setTextColor(INK_MID[0], INK_MID[1], INK_MID[2]);
+        var qLines = wrapText(pdf, r.question, CW);
+        pdf.text(qLines, ML, y);
+        y += qLines.length * 3.8 + 5;
+
+        /* Selected response */
+        pdf.setFont('courier', 'bold');
+        pdf.setFontSize(7);
+        pdf.setTextColor(INK_LIGHT[0], INK_LIGHT[1], INK_LIGHT[2]);
+        pdf.text('SELECTED RESPONSE', ML + 4, y);
+        y += 4;
+
+        pdf.setFillColor(BG_LIGHT[0], BG_LIGHT[1], BG_LIGHT[2]);
+        pdf.roundedRect(ML, y - 2, CW, answerLines.length * 3.8 + 6, 1.5, 1.5, 'F');
+
+        /* Status indicator bar on left edge */
+        pdf.setFillColor(sc[0], sc[1], sc[2]);
+        pdf.rect(ML, y - 2, 1.2, answerLines.length * 3.8 + 6, 'F');
+
+        pdf.setFont('helvetica', 'normal');
+        pdf.setFontSize(9);
+        pdf.setTextColor(INK[0], INK[1], INK[2]);
+        pdf.text(answerLines, ML + 5, y + 2);
+        y += answerLines.length * 3.8 + 8;
+
+        /* Framework context */
+        pdf.setFont('courier', 'bold');
+        pdf.setFontSize(7);
+        pdf.setTextColor(GOLD[0], GOLD[1], GOLD[2]);
+        pdf.text('SCL FRAMEWORK CONTEXT', ML + 4, y);
+        y += 4;
+
+        pdf.setFont('helvetica', 'normal');
+        pdf.setFontSize(8);
+        pdf.setTextColor(INK_MID[0], INK_MID[1], INK_MID[2]);
+        pdf.text(contextLines, ML + 4, y);
+        y += contextLines.length * 3.5 + 10;
+
+        /* Separator */
+        drawRule(pdf, ML, y, CW);
+        y += 8;
       });
-    });
+
+      /* ─────────────────────────────────────────────
+         FINAL PAGE: Next Steps + Disclaimer
+         ───────────────────────────────────────────── */
+      if (y + 80 > PH - 20) {
+        drawPageFooter();
+        pdf.addPage();
+        pageNum++;
+        drawPageHeader();
+        y = 30;
+      }
+
+      drawRule(pdf, ML, y, CW);
+      y += 10;
+
+      pdf.setFont('courier', 'bold');
+      pdf.setFontSize(8);
+      pdf.setTextColor(INK_LIGHT[0], INK_LIGHT[1], INK_LIGHT[2]);
+      pdf.text('NEXT STEPS', ML, y);
+      y += 7;
+
+      pdf.setFont('helvetica', 'normal');
+      pdf.setFontSize(9);
+      pdf.setTextColor(INK[0], INK[1], INK[2]);
+
+      var steps = [
+        '1.  Review this report to understand where your system meets, partially meets, or falls short of each requirement area.',
+        '2.  Share this report with the SCL team at safetycriticallabs.com/contact to start a conversation about formal assessment.',
+        '3.  Reference Report ID ' + reportId + ' in your inquiry so the team can review your responses ahead of a scoping call.',
+        '4.  A scoping call will determine the assessment timeline, required evidence packages, and applicable domain-specific considerations.'
+      ];
+
+      steps.forEach(function(step) {
+        y = checkPage(pdf, y, 12, MT, PH);
+        var sLines = wrapText(pdf, step, CW - 4);
+        pdf.text(sLines, ML + 2, y);
+        y += sLines.length * 4 + 3;
+      });
+
+      y += 8;
+      drawRule(pdf, ML, y, CW);
+      y += 8;
+
+      /* Disclaimer */
+      pdf.setFont('helvetica', 'italic');
+      pdf.setFontSize(7.5);
+      pdf.setTextColor(INK_LIGHT[0], INK_LIGHT[1], INK_LIGHT[2]);
+      var disclaimer = 'This report reflects a self-assessment only. It does not constitute a formal certification, determination, or endorsement by Safety Critical Labs. The responses recorded herein have not been independently verified. To obtain a formal assessment against the SCL AI Requirements Framework, contact the SCL team. Safety Critical Labs \u00b7 DOI 10.5281/zenodo.19024421 \u00b7 Framework v1.0.3';
+      var dLines = wrapText(pdf, disclaimer, CW);
+      pdf.text(dLines, ML, y);
+
+      /* Final page footer */
+      drawPageFooter();
+
+      /* Save */
+      pdf.save('SCL-Assessment-Report-' + reportId + '.pdf');
+
+      btn.textContent = originalText;
+      btn.disabled = false;
+
+    } catch (err) {
+      console.error('PDF generation failed:', err);
+      btn.textContent = originalText;
+      btn.disabled = false;
+      alert('Report generation failed. Please try again.');
+    }
   }
 
-  // Wire up the download button
-  document.getElementById('downloadCertBtn').addEventListener('click', generatePDF);
+  /* Wire up the download button */
+  document.getElementById('downloadReportBtn').addEventListener('click', generateReport);
 
 })();
 </script>

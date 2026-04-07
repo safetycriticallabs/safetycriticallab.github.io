@@ -228,7 +228,7 @@
     <li><a href="/">Home</a></li>
     <li class="gn-dropdown">
       <button class="gn-dropdown-toggle has-active">Certification <span class="gn-dropdown-arrow"></span></button>
-      <ul class="gn-dropdown-menu">
+      <ul class="gn-dropdown-menu" style="display:none">
         <li><a href="/framework" class="active">Framework</a></li>
         <li><a href="/process">Process</a></li>
         <li><a href="/assess">Assess</a></li>
@@ -617,13 +617,25 @@ document.querySelectorAll(".gn-dropdown-toggle").forEach(function(btn) {
   btn.addEventListener("click", function(e) {
     e.stopPropagation();
     var dd = this.closest(".gn-dropdown");
+    var menu = dd.querySelector(".gn-dropdown-menu");
     var isOpen = dd.classList.contains("open");
-    document.querySelectorAll(".gn-dropdown").forEach(function(d) { d.classList.remove("open"); });
-    if (!isOpen) dd.classList.add("open");
+    document.querySelectorAll(".gn-dropdown").forEach(function(d) {
+      d.classList.remove("open");
+      var m = d.querySelector(".gn-dropdown-menu");
+      if (m) m.style.display = "none";
+    });
+    if (!isOpen) {
+      dd.classList.add("open");
+      menu.style.display = "block";
+    }
   });
 });
 document.addEventListener("click", function() {
-  document.querySelectorAll(".gn-dropdown").forEach(function(d) { d.classList.remove("open"); });
+  document.querySelectorAll(".gn-dropdown").forEach(function(d) {
+    d.classList.remove("open");
+    var m = d.querySelector(".gn-dropdown-menu");
+    if (m) m.style.display = "none";
+  });
 });
 });
 </script>

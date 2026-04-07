@@ -59,7 +59,7 @@ body {
   display: flex; gap: 4px; align-items: center;
   margin-left: 48px; list-style: none;
 }
-.gn-links li {
+.gn-links > li {
   display: flex; align-items: center;
 }
 

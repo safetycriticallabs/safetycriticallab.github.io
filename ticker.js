@@ -46,9 +46,12 @@
         + '</a><span class="reg-ticker-sep"></span>';
     }
     track.innerHTML = html + html;
-    /* Force animation restart */
+    /* Set speed based on content width: consistent 50px/s */
     track.classList.remove('scrolling');
     void track.offsetWidth;
+    var halfWidth = track.scrollWidth / 2;
+    var duration = halfWidth / 50;
+    track.style.animationDuration = duration + 's';
     track.classList.add('scrolling');
   }
 

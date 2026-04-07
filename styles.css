@@ -855,17 +855,11 @@ h2.section-title em { font-style: italic; color: var(--red); font-family: var(--
   position: relative;
 }
 .gn-dropdown-toggle {
-  font-family: var(--sans); font-size: 13px;
-  font-weight: 400;
-  color: rgba(250,250,248,0.7);
-  padding: 8px 14px; border-radius: 4px;
-  transition: color 0.25s;
-  letter-spacing: 0.01em;
-  cursor: pointer;
   display: flex; align-items: center; gap: 5px;
-  background: none; border: none;
+  cursor: pointer;
+  border: none; outline: none;
+  background: none;
 }
-.gn-dropdown-toggle:hover { color: var(--bg); }
 .gn-dropdown-toggle.has-active { color: var(--bg); font-weight: 500; }
 .gn-dropdown-arrow {
   width: 8px; height: 8px;

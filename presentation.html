@@ -1860,16 +1860,16 @@ function tokenizeInput() {
 
 // Interactive: Embedding Comparison
 const embedVectors = {
-  'MONEY':   { v: [0.23,-0.87,0.12,0.45,-0.33,0.91], cluster: 'financial', x: 75, y: 18 },
-  'CASH':    { v: [0.21,-0.85,0.14,0.42,-0.31,0.89], cluster: 'financial', x: 85, y: 32 },
-  'FUNDS':   { v: [0.19,-0.82,0.16,0.40,-0.29,0.87], cluster: 'financial', x: 68, y: 36 },
-  'DOLLARS': { v: [0.22,-0.84,0.11,0.44,-0.32,0.90], cluster: 'financial', x: 82, y: 14 },
-  'PRIZE':   { v: [0.18,-0.60,0.30,0.35,-0.20,0.65], cluster: 'incentive', x: 62, y: 58 },
-  'FREE':    { v: [0.15,-0.55,0.33,0.30,-0.18,0.60], cluster: 'incentive', x: 50, y: 64 },
-  'MEETING': { v: [-0.45,0.30,0.67,-0.12,0.55,-0.20], cluster: 'everyday', x: 18, y: 70 },
-  'LUNCH':   { v: [-0.42,0.35,0.70,-0.15,0.52,-0.18], cluster: 'everyday', x: 30, y: 82 },
-  'HELLO':   { v: [-0.50,0.40,0.60,-0.10,0.48,-0.25], cluster: 'everyday', x: 12, y: 56 },
-  'URGENT':  { v: [0.10,-0.70,0.25,0.50,-0.40,0.75], cluster: 'pressure', x: 55, y: 42 }
+  'MONEY':   { v: [0.23,-0.87,0.12,0.45,-0.33,0.91], cluster: 'financial', x: 76, y: 20 },
+  'CASH':    { v: [0.21,-0.85,0.14,0.42,-0.31,0.89], cluster: 'financial', x: 82, y: 30 },
+  'FUNDS':   { v: [0.19,-0.82,0.16,0.40,-0.29,0.87], cluster: 'financial', x: 70, y: 32 },
+  'DOLLARS': { v: [0.22,-0.84,0.11,0.44,-0.32,0.90], cluster: 'financial', x: 80, y: 16 },
+  'PRIZE':   { v: [0.18,-0.60,0.30,0.35,-0.20,0.65], cluster: 'incentive', x: 60, y: 56 },
+  'FREE':    { v: [0.15,-0.55,0.33,0.30,-0.18,0.60], cluster: 'incentive', x: 50, y: 62 },
+  'MEETING': { v: [-0.45,0.30,0.67,-0.12,0.55,-0.20], cluster: 'everyday', x: 20, y: 68 },
+  'LUNCH':   { v: [-0.42,0.35,0.70,-0.15,0.52,-0.18], cluster: 'everyday', x: 28, y: 78 },
+  'HELLO':   { v: [-0.50,0.40,0.60,-0.10,0.48,-0.25], cluster: 'everyday', x: 14, y: 56 },
+  'URGENT':  { v: [0.10,-0.70,0.25,0.50,-0.40,0.75], cluster: 'pressure', x: 56, y: 42 }
 };
 
 let embedSelections = [null, null];
@@ -1964,7 +1964,19 @@ function showEmbedComparison() {
     svg += '<text x="' + cx + '" y="' + (cy + ry + 12) + '" text-anchor="middle" font-size="8" fill="' + clusterColors[name] + '" font-family="IBM Plex Mono,monospace" letter-spacing="0.05em" opacity="0.7">' + name.toUpperCase() + '</text>';
   });
   
-  // All dots
+  // All dots - per-word label offsets to avoid overlap
+  const labelOffsets = {
+    'MONEY': { dx: 0, dy: -12, anchor: 'middle' },
+    'CASH': { dx: 10, dy: 4, anchor: 'start' },
+    'FUNDS': { dx: -10, dy: 4, anchor: 'end' },
+    'DOLLARS': { dx: 0, dy: -12, anchor: 'middle' },
+    'PRIZE': { dx: 10, dy: 4, anchor: 'start' },
+    'FREE': { dx: -10, dy: 4, anchor: 'end' },
+    'MEETING': { dx: 10, dy: 4, anchor: 'start' },
+    'LUNCH': { dx: 10, dy: 4, anchor: 'start' },
+    'HELLO': { dx: 10, dy: 4, anchor: 'start' },
+    'URGENT': { dx: 10, dy: 4, anchor: 'start' }
+  };
   Object.entries(embedVectors).forEach(([word, data]) => {
     const px = pad + data.x / 100 * (W - pad - 20);
     const py = 20 + data.y / 100 * (H - pad - 20);
@@ -1973,11 +1985,10 @@ function showEmbedComparison() {
     const fillColor = isSelected ? (word === w1 ? '#C8272D' : '#0F2340') : clusterColors[data.cluster];
     const opacity = isSelected ? 1 : 0.5;
     
-    // Place labels left for right-side words, above for selected
-    const onRight = data.x > 65;
-    const labelX = isSelected ? (onRight ? px - 8 : px + 8) : (onRight ? px - 8 : px + 8);
-    const labelAnchor = onRight ? 'end' : 'start';
-    const labelY = isSelected ? py - 10 : py + 4;
+    const lo = labelOffsets[word] || { dx: 10, dy: 4, anchor: 'start' };
+    const labelX = px + (isSelected ? lo.dx * 1.2 : lo.dx);
+    const labelY = py + (isSelected ? lo.dy * 1.2 : lo.dy);
+    const labelAnchor = lo.anchor;
     
     if (isSelected) {
       svg += '<circle cx="' + px + '" cy="' + py + '" r="' + (r + 4) + '" fill="' + fillColor + '" opacity="0.12"/>';

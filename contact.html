@@ -489,6 +489,7 @@ document.querySelector('.gn-hamburger').addEventListener('click', function() {
   document.querySelector('.gn-links').classList.toggle('open');
   this.setAttribute('aria-expanded', this.classList.contains('open'));
   document.body.style.overflow = this.classList.contains('open') ? 'hidden' : '';
+});
 
 /* Dropdown nav toggle */
 document.querySelectorAll(".gn-dropdown-toggle").forEach(function(btn) {
@@ -514,7 +515,6 @@ document.addEventListener("click", function() {
     var m = d.querySelector(".gn-dropdown-menu");
     if (m) m.style.display = "none";
   });
-});
 });
 </script>
 <script src="ticker.js"></script>

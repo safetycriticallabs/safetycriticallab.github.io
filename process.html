@@ -24,36 +24,8 @@
 
 /* PHASES */
 .phases-layout {
-  display: grid; grid-template-columns: 280px 1fr;
-  gap: 0; align-items: start;
+  display: block;
 }
-.phase-nav {
-  position: sticky; top: 72px;
-  padding-right: 40px;
-}
-.phase-nav-item {
-  display: flex; gap: 16px; align-items: flex-start;
-  padding: 16px 0;
-  border-left: 2px solid var(--rule);
-  padding-left: 20px; margin-left: 12px;
-  cursor: pointer; text-decoration: none;
-  transition: border-color 0.2s;
-}
-.phase-nav-item:hover { border-color: var(--red); }
-.phase-nav-item.selected { border-color: var(--red); }
-.pni-num {
-  font-family: var(--mono); font-size: 11px;
-  color: var(--ink-3); flex-shrink: 0; padding-top: 1px;
-  transition: color 0.2s;
-}
-.phase-nav-item.selected .pni-num,
-.phase-nav-item:hover .pni-num { color: var(--red); }
-.pni-title {
-  font-size: 14px; font-weight: 500; color: var(--ink-2); line-height: 1.3;
-  transition: color 0.2s;
-}
-.phase-nav-item.selected .pni-title,
-.phase-nav-item:hover .pni-title { color: var(--ink); }
 
 .phases-detail { display: flex; flex-direction: column; gap: 0; }
 .phase-block { padding: 48px 0; border-top: 1px solid var(--rule); }
@@ -259,8 +231,6 @@
   .inner-hero { padding: 60px 24px 48px; }
   .inner-hero-inner { grid-template-columns: 1fr; gap: 24px; }
   .page-section { padding: 56px 24px; }
-  .phases-layout { grid-template-columns: 1fr; }
-  .phase-nav { display: none; }
   .timeline-section { padding: 60px 24px; }
   .timeline-grid { grid-template-columns: 1fr 1fr; }
   .outputs-section { padding: 60px 24px; }
@@ -326,25 +296,6 @@
   <div class="section-inner">
     <div class="section-eyebrow">Four phases</div>
     <div class="phases-layout">
-      <div class="phase-nav">
-        <a href="#phase1" class="phase-nav-item selected">
-          <span class="pni-num">01</span>
-          <span class="pni-title">Applicability determination</span>
-        </a>
-        <a href="#phase2" class="phase-nav-item">
-          <span class="pni-num">02</span>
-          <span class="pni-title">Evidence package review</span>
-        </a>
-        <a href="#phase3" class="phase-nav-item">
-          <span class="pni-num">03</span>
-          <span class="pni-title">Technical assessment</span>
-        </a>
-        <a href="#phase4" class="phase-nav-item">
-          <span class="pni-num">04</span>
-          <span class="pni-title">Certificate issuance</span>
-        </a>
-      </div>
-
       <div class="phases-detail">
 
         <!-- PHASE 1 -->
@@ -768,31 +719,6 @@ gsap.utils.toArray('.slide-right').forEach(function(el) {
   );
 });
 
-const phaseLinks = document.querySelectorAll('.phase-nav-item');
-const phaseBlocks = document.querySelectorAll('.phase-block');
-
-function setActivePhase(id) {
-  phaseLinks.forEach(l => {
-    l.classList.toggle('selected', l.getAttribute('href') === '#' + id);
-  });
-}
-
-const phaseObserver = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      setActivePhase(entry.target.id);
-    }
-  });
-}, { rootMargin: '-20% 0px -60% 0px', threshold: 0 });
-
-phaseBlocks.forEach(block => phaseObserver.observe(block));
-
-phaseLinks.forEach(link => {
-  link.addEventListener('click', () => {
-    phaseLinks.forEach(l => l.classList.remove('selected'));
-    link.classList.add('selected');
-  });
-});
 
 // Scale certificate preview iframe to fit container
 function scaleCertPreview() {

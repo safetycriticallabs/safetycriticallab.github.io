@@ -855,19 +855,21 @@ h2.section-title em { font-style: italic; color: var(--red); font-family: var(--
   position: relative;
 }
 .gn-dropdown-toggle {
-  display: flex; align-items: center; gap: 5px;
+  display: inline-flex; align-items: center; gap: 5px;
   cursor: pointer;
   border: none; outline: none;
   background: none;
+  vertical-align: middle;
 }
 .gn-dropdown-toggle.has-active { color: var(--bg); font-weight: 500; }
 .gn-dropdown-arrow {
-  width: 8px; height: 8px;
+  width: 6px; height: 6px;
   display: inline-block;
   border-right: 1.5px solid currentColor;
   border-bottom: 1.5px solid currentColor;
   transform: rotate(45deg);
-  margin-top: -3px;
+  vertical-align: middle;
+  margin-top: -2px;
   transition: transform 0.25s;
 }
 .gn-dropdown.open .gn-dropdown-arrow {

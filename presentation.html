@@ -1860,16 +1860,16 @@ function tokenizeInput() {
 
 // Interactive: Embedding Comparison
 const embedVectors = {
-  'MONEY':   { v: [0.23,-0.87,0.12,0.45,-0.33,0.91], cluster: 'financial', x: 72, y: 28 },
-  'CASH':    { v: [0.21,-0.85,0.14,0.42,-0.31,0.89], cluster: 'financial', x: 78, y: 32 },
-  'FUNDS':   { v: [0.19,-0.82,0.16,0.40,-0.29,0.87], cluster: 'financial', x: 68, y: 35 },
-  'DOLLARS': { v: [0.22,-0.84,0.11,0.44,-0.32,0.90], cluster: 'financial', x: 75, y: 24 },
-  'PRIZE':   { v: [0.18,-0.60,0.30,0.35,-0.20,0.65], cluster: 'incentive', x: 58, y: 52 },
-  'FREE':    { v: [0.15,-0.55,0.33,0.30,-0.18,0.60], cluster: 'incentive', x: 52, y: 56 },
-  'MEETING': { v: [-0.45,0.30,0.67,-0.12,0.55,-0.20], cluster: 'everyday', x: 22, y: 68 },
-  'LUNCH':   { v: [-0.42,0.35,0.70,-0.15,0.52,-0.18], cluster: 'everyday', x: 28, y: 74 },
-  'HELLO':   { v: [-0.50,0.40,0.60,-0.10,0.48,-0.25], cluster: 'everyday', x: 18, y: 62 },
-  'URGENT':  { v: [0.10,-0.70,0.25,0.50,-0.40,0.75], cluster: 'pressure', x: 62, y: 42 }
+  'MONEY':   { v: [0.23,-0.87,0.12,0.45,-0.33,0.91], cluster: 'financial', x: 75, y: 18 },
+  'CASH':    { v: [0.21,-0.85,0.14,0.42,-0.31,0.89], cluster: 'financial', x: 85, y: 32 },
+  'FUNDS':   { v: [0.19,-0.82,0.16,0.40,-0.29,0.87], cluster: 'financial', x: 68, y: 36 },
+  'DOLLARS': { v: [0.22,-0.84,0.11,0.44,-0.32,0.90], cluster: 'financial', x: 82, y: 14 },
+  'PRIZE':   { v: [0.18,-0.60,0.30,0.35,-0.20,0.65], cluster: 'incentive', x: 62, y: 58 },
+  'FREE':    { v: [0.15,-0.55,0.33,0.30,-0.18,0.60], cluster: 'incentive', x: 50, y: 64 },
+  'MEETING': { v: [-0.45,0.30,0.67,-0.12,0.55,-0.20], cluster: 'everyday', x: 18, y: 70 },
+  'LUNCH':   { v: [-0.42,0.35,0.70,-0.15,0.52,-0.18], cluster: 'everyday', x: 30, y: 82 },
+  'HELLO':   { v: [-0.50,0.40,0.60,-0.10,0.48,-0.25], cluster: 'everyday', x: 12, y: 56 },
+  'URGENT':  { v: [0.10,-0.70,0.25,0.50,-0.40,0.75], cluster: 'pressure', x: 55, y: 42 }
 };
 
 let embedSelections = [null, null];
@@ -1921,7 +1921,7 @@ function showEmbedComparison() {
   result.style.display = 'block';
   
   // Scatter plot SVG
-  const W = 400, H = 300, pad = 40;
+  const W = 440, H = 320, pad = 44;
   const clusterColors = { financial: '#C8272D', incentive: '#D4A017', everyday: '#2D8A56', pressure: '#6B4E0A' };
   
   let svg = '<div class="embed-scatter"><svg viewBox="0 0 ' + W + ' ' + H + '" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;">';
@@ -1940,10 +1940,14 @@ function showEmbedComparison() {
   const lineColor = pct > 75 ? '#C8272D' : pct > 40 ? '#D4A017' : '#2D8A56';
   svg += '<line x1="' + x1 + '" y1="' + y1 + '" x2="' + x2 + '" y2="' + y2 + '" stroke="' + lineColor + '" stroke-width="1.5" stroke-dasharray="4,3" opacity="0.6"/>';
   
-  // Distance label at midpoint
+  // Distance label at midpoint, offset perpendicular to line
   const mx = (x1 + x2) / 2, my = (y1 + y2) / 2;
-  svg += '<rect x="' + (mx - 18) + '" y="' + (my - 8) + '" width="36" height="16" rx="3" fill="white" stroke="' + lineColor + '" stroke-width="0.5"/>';
-  svg += '<text x="' + mx + '" y="' + (my + 3) + '" text-anchor="middle" font-size="8" fill="' + lineColor + '" font-family="IBM Plex Mono,monospace" font-weight="600">' + pct + '%</text>';
+  const dx = x2 - x1, dy = y2 - y1;
+  const len = Math.sqrt(dx*dx + dy*dy) || 1;
+  const offX = -(dy/len) * 16, offY = (dx/len) * 16;
+  const lx = mx + offX, ly = my + offY;
+  svg += '<rect x="' + (lx - 20) + '" y="' + (ly - 9) + '" width="40" height="18" rx="3" fill="white" stroke="' + lineColor + '" stroke-width="0.5"/>';
+  svg += '<text x="' + lx + '" y="' + (ly + 4) + '" text-anchor="middle" font-size="9" fill="' + lineColor + '" font-family="IBM Plex Mono,monospace" font-weight="600">' + pct + '%</text>';
   
   // Cluster regions (subtle ellipses)
   const clusters = {};
@@ -1969,11 +1973,17 @@ function showEmbedComparison() {
     const fillColor = isSelected ? (word === w1 ? '#C8272D' : '#0F2340') : clusterColors[data.cluster];
     const opacity = isSelected ? 1 : 0.5;
     
+    // Place labels left for right-side words, above for selected
+    const onRight = data.x > 65;
+    const labelX = isSelected ? (onRight ? px - 8 : px + 8) : (onRight ? px - 8 : px + 8);
+    const labelAnchor = onRight ? 'end' : 'start';
+    const labelY = isSelected ? py - 10 : py + 4;
+    
     if (isSelected) {
       svg += '<circle cx="' + px + '" cy="' + py + '" r="' + (r + 4) + '" fill="' + fillColor + '" opacity="0.12"/>';
     }
     svg += '<circle cx="' + px + '" cy="' + py + '" r="' + r + '" fill="' + fillColor + '" opacity="' + opacity + '"/>';
-    svg += '<text x="' + (px + 8) + '" y="' + (py + (isSelected ? -8 : 3)) + '" font-size="' + (isSelected ? '10' : '8') + '" fill="' + fillColor + '" font-family="DM Sans,sans-serif" font-weight="' + (isSelected ? '600' : '400') + '" opacity="' + (isSelected ? 1 : 0.6) + '">' + word + '</text>';
+    svg += '<text x="' + labelX + '" y="' + labelY + '" text-anchor="' + labelAnchor + '" font-size="' + (isSelected ? '10' : '8') + '" fill="' + fillColor + '" font-family="DM Sans,sans-serif" font-weight="' + (isSelected ? '600' : '400') + '" opacity="' + (isSelected ? 1 : 0.6) + '">' + word + '</text>';
   });
   
   svg += '</svg></div>';

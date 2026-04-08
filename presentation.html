@@ -675,7 +675,7 @@ const sections = {
   "why-different": {
     group: "Foundation", title: "Where Intent Goes", type: "ml-walkthrough",
     data: {
-      steps: ["The Developer's Intent", "Where Intent Lives", "The Data", "Tokenization", "Embedding", "The Loss Function", "Training", "The Result", "The Verification Question", "The Certification Gap"]
+      steps: ["The Spam Filter", "Where Intent Lives", "The Data", "Tokenization", "Embedding", "The Loss Function", "Training", "The Result", "The Verification Question", "The Certification Gap"]
     }
   },
   "two-paths": {
@@ -1318,6 +1318,8 @@ function renderWTIntent() {
   return '<div class="wt-step active">' +
     '<div class="wt-title">Every system starts with intent</div>' +
     '<div class="wt-text">A developer looks at a problem and says: <strong>I need to build a spam filter.</strong> Emails come in, the system decides spam or not spam. The intent is clear. The question is what happens to that intent next.</div>' +
+
+    // Two approaches
     '<div class="wt-compare">' +
       '<div class="wt-compare-col trad">' +
         '<div class="wt-compare-label">Traditional Approach</div>' +
@@ -1328,6 +1330,49 @@ function renderWTIntent() {
         '<div class="wt-compare-text">"My intent is to catch spam. Let me define what \'wrong\' means and show the system examples until it figures out the rest."</div>' +
       '</div>' +
     '</div>' +
+
+    // The spam filter as a model
+    '<div class="wt-panel" style="margin-top:16px;">' +
+      '<div class="wt-panel-label">What is the developer building?</div>' +
+      '<div class="wt-text" style="margin-bottom:12px;">In both approaches, the result is the same kind of system: a <strong>binary classifier</strong>. That means one input goes in and one of two possible answers comes out. The email is either spam or it is not. There is no middle ground. The entire question is how the system arrives at that answer.</div>' +
+
+      // Diagram
+      '<svg viewBox="0 0 700 160" style="width:100%;max-width:700px;display:block;margin:0 auto;" xmlns="http://www.w3.org/2000/svg">' +
+        // Email input
+        '<rect x="20" y="50" width="120" height="60" rx="4" fill="var(--bg)" stroke="var(--rule)" stroke-width="1.5"/>' +
+        '<text x="80" y="75" text-anchor="middle" font-family="var(--mono)" font-size="9" letter-spacing="0.08em" fill="var(--ink3)">INPUT</text>' +
+        '<text x="80" y="95" text-anchor="middle" font-family="var(--sans)" font-size="13" font-weight="500" fill="var(--ink)">Incoming Email</text>' +
+
+        // Arrow to model
+        '<line x1="140" y1="80" x2="230" y2="80" stroke="var(--rule)" stroke-width="1.5"/>' +
+        '<polygon points="228,75 238,80 228,85" fill="var(--rule)"/>' +
+
+        // Model box
+        '<rect x="240" y="30" width="180" height="100" rx="6" fill="var(--red-lt)" stroke="var(--red)" stroke-width="1.5" stroke-dasharray="6 3"/>' +
+        '<text x="330" y="65" text-anchor="middle" font-family="var(--mono)" font-size="9" letter-spacing="0.08em" fill="var(--red)">THE MODEL</text>' +
+        '<text x="330" y="88" text-anchor="middle" font-family="var(--sans)" font-size="14" font-weight="600" fill="var(--ink)">Binary Classifier</text>' +
+        '<text x="330" y="108" text-anchor="middle" font-family="var(--sans)" font-size="11" fill="var(--ink3)">What happens inside?</text>' +
+
+        // Arrow to not spam
+        '<line x1="420" y1="60" x2="510" y2="35" stroke="var(--rule)" stroke-width="1.5"/>' +
+        '<polygon points="507,30 517,33 509,39" fill="var(--rule)"/>' +
+
+        // Not spam output
+        '<rect x="520" y="10" width="140" height="50" rx="4" fill="var(--green-lt)" stroke="rgba(45,122,58,0.3)" stroke-width="1.5"/>' +
+        '<text x="590" y="32" text-anchor="middle" font-family="var(--mono)" font-size="9" letter-spacing="0.08em" fill="var(--green)">OUTPUT</text>' +
+        '<text x="590" y="48" text-anchor="middle" font-family="var(--sans)" font-size="13" font-weight="500" fill="var(--green)">Not Spam</text>' +
+
+        // Arrow to spam
+        '<line x1="420" y1="100" x2="510" y2="125" stroke="var(--rule)" stroke-width="1.5"/>' +
+        '<polygon points="507,121 517,127 509,130" fill="var(--rule)"/>' +
+
+        // Spam output
+        '<rect x="520" y="100" width="140" height="50" rx="4" fill="var(--red-lt)" stroke="rgba(43,108,176,0.3)" stroke-width="1.5"/>' +
+        '<text x="590" y="122" text-anchor="middle" font-family="var(--mono)" font-size="9" letter-spacing="0.08em" fill="var(--red)">OUTPUT</text>' +
+        '<text x="590" y="138" text-anchor="middle" font-family="var(--sans)" font-size="13" font-weight="500" fill="var(--red)">Spam</text>' +
+      '</svg>' +
+    '</div>' +
+
     '<div class="wt-callout"><p>Same intent. Same goal. But the developer is about to put that intent into two very different places. <strong>In one path, the intent goes into the code. In the other, it goes somewhere else entirely.</strong></p></div>' +
   '</div>';
 }

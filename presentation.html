@@ -495,6 +495,65 @@ td:first-child { color: var(--ink); font-weight: 500; }
 .ct-hero-right { display: flex; align-items: center; justify-content: center; }
 .ct-system-diagram { width: 100%; }
 
+/* Crew Dashboard */
+.crew-dash { background: var(--ink); border-radius: 8px; overflow: hidden; }
+.crew-dash-header { padding: 14px 18px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.1); }
+.crew-dash-title { font-family: var(--mono); font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.5); }
+.crew-dash-mission { font-family: var(--mono); font-size: 9px; color: rgba(255,255,255,0.3); }
+.crew-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: rgba(255,255,255,0.05); }
+.crew-card { padding: 16px 14px; background: var(--ink); text-align: center; transition: all 0.4s ease; }
+.crew-card.alert { background: rgba(200,39,45,0.15); }
+.crew-role { font-family: var(--mono); font-size: 8px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.4); margin-bottom: 6px; }
+.crew-name { font-size: 13px; font-weight: 500; color: rgba(255,255,255,0.9); margin-bottom: 10px; }
+.crew-score { font-family: var(--serif); font-size: 32px; line-height: 1; margin-bottom: 4px; transition: color 0.4s ease; }
+.crew-score.green { color: #4ADE80; }
+.crew-score.amber { color: #FBBF24; }
+.crew-score.red { color: #F87171; }
+.crew-status { font-family: var(--mono); font-size: 8px; letter-spacing: 0.08em; text-transform: uppercase; transition: color 0.4s ease; }
+.crew-status.green { color: #4ADE80; }
+.crew-status.amber { color: #FBBF24; }
+.crew-status.red { color: #F87171; }
+.crew-bar { height: 3px; border-radius: 2px; background: rgba(255,255,255,0.1); margin-top: 8px; overflow: hidden; }
+.crew-bar-fill { height: 100%; border-radius: 2px; transition: width 0.6s ease, background 0.4s ease; }
+.crew-alert-panel { padding: 18px; border-top: 1px solid rgba(255,255,255,0.08); display: none; animation: ctAlertIn 0.4s ease; }
+.crew-alert-panel.visible { display: block; }
+@keyframes ctAlertIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+.crew-alert-header { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
+.crew-alert-icon { width: 24px; height: 24px; border-radius: 50%; background: rgba(248,113,113,0.2); display: flex; align-items: center; justify-content: center; font-size: 12px; color: #F87171; }
+.crew-alert-title { font-size: 13px; font-weight: 500; color: rgba(255,255,255,0.9); }
+.crew-alert-tag { font-family: var(--mono); font-size: 8px; letter-spacing: 0.06em; padding: 3px 8px; border-radius: 3px; background: rgba(255,255,255,0.08); color: rgba(255,255,255,0.4); margin-left: auto; }
+.crew-explain { margin-bottom: 14px; }
+.crew-explain-label { font-family: var(--mono); font-size: 8px; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(255,255,255,0.35); margin-bottom: 8px; }
+.crew-factor { display: flex; align-items: center; gap: 10px; margin-bottom: 6px; }
+.crew-factor-name { font-size: 11px; color: rgba(255,255,255,0.6); width: 140px; flex-shrink: 0; }
+.crew-factor-bar { flex: 1; height: 6px; background: rgba(255,255,255,0.08); border-radius: 3px; overflow: hidden; }
+.crew-factor-fill { height: 100%; border-radius: 3px; background: #F87171; transition: width 0.6s ease; }
+.crew-factor-pct { font-family: var(--mono); font-size: 10px; color: rgba(255,255,255,0.5); width: 36px; text-align: right; }
+.crew-rec { padding: 12px 14px; background: rgba(248,113,113,0.1); border: 1px solid rgba(248,113,113,0.2); border-radius: 4px; margin-bottom: 14px; }
+.crew-rec-label { font-family: var(--mono); font-size: 8px; letter-spacing: 0.08em; text-transform: uppercase; color: #F87171; margin-bottom: 4px; }
+.crew-rec-text { font-size: 12px; color: rgba(255,255,255,0.8); line-height: 1.5; }
+.crew-conf { display: flex; align-items: center; gap: 8px; margin-bottom: 14px; }
+.crew-conf-label { font-family: var(--mono); font-size: 8px; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(255,255,255,0.35); }
+.crew-conf-value { font-family: var(--mono); font-size: 12px; color: #FBBF24; font-weight: 600; }
+.crew-actions { display: flex; gap: 8px; }
+.crew-action-btn { padding: 8px 16px; border-radius: 4px; font-family: var(--mono); font-size: 10px; letter-spacing: 0.06em; text-transform: uppercase; border: 1px solid rgba(255,255,255,0.15); background: transparent; color: rgba(255,255,255,0.6); cursor: pointer; transition: all 0.2s; }
+.crew-action-btn:hover { border-color: rgba(255,255,255,0.4); color: rgba(255,255,255,0.9); }
+.crew-action-btn.accept { border-color: rgba(74,222,128,0.4); color: #4ADE80; }
+.crew-action-btn.accept:hover { background: rgba(74,222,128,0.1); }
+.crew-action-btn.override { border-color: rgba(251,191,36,0.4); color: #FBBF24; }
+.crew-action-btn.override:hover { background: rgba(251,191,36,0.1); }
+.crew-override-input { display: none; margin-top: 10px; }
+.crew-override-input.visible { display: block; }
+.crew-override-input textarea { width: 100%; padding: 10px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.15); border-radius: 4px; color: rgba(255,255,255,0.8); font-family: var(--sans); font-size: 12px; resize: none; outline: none; }
+.crew-override-input textarea::placeholder { color: rgba(255,255,255,0.25); }
+.crew-req-tag { display: inline-block; font-family: var(--mono); font-size: 8px; letter-spacing: 0.06em; padding: 2px 6px; border-radius: 2px; background: rgba(43,108,176,0.15); color: rgba(43,108,176,0.8); margin-left: 6px; vertical-align: middle; }
+.crew-dash-footer { padding: 10px 18px; border-top: 1px solid rgba(255,255,255,0.06); display: flex; gap: 12px; flex-wrap: wrap; }
+.crew-dash-footer .crew-req-tag { background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.3); }
+.crew-trigger-wrap { text-align: center; margin-top: 16px; }
+.crew-trigger-btn { padding: 10px 24px; background: var(--red); color: var(--white); border: none; border-radius: 4px; font-family: var(--mono); font-size: 11px; letter-spacing: 0.06em; cursor: pointer; transition: all 0.2s; }
+.crew-trigger-btn:hover { background: var(--ink); }
+.crew-trigger-btn:disabled { background: var(--rule); color: var(--ink3); cursor: default; }
+
 .ct-req-tabs { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 20px; }
 .ct-req-tab { padding: 8px 14px; background: var(--white); border: 1px solid var(--rule); border-radius: 4px; font-family: var(--mono); font-size: 11px; color: var(--ink3); transition: all 0.15s; }
 .ct-req-tab:hover { border-color: var(--ink3); color: var(--ink2); }
@@ -763,7 +822,7 @@ const sections = {
         { num: "A", title: "Glossary", badge: "51 Terms", desc: "All defined terms with source traceability. 41 aligned with ISO/IEC 22989, ISO/IEC 5338, and NIST AI RMF. 10 framework specific.", subs: [] },
         { num: "B", title: "Classification Checklist", badge: "Appendix", desc: "Step by step checklist for AI presence screening and consequence based classification determination.", subs: [] },
         { num: "C", title: "Verification Evidence Templates", badge: "Appendix", desc: "Applicability determination record, test report template, and inspection record template.", subs: [] },
-        { num: "D", title: "Risk Score", badge: "Appendix", desc: "Quantitative risk scoring methodology for AI system assessment.", subs: [] },
+        { num: "D", title: "Risk Score (v2.0)", badge: "Appendix", desc: "Quantitative risk scoring methodology for AI system assessment.", subs: [] },
         { num: "E", title: "Source Traceability Matrix", badge: "Appendix", desc: "Maps every term and concept to its authoritative source document with specific section references.", subs: [] }
       ]
     }
@@ -788,7 +847,7 @@ const sections = {
         { title: "Learned Behavior", desc: "Does the system use behavior derived from training data rather than explicitly programmed logic? If the system's decisions come from patterns learned during training rather than rules written by a developer, AI is present." },
         { title: "Probabilistic Outputs", desc: "Are system outputs probabilistic or non deterministic? If the same input can produce different outputs, or if outputs carry confidence scores rather than definitive answers, AI is present." },
         { title: "Silent Degradation", desc: "Can system behavior change or degrade over time without code modifications? If the system can become less accurate because the world changed around it while no code was touched, AI is present." },
-        { title: "Decision Impact", desc: "Does the system make or inform decisions affecting human safety or operational success? If the system's outputs influence actions where errors have real consequences, the screening is complete." }
+        { title: "Decision Impact", desc: "Does the system make or inform decisions affecting human safety or operational success? If the system's outputs influence actions where errors have real consequences, AI is present." }
       ],
       callout: "Most real systems are not purely AI. They are traditional software with AI components embedded in the pipeline. The screening identifies where AI is present within a larger system. The boundary between AI and traditional components determines where this framework applies and where your existing V&V processes continue unchanged. Both verification approaches coexist. The framework covers the AI portion. Your existing processes cover the rest."
     }
@@ -800,7 +859,7 @@ const sections = {
       tiers: [
         { name: "Safety Critical AI", color: "red", desc: "AI outputs directly affect human safety or system survivability.", checklistQs: "Could AI malfunction result in loss of life or critical equipment? Is the AI in the control path for safety-critical functions?", examples: "Surgical guidance systems, autonomous vehicle collision avoidance, medical diagnostic AI that determines treatment, flight control systems", reqs: "AI-1 through AI-9 (all requirements, no tailoring without PSRB approval)" },
         { name: "Mission Critical AI", color: "gold", desc: "AI outputs affect operational success but not human safety.", checklistQs: "Could AI malfunction result in loss of operational objectives? Is the AI in the decision path for mission-critical functions?", examples: "Predictive maintenance for aircraft engines, medical triage prioritization, financial fraud detection, spam filter for flight operations communications", reqs: "AI-1 through AI-9 (tailoring permitted with CE approval)" },
-        { name: "Mission Support AI", color: "blue", desc: "AI supports operations but does not drive critical decisions.", checklistQs: "Does the AI support operations without driving critical decisions?", examples: "Corporate email spam filter, schedule optimization, meeting transcription, documentation assistants", reqs: "AI-1 through AI-5 minimum; AI-6 through AI-8 as tailored (SA approval)" }
+        { name: "Mission Support AI", color: "blue", desc: "AI supports operations but does not drive critical decisions.", checklistQs: "Does the AI support operations without driving critical decisions?", examples: "Corporate email spam filter, schedule optimization, meeting transcription, documentation assistants", reqs: "AI-1 through AI-6 minimum; AI-7 through AI-8 as tailored (SA approval)" }
       ],
       footer: "The same AI capability can fall into different tiers depending on operational context. A spam filter for marketing emails is Mission Support. A spam filter for flight operations communications could be Mission Critical."
     }
@@ -909,6 +968,8 @@ const sections = {
           { phase: "Bias Metrics (AI-2)", desc: "Demographic parity difference: 2% or less for Safety Critical, 5% or less for Mission Critical. Equalized odds difference: 3% or less TPR/FPR difference across groups. Tighter thresholds for crew health and safety functions." },
           { phase: "Drift Detection (AI-4)", desc: "Population Stability Index below 0.1 is negligible. Between 0.1 and 0.25 is moderate, triggering alerts. Above 0.25 is significant, halting autonomous operation for Safety Critical systems." },
           { phase: "Performance Degradation (AI-4)", desc: "5% or less accuracy drop from baseline. Baseline established during V&V. Consider mission phase sensitivity. Threshold values are documented and justified based on mission risk tolerance." },
+          { phase: "Confidence Threshold (AI-8)", desc: "Expected Calibration Error of 0.05 or less. Reliability slope between 0.9 and 1.1. A stated 90% confidence should be correct approximately 90% of the time. Critical for operator trust calibration. Validate across operational scenarios, not just aggregate test data." },
+          { phase: "OOD Detection (AI-6)", desc: "Detection rate of 97% or greater with a false positive rate of 2% or less. Validate against realistic out of distribution scenarios from the operational environment, not just synthetic noise. Balance detection sensitivity against operational false alarm burden." },
           { phase: "Project Responsibility", desc: "These are example ranges, not mandated values. Projects define and document their own thresholds with justification. The framework requires the thresholds to exist, be justified, and be monitored. The specific values are an engineering decision." }
         ], note: "Threshold values should be derived from mission risk tolerance. The framework requires thresholds, justification, and monitoring. It does not prescribe specific numbers." },
         { title: "Deployment Validation", items: [
@@ -950,7 +1011,7 @@ const sections = {
   "readiness-assess": {
     group: "Lifecycle", title: "Readiness Assessment", type: "readiness",
     data: {
-      intro: "Before engaging SCL for formal certification, a free self-assessment covers all nine requirement areas. It takes about five minutes, requires no account, and your answers stay in your browser.",
+      intro: "The readiness assessment maps your current AI system practices against the nine requirement areas in the SCL framework. It identifies where you have coverage, where gaps exist, and which requirements apply at your classification tier.",
       steps: [
         { num: "1", title: "Classification", desc: "Domain, consequence of failure, and human override capability. Determines your classification tier and which requirements apply.", reqs: "Tier Assignment" },
         { num: "2", title: "Data & Testing", desc: "Dataset separation, provenance, bias monitoring, and test coverage. Maps to three foundational requirement sets.", reqs: "AI-1, AI-2, AI-3" },
@@ -963,7 +1024,7 @@ const sections = {
         { label: "Gap", color: "#C8272D", desc: "Not addressed or significant shortfall." },
         { label: "N/A", color: "#8E99A4", desc: "Requirement does not apply at this tier." }
       ],
-      callout: "The readiness assessment is not a substitute for formal certification. It is a preparation tool. It shows you where you stand so you know what to prioritize before the real assessment begins.",
+      callout: "The readiness assessment is not a substitute for formal certification. It is a diagnostic tool. It shows you where your system stands against the framework so you know what to address before the formal assessment begins.",
       link: "https://safetycriticallabs.com/assess"
     }
   },
@@ -993,14 +1054,14 @@ const sections = {
   "surveillance": {
     group: "The Process", title: "Surveillance", type: "table",
     data: {
-      intro: "Every certificate includes a structured surveillance schedule. AI systems can degrade without code changes. Surveillance is how certification remains valid.",
+      intro: "Traditional software does not change after deployment unless someone changes the code. AI systems can degrade while the code stays the same. Data drifts, operational conditions shift, and the model's performance erodes without any release, any commit, or any alert from your existing change management process. The framework requires the customer to monitor continuously (AI-4). Surveillance is SCL verifying that the customer's monitoring is working and that the certified system is still performing within the bounds it was assessed against. Surveillance is not a full reassessment every time. It is a focused review of the evidence that the system remains within certified performance bounds. The cadences below reflect the risk exposure at each classification level.",
       headers: ["Classification", "Surveillance Cadence", "Scope"],
       rows: [
-        ["Safety Critical", "Annual audit", "Full reassessment of drift metrics, OOD logs, bias monitoring, operational performance"],
-        ["Mission Critical", "Biennial audit", "Focused reassessment of continuous validation records and model updates"],
+        ["Safety Critical", "Annual audit", "Full reassessment of drift metrics, OOD logs, bias monitoring, operational performance, and model integrity verification"],
+        ["Mission Critical", "Biennial audit", "Focused reassessment of continuous validation records, model update history, and performance trend analysis"],
         ["Triggered (all tiers)", "On trigger event", "Model version change, environment change, drift threshold breach, or safety related incident"]
       ],
-      footer: "Triggered reassessment is mandatory. Any model version change, regardless of magnitude, requires reassessment."
+      footer: "Triggered reassessment is mandatory. A model version change means the certified artifact is no longer the deployed artifact. The certificate applies to a specific assessed configuration. When the configuration changes, the assessment must be revisited regardless of how minor the change appears."
     }
   },
   "cognitive-twin": {
@@ -1116,6 +1177,8 @@ let currentIndex = 0, expandedReq = null, expandedStep = null, activeTab = 0, ac
 let wtStep = 0;
 let trainEpoch = 0;
 let trainInterval = null;
+let ctScenario = 0;
+let ctWtStep = 0;
 
 // Word positions for training animation (start scattered, end clustered)
 const wordData = [
@@ -2354,60 +2417,76 @@ function renderComparison(data) {
   
   html += '<div class="tab-content"><h4>' + tab.title + '</h4>';
   
-  // Gauges
-  const showSecondGauge = activeTab === 1;
-  const currentMetrics = tab.items[Math.min(compRevealStep, tab.items.length - 1)].metrics;
-  const accColor = currentMetrics.accuracy >= 90 ? '#2D7A3A' : currentMetrics.accuracy >= 75 ? '#C8861A' : '#C8272D';
-  
-  html += '<div class="comp-gauge-wrap">';
-  html += '<div class="comp-gauge">';
-  html += '<div class="comp-gauge-label">' + tab.gaugeLabels[0] + '</div>';
-  html += '<div class="comp-gauge-value" style="color:' + accColor + '">' + currentMetrics.accuracy + '<span>%</span></div>';
-  html += '<div class="comp-gauge-bar"><div class="comp-gauge-fill" style="width:' + currentMetrics.accuracy + '%;background:' + accColor + '"></div></div>';
-  html += '</div>';
-  
-  if (showSecondGauge) {
-    const blkColor = currentMetrics.blocked === 0 ? '#2D7A3A' : currentMetrics.blocked < 20 ? '#C8861A' : '#C8272D';
+  // Gauges (only if metrics exist)
+  const hasMetrics = tab.items && tab.items[0] && tab.items[0].metrics;
+  if (hasMetrics) {
+    const showSecondGauge = activeTab === 1;
+    const currentMetrics = tab.items[Math.min(compRevealStep, tab.items.length - 1)].metrics;
+    const accColor = currentMetrics.accuracy >= 90 ? '#2D7A3A' : currentMetrics.accuracy >= 75 ? '#C8861A' : '#C8272D';
+    
+    html += '<div class="comp-gauge-wrap">';
     html += '<div class="comp-gauge">';
-    html += '<div class="comp-gauge-label">' + tab.gaugeLabels[1] + '</div>';
-    html += '<div class="comp-gauge-value" style="color:' + blkColor + '">' + currentMetrics.blocked + '<span>%</span></div>';
-    html += '<div class="comp-gauge-bar"><div class="comp-gauge-fill" style="width:' + currentMetrics.blocked + '%;background:' + blkColor + '"></div></div>';
+    html += '<div class="comp-gauge-label">' + tab.gaugeLabels[0] + '</div>';
+    html += '<div class="comp-gauge-value" style="color:' + accColor + '">' + currentMetrics.accuracy + '<span>%</span></div>';
+    html += '<div class="comp-gauge-bar"><div class="comp-gauge-fill" style="width:' + currentMetrics.accuracy + '%;background:' + accColor + '"></div></div>';
+    html += '</div>';
+    
+    if (showSecondGauge) {
+      const blkColor = currentMetrics.blocked === 0 ? '#2D7A3A' : currentMetrics.blocked < 20 ? '#C8861A' : '#C8272D';
+      html += '<div class="comp-gauge">';
+      html += '<div class="comp-gauge-label">' + tab.gaugeLabels[1] + '</div>';
+      html += '<div class="comp-gauge-value" style="color:' + blkColor + '">' + currentMetrics.blocked + '<span>%</span></div>';
+      html += '<div class="comp-gauge-bar"><div class="comp-gauge-fill" style="width:' + currentMetrics.blocked + '%;background:' + blkColor + '"></div></div>';
+      html += '</div>';
+    }
     html += '</div>';
   }
-  html += '</div>';
   
   // Timeline
   html += '<div class="comp-timeline">';
   tab.items.forEach((item, i) => {
-    const revealed = i <= compRevealStep;
-    html += '<div class="comp-phase' + (revealed ? ' revealed' : '') + '">';
-    html += '<div class="comp-phase-marker status-' + item.status + '">' + item.icon + '</div>';
-    html += '<div class="comp-phase-body">';
-    html += '<div class="comp-phase-name">' + item.phase + '</div>';
-    html += '<div class="comp-phase-desc">' + item.desc + '</div>';
-    html += '</div></div>';
+    if (hasMetrics) {
+      const revealed = i <= compRevealStep;
+      html += '<div class="comp-phase' + (revealed ? ' revealed' : '') + '">';
+      html += '<div class="comp-phase-marker status-' + item.status + '">' + item.icon + '</div>';
+      html += '<div class="comp-phase-body">';
+      html += '<div class="comp-phase-name">' + item.phase + '</div>';
+      html += '<div class="comp-phase-desc">' + item.desc + '</div>';
+      html += '</div></div>';
+    } else {
+      html += '<div class="comp-phase revealed">';
+      html += '<div class="comp-phase-body">';
+      html += '<div class="comp-phase-name">' + item.phase + '</div>';
+      html += '<div class="comp-phase-desc">' + item.desc + '</div>';
+      html += '</div></div>';
+    }
   });
   html += '</div>';
   
-  // Deeper question breakout
-  const deeperRevealed = compRevealStep >= tab.items.length;
-  html += '<div class="comp-deeper' + (deeperRevealed ? ' revealed' : '') + '">';
-  html += '<div class="comp-deeper-label">The Deeper Question</div>';
-  html += '<div class="comp-deeper-text">' + tab.deeper + '</div>';
-  html += '</div>';
+  // Deeper question breakout (only if exists)
+  if (tab.deeper) {
+    const deeperRevealed = compRevealStep >= tab.items.length;
+    html += '<div class="comp-deeper' + (deeperRevealed ? ' revealed' : '') + '">';
+    html += '<div class="comp-deeper-label">The Deeper Question</div>';
+    html += '<div class="comp-deeper-text">' + tab.deeper + '</div>';
+    html += '</div>';
+  }
   
-  // Step button
-  const maxSteps = tab.items.length; // items.length reveals deeper
-  if (compRevealStep <= maxSteps) {
-    const btnLabel = compRevealStep < tab.items.length ? 'Next: ' + (compRevealStep < tab.items.length - 1 ? tab.items[compRevealStep + 1].phase : 'The Deeper Question') : '';
-    if (compRevealStep === 0) {
-      html += '<button class="comp-step-btn" onclick="advanceComp()">Step through the story &#9656;</button>';
-    } else if (compRevealStep <= maxSteps - 1) {
-      html += '<button class="comp-step-btn" onclick="advanceComp()">' + btnLabel + ' &#9656;</button>';
+  // Step button (only if metrics/timeline mode)
+  if (hasMetrics) {
+    const maxSteps = tab.items.length;
+    if (compRevealStep <= maxSteps) {
+      const btnLabel = compRevealStep < tab.items.length ? 'Next: ' + (compRevealStep < tab.items.length - 1 ? tab.items[compRevealStep + 1].phase : 'The Deeper Question') : '';
+      if (compRevealStep === 0) {
+        html += '<button class="comp-step-btn" onclick="advanceComp()">Step through the story &#9656;</button>';
+      } else if (compRevealStep <= maxSteps - 1) {
+        html += '<button class="comp-step-btn" onclick="advanceComp()">' + btnLabel + ' &#9656;</button>';
+      }
     }
   }
   
   // Note
+  const deeperRevealed = !tab.deeper || compRevealStep >= tab.items.length;
   if (deeperRevealed && tab.note) html += '<div class="tab-note">' + tab.note + '</div>';
   
   html += '</div>';
@@ -2794,43 +2873,406 @@ function renderStandard(data) {
 function setCtReq(i) { activeCTReq = i; renderContent(); }
 
 function renderCTIntro(data) {
-  var html = '<div class="ct-hero">';
-  html += '<div class="ct-hero-left">';
+  var ctSteps = ['The System', 'The Astronaut', 'Edge Compute', 'The Model', 'Team Mode', 'The Interface'];
+  
+  // Navigation dots
+  var html = '<div class="wt-nav">';
+  html += '<div class="wt-dots">';
+  ctSteps.forEach(function(s, i) {
+    var cls = i === ctWtStep ? 'active' : (i < ctWtStep ? 'done' : '');
+    html += '<button class="wt-dot ' + cls + '" onclick="ctWtGoTo(' + i + ')"></button>';
+  });
+  html += '</div>';
+  html += '<span class="wt-label">' + ctSteps[ctWtStep] + '</span>';
+  html += '<div class="wt-arrows">';
+  html += '<button class="wt-arrow" ' + (ctWtStep === 0 ? 'disabled' : '') + ' onclick="ctWtPrev()">←</button>';
+  html += '<button class="wt-arrow" ' + (ctWtStep === ctSteps.length - 1 ? 'disabled' : '') + ' onclick="ctWtNext()">→</button>';
+  html += '</div></div>';
+  
+  // Step content
+  switch(ctWtStep) {
+    case 0: html += renderCTSystem(data); break;
+    case 1: html += renderCTAstronaut(); break;
+    case 2: html += renderCTEdge(); break;
+    case 3: html += renderCTModel(); break;
+    case 4: html += renderCTTeamMode(); break;
+    case 5: html += renderCTDashboard(data); break;
+  }
+  
+  return html;
+}
+
+function ctWtGoTo(i) { ctWtStep = i; ctScenario = 0; renderContent(); }
+function ctWtPrev() { if (ctWtStep > 0) ctWtGoTo(ctWtStep - 1); }
+function ctWtNext() { if (ctWtStep < 5) ctWtGoTo(ctWtStep + 1); }
+
+function renderCTSystem(data) {
+  var html = '<div class="wt-step active">';
+  html += '<div class="wt-title">A real system, nine requirements</div>';
+  html += '<div class="wt-text">Everything in this presentation has used a spam filter. Now apply every concept to a system where the stakes are human life. The Cognitive Twin is an AI system proposed for long duration space missions. It monitors each astronaut\'s cognitive state and alerts the crew when it detects decline.</div>';
+  
+  html += '<div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:16px;">';
+  
+  // Left: features
+  html += '<div>';
   html += '<div class="ct-badge">' + data.classification + '</div>';
-  html += '<div class="ct-desc">' + data.description + '</div>';
-  html += '<div class="ct-features">';
+  html += '<div class="ct-features" style="margin-top:12px;">';
   data.features.forEach(function(f) {
     html += '<div class="ct-feature"><div class="ct-feature-label">' + f.label + '</div><div class="ct-feature-value">' + f.value + '</div></div>';
   });
   html += '</div></div>';
-  // System diagram
-  html += '<div class="ct-hero-right"><svg class="ct-system-diagram" viewBox="0 0 280 300">';
-  // Central twin node
-  html += '<circle cx="140" cy="130" r="40" fill="var(--red-lt)" stroke="var(--red)" stroke-width="1.5"/>';
-  html += '<text x="140" y="125" font-family="IBM Plex Mono,monospace" font-size="8" fill="var(--red)" text-anchor="middle" font-weight="600">COGNITIVE</text>';
-  html += '<text x="140" y="137" font-family="IBM Plex Mono,monospace" font-size="8" fill="var(--red)" text-anchor="middle" font-weight="600">TWIN</text>';
-  // Input nodes
-  var inputs = [{x:50,y:40,label:'Biometric'},{x:140,y:20,label:'Cognitive'},{x:230,y:40,label:'Emotional'}];
-  inputs.forEach(function(n) {
-    html += '<circle cx="'+n.x+'" cy="'+n.y+'" r="22" fill="var(--bg)" stroke="var(--rule)" stroke-width="1"/>';
-    html += '<text x="'+n.x+'" y="'+(n.y+3)+'" font-family="IBM Plex Mono,monospace" font-size="7" fill="var(--ink2)" text-anchor="middle">'+n.label+'</text>';
-    html += '<line x1="'+n.x+'" y1="'+(n.y+22)+'" x2="140" y2="90" stroke="var(--rule)" stroke-width="1" stroke-dasharray="3,2"/>';
-  });
-  // Output nodes
-  var outputs = [{x:50,y:230,label:'Decline Alert'},{x:140,y:250,label:'Task Adjust'},{x:230,y:230,label:'Crew Report'}];
-  outputs.forEach(function(n) {
-    html += '<circle cx="'+n.x+'" cy="'+n.y+'" r="22" fill="var(--bg)" stroke="var(--rule)" stroke-width="1"/>';
-    html += '<text x="'+n.x+'" y="'+(n.y+3)+'" font-family="IBM Plex Mono,monospace" font-size="7" fill="var(--ink2)" text-anchor="middle">'+n.label+'</text>';
-    html += '<line x1="140" y1="170" x2="'+n.x+'" y2="'+(n.y-22)+'" stroke="var(--ink3)" stroke-width="1" marker-end="url(#ctArrow)"/>';
-  });
-  // Team mode at bottom
-  html += '<rect x="60" y="275" width="160" height="22" rx="4" fill="var(--ink)" opacity="0.9"/>';
-  html += '<text x="140" y="289" font-family="IBM Plex Mono,monospace" font-size="7" fill="var(--white)" text-anchor="middle" letter-spacing="0.08em">TEAM MODE: CREW AWARENESS LAYER</text>';
-  html += '<defs><marker id="ctArrow" markerWidth="6" markerHeight="4" refX="5" refY="2" orient="auto"><path d="M0,0 L6,2 L0,4" fill="var(--ink3)"/></marker></defs>';
-  html += '</svg></div></div>';
-  // Classification rationale
+  
+  // Right: classification rationale
+  html += '<div>';
   html += '<div class="ct-rationale"><p><strong>Classification rationale:</strong> ' + data.classificationRationale + '</p></div>';
+  html += '</div>';
+  
+  html += '</div>';
+  
+  html += '<div class="wt-callout" style="margin-top:16px;"><p>The next four steps walk through the system from sensor to screen. Each step maps to framework requirements. The final step shows what the crew actually sees.</p></div>';
+  html += '</div>';
   return html;
+}
+
+function renderCTAstronaut() {
+  var html = '<div class="wt-step active">';
+  html += '<div class="wt-title">The astronaut</div>';
+  html += '<div class="wt-text">The system starts with a person. Sensors worn by the astronaut collect continuous physiological data throughout the mission. This is not a periodic check. It is a constant stream of biometric signals feeding the twin in real time.</div>';
+  
+  // Sensor cards
+  html += '<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:16px;">';
+  
+  var sensors = [
+    { name: 'Heart Rate Variability', abbr: 'HRV', desc: 'Beat to beat variation in heart rhythm. Tracks autonomic nervous system state. Decreasing HRV correlates with cognitive fatigue and stress accumulation.', req: 'AI-1.3' },
+    { name: 'Electrodermal Activity', abbr: 'EDA', desc: 'Skin conductance changes driven by sweat gland activity. Measures sympathetic arousal. Spikes indicate acute stress responses. Baseline shifts indicate chronic load.', req: 'AI-1.3' },
+    { name: 'Skin Temperature', abbr: 'TEMP', desc: 'Peripheral temperature from wrist sensor. Circadian rhythm disruption shows as flattened temperature oscillation. Sleep quality directly affects cognitive readiness.', req: 'AI-1.3' },
+    { name: 'Electroencephalography', abbr: 'EEG', desc: 'Brainwave patterns from lightweight headband sensor. Alpha/theta ratio indicates alertness versus drowsiness. Captures cognitive state that other sensors cannot directly measure.', req: 'AI-1.3' }
+  ];
+  
+  sensors.forEach(function(s) {
+    html += '<div class="wt-panel" style="margin-bottom:0;">';
+    html += '<div style="font-family:var(--mono);font-size:20px;font-weight:600;color:var(--red);margin-bottom:4px;">' + s.abbr + '</div>';
+    html += '<div style="font-size:13px;font-weight:500;color:var(--ink);margin-bottom:8px;">' + s.name + '</div>';
+    html += '<div style="font-size:12px;color:var(--ink2);line-height:1.6;">' + s.desc + '</div>';
+    html += '<div style="margin-top:8px;"><span class="crew-req-tag" style="background:rgba(43,108,176,0.1);color:var(--red);">' + s.req + ' Data Provenance</span></div>';
+    html += '</div>';
+  });
+  
+  html += '</div>';
+  
+  html += '<div class="wt-panel wt-panel-red" style="margin-top:16px;">';
+  html += '<div class="wt-panel-label">What makes this data different</div>';
+  html += '<div class="wt-text" style="margin-bottom:0;">This is not operational telemetry. It is personal health data. Heart rate patterns can reveal medical conditions. EDA traces can indicate psychological state. EEG data is among the most sensitive biometric information that exists. Every downstream decision about how this data is stored, partitioned, and protected follows from this fact.</div>';
+  html += '</div>';
+  
+  html += '<div class="wt-callout"><p><strong>Framework connection:</strong> AI-1.3 requires documented data provenance for all datasets. AI-1.5 requires classification screening before ingestion. AI-1.6 establishes that model artifacts inherit the classification level of the training data. The sensitivity of the input determines the handling requirements for everything that follows.</p></div>';
+  html += '</div>';
+  return html;
+}
+
+function renderCTEdge() {
+  var html = '<div class="wt-step active">';
+  html += '<div class="wt-title">Edge compute</div>';
+  html += '<div class="wt-text">The sensor data does not go to Earth for processing. At mission distances, the communication delay can exceed 20 minutes each way. The model runs on the vehicle. This is edge deployment, and it changes everything about how the system is verified and maintained.</div>';
+  
+  // Architecture visual
+  html += '<div class="wt-panel" style="margin-top:16px;">';
+  html += '<div class="wt-panel-label">Onboard Processing Architecture</div>';
+  
+  html += '<svg viewBox="0 0 700 200" style="width:100%;display:block;" xmlns="http://www.w3.org/2000/svg">';
+  
+  // Four containers
+  var containers = [
+    { x: 40, label: 'CDR Shaw', color: '#4ADE80' },
+    { x: 210, label: 'PLT Okafor', color: '#4ADE80' },
+    { x: 380, label: 'MS-1 Reeves', color: '#4ADE80' },
+    { x: 550, label: 'MS-2 Tanaka', color: '#4ADE80' }
+  ];
+  
+  containers.forEach(function(c) {
+    // Container box
+    html += '<rect x="' + c.x + '" y="20" width="130" height="120" rx="4" fill="var(--bg)" stroke="var(--rule)" stroke-width="1.5" stroke-dasharray="6 3"/>';
+    html += '<text x="' + (c.x + 65) + '" y="40" font-family="var(--mono)" font-size="8" letter-spacing="0.08em" fill="var(--ink3)" text-anchor="middle">CONTAINER</text>';
+    // Twin circle inside
+    html += '<circle cx="' + (c.x + 65) + '" cy="80" r="22" fill="var(--red-lt)" stroke="var(--red)" stroke-width="1"/>';
+    html += '<text x="' + (c.x + 65) + '" y="78" font-family="var(--mono)" font-size="7" fill="var(--red)" text-anchor="middle" font-weight="600">TWIN</text>';
+    html += '<text x="' + (c.x + 65) + '" y="88" font-family="var(--mono)" font-size="6" fill="var(--ink3)" text-anchor="middle">Model</text>';
+    // Name
+    html += '<text x="' + (c.x + 65) + '" y="125" font-family="var(--sans)" font-size="10" fill="var(--ink2)" text-anchor="middle">' + c.label + '</text>';
+    // No cross arrows between containers (that's the point)
+  });
+  
+  // Isolation label
+  html += '<text x="350" y="165" font-family="var(--mono)" font-size="8" letter-spacing="0.06em" fill="var(--ink3)" text-anchor="middle">No data crosses container boundaries</text>';
+  
+  // X marks between containers
+  html += '<text x="172" y="80" font-family="var(--sans)" font-size="16" fill="var(--red)" text-anchor="middle" opacity="0.5">&#10007;</text>';
+  html += '<text x="342" y="80" font-family="var(--sans)" font-size="16" fill="var(--red)" text-anchor="middle" opacity="0.5">&#10007;</text>';
+  html += '<text x="512" y="80" font-family="var(--sans)" font-size="16" fill="var(--red)" text-anchor="middle" opacity="0.5">&#10007;</text>';
+  
+  // Edge compute bar at bottom
+  html += '<rect x="40" y="178" width="640" height="20" rx="3" fill="var(--ink)" opacity="0.85"/>';
+  html += '<text x="360" y="192" font-family="var(--mono)" font-size="7" fill="rgba(255,255,255,0.7)" text-anchor="middle" letter-spacing="0.08em">ONBOARD EDGE COMPUTE NODE</text>';
+  
+  html += '</svg>';
+  html += '</div>';
+  
+  // Two column callouts
+  html += '<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:16px;">';
+  
+  html += '<div class="wt-panel wt-panel-red" style="margin-bottom:0;">';
+  html += '<div class="wt-panel-label">Why containerization matters</div>';
+  html += '<div style="font-size:12px;color:var(--ink2);line-height:1.65;">Shaw\'s cardiac data never touches Reeves\' cognitive model. Each twin is trained and operates on its own astronaut\'s data only. A corrupted model in one container cannot access or contaminate another. This is the privacy architecture from the research: defending against membership inference means ensuring one astronaut\'s health patterns cannot be extracted from another\'s model.</div>';
+  html += '</div>';
+  
+  html += '<div class="wt-panel wt-panel-gold" style="margin-bottom:0;">';
+  html += '<div class="wt-panel-label">Why edge deployment matters</div>';
+  html += '<div style="font-size:12px;color:var(--ink2);line-height:1.65;">No model updates from ground during a communication blackout. No real time ground truth feed. The model that launched is the model that runs, unless the continuous learning system updates it onboard. That means every verification claim must hold without a ground link. Drift detection, performance monitoring, and fallback behavior all execute autonomously.</div>';
+  html += '</div>';
+  
+  html += '</div>';
+  
+  html += '<div class="wt-callout"><p><strong>Framework connection:</strong> AI-1.1 requires dataset separation with technical controls. The container boundary is that control. AI-7.4 requires model integrity verification throughout the lifecycle. On an edge node with no ground link, integrity checks run onboard. AI-4 continuous validation must function without external ground truth.</p></div>';
+  html += '</div>';
+  return html;
+}
+
+function renderCTModel() {
+  var html = '<div class="wt-step active">';
+  html += '<div class="wt-title">The model</div>';
+  html += '<div class="wt-text">Inside each container, the twin processes incoming sensor data against the astronaut\'s learned baseline. It is not looking for a single threshold. It is tracking patterns across multiple signals over time, comparing today\'s readings against what it has learned is normal for this specific person.</div>';
+  
+  // Processing pipeline
+  html += '<div class="wt-panel" style="margin-top:16px;">';
+  html += '<div class="wt-panel-label">Processing Pipeline</div>';
+  
+  var pipeline = [
+    { label: 'Raw Signals', desc: 'Continuous stream from HRV, EDA, temperature, and EEG sensors. Hundreds of data points per minute.', tag: 'Input' },
+    { label: 'Feature Extraction', desc: 'Rolling averages, variability metrics, spectral analysis, circadian rhythm indicators. Raw signals become structured features.', tag: 'Processing' },
+    { label: 'Baseline Comparison', desc: 'Current features compared against this astronaut\'s personal baseline. The baseline was established during ground training and adapts throughout the mission.', tag: 'AI-4' },
+    { label: 'State Classification', desc: 'Four cognitive states: Baseline, Stress, Amusement, Meditation. The model from the research achieved 94% accuracy on ground data using these categories.', tag: 'Output' },
+    { label: 'Readiness Score', desc: 'State classification, trend data, and confidence level combined into a single readiness score (0 to 100) for the crew interface.', tag: 'AI-8' }
+  ];
+  
+  pipeline.forEach(function(p, i) {
+    html += '<div style="display:flex;align-items:flex-start;gap:14px;padding:12px 0;' + (i < pipeline.length - 1 ? 'border-bottom:1px solid var(--rule);' : '') + '">';
+    html += '<div style="font-family:var(--mono);font-size:9px;letter-spacing:0.06em;padding:3px 8px;border-radius:3px;background:var(--red-lt);color:var(--red);flex-shrink:0;margin-top:2px;">' + p.tag + '</div>';
+    html += '<div>';
+    html += '<div style="font-size:13px;font-weight:500;color:var(--ink);margin-bottom:4px;">' + p.label + '</div>';
+    html += '<div style="font-size:12px;color:var(--ink2);line-height:1.6;">' + p.desc + '</div>';
+    html += '</div></div>';
+  });
+  
+  html += '</div>';
+  
+  // Continuous learning callout
+  html += '<div class="wt-panel wt-panel-red" style="margin-top:16px;">';
+  html += '<div class="wt-panel-label">Continuous Learning: The Design Choice That Changes Everything</div>';
+  html += '<div style="font-size:12px;color:var(--ink2);line-height:1.65;">The twin adapts throughout the mission. It learns each astronaut\'s evolving baseline as their body adjusts to microgravity, as sleep patterns shift, as chronic stress accumulates. This is not a bug. It is the design. A static model trained on ground data would become increasingly wrong as the mission progresses.</div>';
+  html += '<div style="font-size:12px;color:var(--ink2);line-height:1.65;margin-top:8px;">But continuous learning means the model you certified at launch is not the model running at month six. The framework addresses this directly: Section 4.2 requires rollback capability, approval gates before activation, shadow mode validation, automated performance bounds with automatic reversion, and tightened continuous validation thresholds. All five controls are mandatory for Safety Critical classification.</div>';
+  html += '</div>';
+  
+  html += '<div class="wt-callout"><p><strong>Framework connection:</strong> AI-3 requires test coverage across operational input distributions. The cognitive states that matter most (long duration fatigue, confinement stress) are exactly the states absent from ground training. AI-5 hallucination prevention requires detection of fabricated outputs. A twin that invents a cognitive decline signal triggers a false alarm during a critical operation.</p></div>';
+  html += '</div>';
+  return html;
+}
+
+function renderCTTeamMode() {
+  var html = '<div class="wt-step active">';
+  html += '<div class="wt-title">Team Mode</div>';
+  html += '<div class="wt-text">Individual twins monitor individual astronauts. Team Mode is the layer above: a multi agent system that takes high level readiness signals from each twin and forms a composite picture of crew capability. The commander and flight surgeon see the crew as a whole, not just individual scores.</div>';
+  
+  // Team mode visual
+  html += '<div class="wt-panel" style="margin-top:16px;">';
+  html += '<div class="wt-panel-label">Data Sharing Boundaries</div>';
+  
+  html += '<svg viewBox="0 0 700 220" style="width:100%;display:block;" xmlns="http://www.w3.org/2000/svg">';
+  
+  // Individual twins at top
+  var twins = [
+    { x: 100, name: 'Shaw Twin' },
+    { x: 270, name: 'Okafor Twin' },
+    { x: 440, name: 'Reeves Twin' },
+    { x: 610, name: 'Tanaka Twin' }
+  ];
+  
+  twins.forEach(function(t) {
+    html += '<circle cx="' + t.x + '" cy="40" r="24" fill="var(--red-lt)" stroke="var(--red)" stroke-width="1"/>';
+    html += '<text x="' + t.x + '" y="38" font-family="var(--mono)" font-size="7" fill="var(--red)" text-anchor="middle" font-weight="600">TWIN</text>';
+    html += '<text x="' + t.x + '" y="48" font-family="var(--mono)" font-size="6" fill="var(--ink3)" text-anchor="middle">' + t.name.split(' ')[0] + '</text>';
+    // Arrow down to filter
+    html += '<line x1="' + t.x + '" y1="64" x2="' + t.x + '" y2="88" stroke="var(--ink3)" stroke-width="1" marker-end="url(#ctArrow3)"/>';
+    // Filter box
+    html += '<rect x="' + (t.x - 40) + '" y="90" width="80" height="24" rx="3" fill="var(--bg)" stroke="var(--rule)" stroke-width="1"/>';
+    html += '<text x="' + t.x + '" y="105" font-family="var(--mono)" font-size="6" fill="var(--ink3)" text-anchor="middle">READINESS ONLY</text>';
+    // Arrow to team mode
+    html += '<line x1="' + t.x + '" y1="114" x2="355" y2="155" stroke="var(--ink3)" stroke-width="0.8" stroke-dasharray="4,2"/>';
+  });
+  
+  // Team mode bar
+  html += '<rect x="255" y="148" width="200" height="32" rx="4" fill="var(--ink)" opacity="0.9"/>';
+  html += '<text x="355" y="162" font-family="var(--mono)" font-size="7" fill="rgba(255,255,255,0.8)" text-anchor="middle" font-weight="600" letter-spacing="0.06em">TEAM MODE</text>';
+  html += '<text x="355" y="174" font-family="var(--mono)" font-size="6" fill="rgba(255,255,255,0.4)" text-anchor="middle" letter-spacing="0.04em">Crew Awareness Layer</text>';
+  
+  // Arrow to display
+  html += '<line x1="355" y1="180" x2="355" y2="205" stroke="var(--ink3)" stroke-width="1" marker-end="url(#ctArrow3)"/>';
+  html += '<text x="355" y="218" font-family="var(--mono)" font-size="8" fill="var(--ink2)" text-anchor="middle">Commander Display</text>';
+  
+  html += '<defs><marker id="ctArrow3" markerWidth="6" markerHeight="4" refX="5" refY="2" orient="auto"><path d="M0,0 L6,2 L0,4" fill="var(--ink3)"/></marker></defs>';
+  html += '</svg>';
+  html += '</div>';
+  
+  // Key principles
+  html += '<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:16px;">';
+  
+  html += '<div class="wt-panel" style="margin-bottom:0;">';
+  html += '<div class="wt-panel-label">What flows up</div>';
+  html += '<div style="font-size:12px;color:var(--ink2);line-height:1.65;">Readiness scores. State classifications. Trend indicators. Alert flags. High level signals only. Team Mode knows Shaw is at 94 and trending stable. It does not know Shaw\'s heart rate, cortisol levels, or sleep data. The privacy boundary holds.</div>';
+  html += '</div>';
+  
+  html += '<div class="wt-panel" style="margin-bottom:0;">';
+  html += '<div class="wt-panel-label">What stays down</div>';
+  html += '<div style="font-size:12px;color:var(--ink2);line-height:1.65;">Raw biometric data. Individual baselines. Personal health patterns. Model weights. Everything that could identify a specific astronaut\'s medical state stays inside the container. A compromised Team Mode layer cannot reconstruct individual health records.</div>';
+  html += '</div>';
+  
+  html += '</div>';
+  
+  html += '<div class="wt-callout"><p><strong>Framework connection:</strong> AI-7 adversarial robustness applies here. A corrupted individual twin could inject false readiness signals into Team Mode, masking a real problem or misallocating tasks. AI-7.4 model integrity verification must extend to the data exchange between twins and the crew level layer. AI-1.7 output classification awareness ensures that even aggregated readiness data carries the appropriate handling requirements.</p></div>';
+  html += '</div>';
+  return html;
+}
+
+function renderCTDashboard(data) {
+  var html = '<div class="wt-step active">';
+  html += '<div class="wt-title">The interface</div>';
+  html += '<div class="wt-text">This is what the commander sees. Four crew members, each with a readiness score fed by their individual twin through Team Mode. Every element on this screen maps to a framework requirement. Walk through the scenario to see how the system and the human interact when something goes wrong.</div>';
+  
+  // Dashboard
+  html += '<div class="crew-dash">';
+  
+  // Header
+  html += '<div class="crew-dash-header">';
+  html += '<span class="crew-dash-title">Cognitive Twin System: Crew Readiness</span>';
+  html += '<span class="crew-dash-mission">MISSION DAY 187 | 14:32 UTC</span>';
+  html += '</div>';
+  
+  // Crew cards
+  var crew = [
+    { role: 'CDR', name: 'Shaw', score: ctScenario === 0 ? 94 : 92, status: 'nominal' },
+    { role: 'PLT', name: 'Okafor', score: 91, status: 'nominal' },
+    { role: 'MS-1', name: 'Reeves', score: ctScenario === 0 ? 88 : 71, status: ctScenario === 0 ? 'nominal' : 'alert' },
+    { role: 'MS-2', name: 'Tanaka', score: 93, status: 'nominal' }
+  ];
+  
+  html += '<div class="crew-grid">';
+  crew.forEach(function(c) {
+    var scoreClass = c.score >= 85 ? 'green' : c.score >= 75 ? 'amber' : 'red';
+    var statusLabel = c.status === 'nominal' ? 'Nominal' : 'Elevated Fatigue';
+    html += '<div class="crew-card' + (c.status === 'alert' ? ' alert' : '') + '">';
+    html += '<div class="crew-role">' + c.role + '</div>';
+    html += '<div class="crew-name">' + c.name + '</div>';
+    html += '<div class="crew-score ' + scoreClass + '">' + c.score + '</div>';
+    html += '<div class="crew-status ' + scoreClass + '">' + statusLabel + '</div>';
+    html += '<div class="crew-bar"><div class="crew-bar-fill" style="width:' + c.score + '%;background:' + (scoreClass === 'green' ? '#4ADE80' : scoreClass === 'amber' ? '#FBBF24' : '#F87171') + '"></div></div>';
+    html += '</div>';
+  });
+  html += '</div>';
+  
+  // Alert panel
+  if (ctScenario >= 1) {
+    html += '<div class="crew-alert-panel visible">';
+    html += '<div class="crew-alert-header">';
+    html += '<div class="crew-alert-icon">!</div>';
+    html += '<div class="crew-alert-title">Cognitive Fatigue Alert: MS-1 Reeves</div>';
+    html += '<div class="crew-alert-tag">AI-4 Continuous Validation</div>';
+    html += '</div>';
+    
+    html += '<div class="crew-explain">';
+    html += '<div class="crew-explain-label">Contributing Factors <span class="crew-req-tag">AI-8</span></div>';
+    var factors = [
+      { name: 'Sleep disruption (3 nights)', pct: 38 },
+      { name: 'Elevated cortisol trend', pct: 27 },
+      { name: 'Reaction time degradation', pct: 22 },
+      { name: 'HRV pattern anomaly', pct: 13 }
+    ];
+    factors.forEach(function(f) {
+      html += '<div class="crew-factor">';
+      html += '<div class="crew-factor-name">' + f.name + '</div>';
+      html += '<div class="crew-factor-bar"><div class="crew-factor-fill" style="width:' + f.pct + '%"></div></div>';
+      html += '<div class="crew-factor-pct">' + f.pct + '%</div>';
+      html += '</div>';
+    });
+    html += '</div>';
+    
+    html += '<div class="crew-conf">';
+    html += '<div class="crew-conf-label">Model Confidence <span class="crew-req-tag">AI-8.3</span></div>';
+    html += '<div class="crew-conf-value">78%</div>';
+    html += '</div>';
+    
+    html += '<div class="crew-rec">';
+    html += '<div class="crew-rec-label">Recommendation</div>';
+    html += '<div class="crew-rec-text">Reassign MS-1 Reeves from EVA prep (scheduled T+4h). Substitute MS-2 Tanaka or defer EVA 24h to allow recovery period. Flag for flight surgeon review at next comm window.</div>';
+    html += '</div>';
+    
+    if (ctScenario >= 2) {
+      html += '<div class="crew-explain-label">Commander Decision <span class="crew-req-tag">AI-9</span></div>';
+      html += '<div class="crew-actions">';
+      html += '<button class="crew-action-btn accept" onclick="ctAction(\'accept\')">Accept Recommendation</button>';
+      html += '<button class="crew-action-btn override" onclick="ctAction(\'override\')">Override with Rationale</button>';
+      html += '<button class="crew-action-btn" onclick="ctAction(\'detail\')">Request Detail</button>';
+      html += '</div>';
+      html += '<div class="crew-override-input" id="ct-override"><textarea rows="2" placeholder="Commander rationale: e.g., EVA is time critical, will monitor MS-1 in real time..."></textarea></div>';
+    }
+    
+    if (ctScenario >= 3) {
+      html += '<div style="margin-top:14px;padding:10px 14px;background:rgba(74,222,128,0.1);border:1px solid rgba(74,222,128,0.2);border-radius:4px;">';
+      html += '<div style="font-family:var(--mono);font-size:8px;letter-spacing:0.08em;text-transform:uppercase;color:#4ADE80;margin-bottom:4px;">Logged <span class="crew-req-tag">AI-9.5</span></div>';
+      html += '<div style="font-size:11px;color:rgba(255,255,255,0.7);line-height:1.5;">Decision recorded. Override rationale archived. Flight surgeon notified at next comm window (T+18min). Continuous monitoring escalated to 5 min intervals for MS-1.</div>';
+      html += '</div>';
+    }
+    
+    html += '</div>';
+  }
+  
+  // Footer
+  html += '<div class="crew-dash-footer">';
+  html += '<span class="crew-req-tag">AI-4 Drift Monitoring</span>';
+  html += '<span class="crew-req-tag">AI-6 OOD Detection</span>';
+  html += '<span class="crew-req-tag">AI-8 Explainability</span>';
+  html += '<span class="crew-req-tag">AI-8.3 Confidence</span>';
+  html += '<span class="crew-req-tag">AI-9 Human Authority</span>';
+  html += '<span class="crew-req-tag">AI-9.5 Interaction Logging</span>';
+  html += '</div>';
+  
+  html += '</div>';
+  
+  // Trigger button
+  html += '<div class="crew-trigger-wrap">';
+  if (ctScenario === 0) {
+    html += '<button class="crew-trigger-btn" onclick="advanceCTScenario()">Trigger Alert Scenario</button>';
+  } else if (ctScenario === 1) {
+    html += '<button class="crew-trigger-btn" onclick="advanceCTScenario()">Show Commander Options</button>';
+  } else if (ctScenario === 2) {
+    html += '<button class="crew-trigger-btn" onclick="advanceCTScenario()">Commander Overrides</button>';
+  } else {
+    html += '<button class="crew-trigger-btn" disabled>Scenario Complete</button>';
+  }
+  html += '</div>';
+  
+  html += '</div>';
+  return html;
+}
+
+function advanceCTScenario() {
+  ctScenario++;
+  renderContent();
+}
+
+function ctAction(type) {
+  if (type === 'override') {
+    var el = document.getElementById('ct-override');
+    if (el) el.classList.toggle('visible');
+  }
 }
 
 function renderCTReqs(data) {
@@ -2887,6 +3329,8 @@ function goTo(i) {
   advState = false;
   partitionState = 0;
   compRevealStep = 0;
+  ctScenario = 0;
+  ctWtStep = 0;
   if (trainInterval) { clearInterval(trainInterval); trainInterval = null; }
   if (searchInterval) { clearInterval(searchInterval); searchInterval = null; }
   if (driftInterval) { clearInterval(driftInterval); driftInterval = null; }

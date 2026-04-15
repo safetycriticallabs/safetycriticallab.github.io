@@ -1105,7 +1105,7 @@ document.addEventListener("click", function() {
 <script>
 /* ─── REGULATORY LANDSCAPE FEEDS ─────────────────────────── */
 (function () {
-  const CORS_PROXY = 'https://corsproxy.io/?';
+  const CORS_PROXY = 'https://api.cors.lol/?url=';
 
   /* ── Agency logos (inline SVG) ─────────────────────── */
   var LOGOS = {
@@ -1264,7 +1264,7 @@ document.addEventListener("click", function() {
 
   var eurLexUrl = 'https://eur-lex.europa.eu/EN/display-feed.rss?rssId=162';
   fetch(CORS_PROXY + encodeURIComponent(eurLexUrl))
-    .then(function (r) { return r.text(); })
+    .then(function (r) { if (!r.ok) throw new Error('proxy ' + r.status); return r.text(); })
     .then(function (xml) {
       var parser = new DOMParser();
       var doc = parser.parseFromString(xml, 'text/xml');
@@ -1318,10 +1318,10 @@ document.addEventListener("click", function() {
   var nistAiKeywords = /artificial intelligence|AI |AI-|machine learning|cybersecurity framework|risk management framework|AI agent|agentic|neural network/i;
 
   var nistFallback = [
-    { title: 'Announcing the "AI Agent Standards Initiative" for Interoperable and Secure Innovation', url: 'https://www.nist.gov/news-events/news/2026/02/announcing-ai-agent-standards-initiative', date: formatDate('2026-02-17'), type: 'NIST News' },
+    { title: 'Announcing the "AI Agent Standards Initiative" for Interoperable and Secure Innovation', url: 'https://www.nist.gov/news-events/news/2026/02/announcing-ai-agent-standards-initiative-interoperable-and-secure', date: formatDate('2026-02-17'), type: 'NIST News' },
     { title: 'CAISI Issues Request for Information About Securing AI Agent Systems', url: 'https://www.nist.gov/news-events/news/2026/01/caisi-issues-request-information-about-securing-ai-agent-systems', date: formatDate('2026-01-28'), type: 'NIST News' },
-    { title: 'NIST Launches Centers for AI in Manufacturing and Critical Infrastructure', url: 'https://www.nist.gov/news-events/news/2026/01/nist-launches-centers-ai-manufacturing-and-critical-infrastructure', date: formatDate('2026-01-15'), type: 'NIST News' },
-    { title: 'Accelerating the Adoption of Software and AI Agent Identity and Authorization', url: 'https://csrc.nist.gov/pubs/other/2025/02/accelerating-the-adoption-of-sw-and-ai-agent-iden/final', date: formatDate('2025-02-05'), type: 'Concept Paper' },
+    { title: 'NIST Launches Centers for AI in Manufacturing and Critical Infrastructure', url: 'https://www.nist.gov/news-events/news/2025/12/nist-launches-centers-ai-manufacturing-and-critical-infrastructure', date: formatDate('2025-12-22'), type: 'NIST News' },
+    { title: 'Accelerating the Adoption of Software and AI Agent Identity and Authorization', url: 'https://csrc.nist.gov/pubs/other/2026/02/05/accelerating-the-adoption-of-software-and-ai-agent/ipd', date: formatDate('2026-02-05'), type: 'Concept Paper' },
     { title: 'NIST AI Risk Management Framework (AI RMF 1.0)', url: 'https://www.nist.gov/artificial-intelligence/executive-order-safe-secure-and-trustworthy-artificial-intelligence', date: formatDate('2025-01-26'), type: 'AI Framework' }
   ];
 
@@ -1329,8 +1329,8 @@ document.addEventListener("click", function() {
   var nistDraftsUrl = 'https://csrc.nist.gov/CSRC/media/feeds/pubs/drafts-open-for-comment.json';
 
   Promise.all([
-    fetch(CORS_PROXY + encodeURIComponent(nistNewsUrl)).then(function (r) { return r.text(); }).catch(function () { return ''; }),
-    fetch(CORS_PROXY + encodeURIComponent(nistDraftsUrl)).then(function (r) { return r.text(); }).catch(function () { return ''; })
+    fetch(CORS_PROXY + encodeURIComponent(nistNewsUrl)).then(function (r) { return r.ok ? r.text() : ''; }).catch(function () { return ''; }),
+    fetch(CORS_PROXY + encodeURIComponent(nistDraftsUrl)).then(function (r) { return r.ok ? r.text() : ''; }).catch(function () { return ''; })
   ]).then(function (results) {
     var items = [];
 

@@ -368,6 +368,47 @@
       </div>
     </div>
 
+    <!-- INDUSTRIAL -->
+    <div class="market-block">
+      <div class="market-label-col">
+        <div class="market-seq">Industrial &amp; Manufacturing</div>
+
+        <div class="market-name">Industrial &amp; Manufacturing</div>
+        <div class="market-timeline">Functional safety meets ML</div>
+        <div class="market-regulators">
+          <span class="regulator-tag">IEC 61508</span>
+          <span class="regulator-tag">ISO 10218</span>
+          <span class="regulator-tag">ISO 13849</span>
+          <span class="regulator-tag">NIST AI RMF</span>
+          <span class="regulator-tag">EU AI Act</span>
+        </div>
+      </div>
+      <div class="market-content">
+        <p class="market-body" style="font-size:14px;color:var(--ink-3);margin-bottom:16px;font-weight:400;">If you are deploying AI into process control, predictive maintenance, industrial robotics, or machine vision on a production floor, the functional safety standards you already work to were not written for learned behavior.</p>
+        <p class="market-body">
+          IEC 61508 and its derivatives define functional safety for electrical/electronic/programmable electronic systems. ISO 10218 and ISO 13849 govern robotic and machinery safety. <strong>None of these standards account for models whose behavior emerges from training data</strong> or that may degrade silently after deployment.
+        </p>
+        <p class="market-body">
+          Industrial AI deployments often operate in tightly bounded physical environments with well-defined operational parameters — an ideal fit for a declared Operational Design Domain (ODD). The SCL framework lets industrial operators translate the operational envelope they already enforce into a certification claim that downstream regulators, insurers, and customers can reference.
+        </p>
+        <div class="market-gaps">
+          <div class="market-gap fade-up">
+            <span class="mg-standard">IEC 61508</span>
+            <span class="mg-gap"><strong>SIL targets assume deterministic failure modes</strong> with quantifiable failure rates. Distributional, data-driven failure modes fall outside the standard's vocabulary.</span>
+          </div>
+          <div class="market-gap fade-up">
+            <span class="mg-standard">ISO 10218 / 13849</span>
+            <span class="mg-gap"><strong>Robot safety functions</strong> are specified for bounded kinematic behavior. Vision-based and learned control loops require OOD detection and explainability that current standards don't address.</span>
+          </div>
+          <div class="market-gap fade-up">
+            <span class="mg-standard">EU AI Act</span>
+            <span class="mg-gap"><strong>High-risk AI categories</strong> explicitly include industrial safety-relevant systems. Organizations need verifiable evidence against a published standard, not internal attestations.</span>
+          </div>
+        </div>
+        <a href="/contact" class="btn btn-solid">Begin an assessment for your industrial AI</a>
+      </div>
+    </div>
+
   </div>
 </section>
 
@@ -403,6 +444,10 @@
           <span class="ag-domain">Automotive</span>
           <span class="ag-note">Perception failure outside the operational design domain. Adversarial inputs that exploit model vulnerabilities. Drift in a safety system as vehicle population ages.</span>
         </div>
+        <div class="ag-item fade-up">
+          <span class="ag-domain">Industrial</span>
+          <span class="ag-note">Vision model misclassification outside the declared ODD on a production line. Drift in a predictive maintenance model as equipment ages. OOD input to a collaborative robot when an unexpected object enters the workspace.</span>
+        </div>
       </div>
     </div>
   </div>
@@ -433,7 +478,7 @@
     <div class="footer-divider"></div>
     <div class="footer-bottom">
       <span class="footer-copyright">&copy; 2025 Safety Critical Labs. All rights reserved.</span>
-      <span class="footer-version">Framework v2.0</span>
+      <span class="footer-version">Framework v2.1.1</span>
     </div>
   </div>
 </footer>

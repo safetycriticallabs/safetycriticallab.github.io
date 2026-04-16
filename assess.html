@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Readiness Assessment — Safety Critical Labs</title>
-<meta name="description" content="Evaluate your AI system's certification readiness against the SCL framework. Free self-assessment covering all nine requirement areas.">
+<meta name="description" content="Evaluate your AI system's certification readiness against the SCL framework. Free self-assessment covering all ten requirement areas.">
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -710,7 +710,7 @@
       </div>
     </div>
 
-    <!-- STEP 4: Advanced Requirements (AI-7, AI-8, AI-9) -->
+    <!-- STEP 4: Advanced Requirements (AI-7, AI-8, AI-9, AI-10) -->
     <div class="assess-step" id="step-4">
       <div class="step-eyebrow">Step 4 — Robustness &amp; Oversight</div>
       <div class="step-title">Adversarial testing, explainability, and human teaming</div>
@@ -803,6 +803,35 @@
         </div>
       </div>
 
+      <div class="q-card">
+        <div class="q-label">
+          AI-10: Privacy and Data Protection
+          <div class="q-sublabel">If your system processes personal data, are lawful basis, data subject rights, and privacy-enhancing techniques implemented and auditable?</div>
+        </div>
+        <div class="q-options" data-name="q-ai10">
+          <label class="q-option">
+            <input type="radio" name="q-ai10" value="3">
+            <span class="q-radio"></span>
+            <span class="q-option-text">Yes — personal data is identified and minimized, lawful basis is documented, data subject rights are implemented, and privacy-enhancing techniques are in place</span>
+          </label>
+          <label class="q-option">
+            <input type="radio" name="q-ai10" value="2">
+            <span class="q-radio"></span>
+            <span class="q-option-text">Some privacy controls exist, but not all components are formally documented or verified</span>
+          </label>
+          <label class="q-option">
+            <input type="radio" name="q-ai10" value="1">
+            <span class="q-radio"></span>
+            <span class="q-option-text">No formal privacy controls or data protection framework in place</span>
+          </label>
+          <label class="q-option">
+            <input type="radio" name="q-ai10" value="0">
+            <span class="q-radio"></span>
+            <span class="q-option-text">Not applicable — the system does not process personal data</span>
+          </label>
+        </div>
+      </div>
+
       <div class="assess-nav">
         <button class="assess-btn assess-btn-back" id="btn-back-4">Back</button>
         <button class="assess-btn assess-btn-next" id="btn-next-4">See Results</button>
@@ -874,7 +903,7 @@
     <div class="footer-divider"></div>
     <div class="footer-bottom">
       <span class="footer-copyright">&copy; 2025 Safety Critical Labs. All rights reserved.</span>
-      <span class="footer-version">Framework v2.0</span>
+      <span class="footer-version">Framework v2.1.1</span>
     </div>
   </div>
 </footer>
@@ -888,15 +917,16 @@
   var currentStep = 1;
 
   var reqMeta = {
-    'ai1': { id: 'AI-1', title: 'Data partitioning & classification' },
-    'ai2': { id: 'AI-2', title: 'Bias detection & mitigation' },
+    'ai1': { id: 'AI-1', title: 'Operational and data foundations' },
+    'ai2': { id: 'AI-2', title: 'Addressing AI bias' },
     'ai3': { id: 'AI-3', title: 'ML test coverage' },
     'ai4': { id: 'AI-4', title: 'Continuous validation' },
     'ai5': { id: 'AI-5', title: 'Hallucination prevention' },
     'ai6': { id: 'AI-6', title: 'Out-of-distribution detection' },
     'ai7': { id: 'AI-7', title: 'Adversarial robustness' },
     'ai8': { id: 'AI-8', title: 'Explainability' },
-    'ai9': { id: 'AI-9', title: 'Human-AI teaming' }
+    'ai9': { id: 'AI-9', title: 'Human-AI teaming' },
+    'ai10': { id: 'AI-10', title: 'Privacy and data protection' }
   };
 
   /* ── Radio selection handling ─────────────────── */
@@ -951,7 +981,8 @@
     if (n === 4) {
       return document.querySelector('input[name="q-ai7"]:checked')
         && document.querySelector('input[name="q-ai8"]:checked')
-        && document.querySelector('input[name="q-ai9"]:checked');
+        && document.querySelector('input[name="q-ai9"]:checked')
+        && document.querySelector('input[name="q-ai10"]:checked');
     }
     return false;
   }
@@ -961,9 +992,9 @@
     var consequence = parseInt(document.querySelector('input[name="q-consequence"]:checked').value);
     var override = document.querySelector('input[name="q-override"]:checked').value;
 
-    if (consequence === 3 || override === 'no') return { tier: 1, label: 'Safety-Critical', desc: 'Your system classification is Tier 1 — Safety-Critical. All nine requirement areas (AI-1 through AI-9) apply. Annual surveillance audits required.' };
-    if (consequence === 2 || override === 'partial') return { tier: 2, label: 'Mission-Critical', desc: 'Your system classification is Tier 2 — Mission-Critical. AI-1 through AI-6, AI-8, and AI-9 apply. AI-7 (adversarial robustness) may be tailored based on threat environment.' };
-    return { tier: 3, label: 'Mission Support', desc: 'Your system classification is Tier 3 — Mission Support. AI-1 through AI-6 apply. AI-8 and AI-9 may be scoped to your specific operational context.' };
+    if (consequence === 3 || override === 'no') return { tier: 1, label: 'Safety-Critical AI', desc: 'Your system classification is Tier 1 — Safety-Critical AI. All ten requirement areas (AI-1 through AI-10) apply. Annual surveillance audits required.' };
+    if (consequence === 2 || override === 'partial') return { tier: 2, label: 'Mission-Critical AI', desc: 'Your system classification is Tier 2 — Mission-Critical AI. AI-1 through AI-6, AI-8, AI-9, and AI-10 apply. AI-7 (adversarial robustness) may be tailored based on threat environment.' };
+    return { tier: 3, label: 'Operational Support AI', desc: 'Your system classification is Tier 3 — Operational Support AI. AI-1 through AI-6 and AI-10 apply at minimum. AI-8 and AI-9 may be scoped to your specific operational context.' };
   }
 
   /* ── Calculate results ───────────────────────── */
@@ -974,7 +1005,7 @@
     var totalApplicable = 0;
     var totalScore = 0;
 
-    ['ai1','ai2','ai3','ai4','ai5','ai6','ai7','ai8','ai9'].forEach(function(key) {
+    ['ai1','ai2','ai3','ai4','ai5','ai6','ai7','ai8','ai9','ai10'].forEach(function(key) {
       var input = document.querySelector('input[name="q-' + key + '"]:checked');
       var val = input ? parseInt(input.value) : 0;
 
@@ -1062,7 +1093,7 @@
     // Render requirement cards
     var grid = document.getElementById('resultsGrid');
     grid.innerHTML = '';
-    ['ai1','ai2','ai3','ai4','ai5','ai6','ai7','ai8','ai9'].forEach(function(key) {
+    ['ai1','ai2','ai3','ai4','ai5','ai6','ai7','ai8','ai9','ai10'].forEach(function(key) {
       var s = r.scores[key];
       var m = reqMeta[key];
       var card = document.createElement('div');
@@ -1139,13 +1170,13 @@ document.addEventListener("click", function() {
   /* ── Reference data ─────────────────────────────── */
   var REQ_DATA = {
     ai1: {
-      id: 'AI-1', title: 'Data Partitioning & Classification',
-      question: 'Do you maintain documented, separated training, validation, and test datasets with recorded provenance?',
-      context: 'AI-1 addresses the separation and documentation of datasets used to train, validate, and test AI models. In safety-critical environments, data provenance and lineage must be auditable to ensure training data has not been contaminated and that test datasets have not leaked into training sets. This requirement also covers CUI and ITAR classification inheritance through AI output channels.',
+      id: 'AI-1', title: 'Operational and Data Foundations',
+      question: 'Do you have a declared Operational Design Domain (ODD) plus documented, separated training, validation, and test datasets with recorded provenance?',
+      context: 'AI-1 establishes the foundations on which all downstream verification depends: a declared Operational Design Domain (ODD) that bounds the certification claim, the integrity of training/validation/test data partitions with documented provenance, and classification handling controls (including CUI and ITAR inheritance) that govern data and outputs through the lifecycle.',
       answers: {
-        '3': 'Fully documented \u2014 partitions are enforced, provenance is tracked, and data lineage is auditable',
-        '2': 'Partially \u2014 data is separated but documentation or provenance tracking is incomplete',
-        '1': 'Minimal \u2014 no formal partitioning or documentation process'
+        '3': 'Fully documented \u2014 ODD is declared, partitions are enforced, provenance is tracked, and data lineage is auditable',
+        '2': 'Partially \u2014 some foundations in place but ODD declaration, partitioning, or provenance documentation is incomplete',
+        '1': 'Minimal \u2014 no declared ODD and no formal partitioning or documentation process'
       }
     },
     ai2: {
@@ -1230,6 +1261,17 @@ document.addEventListener("click", function() {
         '1': 'No formal human-AI teaming framework in place',
         '0': 'Not applicable to this system\'s classification'
       }
+    },
+    ai10: {
+      id: 'AI-10', title: 'Privacy and Data Protection',
+      question: 'If your system processes personal data, are lawful basis, data subject rights, and privacy-enhancing techniques implemented and auditable?',
+      context: 'AI-10 addresses personal data identification and minimization, lawful basis and consent management, data subject rights implementation, privacy-enhancing techniques, and cross-border data transfer controls. Where personal data is not processed, sub-requirements may be documented as Not Applicable with rationale; otherwise they apply across all classifications.',
+      answers: {
+        '3': 'Personal data is identified and minimized, lawful basis is documented, data subject rights are implemented, and privacy-enhancing techniques are in place',
+        '2': 'Some privacy controls exist, but not all components are formally documented or verified',
+        '1': 'No formal privacy controls or data protection framework in place',
+        '0': 'Not applicable \u2014 the system does not process personal data'
+      }
     }
   };
 
@@ -1290,17 +1332,17 @@ document.addEventListener("click", function() {
 
     var classification;
     if (cq === 3 || override === 'no') {
-      classification = { tier: 1, label: 'Safety-Critical', desc: 'All nine requirement areas (AI-1 through AI-9) apply. Annual surveillance audits required.' };
+      classification = { tier: 1, label: 'Safety-Critical AI', desc: 'All ten requirement areas (AI-1 through AI-10) apply. Annual surveillance audits required.' };
     } else if (cq === 2 || override === 'partial') {
-      classification = { tier: 2, label: 'Mission-Critical', desc: 'AI-1 through AI-6, AI-8, and AI-9 apply. AI-7 (adversarial robustness) may be tailored based on threat environment.' };
+      classification = { tier: 2, label: 'Mission-Critical AI', desc: 'AI-1 through AI-6, AI-8, AI-9, and AI-10 apply. AI-7 (adversarial robustness) may be tailored based on threat environment.' };
     } else {
-      classification = { tier: 3, label: 'Mission Support', desc: 'AI-1 through AI-6 apply. AI-8 and AI-9 may be scoped to your specific operational context.' };
+      classification = { tier: 3, label: 'Operational Support AI', desc: 'AI-1 through AI-6 and AI-10 apply at minimum. AI-8 and AI-9 may be scoped to your specific operational context.' };
     }
 
     var scores = {};
     var totalApplicable = 0;
     var totalScore = 0;
-    var keys = ['ai1','ai2','ai3','ai4','ai5','ai6','ai7','ai8','ai9'];
+    var keys = ['ai1','ai2','ai3','ai4','ai5','ai6','ai7','ai8','ai9','ai10'];
     keys.forEach(function(key) {
       var input = document.querySelector('input[name="q-' + key + '"]:checked');
       var val = input ? parseInt(input.value) : 0;
@@ -1409,7 +1451,7 @@ document.addEventListener("click", function() {
 
       pdf.setFontSize(9);
       pdf.setTextColor(180, 200, 220);
-      pdf.text('SCL AI Requirements Framework v2.0', ML, 46);
+      pdf.text('SCL AI Requirements Framework v2.1.1', ML, 46);
 
       y = 66;
 
@@ -1417,7 +1459,7 @@ document.addEventListener("click", function() {
       pdf.setFont('helvetica', 'normal');
       pdf.setFontSize(9);
       pdf.setTextColor(INK_MID[0], INK_MID[1], INK_MID[2]);
-      var preamble = 'This report documents the self-assessment responses submitted against the SCL AI Requirements Framework v2.0. It captures the respondent\u2019s evaluation of their AI system across nine requirement areas. This report has not been independently verified by Safety Critical Labs and does not constitute a formal certification or determination.';
+      var preamble = 'This report documents the self-assessment responses submitted against the SCL AI Requirements Framework v2.1.1. It captures the respondent\u2019s evaluation of their AI system across ten requirement areas. This report has not been independently verified by Safety Critical Labs and does not constitute a formal certification or determination.';
       var pLines = wrapText(pdf, preamble, CW);
       pdf.text(pLines, ML, y);
       y += pLines.length * 4.2 + 10;
@@ -1438,7 +1480,7 @@ document.addEventListener("click", function() {
         ['Consequence Level', data.consequenceLabel],
         ['Human Override', data.overrideLabel],
         ['Overall Readiness', data.percentage + '%'],
-        ['Applicable Requirements', data.totalApplicable + ' of 9']
+        ['Applicable Requirements', data.totalApplicable + ' of 10']
       ];
 
       overviewItems.forEach(function(item) {
@@ -1474,7 +1516,7 @@ document.addEventListener("click", function() {
       pdf.text('RESULTS AT A GLANCE', ML, y);
       y += 8;
 
-      var keys = ['ai1','ai2','ai3','ai4','ai5','ai6','ai7','ai8','ai9'];
+      var keys = ['ai1','ai2','ai3','ai4','ai5','ai6','ai7','ai8','ai9','ai10'];
       keys.forEach(function(key) {
         y = checkPage(pdf, y, 8, MT, PH);
         var r = REQ_DATA[key];
@@ -1526,7 +1568,7 @@ document.addEventListener("click", function() {
       pdf.setFont('courier', 'normal');
       pdf.setFontSize(7);
       pdf.setTextColor(INK_LIGHT[0], INK_LIGHT[1], INK_LIGHT[2]);
-      pdf.text('Safety Critical Labs \u00b7 safetycriticallabs.com \u00b7 Framework v2.0', ML, PH - 12);
+      pdf.text('Safety Critical Labs \u00b7 safetycriticallabs.com \u00b7 Framework v2.1.1', ML, PH - 12);
       pdf.text('Report ' + reportId + ' \u00b7 Page 1', PW - MR, PH - 12, { align: 'right' });
 
       /* ─────────────────────────────────────────────
@@ -1553,7 +1595,7 @@ document.addEventListener("click", function() {
         pdf.setFont('courier', 'normal');
         pdf.setFontSize(7);
         pdf.setTextColor(INK_LIGHT[0], INK_LIGHT[1], INK_LIGHT[2]);
-        pdf.text('Safety Critical Labs \u00b7 safetycriticallabs.com \u00b7 Framework v2.0', ML, PH - 12);
+        pdf.text('Safety Critical Labs \u00b7 safetycriticallabs.com \u00b7 Framework v2.1.1', ML, PH - 12);
         pdf.text('Report ' + reportId + ' \u00b7 Page ' + pageNum, PW - MR, PH - 12, { align: 'right' });
       }
 
@@ -1707,7 +1749,7 @@ document.addEventListener("click", function() {
       pdf.setFont('helvetica', 'italic');
       pdf.setFontSize(7.5);
       pdf.setTextColor(INK_LIGHT[0], INK_LIGHT[1], INK_LIGHT[2]);
-      var disclaimer = 'This report reflects a self-assessment only. It does not constitute a formal certification, determination, or endorsement by Safety Critical Labs. The responses recorded herein have not been independently verified. To obtain a formal assessment against the SCL AI Requirements Framework, contact the SCL team. Safety Critical Labs \u00b7 DOI 10.5281/zenodo.19024420 \u00b7 Framework v2.0';
+      var disclaimer = 'This report reflects a self-assessment only. It does not constitute a formal certification, determination, or endorsement by Safety Critical Labs. The responses recorded herein have not been independently verified. To obtain a formal assessment against the SCL AI Requirements Framework, contact the SCL team. Safety Critical Labs \u00b7 DOI 10.5281/zenodo.19024420 \u00b7 Framework v2.1.1';
       var dLines = wrapText(pdf, disclaimer, CW);
       pdf.text(dLines, ML, y);
 

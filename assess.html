@@ -198,6 +198,37 @@
   border-color: var(--red);
 }
 
+/* Validation / error state */
+.q-card.error {
+  border-color: #C8272D;
+  background: #FEF5F5;
+  box-shadow: 0 0 0 1px #C8272D inset;
+}
+.q-card.error .q-label { color: #C8272D; }
+.assess-error-banner {
+  background: #FEF2F2;
+  border: 1px solid #C8272D;
+  border-left: 4px solid #C8272D;
+  border-radius: 4px;
+  padding: 14px 18px 14px 22px;
+  margin-bottom: 20px;
+  font-size: 13px;
+  color: #7A1B1E;
+  line-height: 1.5;
+}
+.assess-error-banner strong {
+  display: block;
+  color: #C8272D;
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+.assess-error-banner ul {
+  margin: 4px 0 0 0;
+  padding-left: 18px;
+}
+.assess-error-banner li { margin: 2px 0; }
+
 /* Navigation buttons */
 .assess-nav {
   display: flex; justify-content: space-between;
@@ -929,6 +960,81 @@
     'ai10': { id: 'AI-10', title: 'Privacy and data protection' }
   };
 
+  /* ── Question labels for error messages ───────── */
+  var questionLabels = {
+    'q-domain': 'Primary domain',
+    'q-consequence': 'Worst-case consequence of failure',
+    'q-override': 'Human override capability',
+    'q-ai1': 'AI-1: Operational and Data Foundations',
+    'q-ai2': 'AI-2: Addressing AI Bias',
+    'q-ai3': 'AI-3: ML Test Coverage',
+    'q-ai4': 'AI-4: Continuous Validation',
+    'q-ai5': 'AI-5: Hallucination Prevention',
+    'q-ai6': 'AI-6: Out-of-Distribution Detection',
+    'q-ai7': 'AI-7: Adversarial Robustness',
+    'q-ai8': 'AI-8: Explainability',
+    'q-ai9': 'AI-9: Human-AI Teaming',
+    'q-ai10': 'AI-10: Privacy and Data Protection'
+  };
+
+  function findCardFor(name) {
+    var sel = document.getElementById(name);
+    if (sel) return sel.closest('.q-card');
+    var opts = document.querySelector('.q-options[data-name="' + name + '"]');
+    return opts ? opts.closest('.q-card') : null;
+  }
+
+  function clearStepErrors(n) {
+    var step = document.getElementById('step-' + n);
+    if (!step) return;
+    step.querySelectorAll('.q-card.error').forEach(function(c) { c.classList.remove('error'); });
+    var banner = step.querySelector('.assess-error-banner');
+    if (banner) banner.remove();
+  }
+
+  function showStepErrors(n, missing) {
+    var step = document.getElementById('step-' + n);
+    if (!step) return;
+    clearStepErrors(n);
+
+    var banner = document.createElement('div');
+    banner.className = 'assess-error-banner';
+    var heading = missing.length === 1
+      ? 'Please answer this question before continuing.'
+      : 'Please answer all ' + missing.length + ' questions before continuing.';
+    var items = missing.map(function(name) {
+      return '<li>' + (questionLabels[name] || name) + '</li>';
+    }).join('');
+    banner.innerHTML = '<strong>' + heading + '</strong><ul>' + items + '</ul>';
+
+    var firstChild = step.firstChild;
+    step.insertBefore(banner, firstChild);
+
+    var firstCard = null;
+    missing.forEach(function(name) {
+      var card = findCardFor(name);
+      if (card) {
+        card.classList.add('error');
+        if (!firstCard) firstCard = card;
+      }
+    });
+
+    if (firstCard) {
+      firstCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  }
+
+  function clearCardError(card) {
+    if (!card) return;
+    card.classList.remove('error');
+    var step = card.closest('.assess-step');
+    if (!step) return;
+    if (step.querySelectorAll('.q-card.error').length === 0) {
+      var banner = step.querySelector('.assess-error-banner');
+      if (banner) banner.remove();
+    }
+  }
+
   /* ── Radio selection handling ─────────────────── */
   document.querySelectorAll('.q-option').forEach(function(opt) {
     opt.addEventListener('click', function() {
@@ -938,8 +1044,17 @@
       var siblings = this.closest('.q-options').querySelectorAll('.q-option');
       siblings.forEach(function(s) { s.classList.remove('selected'); });
       this.classList.add('selected');
+      clearCardError(this.closest('.q-card'));
     });
   });
+
+  /* ── Select dropdown: clear error on change ───── */
+  var domainSelect = document.getElementById('q-domain');
+  if (domainSelect) {
+    domainSelect.addEventListener('change', function() {
+      if (this.value) clearCardError(this.closest('.q-card'));
+    });
+  }
 
   /* ── Progress bar ────────────────────────────── */
   function updateProgress() {
@@ -961,30 +1076,37 @@
   }
 
   /* ── Validation ──────────────────────────────── */
+  var stepQuestions = {
+    1: ['q-domain', 'q-consequence', 'q-override'],
+    2: ['q-ai1', 'q-ai2', 'q-ai3'],
+    3: ['q-ai4', 'q-ai5', 'q-ai6'],
+    4: ['q-ai7', 'q-ai8', 'q-ai9', 'q-ai10']
+  };
+
   function validateStep(n) {
-    if (n === 1) {
-      var domain = document.getElementById('q-domain').value;
-      var consequence = document.querySelector('input[name="q-consequence"]:checked');
-      var override = document.querySelector('input[name="q-override"]:checked');
-      return domain && consequence && override;
+    var names = stepQuestions[n] || [];
+    var missing = [];
+    names.forEach(function(name) {
+      var answered;
+      if (name === 'q-domain') {
+        var sel = document.getElementById(name);
+        answered = sel && sel.value;
+      } else {
+        answered = !!document.querySelector('input[name="' + name + '"]:checked');
+      }
+      if (!answered) missing.push(name);
+    });
+    return { valid: missing.length === 0, missing: missing };
+  }
+
+  function tryAdvance(fromStep, onValid) {
+    var result = validateStep(fromStep);
+    if (result.valid) {
+      clearStepErrors(fromStep);
+      onValid();
+    } else {
+      showStepErrors(fromStep, result.missing);
     }
-    if (n === 2) {
-      return document.querySelector('input[name="q-ai1"]:checked')
-        && document.querySelector('input[name="q-ai2"]:checked')
-        && document.querySelector('input[name="q-ai3"]:checked');
-    }
-    if (n === 3) {
-      return document.querySelector('input[name="q-ai4"]:checked')
-        && document.querySelector('input[name="q-ai5"]:checked')
-        && document.querySelector('input[name="q-ai6"]:checked');
-    }
-    if (n === 4) {
-      return document.querySelector('input[name="q-ai7"]:checked')
-        && document.querySelector('input[name="q-ai8"]:checked')
-        && document.querySelector('input[name="q-ai9"]:checked')
-        && document.querySelector('input[name="q-ai10"]:checked');
-    }
-    return false;
   }
 
   /* ── Determine classification ────────────────── */
@@ -1108,20 +1230,20 @@
 
   /* ── Button wiring ───────────────────────────── */
   document.getElementById('btn-next-1').addEventListener('click', function() {
-    if (validateStep(1)) showStep(2);
+    tryAdvance(1, function() { showStep(2); });
   });
   document.getElementById('btn-next-2').addEventListener('click', function() {
-    if (validateStep(2)) showStep(3);
+    tryAdvance(2, function() { showStep(3); });
   });
   document.getElementById('btn-next-3').addEventListener('click', function() {
-    if (validateStep(3)) showStep(4);
+    tryAdvance(3, function() { showStep(4); });
   });
   document.getElementById('btn-next-4').addEventListener('click', function() {
-    if (validateStep(4)) showResults();
+    tryAdvance(4, function() { showResults(); });
   });
-  document.getElementById('btn-back-2').addEventListener('click', function() { showStep(1); });
-  document.getElementById('btn-back-3').addEventListener('click', function() { showStep(2); });
-  document.getElementById('btn-back-4').addEventListener('click', function() { showStep(3); });
+  document.getElementById('btn-back-2').addEventListener('click', function() { clearStepErrors(2); showStep(1); });
+  document.getElementById('btn-back-3').addEventListener('click', function() { clearStepErrors(3); showStep(2); });
+  document.getElementById('btn-back-4').addEventListener('click', function() { clearStepErrors(4); showStep(3); });
 
   // Initialize
   updateProgress();

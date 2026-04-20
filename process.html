@@ -16,6 +16,46 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 <link rel="stylesheet" href="styles.css">
 <style>
+/* ─── SECTION EYEBROW OVERRIDE ────────────────────────────── */
+.page-section .section-eyebrow,
+.evidence-section .section-eyebrow {
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  color: var(--red);
+  margin-bottom: 22px;
+}
+.page-section .section-eyebrow::before,
+.evidence-section .section-eyebrow::before {
+  width: 28px; height: 2px;
+  background: var(--red);
+}
+.outputs-section .section-eyebrow,
+.timeline-section .section-eyebrow {
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  color: var(--red) !important;
+  margin-bottom: 22px;
+}
+.outputs-section .section-eyebrow::before,
+.timeline-section .section-eyebrow::before {
+  width: 28px; height: 2px;
+  background: var(--red);
+}
+
+/* ─── SECTION TRANSITIONS ─────────────────────────────────── */
+.inner-hero { position: relative; }
+.inner-hero::after {
+  content: ''; position: absolute; bottom: 0; left: 0; right: 0;
+  height: 120px;
+  background: linear-gradient(to bottom, transparent, var(--bg));
+  pointer-events: none; z-index: 1;
+  mix-blend-mode: screen;
+  opacity: 0.25;
+}
+.page-section { position: relative; }
+
 /* ─── PROCESS PAGE STYLES ────────────────────────────────── */
 
 /* ═══════════════════════════════════════════════════════════

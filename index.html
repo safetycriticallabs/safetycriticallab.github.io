@@ -20,21 +20,33 @@
 <style>
 /* ─── INDEX PAGE STYLES ─────────────────────────────── */
 
+/* ─── SECTION EYEBROW OVERRIDE ────────────────────────────── */
+.page-section .section-eyebrow {
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  color: var(--red);
+  margin-bottom: 22px;
+}
+.page-section .section-eyebrow::before {
+  width: 28px; height: 2px;
+  background: var(--red);
+}
+
 /* ─── HOME HERO ───────────────────────────────────────────── */
 .home-hero {
   background: var(--bg);
   min-height: calc(100vh - 88px);
   display: flex; align-items: center;
-  padding: 100px 40px 80px;
+  padding: 100px 40px 120px;
   position: relative;
   overflow: hidden;
 }
 .home-hero::after {
   content: ''; position: absolute; bottom: 0; left: 0; right: 0;
-  height: 120px;
-  background: linear-gradient(to bottom, transparent, var(--white));
-  pointer-events: none;
-  z-index: 2;
+  height: 180px;
+  background: linear-gradient(to bottom, transparent, #F7F3EC);
+  pointer-events: none; z-index: 1;
 }
 
 .home-hero-inner {
@@ -77,6 +89,8 @@
   display: flex; align-items: center; justify-content: center;
   position: relative; z-index: 1;
   margin-left: -80px;
+  perspective: 1800px;
+  perspective-origin: 50% 40%;
 }
 
 .cert-doc {
@@ -85,8 +99,36 @@
   width: 100%; max-width: 440px;
   padding: 24px 28px;
   position: relative;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.04), 0 20px 60px rgba(0,0,0,0.06);
   font-family: var(--serif);
+  transform: rotateY(-9deg) rotateX(5deg);
+  transform-style: preserve-3d;
+  transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1),
+              box-shadow 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+  box-shadow:
+    0 2px 4px rgba(20, 24, 40, 0.04),
+    0 8px 16px rgba(20, 24, 40, 0.06),
+    -18px 30px 40px rgba(20, 24, 40, 0.10),
+    -30px 60px 90px rgba(20, 24, 40, 0.12);
+}
+
+.cert-doc::after {
+  content: ''; position: absolute;
+  left: 6%; right: 10%;
+  bottom: -24px; height: 40px;
+  background: radial-gradient(ellipse at center, rgba(20,24,40,0.22), rgba(20,24,40,0) 70%);
+  filter: blur(10px);
+  z-index: -1;
+  transform: translateZ(-60px);
+  pointer-events: none;
+}
+
+.cert-stage:hover .cert-doc {
+  transform: rotateY(-3deg) rotateX(2deg);
+  box-shadow:
+    0 4px 8px rgba(20, 24, 40, 0.05),
+    0 14px 24px rgba(20, 24, 40, 0.07),
+    -10px 24px 40px rgba(20, 24, 40, 0.10),
+    -20px 50px 90px rgba(20, 24, 40, 0.12);
 }
 
 .cert-doc::before {
@@ -239,29 +281,25 @@
 
 /* ─── SECTION FLOW & DEPTH ────────────────────────────────── */
 .section-wwd {
-  background: var(--white);
+  background: #F7F3EC;
   position: relative;
-  padding: 104px 40px;
+  padding: 120px 40px;
 }
 .section-wwd::after {
   content: ''; position: absolute; bottom: 0; left: 0; right: 0;
-  height: 160px;
-  background: linear-gradient(to bottom, transparent, var(--bg));
+  height: 180px;
+  background: linear-gradient(to bottom, transparent, var(--white));
   pointer-events: none;
 }
 .section-produces {
-  background: var(--bg);
+  background: var(--white);
   position: relative;
-  padding: 104px 40px;
-}
-.section-produces::before {
-  content: ''; position: absolute; top: 0; left: 50%; transform: translateX(-50%);
-  width: 48px; height: 2px; background: var(--red); border-radius: 2px; opacity: 0.25;
+  padding: 120px 40px;
 }
 .section-produces::after {
   content: ''; position: absolute; bottom: 0; left: 0; right: 0;
-  height: 160px;
-  background: linear-gradient(to bottom, transparent, #F0F2F5);
+  height: 180px;
+  background: linear-gradient(to bottom, transparent, #EEF2F7);
   pointer-events: none;
 }
 
@@ -348,27 +386,6 @@
 }
 .produces-card-desc { font-size: 14px; color: var(--ink-2); line-height: 1.65; }
 
-/* ─── HOME CTA ────────────────────────────────────────────── */
-.home-cta {
-  background: var(--white);
-  padding: 96px 40px;
-  text-align: center;
-  position: relative;
-}
-
-.home-cta h2 {
-  font-family: var(--serif);
-  font-size: clamp(30px, 3.5vw, 44px);
-  color: var(--ink); font-weight: 400;
-  margin-bottom: 20px; line-height: 1.15;
-}
-
-.home-cta p {
-  font-size: 17px; color: var(--ink-2);
-  font-weight: 300; max-width: 500px;
-  margin: 0 auto 36px; line-height: 1.8;
-}
-
 .btn-white {
   display: inline-block;
   background: #fff; color: var(--ink);
@@ -380,50 +397,12 @@
 }
 .btn-white:hover { background: var(--bg); }
 
-/* ─── ALIGNED WITH STRIP ──────────────────────────────────── */
-.aligned-strip {
-  background: var(--bg);
-  padding: 56px 40px;
-  border-top: 1px solid var(--rule);
-  border-bottom: 1px solid var(--rule);
-}
-.aligned-inner {
-  max-width: 1200px; margin: 0 auto;
-  text-align: center;
-}
-.aligned-label {
-  font-family: var(--mono); font-size: 11px;
-  letter-spacing: 0.2em; text-transform: uppercase;
-  color: var(--ink-3);
-  display: block; margin-bottom: 24px;
-}
-.aligned-logos {
-  display: flex; align-items: center; gap: 0;
-  flex-wrap: wrap; justify-content: center;
-}
-.aligned-item {
-  font-family: var(--mono); font-size: 12px;
-  font-weight: 500; letter-spacing: 0.06em;
-  color: var(--ink);
-  transition: color 0.3s ease, border-color 0.3s ease, background 0.3s ease;
-  cursor: default; white-space: nowrap;
-  padding: 10px 24px;
-  border: 1px solid var(--rule);
-  border-radius: 980px;
-  margin: 6px 7px;
-}
-.aligned-item:hover {
-  color: var(--red);
-  border-color: var(--red);
-  background: rgba(200,39,45,0.03);
-}
-.aligned-sep { display: none; }
-
 /* ─── REGULATORY LANDSCAPE ───────────────────────────────── */
 .reg-landscape {
-  background: #F0F2F5;
+  background: #EEF2F7;
+  position: relative;
   border-top: none;
-  padding-top: 104px; padding-bottom: 104px;
+  padding-top: 120px; padding-bottom: 120px;
 }
 
 .reg-header {
@@ -577,8 +556,6 @@
   .reg-landscape { padding-top: 72px; padding-bottom: 72px; }
   .reg-header { text-align: center; }
   .reg-grid { grid-template-columns: 1fr; gap: 20px; }
-  .home-cta { padding: 72px 24px; }
-  .aligned-strip { padding: 40px 24px; }
 }
 @media (max-width: 580px) {
   .home-hero h1 { font-size: clamp(36px, 8vw, 48px); }
@@ -765,21 +742,6 @@
     </div>
   </section>
 
-<!-- ALIGNED WITH STRIP -->
-<div class="aligned-strip">
-  <div class="aligned-inner">
-    <span class="aligned-label">Framework aligned with</span>
-    <div class="aligned-logos">
-      <span class="aligned-item">NIST</span>
-      <span class="aligned-item">FAA</span>
-      <span class="aligned-item">NASA</span>
-      <span class="aligned-item">ISO</span>
-      <span class="aligned-item">EU AI Act</span>
-      <span class="aligned-item">MIL-STD</span>
-    </div>
-  </div>
-</div>
-
 <!-- WHAT WE DO -->
 <section class="page-section section-wwd">
   <div class="section-inner">
@@ -941,12 +903,6 @@
     <div class="reg-footer-note">Sources updated on page load from official government APIs</div>
   </div>
 </section>
-
-<!-- HOME CTA -->
-<div class="home-cta">
-  <p class="home-cta-closing">A published standard. A formal determination on record.<br>That is what separates certification from attestation.</p>
-  <a href="/contact" class="btn btn-outline-dark">Contact the team</a>
-</div>
 
 <!-- FOOTER -->
 <footer class="site-footer">

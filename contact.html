@@ -180,6 +180,44 @@
   min-height: 140px;
 }
 .form-editor .form-textarea:focus { border: none; }
+
+/* Rich-text (contenteditable) surface */
+.form-richtext {
+  font-family: var(--sans);
+  font-size: 14px;
+  color: var(--ink);
+  background: var(--white);
+  padding: 12px 14px;
+  min-height: 140px;
+  outline: none;
+  line-height: 1.6;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+.form-richtext p { margin: 0 0 8px; }
+.form-richtext p:last-child { margin-bottom: 0; }
+.form-richtext strong, .form-richtext b { font-weight: 600; color: var(--ink); }
+.form-richtext em, .form-richtext i { font-style: italic; }
+.form-richtext h2 {
+  font-family: var(--sans);
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--ink);
+  margin: 10px 0 6px;
+  line-height: 1.3;
+}
+.form-richtext ul, .form-richtext ol {
+  margin: 6px 0 10px;
+  padding-left: 24px;
+}
+.form-richtext li { margin-bottom: 4px; }
+.form-richtext a { color: var(--red); text-decoration: underline; }
+.form-richtext.is-empty::before {
+  content: attr(data-placeholder);
+  color: var(--ink-3);
+  pointer-events: none;
+  display: block;
+}
 .form-toolbar {
   display: flex;
   flex-wrap: wrap;
@@ -419,20 +457,21 @@
             <input class="form-input" type="text" id="system" name="system" placeholder="Brief description of your AI system">
           </div>
           <div class="form-field">
-            <label class="form-label" for="message">Message</label>
+            <label class="form-label" for="messageEditable">Message</label>
             <div class="form-editor" id="messageEditor">
               <div class="form-toolbar" role="toolbar" aria-label="Formatting">
-                <button type="button" class="tb-bold" data-action="bold" title="Bold (wraps selection with **)" aria-label="Bold">B</button>
-                <button type="button" class="tb-italic" data-action="italic" title="Italic (wraps selection with *)" aria-label="Italic">I</button>
+                <button type="button" class="tb-bold" data-action="bold" title="Bold" aria-label="Bold">B</button>
+                <button type="button" class="tb-italic" data-action="italic" title="Italic" aria-label="Italic">I</button>
                 <span class="tb-sep" aria-hidden="true"></span>
                 <button type="button" data-action="h2" title="Heading" aria-label="Heading">H</button>
                 <button type="button" data-action="bullet" title="Bulleted list" aria-label="Bulleted list">• List</button>
                 <button type="button" data-action="number" title="Numbered list" aria-label="Numbered list">1. List</button>
                 <span class="tb-sep" aria-hidden="true"></span>
                 <button type="button" data-action="link" title="Insert link" aria-label="Insert link">🔗 Link</button>
-                <span class="tb-hint">Markdown</span>
+                <span class="tb-hint">Rich text</span>
               </div>
-              <textarea class="form-textarea" id="message" name="message" placeholder="How can we help? Tip: use the toolbar above to add bullets, headings, or links."></textarea>
+              <div class="form-richtext is-empty" id="messageEditable" contenteditable="true" role="textbox" aria-multiline="true" data-placeholder="How can we help? Use the toolbar above to add bold, bullets, headings, or links."></div>
+              <input type="hidden" name="message" id="message">
             </div>
           </div>
           <div class="form-field">
@@ -600,11 +639,119 @@ gsap.utils.toArray('.slide-right').forEach(function(el) {
   );
 });
 
+/* ─── Rich-text (contenteditable) editor ─────── */
+(function() {
+  const editable = document.getElementById('messageEditable');
+  const hidden = document.getElementById('message');
+  const toolbar = document.querySelector('#messageEditor .form-toolbar');
+  if (!editable || !toolbar) return;
+
+  function isEmpty() {
+    if (editable.textContent.trim() !== '') return false;
+    const html = editable.innerHTML.replace(/<br\s*\/?>/gi, '').replace(/&nbsp;/g, '').trim();
+    return html === '';
+  }
+  function updatePlaceholder() {
+    editable.classList.toggle('is-empty', isEmpty());
+  }
+  editable.addEventListener('input', updatePlaceholder);
+  editable.addEventListener('blur', updatePlaceholder);
+  editable.addEventListener('focus', updatePlaceholder);
+  updatePlaceholder();
+
+  function exec(cmd, value) {
+    editable.focus();
+    document.execCommand(cmd, false, value || null);
+    updatePlaceholder();
+  }
+
+  toolbar.addEventListener('mousedown', function(e) {
+    // Keep editor focus when clicking toolbar buttons
+    if (e.target.closest('button[data-action]')) e.preventDefault();
+  });
+
+  toolbar.addEventListener('click', function(e) {
+    const btn = e.target.closest('button[data-action]');
+    if (!btn) return;
+    e.preventDefault();
+    const action = btn.dataset.action;
+    if (action === 'bold') exec('bold');
+    else if (action === 'italic') exec('italic');
+    else if (action === 'bullet') exec('insertUnorderedList');
+    else if (action === 'number') exec('insertOrderedList');
+    else if (action === 'h2') exec('formatBlock', 'H2');
+    else if (action === 'link') {
+      const url = window.prompt('Enter URL', 'https://');
+      if (url) exec('createLink', url);
+    }
+  });
+
+  // Convert rich-text HTML to readable plain text for submission
+  function htmlToText(root) {
+    let out = '';
+    function walk(node, ctx) {
+      if (node.nodeType === 3) { out += node.textContent; return; }
+      if (node.nodeType !== 1) return;
+      const tag = node.tagName;
+      const kids = Array.from(node.childNodes);
+      switch (tag) {
+        case 'B': case 'STRONG':
+          out += '**'; kids.forEach(c => walk(c, ctx)); out += '**'; break;
+        case 'I': case 'EM':
+          out += '*'; kids.forEach(c => walk(c, ctx)); out += '*'; break;
+        case 'H1': case 'H2': case 'H3':
+          out += '\n## '; kids.forEach(c => walk(c, ctx)); out += '\n'; break;
+        case 'UL':
+          out += '\n';
+          Array.from(node.children).forEach(li => {
+            out += '- '; Array.from(li.childNodes).forEach(c => walk(c, ctx)); out += '\n';
+          });
+          break;
+        case 'OL': {
+          out += '\n';
+          let n = 1;
+          Array.from(node.children).forEach(li => {
+            out += n + '. '; Array.from(li.childNodes).forEach(c => walk(c, ctx)); out += '\n'; n++;
+          });
+          break;
+        }
+        case 'A':
+          out += '[';
+          kids.forEach(c => walk(c, ctx));
+          out += '](' + (node.getAttribute('href') || '') + ')';
+          break;
+        case 'BR': out += '\n'; break;
+        case 'P': case 'DIV':
+          kids.forEach(c => walk(c, ctx));
+          out += '\n';
+          break;
+        default:
+          kids.forEach(c => walk(c, ctx));
+      }
+    }
+    Array.from(root.childNodes).forEach(c => walk(c, {}));
+    return out.replace(/\n{3,}/g, '\n\n').trim();
+  }
+  window.__messageToText = function() {
+    hidden.value = htmlToText(editable);
+  };
+})();
+
 const form = document.getElementById('contactForm');
 const success = document.getElementById('formSuccess');
 if (form) {
+  // Prevent Enter from submitting the form on single-line text inputs
+  form.addEventListener('keydown', function(e) {
+    if (e.key !== 'Enter') return;
+    const t = e.target;
+    if (t && t.tagName === 'INPUT' && t.type !== 'submit' && t.type !== 'button') {
+      e.preventDefault();
+    }
+  });
+
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
+    if (typeof window.__messageToText === 'function') window.__messageToText();
     const data = new FormData(form);
     const response = await fetch(form.action, {
       method: 'POST',
@@ -617,80 +764,6 @@ if (form) {
     }
   });
 }
-
-/* ─── Markdown toolbar ───────────────────────── */
-(function() {
-  const textarea = document.getElementById('message');
-  const toolbar = document.querySelector('#messageEditor .form-toolbar');
-  if (!textarea || !toolbar) return;
-
-  function wrapSelection(before, after) {
-    const start = textarea.selectionStart;
-    const end = textarea.selectionEnd;
-    const selected = textarea.value.substring(start, end);
-    const replacement = before + (selected || '') + (after || '');
-    textarea.setRangeText(replacement, start, end, 'end');
-    if (!selected) {
-      // Put cursor between the markers so user can type
-      const pos = start + before.length;
-      textarea.setSelectionRange(pos, pos);
-    }
-    textarea.focus();
-  }
-
-  function prefixLines(prefix, numbered) {
-    const start = textarea.selectionStart;
-    const end = textarea.selectionEnd;
-    const value = textarea.value;
-
-    // Expand to full line boundaries
-    let lineStart = value.lastIndexOf('\n', start - 1) + 1;
-    let lineEnd = value.indexOf('\n', end);
-    if (lineEnd === -1) lineEnd = value.length;
-
-    const block = value.substring(lineStart, lineEnd);
-    const lines = block.length ? block.split('\n') : [''];
-    const transformed = lines.map((line, i) => {
-      const p = numbered ? (i + 1) + '. ' : prefix;
-      return p + line;
-    }).join('\n');
-
-    textarea.setRangeText(transformed, lineStart, lineEnd, 'end');
-    textarea.focus();
-  }
-
-  function insertHeading() {
-    const start = textarea.selectionStart;
-    const value = textarea.value;
-    const lineStart = value.lastIndexOf('\n', start - 1) + 1;
-    textarea.setRangeText('## ', lineStart, lineStart, 'end');
-    textarea.focus();
-  }
-
-  function insertLink() {
-    const start = textarea.selectionStart;
-    const end = textarea.selectionEnd;
-    const selected = textarea.value.substring(start, end) || 'link text';
-    const url = window.prompt('Enter URL', 'https://');
-    if (!url) return;
-    const md = '[' + selected + '](' + url + ')';
-    textarea.setRangeText(md, start, end, 'end');
-    textarea.focus();
-  }
-
-  toolbar.addEventListener('click', function(e) {
-    const btn = e.target.closest('button[data-action]');
-    if (!btn) return;
-    e.preventDefault();
-    const action = btn.dataset.action;
-    if (action === 'bold') wrapSelection('**', '**');
-    else if (action === 'italic') wrapSelection('*', '*');
-    else if (action === 'bullet') prefixLines('- ', false);
-    else if (action === 'number') prefixLines('', true);
-    else if (action === 'h2') insertHeading();
-    else if (action === 'link') insertLink();
-  });
-})();
 
 /* ─── File attachment UI ─────────────────────── */
 (function() {

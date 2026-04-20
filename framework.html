@@ -39,14 +39,73 @@
   display: flex; align-items: center; gap: 8px;
   font-family: var(--mono); font-size: 10px;
   letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-3);
+  padding: 5px 10px;
+  border-radius: 3px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  user-select: none;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+.class-item:hover {
+  background: var(--white);
+  color: var(--ink-2);
+  border-color: var(--rule);
+}
+.class-item.active {
+  background: var(--ink);
+  color: #fff;
+  border-color: var(--ink);
+}
+.class-item:focus-visible {
+  outline: 2px solid var(--red);
+  outline-offset: 2px;
+}
+.class-key-hint {
+  font-family: var(--mono); font-size: 9px;
+  letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--ink-3);
+  margin-top: 6px;
+  width: 100%;
+  text-align: right;
 }
 
 .class-dot {
   width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0;
 }
-.dot-all { background: var(--red); }
-.dot-safety { background: var(--ink-2); }
-.dot-mission { background: var(--ink-3); }
+.dot-safety-tier { background: var(--red); }
+.dot-mission-tier { background: var(--ink-2); }
+.dot-operational-tier { background: var(--ink-3); }
+
+/* Interactive filter state on the card grid */
+.fw-full-grid.filtering .fw-card {
+  opacity: 0.28;
+  transition: opacity 0.25s ease, border-color 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
+}
+.fw-full-grid.filtering .fw-card:hover { transform: none; }
+.fw-full-grid.filtering .fw-card.highlight {
+  opacity: 1;
+  border-color: var(--red);
+  box-shadow: 0 10px 28px rgba(43,108,176,0.14);
+  transform: translateY(-2px);
+}
+.fw-full-grid.filtering .fw-card.highlight .fw-scope {
+  background: var(--red);
+  color: #fff;
+  border-color: var(--red);
+}
+.fw-full-grid.filtering .fw-card.highlight-tailored {
+  opacity: 0.78;
+  border-color: rgba(200,39,45,0.55);
+  border-style: dashed;
+  box-shadow: 0 6px 20px rgba(43,108,176,0.08);
+  transform: translateY(-1px);
+}
+.fw-full-grid.filtering .fw-card.highlight-tailored .fw-scope {
+  background: transparent;
+  color: var(--red);
+  border-color: var(--red);
+  border-style: dashed;
+}
 
 /* ─── FULL FRAMEWORK GRID ─────────────────────────────────── */
 .fw-full-grid {
@@ -139,6 +198,12 @@
   color: rgba(255,255,255,0.5);
   padding: 4px 10px; border-radius: 2px;
   border: 1px solid rgba(255,255,255,0.1);
+}
+.struct-req-tag.tailored {
+  background: transparent;
+  border-style: dashed;
+  border-color: rgba(200,39,45,0.45);
+  color: rgba(200,39,45,0.75);
 }
 
 /* ─── OPEN STANDARD BAND ──────────────────────────────────── */
@@ -282,73 +347,74 @@
     <div class="section-eyebrow">Framework v2.1.1</div>
     <div style="display:flex; justify-content:space-between; align-items:flex-end; gap: 32px; margin-bottom: 48px; flex-wrap: wrap;">
       <h2 class="section-title" style="margin-bottom:0;">AI-1 through AI-10</h2>
-      <div class="class-key">
-        <div class="class-item"><span class="class-dot dot-all"></span>All classifications</div>
-        <div class="class-item"><span class="class-dot dot-safety"></span>Safety &amp; mission critical</div>
-        <div class="class-item"><span class="class-dot dot-mission"></span>Safety-critical only</div>
+      <div class="class-key" role="group" aria-label="Filter requirements by classification tier">
+        <div class="class-item" data-tier="safety" role="button" tabindex="0" aria-pressed="false"><span class="class-dot dot-safety-tier"></span>Safety-Critical</div>
+        <div class="class-item" data-tier="mission" role="button" tabindex="0" aria-pressed="false"><span class="class-dot dot-mission-tier"></span>Mission-Critical</div>
+        <div class="class-item" data-tier="operational" role="button" tabindex="0" aria-pressed="false"><span class="class-dot dot-operational-tier"></span>Operational Support</div>
+        <div class="class-key-hint">Click a tier to filter · Esc to clear</div>
       </div>
     </div>
 
     <div class="fw-full-grid stagger-in">
-      <div class="fw-card">
+      <div class="fw-card" data-tiers="safety mission operational">
         <div class="fw-card-id">AI-1</div>
         <div class="fw-card-title">Operational and data foundations</div>
         <div class="fw-card-body">A declared Operational Design Domain (ODD) bounding the certification claim, training/validation/test separation with documented provenance, and CUI and ITAR classification inheritance through AI output channels.</div>
         <div class="fw-scope">All classifications</div>
       </div>
-      <div class="fw-card">
+      <div class="fw-card" data-tiers="safety mission operational">
         <div class="fw-card-id">AI-2</div>
-        <div class="fw-card-title">Bias detection &amp; mitigation</div>
-        <div class="fw-card-body">Baseline performance across user classes and operational contexts. Bias-free training data requirements with verifiable inspection criteria.</div>
+        <div class="fw-card-title">Addressing AI bias</div>
+        <div class="fw-card-body">Bias-free baseline performance across user classes and operational contexts, bias-free training data, continuous bias monitoring, and bias threshold alerting and response.</div>
         <div class="fw-scope">All classifications</div>
       </div>
-      <div class="fw-card">
+      <div class="fw-card" data-tiers="safety mission operational">
         <div class="fw-card-id">AI-3</div>
         <div class="fw-card-title">ML test coverage</div>
         <div class="fw-card-body">A defined test matrix serving as the ML equivalent of code coverage. Covers nominal performance, edge cases, failure mode injection, and distributional boundary testing.</div>
         <div class="fw-scope">All classifications</div>
       </div>
-      <div class="fw-card">
+      <div class="fw-card" data-tiers="safety mission operational">
         <div class="fw-card-id">AI-4</div>
         <div class="fw-card-title">Continuous validation</div>
-        <div class="fw-card-body">Post-deployment drift detection with defined thresholds, revalidation triggers, and escalation paths. Addresses a gap not covered by existing safety-critical software standards.</div>
+        <div class="fw-card-body">Post-deployment data drift monitoring, performance threshold maintenance, model maintenance criteria, and periodic model validation. Addresses a gap not covered by existing safety-critical software standards.</div>
         <div class="fw-scope">All classifications</div>
       </div>
-      <div class="fw-card">
+      <div class="fw-card" data-tiers="safety mission operational">
         <div class="fw-card-id">AI-5</div>
         <div class="fw-card-title">Hallucination prevention</div>
-        <div class="fw-card-body">Output confidence bounding with defined thresholds for safety-critical decisions. Graceful degradation to human override below threshold.</div>
+        <div class="fw-card-body">Hallucination criteria definition, detection, response, and logging, with independent output validation for safety-critical decisions. Graceful degradation to human override below threshold.</div>
         <div class="fw-scope">All classifications</div>
       </div>
-      <div class="fw-card">
+      <div class="fw-card" data-tiers="safety mission operational">
         <div class="fw-card-id">AI-6</div>
         <div class="fw-card-title">Out-of-distribution detection</div>
-        <div class="fw-card-body">Detection, logging, and escalation of inputs outside the training distribution. This is the condition under which AI behavior is least predictable.</div>
+        <div class="fw-card-body">Training distribution characterization, runtime OOD detection, defined OOD response, and event logging. This is the condition under which AI behavior is least predictable.</div>
         <div class="fw-scope">All classifications</div>
       </div>
-      <div class="fw-card">
+      <div class="fw-card" data-tiers="safety mission" data-tailored-at="mission">
         <div class="fw-card-id">AI-7</div>
         <div class="fw-card-title">Adversarial robustness</div>
-        <div class="fw-card-body">Adversarial testing protocols, defined robustness bounds, and specified behavioral requirements under adversarial input conditions.</div>
-        <div class="fw-scope">Safety-critical only</div>
+        <div class="fw-card-body">Data poisoning protection, adversarial input protection, model inversion and extraction protection, model integrity, adversarial event logging, and AI supply chain security.</div>
+        <div class="fw-scope">Safety-Critical · Mission-Critical (tailored)</div>
       </div>
-      <div class="fw-card">
+      <div class="fw-card" data-tiers="safety mission">
         <div class="fw-card-id">AI-8</div>
         <div class="fw-card-title">Explainability</div>
-        <div class="fw-card-body">Operator-accessible decision reasoning with traceable decision basis. Required for any AI system where a traditional safety case would demand logical inspection.</div>
-        <div class="fw-scope">Safety &amp; mission critical</div>
+        <div class="fw-card-body">Operator-accessible decision reasoning with traceable decision basis, confidence indication, reasoning inspection capability, and public disclosure support. Required for any AI system where a traditional safety case would demand logical inspection.</div>
+        <div class="fw-scope">Safety &amp; Mission-Critical</div>
       </div>
-      <div class="fw-card">
+      <div class="fw-card" data-tiers="safety mission">
         <div class="fw-card-id">AI-9</div>
         <div class="fw-card-title">Human-AI teaming</div>
-        <div class="fw-card-body">Defined AI authority limits, human override requirements, trust calibration testing, and interaction audit trails.</div>
-        <div class="fw-scope">Safety &amp; mission critical</div>
+        <div class="fw-card-body">Human decision authority, operational situational awareness, trust calibration, graceful degradation, interaction logging, operator qualification, workload management, and training program requirements.</div>
+        <div class="fw-scope">Safety &amp; Mission-Critical</div>
       </div>
-      <div class="fw-card">
+      <div class="fw-card" data-tiers="safety mission operational">
         <div class="fw-card-id">AI-10</div>
         <div class="fw-card-title">Privacy and data protection</div>
-        <div class="fw-card-body">Personal data identification and minimization, lawful basis and consent management, data subject rights, privacy-enhancing techniques, and cross-border transfer controls where personal data is processed.</div>
-        <div class="fw-scope">All classifications</div>
+        <div class="fw-card-body">Personal data identification and minimization, lawful basis and consent management, data subject rights, privacy-enhancing techniques, and cross-border transfer controls. Applies where the system processes personal data; otherwise documented Not Applicable with rationale.</div>
+        <div class="fw-scope">All classifications · where personal data is processed</div>
       </div>
     </div>
   </div>
@@ -366,7 +432,7 @@
       <div class="struct-col">
         <div class="struct-col-title">Tier 1</div>
         <div class="struct-col-name">Safety-Critical AI</div>
-        <div class="struct-col-desc">AI systems where outputs directly affect human safety or system survivability. The full requirement set applies with no tailoring authority below the Project Safety Review Board. Surveillance audits required annually.</div>
+        <div class="struct-col-desc">AI outputs directly affect human safety or system survivability. All AI-1 through AI-10 apply. No tailoring without Project Safety Review Board approval.</div>
         <div class="struct-reqs">
           <span class="struct-req-tag">AI-1</span>
           <span class="struct-req-tag">AI-2</span>
@@ -383,7 +449,7 @@
       <div class="struct-col">
         <div class="struct-col-title">Tier 2</div>
         <div class="struct-col-name">Mission-Critical AI</div>
-        <div class="struct-col-desc">AI systems where outputs affect operational success but not human safety. Adversarial robustness (AI-7) may be tailored with Chief Engineer approval based on threat environment.</div>
+        <div class="struct-col-desc">AI outputs affect operational success but not human safety. AI-1 through AI-6, AI-8, AI-9, and AI-10 apply; AI-7 is tailored with Chief Engineer approval and documented rationale.</div>
         <div class="struct-reqs">
           <span class="struct-req-tag">AI-1</span>
           <span class="struct-req-tag">AI-2</span>
@@ -391,6 +457,7 @@
           <span class="struct-req-tag">AI-4</span>
           <span class="struct-req-tag">AI-5</span>
           <span class="struct-req-tag">AI-6</span>
+          <span class="struct-req-tag tailored">AI-7 · tailored</span>
           <span class="struct-req-tag">AI-8</span>
           <span class="struct-req-tag">AI-9</span>
           <span class="struct-req-tag">AI-10</span>
@@ -399,7 +466,7 @@
       <div class="struct-col">
         <div class="struct-col-title">Tier 3</div>
         <div class="struct-col-name">Operational Support AI</div>
-        <div class="struct-col-desc">AI systems that support operations but do not drive critical decisions. AI-1 through AI-6 and AI-10 apply at minimum; tailoring is permitted with Software Assurance authority approval and documented rationale.</div>
+        <div class="struct-col-desc">AI supports operations but does not drive critical decisions. AI-1 through AI-6 and AI-10 apply at minimum. Tailoring permitted with Software Assurance authority approval and documented rationale.</div>
         <div class="struct-reqs">
           <span class="struct-req-tag">AI-1</span>
           <span class="struct-req-tag">AI-2</span>
@@ -627,6 +694,68 @@ document.addEventListener("click", function() {
     if (m) m.style.display = "none";
   });
 });
+
+/* ─── Interactive classification legend ─────── */
+(function() {
+  var legendItems = document.querySelectorAll('.class-item[data-tier]');
+  var grid = document.querySelector('.fw-full-grid');
+  var cards = document.querySelectorAll('.fw-card[data-tiers]');
+  if (!legendItems.length || !grid || !cards.length) return;
+
+  function clearFilter() {
+    grid.classList.remove('filtering');
+    cards.forEach(function(c) {
+      c.classList.remove('highlight');
+      c.classList.remove('highlight-tailored');
+    });
+    legendItems.forEach(function(i) {
+      i.classList.remove('active');
+      i.setAttribute('aria-pressed', 'false');
+    });
+  }
+
+  function applyFilter(tier, activeItem) {
+    grid.classList.add('filtering');
+    cards.forEach(function(c) {
+      var tiers = (c.dataset.tiers || '').split(/\s+/);
+      var tailoredAt = c.dataset.tailoredAt;
+      c.classList.remove('highlight');
+      c.classList.remove('highlight-tailored');
+      if (tiers.indexOf(tier) !== -1) {
+        if (tailoredAt === tier) c.classList.add('highlight-tailored');
+        else c.classList.add('highlight');
+      }
+    });
+    legendItems.forEach(function(i) {
+      var isThis = i === activeItem;
+      i.classList.toggle('active', isThis);
+      i.setAttribute('aria-pressed', isThis ? 'true' : 'false');
+    });
+  }
+
+  legendItems.forEach(function(item) {
+    function toggle() {
+      if (item.classList.contains('active')) {
+        clearFilter();
+      } else {
+        applyFilter(item.dataset.tier, item);
+      }
+    }
+    item.addEventListener('click', toggle);
+    item.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        toggle();
+      }
+    });
+  });
+
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape' && grid.classList.contains('filtering')) {
+      clearFilter();
+    }
+  });
+})();
 </script>
 <script src="ticker.js"></script>
 </body>

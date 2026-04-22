@@ -670,6 +670,20 @@ gsap.utils.toArray('.slide-right').forEach(function(el) {
     if (e.target.closest('button[data-action]')) e.preventDefault();
   });
 
+  editable.addEventListener('keydown', function(e) {
+    if (e.key !== 'Tab') return;
+    e.preventDefault();
+    const sel = window.getSelection();
+    const node = sel && sel.anchorNode;
+    const inList = node && (node.nodeType === 1 ? node : node.parentNode).closest('li');
+    if (inList) {
+      document.execCommand(e.shiftKey ? 'outdent' : 'indent');
+    } else if (!e.shiftKey) {
+      document.execCommand('insertHTML', false, '&nbsp;&nbsp;&nbsp;&nbsp;');
+    }
+    updatePlaceholder();
+  });
+
   toolbar.addEventListener('click', function(e) {
     const btn = e.target.closest('button[data-action]');
     if (!btn) return;

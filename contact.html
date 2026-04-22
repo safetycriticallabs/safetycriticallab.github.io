@@ -467,23 +467,25 @@
                 <button type="button" data-action="bullet" title="Bulleted list" aria-label="Bulleted list">• List</button>
                 <button type="button" data-action="number" title="Numbered list" aria-label="Numbered list">1. List</button>
                 <span class="tb-sep" aria-hidden="true"></span>
+                <button type="button" data-action="outdent" title="Decrease indent (Shift+Tab)" aria-label="Decrease indent">⇤</button>
+                <button type="button" data-action="indent" title="Increase indent (Tab)" aria-label="Increase indent">⇥</button>
+                <span class="tb-sep" aria-hidden="true"></span>
                 <button type="button" data-action="link" title="Insert link" aria-label="Insert link">🔗 Link</button>
                 <span class="tb-hint">Rich text</span>
               </div>
-              <div class="form-richtext is-empty" id="messageEditable" contenteditable="true" role="textbox" aria-multiline="true" data-placeholder="How can we help? Use the toolbar above to add bold, bullets, headings, or links."></div>
+              <div class="form-richtext is-empty" id="messageEditable" contenteditable="true" role="textbox" aria-multiline="true" data-placeholder="How can we help?"></div>
               <input type="hidden" name="message" id="message">
             </div>
           </div>
           <div class="form-field">
-            <label class="form-label" for="attachment">Attachment <span style="text-transform:none;letter-spacing:0;color:var(--ink-3);font-family:var(--sans);font-size:11px;font-weight:300;">(optional — e.g. your assessment report)</span></label>
+            <label class="form-label" for="attachment">Attachment</label>
             <div class="form-file-wrap" id="fileWrap">
               <button type="button" class="form-file-btn" id="fileBtn">Choose file</button>
               <span class="form-file-name" id="fileName">No file chosen</span>
               <button type="button" class="form-file-clear" id="fileClear" aria-label="Remove file">&times;</button>
               <input type="file" id="attachment" name="attachment" accept=".pdf,.doc,.docx,.html,.htm,.txt,.md,.json,.csv,.xlsx,.zip,image/*">
             </div>
-            <div class="form-file-hint">PDF, Word, HTML, TXT, CSV, XLSX, or ZIP. Max 10 MB.</div>
-            <div class="form-file-error" id="fileError">File is larger than 10 MB. Please attach a smaller file or share via email.</div>
+            <div class="form-file-error" id="fileError">File is too large. Please attach a smaller file or share via email.</div>
           </div>
           <button type="submit" class="form-submit">Send message</button>
         </form>
@@ -647,8 +649,8 @@ gsap.utils.toArray('.slide-right').forEach(function(el) {
   if (!editable || !toolbar) return;
 
   function isEmpty() {
-    if (editable.textContent.trim() !== '') return false;
-    const html = editable.innerHTML.replace(/<br\s*\/?>/gi, '').replace(/&nbsp;/g, '').trim();
+    if (editable.textContent.length > 0) return false;
+    const html = editable.innerHTML.replace(/<br\s*\/?>/gi, '').trim();
     return html === '';
   }
   function updatePlaceholder() {
@@ -670,18 +672,59 @@ gsap.utils.toArray('.slide-right').forEach(function(el) {
     if (e.target.closest('button[data-action]')) e.preventDefault();
   });
 
-  editable.addEventListener('keydown', function(e) {
-    if (e.key !== 'Tab') return;
-    e.preventDefault();
+  function inList() {
     const sel = window.getSelection();
-    const node = sel && sel.anchorNode;
-    const inList = node && (node.nodeType === 1 ? node : node.parentNode).closest('li');
-    if (inList) {
-      document.execCommand(e.shiftKey ? 'outdent' : 'indent');
-    } else if (!e.shiftKey) {
+    let node = sel && sel.anchorNode;
+    while (node && node !== editable) {
+      if (node.nodeType === 1 && node.tagName === 'LI') return true;
+      node = node.parentNode;
+    }
+    return false;
+  }
+  function removeLeadingNbsp() {
+    const sel = window.getSelection();
+    if (!sel || !sel.rangeCount) return;
+    const range = sel.getRangeAt(0);
+    if (!range.collapsed) return;
+    const node = range.startContainer;
+    if (node.nodeType !== 3) return;
+    const offset = range.startOffset;
+    const text = node.textContent;
+    let i = offset, count = 0;
+    while (i > 0 && count < 4 && text.charCodeAt(i - 1) === 160) { i--; count++; }
+    if (count === 0) return;
+    const r = document.createRange();
+    r.setStart(node, i);
+    r.setEnd(node, offset);
+    sel.removeAllRanges();
+    sel.addRange(r);
+    document.execCommand('delete');
+    // If fully empty now, reset so the cursor returns to the start
+    if (editable.textContent.length === 0) {
+      editable.innerHTML = '';
+      const startRange = document.createRange();
+      startRange.setStart(editable, 0);
+      startRange.collapse(true);
+      sel.removeAllRanges();
+      sel.addRange(startRange);
+    }
+  }
+  function doIndent(shift) {
+    editable.focus();
+    if (inList()) {
+      document.execCommand(shift ? 'outdent' : 'indent');
+    } else if (shift) {
+      removeLeadingNbsp();
+    } else {
       document.execCommand('insertHTML', false, '&nbsp;&nbsp;&nbsp;&nbsp;');
     }
     updatePlaceholder();
+  }
+
+  editable.addEventListener('keydown', function(e) {
+    if (e.key !== 'Tab') return;
+    e.preventDefault();
+    doIndent(e.shiftKey);
   });
 
   toolbar.addEventListener('click', function(e) {
@@ -694,6 +737,8 @@ gsap.utils.toArray('.slide-right').forEach(function(el) {
     else if (action === 'bullet') exec('insertUnorderedList');
     else if (action === 'number') exec('insertOrderedList');
     else if (action === 'h2') exec('formatBlock', 'H2');
+    else if (action === 'indent') doIndent(false);
+    else if (action === 'outdent') doIndent(true);
     else if (action === 'link') {
       const url = window.prompt('Enter URL', 'https://');
       if (url) exec('createLink', url);

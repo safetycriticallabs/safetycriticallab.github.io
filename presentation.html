@@ -714,7 +714,8 @@ const groups = [
   ]},
   { label: "Foundation", items: [
     { id: "why-different", title: "Where Intent Goes" },
-    { id: "two-paths", title: "Two Paths, Same Problem" }
+    { id: "two-paths", title: "Two Paths, Same Problem" },
+    { id: "operating-envelope", title: "The Operating Envelope" }
   ]},
   { label: "The Framework", items: [
     { id: "framework-overview", title: "Framework Overview" },
@@ -783,6 +784,26 @@ const sections = {
           { phase: "The Natural Response", desc: "Record every update. Compare each version against the last. Require sign off before the new version goes live. Run regression tests after each cycle. Again, this is correct. This is disciplined practice.", status: "process", icon: "&#8635;", metrics: { accuracy: 99, blocked: 38 } }
         ], deeper: "You recorded the update. You compared versions. But what are you comparing? Two sets of weights, neither of which is readable. The regression test tells you accuracy went up. It does not tell you the model quietly learned to block your own finance team. The behavior change is invisible to any test that only measures aggregate performance.", note: "You already record updates and require sign off. The gap is not in your change process. The gap is in knowing what actually changed when the artifact is geometry, not logic.", gaugeLabels: ["Spam Detection Rate", "Legitimate Emails Blocked"] }
       ]
+    }
+  },
+  "operating-envelope": {
+    group: "Foundation", title: "The Operating Envelope", type: "envelope",
+    data: {
+      intro: "Traditional verification depends on a chain that is readable at every link. Intent becomes requirements. Requirements become code. Code runs against tests. Every step traces back to the last. AI breaks that chain in the middle. The artifact is no longer readable. So if you cannot read the artifact, what do you verify? You verify the envelope around it. The conditions the model was trained under, the conditions it operates under, and the mechanisms that catch it when it fails. The artifact stays opaque. The envelope does not.",
+      traditionalChain: ["Intent", "Requirements", "Code", "Tests", "Verified behavior"],
+      walls: [
+        { id: "AI-1",  short: "Operational and Data Foundations", q: "What was the model trained on, and can that training be defended?" },
+        { id: "AI-2",  short: "Bias",                            q: "Does the model behave equitably across the populations it will serve?" },
+        { id: "AI-3",  short: "ML Test Coverage",                q: "Is the test coverage appropriate to a model, not to a function?" },
+        { id: "AI-4",  short: "Continuous Validation",           q: "Does the model stay in spec as the world shifts around it?" },
+        { id: "AI-5",  short: "Hallucination Prevention",        q: "What happens when the model produces a confident wrong answer?" },
+        { id: "AI-6",  short: "Out of Distribution Detection",   q: "What happens when an input falls outside what the model was trained on?" },
+        { id: "AI-7",  short: "Adversarial Robustness",          q: "Does the model hold up under adversarial pressure?" },
+        { id: "AI-8",  short: "Explainability",                  q: "Can an operator tell why the model decided what it decided?" },
+        { id: "AI-9",  short: "Human AI Teaming",                q: "Is a human positioned to override when the stakes require it?" },
+        { id: "AI-10", short: "Privacy and Data Protection",     q: "Is personal data handled lawfully throughout the pipeline?" }
+      ],
+      closer: "Certification is not a claim that the weights are correct. Certification is a claim that the envelope around the weights is complete. Each of the ten requirements that follows is one wall of that envelope."
     }
   },
   "framework-overview": {
@@ -1270,6 +1291,7 @@ function renderSection(section) {
     case 'ml-walkthrough': return renderMLWalkthrough(section.data);
     case 'concept': return renderConcept(section.data);
     case 'features': return renderFeatures(section.data);
+    case 'envelope': return renderEnvelope(section.data);
     case 'comparison': return renderComparison(section.data);
     case 'table': return renderTable(section.data);
     case 'tiers': return renderTiers(section.data);
@@ -1774,7 +1796,7 @@ function renderWTLoss() {
 function renderWTTraining() {
   return '<div class="wt-step active">' +
     '<div class="wt-title">Training: words drift in space</div>' +
-    '<div class="wt-text">Over thousands of passes through the data, the model adjusts word positions. Words that appear in similar contexts drift toward each other. <strong>No human directs this movement. No human approves each adjustment. The geometry organizes itself.</strong> Watch what happens.</div>' +
+    '<div class="wt-text">The loss function from the previous step is what this loop chases. Over thousands of passes, the model adjusts word positions to make that number smaller. Words that appear in similar contexts drift toward each other. Words that never co occur drift apart. Watch the geometry form. Pay attention to <strong>what the developer did, and did not, tell the system to do</strong>.</div>' +
     '<div class="wt-panel">' +
       '<div class="wt-panel-label">Embedding Space During Training</div>' +
       '<div class="wt-train-canvas" id="train-canvas"></div>' +
@@ -1785,6 +1807,9 @@ function renderWTTraining() {
       '</div>' +
     '</div>' +
     '<div class="wt-text" id="train-explain">Click "Run Training" to watch words move. MONEY, CASH, FUNDS, and DOLLARS will cluster together because they appear in similar contexts (spam emails about urgency and money). MEETING, LUNCH, and HELLO will stay separate.</div>' +
+
+    // Thesis: what the developer specified vs. what emerged
+    '<div class="wt-callout" style="margin-top:14px;"><p>The developer\'s intent went into the loss function. What came out of training is an arrangement the developer never wrote. The formula said <em>minimize this number</em>. It did not say <em>put MONEY near CASH</em>, or <em>put LUNCH far from both</em>. Those positions emerged from the data, not from a specification. <strong>From here on, the developer\'s intent shapes the model\'s behavior but does not appear in its parts.</strong></p></div>' +
   '</div>';
 }
 
@@ -1806,18 +1831,12 @@ function renderWTResult() {
     '</div>' +
     '<div class="wt-space-insight" id="result-insight">Click any word to see why its position matters. MONEY, CASH, FUNDS, and DOLLARS cluster because they appeared in similar contexts during training.</div>' +
 
-    // Unpack: what actually happened, in physical terms
-    '<div class="wt-panel" style="margin-top:16px;">' +
-      '<div class="wt-panel-label">What actually happened here</div>' +
-      '<div class="wt-text">Before training began, every word in the vocabulary had a list of 300 coordinates that were essentially random numbers. Think of throwing every word onto a dartboard blindfolded. No one chose those numbers. No one cared what they were. They were placeholders.</div>' +
-      '<div class="wt-text">The training loop then nudged those coordinates, one small adjustment at a time, based on patterns it detected in the data. If two words showed up in similar contexts across the 10,000 emails, their coordinates drifted closer together. If two words never appeared together, their coordinates drifted apart. Thousands of passes later, the positions stabilized.</div>' +
-      '<div class="wt-text" style="margin-bottom:0;">By the time training finished, MONEY sat at a specific list of 300 numbers. CASH sat close to it. LUNCH sat far away. <strong>No human wrote any of those numbers. No human approved the final positions. No human looked at the pair MONEY and CASH and decided they should be neighbors.</strong> The developer set up the process and let it run. The arrangement you see on the plot emerged on its own, entirely from the data and the loss function.</div>' +
-    '</div>' +
+    // Bridge: pivot from "look at it" to "what can you say about it"
+    '<div class="wt-text" style="margin-top:14px;">MONEY sits at a specific list of 300 numbers. CASH sits close to it. LUNCH sits far away. So what can the developer actually claim about this result, and what can they not?</div>' +
 
     // The concrete inventory: what the developer can and cannot say
     '<div class="wt-panel" style="margin-top:12px;">' +
       '<div class="wt-panel-label">What the developer can and cannot say about this result</div>' +
-      '<div class="wt-text">This is where the language of "no human directed this" stops being philosophical and starts being practical. The developer is not standing over an inexplicable black box. They are standing over a system where some things can be measured and some things cannot.</div>' +
 
       '<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">' +
         '<div style="padding:14px 16px;background:var(--green-lt);border-left:3px solid var(--green);border-radius:0 4px 4px 0;">' +
@@ -2580,6 +2599,63 @@ function renderFeatures(data) {
   data.features.forEach(f => { html += '<div class="feature"><div class="title">' + f.title + '</div><p>' + f.desc + '</p></div>'; });
   html += '</div>';
   if (data.callout) html += '<div class="callout"><p>' + data.callout + '</p></div>';
+  return html;
+}
+
+function renderEnvelope(data) {
+  let html = '<p class="intro">' + data.intro + '</p>';
+
+  // Side by side visual: traditional chain vs. AI envelope
+  html += '<div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:18px;align-items:stretch;">';
+
+  // Left pane: traditional V&V chain
+  html += '<div style="padding:20px;background:var(--green-lt);border:1px solid var(--rule);border-radius:6px;display:flex;flex-direction:column;">';
+  html += '<div style="font-family:var(--mono);font-size:10px;letter-spacing:0.08em;text-transform:uppercase;color:var(--green);margin-bottom:4px;">Traditional V&amp;V</div>';
+  html += '<div style="font-size:12px;color:var(--ink2);margin-bottom:16px;">Readable at every link</div>';
+  html += '<div style="display:flex;flex-direction:column;gap:6px;flex:1;justify-content:center;">';
+  data.traditionalChain.forEach((link, i) => {
+    html += '<div style="padding:10px 14px;background:var(--white);border:1px solid var(--green);border-radius:4px;font-size:13px;color:var(--ink);text-align:center;">' + link + '</div>';
+    if (i < data.traditionalChain.length - 1) {
+      html += '<div style="text-align:center;color:var(--green);font-size:14px;line-height:1;">&#8595;</div>';
+    }
+  });
+  html += '</div></div>';
+
+  // Right pane: AI envelope
+  html += '<div style="padding:20px;background:var(--red-lt);border:1px solid var(--rule);border-radius:6px;display:flex;flex-direction:column;">';
+  html += '<div style="font-family:var(--mono);font-size:10px;letter-spacing:0.08em;text-transform:uppercase;color:var(--red);margin-bottom:4px;">AI V&amp;V</div>';
+  html += '<div style="font-size:12px;color:var(--ink2);margin-bottom:16px;">Artifact opaque. Envelope complete.</div>';
+  // Envelope container with dashed boundary
+  html += '<div style="flex:1;border:2px dashed var(--red);border-radius:6px;padding:22px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;position:relative;">';
+  html += '<div style="position:absolute;top:-10px;left:14px;background:var(--red-lt);padding:0 8px;font-family:var(--mono);font-size:9px;letter-spacing:0.08em;text-transform:uppercase;color:var(--red);">Envelope</div>';
+  // Opaque artifact in the center
+  html += '<div style="padding:24px 28px;background:var(--ink);color:var(--white);border-radius:4px;text-align:center;min-width:60%;">';
+  html += '<div style="font-family:var(--mono);font-size:9px;letter-spacing:0.08em;text-transform:uppercase;opacity:0.6;margin-bottom:4px;">Opaque Artifact</div>';
+  html += '<div style="font-size:15px;font-weight:500;">Model Weights</div>';
+  html += '<div style="font-family:var(--mono);font-size:10px;opacity:0.7;margin-top:6px;">not readable, not traceable</div>';
+  html += '</div>';
+  html += '<div style="font-size:11px;color:var(--ink2);text-align:center;margin-top:4px;">Ten verifiable walls defined below.</div>';
+  html += '</div></div>';
+
+  html += '</div>'; // end grid
+
+  // The ten walls inventory
+  html += '<div style="margin-top:20px;padding:18px;background:var(--white);border:1px solid var(--rule);border-radius:6px;">';
+  html += '<div style="font-family:var(--mono);font-size:10px;letter-spacing:0.08em;text-transform:uppercase;color:var(--ink2);margin-bottom:12px;">The ten walls of the envelope</div>';
+  html += '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">';
+  data.walls.forEach(w => {
+    html += '<div style="display:flex;gap:12px;padding:10px 12px;background:var(--bg);border-left:3px solid var(--red);border-radius:0 4px 4px 0;">';
+    html += '<div style="font-family:var(--mono);font-size:10px;color:var(--red);font-weight:600;flex-shrink:0;min-width:42px;padding-top:2px;">' + w.id + '</div>';
+    html += '<div style="flex:1;">';
+    html += '<div style="font-size:12px;color:var(--ink);font-weight:500;margin-bottom:2px;">' + w.short + '</div>';
+    html += '<div style="font-size:11px;color:var(--ink2);line-height:1.5;">' + w.q + '</div>';
+    html += '</div></div>';
+  });
+  html += '</div></div>';
+
+  // Closing callout
+  html += '<div class="callout" style="margin-top:18px;"><p>' + data.closer + '</p></div>';
+
   return html;
 }
 

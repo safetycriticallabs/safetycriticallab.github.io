@@ -750,7 +750,7 @@ const sections = {
     data: {
       eyebrow: "Published Framework · v2.1.1",
       heading: 'AI Certification for <em>systems that cannot fail.</em>',
-      subheading: "A published standard for assessing AI systems in safety-critical environments — ten requirement sets, three classification tiers, one verifiable determination.",
+      subheading: "A published standard for assessing AI systems in safety-critical environments. Ten requirement sets, three classification tiers, one verifiable determination.",
       meta: [
         { label: "Presented by", value: "Safety Critical Labs" },
         { label: "Authority", value: "AI Certification" },
@@ -1516,7 +1516,46 @@ function renderWTWhereIntentLives() {
     '</div>' +
     '<div class="wt-panel" style="margin-top:16px;">' +
       '<div class="wt-panel-label">What is a loss function?</div>' +
-      '<div class="wt-text" style="margin-bottom:0;">In ML this instruction is formalized as a loss function. The details matter less than the principle: <strong>the developer defines what wrong means, not what right looks like.</strong> The system discovers "right" on its own through training.</div>' +
+      '<div class="wt-text">A loss function is a single number that tells the system how wrong its last guess was. <strong>A big number means very wrong. A small number means close to right.</strong> It is the only feedback the system ever receives during training.</div>' +
+
+      '<div class="wt-text">Think of the children\'s game of hot and cold. One person hides an object. The other walks around searching. The only allowed feedback is "warmer" or "colder." No one ever says <em>"turn left, then take three steps, then look under the chair."</em> Over many guesses, the searcher finds the object. But the path they take, and the strategy they develop, is entirely their own. <strong>A loss function is "warmer or colder" for a machine.</strong></div>' +
+
+      // Concrete worked example
+      '<div style="background:var(--bg);border-radius:4px;padding:16px;margin-bottom:14px;border:1px solid var(--rule);">' +
+        '<div style="font-family:var(--mono);font-size:9px;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink3);margin-bottom:12px;">A worked example: one email at a time</div>' +
+        '<div style="display:grid;grid-template-columns:1.1fr 1.4fr 1.3fr;gap:10px;align-items:center;font-size:12px;line-height:1.4;">' +
+          '<div style="font-family:var(--mono);font-size:9px;letter-spacing:0.08em;text-transform:uppercase;color:var(--ink3);padding-bottom:8px;border-bottom:1px solid var(--rule);">True label</div>' +
+          '<div style="font-family:var(--mono);font-size:9px;letter-spacing:0.08em;text-transform:uppercase;color:var(--ink3);padding-bottom:8px;border-bottom:1px solid var(--rule);">System\'s guess</div>' +
+          '<div style="font-family:var(--mono);font-size:9px;letter-spacing:0.08em;text-transform:uppercase;color:var(--ink3);padding-bottom:8px;border-bottom:1px solid var(--rule);text-align:right;">Loss (how wrong)</div>' +
+
+          '<div style="color:var(--ink);font-weight:500;">Spam</div>' +
+          '<div style="color:var(--ink);">Not spam, very confident</div>' +
+          '<div style="text-align:right;font-family:var(--mono);font-size:13px;color:var(--red);font-weight:600;">4.61 <span style="font-family:var(--sans);font-size:11px;font-weight:400;color:var(--ink3);margin-left:4px;">very wrong</span></div>' +
+
+          '<div style="color:var(--ink);font-weight:500;">Spam</div>' +
+          '<div style="color:var(--ink);">Maybe spam? 60% sure</div>' +
+          '<div style="text-align:right;font-family:var(--mono);font-size:13px;color:var(--gold);font-weight:600;">0.51 <span style="font-family:var(--sans);font-size:11px;font-weight:400;color:var(--ink3);margin-left:4px;">still learning</span></div>' +
+
+          '<div style="color:var(--ink);font-weight:500;">Spam</div>' +
+          '<div style="color:var(--ink);">Spam, 99% sure</div>' +
+          '<div style="text-align:right;font-family:var(--mono);font-size:13px;color:var(--green);font-weight:600;">0.01 <span style="font-family:var(--sans);font-size:11px;font-weight:400;color:var(--ink3);margin-left:4px;">nearly right</span></div>' +
+        '</div>' +
+        '<div style="font-size:12px;color:var(--ink2);margin-top:14px;padding-top:12px;border-top:1px solid var(--rule);line-height:1.6;">The system computes that loss number for every one of the 10,000 emails, averages them, and then adjusts millions of internal parameters to make the average a little smaller on the next pass. Then it does it again. And again. <strong>That repeated adjustment process is what "training" actually is.</strong></div>' +
+      '</div>' +
+
+      // What was written vs not written
+      '<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px;">' +
+        '<div style="padding:12px 14px;background:var(--green-lt);border-left:3px solid var(--green);border-radius:0 4px 4px 0;">' +
+          '<div style="font-family:var(--mono);font-size:9px;letter-spacing:0.08em;text-transform:uppercase;color:var(--green);margin-bottom:6px;">What the developer wrote</div>' +
+          '<div style="font-size:12px;color:var(--ink);line-height:1.5;">A scoring rule: "warmer or colder" as a number.</div>' +
+        '</div>' +
+        '<div style="padding:12px 14px;background:var(--red-lt);border-left:3px solid var(--red);border-radius:0 4px 4px 0;">' +
+          '<div style="font-family:var(--mono);font-size:9px;letter-spacing:0.08em;text-transform:uppercase;color:var(--red);margin-bottom:6px;">What the developer did NOT write</div>' +
+          '<div style="font-size:12px;color:var(--ink);line-height:1.5;">Any rule about subject lines, keywords, senders, or spam patterns.</div>' +
+        '</div>' +
+      '</div>' +
+
+      '<div class="wt-text" style="margin-bottom:0;">That is the principle. <strong>The developer defines what wrong means, not what right looks like.</strong> The system discovers "right" on its own through training. The recipe it discovers lives in those millions of adjusted parameters, not in anything a person wrote down.</div>' +
     '</div>' +
     '<div class="wt-callout"><p>A V&V engineer verifying traditional software reads the code and traces it to requirements. That process assumes the developer\'s intent is readable in the artifact. What happens when it is not? <strong>The next six steps show where the intent goes in an AI system, and why it cannot be read back out.</strong></p></div>' +
   '</div>';
@@ -1573,6 +1612,35 @@ function renderWTData() {
 function renderWTTokens() {
   return '<div class="wt-step active">' +
     '<div class="wt-title">Processing the input</div>' +
+
+    // What is tokenization? — explainer panel for an audience hearing this word for the first time
+    '<div class="wt-panel" style="margin-bottom:16px;">' +
+      '<div class="wt-panel-label">What is tokenization?</div>' +
+      '<div class="wt-text">A computer does not read a sentence the way you do. Before it can work with text at all, the text has to be broken into small, consistent pieces. <strong>Those pieces are called tokens. The chopping process is called tokenization.</strong></div>' +
+
+      // Visual: text → tokens
+      '<div style="background:var(--bg);border-radius:4px;padding:18px;border:1px solid var(--rule);margin-bottom:14px;">' +
+        '<div style="text-align:center;margin-bottom:8px;">' +
+          '<div style="font-family:var(--mono);font-size:9px;letter-spacing:0.08em;text-transform:uppercase;color:var(--ink3);margin-bottom:6px;">What you typed</div>' +
+          '<div style="font-size:15px;color:var(--ink);font-weight:500;">Send MONEY now!</div>' +
+        '</div>' +
+        '<div style="text-align:center;color:var(--ink3);font-size:18px;margin:4px 0;">↓</div>' +
+        '<div style="text-align:center;">' +
+          '<div style="font-family:var(--mono);font-size:9px;letter-spacing:0.08em;text-transform:uppercase;color:var(--ink3);margin-bottom:8px;">What the tokenizer produces</div>' +
+          '<div class="wt-tokens" style="justify-content:center;">' +
+            '<span class="wt-token">Send</span>' +
+            '<span class="wt-token">MONEY</span>' +
+            '<span class="wt-token">now</span>' +
+            '<span class="wt-token">!</span>' +
+          '</div>' +
+        '</div>' +
+      '</div>' +
+
+      // Two facts that usually surprise people
+      '<div class="wt-text">Two things usually surprise people about this step. <strong>First, tokens are not always whole words.</strong> Common words get their own token, but rare or long words get broken into pieces. "Unbelievable" might become three tokens: <span style="font-family:var(--mono);background:var(--bg);padding:1px 5px;border:1px solid var(--rule);border-radius:3px;font-size:11px;">un</span> + <span style="font-family:var(--mono);background:var(--bg);padding:1px 5px;border:1px solid var(--rule);border-radius:3px;font-size:11px;">believ</span> + <span style="font-family:var(--mono);background:var(--bg);padding:1px 5px;border:1px solid var(--rule);border-radius:3px;font-size:11px;">able</span>. Punctuation marks, emojis, and even spaces can each be their own token.</div>' +
+      '<div class="wt-text" style="margin-bottom:0;"><strong>Second, once text is tokenized, these pieces are all the system ever works with.</strong> Not your original sentence, not characters, not anything you typed. Only this sliced list. Every step that follows operates on the output of this step: the comparison to known words, the learning, and the final decision. <strong>If the tokenizer cuts differently, the system receives a different input, even if the text looked identical to a person.</strong></div>' +
+    '</div>' +
+
     '<div class="wt-compare">' +
       '<div class="wt-compare-col trad">' +
         '<div class="wt-compare-label">Traditional: String Matching</div>' +
@@ -1649,7 +1717,11 @@ function renderWTEmbedding() {
 
 function renderWTLoss() {
   return '<div class="wt-step active">' +
-    '<div class="wt-title">The instructions</div>' +
+    '<div class="wt-title">The loss function, up close</div>' +
+
+    '<div class="wt-text">We have talked about loss as a concept. This is the actual mathematical object the developer writes. One expression, a handful of symbols, and it is the only thing training will ever try to minimize.</div>' +
+
+    // Compare: the developer\'s written artifact in each world
     '<div class="wt-compare">' +
       '<div class="wt-compare-col trad">' +
         '<div class="wt-compare-label">Traditional: Explicit Rules</div>' +
@@ -1660,21 +1732,42 @@ function renderWTLoss() {
           '<span style="color:var(--green)">if</span> spam_score > <span style="color:var(--red)">50</span>:<br>' +
           '&nbsp;&nbsp;<span style="color:var(--green)">return</span> SPAM' +
         '</div>' +
-        '<div style="font-size:12px;color:var(--ink2);margin-top:10px;">Every decision is explicitly coded. 40 points for MONEY. Threshold at 50.</div>' +
+        '<div style="font-size:12px;color:var(--ink2);margin-top:10px;">Rules about words, points, and thresholds. Every number is chosen by the developer.</div>' +
       '</div>' +
       '<div class="wt-compare-col ai">' +
-        '<div class="wt-compare-label">AI: Loss Function</div>' +
-        '<div style="font-family:var(--mono);font-size:11px;line-height:1.8;color:var(--ink);background:var(--bg);padding:12px;border-radius:4px;margin-top:8px;">' +
-          '<span style="color:var(--ink3)"># Developer writes:</span><br>' +
-          'loss = prediction_error(<br>' +
-          '&nbsp;&nbsp;predicted,<br>' +
-          '&nbsp;&nbsp;actual_label<br>' +
-          ')' +
+        '<div class="wt-compare-label">AI: A Loss Function</div>' +
+        '<div style="background:var(--bg);padding:22px 12px;border-radius:4px;margin-top:8px;text-align:center;">' +
+          '<div style="font-family:var(--mono);font-size:9px;letter-spacing:0.08em;text-transform:uppercase;color:var(--ink3);margin-bottom:10px;">Binary cross-entropy</div>' +
+          '<div style="font-size:18px;color:var(--ink);line-height:1.7;font-family:Georgia,serif;letter-spacing:0.02em;"><em>L</em> = −[ <em>y</em> · log(<em>ŷ</em>) + (1 − <em>y</em>) · log(1 − <em>ŷ</em>) ]</div>' +
         '</div>' +
-        '<div style="font-size:12px;color:var(--ink2);margin-top:10px;">The only instruction: minimize how often you are wrong. No mention of MONEY anywhere.</div>' +
+        '<div style="font-size:12px;color:var(--ink2);margin-top:10px;">One expression. No words, no thresholds, no opinions about spam. Just a way to score how wrong a guess is.</div>' +
       '</div>' +
     '</div>' +
-    '<div class="wt-callout"><p><strong>The AI developer never wrote a rule about MONEY.</strong> They wrote "be less wrong." The model discovers that MONEY correlates with spam on its own. This means no reviewer can open a file and find the decision logic. The logic was never written. It was learned.</p></div>' +
+
+    // Breakdown: what each symbol means in plain language
+    '<div class="wt-panel" style="margin-top:16px;">' +
+      '<div class="wt-panel-label">What each piece means</div>' +
+      '<div class="wt-text">Four symbols do all the work. Here is what each one represents in plain language.</div>' +
+
+      '<div style="display:grid;grid-template-columns:70px 1fr;gap:14px 20px;align-items:start;font-size:13px;line-height:1.55;">' +
+
+        '<div style="font-family:Georgia,serif;font-size:24px;color:var(--ink);text-align:center;padding-top:2px;"><em>L</em></div>' +
+        '<div style="color:var(--ink);"><strong>The wrongness score.</strong> This is the number that comes out of the formula. The 4.61, 0.51, and 0.01 values you saw on the previous slide are all outputs of exactly this expression.</div>' +
+
+        '<div style="font-family:Georgia,serif;font-size:24px;color:var(--ink);text-align:center;padding-top:2px;"><em>y</em></div>' +
+        '<div style="color:var(--ink);"><strong>The true label.</strong> What the email actually is. 1 means spam, 0 means not spam. This is what the developer wrote next to each email in the training data.</div>' +
+
+        '<div style="font-family:Georgia,serif;font-size:24px;color:var(--ink);text-align:center;padding-top:2px;"><em>ŷ</em></div>' +
+        '<div style="color:var(--ink);"><strong>The system\'s guess.</strong> A number between 0 and 1 showing how confident the system is that this email is spam. Pronounced "y-hat."</div>' +
+
+        '<div style="font-family:Georgia,serif;font-size:22px;color:var(--ink);text-align:center;padding-top:4px;">log</div>' +
+        '<div style="color:var(--ink);"><strong>A math function.</strong> Its job here is to punish confident-but-wrong guesses much harder than uncertain-but-wrong ones. A system that says "spam, 99% sure" about a safe email gets a much bigger wrongness score than one that says "spam, 51% sure."</div>' +
+
+      '</div>' +
+    '</div>' +
+
+    // Setup for training
+    '<div class="wt-callout wt-callout-green"><p><strong>This single expression is what training is about to chase.</strong> Over thousands of passes across every email in the dataset, the model will adjust its internal parameters to make the output of this formula a little smaller. That loop, nothing more, is training.</p></div>' +
   '</div>';
 }
 
@@ -1698,7 +1791,7 @@ function renderWTTraining() {
 function renderWTResult() {
   return '<div class="wt-step active">' +
     '<div class="wt-title">The result: meaning is geometry</div>' +
-    '<div class="wt-text">After training, words that "mean" similar things are located near each other in embedding space. The model has learned to cluster financial urgency words together.</div>' +
+    '<div class="wt-text">After training, words with similar meanings sit close to each other in the embedding space. <strong>The arrangement below was not drawn by anyone.</strong> It is the actual output of the training process, projected into two dimensions so a human can look at it.</div>' +
     '<div class="wt-space" id="result-space">' +
       '<div class="wt-space-axis left">← everyday</div>' +
       '<div class="wt-space-axis right">financial →</div>' +
@@ -1712,7 +1805,44 @@ function renderWTResult() {
       '<div class="wt-space-dot unrelated" style="left:20%;top:40%;" data-word="HELLO" onclick="showInsight(\'hello\')"></div>' +
     '</div>' +
     '<div class="wt-space-insight" id="result-insight">Click any word to see why its position matters. MONEY, CASH, FUNDS, and DOLLARS cluster because they appeared in similar contexts during training.</div>' +
-    '<div class="wt-callout"><p><strong>A new email with "Send FUNDS now" gets flagged as spam</strong> even though the developer never wrote a rule about FUNDS. The model learned that FUNDS is near MONEY in embedding space, and that region correlates with spam.</p></div>' +
+
+    // Unpack: what actually happened, in physical terms
+    '<div class="wt-panel" style="margin-top:16px;">' +
+      '<div class="wt-panel-label">What actually happened here</div>' +
+      '<div class="wt-text">Before training began, every word in the vocabulary had a list of 300 coordinates that were essentially random numbers. Think of throwing every word onto a dartboard blindfolded. No one chose those numbers. No one cared what they were. They were placeholders.</div>' +
+      '<div class="wt-text">The training loop then nudged those coordinates, one small adjustment at a time, based on patterns it detected in the data. If two words showed up in similar contexts across the 10,000 emails, their coordinates drifted closer together. If two words never appeared together, their coordinates drifted apart. Thousands of passes later, the positions stabilized.</div>' +
+      '<div class="wt-text" style="margin-bottom:0;">By the time training finished, MONEY sat at a specific list of 300 numbers. CASH sat close to it. LUNCH sat far away. <strong>No human wrote any of those numbers. No human approved the final positions. No human looked at the pair MONEY and CASH and decided they should be neighbors.</strong> The developer set up the process and let it run. The arrangement you see on the plot emerged on its own, entirely from the data and the loss function.</div>' +
+    '</div>' +
+
+    // The concrete inventory: what the developer can and cannot say
+    '<div class="wt-panel" style="margin-top:12px;">' +
+      '<div class="wt-panel-label">What the developer can and cannot say about this result</div>' +
+      '<div class="wt-text">This is where the language of "no human directed this" stops being philosophical and starts being practical. The developer is not standing over an inexplicable black box. They are standing over a system where some things can be measured and some things cannot.</div>' +
+
+      '<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">' +
+        '<div style="padding:14px 16px;background:var(--green-lt);border-left:3px solid var(--green);border-radius:0 4px 4px 0;">' +
+          '<div style="font-family:var(--mono);font-size:9px;letter-spacing:0.08em;text-transform:uppercase;color:var(--green);margin-bottom:8px;">What they can say</div>' +
+          '<div style="font-size:12px;color:var(--ink);line-height:1.7;">' +
+            '1. The model correctly classifies 95% of the training emails.<br>' +
+            '2. The model correctly classifies 92% of emails it has never seen before.<br>' +
+            '3. The final arrangement of words produces the right answer on every test we ran.' +
+          '</div>' +
+        '</div>' +
+        '<div style="padding:14px 16px;background:var(--red-lt);border-left:3px solid var(--red);border-radius:0 4px 4px 0;">' +
+          '<div style="font-family:var(--mono);font-size:9px;letter-spacing:0.08em;text-transform:uppercase;color:var(--red);margin-bottom:8px;">What they cannot say</div>' +
+          '<div style="font-size:12px;color:var(--ink);line-height:1.7;">' +
+            '1. Why MONEY ended up at these specific 300 numbers and not others.<br>' +
+            '2. Why FUNDS is closer to MONEY than it is to GIFT.<br>' +
+            '3. What rule the model is applying when it classifies a new email.<br>' +
+            '4. Whether an input exists that would cause the model to fail in an unexpected way.' +
+          '</div>' +
+        '</div>' +
+      '</div>' +
+      '<div class="wt-text" style="margin-top:14px;margin-bottom:0;">The left column is full of <strong>outcome evidence</strong>. The right column is full of <strong>mechanism evidence</strong>. A traditional software reviewer gets both. Here the developer can produce the first column and the second column does not exist.</div>' +
+    '</div>' +
+
+    // The practical consequence, grounded
+    '<div class="wt-callout"><p><strong>A new email with "Send FUNDS now" gets flagged as spam</strong> even though the developer never wrote a rule about FUNDS. The model learned that FUNDS is near MONEY in embedding space, and that region correlates with spam. The system works. It just does not work by a method a reviewer can read, audit, or trace to a specific requirement.</p></div>' +
   '</div>';
 }
 
@@ -2409,13 +2539,13 @@ function runCoverageTest() {
     result.style.background = 'var(--green-lt)';
     result.style.border = '1px solid rgba(45,122,58,0.2)';
     result.style.color = 'var(--green)';
-    result.innerHTML = '✓ CAUGHT — "' + input + '" is in the test suite.';
+    result.innerHTML = '✓ CAUGHT. "' + input + '" is in the test suite.';
   } else {
     covMissCount++;
     result.style.background = 'var(--red-lt)';
     result.style.border = '1px solid rgba(43,108,176,0.2)';
     result.style.color = 'var(--red)';
-    result.innerHTML = '✗ MISSED — "' + input + '" is not in the test suite. This variant reaches the inbox.';
+    result.innerHTML = '✗ MISSED. "' + input + '" is not in the test suite. This variant reaches the inbox.';
   }
   
   if (covMissCount > 0) {
@@ -2695,7 +2825,7 @@ function renderMiniSpace(type) {
   }
 
   return '<div class="rv-mini-space">' +
-    '<div class="rv-mini-space-label">Embedding Space — From Foundation</div>' +
+    '<div class="rv-mini-space-label">Embedding Space: From Foundation</div>' +
     '<svg class="rv-mini-space-svg" viewBox="0 0 410 100">' +
       axes + baseDots + baseLabels + overlay +
     '</svg>' +

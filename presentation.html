@@ -737,7 +737,8 @@ const groups = [
   ]},
   { label: "Stakeholders", items: [
     { id: "cognitive-twin", title: "Cognitive Twin System" },
-    { id: "ct-requirements", title: "Requirements Applied" }
+    { id: "ct-requirements", title: "Requirements Applied" },
+    { id: "ct-envelope-built", title: "The Envelope Built" }
   ]},
   { label: "Context", items: [
     { id: "the-standard", title: "The Published Standard" },
@@ -1141,7 +1142,7 @@ const sections = {
   "ct-requirements": {
     group: "Stakeholders", title: "Requirements Applied", type: "ct-reqs",
     data: {
-      intro: "Every requirement you learned in this presentation applied to a single system. Select a requirement to see what it demands of the Cognitive Twin.",
+      intro: "You have seen the ten walls in the abstract. Now watch them built around one real system. Every requirement you learned in this presentation applied to the Cognitive Twin. Select a wall to see what it demands.",
       reqs: [
         {
           id: "AI-1", name: "Operational and Data Foundations",
@@ -1205,6 +1206,10 @@ const sections = {
         }
       ]
     }
+  },
+  "ct-envelope-built": {
+    group: "Stakeholders", title: "The Envelope Built", type: "ct-dashboard",
+    data: {}
   },
   "the-standard": {
     group: "Context", title: "The Published Standard", type: "standard",
@@ -1305,6 +1310,7 @@ function renderSection(section) {
     case 'contact': return renderContact(section.data);
     case 'ct-intro': return renderCTIntro(section.data);
     case 'ct-reqs': return renderCTReqs(section.data);
+    case 'ct-dashboard': return renderCTEnvelopeBuilt(section.data);
     case 'vv-compare': return renderVVCompare(section.data);
     case 'readiness': return renderReadiness(section.data);
     default: return '';
@@ -3139,7 +3145,7 @@ function renderStandard(data) {
 function setCtReq(i) { activeCTReq = i; renderContent(); }
 
 function renderCTIntro(data) {
-  var ctSteps = ['The System', 'The Astronaut', 'Edge Compute', 'The Model', 'Team Mode', 'The Interface'];
+  var ctSteps = ['The System', 'The Astronaut', 'Edge Compute', 'The Model', 'Team Mode'];
   
   // Navigation dots
   var html = '<div class="wt-nav">';
@@ -3162,7 +3168,6 @@ function renderCTIntro(data) {
     case 2: html += renderCTEdge(); break;
     case 3: html += renderCTModel(); break;
     case 4: html += renderCTTeamMode(); break;
-    case 5: html += renderCTDashboard(data); break;
   }
   
   return html;
@@ -3170,7 +3175,7 @@ function renderCTIntro(data) {
 
 function ctWtGoTo(i) { ctWtStep = i; ctScenario = 0; renderContent(); }
 function ctWtPrev() { if (ctWtStep > 0) ctWtGoTo(ctWtStep - 1); }
-function ctWtNext() { if (ctWtStep < 5) ctWtGoTo(ctWtStep + 1); }
+function ctWtNext() { if (ctWtStep < 4) ctWtGoTo(ctWtStep + 1); }
 
 function renderCTSystem(data) {
   var html = '<div class="wt-step active">';
@@ -3408,10 +3413,15 @@ function renderCTTeamMode() {
   return html;
 }
 
+function renderCTEnvelopeBuilt(data) {
+  var html = '<p class="intro">Ten walls, built around one system. This is what the envelope looks like from inside the cockpit. Every element on this screen maps back to a specific requirement. Walk through the scenario and watch the envelope catch a problem and route it correctly.</p>';
+  html += renderCTDashboard(data);
+  html += '<div class="callout" style="margin-top:18px;"><p>Certification is not a claim that the weights are correct. Certification is a claim that the envelope around the weights is complete. This is what complete looks like.</p></div>';
+  return html;
+}
+
 function renderCTDashboard(data) {
   var html = '<div class="wt-step active">';
-  html += '<div class="wt-title">The interface</div>';
-  html += '<div class="wt-text">This is what the commander sees. Four crew members, each with a readiness score fed by their individual twin through Team Mode. Every element on this screen maps to a framework requirement. Walk through the scenario to see how the system and the human interact when something goes wrong.</div>';
   
   // Dashboard
   html += '<div class="crew-dash">';

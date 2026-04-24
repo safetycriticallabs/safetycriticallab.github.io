@@ -1693,10 +1693,21 @@ function renderWTTokens() {
     '<div class="wt-text" style="margin-top:16px;">At this point, both approaches still have MONEY as a readable string. A V&V engineer could still find the word. <strong>The divergence happens next, and it is where your ability to read the artifact ends.</strong></div>' +
     '<div class="wt-panel" style="margin-top:16px;">' +
       '<div class="wt-panel-label">Try it yourself</div>' +
+      '<div class="wt-text" style="margin-top:8px;margin-bottom:6px;">Type anything. Watch both systems react to the same input. Try variations: <span style="font-family:var(--mono);background:var(--bg);padding:1px 5px;border:1px solid var(--rule);border-radius:3px;font-size:11px;">MONEY</span>, then <span style="font-family:var(--mono);background:var(--bg);padding:1px 5px;border:1px solid var(--rule);border-radius:3px;font-size:11px;">m0ney</span>, then <span style="font-family:var(--mono);background:var(--bg);padding:1px 5px;border:1px solid var(--rule);border-radius:3px;font-size:11px;">Fr33 m0n3y</span>.</div>' +
       '<div class="tok-input-wrap">' +
-        '<input class="tok-input" id="tok-input" type="text" placeholder="Type a phrase and watch it tokenize... try \'Fr33 M0NEY\' vs \'Free MONEY\'" oninput="tokenizeInput()">' +
-        '<div class="tok-output" id="tok-output"><div style="font-size:12px;color:var(--ink3);">Type something above to see it tokenized.</div></div>' +
+        '<input class="tok-input" id="tok-input" type="text" placeholder="Try MONEY, then try m0ney..." oninput="tokenizeInput()">' +
       '</div>' +
+      '<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px;">' +
+        '<div style="padding:14px;background:var(--green-lt);border:1px solid var(--rule);border-radius:4px;min-height:120px;">' +
+          '<div style="font-family:var(--mono);font-size:9px;letter-spacing:0.08em;text-transform:uppercase;color:var(--green);margin-bottom:8px;">Traditional filter</div>' +
+          '<div id="tok-trad"><div style="color:var(--ink3);font-size:12px;">Type above to see the result.</div></div>' +
+        '</div>' +
+        '<div style="padding:14px;background:var(--red-lt);border:1px solid var(--rule);border-radius:4px;min-height:120px;">' +
+          '<div style="font-family:var(--mono);font-size:9px;letter-spacing:0.08em;text-transform:uppercase;color:var(--red);margin-bottom:8px;">AI tokenizer</div>' +
+          '<div id="tok-ai"><div style="color:var(--ink3);font-size:12px;">Type above to see the tokens.</div></div>' +
+        '</div>' +
+      '</div>' +
+      '<div id="tok-lesson" style="font-size:12px;color:var(--ink);margin-top:12px;line-height:1.65;min-height:20px;"></div>' +
     '</div>' +
   '</div>';
 }
@@ -2140,29 +2151,59 @@ const spamWords = ['money','cash','free','urgent','funds','prize','claim','rewar
 
 function tokenizeInput() {
   const input = document.getElementById('tok-input');
-  const output = document.getElementById('tok-output');
+  const trad = document.getElementById('tok-trad');
+  const aiOut = document.getElementById('tok-ai');
+  const lesson = document.getElementById('tok-lesson');
   const text = input.value.trim();
-  
+
   if (!text) {
-    output.innerHTML = '<div style="font-size:12px;color:var(--ink3);">Type something above to see it tokenized.</div>';
+    trad.innerHTML = '<div style="color:var(--ink3);font-size:12px;">Type above to see the result.</div>';
+    aiOut.innerHTML = '<div style="color:var(--ink3);font-size:12px;">Type above to see the tokens.</div>';
+    lesson.innerHTML = '';
     return;
   }
-  
-  // Simple whitespace + punctuation tokenization
-  const tokens = text.match(/[\w]+|[^\s\w]/g) || [];
-  let html = '<div class="wt-tokens">';
-  tokens.forEach(t => {
-    const isSpam = spamWords.includes(t.toLowerCase());
-    html += '<span class="wt-token' + (isSpam ? ' spam-word' : '') + '">' + t + '</span>';
+
+  // Traditional: literal whole-word keyword match against the raw input
+  const matchedKeywords = spamWords.filter(function(w) {
+    return new RegExp('\\b' + w + '\\b', 'i').test(text);
   });
-  html += '</div>';
-  
-  const spamFound = tokens.filter(t => spamWords.includes(t.toLowerCase()));
-  if (spamFound.length > 0) {
-    html += '<div style="font-size:11px;color:var(--red);margin-top:8px;font-family:var(--mono);">' + spamFound.length + ' token' + (spamFound.length > 1 ? 's' : '') + ' associated with spam patterns highlighted.</div>';
+  const tradMatch = matchedKeywords.length > 0;
+
+  // Render Traditional pane
+  let tradHtml = '<div style="font-family:var(--mono);font-size:10px;color:var(--ink3);margin-bottom:6px;">Input: "' + text + '"</div>';
+  tradHtml += '<div style="font-family:var(--mono);font-size:11px;color:var(--ink2);line-height:1.7;">';
+  tradHtml += 'contains(spam_keywords) &rarr; ';
+  tradHtml += '<span style="color:' + (tradMatch ? 'var(--green)' : 'var(--red)') + ';font-weight:600;">' + (tradMatch ? 'TRUE' : 'FALSE') + '</span>';
+  tradHtml += '</div>';
+  tradHtml += '<div style="font-size:11px;color:var(--ink2);margin-top:8px;line-height:1.55;">';
+  if (tradMatch) {
+    tradHtml += 'Flagged. Matched keyword: <span style="font-family:var(--mono);color:var(--red);">' + matchedKeywords.join(', ') + '</span>.';
+  } else {
+    tradHtml += 'No literal keyword match. The filter does not flag this.';
   }
-  
-  output.innerHTML = html;
+  tradHtml += '</div>';
+  trad.innerHTML = tradHtml;
+
+  // AI tokenizer: always produces tokens, regardless of content
+  const tokens = text.match(/[\w]+|[^\s\w]/g) || [];
+  let aiHtml = '<div style="font-family:var(--mono);font-size:10px;color:var(--ink3);margin-bottom:6px;">Input: "' + text + '"</div>';
+  aiHtml += '<div class="wt-tokens" style="margin-bottom:8px;">';
+  tokens.forEach(function(t) {
+    const isKnown = spamWords.includes(t.toLowerCase());
+    aiHtml += '<span class="wt-token' + (isKnown ? ' spam-word' : '') + '">' + t + '</span>';
+  });
+  aiHtml += '</div>';
+  aiHtml += '<div style="font-size:11px;color:var(--ink2);line-height:1.55;">' + tokens.length + ' token' + (tokens.length === 1 ? '' : 's') + ' produced. All of them pass to embedding, regardless of content.</div>';
+  aiOut.innerHTML = aiHtml;
+
+  // Adaptive lesson
+  let lessonHtml = '';
+  if (tradMatch) {
+    lessonHtml = '<strong>The traditional filter is deciding right now.</strong> It sees a literal keyword match and flags. The AI tokenizer, by contrast, has only produced tokens. It has not decided anything yet. The tokens pass to the next step, where the geometry built during training is what actually classifies. Traditional decides here. AI is still preparing. The divergence has already started.';
+  } else {
+    lessonHtml = '<strong>The traditional filter produced no flag</strong> because your input did not contain a literal keyword. The AI tokenizer still produced tokens and passed them downstream. Whether the AI flags them is decided in the next step, by geometry learned during training. A variation the traditional filter cannot match might still be caught by the AI through proximity to known spam tokens in embedding space. The AI does not need an exact match. It also cannot tell you, at this stage, what it will do.';
+  }
+  lesson.innerHTML = lessonHtml;
 }
 
 // Interactive: Embedding Comparison

@@ -277,7 +277,9 @@
   font-family: var(--mono); font-size: 6px;
   letter-spacing: 0.08em; color: #6b6b80; line-height: 1.6;
 }
-.cert-foot-seal svg { display: block; }
+.cert-foot-seal svg,
+.cert-foot-seal img { display: block; }
+.cert-foot-seal img { width: 88px; height: 88px; object-fit: contain; }
 
 /* ─── SECTION FLOW & DEPTH ────────────────────────────────── */
 .section-wwd {
@@ -704,35 +706,7 @@
           <div class="cert-foot-row">
             <div class="cert-foot-text">DOI 10.5281/zenodo.19024420<br>Framework v2.1.1</div>
             <div class="cert-foot-seal">
-              <svg width="56" height="56" viewBox="0 0 200 200" fill="none">
-                <circle cx="100" cy="100" r="97" stroke="#1B3A6B" stroke-width="0.8" opacity="0.2"/>
-                <circle cx="100" cy="100" r="93" stroke="#1B3A6B" stroke-width="4" stroke-dasharray="3.2 3.8" opacity="0.5"/>
-                <circle cx="100" cy="100" r="89" stroke="#1B3A6B" stroke-width="1" opacity="0.25"/>
-                <path id="ft-top" d="M 21,100 A 79,79 0 0,1 179,100" fill="none"/>
-                <text font-family="monospace" font-size="9.5" font-weight="500" letter-spacing="4.8" fill="#1B3A6B" opacity="0.85"><textPath href="#ft-top" startOffset="50%" text-anchor="middle">SAFETY CRITICAL LABS</textPath></text>
-                <path id="ft-bot" d="M 16,100 A 84,84 0 0,0 184,100" fill="none"/>
-                <text font-family="monospace" font-size="8" font-weight="400" letter-spacing="3" fill="#1B3A6B" opacity="0.6"><textPath href="#ft-bot" startOffset="50%" text-anchor="middle">AI CERTIFICATION AUTHORITY</textPath></text>
-                <text x="14" y="104" text-anchor="middle" font-size="6" fill="#B4822A" opacity="0.8">&#10022;</text>
-                <text x="186" y="104" text-anchor="middle" font-size="6" fill="#B4822A" opacity="0.8">&#10022;</text>
-                <circle cx="100" cy="100" r="73" stroke="#1B3A6B" stroke-width="0.8" opacity="0.18"/>
-                <circle cx="100" cy="100" r="70" stroke="#1B3A6B" stroke-width="0.4" opacity="0.12"/>
-                <circle cx="100" cy="100" r="67" fill="#EEF3F9" stroke="#1B3A6B" stroke-width="0.5" opacity="0.9"/>
-                <circle cx="100" cy="100" r="50" stroke="#1B3A6B" stroke-width="1" fill="none" opacity="0.3"/>
-                <circle cx="100" cy="100" r="38" stroke="#1B3A6B" stroke-width="0.8" fill="none" opacity="0.35"/>
-                <circle cx="100" cy="100" r="27" stroke="#1B3A6B" stroke-width="0.7" fill="none" opacity="0.4"/>
-                <line x1="100" y1="70" x2="100" y2="75" stroke="#1B3A6B" stroke-width="1.2" stroke-linecap="round" opacity="0.45"/>
-                <line x1="100" y1="125" x2="100" y2="130" stroke="#1B3A6B" stroke-width="1.2" stroke-linecap="round" opacity="0.45"/>
-                <line x1="70" y1="100" x2="75" y2="100" stroke="#1B3A6B" stroke-width="1.2" stroke-linecap="round" opacity="0.45"/>
-                <line x1="125" y1="100" x2="130" y2="100" stroke="#1B3A6B" stroke-width="1.2" stroke-linecap="round" opacity="0.45"/>
-                <line x1="79" y1="79" x2="83" y2="83" stroke="#1B3A6B" stroke-width="1" stroke-linecap="round" opacity="0.3"/>
-                <line x1="117" y1="117" x2="121" y2="121" stroke="#1B3A6B" stroke-width="1" stroke-linecap="round" opacity="0.3"/>
-                <line x1="121" y1="79" x2="117" y2="83" stroke="#1B3A6B" stroke-width="1" stroke-linecap="round" opacity="0.3"/>
-                <line x1="83" y1="117" x2="79" y2="121" stroke="#1B3A6B" stroke-width="1" stroke-linecap="round" opacity="0.3"/>
-                <circle cx="100" cy="100" r="17" fill="#1B3A6B" stroke="#B4822A" stroke-width="1.5"/>
-                <circle cx="100" cy="100" r="11" fill="#1B3A6B" stroke="#B4822A" stroke-width="0.6" opacity="0.4"/>
-                <line x1="86" y1="100" x2="114" y2="100" stroke="#2E6DB4" stroke-width="2.5" stroke-linecap="round"/>
-                <circle cx="100" cy="100" r="4.5" fill="#2E6DB4"/>
-              </svg>
+              <img src="img/SCL Logo 3d.png" alt="Safety Critical Labs · AI Certification Authority">
             </div>
             <div class="cert-foot-text" style="text-align:right;">Issued: [DD Month YYYY]<br>Surveillance Due: [DD Month YYYY]</div>
           </div>
@@ -907,8 +881,9 @@
 <!-- FOOTER -->
 <footer class="site-footer">
   <div class="footer-inner">
-    <div class="footer-top">
-      <a href="/" class="footer-wordmark">
+    <div class="footer-top footer-top--row">
+      <a href="/" class="footer-wordmark" aria-label="Safety Critical Labs">
+        <img src="img/SCL_Logo_transparent.png" alt="" class="footer-seal">
         <span class="gn-text"><em>Safety Critical</em> Labs</span>
       </a>
       <div class="footer-content">

@@ -17,29 +17,14 @@
 <link rel="stylesheet" href="styles.css">
 <style>
 /* ─── SECTION EYEBROW OVERRIDE ────────────────────────────── */
-.page-section .section-eyebrow,
-.evidence-section .section-eyebrow {
+.page-section .section-eyebrow {
   font-size: 12px;
   font-weight: 500;
   letter-spacing: 0.22em;
   color: var(--red);
   margin-bottom: 22px;
 }
-.page-section .section-eyebrow::before,
-.evidence-section .section-eyebrow::before {
-  width: 28px; height: 2px;
-  background: var(--red);
-}
-.outputs-section .section-eyebrow,
-.timeline-section .section-eyebrow {
-  font-size: 12px;
-  font-weight: 500;
-  letter-spacing: 0.22em;
-  color: var(--red) !important;
-  margin-bottom: 22px;
-}
-.outputs-section .section-eyebrow::before,
-.timeline-section .section-eyebrow::before {
+.page-section .section-eyebrow::before {
   width: 28px; height: 2px;
   background: var(--red);
 }
@@ -74,6 +59,29 @@
 }
 .phase-body { font-size: 16px; color: var(--ink-2); line-height: 1.8; font-weight: 300; margin-bottom: 24px; }
 .phase-checklist { display: flex; flex-direction: column; gap: 8px; }
+.phase-note {
+  margin-top: 20px;
+  padding: 14px 18px;
+  background: var(--white);
+  border-left: 3px solid var(--red);
+  font-size: 13px; color: var(--ink-2); line-height: 1.65;
+}
+.phase-note strong { color: var(--ink); }
+.phase-subsection { margin-top: 32px; }
+.phase-subsection-label {
+  font-family: var(--mono); font-size: 10px;
+  letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--red); margin-bottom: 12px;
+  display: flex; align-items: center; gap: 8px;
+}
+.phase-subsection-label::before {
+  content: ''; display: inline-block;
+  width: 14px; height: 1px; background: var(--red);
+}
+.phase-subsection .ev-intro { font-size: 15px; color: var(--ink-2); line-height: 1.75; font-weight: 300; margin-bottom: 16px; }
+.phase-subsection .ev-list { margin-top: 16px; }
+.phase-subsection .ev-item { background: var(--white); }
+.phase-subsection .ev-note { margin-top: 14px; background: var(--white); }
 .check-item {
   display: flex; gap: 12px; align-items: flex-start;
   padding: 14px 18px;
@@ -95,126 +103,25 @@
 .check-item.check-item-score .check-dot { background: var(--red); }
 .check-item.check-item-score .check-text strong { color: var(--ink); }
 
-/* TIMELINE STRIP */
-.timeline-section { background: var(--ink); padding: 80px 40px; }
-.timeline-inner { max-width: 1140px; margin: 0 auto; }
-.timeline-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2px; margin-top: 48px; }
-.tl-block {
-  background: rgba(255,255,255,0.03);
-  border: 1px solid rgba(255,255,255,0.06);
-  padding: 28px 24px;
-  position: relative;
+/* CERTIFICATE REVEAL (inside Phase 4) */
+.cert-reveal {
+  margin-top: 32px;
+  display: flex; justify-content: center;
 }
-.tl-phase {
-  font-family: var(--mono); font-size: 9px;
-  letter-spacing: 0.12em; text-transform: uppercase;
-  color: var(--red); margin-bottom: 10px;
-}
-.tl-title { font-size: 15px; font-weight: 500; color: #fff; margin-bottom: 8px; line-height: 1.3; }
-.tl-output { font-size: 13px; color: rgba(255,255,255,0.4); line-height: 1.6; }
-.tl-output strong { color: rgba(255,255,255,0.7); font-weight: 500; }
-.tl-total {
-  margin-top: 20px;
-  display: flex; align-items: center; gap: 16px;
-  padding: 20px 24px;
-  background: rgba(200,39,45,0.08);
-  border: 1px solid rgba(200,39,45,0.2);
-  border-radius: 3px;
-}
-.tl-total-num { font-family: var(--serif); font-size: 36px; color: #fff; line-height: 1; flex-shrink: 0; }
-.tl-total-num em { color: var(--red); font-style: normal; }
-.tl-total-label { font-size: 13px; color: rgba(255,255,255,0.4); line-height: 1.6; }
-.tl-total-label strong { color: rgba(255,255,255,0.7); font-weight: 500; }
-
-/* WHAT YOU GET SECTION */
-.outputs-section { background: var(--ink); padding: 80px 40px; border-top: 1px solid rgba(255,255,255,0.06); }
-.outputs-inner { max-width: 1140px; margin: 0 auto; }
-
-.outputs-layout {
-  display: grid; grid-template-columns: 1fr 1fr;
-  gap: 40px; align-items: start; margin-top: 48px;
-}
-
-.outputs-grid { display: flex; flex-direction: column; gap: 2px; }
-
-.output-card {
-  background: rgba(255,255,255,0.03);
-  border: 1px solid rgba(255,255,255,0.06);
-  padding: 22px 20px;
-}
-.output-card.output-card-primary {
-  background: rgba(200,39,45,0.07);
-  border-color: rgba(200,39,45,0.25);
-}
-.output-card-label {
-  font-family: var(--mono); font-size: 9px;
-  letter-spacing: 0.12em; text-transform: uppercase;
-  color: var(--red); margin-bottom: 10px;
-}
-.output-card-title { font-size: 15px; font-weight: 500; color: #fff; margin-bottom: 8px; line-height: 1.3; }
-.output-card-desc { font-size: 13px; color: rgba(255,255,255,0.4); line-height: 1.7; }
-.output-card-desc strong { color: rgba(255,255,255,0.7); font-weight: 500; }
-
-.score-display {
-  display: flex; align-items: baseline; gap: 10px;
-  margin: 12px 0 10px;
-}
-.score-num {
-  font-family: var(--serif); font-size: 44px;
-  color: #fff; line-height: 1;
-}
-.score-meta { display: flex; flex-direction: column; gap: 4px; }
-.score-label {
-  font-family: var(--mono); font-size: 9px;
-  letter-spacing: 0.1em; text-transform: uppercase;
-  color: var(--red);
-}
-.score-sub { font-size: 11px; color: rgba(255,255,255,0.3); line-height: 1.4; }
-
-.outputs-callout {
-  margin-top: 2px;
-  padding: 18px 20px;
-  background: rgba(255,255,255,0.02);
-  border: 1px solid rgba(255,255,255,0.05);
-  display: grid; grid-template-columns: 72px 1fr; gap: 16px; align-items: start;
-}
-.oc-label {
-  font-family: var(--mono); font-size: 9px;
-  letter-spacing: 0.12em; text-transform: uppercase;
-  color: rgba(255,255,255,0.2); line-height: 1.6;
-}
-.oc-text { font-size: 13px; color: rgba(255,255,255,0.4); line-height: 1.7; }
-.oc-text strong { color: rgba(255,255,255,0.7); font-weight: 500; }
-
-/* CERTIFICATE PREVIEW */
-.cert-preview-col { position: sticky; top: 72px; }
-.cert-preview-label {
-  font-family: var(--mono); font-size: 9px;
-  letter-spacing: 0.14em; text-transform: uppercase;
-  color: rgba(255,255,255,0.2); margin-bottom: 12px;
-  display: flex; align-items: center; gap: 8px;
-}
-.cert-preview-label::before {
-  content: ''; display: inline-block;
-  width: 14px; height: 1px; background: rgba(255,255,255,0.2);
-}
-.cert-preview-frame {
-  width: 100%; overflow: hidden;
-  border: 1px solid rgba(255,255,255,0.1);
+.cert-reveal-frame {
+  overflow: hidden;
+  border: 1px solid var(--rule);
   background: #faf9f6;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+  box-shadow: 0 8px 32px rgba(15,35,64,0.12);
 }
-.cert-preview-frame iframe {
-  width: 860px; height: 1600px;
+.cert-reveal-frame iframe {
+  width: 860px; height: 1720px;
   border: none; display: block;
   transform-origin: top left;
   pointer-events: none;
 }
 
-/* EVIDENCE PACKAGE */
-.evidence-section { background: var(--white); padding: 80px 40px; }
-.evidence-inner { max-width: 1140px; margin: 0 auto; }
-.evidence-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: start; margin-top: 48px; }
+/* EVIDENCE PACKAGE PARTS (used inside Phase 2) */
 .ev-intro { font-size: 16px; color: var(--ink-2); line-height: 1.8; font-weight: 300; margin-bottom: 24px; }
 .ev-note {
   padding: 16px 20px;
@@ -259,20 +166,10 @@
   .inner-hero { padding: 60px 24px 48px; }
   .inner-hero-inner { grid-template-columns: 1fr; gap: 24px; }
   .page-section { padding: 56px 24px; }
-  .timeline-section { padding: 60px 24px; }
-  .timeline-grid { grid-template-columns: 1fr 1fr; }
-  .outputs-section { padding: 60px 24px; }
-  .outputs-layout { grid-template-columns: 1fr; }
-  .cert-preview-col { display: none; }
-  .evidence-section { padding: 60px 24px; }
-  .evidence-grid { grid-template-columns: 1fr; gap: 32px; }
   .ev-item { grid-template-columns: 1fr; gap: 4px; }
   .surv-inline-card { grid-template-columns: 1fr; gap: 6px; }
   .site-footer { grid-template-columns: 1fr; gap: 16px; }
   .footer-meta { text-align: left; }
-}
-@media (max-width: 580px) {
-  .timeline-grid { grid-template-columns: 1fr; }
 }
 </style>
 </head>
@@ -317,10 +214,10 @@
         <a href="/">Safety Critical Labs</a>
         <span>/</span> Certification Process
       </div>
-      <h1>From assessment<br>to <em>two answers<br>you can act on.</em></h1>
+      <h1>A formal determination.<br><em>And a quantified<br>risk score.</em></h1>
     </div>
     <p class="inner-hero-lead">
-      A four-phase process that produces a formal certification determination and a quantified risk score. Not a general impression. Not a vendor attestation. A documented, reproducible answer to the question every operator of a safety-critical AI system needs to be able to answer.
+      Every SCL assessment produces both. A four-phase, documented process for AI systems operating in safety-critical environments. Aerospace, aviation, medical, automotive. Not a general impression. Not a vendor attestation.
     </p>
   </div>
 </div>
@@ -362,6 +259,9 @@
               <span class="check-text"><strong>Applicability determination document:</strong> Formal output of Phase 1. Establishes the assessment scope in writing before any evidence is submitted. Client signs off before Phase 2 begins.</span>
             </div>
           </div>
+          <div class="phase-note fade-up">
+            <strong>Engagement scope.</strong> The assessment fee covers all four phases through certificate issuance. Scope and engagement timeline are established here, before Phase 2 begins.
+          </div>
         </div>
 
         <!-- PHASE 2 -->
@@ -392,6 +292,40 @@
             <div class="check-item fade-up">
               <span class="check-dot"></span>
               <span class="check-text"><strong>Evidence package review report:</strong> Formal output. Documents open items, requests for additional evidence, and preliminary findings. Client has opportunity to address open items before Phase 3.</span>
+            </div>
+          </div>
+          <div class="phase-subsection">
+            <div class="phase-subsection-label">What you bring to Phase 2</div>
+            <p class="ev-intro">
+              Phase 2 is an evidence review, not a discovery exercise. You submit a structured package against each applicable requirement. SCL reviews against specific framework criteria, not general best practices. Every finding is traceable to a requirement.
+            </p>
+            <p class="ev-intro">
+              An incomplete or placeholder submission resets the Phase 2 clock. The Evidence Package Guide provided at the end of Phase 1 details exactly what is required for your system and classification level. SCL will work with you on the specifics.
+            </p>
+            <div class="ev-list">
+              <div class="ev-item fade-up">
+                <span class="ev-item-label">System documentation</span>
+                <span class="ev-item-desc">Architecture documentation, model cards, training data records with version control and provenance documentation.</span>
+              </div>
+              <div class="ev-item fade-up">
+                <span class="ev-item-label">Test reports</span>
+                <span class="ev-item-desc">ML test coverage results, bias evaluation reports, OOD detection test results, adversarial robustness outcomes. Dated and reproducible.</span>
+              </div>
+              <div class="ev-item fade-up">
+                <span class="ev-item-label">Validation records</span>
+                <span class="ev-item-desc">Post-deployment performance data, drift monitoring logs, and continuous validation records.</span>
+              </div>
+              <div class="ev-item fade-up">
+                <span class="ev-item-label">Verification matrix</span>
+                <span class="ev-item-desc">Requirements traceability from each applicable requirement to a corresponding verification method and documented test result. No placeholders.</span>
+              </div>
+              <div class="ev-item fade-up">
+                <span class="ev-item-label">Operational procedures</span>
+                <span class="ev-item-desc">Human override procedures, authority limit documentation, OOD escalation protocols, and human-AI interaction logs.</span>
+              </div>
+            </div>
+            <div class="ev-note fade-up">
+              <strong>Not ready to certify yet?</strong> Organizations can request a readiness assessment before committing to a full certification cycle. A readiness assessment identifies specific gaps against the framework without producing a formal determination.
             </div>
           </div>
         </div>
@@ -476,6 +410,14 @@
               <span class="si-desc"><strong>Required for any of:</strong> model version change, significant operational environment change, defined drift threshold breach, or incident involving an AI-assisted decision with safety consequences.</span>
             </div>
           </div>
+          <div class="phase-subsection">
+            <div class="phase-subsection-label">Certificate of conformance</div>
+            <div class="cert-reveal fade-up">
+              <div class="cert-reveal-frame" id="certFrame">
+                <iframe src="certificate-template.html" id="certIframe" scrolling="no" title="SCL Certificate of Conformance preview"></iframe>
+              </div>
+            </div>
+          </div>
         </div>
 
       </div>
@@ -483,147 +425,14 @@
   </div>
 </section>
 
-<!-- WHAT THE ASSESSMENT PRODUCES -->
-<div class="outputs-section">
-  <div class="outputs-inner">
-    <div class="section-eyebrow" style="color:rgba(255,255,255,0.3)">What the assessment produces</div>
-    <h2 class="section-title" style="color:#fff;">A determination.<br><em>And a number to go with it.</em></h2>
-    <p style="font-size:16px;color:rgba(255,255,255,0.4);font-weight:300;line-height:1.75;max-width:580px;margin-bottom:0;">
-      A certification determination tells you whether your system met the standard. A risk score tells you where it sits on the risk spectrum. Together they give your team something to act on and something to show.
-    </p>
-    <div class="outputs-layout">
-
-      <!-- LEFT: cards + callout -->
-      <div>
-        <div class="outputs-grid">
-          <div class="output-card output-card-primary fade-up">
-            <div class="output-card-label">Risk score</div>
-            <div class="score-display">
-              <div class="score-num">3<span style="color:var(--red);font-size:28px;">L</span></div>
-              <div class="score-meta">
-                <span class="score-label">Quantified risk level</span>
-                <span class="score-sub">Reproducible. Documented.<br>Issued with every certificate.</span>
-              </div>
-            </div>
-            <div class="output-card-desc">A number derived from assessed failure modes, operational consequences, and human oversight effectiveness. A reproducible score your leadership, regulators, and procurement officers can read without parsing a findings report.</div>
-          </div>
-          <div class="output-card fade-up">
-            <div class="output-card-label">Certification determination</div>
-            <div class="output-card-title">Certified, Conditionally Certified, or Not Certified</div>
-            <div class="output-card-desc">A formal determination document issued for every assessment regardless of outcome. States what was assessed, what was found, and what is required to maintain certificate validity. <strong>Not a vendor claim.</strong> A documented determination against a published standard.</div>
-          </div>
-          <div class="output-card fade-up">
-            <div class="output-card-label">Certificate (if certified)</div>
-            <div class="output-card-title">A record built to survive regulatory scrutiny</div>
-            <div class="output-card-desc">Classification level, requirement sets assessed, quantified risk score, issue date, validity period, and surveillance schedule. <strong>All four phases of documentation retained for a minimum of 10 years.</strong> Available for regulatory review.</div>
-          </div>
-        </div>
-        <div class="outputs-callout fade-up">
-          <div class="oc-label">Why both matter</div>
-          <div class="oc-text">Pass/fail tells you the threshold was cleared. The risk score tells you where the remaining exposure sits. <strong>For a regulator or procurement officer, the score is the answer the determination alone cannot provide.</strong></div>
-        </div>
-      </div>
-
-      <!-- RIGHT: live certificate preview -->
-      <div class="cert-preview-col fade-up">
-        <div class="cert-preview-label">Certificate of conformance</div>
-        <div class="cert-preview-frame" id="certFrame">
-          <iframe src="certificate-template.html" id="certIframe" scrolling="no" title="SCL Certificate of Conformance preview"></iframe>
-        </div>
-      </div>
-
-    </div>
-  </div>
-</div>
-
-<!-- TIMELINE -->
-<div class="timeline-section">
-  <div class="timeline-inner">
-    <div class="section-eyebrow" style="color:rgba(255,255,255,0.3)">Assessment process</div>
-    <h2 class="section-title" style="color:#fff;">A streamlined process,<br><em>scoped to your system.</em></h2>
-    <p style="font-size:16px;color:rgba(255,255,255,0.4);font-weight:300;line-height:1.75;max-width:560px;margin-top:0;">
-      Every engagement is scoped during Phase 1 based on system complexity, classification level, and your regulatory context. Each phase has a defined output before the next begins.
-    </p>
-    <div class="timeline-grid">
-      <div class="tl-block fade-up">
-        <div class="tl-phase">Phase 01</div>
-        <div class="tl-title">Applicability determination</div>
-        <div class="tl-output"><strong>Output:</strong> Signed Applicability Determination Record. Establishes scope, classification, and applicable requirement sets. Both parties sign before Phase 2 begins.</div>
-      </div>
-      <div class="tl-block fade-up">
-        <div class="tl-phase">Phase 02</div>
-        <div class="tl-title">Evidence package review</div>
-        <div class="tl-output"><strong>Output:</strong> Evidence Review Report with preliminary findings for each requirement. Client reviews open items before the technical assessment begins.</div>
-      </div>
-      <div class="tl-block fade-up">
-        <div class="tl-phase">Phase 03</div>
-        <div class="tl-title">Technical assessment</div>
-        <div class="tl-output"><strong>Output:</strong> Technical Assessment Report with final findings graded against specific requirement criteria, plus the quantified risk score derived from the assessment.</div>
-      </div>
-      <div class="tl-block fade-up">
-        <div class="tl-phase">Phase 04</div>
-        <div class="tl-title">Determination and issuance</div>
-        <div class="tl-output"><strong>Output:</strong> Certification Determination Document with risk score, issued regardless of outcome. Certificate issued if applicable requirements are met.</div>
-      </div>
-    </div>
-    <div class="tl-total">
-      <div class="tl-total-label">The assessment fee covers all four phases through certificate issuance. Scope and engagement timeline are established during Phase 1.</div>
-    </div>
-  </div>
-</div>
-
-<!-- EVIDENCE PACKAGE -->
-<div class="evidence-section">
-  <div class="evidence-inner">
-    <div class="section-eyebrow">What you prepare</div>
-    <h2 class="section-title">The evidence package.<br><em>What you bring to Phase 2.</em></h2>
-    <div class="evidence-grid">
-      <div>
-        <p class="ev-intro">
-          Phase 2 is an evidence review, not a discovery exercise. You submit a structured package against each applicable requirement. SCL reviews against specific framework criteria, not general best practices. Every finding is traceable to a requirement.
-        </p>
-        <p class="ev-intro">
-          An incomplete or placeholder submission resets the Phase 2 clock. The Evidence Package Guide provided at the end of Phase 1 details exactly what is required for your system and classification level. SCL will work with you on the specifics.
-        </p>
-        <div class="ev-note">
-          <strong>Not ready to certify yet?</strong> Organizations can request a readiness assessment before committing to a full certification cycle. A readiness assessment identifies specific gaps against the framework without producing a formal determination.
-        </div>
-      </div>
-      <div class="ev-list">
-        <div class="ev-item fade-up">
-          <span class="ev-item-label">System documentation</span>
-          <span class="ev-item-desc">Architecture documentation, model cards, training data records with version control and provenance documentation.</span>
-        </div>
-        <div class="ev-item fade-up">
-          <span class="ev-item-label">Test reports</span>
-          <span class="ev-item-desc">ML test coverage results, bias evaluation reports, OOD detection test results, adversarial robustness outcomes. Dated and reproducible.</span>
-        </div>
-        <div class="ev-item fade-up">
-          <span class="ev-item-label">Validation records</span>
-          <span class="ev-item-desc">Post-deployment performance data, drift monitoring logs, and continuous validation records.</span>
-        </div>
-        <div class="ev-item fade-up">
-          <span class="ev-item-label">Verification matrix</span>
-          <span class="ev-item-desc">Requirements traceability from each applicable requirement to a corresponding verification method and documented test result. No placeholders.</span>
-        </div>
-        <div class="ev-item fade-up">
-          <span class="ev-item-label">Operational procedures</span>
-          <span class="ev-item-desc">Human override procedures, authority limit documentation, OOD escalation protocols, and human-AI interaction logs.</span>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-
-
 </div>
 
 <!-- FOOTER -->
 <footer class="site-footer">
   <div class="footer-inner">
-    <div class="footer-top">
-      <a href="/" class="footer-wordmark">
+    <div class="footer-top footer-top--row">
+      <a href="/" class="footer-wordmark" aria-label="Safety Critical Labs">
+        <img src="img/SCL_Logo_transparent.png" alt="" class="footer-seal">
         <span class="gn-text"><em>Safety Critical</em> Labs</span>
       </a>
       <div class="footer-content">
@@ -722,18 +531,20 @@ gsap.utils.toArray('.slide-right').forEach(function(el) {
 });
 
 
-// Scale certificate preview iframe to fit container
-function scaleCertPreview() {
+// Scale certificate reveal iframe to fit its frame width
+function scaleCertReveal() {
   const frame = document.getElementById('certFrame');
   const iframe = document.getElementById('certIframe');
   if (!frame || !iframe) return;
-  const containerWidth = frame.offsetWidth;
-  const scale = containerWidth / 860;
+  const maxWidth = Math.min(frame.parentElement.offsetWidth, 860);
+  const scale = maxWidth / 860;
   iframe.style.transform = 'scale(' + scale + ')';
-  frame.style.height = Math.round(1600 * scale) + 'px';
+  frame.style.width = Math.round(860 * scale) + 'px';
+  frame.style.height = Math.round(1720 * scale) + 'px';
 }
-scaleCertPreview();
-window.addEventListener('resize', scaleCertPreview);
+scaleCertReveal();
+window.addEventListener('resize', scaleCertReveal);
+
 // Mobile menu toggle
 document.querySelector('.gn-hamburger').addEventListener('click', function() {
   this.classList.toggle('open');

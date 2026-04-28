@@ -263,6 +263,10 @@
   max-width: 1140px; margin: 0 auto; position: relative; z-index: 1;
   display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: end;
 }
+.inner-hero-seal {
+  width: 168px; height: 168px; display: block;
+  margin-bottom: 32px; object-fit: contain;
+}
 .inner-hero-breadcrumb {
   font-family: var(--mono); font-size: 10px;
   letter-spacing: 0.14em; text-transform: uppercase;
@@ -324,6 +328,7 @@
 <div class="inner-hero">
   <div class="inner-hero-inner">
     <div>
+      <img src="img/SCL Logo 3d.png" alt="Safety Critical Labs" class="inner-hero-seal">
       <div class="inner-hero-breadcrumb">
         <a href="/">Safety Critical Labs</a>
         <span>/</span> The Framework
@@ -547,8 +552,9 @@
 <!-- FOOTER -->
 <footer class="site-footer">
   <div class="footer-inner">
-    <div class="footer-top">
-      <a href="/" class="footer-wordmark">
+    <div class="footer-top footer-top--row">
+      <a href="/" class="footer-wordmark" aria-label="Safety Critical Labs">
+        <img src="img/SCL_Logo_transparent.png" alt="" class="footer-seal">
         <span class="gn-text"><em>Safety Critical</em> Labs</span>
       </a>
       <div class="footer-content">

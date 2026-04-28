@@ -239,7 +239,7 @@
             </div>
           </div>
           <p class="phase-body">
-            Before evidence is reviewed or any technical assessment begins, we establish exactly what is being assessed and at which level. Applicability determination is the phase that defines scope, and it cannot be skipped or combined with evidence review without undermining the integrity of the determination.
+            Phase 1 produces an applicability determination for the specific system being assessed. It begins with a kickoff meeting and a structured questionnaire, because the Lead Assessor cannot define scope from the outside. Boundary, classification, and tailoring decisions all depend on specific information about how the system is built, how it is operated, and the consequence its outputs carry. The four items below are the components of that determination. Each is recorded in writing, and the client signs off before any evidence is reviewed.
           </p>
           <div class="phase-checklist">
             <div class="check-item fade-up">
@@ -256,7 +256,7 @@
             </div>
             <div class="check-item fade-up">
               <span class="check-dot"></span>
-              <span class="check-text"><strong>Applicability determination document:</strong> Formal output of Phase 1. Establishes the assessment scope in writing before any evidence is submitted. Client signs off before Phase 2 begins.</span>
+              <span class="check-text"><strong>Applicability Determination Record (ADR):</strong> Signed formal output of Phase 1. System-level information used for applicability and classification is captured in the ADR, which establishes the assessment scope in writing before any evidence is submitted. Client signs off before Phase 2 begins.</span>
             </div>
           </div>
           <div class="phase-note fade-up">
@@ -274,59 +274,32 @@
             </div>
           </div>
           <p class="phase-body">
-            The client submits their evidence package against the applicable requirement set. Our team reviews each submission against specific framework requirements with documented findings, not general observations. Every finding is traceable to a requirement number, a specific criterion, and a pass/fail disposition.
+            The client submits their evidence package against the applicable requirement set. Our team reviews each submission against specific framework requirements with documented findings, not general observations. Every finding is traceable to a requirement number, a specific criterion, and a pass/fail disposition. The items below are the categories of evidence we review and the formal output that closes the phase.
           </p>
           <div class="phase-checklist">
             <div class="check-item fade-up">
               <span class="check-dot"></span>
-              <span class="check-text"><strong>Documentation review:</strong> Architecture documentation, model cards, training data documentation, validation reports, and operational procedures. Reviewed against each applicable AI-1 through AI-10 requirement.</span>
+              <span class="check-text"><strong>Documentation review:</strong> Architecture documentation, model cards, training data records, validation reports. Reviewed against each applicable AI-1 through AI-10 requirement.</span>
             </div>
             <div class="check-item fade-up">
               <span class="check-dot"></span>
-              <span class="check-text"><strong>Test report analysis:</strong> ML test coverage results, bias evaluation reports, OOD detection test results, adversarial robustness test outcomes. Assessed against framework criteria, not general best practices.</span>
+              <span class="check-text"><strong>Operational procedures review:</strong> Post deployment performance data, drift monitoring logs, continuous validation records, human override procedures, authority limit documentation, OOD escalation protocols, and human AI interaction logs.</span>
             </div>
             <div class="check-item fade-up">
               <span class="check-dot"></span>
-              <span class="check-text"><strong>Verification matrix review:</strong> Requirements traceability from system requirements to test evidence. Every AI requirement must have a corresponding verification method and documented test result.</span>
+              <span class="check-text"><strong>Test report analysis:</strong> ML test coverage results, bias evaluation reports, OOD detection test results, and adversarial robustness test outcomes. Dated and reproducible. Assessed against framework criteria, not general best practices.</span>
+            </div>
+            <div class="check-item fade-up">
+              <span class="check-dot"></span>
+              <span class="check-text"><strong>Verification matrix review:</strong> Requirements traceability from each applicable requirement to a corresponding verification method and documented test result. No placeholders.</span>
             </div>
             <div class="check-item fade-up">
               <span class="check-dot"></span>
               <span class="check-text"><strong>Evidence package review report:</strong> Formal output. Documents open items, requests for additional evidence, and preliminary findings. Client has opportunity to address open items before Phase 3.</span>
             </div>
           </div>
-          <div class="phase-subsection">
-            <div class="phase-subsection-label">What you bring to Phase 2</div>
-            <p class="ev-intro">
-              Phase 2 is an evidence review, not a discovery exercise. You submit a structured package against each applicable requirement. SCL reviews against specific framework criteria, not general best practices. Every finding is traceable to a requirement.
-            </p>
-            <p class="ev-intro">
-              An incomplete or placeholder submission resets the Phase 2 clock. The Evidence Package Guide provided at the end of Phase 1 details exactly what is required for your system and classification level. SCL will work with you on the specifics.
-            </p>
-            <div class="ev-list">
-              <div class="ev-item fade-up">
-                <span class="ev-item-label">System documentation</span>
-                <span class="ev-item-desc">Architecture documentation, model cards, training data records with version control and provenance documentation.</span>
-              </div>
-              <div class="ev-item fade-up">
-                <span class="ev-item-label">Test reports</span>
-                <span class="ev-item-desc">ML test coverage results, bias evaluation reports, OOD detection test results, adversarial robustness outcomes. Dated and reproducible.</span>
-              </div>
-              <div class="ev-item fade-up">
-                <span class="ev-item-label">Validation records</span>
-                <span class="ev-item-desc">Post-deployment performance data, drift monitoring logs, and continuous validation records.</span>
-              </div>
-              <div class="ev-item fade-up">
-                <span class="ev-item-label">Verification matrix</span>
-                <span class="ev-item-desc">Requirements traceability from each applicable requirement to a corresponding verification method and documented test result. No placeholders.</span>
-              </div>
-              <div class="ev-item fade-up">
-                <span class="ev-item-label">Operational procedures</span>
-                <span class="ev-item-desc">Human override procedures, authority limit documentation, OOD escalation protocols, and human-AI interaction logs.</span>
-              </div>
-            </div>
-            <div class="ev-note fade-up">
-              <strong>Not ready to certify yet?</strong> Organizations can request a readiness assessment before committing to a full certification cycle. A readiness assessment identifies specific gaps against the framework without producing a formal determination.
-            </div>
+          <div class="phase-note fade-up">
+            <strong>Not ready to certify yet?</strong> Organizations can request a readiness assessment before committing to a full certification cycle. A readiness assessment identifies specific gaps against the framework without producing a formal determination.
           </div>
         </div>
 
@@ -340,7 +313,7 @@
             </div>
           </div>
           <p class="phase-body">
-            The structured audit of your AI system against the framework requirements. Where evidence review examined documentation, technical assessment examines the system itself: its architecture, its test infrastructure, and the operational validity of its verification claims. This is also the phase where the risk score is calculated.
+            The structured audit of your AI system against the framework requirements. Where evidence review examined documentation, technical assessment examines the system itself: its architecture, its test infrastructure, and the operational validity of its verification claims. This is also the phase where the risk score is calculated. The items below are the activities that make up the audit, the grading they produce, and the remediation path for any conditional findings.
           </p>
           <div class="phase-checklist">
             <div class="check-item fade-up">
@@ -376,7 +349,7 @@
             </div>
           </div>
           <p class="phase-body">
-            A formal determination document stating what was assessed, what was found, and what is required to maintain certificate validity. Every assessment produces a Determination Document regardless of outcome. A certificate is issued only when applicable requirements are met. Both documents include the risk score.
+            A formal determination document stating what was assessed, what was found, and what is required to maintain certificate validity. Every assessment produces a Determination Document regardless of outcome. A certificate is issued only when applicable requirements are met. Both documents include the risk score. The items below are the formal outputs of this phase, the records retained, and the surveillance schedule that keeps the certificate valid.
           </p>
           <div class="phase-checklist">
             <div class="check-item fade-up">
@@ -396,18 +369,24 @@
               <span class="check-text"><strong>Surveillance schedule established:</strong> Certification is not a one-time event. AI systems change behavior over time. Every certificate includes a structured surveillance schedule.</span>
             </div>
           </div>
-          <div class="surv-inline" style="margin-top:24px; background: var(--ink); border-radius: 3px; padding: 20px;">
-            <div class="surv-inline-card fade-up">
-              <span class="si-tier">Safety-Critical</span>
-              <span class="si-desc"><strong>Annual surveillance audit.</strong> Full reassessment of drift metrics, OOD detection logs, and operational performance data since certification.</span>
-            </div>
-            <div class="surv-inline-card fade-up">
-              <span class="si-tier">Mission-Critical</span>
-              <span class="si-desc"><strong>Biennial surveillance audit.</strong> Focused reassessment of continuous validation records and any model updates made since the original certification.</span>
-            </div>
-            <div class="surv-inline-card fade-up">
-              <span class="si-tier">Triggered reassessment</span>
-              <span class="si-desc"><strong>Required for any of:</strong> model version change, significant operational environment change, defined drift threshold breach, or incident involving an AI-assisted decision with safety consequences.</span>
+          <div class="phase-subsection">
+            <div class="phase-subsection-label">Surveillance and recertification</div>
+            <p class="ev-intro">
+              Certificate issuance is not the end of the relationship. AI systems change behavior over time, so every certificate carries a defined surveillance cadence and the conditions that trigger recertification. The schedule below is calibrated to classification level and is set at issuance.
+            </p>
+            <div class="ev-list">
+              <div class="ev-item fade-up">
+                <span class="ev-item-label">Safety-Critical</span>
+                <span class="ev-item-desc"><strong>Annual surveillance audit.</strong> Full reassessment of drift metrics, OOD detection logs, and operational performance data since certification.</span>
+              </div>
+              <div class="ev-item fade-up">
+                <span class="ev-item-label">Mission-Critical</span>
+                <span class="ev-item-desc"><strong>Biennial surveillance audit.</strong> Focused reassessment of continuous validation records and any model updates made since the original certification.</span>
+              </div>
+              <div class="ev-item fade-up">
+                <span class="ev-item-label">Triggered reassessment</span>
+                <span class="ev-item-desc"><strong>Required for any of:</strong> model version change, significant operational environment change, defined drift threshold breach, or incident involving an AI-assisted decision with safety consequences.</span>
+              </div>
             </div>
           </div>
           <div class="phase-subsection">

@@ -95,7 +95,7 @@
 .mg-gap strong { color: var(--ink); font-weight: 500; }
 
 /* ─── AGNOSTIC BAND ───────────────────────────────────────── */
-.agnostic-band { background: var(--ink); padding: 80px 40px; }
+.agnostic-band { background: var(--bg); padding: 80px 40px; border-top: 1px solid var(--rule); }
 
 .ag-inner { max-width: 1140px; margin: 0 auto; }
 
@@ -104,16 +104,16 @@
 }
 
 .ag-left p {
-  font-size: 16px; color: rgba(255,255,255,0.55);
+  font-size: 16px; color: var(--ink-2);
   line-height: 1.8; font-weight: 300; margin-bottom: 16px;
 }
-.ag-left p strong { color: #fff; font-weight: 500; }
+.ag-left p strong { color: var(--ink); font-weight: 500; }
 
 .ag-right { display: flex; flex-direction: column; gap: 10px; }
 
 .ag-item {
-  background: rgba(255,255,255,0.04);
-  border: 1px solid rgba(255,255,255,0.07); border-radius: 3px;
+  background: var(--white);
+  border: 1px solid var(--rule); border-radius: 3px;
   padding: 18px 22px;
   display: grid; grid-template-columns: 100px 1fr; gap: 16px;
 }
@@ -122,7 +122,8 @@
   font-family: var(--mono); font-size: 9px;
   letter-spacing: 0.1em; text-transform: uppercase; color: var(--red);
 }
-.ag-note { font-size: 13px; color: rgba(255,255,255,0.5); line-height: 1.55; }
+.ag-note { font-size: 13px; color: var(--ink-2); line-height: 1.55; }
+.ag-note strong { color: var(--ink); }
 
 @media (max-width: 880px) {
   .inner-hero-inner { grid-template-columns: 1fr !important; gap: 24px !important; }
@@ -436,8 +437,8 @@
 <!-- DOMAIN AGNOSTIC -->
 <div class="agnostic-band">
   <div class="ag-inner">
-    <div class="section-eyebrow" style="color:rgba(255,255,255,0.3)">Algorithm-agnostic. Domain-agnostic.</div>
-    <h2 class="section-title" style="color:#fff;">The failure modes are<br><em>the same everywhere.</em></h2>
+    <div class="section-eyebrow">Algorithm-agnostic. Domain-agnostic.</div>
+    <h2 class="section-title">The failure modes are<br><em>the same everywhere.</em></h2>
     <div class="ag-grid">
       <div class="ag-left">
         <p>
@@ -498,7 +499,7 @@
     <div class="footer-divider"></div>
     <div class="footer-bottom">
       <span class="footer-copyright">&copy; 2025 Safety Critical Labs. All rights reserved.</span>
-      <span class="footer-version">Framework v2.1.1</span>
+      <span class="footer-version">Framework v2.1.2</span>
     </div>
   </div>
 </footer>

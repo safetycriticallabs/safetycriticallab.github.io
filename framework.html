@@ -151,19 +151,20 @@
 }
 
 /* ─── STRUCTURE EXPLAINER ─────────────────────────────────── */
-.structure-section { background: var(--ink); padding: 80px 40px; }
+.structure-section { background: var(--bg); padding: 80px 40px; border-top: 1px solid var(--rule); }
 
 .struct-inner { max-width: 1140px; margin: 0 auto; }
 
 .struct-grid {
-  display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px;
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px;
   margin-top: 48px;
 }
 
 .struct-col {
-  background: rgba(255,255,255,0.03);
-  border: 1px solid rgba(255,255,255,0.06);
+  background: var(--white);
+  border: 1px solid var(--rule);
   padding: 32px 28px;
+  border-radius: 3px;
 }
 
 .struct-col-title {
@@ -173,12 +174,12 @@
 }
 
 .struct-col-name {
-  font-size: 18px; font-weight: 600; color: #fff;
+  font-size: 18px; font-weight: 600; color: var(--ink);
   margin-bottom: 12px;
 }
 
 .struct-col-desc {
-  font-size: 13px; color: rgba(255,255,255,0.4); line-height: 1.65;
+  font-size: 13px; color: var(--ink-2); line-height: 1.65;
   margin-bottom: 16px;
 }
 
@@ -189,16 +190,16 @@
 .struct-req-tag {
   font-family: var(--mono); font-size: 10px;
   letter-spacing: 0.07em; text-transform: uppercase;
-  background: rgba(255,255,255,0.07);
-  color: rgba(255,255,255,0.5);
+  background: var(--bg);
+  color: var(--ink-2);
   padding: 4px 10px; border-radius: 2px;
-  border: 1px solid rgba(255,255,255,0.1);
+  border: 1px solid var(--rule);
 }
 .struct-req-tag.tailored {
   background: transparent;
   border-style: dashed;
-  border-color: rgba(200,39,45,0.45);
-  color: rgba(200,39,45,0.75);
+  border-color: rgba(46,109,180,0.45);
+  color: var(--red);
 }
 
 /* ─── OPEN STANDARD BAND ──────────────────────────────────── */
@@ -343,7 +344,7 @@
 <!-- CLASSIFICATION KEY + FRAMEWORK -->
 <section class="page-section" style="background: var(--bg);">
   <div class="section-inner">
-    <div class="section-eyebrow">Framework v2.1.1</div>
+    <div class="section-eyebrow">Framework v2.1.2</div>
     <div style="display:flex; justify-content:space-between; align-items:flex-end; gap: 32px; margin-bottom: 48px; flex-wrap: wrap;">
       <h2 class="section-title" style="margin-bottom:0;">AI-1 through AI-10</h2>
       <div class="class-key" role="group" aria-label="Filter requirements by classification tier">
@@ -412,9 +413,9 @@
 <!-- CLASSIFICATION STRUCTURE -->
 <div class="structure-section">
   <div class="struct-inner">
-    <div class="section-eyebrow" style="color:rgba(255,255,255,0.3)">Classification levels</div>
-    <h2 class="section-title" style="color:#fff;">Three tiers. Scaled to consequence.</h2>
-    <p style="font-size:16px;color:rgba(255,255,255,0.45);font-weight:300;line-height:1.75;max-width:560px;margin-top:0;">
+    <div class="section-eyebrow">Classification levels</div>
+    <h2 class="section-title">Three tiers. Scaled to consequence.</h2>
+    <p style="font-size:16px;color:var(--ink-2);font-weight:300;line-height:1.75;max-width:560px;margin-top:0;">
       The framework applies all ten requirement areas at different depths depending on the classification of your AI system. Classification is determined during Phase 1 of the assessment.
     </p>
     <div class="struct-grid stagger-in">
@@ -506,32 +507,32 @@
 
 
 <!-- PUBLISHED STANDARD BAND -->
-<div style="background: var(--ink); padding: 72px 40px; border-top: 1px solid rgba(255,255,255,0.06);">
+<div style="background: var(--bg); padding: 72px 40px; border-top: 1px solid var(--rule);">
   <div class="pub-standard-grid" style="max-width: 1140px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center;">
     <div>
-      <div class="section-eyebrow" style="color: rgba(255,255,255,0.3);">Published standard</div>
-      <h2 style="font-family: var(--sans); font-size: clamp(28px, 3vw, 40px); font-weight: 600; color: #fff; line-height: 1.1; letter-spacing: -0.02em; margin-bottom: 20px;">
+      <div class="section-eyebrow">Published standard</div>
+      <h2 style="font-family: var(--sans); font-size: clamp(28px, 3vw, 40px); font-weight: 600; color: var(--ink); line-height: 1.1; letter-spacing: -0.02em; margin-bottom: 20px;">
         Read every requirement<br>before you engage.
       </h2>
-      <p style="font-size: 15px; color: rgba(255,255,255,0.45); line-height: 1.8; font-weight: 300; margin-bottom: 16px;">
+      <p style="font-size: 15px; color: var(--ink-2); line-height: 1.8; font-weight: 300; margin-bottom: 16px;">
         The framework is openly published under a citable DOI. Every requirement, verification method, and evidence standard is available for review before any assessment begins.
       </p>
-      <p style="font-size: 15px; color: rgba(255,255,255,0.45); line-height: 1.8; font-weight: 300;">
+      <p style="font-size: 15px; color: var(--ink-2); line-height: 1.8; font-weight: 300;">
         If you believe a requirement is technically incorrect, insufficiently grounded, or missing coverage for a known AI failure mode, SCL welcomes that challenge. The standard improves through scrutiny.
       </p>
     </div>
     <div style="display: flex; flex-direction: column; gap: 12px;">
-      <div style="background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 4px; padding: 20px 24px; display: grid; grid-template-columns: 72px 1fr; gap: 16px; align-items: center;">
+      <div style="background: var(--white); border: 1px solid var(--rule); border-radius: 4px; padding: 20px 24px; display: grid; grid-template-columns: 72px 1fr; gap: 16px; align-items: center;">
         <span style="font-family: var(--mono); font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--red);">Document</span>
-        <span style="font-size: 14px; color: rgba(255,255,255,0.7); line-height: 1.5;">Requirements and Verification Standards for Artificial Intelligence in Safety-Critical Applications — Version 2.1.1</span>
+        <span style="font-size: 14px; color: var(--ink-2); line-height: 1.5;">Requirements and Verification Standards for Artificial Intelligence in Safety-Critical Applications — Version 2.1.2</span>
       </div>
-      <div style="background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 4px; padding: 20px 24px; display: grid; grid-template-columns: 72px 1fr; gap: 16px; align-items: center;">
+      <div style="background: var(--white); border: 1px solid var(--rule); border-radius: 4px; padding: 20px 24px; display: grid; grid-template-columns: 72px 1fr; gap: 16px; align-items: center;">
         <span style="font-family: var(--mono); font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--red);">DOI</span>
-        <span style="font-size: 14px; color: rgba(255,255,255,0.7); line-height: 1.5; font-family: var(--mono);">10.5281/zenodo.19024420</span>
+        <span style="font-size: 14px; color: var(--ink-2); line-height: 1.5; font-family: var(--mono);">10.5281/zenodo.19024420</span>
       </div>
-      <div style="background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 4px; padding: 20px 24px; display: grid; grid-template-columns: 72px 1fr; gap: 16px; align-items: center;">
+      <div style="background: var(--white); border: 1px solid var(--rule); border-radius: 4px; padding: 20px 24px; display: grid; grid-template-columns: 72px 1fr; gap: 16px; align-items: center;">
         <span style="font-family: var(--mono); font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--red);">License</span>
-        <span style="font-size: 14px; color: rgba(255,255,255,0.7); line-height: 1.5;">CC BY-SA 4.0 — free to read, cite, and reproduce with attribution</span>
+        <span style="font-size: 14px; color: var(--ink-2); line-height: 1.5;">CC BY-SA 4.0 — free to read, cite, and reproduce with attribution</span>
       </div>
       <a href="https://doi.org/10.5281/zenodo.19024420" target="_blank" rel="noopener"
          style="display: inline-flex; align-items: center; justify-content: center; gap: 10px;
@@ -571,7 +572,7 @@
     <div class="footer-divider"></div>
     <div class="footer-bottom">
       <span class="footer-copyright">&copy; 2025 Safety Critical Labs. All rights reserved.</span>
-      <span class="footer-version">Framework v2.1.1</span>
+      <span class="footer-version">Framework v2.1.2</span>
     </div>
   </div>
 </footer>

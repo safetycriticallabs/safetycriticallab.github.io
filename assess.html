@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Readiness Assessment — Safety Critical Labs</title>
-<meta name="description" content="Evaluate your AI system's certification readiness against the SCL framework. Free self-assessment covering all ten requirement areas.">
+<title>Readiness Assessment | Safety Critical Labs</title>
+<meta name="description" content="Evaluate your AI system's certification readiness against the SCL framework. Free self assessment covering all ten requirement areas.">
 <link rel="icon" type="image/x-icon" href="favicon.ico">
 <link rel="icon" type="image/png" sizes="16x16" href="img/favicon-16x16.png">
 <link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32x32.png">
@@ -512,7 +512,7 @@
 
     <!-- STEP 1: Classification -->
     <div class="assess-step active" id="step-1">
-      <div class="step-eyebrow">Step 1 — Classification</div>
+      <div class="step-eyebrow">Step 1: Classification</div>
       <div class="step-title">What kind of system are you building?</div>
       <div class="step-desc">These questions help determine which classification tier applies and which requirement areas are relevant to your system.</div>
 
@@ -526,12 +526,12 @@
           <option value="defense">Defense / National Security</option>
           <option value="industrial">Industrial / Manufacturing</option>
           <option value="energy">Energy / Utilities</option>
-          <option value="other">Other safety-critical application</option>
+          <option value="other">Other safety critical application</option>
         </select>
       </div>
 
       <div class="q-card">
-        <div class="q-label">What is the worst-case consequence if your AI system fails or produces incorrect output?</div>
+        <div class="q-label">What is the worst case consequence if your AI system fails or produces incorrect output?</div>
         <div class="q-options" data-name="q-consequence">
           <label class="q-option">
             <input type="radio" name="q-consequence" value="3">
@@ -557,17 +557,17 @@
           <label class="q-option">
             <input type="radio" name="q-override" value="yes">
             <span class="q-radio"></span>
-            <span class="q-option-text">Yes — a human can always intervene before the AI acts</span>
+            <span class="q-option-text">Yes. A human can always intervene before the AI acts</span>
           </label>
           <label class="q-option">
             <input type="radio" name="q-override" value="partial">
             <span class="q-radio"></span>
-            <span class="q-option-text">Partially — override exists but response time may be insufficient</span>
+            <span class="q-option-text">Partially. Override exists but response time may be insufficient</span>
           </label>
           <label class="q-option">
             <input type="radio" name="q-override" value="no">
             <span class="q-radio"></span>
-            <span class="q-option-text">No — the AI operates autonomously with no real-time human override</span>
+            <span class="q-option-text">No. The AI operates autonomously with no real time human override</span>
           </label>
         </div>
       </div>
@@ -580,7 +580,7 @@
 
     <!-- STEP 2: Data & Testing (AI-1, AI-2, AI-3) -->
     <div class="assess-step" id="step-2">
-      <div class="step-eyebrow">Step 2 — Data &amp; Testing</div>
+      <div class="step-eyebrow">Step 2: Data &amp; Testing</div>
       <div class="step-title">Training data and test coverage</div>
       <div class="step-desc">These questions map to AI-1 (data partitioning), AI-2 (bias detection), and AI-3 (ML test coverage).</div>
 
@@ -593,17 +593,17 @@
           <label class="q-option">
             <input type="radio" name="q-ai1" value="3">
             <span class="q-radio"></span>
-            <span class="q-option-text">Fully documented — partitions are enforced, provenance is tracked, and data lineage is auditable</span>
+            <span class="q-option-text">Fully documented. Partitions are enforced, provenance is tracked, and data lineage is auditable</span>
           </label>
           <label class="q-option">
             <input type="radio" name="q-ai1" value="2">
             <span class="q-radio"></span>
-            <span class="q-option-text">Partially — we separate data but documentation or provenance tracking is incomplete</span>
+            <span class="q-option-text">Partially. We separate data but documentation or provenance tracking is incomplete</span>
           </label>
           <label class="q-option">
             <input type="radio" name="q-ai1" value="1">
             <span class="q-radio"></span>
-            <span class="q-option-text">Minimal — no formal partitioning or documentation process</span>
+            <span class="q-option-text">Minimal. No formal partitioning or documentation process</span>
           </label>
         </div>
       </div>
@@ -617,7 +617,7 @@
           <label class="q-option">
             <input type="radio" name="q-ai2" value="3">
             <span class="q-radio"></span>
-            <span class="q-option-text">Yes — systematic bias testing with documented baselines and mitigation procedures</span>
+            <span class="q-option-text">Yes. Systematic bias testing with documented baselines and mitigation procedures</span>
           </label>
           <label class="q-option">
             <input type="radio" name="q-ai2" value="2">
@@ -651,7 +651,7 @@
           <label class="q-option">
             <input type="radio" name="q-ai3" value="1">
             <span class="q-radio"></span>
-            <span class="q-option-text">Testing is ad hoc — no structured test matrix or coverage tracking</span>
+            <span class="q-option-text">Testing is ad hoc. No structured test matrix or coverage tracking</span>
           </label>
         </div>
       </div>
@@ -664,9 +664,9 @@
 
     <!-- STEP 3: Runtime Safety (AI-4, AI-5, AI-6) -->
     <div class="assess-step" id="step-3">
-      <div class="step-eyebrow">Step 3 — Runtime Safety</div>
+      <div class="step-eyebrow">Step 3: Runtime Safety</div>
       <div class="step-title">Monitoring, confidence, and edge detection</div>
-      <div class="step-desc">These questions map to AI-4 (continuous validation), AI-5 (hallucination prevention), and AI-6 (out-of-distribution detection).</div>
+      <div class="step-desc">These questions map to AI-4 (continuous validation), AI-5 (hallucination prevention), and AI-6 (out of distribution detection).</div>
 
       <div class="q-card">
         <div class="q-label">
@@ -677,7 +677,7 @@
           <label class="q-option">
             <input type="radio" name="q-ai4" value="3">
             <span class="q-radio"></span>
-            <span class="q-option-text">Yes — automated drift detection with documented thresholds, triggers, and escalation paths</span>
+            <span class="q-option-text">Yes. Automated drift detection with documented thresholds, triggers, and escalation paths</span>
           </label>
           <label class="q-option">
             <input type="radio" name="q-ai4" value="2">
@@ -687,7 +687,7 @@
           <label class="q-option">
             <input type="radio" name="q-ai4" value="1">
             <span class="q-radio"></span>
-            <span class="q-option-text">No post-deployment monitoring in place</span>
+            <span class="q-option-text">No post deployment monitoring in place</span>
           </label>
         </div>
       </div>
@@ -701,7 +701,7 @@
           <label class="q-option">
             <input type="radio" name="q-ai5" value="3">
             <span class="q-radio"></span>
-            <span class="q-option-text">Yes — confidence thresholds defined, low-confidence outputs trigger human review or safe fallback</span>
+            <span class="q-option-text">Yes. Confidence thresholds defined, low confidence outputs trigger human review or safe fallback</span>
           </label>
           <label class="q-option">
             <input type="radio" name="q-ai5" value="2">
@@ -718,14 +718,14 @@
 
       <div class="q-card">
         <div class="q-label">
-          AI-6: Out-of-Distribution Detection
+          AI-6: Out of Distribution Detection
           <div class="q-sublabel">Can your system detect when it receives inputs outside its training distribution, and does it log and escalate these events?</div>
         </div>
         <div class="q-options" data-name="q-ai6">
           <label class="q-option">
             <input type="radio" name="q-ai6" value="3">
             <span class="q-radio"></span>
-            <span class="q-option-text">Yes — OOD detection with logging, alerting, and defined escalation procedures</span>
+            <span class="q-option-text">Yes. OOD detection with logging, alerting, and defined escalation procedures</span>
           </label>
           <label class="q-option">
             <input type="radio" name="q-ai6" value="2">
@@ -735,7 +735,7 @@
           <label class="q-option">
             <input type="radio" name="q-ai6" value="1">
             <span class="q-radio"></span>
-            <span class="q-option-text">No out-of-distribution detection implemented</span>
+            <span class="q-option-text">No out of distribution detection implemented</span>
           </label>
         </div>
       </div>
@@ -748,9 +748,9 @@
 
     <!-- STEP 4: Advanced Requirements (AI-7, AI-8, AI-9, AI-10) -->
     <div class="assess-step" id="step-4">
-      <div class="step-eyebrow">Step 4 — Robustness &amp; Oversight</div>
+      <div class="step-eyebrow">Step 4: Robustness &amp; Oversight</div>
       <div class="step-title">Adversarial testing, explainability, and human teaming</div>
-      <div class="step-desc">These requirements apply based on your classification level. Answer based on your current state — if a requirement doesn't apply to your tier, you can select "Not applicable."</div>
+      <div class="step-desc">These requirements apply based on your classification level. Answer based on your current state. If a requirement doesn't apply to your tier, you can select "Not applicable."</div>
 
       <div class="q-card">
         <div class="q-label">
@@ -761,7 +761,7 @@
           <label class="q-option">
             <input type="radio" name="q-ai7" value="3">
             <span class="q-radio"></span>
-            <span class="q-option-text">Yes — formal adversarial testing with documented bounds and specified behavioral requirements</span>
+            <span class="q-option-text">Yes. Formal adversarial testing with documented bounds and specified behavioral requirements</span>
           </label>
           <label class="q-option">
             <input type="radio" name="q-ai7" value="2">
@@ -790,7 +790,7 @@
           <label class="q-option">
             <input type="radio" name="q-ai8" value="3">
             <span class="q-radio"></span>
-            <span class="q-option-text">Yes — operator-facing explanations with traceable decision basis for all critical outputs</span>
+            <span class="q-option-text">Yes. Operator facing explanations with traceable decision basis for all critical outputs</span>
           </label>
           <label class="q-option">
             <input type="radio" name="q-ai8" value="2">
@@ -819,7 +819,7 @@
           <label class="q-option">
             <input type="radio" name="q-ai9" value="3">
             <span class="q-radio"></span>
-            <span class="q-option-text">Yes — defined authority limits, override procedures, trust calibration testing, and audit trails</span>
+            <span class="q-option-text">Yes. Defined authority limits, override procedures, trust calibration testing, and audit trails</span>
           </label>
           <label class="q-option">
             <input type="radio" name="q-ai9" value="2">
@@ -829,7 +829,7 @@
           <label class="q-option">
             <input type="radio" name="q-ai9" value="1">
             <span class="q-radio"></span>
-            <span class="q-option-text">No formal human-AI teaming framework in place</span>
+            <span class="q-option-text">No formal human and AI teaming framework in place</span>
           </label>
           <label class="q-option">
             <input type="radio" name="q-ai9" value="0">
@@ -842,13 +842,13 @@
       <div class="q-card">
         <div class="q-label">
           AI-10: Privacy and Data Protection
-          <div class="q-sublabel">If your system processes personal data, are lawful basis, data subject rights, and privacy-enhancing techniques implemented and auditable?</div>
+          <div class="q-sublabel">If your system processes personal data, are lawful basis, data subject rights, and privacy enhancing techniques implemented and auditable?</div>
         </div>
         <div class="q-options" data-name="q-ai10">
           <label class="q-option">
             <input type="radio" name="q-ai10" value="3">
             <span class="q-radio"></span>
-            <span class="q-option-text">Yes — personal data is identified and minimized, lawful basis is documented, data subject rights are implemented, and privacy-enhancing techniques are in place</span>
+            <span class="q-option-text">Yes. Personal data is identified and minimized, lawful basis is documented, data subject rights are implemented, and privacy enhancing techniques are in place</span>
           </label>
           <label class="q-option">
             <input type="radio" name="q-ai10" value="2">
@@ -863,7 +863,7 @@
           <label class="q-option">
             <input type="radio" name="q-ai10" value="0">
             <span class="q-radio"></span>
-            <span class="q-option-text">Not applicable — the system does not process personal data</span>
+            <span class="q-option-text">Not applicable. The system does not process personal data</span>
           </label>
         </div>
       </div>
@@ -934,7 +934,7 @@
           <a href="/assess">Assess</a>
           <a href="/contact">Contact</a>
         </div>
-        <p class="footer-tagline">AI certification authority for safety-critical systems.<br>Formal determinations issued against a published, citable standard.</p>
+        <p class="footer-tagline">AI certification authority for safety critical systems.<br>Formal determinations issued against a published, citable standard.</p>
       </div>
     </div>
     <div class="footer-divider"></div>
@@ -959,7 +959,7 @@
     'ai3': { id: 'AI-3', title: 'ML test coverage' },
     'ai4': { id: 'AI-4', title: 'Continuous validation' },
     'ai5': { id: 'AI-5', title: 'Hallucination prevention' },
-    'ai6': { id: 'AI-6', title: 'Out-of-distribution detection' },
+    'ai6': { id: 'AI-6', title: 'Out of distribution detection' },
     'ai7': { id: 'AI-7', title: 'Adversarial robustness' },
     'ai8': { id: 'AI-8', title: 'Explainability' },
     'ai9': { id: 'AI-9', title: 'Human-AI teaming' },
@@ -969,14 +969,14 @@
   /* ── Question labels for error messages ───────── */
   var questionLabels = {
     'q-domain': 'Primary domain',
-    'q-consequence': 'Worst-case consequence of failure',
+    'q-consequence': 'Worst case consequence of failure',
     'q-override': 'Human override capability',
     'q-ai1': 'AI-1: Operational and Data Foundations',
     'q-ai2': 'AI-2: Addressing AI Bias',
     'q-ai3': 'AI-3: ML Test Coverage',
     'q-ai4': 'AI-4: Continuous Validation',
     'q-ai5': 'AI-5: Hallucination Prevention',
-    'q-ai6': 'AI-6: Out-of-Distribution Detection',
+    'q-ai6': 'AI-6: Out of Distribution Detection',
     'q-ai7': 'AI-7: Adversarial Robustness',
     'q-ai8': 'AI-8: Explainability',
     'q-ai9': 'AI-9: Human-AI Teaming',
@@ -1120,9 +1120,9 @@
     var consequence = parseInt(document.querySelector('input[name="q-consequence"]:checked').value);
     var override = document.querySelector('input[name="q-override"]:checked').value;
 
-    if (consequence === 3 || override === 'no') return { tier: 1, label: 'Safety-Critical AI', desc: 'Your system classification is Tier 1 — Safety-Critical AI. All ten requirement areas (AI-1 through AI-10) apply. Annual surveillance audits required.' };
-    if (consequence === 2 || override === 'partial') return { tier: 2, label: 'Mission-Critical AI', desc: 'Your system classification is Tier 2 — Mission-Critical AI. AI-1 through AI-6, AI-8, AI-9, and AI-10 apply. AI-7 (adversarial robustness) may be tailored based on threat environment.' };
-    return { tier: 3, label: 'Operational Support AI', desc: 'Your system classification is Tier 3 — Operational Support AI. AI-1 through AI-6 and AI-10 apply at minimum. AI-8 and AI-9 may be scoped to your specific operational context.' };
+    if (consequence === 3 || override === 'no') return { tier: 1, label: 'Safety Critical AI', desc: 'Your system classification is Tier 1: Safety Critical AI. All ten requirement areas (AI-1 through AI-10) apply. Annual surveillance audits required.' };
+    if (consequence === 2 || override === 'partial') return { tier: 2, label: 'Mission Critical AI', desc: 'Your system classification is Tier 2: Mission Critical AI. AI-1 through AI-6, AI-8, AI-9, and AI-10 apply. AI-7 (adversarial robustness) may be tailored based on threat environment.' };
+    return { tier: 3, label: 'Operational Support AI', desc: 'Your system classification is Tier 3: Operational Support AI. AI-1 through AI-6 and AI-10 apply at minimum. AI-8 and AI-9 may be scoped to your specific operational context.' };
   }
 
   /* ── Calculate results ───────────────────────── */
@@ -1174,7 +1174,7 @@
 
     // Classification label
     document.getElementById('resultsClassification').textContent =
-      'Tier ' + r.classification.tier + ' — ' + r.classification.label;
+      'Tier ' + r.classification.tier + ': ' + r.classification.label;
 
     // Summary
     var gaps = [];
@@ -1302,15 +1302,15 @@ document.addEventListener("click", function() {
       question: 'Do you have a declared Operational Design Domain (ODD) plus documented, separated training, validation, and test datasets with recorded provenance?',
       context: 'AI-1 establishes the foundations on which all downstream verification depends: a declared Operational Design Domain (ODD) that bounds the certification claim, the integrity of training/validation/test data partitions with documented provenance, and classification handling controls (including CUI and ITAR inheritance) that govern data and outputs through the lifecycle.',
       answers: {
-        '3': 'Fully documented \u2014 ODD is declared, partitions are enforced, provenance is tracked, and data lineage is auditable',
-        '2': 'Partially \u2014 some foundations in place but ODD declaration, partitioning, or provenance documentation is incomplete',
-        '1': 'Minimal \u2014 no declared ODD and no formal partitioning or documentation process'
+        '3': 'Fully documented. ODD is declared, partitions are enforced, provenance is tracked, and data lineage is auditable',
+        '2': 'Partially. Some foundations in place but ODD declaration, partitioning, or provenance documentation is incomplete',
+        '1': 'Minimal. No declared ODD and no formal partitioning or documentation process'
       }
     },
     ai2: {
       id: 'AI-2', title: 'Bias Detection & Mitigation',
       question: 'Have you tested for performance disparities across user classes, operational contexts, or demographic groups?',
-      context: 'AI-2 requires baseline performance measurement across user classes and operational contexts. Bias-free training data requirements with verifiable inspection criteria are established. In regulated domains, undetected bias can result in discriminatory outcomes with direct safety or mission impact.',
+      context: 'AI-2 requires baseline performance measurement across user classes and operational contexts. Bias free training data requirements with verifiable inspection criteria are established. In regulated domains, undetected bias can result in discriminatory outcomes with direct safety or mission impact.',
       answers: {
         '3': 'Systematic bias testing with documented baselines and mitigation procedures',
         '2': 'Some testing done, but not comprehensive or not formally documented',
@@ -1320,21 +1320,21 @@ document.addEventListener("click", function() {
     ai3: {
       id: 'AI-3', title: 'ML Test Coverage',
       question: 'Do you have a defined test matrix covering nominal performance, edge cases, failure mode injection, and distributional boundaries?',
-      context: 'AI-3 establishes the ML equivalent of code coverage. A defined test matrix must cover nominal performance, edge cases, failure mode injection, and distributional boundary testing. This requirement ensures that the system has been evaluated not just on average-case inputs but across the full range of conditions it may encounter in deployment.',
+      context: 'AI-3 establishes the ML equivalent of code coverage. A defined test matrix must cover nominal performance, edge cases, failure mode injection, and distributional boundary testing. This requirement ensures that the system has been evaluated not just on average case inputs but across the full range of conditions it may encounter in deployment.',
       answers: {
         '3': 'Comprehensive test matrix with documented coverage across all categories',
         '2': 'Testing for accuracy and some edge cases, but no formal coverage matrix',
-        '1': 'Ad hoc testing \u2014 no structured test matrix or coverage tracking'
+        '1': 'Ad hoc testing. No structured test matrix or coverage tracking'
       }
     },
     ai4: {
       id: 'AI-4', title: 'Continuous Validation',
       question: 'Do you monitor your model in production for performance drift with defined thresholds and revalidation triggers?',
-      context: 'AI-4 addresses post-deployment model monitoring. Performance drift must be detected using defined thresholds, with documented revalidation triggers and escalation paths. In safety-critical systems, undetected model degradation can introduce failures that were not present during initial testing.',
+      context: 'AI-4 addresses post deployment model monitoring. Performance drift must be detected using defined thresholds, with documented revalidation triggers and escalation paths. In safety critical systems, undetected model degradation can introduce failures that were not present during initial testing.',
       answers: {
         '3': 'Automated drift detection with documented thresholds, triggers, and escalation paths',
         '2': 'Some metrics monitored, but thresholds and triggers are not formally defined',
-        '1': 'No post-deployment monitoring in place'
+        '1': 'No post deployment monitoring in place'
       }
     },
     ai5: {
@@ -1342,25 +1342,25 @@ document.addEventListener("click", function() {
       question: 'Does your system bound output confidence and degrade gracefully to human override when confidence is low?',
       context: 'AI-5 requires confidence bounding and graceful degradation. When model confidence falls below defined thresholds, the system must defer to human judgment or a safe fallback state. This is critical in domains where an incorrect output presented with high confidence can lead to catastrophic decisions.',
       answers: {
-        '3': 'Confidence thresholds defined, low-confidence outputs trigger human review or safe fallback',
+        '3': 'Confidence thresholds defined, low confidence outputs trigger human review or safe fallback',
         '2': 'Confidence scores available but no formal thresholds or degradation procedures',
         '1': 'No confidence bounding or graceful degradation in place'
       }
     },
     ai6: {
-      id: 'AI-6', title: 'Out-of-Distribution Detection',
+      id: 'AI-6', title: 'Out of Distribution Detection',
       question: 'Can your system detect when it receives inputs outside its training distribution, and does it log and escalate these events?',
       context: 'AI-6 evaluates the system\'s ability to recognize inputs it was not designed to handle. OOD detection with logging, alerting, and defined escalation procedures ensures the system does not silently produce unreliable outputs when encountering novel or unexpected data.',
       answers: {
         '3': 'OOD detection with logging, alerting, and defined escalation procedures',
         '2': 'Some detection capability, but logging or escalation is inconsistent',
-        '1': 'No out-of-distribution detection implemented'
+        '1': 'No out of distribution detection implemented'
       }
     },
     ai7: {
       id: 'AI-7', title: 'Adversarial Robustness',
       question: 'Have you conducted adversarial testing with defined robustness bounds and behavioral requirements under adversarial inputs?',
-      context: 'AI-7 addresses formal adversarial testing. The system must have documented robustness bounds and specified behavioral requirements under adversarial conditions. This requirement is most critical for Safety-Critical (Tier 1) classifications where adversarial manipulation could have direct safety consequences.',
+      context: 'AI-7 addresses formal adversarial testing. The system must have documented robustness bounds and specified behavioral requirements under adversarial conditions. This requirement is most critical for Safety Critical (Tier 1) classifications where adversarial manipulation could have direct safety consequences.',
       answers: {
         '3': 'Formal adversarial testing with documented bounds and specified behavioral requirements',
         '2': 'Some adversarial testing done, but not comprehensive or formally documented',
@@ -1371,9 +1371,9 @@ document.addEventListener("click", function() {
     ai8: {
       id: 'AI-8', title: 'Explainability',
       question: 'Can operators access decision reasoning with a traceable decision basis for your AI system\'s outputs?',
-      context: 'AI-8 requires operator-facing explainability. Operators must be able to access decision reasoning with a traceable decision basis. In regulated environments, the inability to explain why an AI system made a particular decision can render the system unsuitable for deployment.',
+      context: 'AI-8 requires operator facing explainability. Operators must be able to access decision reasoning with a traceable decision basis. In regulated environments, the inability to explain why an AI system made a particular decision can render the system unsuitable for deployment.',
       answers: {
-        '3': 'Operator-facing explanations with traceable decision basis for all critical outputs',
+        '3': 'Operator facing explanations with traceable decision basis for all critical outputs',
         '2': 'Some explainability, but not systematic or not available for all decision paths',
         '1': 'No explainability mechanisms in place',
         '0': 'Not applicable to this system\'s classification'
@@ -1382,23 +1382,23 @@ document.addEventListener("click", function() {
     ai9: {
       id: 'AI-9', title: 'Human-AI Teaming',
       question: 'Are AI authority limits, human override requirements, and interaction audit trails formally defined?',
-      context: 'AI-9 addresses the formal definition of human-AI interaction boundaries. Authority limits, override procedures, trust calibration testing, and audit trails must be established. This requirement ensures there is clarity about what the AI can decide autonomously versus what requires human authorization.',
+      context: 'AI-9 addresses the formal definition of human and AI interaction boundaries. Authority limits, override procedures, trust calibration testing, and audit trails must be established. This requirement ensures there is clarity about what the AI can decide autonomously versus what requires human authorization.',
       answers: {
         '3': 'Defined authority limits, override procedures, trust calibration testing, and audit trails',
         '2': 'Some procedures exist, but not all components are formally defined or tested',
-        '1': 'No formal human-AI teaming framework in place',
+        '1': 'No formal human and AI teaming framework in place',
         '0': 'Not applicable to this system\'s classification'
       }
     },
     ai10: {
       id: 'AI-10', title: 'Privacy and Data Protection',
-      question: 'If your system processes personal data, are lawful basis, data subject rights, and privacy-enhancing techniques implemented and auditable?',
-      context: 'AI-10 addresses personal data identification and minimization, lawful basis and consent management, data subject rights implementation, privacy-enhancing techniques, and cross-border data transfer controls. Where personal data is not processed, sub-requirements may be documented as Not Applicable with rationale; otherwise they apply across all classifications.',
+      question: 'If your system processes personal data, are lawful basis, data subject rights, and privacy enhancing techniques implemented and auditable?',
+      context: 'AI-10 addresses personal data identification and minimization, lawful basis and consent management, data subject rights implementation, privacy enhancing techniques, and cross border data transfer controls. Where personal data is not processed, sub requirements may be documented as Not Applicable with rationale; otherwise they apply across all classifications.',
       answers: {
-        '3': 'Personal data is identified and minimized, lawful basis is documented, data subject rights are implemented, and privacy-enhancing techniques are in place',
+        '3': 'Personal data is identified and minimized, lawful basis is documented, data subject rights are implemented, and privacy enhancing techniques are in place',
         '2': 'Some privacy controls exist, but not all components are formally documented or verified',
         '1': 'No formal privacy controls or data protection framework in place',
-        '0': 'Not applicable \u2014 the system does not process personal data'
+        '0': 'Not applicable. The system does not process personal data'
       }
     }
   };
@@ -1410,7 +1410,7 @@ document.addEventListener("click", function() {
     'defense': 'Defense / National Security',
     'industrial': 'Industrial / Manufacturing',
     'energy': 'Energy / Utilities',
-    'other': 'Other safety-critical application'
+    'other': 'Other safety critical application'
   };
 
   var CONSEQUENCE_LABELS = {
@@ -1420,9 +1420,9 @@ document.addEventListener("click", function() {
   };
 
   var OVERRIDE_LABELS = {
-    'yes': 'Yes \u2014 a human can always intervene before the AI acts',
-    'partial': 'Partially \u2014 override exists but response time may be insufficient',
-    'no': 'No \u2014 the AI operates autonomously with no real-time human override'
+    'yes': 'Yes. A human can always intervene before the AI acts',
+    'partial': 'Partially. Override exists but response time may be insufficient',
+    'no': 'No. The AI operates autonomously with no real time human override'
   };
 
   /* ── Helpers ────────────────────────────────────── */
@@ -1460,9 +1460,9 @@ document.addEventListener("click", function() {
 
     var classification;
     if (cq === 3 || override === 'no') {
-      classification = { tier: 1, label: 'Safety-Critical AI', desc: 'All ten requirement areas (AI-1 through AI-10) apply. Annual surveillance audits required.' };
+      classification = { tier: 1, label: 'Safety Critical AI', desc: 'All ten requirement areas (AI-1 through AI-10) apply. Annual surveillance audits required.' };
     } else if (cq === 2 || override === 'partial') {
-      classification = { tier: 2, label: 'Mission-Critical AI', desc: 'AI-1 through AI-6, AI-8, AI-9, and AI-10 apply. AI-7 (adversarial robustness) may be tailored based on threat environment.' };
+      classification = { tier: 2, label: 'Mission Critical AI', desc: 'AI-1 through AI-6, AI-8, AI-9, and AI-10 apply. AI-7 (adversarial robustness) may be tailored based on threat environment.' };
     } else {
       classification = { tier: 3, label: 'Operational Support AI', desc: 'AI-1 through AI-6 and AI-10 apply at minimum. AI-8 and AI-9 may be scoped to your specific operational context.' };
     }
@@ -1587,7 +1587,7 @@ document.addEventListener("click", function() {
       pdf.setFont('helvetica', 'normal');
       pdf.setFontSize(9);
       pdf.setTextColor(INK_MID[0], INK_MID[1], INK_MID[2]);
-      var preamble = 'This report documents the self-assessment responses submitted against the SCL AI Requirements Framework v2.1.2. It captures the respondent\u2019s evaluation of their AI system across ten requirement areas. This report has not been independently verified by Safety Critical Labs and does not constitute a formal certification or determination.';
+      var preamble = 'This report documents the self assessment responses submitted against the SCL AI Requirements Framework v2.1.2. It captures the respondent\u2019s evaluation of their AI system across ten requirement areas. This report has not been independently verified by Safety Critical Labs and does not constitute a formal certification or determination.';
       var pLines = wrapText(pdf, preamble, CW);
       pdf.text(pLines, ML, y);
       y += pLines.length * 4.2 + 10;
@@ -1604,7 +1604,7 @@ document.addEventListener("click", function() {
 
       var overviewItems = [
         ['Domain', data.domainLabel],
-        ['Classification', 'Tier ' + data.classification.tier + ' \u2014 ' + data.classification.label],
+        ['Classification', 'Tier ' + data.classification.tier + ': ' + data.classification.label],
         ['Consequence Level', data.consequenceLabel],
         ['Human Override', data.overrideLabel],
         ['Overall Readiness', data.percentage + '%'],
@@ -1859,7 +1859,7 @@ document.addEventListener("click", function() {
         '1.  Review this report to understand where your system meets, partially meets, or falls short of each requirement area.',
         '2.  Share this report with the SCL team at safetycriticallabs.com/contact to start a conversation about formal assessment.',
         '3.  Reference Report ID ' + reportId + ' in your inquiry so the team can review your responses ahead of a scoping call.',
-        '4.  A scoping call will determine the assessment timeline, required evidence packages, and applicable domain-specific considerations.'
+        '4.  A scoping call will determine the assessment timeline, required evidence packages, and applicable domain specific considerations.'
       ];
 
       steps.forEach(function(step) {
@@ -1877,7 +1877,7 @@ document.addEventListener("click", function() {
       pdf.setFont('helvetica', 'italic');
       pdf.setFontSize(7.5);
       pdf.setTextColor(INK_LIGHT[0], INK_LIGHT[1], INK_LIGHT[2]);
-      var disclaimer = 'This report reflects a self-assessment only. It does not constitute a formal certification, determination, or endorsement by Safety Critical Labs. The responses recorded herein have not been independently verified. To obtain a formal assessment against the SCL AI Requirements Framework, contact the SCL team. Safety Critical Labs \u00b7 DOI 10.5281/zenodo.19024420 \u00b7 Framework v2.1.2';
+      var disclaimer = 'This report reflects a self assessment only. It does not constitute a formal certification, determination, or endorsement by Safety Critical Labs. The responses recorded herein have not been independently verified. To obtain a formal assessment against the SCL AI Requirements Framework, contact the SCL team. Safety Critical Labs \u00b7 DOI 10.5281/zenodo.19024420 \u00b7 Framework v2.1.2';
       var dLines = wrapText(pdf, disclaimer, CW);
       pdf.text(dLines, ML, y);
 

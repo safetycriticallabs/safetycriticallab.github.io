@@ -3,10 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Markets — Safety Critical Labs</title>
-<meta name="description" content="SCL certifies AI systems in aerospace, aviation, medical devices, and automotive. The framework is domain-agnostic and applicable wherever the consequence of AI failure is measured in lives or missions.">
-<meta property="og:title" content="Markets — Safety Critical Labs">
-<meta property="og:description" content="AI certification for aerospace, aviation, medical devices, and automotive. Domain-agnostic. Applicable wherever AI failure has consequence.">
+<title>Markets | Safety Critical Labs</title>
+<meta name="description" content="SCL certifies AI systems in aerospace, aviation, medical devices, and automotive. The framework is domain agnostic and applicable wherever the consequence of AI failure is measured in lives or missions.">
+<meta property="og:title" content="Markets | Safety Critical Labs">
+<meta property="og:description" content="AI certification for aerospace, aviation, medical devices, and automotive. Domain agnostic. Applicable wherever AI failure has consequence.">
 <meta property="og:url" content="https://safetycriticallabs.com/markets.html">
 <meta property="og:type" content="website">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -16,27 +16,12 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 <link rel="stylesheet" href="styles.css">
 <style>
-/* ─── SECTION EYEBROW OVERRIDE ────────────────────────────── */
-.section-eyebrow {
-  font-size: 12px !important;
-  font-weight: 500 !important;
-  letter-spacing: 0.22em !important;
-  color: var(--red) !important;
-  margin-bottom: 22px !important;
-}
-.section-eyebrow::before {
-  width: 28px !important; height: 2px !important;
-  background: var(--red) !important;
-}
-
 /* ─── MARKET DETAIL BLOCKS ────────────────────────────────── */
 .market-block {
   padding: 72px 0; border-top: 1px solid var(--rule);
   display: grid; grid-template-columns: 320px 1fr; gap: 72px; align-items: start;
 }
 .market-block:first-child { border-top: none; padding-top: 0; }
-
-.market-label-col {}
 
 .market-seq {
   font-family: var(--mono); font-size: 12px;
@@ -57,19 +42,6 @@
   letter-spacing: 0.08em; text-transform: uppercase;
   color: var(--red); margin-bottom: 20px;
 }
-
-.market-regulators {
-  display: flex; flex-wrap: wrap; gap: 6px; margin-top: 20px;
-}
-
-.regulator-tag {
-  font-family: var(--mono); font-size: 9px;
-  letter-spacing: 0.07em; text-transform: uppercase;
-  border: 1px solid var(--rule); padding: 5px 10px;
-  border-radius: 2px; color: var(--ink-3);
-}
-
-.market-content {}
 
 .market-body {
   font-size: 17px; color: var(--ink-2); line-height: 1.8;
@@ -99,37 +71,19 @@
 
 .ag-inner { max-width: 1140px; margin: 0 auto; }
 
-.ag-grid {
-  display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; margin-top: 48px;
-}
-
-.ag-left p {
+.ag-inner { text-align: center; }
+.ag-inner .section-title { text-align: center; }
+.ag-prose { max-width: 760px; margin: 40px auto 0; text-align: left; }
+.ag-prose p {
   font-size: 16px; color: var(--ink-2);
   line-height: 1.8; font-weight: 300; margin-bottom: 16px;
 }
-.ag-left p strong { color: var(--ink); font-weight: 500; }
-
-.ag-right { display: flex; flex-direction: column; gap: 10px; }
-
-.ag-item {
-  background: var(--white);
-  border: 1px solid var(--rule); border-radius: 3px;
-  padding: 18px 22px;
-  display: grid; grid-template-columns: 100px 1fr; gap: 16px;
-}
-
-.ag-domain {
-  font-family: var(--mono); font-size: 9px;
-  letter-spacing: 0.1em; text-transform: uppercase; color: var(--red);
-}
-.ag-note { font-size: 13px; color: var(--ink-2); line-height: 1.55; }
-.ag-note strong { color: var(--ink); }
+.ag-prose p strong { color: var(--ink); font-weight: 500; }
 
 @media (max-width: 880px) {
   .inner-hero-inner { grid-template-columns: 1fr !important; gap: 24px !important; }
   .market-block { grid-template-columns: 1fr; gap: 32px; }
   .market-gap { grid-template-columns: 1fr; gap: 4px; }
-  .ag-grid { grid-template-columns: 1fr; gap: 40px; }
   .agnostic-band { padding: 60px 24px; }
 }
 
@@ -211,7 +165,7 @@
       <h1>Certification that<br>follows <em>AI</em><br>wherever it goes.</h1>
     </div>
     <p class="inner-hero-lead">
-      The SCL framework is explicitly domain-agnostic. Developed in spaceflight but applicable wherever the consequence of AI failure is measured in lives, missions, or critical infrastructure. We go where AI goes.
+      The same framework certifies an AI system in a cockpit, an operating room, a vehicle, and a production line. Different regulators, different standards, the same underlying failure modes. One published certification record.
     </p>
   </div>
 </div>
@@ -223,25 +177,16 @@
     <!-- AEROSPACE -->
     <div class="market-block">
       <div class="market-label-col">
-        <div class="market-seq">Aerospace &amp; Defense</div>
-        
+        <div class="market-seq">01 / Origin</div>
         <div class="market-name">Aerospace &amp; Defense</div>
         <div class="market-timeline">Where the framework was built</div>
-        <div class="market-regulators">
-          <span class="regulator-tag">NASA</span>
-          <span class="regulator-tag">DoD</span>
-          <span class="regulator-tag">NPR 7150.2D</span>
-          <span class="regulator-tag">NASA-STD-8739.8</span>
-          <span class="regulator-tag">MIL-STD</span>
-        </div>
       </div>
       <div class="market-content">
-        <p class="market-body" style="font-size:14px;color:var(--ink-3);margin-bottom:16px;font-weight:400;">If you are building or deploying AI on human-rated spacecraft, autonomous defense systems, launch vehicles, or crew-support platforms, this is the market the SCL framework was written for.</p>
         <p class="market-body">
-          The SCL framework was developed from inside a government human spaceflight program to address exactly this problem — for crewed vehicles where the consequence of an incorrect AI output cannot be undone.
+          The SCL framework was developed from inside a government human spaceflight program to address exactly this problem, for crewed vehicles where the consequence of an incorrect AI output cannot be undone.
         </p>
         <p class="market-body">
-          <strong>No AI-specific certification path currently exists</strong> for human-rated spacecraft. The governing software standard covers deterministic systems. The AI requirements developed inside the spaceflight program are a direct response to that gap. The SCL framework is the continuation of that work in the commercial and defense sectors.
+          <strong>No AI specific certification path currently exists</strong> for human rated spacecraft. The governing software standard covers deterministic systems. The AI requirements developed inside the spaceflight program are a direct response to that gap. The SCL framework is the continuation of that work in the commercial and defense sectors.
         </p>
         <div class="market-gaps">
           <div class="market-gap fade-up">
@@ -250,7 +195,7 @@
           </div>
           <div class="market-gap fade-up">
             <span class="mg-standard">NASA-STD-8739.8</span>
-            <span class="mg-gap"><strong>Safety cases require logical traceability</strong> from requirements to implementation. Black-box AI outputs cannot satisfy this without an explicit explainability layer.</span>
+            <span class="mg-gap"><strong>Safety cases require logical traceability</strong> from requirements to implementation. Black box AI outputs cannot satisfy this without an explicit explainability layer.</span>
           </div>
           <div class="market-gap fade-up">
             <span class="mg-standard">All spaceflight stds.</span>
@@ -263,30 +208,21 @@
     <!-- AVIATION -->
     <div class="market-block">
       <div class="market-label-col">
-        <div class="market-seq">Aviation</div>
-        
+        <div class="market-seq">02 / Market</div>
         <div class="market-name">Aviation</div>
-        <div class="market-timeline">FAA Roadmap forming now</div>
-        <div class="market-regulators">
-          <span class="regulator-tag">FAA</span>
-          <span class="regulator-tag">EASA</span>
-          <span class="regulator-tag">RTCA</span>
-          <span class="regulator-tag">DO-178C</span>
-          <span class="regulator-tag">DO-254</span>
-        </div>
+        <div class="market-timeline">FAA roadmap forming</div>
       </div>
       <div class="market-content">
-        <p class="market-body" style="font-size:14px;color:var(--ink-3);margin-bottom:16px;font-weight:400;">If you are an avionics supplier, aircraft OEM, or air traffic management provider deploying AI in certified airspace, the regulatory window to establish a certification record is open now.</p>
         <p class="market-body">
           The FAA has explicitly acknowledged in its AI Safety Roadmap that it lacks standards for AI in aviation. <strong>Certification frameworks established before regulation arrives often become the basis for regulation.</strong> Organizations certifying now are building the record that regulators will reference.
         </p>
         <p class="market-body">
-          The DO-178C ecosystem already has a deeply established certification culture. Aerospace organizations know what certification means, why it matters, and how to prepare for it. That culture is ready for an AI-specific layer. The SCL framework is designed to sit alongside DO-178C and address the AI failure modes that existing avionics software standards do not cover.
+          The DO-178C ecosystem already has a deeply established certification culture. Aerospace organizations know what certification means, why it matters, and how to prepare for it. That culture is ready for an AI specific layer. The SCL framework is designed to sit alongside DO-178C and address the AI failure modes that existing avionics software standards do not cover.
         </p>
         <div class="market-gaps">
           <div class="market-gap fade-up">
             <span class="mg-standard">DO-178C</span>
-            <span class="mg-gap"><strong>Structural coverage metrics</strong> (MC/DC, decision coverage) cannot be applied to neural networks. No AI-equivalent test coverage requirement exists in avionics software standards.</span>
+            <span class="mg-gap"><strong>Structural coverage metrics</strong> (MC/DC, decision coverage) cannot be applied to neural networks. No AI equivalent test coverage requirement exists in avionics software standards.</span>
           </div>
           <div class="market-gap fade-up">
             <span class="mg-standard">DO-178C</span>
@@ -303,24 +239,16 @@
     <!-- MEDICAL -->
     <div class="market-block">
       <div class="market-label-col">
-        <div class="market-seq">Medical Devices</div>
-        
+        <div class="market-seq">03 / Market</div>
         <div class="market-name">Medical Devices</div>
-        <div class="market-timeline">FDA SaMD guidance evolving</div>
-        <div class="market-regulators">
-          <span class="regulator-tag">FDA</span>
-          <span class="regulator-tag">SaMD</span>
-          <span class="regulator-tag">IEC 62304</span>
-          <span class="regulator-tag">ISO 14971</span>
-        </div>
+        <div class="market-timeline">FDA SaMD evolving</div>
       </div>
       <div class="market-content">
-        <p class="market-body" style="font-size:14px;color:var(--ink-3);margin-bottom:16px;font-weight:400;">If you are a medical device manufacturer, clinical AI developer, or health system deploying AI in diagnostic, therapeutic, or patient monitoring applications, the SaMD regulatory environment is moving faster than most organizations are prepared for.</p>
         <p class="market-body">
-          FDA's Software as a Medical Device framework is evolving rapidly to address AI and ML in clinical decision support, diagnostic imaging, and patient monitoring. <strong>AI-specific validation requirements remain underspecified.</strong> Organizations that establish certification records now will hold lasting regulatory position as FDA's requirements solidify.
+          FDA's Software as a Medical Device framework is evolving rapidly to address AI and ML in clinical decision support, diagnostic imaging, and patient monitoring. <strong>AI specific validation requirements remain underspecified.</strong> Organizations that establish certification records now will hold lasting regulatory position as FDA's requirements solidify.
         </p>
         <p class="market-body">
-          The failure modes are identical to spaceflight AI: distributional drift in deployed models, hallucination in clinical language models, out-of-distribution inputs when patient populations differ from training data, and the absence of explainability when a clinician needs to understand an AI recommendation. <strong>The SCL framework addresses all of them.</strong>
+          The failure modes are identical to spaceflight AI: distributional drift in deployed models, hallucination in clinical language models, out of distribution inputs when patient populations differ from training data, and the absence of explainability when a clinician needs to understand an AI recommendation. <strong>The SCL framework addresses all of them.</strong>
         </p>
         <div class="market-gaps">
           <div class="market-gap fade-up">
@@ -329,7 +257,7 @@
           </div>
           <div class="market-gap fade-up">
             <span class="mg-standard">IEC 62304</span>
-            <span class="mg-gap"><strong>Medical device software lifecycle</strong> standard does not address ML-specific V&amp;V requirements, OOD detection, or confidence calibration for clinical outputs.</span>
+            <span class="mg-gap"><strong>Medical device software lifecycle</strong> standard does not address ML specific V&amp;V requirements, OOD detection, or confidence calibration for clinical outputs.</span>
           </div>
           <div class="market-gap fade-up">
             <span class="mg-standard">ISO 14971</span>
@@ -342,25 +270,16 @@
     <!-- AUTOMOTIVE -->
     <div class="market-block">
       <div class="market-label-col">
-        <div class="market-seq">Automotive</div>
-        
+        <div class="market-seq">04 / Market</div>
         <div class="market-name">Automotive</div>
-        <div class="market-timeline">ISO 26262 / SOTIF gaps</div>
-        <div class="market-regulators">
-          <span class="regulator-tag">ISO 26262</span>
-          <span class="regulator-tag">ISO 21448</span>
-          <span class="regulator-tag">SOTIF</span>
-          <span class="regulator-tag">NHTSA</span>
-          <span class="regulator-tag">UNECE WP.29</span>
-        </div>
+        <div class="market-timeline">ISO 26262 / SOTIF gaps open</div>
       </div>
       <div class="market-content">
-        <p class="market-body" style="font-size:14px;color:var(--ink-3);margin-bottom:16px;font-weight:400;">If you are an automotive OEM, Tier 1 supplier, or ADAS developer working with neural network-based systems in safety-relevant vehicle functions, the gap between what ISO 26262 requires and what your AI system actually does is not theoretical.</p>
         <p class="market-body">
-          ISO 26262 defines functional safety requirements for automotive electrical and electronic systems. ISO 21448 (SOTIF) addresses safety of the intended functionality. <strong>Neither was designed for the probabilistic, distributional behavioral characteristics of neural network-based systems</strong> operating in the open-world conditions of public road environments.
+          ISO 26262 defines functional safety requirements for automotive electrical and electronic systems. ISO 21448 (SOTIF) addresses safety of the intended functionality. <strong>Neither was designed for the probabilistic, distributional behavioral characteristics of neural network based systems</strong> operating in the open world conditions of public road environments.
         </p>
         <p class="market-body">
-          The automotive market has the largest installed base of safety-critical AI systems in the world. The gap between current certification practice and what AI systems actually require is substantial. SOTIF's "unknown unsafe scenarios" are, in AI terms, the out-of-distribution problem. SCL's AI-6 requirement formalizes what SOTIF acknowledges but does not specify.
+          The automotive market has the largest installed base of safety critical AI systems in the world. The gap between current certification practice and what AI systems actually require is substantial. SOTIF's "unknown unsafe scenarios" are, in AI terms, the out of distribution problem. SCL's AI-6 requirement formalizes what SOTIF acknowledges but does not specify.
         </p>
         <div class="market-gaps">
           <div class="market-gap fade-up">
@@ -369,11 +288,11 @@
           </div>
           <div class="market-gap fade-up">
             <span class="mg-standard">ISO 21448 / SOTIF</span>
-            <span class="mg-gap"><strong>Unknown unsafe scenarios</strong> are acknowledged but not addressed with quantitative detection requirements. Out-of-distribution detection is the missing specification.</span>
+            <span class="mg-gap"><strong>Unknown unsafe scenarios</strong> are acknowledged but not addressed with quantitative detection requirements. Out of distribution detection is the missing specification.</span>
           </div>
           <div class="market-gap fade-up">
             <span class="mg-standard">SOTIF</span>
-            <span class="mg-gap"><strong>Operational design domain</strong> definitions exist in concept but lack quantitative boundary enforcement. This is what SCL addresses through out-of-distribution detection with defined escalation paths.</span>
+            <span class="mg-gap"><strong>Operational design domain</strong> definitions exist in concept but lack quantitative boundary enforcement. This is what SCL addresses through out of distribution detection with defined escalation paths.</span>
           </div>
         </div>
       </div>
@@ -382,38 +301,29 @@
     <!-- INDUSTRIAL -->
     <div class="market-block">
       <div class="market-label-col">
-        <div class="market-seq">Industrial &amp; Manufacturing</div>
-
+        <div class="market-seq">05 / Market</div>
         <div class="market-name">Industrial &amp; Manufacturing</div>
-        <div class="market-timeline">Functional safety meets ML</div>
-        <div class="market-regulators">
-          <span class="regulator-tag">IEC 61508</span>
-          <span class="regulator-tag">ISO 10218</span>
-          <span class="regulator-tag">ISO 13849</span>
-          <span class="regulator-tag">NIST AI RMF</span>
-          <span class="regulator-tag">EU AI Act</span>
-        </div>
+        <div class="market-timeline">EU AI Act, NIST AI RMF emerging</div>
       </div>
       <div class="market-content">
-        <p class="market-body" style="font-size:14px;color:var(--ink-3);margin-bottom:16px;font-weight:400;">If you are deploying AI into process control, predictive maintenance, industrial robotics, or machine vision on a production floor, the functional safety standards you already work to were not written for learned behavior.</p>
         <p class="market-body">
           IEC 61508 and its derivatives define functional safety for electrical/electronic/programmable electronic systems. ISO 10218 and ISO 13849 govern robotic and machinery safety. <strong>None of these standards account for models whose behavior emerges from training data</strong> or that may degrade silently after deployment.
         </p>
         <p class="market-body">
-          Industrial AI deployments often operate in tightly bounded physical environments with well-defined operational parameters — an ideal fit for a declared Operational Design Domain (ODD). The SCL framework lets industrial operators translate the operational envelope they already enforce into a certification claim that downstream regulators, insurers, and customers can reference.
+          Industrial AI deployments often operate in tightly bounded physical environments with well defined operational parameters. An ideal fit for a declared Operational Design Domain (ODD). The SCL framework lets industrial operators translate the operational envelope they already enforce into a certification claim that downstream regulators, insurers, and customers can reference.
         </p>
         <div class="market-gaps">
           <div class="market-gap fade-up">
             <span class="mg-standard">IEC 61508</span>
-            <span class="mg-gap"><strong>SIL targets assume deterministic failure modes</strong> with quantifiable failure rates. Distributional, data-driven failure modes fall outside the standard's vocabulary.</span>
+            <span class="mg-gap"><strong>SIL targets assume deterministic failure modes</strong> with quantifiable failure rates. Distributional, data driven failure modes fall outside the standard's vocabulary.</span>
           </div>
           <div class="market-gap fade-up">
             <span class="mg-standard">ISO 10218 / 13849</span>
-            <span class="mg-gap"><strong>Robot safety functions</strong> are specified for bounded kinematic behavior. Vision-based and learned control loops require OOD detection and explainability that current standards don't address.</span>
+            <span class="mg-gap"><strong>Robot safety functions</strong> are specified for bounded kinematic behavior. Vision based and learned control loops require OOD detection and explainability that current standards don't address.</span>
           </div>
           <div class="market-gap fade-up">
             <span class="mg-standard">EU AI Act</span>
-            <span class="mg-gap"><strong>High-risk AI categories</strong> explicitly include industrial safety-relevant systems. Organizations need verifiable evidence against a published standard, not internal attestations.</span>
+            <span class="mg-gap"><strong>High risk AI categories</strong> explicitly include industrial safety relevant systems. Organizations need verifiable evidence against a published standard, not internal attestations.</span>
           </div>
         </div>
       </div>
@@ -422,55 +332,17 @@
   </div>
 </section>
 
-<!-- PAGE CTA -->
-<section class="page-section" style="background: var(--bg); border-top: 1px solid var(--rule);">
-  <div class="section-inner" style="text-align:center; padding: 64px 0;">
-    <div class="section-eyebrow" style="justify-content:center; display:inline-flex;">Ready to certify</div>
-    <h2 class="section-title" style="margin-bottom:16px;">Begin an assessment for your program.</h2>
-    <p style="font-size:15px; color:var(--ink-2); line-height:1.75; font-weight:300; max-width:620px; margin:0 auto 28px;">
-      The SCL framework applies wherever AI is deployed under consequence. Tell us about your program and we will map the applicable requirements and next steps.
-    </p>
-    <a href="/contact" class="btn btn-solid">Start an assessment</a>
-  </div>
-</section>
-
 <!-- DOMAIN AGNOSTIC -->
 <div class="agnostic-band">
   <div class="ag-inner">
-    <div class="section-eyebrow">Algorithm-agnostic. Domain-agnostic.</div>
     <h2 class="section-title">The failure modes are<br><em>the same everywhere.</em></h2>
-    <div class="ag-grid">
-      <div class="ag-left">
-        <p>
-          A language model in a cockpit that hallucinates a clearance. A diagnostic imaging model in an operating room that misclassifies a scan. A perception system in an autonomous vehicle that fails to detect an out-of-distribution object. <strong>The failure mode is the same. The consequence differs only in specifics.</strong>
-        </p>
-        <p>
-          The SCL framework was developed in spaceflight, where the requirements pressure was greatest and the regulatory gap was most clearly defined. But hallucination doesn't care what industry you're in. Distributional drift happens in every deployed model. The framework is explicitly algorithm-agnostic and applicable to neural networks, decision trees, reinforcement learning systems, and hybrid architectures.
-        </p>
-
-      </div>
-      <div class="ag-right">
-        <div class="ag-item fade-up">
-          <span class="ag-domain">Spaceflight</span>
-          <span class="ag-note">Hallucination in a crew decision support system. Drift in an anomaly detection model between launch and arrival. OOD input during an unplanned orbital maneuver.</span>
-        </div>
-        <div class="ag-item fade-up">
-          <span class="ag-domain">Aviation</span>
-          <span class="ag-note">Hallucination in an ATC communication model. Distributional shift when operating in weather conditions outside training data. Adversarial spoofing of sensor inputs.</span>
-        </div>
-        <div class="ag-item fade-up">
-          <span class="ag-domain">Medical</span>
-          <span class="ag-note">Hallucination in a clinical language model. Drift in a diagnostic model as patient population shifts. OOD inputs when rare conditions fall outside training distribution.</span>
-        </div>
-        <div class="ag-item fade-up">
-          <span class="ag-domain">Automotive</span>
-          <span class="ag-note">Perception failure outside the operational design domain. Adversarial inputs that exploit model vulnerabilities. Drift in a safety system as vehicle population ages.</span>
-        </div>
-        <div class="ag-item fade-up">
-          <span class="ag-domain">Industrial</span>
-          <span class="ag-note">Vision model misclassification outside the declared ODD on a production line. Drift in a predictive maintenance model as equipment ages. OOD input to a collaborative robot when an unexpected object enters the workspace.</span>
-        </div>
-      </div>
+    <div class="ag-prose">
+      <p>
+        A language model in a cockpit that hallucinates a clearance. A diagnostic imaging model in an operating room that misclassifies a scan. A perception system in an autonomous vehicle that fails to detect an out of distribution object. <strong>The failure mode is the same. The consequence differs only in specifics.</strong>
+      </p>
+      <p>
+        The SCL framework was developed in spaceflight, where the requirements pressure was greatest and the regulatory gap was most clearly defined. But hallucination doesn't care what industry you're in. Distributional drift happens in every deployed model. The framework is explicitly algorithm agnostic and applicable to neural networks, decision trees, reinforcement learning systems, and hybrid architectures.
+      </p>
     </div>
   </div>
 </div>
@@ -493,7 +365,7 @@
           <a href="/assess">Assess</a>
           <a href="/contact">Contact</a>
         </div>
-        <p class="footer-tagline">AI certification authority for safety-critical systems.<br>Formal determinations issued against a published, citable standard.</p>
+        <p class="footer-tagline">AI certification authority for safety critical systems.<br>Formal determinations issued against a published, citable standard.</p>
       </div>
     </div>
     <div class="footer-divider"></div>

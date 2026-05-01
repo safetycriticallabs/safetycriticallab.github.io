@@ -3,10 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>The Framework — Safety Critical Labs</title>
-<meta name="description" content="The SCL AI Requirements Framework covers ten requirement areas for AI-specific failure modes. Algorithm-agnostic, domain-applicable, and openly published under a citable DOI.">
-<meta property="og:title" content="The Framework — Safety Critical Labs">
-<meta property="og:description" content="Ten requirement areas covering every AI-specific failure mode. Openly published under a citable DOI.">
+<title>The Framework | Safety Critical Labs</title>
+<meta name="description" content="The SCL AI Requirements Framework covers ten requirement areas for AI specific failure modes. Algorithm agnostic, domain applicable, and openly published under a citable DOI.">
+<meta property="og:title" content="The Framework | Safety Critical Labs">
+<meta property="og:description" content="Ten requirement areas covering every AI specific failure mode. Openly published under a citable DOI.">
 <meta property="og:url" content="https://safetycriticallabs.com/framework.html">
 <meta property="og:type" content="website">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -336,7 +336,7 @@
       <h1>Ten requirement<br>areas. Every <em>AI<br>failure mode</em> covered.</h1>
     </div>
     <p class="inner-hero-lead">
-      The SCL AI Requirements Framework establishes verifiable, pass/fail requirements for each AI-specific failure mode not addressed by existing safety-critical software standards. Algorithm-agnostic. Domain-applicable. Openly published under a citable DOI.
+      The SCL AI Requirements Framework establishes verifiable, pass/fail requirements for each AI specific failure mode not addressed by existing safety critical software standards. Algorithm agnostic. Domain applicable. Openly published under a citable DOI.
     </p>
   </div>
 </div>
@@ -348,8 +348,8 @@
     <div style="display:flex; justify-content:space-between; align-items:flex-end; gap: 32px; margin-bottom: 48px; flex-wrap: wrap;">
       <h2 class="section-title" style="margin-bottom:0;">AI-1 through AI-10</h2>
       <div class="class-key" role="group" aria-label="Filter requirements by classification tier">
-        <div class="class-item" data-tier="safety" role="button" tabindex="0" aria-pressed="false"><span class="class-dot dot-safety-tier"></span>Safety-Critical</div>
-        <div class="class-item" data-tier="mission" role="button" tabindex="0" aria-pressed="false"><span class="class-dot dot-mission-tier"></span>Mission-Critical</div>
+        <div class="class-item" data-tier="safety" role="button" tabindex="0" aria-pressed="false"><span class="class-dot dot-safety-tier"></span>Safety Critical</div>
+        <div class="class-item" data-tier="mission" role="button" tabindex="0" aria-pressed="false"><span class="class-dot dot-mission-tier"></span>Mission Critical</div>
         <div class="class-item" data-tier="operational" role="button" tabindex="0" aria-pressed="false"><span class="class-dot dot-operational-tier"></span>Operational Support</div>
         <div class="class-key-hint">Click a tier to filter · Esc to clear</div>
       </div>
@@ -364,7 +364,7 @@
       <div class="fw-card" data-tiers="safety mission operational">
         <div class="fw-card-id">AI-2</div>
         <div class="fw-card-title">Addressing AI bias</div>
-        <div class="fw-card-body">Bias-free baseline performance across user classes and operational contexts, bias-free training data, continuous bias monitoring, and bias threshold alerting and response.</div>
+        <div class="fw-card-body">Bias free baseline performance across user classes and operational contexts, bias free training data, continuous bias monitoring, and bias threshold alerting and response.</div>
       </div>
       <div class="fw-card" data-tiers="safety mission operational">
         <div class="fw-card-id">AI-3</div>
@@ -374,16 +374,16 @@
       <div class="fw-card" data-tiers="safety mission operational">
         <div class="fw-card-id">AI-4</div>
         <div class="fw-card-title">Continuous validation</div>
-        <div class="fw-card-body">Post-deployment data drift monitoring, performance threshold maintenance, model maintenance criteria, and periodic model validation. Addresses a gap not covered by existing safety-critical software standards.</div>
+        <div class="fw-card-body">Post deployment data drift monitoring, performance threshold maintenance, model maintenance criteria, and periodic model validation. Addresses a gap not covered by existing safety critical software standards.</div>
       </div>
       <div class="fw-card" data-tiers="safety mission operational">
         <div class="fw-card-id">AI-5</div>
         <div class="fw-card-title">Hallucination prevention</div>
-        <div class="fw-card-body">Hallucination criteria definition, detection, response, and logging, with independent output validation for safety-critical decisions. Graceful degradation to human override below threshold.</div>
+        <div class="fw-card-body">Hallucination criteria definition, detection, response, and logging, with independent output validation for safety critical decisions. Graceful degradation to human override below threshold.</div>
       </div>
       <div class="fw-card" data-tiers="safety mission operational">
         <div class="fw-card-id">AI-6</div>
-        <div class="fw-card-title">Out-of-distribution detection</div>
+        <div class="fw-card-title">Out of distribution detection</div>
         <div class="fw-card-body">Training distribution characterization, runtime OOD detection, defined OOD response, and event logging. This is the condition under which AI behavior is least predictable.</div>
       </div>
       <div class="fw-card" data-tiers="safety mission" data-tailored-at="mission">
@@ -394,17 +394,17 @@
       <div class="fw-card" data-tiers="safety mission">
         <div class="fw-card-id">AI-8</div>
         <div class="fw-card-title">Explainability</div>
-        <div class="fw-card-body">Operator-accessible decision reasoning with traceable decision basis, confidence indication, reasoning inspection capability, and public disclosure support. Required for any AI system where a traditional safety case would demand logical inspection.</div>
+        <div class="fw-card-body">Operator accessible decision reasoning with traceable decision basis, confidence indication, reasoning inspection capability, and public disclosure support. Required for any AI system where a traditional safety case would demand logical inspection.</div>
       </div>
       <div class="fw-card" data-tiers="safety mission">
         <div class="fw-card-id">AI-9</div>
-        <div class="fw-card-title">Human-AI teaming</div>
+        <div class="fw-card-title">Human and AI teaming</div>
         <div class="fw-card-body">Human decision authority, operational situational awareness, trust calibration, graceful degradation, interaction logging, operator qualification, workload management, and training program requirements.</div>
       </div>
       <div class="fw-card" data-tiers="safety mission operational">
         <div class="fw-card-id">AI-10</div>
         <div class="fw-card-title">Privacy and data protection</div>
-        <div class="fw-card-body">Personal data identification and minimization, lawful basis and consent management, data subject rights, privacy-enhancing techniques, and cross-border transfer controls. Applies where the system processes personal data; otherwise documented Not Applicable with rationale.</div>
+        <div class="fw-card-body">Personal data identification and minimization, lawful basis and consent management, data subject rights, privacy enhancing techniques, and cross border transfer controls. Applies where the system processes personal data; otherwise documented Not Applicable with rationale.</div>
       </div>
     </div>
   </div>
@@ -421,7 +421,7 @@
     <div class="struct-grid stagger-in">
       <div class="struct-col">
         <div class="struct-col-title">Tier 1</div>
-        <div class="struct-col-name">Safety-Critical AI</div>
+        <div class="struct-col-name">Safety Critical AI</div>
         <div class="struct-col-desc">AI outputs directly affect human safety or system survivability. All AI-1 through AI-10 apply. No tailoring without Project Safety Review Board approval.</div>
         <div class="struct-reqs">
           <span class="struct-req-tag">AI-1</span>
@@ -438,7 +438,7 @@
       </div>
       <div class="struct-col">
         <div class="struct-col-title">Tier 2</div>
-        <div class="struct-col-name">Mission-Critical AI</div>
+        <div class="struct-col-name">Mission Critical AI</div>
         <div class="struct-col-desc">AI outputs affect operational success but not human safety. AI-1 through AI-6, AI-8, AI-9, and AI-10 apply; AI-7 is tailored with Chief Engineer approval and documented rationale.</div>
         <div class="struct-reqs">
           <span class="struct-req-tag">AI-1</span>
@@ -492,14 +492,14 @@
       </div>
       <div class="os-item" style="border-left: 3px solid #C8861A;">
         <span class="os-item-label" style="color: #C8861A;">Conditional</span>
-        <span class="os-item-val">Minor findings documented. Certificate issued with specific, time-bound conditions attached and a required closure review.</span>
+        <span class="os-item-val">Minor findings documented. Certificate issued with specific, time bound conditions attached and a required closure review.</span>
       </div>
       <div class="os-item" style="border-left: 3px solid var(--red);">
         <span class="os-item-label">Not Certified</span>
         <span class="os-item-val">One or more requirements not met. Findings documented. Remediation required before reassessment. A Determination Document is issued regardless of outcome.</span>
       </div>
       <p style="font-size:12px;color:var(--ink-3);line-height:1.6;margin-top:4px;font-family:var(--mono);letter-spacing:0.02em;">
-        A Conditional Certification is not a lesser certificate. It is a certificate with specific, documented, time-bound conditions. It requires a closure review within the agreed timeframe.
+        A Conditional Certification is not a lesser certificate. It is a certificate with specific, documented, time bound conditions. It requires a closure review within the agreed timeframe.
       </p>
     </div>
   </div>
@@ -524,7 +524,7 @@
     <div style="display: flex; flex-direction: column; gap: 12px;">
       <div style="background: var(--white); border: 1px solid var(--rule); border-radius: 4px; padding: 20px 24px; display: grid; grid-template-columns: 72px 1fr; gap: 16px; align-items: center;">
         <span style="font-family: var(--mono); font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--red);">Document</span>
-        <span style="font-size: 14px; color: var(--ink-2); line-height: 1.5;">Requirements and Verification Standards for Artificial Intelligence in Safety-Critical Applications — Version 2.1.2</span>
+        <span style="font-size: 14px; color: var(--ink-2); line-height: 1.5;">Requirements and Verification Standards for Artificial Intelligence in Safety Critical Applications. Version 2.1.2</span>
       </div>
       <div style="background: var(--white); border: 1px solid var(--rule); border-radius: 4px; padding: 20px 24px; display: grid; grid-template-columns: 72px 1fr; gap: 16px; align-items: center;">
         <span style="font-family: var(--mono); font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--red);">DOI</span>
@@ -532,7 +532,7 @@
       </div>
       <div style="background: var(--white); border: 1px solid var(--rule); border-radius: 4px; padding: 20px 24px; display: grid; grid-template-columns: 72px 1fr; gap: 16px; align-items: center;">
         <span style="font-family: var(--mono); font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--red);">License</span>
-        <span style="font-size: 14px; color: var(--ink-2); line-height: 1.5;">CC BY-SA 4.0 — free to read, cite, and reproduce with attribution</span>
+        <span style="font-size: 14px; color: var(--ink-2); line-height: 1.5;">CC BY-SA 4.0. Free to read, cite, and reproduce with attribution</span>
       </div>
       <a href="https://doi.org/10.5281/zenodo.19024420" target="_blank" rel="noopener"
          style="display: inline-flex; align-items: center; justify-content: center; gap: 10px;
@@ -566,7 +566,7 @@
           <a href="/assess">Assess</a>
           <a href="/contact">Contact</a>
         </div>
-        <p class="footer-tagline">AI certification authority for safety-critical systems.<br>Formal determinations issued against a published, citable standard.</p>
+        <p class="footer-tagline">AI certification authority for safety critical systems.<br>Formal determinations issued against a published, citable standard.</p>
       </div>
     </div>
     <div class="footer-divider"></div>

@@ -243,29 +243,30 @@
   border-top: 1px solid var(--rule);
 }
 .assess-btn {
-  font-family: var(--mono); font-size: 12px;
-  letter-spacing: 0.08em; text-transform: uppercase;
+  font-family: var(--sans); font-size: 13px;
+  font-weight: 500; letter-spacing: 0.04em;
   padding: 14px 32px;
   border-radius: 4px;
   cursor: pointer;
-  transition: opacity 0.2s, background 0.2s;
+  transition: background 0.2s, color 0.15s, border-color 0.15s;
   border: none;
   text-decoration: none;
+  display: inline-block;
 }
-.assess-btn:hover { opacity: 0.85; }
 .assess-btn-back {
-  background: none;
-  color: var(--ink-3);
+  background: transparent;
+  color: var(--ink-2);
   border: 1px solid var(--rule);
 }
 .assess-btn-back:hover {
-  background: var(--white);
-  color: var(--ink-2);
+  border-color: var(--ink);
+  color: var(--ink);
 }
 .assess-btn-next {
   background: var(--blue);
   color: #fff;
 }
+.assess-btn-next:hover { background: var(--blue-dk); }
 .assess-btn-next:disabled {
   opacity: 0.4;
   cursor: not-allowed;
@@ -424,17 +425,6 @@
   margin-bottom: 28px;
   max-width: 480px; margin-left: auto; margin-right: auto;
 }
-.results-cta-btn {
-  display: inline-block;
-  background: var(--blue); color: #fff;
-  font-family: var(--mono); font-size: 12px;
-  letter-spacing: 0.08em; text-transform: uppercase;
-  padding: 16px 36px; border-radius: 4px;
-  text-decoration: none;
-  transition: opacity 0.2s;
-}
-.results-cta-btn:hover { opacity: 0.85; }
-
 /* Responsive */
 @media (max-width: 880px) {
   .inner-hero-inner { grid-template-columns: 1fr !important; gap: 24px !important; }
@@ -907,8 +897,8 @@
       <h3>Ready to close the gaps?</h3>
       <p>Download your assessment report and share it with the SCL team when you're ready to start a conversation.</p>
       <div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap;align-items:center;">
-        <button id="downloadReportBtn" class="results-cta-btn" style="border:none;cursor:pointer;font-family:var(--mono);">Download Report</button>
-        <a href="/contact" class="results-cta-btn" style="background:transparent;color:rgba(255,255,255,0.7);border:1.5px solid rgba(255,255,255,0.25);">Talk to SCL</a>
+        <button id="downloadReportBtn" class="btn btn-solid" style="cursor:pointer;">Download Report</button>
+        <a href="/contact" class="btn btn-outline-white">Talk to SCL</a>
       </div>
     </div>
 

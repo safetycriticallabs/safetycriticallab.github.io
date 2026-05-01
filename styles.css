@@ -10,9 +10,9 @@
   --ink:      #0F2340;
   --ink-2:    #3D5068;
   --ink-3:    #7A8FA6;
-  --red:      #2E6DB4;
-  --red-dk:   #1E5A9A;
-  --red-lt:   #EBF1F8;
+  --blue:      #2E6DB4;
+  --blue-dk:   #1E5A9A;
+  --blue-lt:   #EBF1F8;
   --rule:     #E4E8EC;
   --serif:    'Instrument Serif', Georgia, serif;
   --sans:     'DM Sans', system-ui, sans-serif;
@@ -53,7 +53,7 @@ body {
   font-family: var(--sans); font-size: 15px;
   font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--bg);
 }
-.gn-text em { color: var(--red); font-style: normal; }
+.gn-text em { color: var(--blue); font-style: normal; }
 
 .gn-links {
   display: flex; gap: 4px; align-items: center;
@@ -78,7 +78,7 @@ body {
 }
 
 .gn-cta {
-  background: var(--red) !important;
+  background: var(--blue) !important;
   color: #fff !important;
   padding: 8px 20px !important;
   border-radius: 4px !important;
@@ -88,7 +88,7 @@ body {
   transition: background 0.25s ease !important;
   margin-left: 4px;
 }
-.gn-cta:hover { background: var(--red-dk) !important; }
+.gn-cta:hover { background: var(--blue-dk) !important; }
 
 /* ─── HAMBURGER BUTTON ───────────────────────────────────── */
 .gn-hamburger {
@@ -232,12 +232,12 @@ body {
   font-weight: 600; line-height: 1.05;
   color: #fff; letter-spacing: -0.025em;
 }
-.inner-hero h1 em { font-style: italic; color: var(--red); font-family: var(--serif); font-weight: 400; font-size: 1.05em; }
+.inner-hero h1 em { font-style: italic; color: var(--blue); font-family: var(--serif); font-weight: 400; font-size: 1.05em; }
 
 .inner-hero-lead {
   font-size: 17px; color: rgba(255,255,255,0.5);
   font-weight: 300; line-height: 1.75;
-  border-left: 2px solid var(--red); padding-left: 20px;
+  border-left: 2px solid var(--blue); padding-left: 20px;
   align-self: end;
 }
 
@@ -263,7 +263,7 @@ h2.section-title {
   color: var(--ink); margin-bottom: 20px;
   letter-spacing: -0.025em;
 }
-h2.section-title em { font-style: italic; color: var(--red); font-family: var(--serif); font-size: 1.05em; font-weight: 400; }
+h2.section-title em { font-style: italic; color: var(--blue); font-family: var(--serif); font-size: 1.05em; font-weight: 400; }
 
 .section-lead {
   font-size: 18px; color: var(--ink-2);
@@ -280,10 +280,10 @@ h2.section-title em { font-style: italic; color: var(--red); font-family: var(--
   display: inline-block; cursor: pointer;
   border: none;
 }
-.btn-solid { background: var(--ink); color: var(--white); }
-.btn-solid:hover { background: var(--red); }
-.btn-red { background: var(--red); color: #fff; }
-.btn-red:hover { background: var(--red-dk); }
+.btn-solid { background: var(--blue); color: #fff; }
+.btn-solid:hover { background: var(--blue-dk); }
+.btn-red { background: var(--blue); color: #fff; }
+.btn-red:hover { background: var(--blue-dk); }
 .btn-outline {
   border: 1px solid var(--rule); color: var(--ink-2);
   background: transparent;
@@ -329,14 +329,14 @@ h2.section-title em { font-style: italic; color: var(--red); font-family: var(--
   cursor: default;
 }
 .req-card:hover {
-  border-color: var(--red);
+  border-color: var(--blue);
   transform: translateY(-3px);
   box-shadow: 0 8px 24px rgba(0,0,0,0.07);
 }
 
 .req-id {
   font-family: var(--mono); font-size: 11px;
-  color: var(--red); letter-spacing: 0.1em;
+  color: var(--blue); letter-spacing: 0.1em;
   margin-bottom: 10px;
 }
 .req-title { font-size: 14px; font-weight: 600; margin-bottom: 8px; line-height: 1.35; }
@@ -408,7 +408,7 @@ h2.section-title em { font-style: italic; color: var(--red); font-family: var(--
 .site-footer {
   background: var(--ink);
   padding: 0;
-  border-top: 3px solid var(--red);
+  border-top: 3px solid var(--blue);
 }
 
 .footer-inner {
@@ -442,7 +442,7 @@ h2.section-title em { font-style: italic; color: var(--red); font-family: var(--
   color: rgba(255,255,255,0.85);
 }
 .footer-wordmark .gn-text em {
-  color: var(--red);
+  color: var(--blue);
   font-style: normal;
 }
 .footer-wordmark:hover { opacity: 0.8; }
@@ -519,13 +519,13 @@ h2.section-title em { font-style: italic; color: var(--red); font-family: var(--
 .note-box {
   padding: 20px 24px;
   background: var(--white); border: 1px solid var(--rule);
-  border-left: 3px solid var(--red); border-radius: 0 4px 4px 0;
+  border-left: 3px solid var(--blue); border-radius: 0 4px 4px 0;
   display: flex; gap: 16px; align-items: flex-start;
 }
 .note-label {
   font-family: var(--mono); font-size: 9px;
   letter-spacing: 0.1em; text-transform: uppercase;
-  color: var(--red); flex-shrink: 0; padding-top: 3px; min-width: 80px;
+  color: var(--blue); flex-shrink: 0; padding-top: 3px; min-width: 80px;
 }
 .note-text { font-size: 13px; color: var(--ink-2); line-height: 1.65; }
 .note-text strong { color: var(--ink); }
@@ -553,10 +553,10 @@ h2.section-title em { font-style: italic; color: var(--red); font-family: var(--
 .hero-eyebrow {
   font-family: var(--mono); font-size: 10px;
   letter-spacing: 0.16em; text-transform: uppercase;
-  color: var(--red); margin-bottom: 24px;
+  color: var(--blue); margin-bottom: 24px;
   display: flex; align-items: center; gap: 10px;
 }
-.hero-eyebrow::before { content: ''; display: inline-block; width: 20px; height: 1px; background: var(--red); }
+.hero-eyebrow::before { content: ''; display: inline-block; width: 20px; height: 1px; background: var(--blue); }
 
 .home-hero h1 {
   font-family: var(--serif);
@@ -565,7 +565,7 @@ h2.section-title em { font-style: italic; color: var(--red); font-family: var(--
   color: #fff; letter-spacing: -0.015em;
   margin-bottom: 32px;
 }
-.home-hero h1 em { font-style: italic; color: var(--red); }
+.home-hero h1 em { font-style: italic; color: var(--blue); }
 
 .hero-body {
   font-size: 18px; color: rgba(255,255,255,0.5);
@@ -592,7 +592,7 @@ h2.section-title em { font-style: italic; color: var(--red); font-family: var(--
 .hc-label {
   font-family: var(--mono); font-size: 9px;
   letter-spacing: 0.12em; text-transform: uppercase;
-  color: var(--red); margin-bottom: 6px;
+  color: var(--blue); margin-bottom: 6px;
 }
 .hc-title { font-size: 15px; font-weight: 500; color: #fff; margin-bottom: 6px; line-height: 1.3; }
 .hc-body { font-size: 13px; color: rgba(255,255,255,0.4); line-height: 1.55; }
@@ -602,7 +602,7 @@ h2.section-title em { font-style: italic; color: var(--red); font-family: var(--
   font-size: 16px; margin-top: -2px;
   transition: color 0.15s;
 }
-.hero-card:hover .hc-arrow { color: var(--red); }
+.hero-card:hover .hc-arrow { color: var(--blue); }
 
 /* ─── STATS STRIP ─────────────────────────────────────────── */
 .stats-strip {
@@ -628,7 +628,7 @@ h2.section-title em { font-style: italic; color: var(--red); font-family: var(--
   font-family: var(--serif); font-size: 44px;
   color: #fff; line-height: 1; margin-bottom: 8px;
 }
-.stat-num em { color: var(--red); font-style: normal; }
+.stat-num em { color: var(--blue); font-style: normal; }
 
 .stat-label {
   font-family: var(--mono); font-size: 10px;
@@ -657,7 +657,7 @@ h2.section-title em { font-style: italic; color: var(--red); font-family: var(--
   padding: 6px 12px; color: var(--ink-3); background: transparent;
   cursor: default;
 }
-.atag.highlight { color: var(--red); border-color: rgba(200,39,45,0.25); background: var(--red-lt); }
+.atag.highlight { color: var(--blue); border-color: rgba(200,39,45,0.25); background: var(--blue-lt); }
 
 .page-preview-cards { display: flex; flex-direction: column; gap: 12px; }
 
@@ -668,18 +668,18 @@ h2.section-title em { font-style: italic; color: var(--red); font-family: var(--
   text-decoration: none; color: inherit;
   transition: border-color 0.2s, transform 0.2s;
 }
-.ppc:hover { border-color: var(--red); transform: translateX(4px); }
+.ppc:hover { border-color: var(--blue); transform: translateX(4px); }
 
 .ppc-num {
   font-family: var(--mono); font-size: 11px;
-  color: var(--red); flex-shrink: 0; padding-top: 2px;
+  color: var(--blue); flex-shrink: 0; padding-top: 2px;
   min-width: 28px;
 }
 .ppc-body { flex: 1; }
 .ppc-title { font-size: 14px; font-weight: 600; margin-bottom: 4px; color: var(--ink); }
 .ppc-desc { font-size: 12px; color: var(--ink-3); line-height: 1.55; }
 .ppc-arrow { color: var(--rule); font-size: 14px; flex-shrink: 0; padding-top: 2px; transition: color 0.15s; }
-.ppc:hover .ppc-arrow { color: var(--red); }
+.ppc:hover .ppc-arrow { color: var(--blue); }
 
 /* ─── URGENCY BAND ────────────────────────────────────────── */
 .urgency-band {
@@ -703,7 +703,7 @@ h2.section-title em { font-style: italic; color: var(--red); font-family: var(--
 .ub-lead {
   font-size: 16px; color: rgba(255,255,255,0.45);
   font-weight: 300; line-height: 1.75;
-  border-left: 2px solid var(--red); padding-left: 20px;
+  border-left: 2px solid var(--blue); padding-left: 20px;
   align-self: end;
 }
 
@@ -725,7 +725,7 @@ h2.section-title em { font-style: italic; color: var(--red); font-family: var(--
 .ub-std {
   font-family: var(--mono); font-size: 9px;
   letter-spacing: 0.12em; text-transform: uppercase;
-  color: var(--red); margin-bottom: 10px;
+  color: var(--blue); margin-bottom: 10px;
 }
 .ub-title { font-size: 14px; font-weight: 500; color: rgba(255,255,255,0.85); margin-bottom: 6px; line-height: 1.35; }
 .ub-desc { font-size: 13px; color: rgba(255,255,255,0.35); line-height: 1.6; }
@@ -746,7 +746,7 @@ h2.section-title em { font-style: italic; color: var(--red); font-family: var(--
 .fp-quote {
   font-family: var(--serif); font-size: 20px; font-style: italic;
   color: var(--ink-2); line-height: 1.55;
-  border-left: 2px solid var(--red); padding-left: 20px;
+  border-left: 2px solid var(--blue); padding-left: 20px;
   margin: 28px 0;
 }
 
@@ -765,7 +765,7 @@ h2.section-title em { font-style: italic; color: var(--red); font-family: var(--
 .fp-card-org {
   font-family: var(--mono); font-size: 9px;
   letter-spacing: 0.12em; text-transform: uppercase;
-  color: var(--red); margin-bottom: 6px;
+  color: var(--blue); margin-bottom: 6px;
 }
 .fp-card-role { font-size: 14px; font-weight: 600; margin-bottom: 6px; color: var(--ink); }
 .fp-card-desc { font-size: 13px; color: var(--ink-2); line-height: 1.6; }
@@ -773,8 +773,8 @@ h2.section-title em { font-style: italic; color: var(--red); font-family: var(--
   display: inline-block; margin-top: 10px;
   font-family: var(--mono); font-size: 9px;
   letter-spacing: 0.08em; text-transform: uppercase;
-  background: var(--red-lt); border: 1px solid rgba(200,39,45,0.2);
-  color: var(--red); padding: 4px 10px; border-radius: 2px;
+  background: var(--blue-lt); border: 1px solid rgba(200,39,45,0.2);
+  color: var(--blue); padding: 4px 10px; border-radius: 2px;
 }
 
 /* ─── HOME CTA ────────────────────────────────────────────── */
@@ -838,10 +838,10 @@ h2.section-title em { font-style: italic; color: var(--red); font-family: var(--
     border-bottom: 1px solid rgba(250,250,248,0.1);
     border-radius: 0;
   }
-  .gn-links > li > a:hover { background: none; color: var(--red); }
+  .gn-links > li > a:hover { background: none; color: var(--blue); }
   .gn-links > li:last-child > a { border-bottom: none; }
   .gn-cta {
-    background: var(--red) !important;
+    background: var(--blue) !important;
     color: #fff !important;
     text-align: center;
     margin-left: 0 !important;

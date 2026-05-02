@@ -30,51 +30,17 @@
 }
 
 /* ─── EXPERTISE PAGE STYLES ──────────────────────────────── */
-
-/* ─── DOMAIN COVERAGE ─────────────────────────────────────── */
-.domain-grid {
-  display: grid; grid-template-columns: repeat(5, 1fr); gap: 16px;
+.expertise-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: start;
   margin-top: 48px;
 }
 
-.domain-card {
-  background: var(--white); border: 1px solid var(--rule);
-  border-radius: 4px; padding: 24px;
+.expertise-lead {
+  font-size: 17px; color: var(--ink-2);
+  line-height: 1.85; font-weight: 300;
+  margin-bottom: 20px;
 }
-
-.domain-title {
-  font-size: 15px; font-weight: 600; color: var(--ink);
-  margin-bottom: 8px; line-height: 1.2;
-}
-
-.domain-regs {
-  font-family: var(--mono); font-size: 9px;
-  letter-spacing: 0.07em; text-transform: uppercase;
-  color: var(--blue); margin-bottom: 10px; line-height: 1.6;
-}
-
-.domain-desc {
-  font-size: 13px; color: var(--ink-2); line-height: 1.65; font-weight: 300;
-}
-
-/* ─── CREDIBILITY BAND ────────────────────────────────────── */
-.credibility-band {
-  background: var(--bg);
-  border-top: 1px solid var(--rule);
-  border-bottom: 1px solid var(--rule);
-  padding: 72px 40px;
-}
-
-.cred-inner {
-  max-width: 1140px; margin: 0 auto;
-  display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: start;
-}
-
-.cred-left h2 {
-  font-family: var(--sans); font-size: clamp(28px,3vw,40px);
-  font-weight: 600; color: var(--ink); margin-bottom: 20px; line-height: 1.1; letter-spacing: -0.02em;
-}
-.cred-left p { font-size: 15px; color: var(--ink-2); line-height: 1.8; font-weight: 300; margin-bottom: 16px; }
+.expertise-lead:last-child { margin-bottom: 0; }
 
 .cred-items { display: flex; flex-direction: column; gap: 12px; }
 
@@ -88,12 +54,7 @@
 .cred-text strong { color: var(--ink); font-weight: 500; }
 
 @media (max-width: 880px) {
-  .domain-grid { grid-template-columns: 1fr 1fr; }
-  .cred-inner { grid-template-columns: 1fr; gap: 36px; }
-  .credibility-band { padding: 60px 24px; }
-}
-@media (max-width: 580px) {
-  .domain-grid { grid-template-columns: 1fr; }
+  .expertise-grid { grid-template-columns: 1fr; gap: 36px; }
 }
 </style>
 </head>
@@ -145,107 +106,41 @@
   </div>
 </div>
 
-<!-- EXPERTISE NARRATIVE -->
+<!-- WHAT GROUNDS THE ASSESSMENT -->
 <section class="page-section" style="background: var(--bg);">
   <div class="section-inner">
     <div class="section-eyebrow">What grounds the assessment</div>
     <h2 class="section-title">Practitioner built.<br><em>Structurally independent.</em></h2>
-    <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: start;">
+    <div class="expertise-grid">
       <div>
-        <p style="font-size:17px; color:var(--ink-2); line-height:1.85; font-weight:300; margin-bottom:20px;">
+        <p class="expertise-lead">
           The SCL framework was not assembled from policy documents or governance templates. It was developed by practitioners who wrote AI certification requirements for programs where failure had direct consequences for human life, and who deployed AI into live production systems with measurable safety and quality outcomes.
         </p>
-        <p style="font-size:17px; color:var(--ink-2); line-height:1.85; font-weight:300;">
+        <p class="expertise-lead">
           That foundation is what every assessment reflects. Not a theory of what AI certification should look like, but a working knowledge of what it actually requires when the stakes are real.
         </p>
       </div>
-      <div style="display:flex; flex-direction:column; gap:16px;">
-        <div style="border-left: 2px solid var(--blue); padding-left: 20px;">
-          <div style="font-family:var(--mono); font-size:10px; letter-spacing:0.1em; text-transform:uppercase; color:var(--ink-3); margin-bottom:6px;">Independent review</div>
-          <p style="font-size:15px; color:var(--ink-2); line-height:1.7; font-weight:300;">Every phase includes independent review. No assessor conducts and verifies their own findings. That independence is structural, not optional.</p>
+      <div class="cred-items">
+        <div class="cred-item fade-up">
+          <span class="cred-bullet"></span>
+          <span class="cred-text"><strong>A standard regulators can reference.</strong> The SCL framework is publicly available, citable, and versioned. When a regulator or procurement officer asks what your AI was assessed against, there is a clear answer.</span>
         </div>
-        <div style="border-left: 2px solid var(--blue); padding-left: 20px;">
-          <div style="font-family:var(--mono); font-size:10px; letter-spacing:0.1em; text-transform:uppercase; color:var(--ink-3); margin-bottom:6px;">Domain specialist coverage</div>
-          <p style="font-size:15px; color:var(--ink-2); line-height:1.7; font-weight:300;">Where the operational environment requires regulatory or technical depth specific to your industry, domain specialists are brought in to ensure the assessment reflects your regulatory context.</p>
+        <div class="cred-item fade-up">
+          <span class="cred-bullet"></span>
+          <span class="cred-text"><strong>A record built to hold up.</strong> Every finding traceable to a requirement. Every determination documented. Retained for a minimum of ten years and available for regulatory review.</span>
         </div>
-        <div style="border-left: 2px solid var(--blue); padding-left: 20px;">
-          <div style="font-family:var(--mono); font-size:10px; letter-spacing:0.1em; text-transform:uppercase; color:var(--ink-3); margin-bottom:6px;">Defensible record</div>
-          <p style="font-size:15px; color:var(--ink-2); line-height:1.7; font-weight:300;">Every finding is traceable to a requirement. Every determination is documented against a specific version of the framework. The record is designed to hold up under regulatory scrutiny.</p>
+        <div class="cred-item fade-up">
+          <span class="cred-bullet"></span>
+          <span class="cred-text"><strong>Active in the regulatory conversation.</strong> Participation in AI policy development across multiple regulated industries. Certification records established now are how standards gain traction.</span>
+        </div>
+        <div class="cred-item fade-up">
+          <span class="cred-bullet"></span>
+          <span class="cred-text"><strong>Structured toward formal accreditation.</strong> SCL is pursuing ISO/IEC 17065 accreditation for certification bodies. The infrastructure being built now is the foundation for recognized regulatory standing.</span>
         </div>
       </div>
     </div>
   </div>
 </section>
-
-<!-- DOMAIN COVERAGE -->
-<section class="page-section" style="background: var(--white);">
-  <div class="section-inner">
-    <div class="section-eyebrow">Domain coverage</div>
-    <h2 class="section-title">The framework is domain agnostic.<br><em>The assessment team is not.</em></h2>
-    <p class="section-lead">The requirement areas apply wherever AI failure has safety consequences. Domain specialists are brought in to ensure the assessment reflects the specific regulatory environment your system operates in.</p>
-    <div class="domain-grid stagger-in">
-      <div class="domain-card">
-        <div class="domain-title">Aerospace &amp; Defense</div>
-        <div class="domain-regs">NPR 7150.2D &middot; DO-178C &middot; MIL-STD</div>
-        <div class="domain-desc">Human spaceflight, autonomous systems, and launch programs. The original environment that shaped the framework.</div>
-      </div>
-      <div class="domain-card">
-        <div class="domain-title">Aviation</div>
-        <div class="domain-regs">DO-178C &middot; DO-254 &middot; FAA AI Policy</div>
-        <div class="domain-desc">AI in flight management, air traffic support, and autonomous aircraft systems. Domain specialist coverage for FAA certification pathway alignment.</div>
-      </div>
-      <div class="domain-card">
-        <div class="domain-title">Medical Devices</div>
-        <div class="domain-regs">FDA SaMD &middot; ISO 13485 &middot; IEC 62304</div>
-        <div class="domain-desc">AI in clinical decision support, diagnostics, and therapeutic devices. Domain specialist coverage for FDA Software as a Medical Device framework alignment.</div>
-      </div>
-      <div class="domain-card">
-        <div class="domain-title">Automotive</div>
-        <div class="domain-regs">ISO 26262 &middot; SOTIF &middot; ISO/SAE 21434</div>
-        <div class="domain-desc">AI in ADAS, autonomous driving, and production quality systems. Direct deployment experience in automotive AI at scale.</div>
-      </div>
-      <div class="domain-card">
-        <div class="domain-title">Industrial &amp; Manufacturing</div>
-        <div class="domain-regs">IEC 61508 &middot; ISO 10218 &middot; NIST AI RMF</div>
-        <div class="domain-desc">AI in process control, predictive maintenance, and industrial robotics. Domain specialist coverage for functional safety and operator in the loop verification.</div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- THE INSTITUTION -->
-<div class="credibility-band">
-  <div class="cred-inner">
-    <div class="cred-left">
-      <div class="section-eyebrow" style="color:rgba(200,39,45,0.6)">The institution</div>
-      <h2>Helping your <em style="font-style:italic; color:var(--blue);">AI</em> meet<br>the regulatory world.</h2>
-      <p>
-        The regulatory world is not waiting for AI to catch up. Standards are forming, procurement requirements are tightening, and organizations that cannot demonstrate rigorous, documented assessment are losing ground.
-      </p>
-      <p>
-        SCL exists to bridge that gap. Not as a consulting practice that reviews AI systems and issues reports, but as a formal certification authority that produces a defensible, citable record against a published standard. That record is what regulators and procurement officers can actually use.
-      </p>
-    </div>
-    <div class="cred-items">
-      <div class="cred-item fade-up">
-        <span class="cred-bullet"></span>
-        <span class="cred-text"><strong>A standard regulators can reference.</strong> The SCL framework is publicly available, citable, and versioned. When a regulator or procurement officer asks what your AI was assessed against, there is a clear answer.</span>
-      </div>
-      <div class="cred-item fade-up">
-        <span class="cred-bullet"></span>
-        <span class="cred-text"><strong>A record built to hold up.</strong> Every finding traceable to a requirement. Every determination documented. Retained for a minimum of ten years and available for regulatory review.</span>
-      </div>
-      <div class="cred-item fade-up">
-        <span class="cred-bullet"></span>
-        <span class="cred-text"><strong>Active in the regulatory conversation.</strong> Participation in AI policy development across multiple regulated industries. Certification records established now are how standards gain traction.</span>
-      </div>
-      <div class="cred-item fade-up">
-        <span class="cred-bullet"></span>
-        <span class="cred-text"><strong>Structured toward formal accreditation.</strong> SCL is pursuing ISO/IEC 17065 accreditation for certification bodies. The infrastructure being built now is the foundation for recognized regulatory standing.</span>
-      </div>
-    </div>
-  </div>
-</div>
 
 
 

@@ -124,7 +124,11 @@ body {
 .reg-ticker-track {
   display: flex; align-items: center;
   white-space: nowrap;
+  user-select: none;
+  -webkit-user-select: none;
+  will-change: transform;
 }
+.reg-ticker-track a { -webkit-user-drag: none; user-drag: none; }
 .reg-ticker-track.scrolling {
   animation: ticker-scroll 40s linear infinite;
 }

@@ -38,7 +38,7 @@
     for (var i = 0; i < items.length; i++) {
       var item = items[i];
       var logo = logoMap[item.source] || '';
-      html += '<a class="reg-ticker-item" href="' + item.url + '" target="_blank" rel="noopener">'
+      html += '<a class="reg-ticker-item" href="' + item.url + '" target="_blank" rel="noopener" draggable="false">'
         + '<span class="reg-ticker-icon">' + logo + '</span>'
         + '<span class="reg-ticker-source">' + item.source + '</span>'
         + '<span class="reg-ticker-text">' + item.title + '</span>'

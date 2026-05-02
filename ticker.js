@@ -53,6 +53,25 @@
     var duration = halfWidth / 50;
     track.style.animationDuration = duration + 's';
     track.classList.add('scrolling');
+
+    var ticker = track.closest('.reg-ticker');
+    if (ticker && !ticker._hoverBound) {
+      ticker._hoverBound = true;
+      ticker.addEventListener('mouseenter', function () {
+        var cs = getComputedStyle(track);
+        var matrix = cs.transform;
+        if (matrix && matrix !== 'none') {
+          var tx = parseFloat(matrix.split(',')[4]);
+          track.style.setProperty('--pause-x', tx + 'px');
+          track.style.transform = 'translateX(' + tx + 'px)';
+        }
+        track.classList.add('paused');
+      });
+      ticker.addEventListener('mouseleave', function () {
+        track.style.transform = '';
+        track.classList.remove('paused');
+      });
+    }
   }
 
   /* ── Try loading from sessionStorage for instant render ── */

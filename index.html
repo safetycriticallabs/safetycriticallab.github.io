@@ -139,11 +139,22 @@
     -20px 50px 90px rgba(15, 35, 64, 0.12);
 }
 
+.cert-body-region {
+  position: relative;
+  flex: 1;
+  display: flex; flex-direction: column;
+  overflow: hidden;
+}
+.cert-body-content { position: relative; z-index: 1; }
+.cert-body-footer  { position: relative; z-index: 1; margin-top: auto; }
+
 .cert-watermark {
   position: absolute; top: 50%; left: 50%;
   transform: translate(-50%, -50%);
-  width: 80%; opacity: 0.04;
+  width: 85%; height: auto;
+  opacity: 0.05;
   pointer-events: none; user-select: none;
+  z-index: 0;
 }
 
 .cert-head { text-align: center; margin-bottom: 10px; }
@@ -248,8 +259,6 @@
   letter-spacing: 0.14em; text-transform: uppercase;
   color: var(--ink-3);
 }
-
-.cert-body-footer { margin-top: auto; }
 
 .cert-verify {
   display: flex; justify-content: space-between; align-items: center;
@@ -622,8 +631,6 @@
       <div class="cert-stage">
         <div class="cert-doc">
 
-          <img src="img/SCL_Logo_transparent.png" alt="" class="cert-watermark">
-
           <div class="cert-head">
             <img src="img/SCL Logo 3d.png" alt="Safety Critical Labs" class="cert-head-logo">
             <div class="cert-head-wordmark">Safety Critical Labs</div>
@@ -632,56 +639,63 @@
 
           <div class="cert-top-rule"></div>
 
-          <div class="cert-doc-type">Certificate of Conformance</div>
+          <div class="cert-body-region">
+            <img src="img/SCL_Logo_transparent.png" alt="" class="cert-watermark">
+            <div class="cert-body-content">
 
-          <div class="cert-focal">
-            <div class="cert-verb">This is to certify that</div>
-            <div class="cert-system-name">[System Name]</div>
-            <div class="cert-attribution">[Organization] &middot; Version [X.X] &middot; Assessed [Month YYYY]</div>
-            <div class="cert-standard-lead">has been formally assessed against the</div>
-            <div class="cert-standard-name">SCL AI Requirements Framework</div>
-            <div class="cert-standard-tail">and certified at the <strong>Safety Critical</strong> level for the operational claim stated below.</div>
-          </div>
+              <div class="cert-doc-type">Certificate of Conformance</div>
 
-          <div class="cert-claim">
-            <div class="cert-claim-label">Operational Claim</div>
-            <div class="cert-claim-body">One sentence operational claim describing the certified role and intended scope of the system.</div>
-          </div>
-
-          <div class="cert-mid-rule"></div>
-
-          <div class="cert-admin">
-            <div class="cert-admin-cell">
-              <div class="cert-admin-label">Certificate No.</div>
-              <div class="cert-admin-value">SCL-CERT-2025-001</div>
-            </div>
-            <div class="cert-admin-cell">
-              <div class="cert-admin-label">Issued</div>
-              <div class="cert-admin-value">DD Mon YYYY</div>
-            </div>
-            <div class="cert-admin-cell">
-              <div class="cert-admin-label">Framework DOI</div>
-              <div class="cert-admin-value">10.5281/zenodo.19501092</div>
-            </div>
-          </div>
-
-          <div class="cert-signature">
-            <div class="cert-sig-line"></div>
-            <div class="cert-sig-name">Principal</div>
-            <div class="cert-sig-title">Safety Critical Labs</div>
-          </div>
-
-          <div class="cert-body-footer">
-            <div class="cert-verify">
-              <div class="cert-verify-text">
-                <strong>Verify Online</strong>
-                safetycriticallabs.com/verify/SCL-CERT-2025-001
+              <div class="cert-focal">
+                <div class="cert-verb">This is to certify that</div>
+                <div class="cert-system-name">System Name</div>
+                <div class="cert-attribution">Organization &middot; Version X.X &middot; Assessed Month YYYY</div>
+                <div class="cert-standard-lead">has been formally assessed against the</div>
+                <div class="cert-standard-name">SCL AI Requirements Framework</div>
+                <div class="cert-standard-tail">and certified at the <strong>Safety Critical</strong> level for the operational claim stated below.</div>
               </div>
-              <div class="cert-qr" id="cert-mini-qr"></div>
+
+              <div class="cert-claim">
+                <div class="cert-claim-label">Operational Claim</div>
+                <div class="cert-claim-body">One sentence operational claim describing the certified role and intended scope of the system.</div>
+              </div>
+
+              <div class="cert-mid-rule"></div>
+
+              <div class="cert-admin">
+                <div class="cert-admin-cell">
+                  <div class="cert-admin-label">Certificate No.</div>
+                  <div class="cert-admin-value">SCL-CERT-2025-001</div>
+                </div>
+                <div class="cert-admin-cell">
+                  <div class="cert-admin-label">Issued</div>
+                  <div class="cert-admin-value">DD Mon YYYY</div>
+                </div>
+                <div class="cert-admin-cell">
+                  <div class="cert-admin-label">Framework DOI</div>
+                  <div class="cert-admin-value">10.5281/zenodo.19501092</div>
+                </div>
+              </div>
+
+              <div class="cert-signature">
+                <div class="cert-sig-line"></div>
+                <div class="cert-sig-name">Principal</div>
+                <div class="cert-sig-title">Safety Critical Labs</div>
+              </div>
+
             </div>
 
-            <div class="cert-disclaimer">
-              This certificate records conformance to a defined standard at the time of assessment. It does not constitute a claim that the assessed system is safe, free from defect, or approved for any specific regulatory purpose.
+            <div class="cert-body-footer">
+              <div class="cert-verify">
+                <div class="cert-verify-text">
+                  <strong>Verify Online</strong>
+                  safetycriticallabs.com/verify/SCL-CERT-2025-001
+                </div>
+                <div class="cert-qr" id="cert-mini-qr"></div>
+              </div>
+
+              <div class="cert-disclaimer">
+                This certificate records conformance to a defined standard at the time of assessment. It does not constitute a claim that the assessed system is safe, free from defect, or approved for any specific regulatory purpose.
+              </div>
             </div>
           </div>
 

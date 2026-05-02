@@ -133,7 +133,6 @@ body {
   animation: ticker-scroll 40s linear infinite;
 }
 
-.reg-ticker-track.paused { animation-play-state: paused; }
 
 .reg-ticker-item {
   display: inline-flex; align-items: center; gap: 8px;

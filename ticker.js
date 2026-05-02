@@ -58,18 +58,10 @@
     if (ticker && !ticker._hoverBound) {
       ticker._hoverBound = true;
       ticker.addEventListener('mouseenter', function () {
-        var cs = getComputedStyle(track);
-        var matrix = cs.transform;
-        if (matrix && matrix !== 'none') {
-          var tx = parseFloat(matrix.split(',')[4]);
-          track.style.setProperty('--pause-x', tx + 'px');
-          track.style.transform = 'translateX(' + tx + 'px)';
-        }
-        track.classList.add('paused');
+        track.style.animationPlayState = 'paused';
       });
       ticker.addEventListener('mouseleave', function () {
-        track.style.transform = '';
-        track.classList.remove('paused');
+        track.style.animationPlayState = 'running';
       });
     }
   }

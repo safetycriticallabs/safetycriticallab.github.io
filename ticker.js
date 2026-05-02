@@ -5,7 +5,7 @@
    rendering on subsequent page navigations.
    ──────────────────────────────────────────────────────────── */
 (function () {
-  var CORS_PROXY = 'https://api.cors.lol/?url=';
+  var CORS_PROXY = 'https://corsproxy.io/?url=';
   var CACHE_KEY = 'scl_ticker_cache';
   var CACHE_MAX_AGE = 10 * 60 * 1000; /* 10 minutes */
 

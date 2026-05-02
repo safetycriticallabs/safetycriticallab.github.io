@@ -100,27 +100,30 @@
 
 .cert-doc {
   background: #fff;
-  border: 1px solid #d4cfc4;
-  width: 100%; max-width: 440px;
-  padding: 24px 28px;
+  border: 1px solid #c8ccd4;
+  width: 100%; max-width: 480px;
+  aspect-ratio: 8.5 / 11;
+  padding: 28px 32px;
   position: relative;
-  font-family: var(--serif);
+  font-family: var(--sans);
   transform: rotateY(-9deg) rotateX(5deg);
   transform-style: preserve-3d;
   transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1),
               box-shadow 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
   box-shadow:
-    0 2px 4px rgba(20, 24, 40, 0.04),
-    0 8px 16px rgba(20, 24, 40, 0.06),
-    -18px 30px 40px rgba(20, 24, 40, 0.10),
-    -30px 60px 90px rgba(20, 24, 40, 0.12);
+    0 2px 4px rgba(15, 35, 64, 0.04),
+    0 8px 16px rgba(15, 35, 64, 0.06),
+    -18px 30px 40px rgba(15, 35, 64, 0.10),
+    -30px 60px 90px rgba(15, 35, 64, 0.12);
+  display: flex; flex-direction: column;
+  overflow: hidden;
 }
 
 .cert-doc::after {
   content: ''; position: absolute;
   left: 6%; right: 10%;
   bottom: -24px; height: 40px;
-  background: radial-gradient(ellipse at center, rgba(20,24,40,0.22), rgba(20,24,40,0) 70%);
+  background: radial-gradient(ellipse at center, rgba(15,35,64,0.22), rgba(15,35,64,0) 70%);
   filter: blur(10px);
   z-index: -1;
   transform: translateZ(-60px);
@@ -130,161 +133,162 @@
 .cert-stage:hover .cert-doc {
   transform: rotateY(-3deg) rotateX(2deg);
   box-shadow:
-    0 4px 8px rgba(20, 24, 40, 0.05),
-    0 14px 24px rgba(20, 24, 40, 0.07),
-    -10px 24px 40px rgba(20, 24, 40, 0.10),
-    -20px 50px 90px rgba(20, 24, 40, 0.12);
+    0 4px 8px rgba(15, 35, 64, 0.05),
+    0 14px 24px rgba(15, 35, 64, 0.07),
+    -10px 24px 40px rgba(15, 35, 64, 0.10),
+    -20px 50px 90px rgba(15, 35, 64, 0.12);
 }
 
-.cert-doc::before {
-  content: ''; position: absolute; inset: 8px;
-  border: 1px solid #e8e4dc; pointer-events: none;
+.cert-watermark {
+  position: absolute; top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  width: 80%; opacity: 0.04;
+  pointer-events: none; user-select: none;
 }
 
-.cert-corner { position: absolute; width: 18px; height: 18px; }
-.cert-corner svg { width: 100%; height: 100%; }
-.cert-corner-tl { top: 10px; left: 10px; }
-.cert-corner-tr { top: 10px; right: 10px; transform: scaleX(-1); }
-.cert-corner-bl { bottom: 10px; left: 10px; transform: scaleY(-1); }
-.cert-corner-br { bottom: 10px; right: 10px; transform: scale(-1); }
-
-.cert-header-row {
-  display: flex; justify-content: space-between; align-items: flex-start;
-  margin-bottom: 12px;
+.cert-head { text-align: center; margin-bottom: 10px; }
+.cert-head-logo {
+  width: 44px; height: 44px; object-fit: contain;
+  margin: 0 auto 6px; display: block;
 }
-.cert-header-wordmark {
-  font-family: var(--mono); font-size: 7.5px;
-  letter-spacing: 0.16em; text-transform: uppercase;
-  color: #0a0a0f; font-weight: 500;
+.cert-head-wordmark {
+  font-weight: 700; font-size: 7px;
+  letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--ink);
 }
-.cert-header-wordmark span { color: #8b7340; }
-.cert-header-num {
-  font-family: var(--mono); font-size: 6.5px;
-  letter-spacing: 0.08em; color: #6b6b80;
-  text-align: right; line-height: 1.6;
+.cert-head-sub {
+  font-family: var(--mono); font-size: 5.5px;
+  letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--ink-3);
 }
 
 .cert-top-rule {
   width: 100%; height: 1px;
-  background: linear-gradient(90deg, transparent, #c4a96b, #d4cfc4, #c4a96b, transparent);
-  margin-bottom: 14px;
+  background: var(--ink);
+  margin-bottom: 10px;
 }
 
-.cert-doc-eyebrow {
-  font-family: var(--mono); font-size: 7px;
+.cert-doc-type {
+  font-family: var(--mono); font-size: 6.5px; font-weight: 600;
+  letter-spacing: 0.26em; text-transform: uppercase;
+  color: var(--ink); text-align: center; margin-bottom: 12px;
+}
+
+.cert-focal { text-align: center; margin-bottom: 14px; }
+.cert-verb {
+  font-family: var(--serif); font-style: italic;
+  font-size: 11px; color: var(--ink-2); margin-bottom: 6px;
+}
+.cert-system-name {
+  font-size: 20px; font-weight: 600;
+  letter-spacing: -0.025em; color: var(--ink);
+  line-height: 1.1; margin-bottom: 4px;
+}
+.cert-attribution {
+  font-family: var(--mono); font-size: 6px;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--ink-3); margin-bottom: 10px;
+}
+.cert-standard-lead {
+  font-size: 8px; color: var(--ink-2); margin-bottom: 4px;
+}
+.cert-standard-name {
+  font-size: 12px; font-weight: 600;
+  letter-spacing: -0.01em; color: var(--ink); margin-bottom: 4px;
+}
+.cert-standard-tail {
+  font-size: 8px; line-height: 1.5; color: var(--ink-2);
+  max-width: 280px; margin: 0 auto;
+}
+.cert-standard-tail strong { color: var(--ink); font-weight: 600; }
+
+.cert-claim { text-align: center; margin-bottom: 14px; }
+.cert-claim-label {
+  font-family: var(--mono); font-size: 5.5px; font-weight: 500;
+  letter-spacing: 0.22em; text-transform: uppercase;
+  color: var(--ink-3); margin-bottom: 4px;
+}
+.cert-claim-body {
+  font-family: var(--serif); font-style: italic;
+  font-size: 8px; line-height: 1.5; color: var(--ink-2);
+  max-width: 300px; margin: 0 auto;
+}
+
+.cert-mid-rule {
+  width: 100%; height: 1px;
+  background: var(--rule); margin-bottom: 10px;
+}
+
+.cert-admin {
+  display: grid; grid-template-columns: 1fr 1fr 1fr;
+  gap: 10px; margin-bottom: 14px;
+}
+.cert-admin-cell { text-align: center; }
+.cert-admin-cell + .cert-admin-cell { border-left: 1px solid var(--rule); }
+.cert-admin-label {
+  font-family: var(--mono); font-size: 5px;
   letter-spacing: 0.2em; text-transform: uppercase;
-  color: #8b7340; text-align: center; margin-bottom: 8px;
+  color: var(--ink-3); margin-bottom: 2px;
+}
+.cert-admin-value {
+  font-family: var(--mono); font-size: 6.5px; font-weight: 500;
+  color: var(--ink); letter-spacing: 0.02em;
 }
 
-.cert-doc-title {
-  font-size: 15px; font-weight: 300; line-height: 1.2;
-  text-align: center; color: #0a0a0f; margin-bottom: 4px;
+.cert-signature { text-align: center; margin-bottom: 12px; }
+.cert-sig-line {
+  width: 120px; height: 1px;
+  background: var(--ink); margin: 0 auto 4px;
 }
-.cert-doc-title em { font-style: italic; }
-
-.cert-doc-sub {
-  font-family: var(--mono); font-size: 7px;
-  letter-spacing: 0.12em; text-transform: uppercase;
-  color: #6b6b80; text-align: center; margin-bottom: 10px;
+.cert-sig-name {
+  font-size: 7.5px; font-weight: 600; color: var(--ink); margin-bottom: 1px;
 }
-
-.cert-preamble {
-  font-size: 7.5px; color: #2a2a3a; line-height: 1.7;
-  text-align: center; font-weight: 300;
-  max-width: 300px; margin: 0 auto 12px;
-}
-.cert-preamble strong { font-weight: 500; color: #0a0a0f; font-style: italic; }
-
-.cert-field-block {
-  background: #f7f5f0; border: 1px solid #e8e4dc;
-  padding: 10px 14px; text-align: center; margin-bottom: 10px;
-}
-.cert-field-label {
-  font-family: var(--mono); font-size: 6.5px;
-  letter-spacing: 0.18em; text-transform: uppercase;
-  color: #6b6b80; margin-bottom: 3px;
-}
-.cert-field-value { font-size: 13px; font-weight: 500; color: #0a0a0f; }
-.cert-field-sub {
-  font-family: var(--mono); font-size: 6.5px;
-  letter-spacing: 0.1em; color: #6b6b80; margin-top: 2px;
+.cert-sig-title {
+  font-family: var(--mono); font-size: 5.5px;
+  letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--ink-3);
 }
 
-.cert-data-grid {
-  display: grid; grid-template-columns: 1fr 1fr;
-  border: 1px solid #e8e4dc; margin-bottom: 10px;
-}
-.cert-data-cell {
-  padding: 8px 10px;
-  border-right: 1px solid #e8e4dc;
-  border-bottom: 1px solid #e8e4dc;
-}
-.cert-data-cell:nth-child(2n) { border-right: none; }
-.cert-data-cell:nth-last-child(-n+2) { border-bottom: none; }
-.cert-data-cell.cell-risk { background: #f7f5f0; }
-.cert-data-cell-label {
-  font-family: var(--mono); font-size: 6px;
-  letter-spacing: 0.15em; text-transform: uppercase;
-  color: #6b6b80; margin-bottom: 3px;
-}
-.cert-data-cell-value { font-size: 9.5px; font-weight: 500; color: #0a0a0f; line-height: 1.3; }
-.cert-data-cell-value.certified { color: #3B6D11; }
-.cert-data-cell-value.mono { font-family: var(--mono); font-size: 8px; font-weight: 400; }
-.cert-data-cell-value .risk-sub {
-  display: block; font-family: var(--mono); font-size: 6px;
-  font-weight: 400; color: #6b6b80; margin-top: 1px;
-}
+.cert-body-footer { margin-top: auto; }
 
-.cert-req-grid {
-  display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 10px;
+.cert-verify {
+  display: flex; justify-content: space-between; align-items: center;
+  padding-top: 8px; border-top: 1px solid var(--rule); margin-bottom: 6px;
 }
-.cert-req-label {
-  font-family: var(--mono); font-size: 6.5px;
-  letter-spacing: 0.15em; text-transform: uppercase;
-  color: #6b6b80; margin-bottom: 6px;
+.cert-verify-text {
+  font-family: var(--mono); font-size: 6px; line-height: 1.5;
+  color: var(--ink-3);
 }
-.cert-req-tag {
-  font-family: var(--mono); font-size: 6px;
-  letter-spacing: 0.08em; text-transform: uppercase;
-  background: #f7f5f0; border: 1px solid #e8e4dc;
-  color: #2a2a3a; padding: 2px 5px;
+.cert-verify-text strong {
+  display: block; font-weight: 500; color: var(--ink);
+  font-size: 5.5px; letter-spacing: 0.18em;
+  text-transform: uppercase; margin-bottom: 2px;
 }
-
-.cert-thin-rule { width: 100%; height: 1px; background: #e8e4dc; margin: 10px 0; }
-
-.cert-det-text {
-  font-size: 7px; color: #2a2a3a; line-height: 1.7;
-  font-weight: 300; padding: 0 2px; margin-bottom: 8px;
+.cert-qr {
+  width: 56px; height: 56px; flex-shrink: 0;
+  position: relative;
 }
-.cert-det-text em { font-style: italic; }
+.cert-qr svg { width: 100%; height: 100%; display: block; }
+.cert-qr:empty {
+  border: 1px solid var(--rule); background: #f8f9fb;
+}
+.cert-qr:empty::before {
+  content: 'QR'; position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--mono); font-size: 7px; color: var(--ink-3);
+}
 
 .cert-disclaimer {
-  font-size: 6.5px; color: #6b6b80; line-height: 1.6;
-  font-family: var(--mono); padding: 0 2px; margin-bottom: 10px;
+  font-size: 5px; line-height: 1.5; color: var(--ink-3);
+  text-align: center; font-style: italic; margin-bottom: 6px;
 }
 
-.cert-sig-row {
-  display: grid; grid-template-columns: 1fr 1fr;
-  gap: 20px; margin-bottom: 12px;
+.cert-accred {
+  text-align: center; font-family: var(--mono);
+  font-size: 5px; letter-spacing: 0.18em;
+  text-transform: uppercase; color: var(--ink-3);
+  padding-top: 5px; border-top: 1px solid var(--rule);
 }
-.cert-sig-line { height: 1px; background: #0a0a0f; margin-bottom: 4px; }
-.cert-sig-name { font-size: 8.5px; font-weight: 500; color: #0a0a0f; margin-bottom: 2px; }
-.cert-sig-role {
-  font-family: var(--mono); font-size: 6px;
-  letter-spacing: 0.12em; text-transform: uppercase; color: #6b6b80;
-}
-
-.cert-foot-row {
-  display: flex; justify-content: space-between; align-items: center;
-  padding-top: 10px; border-top: 1px solid #e8e4dc;
-}
-.cert-foot-text {
-  font-family: var(--mono); font-size: 6px;
-  letter-spacing: 0.08em; color: #6b6b80; line-height: 1.6;
-}
-.cert-foot-seal svg,
-.cert-foot-seal img { display: block; }
-.cert-foot-seal img { width: 88px; height: 88px; object-fit: contain; }
 
 /* ─── SECTION FLOW & DEPTH ────────────────────────────────── */
 .section-wwd {
@@ -618,103 +622,70 @@
       <div class="cert-stage">
         <div class="cert-doc">
 
-          <div class="cert-corner cert-corner-tl">
-            <svg viewBox="0 0 32 32" fill="none"><path d="M2 30 L2 2 L30 2" stroke="#c4a96b" stroke-width="1" fill="none"/><path d="M2 16 L8 10 M2 24 L8 18" stroke="#c4a96b" stroke-width="0.5" fill="none"/></svg>
-          </div>
-          <div class="cert-corner cert-corner-tr">
-            <svg viewBox="0 0 32 32" fill="none"><path d="M2 30 L2 2 L30 2" stroke="#c4a96b" stroke-width="1" fill="none"/><path d="M2 16 L8 10 M2 24 L8 18" stroke="#c4a96b" stroke-width="0.5" fill="none"/></svg>
-          </div>
-          <div class="cert-corner cert-corner-bl">
-            <svg viewBox="0 0 32 32" fill="none"><path d="M2 30 L2 2 L30 2" stroke="#c4a96b" stroke-width="1" fill="none"/><path d="M2 16 L8 10 M2 24 L8 18" stroke="#c4a96b" stroke-width="0.5" fill="none"/></svg>
-          </div>
-          <div class="cert-corner cert-corner-br">
-            <svg viewBox="0 0 32 32" fill="none"><path d="M2 30 L2 2 L30 2" stroke="#c4a96b" stroke-width="1" fill="none"/><path d="M2 16 L8 10 M2 24 L8 18" stroke="#c4a96b" stroke-width="0.5" fill="none"/></svg>
-          </div>
+          <img src="img/SCL_Logo_Transparent.png" alt="" class="cert-watermark">
 
-          <div class="cert-header-row">
-            <div class="cert-header-wordmark">Safety Critical <span>Labs</span></div>
-            <div class="cert-header-num">Certificate No. SCL-CERT-[YYYY]-[NNN]<br>Framework Version 2.1.2</div>
+          <div class="cert-head">
+            <img src="img/SCL Logo 3d.png" alt="Safety Critical Labs" class="cert-head-logo">
+            <div class="cert-head-wordmark">Safety Critical Labs</div>
+            <div class="cert-head-sub">AI Certification Authority</div>
           </div>
 
           <div class="cert-top-rule"></div>
 
-          <div class="cert-doc-eyebrow">Certificate of Conformance</div>
-          <div class="cert-doc-title">AI Requirements Framework<br><em>Assessment Determination</em></div>
-          <div class="cert-doc-sub">Safety Critical Labs &middot; Certification Authority</div>
+          <div class="cert-doc-type">Certificate of Conformance</div>
 
-          <div class="cert-preamble">
-            This certificate records that the system identified below was formally assessed by Safety Critical Labs against the <strong>SCL AI Requirements Framework v2.1.2</strong> and a determination was made as stated herein.
+          <div class="cert-focal">
+            <div class="cert-verb">This is to certify that</div>
+            <div class="cert-system-name">[System Name]</div>
+            <div class="cert-attribution">[Organization] &middot; Version [X.X] &middot; Assessed [Month YYYY]</div>
+            <div class="cert-standard-lead">has been formally assessed against the</div>
+            <div class="cert-standard-name">SCL AI Requirements Framework</div>
+            <div class="cert-standard-tail">and certified at the <strong>Safety Critical</strong> level for the operational claim stated below.</div>
           </div>
 
-          <div class="cert-field-block">
-            <div class="cert-field-label">Certified System</div>
-            <div class="cert-field-value">[System Name]</div>
-            <div class="cert-field-sub">[Organization] &middot; Version [X.X] &middot; Assessed [Month YYYY]</div>
+          <div class="cert-claim">
+            <div class="cert-claim-label">Operational Claim</div>
+            <div class="cert-claim-body">One sentence operational claim describing the certified role and intended scope of the system.</div>
           </div>
 
-          <div class="cert-data-grid">
-            <div class="cert-data-cell">
-              <div class="cert-data-cell-label">Classification Level</div>
-              <div class="cert-data-cell-value">Safety Critical AI</div>
+          <div class="cert-mid-rule"></div>
+
+          <div class="cert-admin">
+            <div class="cert-admin-cell">
+              <div class="cert-admin-label">Certificate No.</div>
+              <div class="cert-admin-value">SCL-CERT-2025-001</div>
             </div>
-            <div class="cert-data-cell">
-              <div class="cert-data-cell-label">Determination</div>
-              <div class="cert-data-cell-value certified">Certified</div>
+            <div class="cert-admin-cell">
+              <div class="cert-admin-label">Issued</div>
+              <div class="cert-admin-value">DD Mon YYYY</div>
             </div>
-            <div class="cert-data-cell cell-risk">
-              <div class="cert-data-cell-label">Consequence Level</div>
-              <div class="cert-data-cell-value">3L<span class="risk-sub">Low consequence &middot; Low likelihood</span></div>
-            </div>
-            <div class="cert-data-cell">
-              <div class="cert-data-cell-label">Valid Through</div>
-              <div class="cert-data-cell-value mono">[Month YYYY]<br>Surveillance: Annual</div>
-            </div>
-          </div>
-
-          <div class="cert-req-label">Requirement Sets Assessed</div>
-          <div class="cert-req-grid">
-            <div class="cert-req-tag">AI-1 Operational &amp; Data Foundations</div>
-            <div class="cert-req-tag">AI-2 Bias</div>
-            <div class="cert-req-tag">AI-3 ML Test Coverage</div>
-            <div class="cert-req-tag">AI-4 Continuous Validation</div>
-            <div class="cert-req-tag">AI-5 Hallucination Prevention</div>
-            <div class="cert-req-tag">AI-6 OOD Detection</div>
-            <div class="cert-req-tag">AI-7 Adversarial Robustness</div>
-            <div class="cert-req-tag">AI-8 Explainability</div>
-            <div class="cert-req-tag">AI-9 Human-AI Teaming</div>
-            <div class="cert-req-tag">AI-10 Privacy &amp; Data Protection</div>
-          </div>
-
-          <div class="cert-thin-rule"></div>
-
-          <div class="cert-det-text">
-            Having reviewed the evidence package submitted by <em>[Organization]</em> and conducted a technical assessment of <em>[System Name]</em>, Safety Critical Labs determines that the system meets all applicable requirements of the SCL AI Requirements Framework v2.1.2 at the <em>Safety Critical AI</em> classification level, as of the assessment date stated herein. This determination is subject to annual surveillance and remains valid only while the system configuration assessed is maintained without material change.
-          </div>
-
-          <div class="cert-disclaimer">
-            This certificate records conformance to a defined standard at the time of assessment. It does not constitute a claim that the assessed system is safe, free from defect, or approved for any specific regulatory purpose.
-          </div>
-
-          <div class="cert-sig-row">
-            <div>
-              <div class="cert-sig-line"></div>
-              <div class="cert-sig-name">Principal</div>
-              <div class="cert-sig-role">Safety Critical Labs</div>
-            </div>
-            <div>
-              <div class="cert-sig-line"></div>
-              <div class="cert-sig-name">Lead Assessor</div>
-              <div class="cert-sig-role">Assessment Team &middot; Safety Critical Labs</div>
+            <div class="cert-admin-cell">
+              <div class="cert-admin-label">Framework DOI</div>
+              <div class="cert-admin-value">10.5281/zenodo.19501092</div>
             </div>
           </div>
 
-          <div class="cert-foot-row">
-            <div class="cert-foot-text">DOI 10.5281/zenodo.19024420<br>Framework v2.1.2</div>
-            <div class="cert-foot-seal">
-              <img src="img/SCL Logo 3d.png" alt="Safety Critical Labs · AI Certification Authority">
-            </div>
-            <div class="cert-foot-text" style="text-align:right;">Issued: [DD Month YYYY]<br>Surveillance Due: [DD Month YYYY]</div>
+          <div class="cert-signature">
+            <div class="cert-sig-line"></div>
+            <div class="cert-sig-name">Principal</div>
+            <div class="cert-sig-title">Safety Critical Labs</div>
           </div>
+
+          <div class="cert-body-footer">
+            <div class="cert-verify">
+              <div class="cert-verify-text">
+                <strong>Verify Online</strong>
+                safetycriticallabs.com/verify/SCL-CERT-2025-001
+              </div>
+              <div class="cert-qr" id="cert-mini-qr"></div>
+            </div>
+
+            <div class="cert-disclaimer">
+              This certificate records conformance to a defined standard at the time of assessment. It does not constitute a claim that the assessed system is safe, free from defect, or approved for any specific regulatory purpose.
+            </div>
+          </div>
+
+          <div class="cert-accred">Independent Certification &middot; Safety Critical Labs</div>
 
         </div>
       </div>
@@ -1345,6 +1316,21 @@ document.addEventListener("click", function() {
   });
 
 })();
+</script>
+
+<!-- Mini-cert QR code -->
+<script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js"></script>
+<script>
+  (function () {
+    var target = document.getElementById('cert-mini-qr');
+    if (!target || typeof qrcode === 'undefined') return;
+    try {
+      var qr = qrcode(0, 'M');
+      qr.addData('https://safetycriticallabs.com/verify/SCL-CERT-2025-001');
+      qr.make();
+      target.innerHTML = qr.createSvgTag({ cellSize: 4, margin: 0, scalable: true });
+    } catch (e) { /* leaves QR fallback */ }
+  })();
 </script>
 </body>
 </html>

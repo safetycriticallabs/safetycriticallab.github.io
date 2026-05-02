@@ -111,11 +111,11 @@
 .cert-reveal-frame {
   overflow: hidden;
   border: 1px solid var(--rule);
-  background: #faf9f6;
+  background: #FAFAF8;
   box-shadow: 0 8px 32px rgba(15,35,64,0.12);
 }
 .cert-reveal-frame iframe {
-  width: 860px; height: 1720px;
+  width: 856px; height: 1136px;
   border: none; display: block;
   transform-origin: top left;
   pointer-events: none;
@@ -515,11 +515,12 @@ function scaleCertReveal() {
   const frame = document.getElementById('certFrame');
   const iframe = document.getElementById('certIframe');
   if (!frame || !iframe) return;
-  const maxWidth = Math.min(frame.parentElement.offsetWidth, 860);
-  const scale = maxWidth / 860;
+  const nativeW = 856, nativeH = 1136;
+  const maxWidth = Math.min(frame.parentElement.offsetWidth, nativeW);
+  const scale = maxWidth / nativeW;
   iframe.style.transform = 'scale(' + scale + ')';
-  frame.style.width = Math.round(860 * scale) + 'px';
-  frame.style.height = Math.round(1720 * scale) + 'px';
+  frame.style.width = Math.round(nativeW * scale) + 'px';
+  frame.style.height = Math.round(nativeH * scale) + 'px';
 }
 scaleCertReveal();
 window.addEventListener('resize', scaleCertReveal);

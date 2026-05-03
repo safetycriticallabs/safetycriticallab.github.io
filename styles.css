@@ -119,6 +119,7 @@ body {
   box-shadow: inset 0 -1px 0 rgba(15,35,64,0.08);
   overflow: hidden;
   display: flex; align-items: center;
+  touch-action: pan-y;
 }
 
 .reg-ticker-track {
@@ -127,6 +128,8 @@ body {
   user-select: none;
   -webkit-user-select: none;
   will-change: transform;
+  transform: translateZ(0);
+  backface-visibility: hidden;
 }
 .reg-ticker-track a { -webkit-user-drag: none; user-drag: none; }
 .reg-ticker-track.scrolling {

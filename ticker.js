@@ -53,17 +53,6 @@
     var duration = halfWidth / 50;
     track.style.animationDuration = duration + 's';
     track.classList.add('scrolling');
-
-    var ticker = track.closest('.reg-ticker');
-    if (ticker && !ticker._hoverBound) {
-      ticker._hoverBound = true;
-      ticker.addEventListener('mouseenter', function () {
-        track.style.animationPlayState = 'paused';
-      });
-      ticker.addEventListener('mouseleave', function () {
-        track.style.animationPlayState = 'running';
-      });
-    }
   }
 
   /* ── Try loading from sessionStorage for instant render ── */

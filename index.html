@@ -673,7 +673,7 @@
                 </div>
                 <div class="cert-admin-cell">
                   <div class="cert-admin-label">Framework DOI</div>
-                  <div class="cert-admin-value">10.5281/zenodo.19501092</div>
+                  <div class="cert-admin-value">10.5281/zenodo.19889843</div>
                 </div>
               </div>
 
@@ -689,7 +689,7 @@
               <div class="cert-verify">
                 <div class="cert-verify-text">
                   <strong>Verify Online</strong>
-                  safetycriticallabs.com/verify/SCL-CERT-2025-001
+                  safetycriticallabs.com/verify?id=SCL-CERT-2025-001
                 </div>
                 <div class="cert-qr" id="cert-mini-qr"></div>
               </div>
@@ -1352,7 +1352,7 @@ document.addEventListener("click", function() {
     if (!target || typeof qrcode === 'undefined') return;
     try {
       var qr = qrcode(0, 'M');
-      qr.addData('https://safetycriticallabs.com/verify/SCL-CERT-2025-001');
+      qr.addData('https://safetycriticallabs.com/verify?id=SCL-CERT-2025-001');
       qr.make();
       target.innerHTML = qr.createSvgTag({ cellSize: 4, margin: 0, scalable: true });
     } catch (e) { /* leaves QR fallback */ }

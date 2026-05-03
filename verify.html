@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Verify Certificate | Safety Critical Labs</title>
+<meta name="description" content="Verify the authenticity of an SCL Certificate of Conformance. Enter the certificate number or scan the QR code on the certificate.">
+<meta property="og:title" content="Verify Certificate | Safety Critical Labs">
+<meta property="og:description" content="Verify the authenticity of an SCL Certificate of Conformance.">
+<meta property="og:url" content="https://safetycriticallabs.com/verify.html">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://safetycriticallabs.com/img/SCL%20Logo%203d.png">
+<meta name="robots" content="noindex">
+<link rel="icon" type="image/x-icon" href="favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="img/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="48x48" href="img/favicon-48x48.png">
+<link rel="icon" type="image/png" sizes="192x192" href="img/favicon-192x192.png">
+<link rel="apple-touch-icon" sizes="180x180" href="img/apple-touch-icon.png">
+<link rel="shortcut icon" href="favicon.ico">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=IBM+Plex+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<link rel="stylesheet" href="styles.css">
+<style>
+.verify-page {
+  min-height: calc(100vh - 280px);
+  display: flex; align-items: center; justify-content: center;
+  padding: 80px 24px;
+}
+.verify-card {
+  width: 100%; max-width: 640px;
+  background: var(--white);
+  border: 1px solid var(--rule);
+  border-radius: 4px;
+  padding: 56px 56px 48px;
+  text-align: center;
+  box-shadow: 0 8px 32px rgba(15,35,64,0.06);
+}
+.verify-eyebrow {
+  font-family: var(--mono); font-size: 11px;
+  letter-spacing: 0.22em; text-transform: uppercase;
+  color: var(--blue); margin-bottom: 18px;
+}
+.verify-title {
+  font-size: clamp(28px, 3vw, 36px);
+  font-weight: 600; letter-spacing: -0.02em;
+  color: var(--ink); line-height: 1.2;
+  margin-bottom: 24px;
+}
+.verify-id-block {
+  background: var(--bg);
+  border: 1px solid var(--rule);
+  border-radius: 3px;
+  padding: 20px 24px;
+  margin: 0 auto 28px;
+  max-width: 420px;
+}
+.verify-id-label {
+  font-family: var(--mono); font-size: 9px;
+  letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--ink-3); margin-bottom: 6px;
+}
+.verify-id-value {
+  font-family: var(--mono); font-size: 16px;
+  font-weight: 500; color: var(--ink);
+  letter-spacing: 0.02em; word-break: break-all;
+}
+.verify-id-empty { color: var(--ink-3); font-style: italic; }
+.verify-status {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family: var(--mono); font-size: 10px;
+  letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--ink-3);
+  padding: 6px 14px;
+  border: 1px solid var(--rule);
+  border-radius: 999px;
+  margin-bottom: 24px;
+}
+.verify-status::before {
+  content: ''; width: 6px; height: 6px;
+  border-radius: 50%; background: var(--ink-3);
+}
+.verify-body {
+  font-size: 15px; line-height: 1.7;
+  color: var(--ink-2);
+  max-width: 440px; margin: 0 auto 32px;
+}
+.verify-body strong { color: var(--ink); font-weight: 500; }
+.verify-actions {
+  display: flex; gap: 12px; justify-content: center;
+  flex-wrap: wrap;
+}
+@media (max-width: 580px) {
+  .verify-card { padding: 40px 28px 32px; }
+}
+</style>
+</head>
+<body>
+
+<nav class="global-nav">
+  <a href="/" class="gn-wordmark">
+    <span class="gn-text"><em>Safety Critical</em> Labs</span>
+  </a>
+  <button class="gn-hamburger" aria-label="Menu" aria-expanded="false">
+    <span></span><span></span><span></span>
+  </button>
+<ul class="gn-links">
+    <li><a href="/">Home</a></li>
+    <li class="gn-dropdown">
+      <a class="gn-dropdown-toggle" href="javascript:void(0)">Certification <span class="gn-dropdown-arrow"></span></a>
+      <ul class="gn-dropdown-menu" style="display:none">
+        <li><a href="/framework">Framework</a></li>
+        <li><a href="/process">Process</a></li>
+        <li><a href="/assess">Assess</a></li>
+      </ul>
+    </li>
+    <li><a href="/expertise">Expertise</a></li>
+    <li><a href="/markets">Markets</a></li>
+    <li><a href="/contact" class="gn-cta">Get Certified</a></li>
+  </ul>
+</nav>
+
+<!-- CREDIBILITY TICKER -->
+<div class="reg-ticker" id="reg-ticker" aria-label="Recent regulatory activity">
+  <div class="reg-ticker-track" id="reg-ticker-track"></div>
+</div>
+
+<div class="page-shell">
+
+<div class="verify-page">
+  <div class="verify-card fade-up">
+    <div class="verify-eyebrow">Certificate Verification</div>
+    <h1 class="verify-title">Independent record of conformance</h1>
+
+    <div class="verify-id-block">
+      <div class="verify-id-label">Certificate Number</div>
+      <div class="verify-id-value" id="verify-id"><span class="verify-id-empty">No certificate number provided</span></div>
+    </div>
+
+    <div class="verify-status">Lookup pending</div>
+
+    <p class="verify-body">
+      The public verification portal is being staged. Until it is live, certificate authenticity can be confirmed by request. Reference the certificate number above and contact Safety Critical Labs. The Certification Determination Document is the binding artifact and governs in case of conflict.
+    </p>
+
+    <div class="verify-actions">
+      <a href="/contact" class="btn btn-solid">Request verification</a>
+      <a href="/framework" class="btn btn-outline">View the framework</a>
+    </div>
+  </div>
+</div>
+
+</div>
+
+<!-- FOOTER -->
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-top footer-top--row">
+      <a href="/" class="footer-wordmark" aria-label="Safety Critical Labs">
+        <img src="img/SCL_Logo_transparent.png" alt="" class="footer-seal">
+        <span class="gn-text"><em>Safety Critical</em> Labs</span>
+      </a>
+      <div class="footer-content">
+        <div class="footer-nav-row">
+          <a href="/framework">Framework</a>
+          <a href="/process">Process</a>
+          <a href="/expertise">Expertise</a>
+          <a href="/markets">Markets</a>
+          <a href="/assess">Assess</a>
+          <a href="/contact">Contact</a>
+        </div>
+        <p class="footer-tagline">AI certification authority for safety critical systems.<br>Formal determinations issued against a published, citable standard.</p>
+      </div>
+    </div>
+    <div class="footer-divider"></div>
+    <div class="footer-bottom">
+      <span class="footer-copyright">&copy; 2025 Safety Critical Labs. All rights reserved.</span>
+      <span class="footer-version">Framework v2.1.2</span>
+    </div>
+  </div>
+</footer>
+
+<script src="ticker.js"></script>
+<script>
+/* ─── Read certificate ID from URL ─────────────────────────── */
+(function () {
+  // Accept either ?id=SCL-CERT-XXXX or trailing path /verify/SCL-CERT-XXXX
+  var params = new URLSearchParams(window.location.search);
+  var id = params.get('id');
+  if (!id) {
+    var match = window.location.pathname.match(/\/verify\/([^\/?#]+)/);
+    if (match) id = decodeURIComponent(match[1]);
+  }
+  if (id) {
+    // Sanitize: only allow alphanumerics, dash, underscore
+    id = id.replace(/[^A-Za-z0-9_\-]/g, '');
+    if (id) {
+      var el = document.getElementById('verify-id');
+      el.textContent = id;
+    }
+  }
+})();
+
+/* ─── Fade-up animation ────────────────────────────────────── */
+gsap.registerPlugin(ScrollTrigger);
+gsap.utils.toArray('.fade-up').forEach(function(el) {
+  gsap.fromTo(el,
+    { opacity: 0, y: 30 },
+    { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out' }
+  );
+});
+
+/* ─── Mobile menu toggle ───────────────────────────────────── */
+document.querySelector('.gn-hamburger').addEventListener('click', function() {
+  this.classList.toggle('open');
+  document.querySelector('.gn-links').classList.toggle('open');
+  this.setAttribute('aria-expanded', this.classList.contains('open'));
+  document.body.style.overflow = this.classList.contains('open') ? 'hidden' : '';
+});
+
+/* ─── Dropdown nav toggle ──────────────────────────────────── */
+document.querySelectorAll(".gn-dropdown-toggle").forEach(function(btn) {
+  btn.addEventListener("click", function(e) {
+    e.stopPropagation();
+    var dd = this.closest(".gn-dropdown");
+    var menu = dd.querySelector(".gn-dropdown-menu");
+    var isOpen = dd.classList.contains("open");
+    document.querySelectorAll(".gn-dropdown").forEach(function(d) {
+      d.classList.remove("open");
+      var m = d.querySelector(".gn-dropdown-menu");
+      if (m) m.style.display = "none";
+    });
+    if (!isOpen) {
+      dd.classList.add("open");
+      menu.style.display = "block";
+    }
+  });
+});
+document.addEventListener("click", function() {
+  document.querySelectorAll(".gn-dropdown").forEach(function(d) {
+    d.classList.remove("open");
+    var m = d.querySelector(".gn-dropdown-menu");
+    if (m) m.style.display = "none";
+  });
+});
+</script>
+
+</body>
+</html>

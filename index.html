@@ -9,6 +9,7 @@
 <meta property="og:description" content="AI certification for safety critical systems. Formal determinations issued against a published, citable standard.">
 <meta property="og:url" content="https://safetycriticallabs.com">
 <meta property="og:type" content="website">
+<meta property="og:image" content="https://safetycriticallabs.com/img/SCL%20Logo%203d.png">
 <link rel="icon" type="image/x-icon" href="favicon.ico">
 <link rel="icon" type="image/png" sizes="16x16" href="img/favicon-16x16.png">
 <link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32x32.png">
@@ -1068,6 +1069,17 @@ document.addEventListener("click", function() {
     var duration = halfWidth / 50;
     track.style.animationDuration = duration + 's';
     track.classList.add('scrolling');
+
+    var ticker = track.closest('.reg-ticker');
+    if (ticker && !ticker._hoverBound) {
+      ticker._hoverBound = true;
+      ticker.addEventListener('mouseenter', function () {
+        track.style.animationPlayState = 'paused';
+      });
+      ticker.addEventListener('mouseleave', function () {
+        track.style.animationPlayState = 'running';
+      });
+    }
   }
 
   /* Try loading from sessionStorage for instant render */

@@ -941,7 +941,7 @@ h2.section-title em { font-style: italic; color: var(--blue); font-family: var(-
 
 @media (max-width: 580px) {
   .framework-grid { grid-template-columns: 1fr; }
-  .stats-inner { grid-template-columns: 1fr 1fr; }
+  .stats-inner { grid-template-columns: 1fr; }
 }
 
 /* ─── NAV DROPDOWN ───────────────────────────────────────── */

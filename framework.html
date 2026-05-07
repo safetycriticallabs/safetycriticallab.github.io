@@ -4,9 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>The Framework | Safety Critical Labs</title>
-<meta name="description" content="The SCL AI Requirements Framework covers ten requirement areas for AI specific failure modes. Algorithm agnostic, domain applicable, and openly published under a citable DOI.">
+<meta name="description" content="The SCL AI Requirements Framework covers thirteen requirement areas for AI specific failure modes. Algorithm agnostic, domain applicable, and openly published under a citable DOI.">
 <meta property="og:title" content="The Framework | Safety Critical Labs">
-<meta property="og:description" content="Ten requirement areas covering every AI specific failure mode. Openly published under a citable DOI.">
+<meta property="og:description" content="Thirteen requirement areas covering every AI specific failure mode. Openly published under a citable DOI.">
 <meta property="og:url" content="https://safetycriticallabs.com/framework.html">
 <meta property="og:type" content="website">
 <meta property="og:image" content="https://safetycriticallabs.com/img/SCL%20Logo%203d.png">
@@ -339,7 +339,7 @@
         <a href="/">Safety Critical Labs</a>
         <span>/</span> The Framework
       </div>
-      <h1>Ten requirement<br>areas. Every <em>AI<br>failure mode</em> covered.</h1>
+      <h1>Thirteen requirement<br>areas. Every <em>AI<br>failure mode</em> covered.</h1>
     </div>
     <p class="inner-hero-lead">
       The SCL AI Requirements Framework establishes verifiable, pass/fail requirements for each AI specific failure mode not addressed by existing safety critical software standards. Algorithm agnostic. Domain applicable. Openly published under a citable DOI.
@@ -350,9 +350,9 @@
 <!-- CLASSIFICATION KEY + FRAMEWORK -->
 <section class="page-section" style="background: var(--bg);">
   <div class="section-inner">
-    <div class="section-eyebrow">Framework v2.1.2</div>
+    <div class="section-eyebrow">Framework v3.0</div>
     <div style="display:flex; justify-content:space-between; align-items:flex-end; gap: 32px; margin-bottom: 48px; flex-wrap: wrap;">
-      <h2 class="section-title" style="margin-bottom:0;">AI-1 through AI-10</h2>
+      <h2 class="section-title" style="margin-bottom:0;">Core Requirements · AI-1 through AI-10</h2>
       <div class="class-key" role="group" aria-label="Filter requirements by classification tier">
         <div class="class-item" data-tier="safety" role="button" tabindex="0" aria-pressed="false"><span class="class-dot dot-safety-tier"></span>Safety Critical</div>
         <div class="class-item" data-tier="mission" role="button" tabindex="0" aria-pressed="false"><span class="class-dot dot-mission-tier"></span>Mission Critical</div>
@@ -413,6 +413,34 @@
         <div class="fw-card-body">Personal data identification and minimization, lawful basis and consent management, data subject rights, privacy enhancing techniques, and cross border transfer controls. Applies where the system processes personal data; otherwise documented Not Applicable with rationale.</div>
       </div>
     </div>
+
+    <div style="display:flex; justify-content:space-between; align-items:flex-end; gap: 32px; margin-bottom: 48px; margin-top: 72px; flex-wrap: wrap;">
+      <h2 class="section-title" style="margin-bottom:0;">Architecture and Paradigm Requirements · AI-11 through AI-13</h2>
+    </div>
+    <p style="font-size:15px; color:var(--ink-2); font-weight:300; line-height:1.75; max-width:680px; margin-bottom:40px;">
+      These requirements apply conditionally based on the system's design choices. They extend the core requirements when the system uses multi-model coordination, neural networks, or continuous learning.
+    </p>
+
+    <div class="fw-full-grid stagger-in">
+      <div class="fw-card" data-tiers="safety mission operational" data-conditional="true">
+        <div class="fw-card-id">AI-11</div>
+        <div class="fw-card-title">Multi-model systems</div>
+        <div class="fw-card-body">Multi-model architecture documentation, cascading failure mitigation, ensemble coordination, combined confidence representation, and multi-model audit trail. Applies when the system coordinates multiple AI models.</div>
+        <div class="fw-card-detail"><span class="fw-scope">Conditional</span></div>
+      </div>
+      <div class="fw-card" data-tiers="safety mission operational" data-conditional="true">
+        <div class="fw-card-id">AI-12</div>
+        <div class="fw-card-title">Neural network requirements</div>
+        <div class="fw-card-body">Architecture documentation, confidence calibration, neural network explainability methods, training integrity, OOD detection extensions, adversarial vulnerability mitigation, generative model hallucination constraints, and deployment transformation validation.</div>
+        <div class="fw-card-detail"><span class="fw-scope">Conditional</span></div>
+      </div>
+      <div class="fw-card" data-tiers="safety mission operational" data-conditional="true">
+        <div class="fw-card-id">AI-13</div>
+        <div class="fw-card-title">Continuous learning and adaptation</div>
+        <div class="fw-card-body">Continuous learning permission criteria, runtime learning controls, learning data validation, catastrophic forgetting mitigation, learning validation, rollback procedures, ODD evolvability declaration, and continuous learning audit trail.</div>
+        <div class="fw-card-detail"><span class="fw-scope">Conditional</span></div>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -422,13 +450,13 @@
     <div class="section-eyebrow">Classification levels</div>
     <h2 class="section-title">Three tiers. Scaled to consequence.</h2>
     <p style="font-size:16px;color:var(--ink-2);font-weight:300;line-height:1.75;max-width:560px;margin-top:0;">
-      The framework applies all ten requirement areas at different depths depending on the classification of your AI system. Classification is determined during Phase 1 of the assessment.
+      The framework applies all thirteen requirement areas at different depths depending on the classification of your AI system. Core requirements (AI-1 through AI-10) apply based on classification tier. Architecture and paradigm requirements (AI-11 through AI-13) apply conditionally based on system design. Classification is determined during Phase 1 of the assessment.
     </p>
     <div class="struct-grid stagger-in">
       <div class="struct-col">
         <div class="struct-col-title">Tier 1</div>
         <div class="struct-col-name">Safety Critical AI</div>
-        <div class="struct-col-desc">AI outputs directly affect human safety or system survivability. All AI-1 through AI-10 apply. No tailoring without Project Safety Review Board approval.</div>
+        <div class="struct-col-desc">AI outputs directly affect human safety or system survivability. All AI-1 through AI-10 apply. No tailoring without Project Safety Review Board approval. AI-11, AI-12, AI-13 apply conditionally per system design.</div>
         <div class="struct-reqs">
           <span class="struct-req-tag">AI-1</span>
           <span class="struct-req-tag">AI-2</span>
@@ -440,12 +468,15 @@
           <span class="struct-req-tag">AI-8</span>
           <span class="struct-req-tag">AI-9</span>
           <span class="struct-req-tag">AI-10</span>
+          <span class="struct-req-tag tailored">AI-11 · conditional</span>
+          <span class="struct-req-tag tailored">AI-12 · conditional</span>
+          <span class="struct-req-tag tailored">AI-13 · conditional</span>
         </div>
       </div>
       <div class="struct-col">
         <div class="struct-col-title">Tier 2</div>
         <div class="struct-col-name">Mission Critical AI</div>
-        <div class="struct-col-desc">AI outputs affect operational success but not human safety. AI-1 through AI-6, AI-8, AI-9, and AI-10 apply; AI-7 is tailored with Chief Engineer approval and documented rationale.</div>
+        <div class="struct-col-desc">AI outputs affect operational success but not human safety. AI-1 through AI-6, AI-8, AI-9, and AI-10 apply; AI-7 is tailored with Chief Engineer approval and documented rationale. AI-11, AI-12, AI-13 apply conditionally per system design.</div>
         <div class="struct-reqs">
           <span class="struct-req-tag">AI-1</span>
           <span class="struct-req-tag">AI-2</span>
@@ -457,12 +488,15 @@
           <span class="struct-req-tag">AI-8</span>
           <span class="struct-req-tag">AI-9</span>
           <span class="struct-req-tag">AI-10</span>
+          <span class="struct-req-tag tailored">AI-11 · conditional</span>
+          <span class="struct-req-tag tailored">AI-12 · conditional</span>
+          <span class="struct-req-tag tailored">AI-13 · conditional</span>
         </div>
       </div>
       <div class="struct-col">
         <div class="struct-col-title">Tier 3</div>
         <div class="struct-col-name">Operational Support AI</div>
-        <div class="struct-col-desc">AI supports operations but does not drive critical decisions. AI-1 through AI-6 and AI-10 apply at minimum. Tailoring permitted with Software Assurance authority approval and documented rationale.</div>
+        <div class="struct-col-desc">AI supports operations but does not drive critical decisions. AI-1 through AI-6 and AI-10 apply at minimum. AI-7, AI-8, AI-9 as tailored. Tailoring permitted with Software Assurance authority approval. AI-11, AI-12, AI-13 apply conditionally per system design.</div>
         <div class="struct-reqs">
           <span class="struct-req-tag">AI-1</span>
           <span class="struct-req-tag">AI-2</span>
@@ -470,7 +504,13 @@
           <span class="struct-req-tag">AI-4</span>
           <span class="struct-req-tag">AI-5</span>
           <span class="struct-req-tag">AI-6</span>
+          <span class="struct-req-tag tailored">AI-7 · tailored</span>
+          <span class="struct-req-tag tailored">AI-8 · tailored</span>
+          <span class="struct-req-tag tailored">AI-9 · tailored</span>
           <span class="struct-req-tag">AI-10</span>
+          <span class="struct-req-tag tailored">AI-11 · conditional</span>
+          <span class="struct-req-tag tailored">AI-12 · conditional</span>
+          <span class="struct-req-tag tailored">AI-13 · conditional</span>
         </div>
       </div>
     </div>
@@ -523,17 +563,17 @@
     <div style="display: flex; flex-direction: column; gap: 12px;">
       <div style="background: var(--white); border: 1px solid var(--rule); border-radius: 4px; padding: 20px 24px; display: grid; grid-template-columns: 72px 1fr; gap: 16px; align-items: center;">
         <span style="font-family: var(--mono); font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--blue);">Document</span>
-        <span style="font-size: 14px; color: var(--ink-2); line-height: 1.5;">Requirements and Verification Standards for Artificial Intelligence in Safety Critical Applications. Version 2.1.2</span>
+        <span style="font-size: 14px; color: var(--ink-2); line-height: 1.5;">Requirements and Verification Standards for Artificial Intelligence in Safety-Critical Applications. Version 3.0</span>
       </div>
       <div style="background: var(--white); border: 1px solid var(--rule); border-radius: 4px; padding: 20px 24px; display: grid; grid-template-columns: 72px 1fr; gap: 16px; align-items: center;">
         <span style="font-family: var(--mono); font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--blue);">DOI</span>
-        <span style="font-size: 14px; color: var(--ink-2); line-height: 1.5; font-family: var(--mono);">10.5281/zenodo.19889843</span>
+        <span style="font-size: 14px; color: var(--ink-2); line-height: 1.5; font-family: var(--mono);">10.5281/zenodo.20060591</span>
       </div>
       <div style="background: var(--white); border: 1px solid var(--rule); border-radius: 4px; padding: 20px 24px; display: grid; grid-template-columns: 72px 1fr; gap: 16px; align-items: center;">
         <span style="font-family: var(--mono); font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--blue);">License</span>
         <span style="font-size: 14px; color: var(--ink-2); line-height: 1.5;">CC BY-SA 4.0. Free to read, cite, and reproduce with attribution</span>
       </div>
-      <a href="https://doi.org/10.5281/zenodo.19889843" target="_blank" rel="noopener"
+      <a href="https://doi.org/10.5281/zenodo.20060591" target="_blank" rel="noopener"
          class="btn btn-solid" style="margin-top: 4px;">
         Download the framework
       </a>
@@ -566,7 +606,7 @@
     <div class="footer-divider"></div>
     <div class="footer-bottom">
       <span class="footer-copyright">&copy; 2025 Safety Critical Labs. All rights reserved.</span>
-      <span class="footer-version">Framework v2.1.2</span>
+      <span class="footer-version">Framework v3.0</span>
     </div>
   </div>
 </footer>

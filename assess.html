@@ -4,9 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Readiness Assessment | Safety Critical Labs</title>
-<meta name="description" content="Evaluate your AI system's certification readiness against the SCL framework. Free self assessment covering all ten requirement areas.">
+<meta name="description" content="Evaluate your AI system's certification readiness against the SCL framework. Free self assessment covering all thirteen requirement areas.">
 <meta property="og:title" content="Readiness Assessment | Safety Critical Labs">
-<meta property="og:description" content="Evaluate your AI system's certification readiness against the SCL framework. Free self assessment covering all ten requirement areas.">
+<meta property="og:description" content="Evaluate your AI system's certification readiness against the SCL framework. Free self assessment covering all thirteen requirement areas.">
 <meta property="og:url" content="https://safetycriticallabs.com/assess.html">
 <meta property="og:type" content="website">
 <meta property="og:image" content="https://safetycriticallabs.com/img/SCL%20Logo%203d.png">
@@ -933,7 +933,7 @@
     <div class="footer-divider"></div>
     <div class="footer-bottom">
       <span class="footer-copyright">&copy; 2025 Safety Critical Labs. All rights reserved.</span>
-      <span class="footer-version">Framework v2.1.2</span>
+      <span class="footer-version">Framework v3.0</span>
     </div>
   </div>
 </footer>
@@ -1116,7 +1116,7 @@
     var consequence = parseInt(document.querySelector('input[name="q-consequence"]:checked').value);
     var override = document.querySelector('input[name="q-override"]:checked').value;
 
-    if (consequence === 3 || override === 'no') return { tier: 1, label: 'Safety Critical AI', desc: 'Your system classification is Tier 1: Safety Critical AI. All ten requirement areas (AI-1 through AI-10) apply. Annual surveillance audits required.' };
+    if (consequence === 3 || override === 'no') return { tier: 1, label: 'Safety Critical AI', desc: 'Your system classification is Tier 1: Safety Critical AI. All core requirement areas (AI-1 through AI-10) apply. AI-11, AI-12, AI-13 apply conditionally per system design. Annual surveillance audits required.' };
     if (consequence === 2 || override === 'partial') return { tier: 2, label: 'Mission Critical AI', desc: 'Your system classification is Tier 2: Mission Critical AI. AI-1 through AI-6, AI-8, AI-9, and AI-10 apply. AI-7 (adversarial robustness) may be tailored based on threat environment.' };
     return { tier: 3, label: 'Operational Support AI', desc: 'Your system classification is Tier 3: Operational Support AI. AI-1 through AI-6 and AI-10 apply at minimum. AI-8 and AI-9 may be scoped to your specific operational context.' };
   }
@@ -1456,7 +1456,7 @@ document.addEventListener("click", function() {
 
     var classification;
     if (cq === 3 || override === 'no') {
-      classification = { tier: 1, label: 'Safety Critical AI', desc: 'All ten requirement areas (AI-1 through AI-10) apply. Annual surveillance audits required.' };
+      classification = { tier: 1, label: 'Safety Critical AI', desc: 'All core requirement areas (AI-1 through AI-10) apply. AI-11, AI-12, AI-13 apply conditionally per system design. Annual surveillance audits required.' };
     } else if (cq === 2 || override === 'partial') {
       classification = { tier: 2, label: 'Mission Critical AI', desc: 'AI-1 through AI-6, AI-8, AI-9, and AI-10 apply. AI-7 (adversarial robustness) may be tailored based on threat environment.' };
     } else {
@@ -1575,7 +1575,7 @@ document.addEventListener("click", function() {
 
       pdf.setFontSize(9);
       pdf.setTextColor(180, 200, 220);
-      pdf.text('SCL AI Requirements Framework v2.1.2', ML, 46);
+      pdf.text('SCL AI Requirements Framework v3.0', ML, 46);
 
       y = 66;
 
@@ -1583,7 +1583,7 @@ document.addEventListener("click", function() {
       pdf.setFont('helvetica', 'normal');
       pdf.setFontSize(9);
       pdf.setTextColor(INK_MID[0], INK_MID[1], INK_MID[2]);
-      var preamble = 'This report documents the self assessment responses submitted against the SCL AI Requirements Framework v2.1.2. It captures the respondent\u2019s evaluation of their AI system across ten requirement areas. This report has not been independently verified by Safety Critical Labs and does not constitute a formal certification or determination.';
+      var preamble = 'This report documents the self assessment responses submitted against the SCL AI Requirements Framework v3.0. It captures the respondent\u2019s evaluation of their AI system across thirteen requirement areas. This report has not been independently verified by Safety Critical Labs and does not constitute a formal certification or determination.';
       var pLines = wrapText(pdf, preamble, CW);
       pdf.text(pLines, ML, y);
       y += pLines.length * 4.2 + 10;
@@ -1692,7 +1692,7 @@ document.addEventListener("click", function() {
       pdf.setFont('courier', 'normal');
       pdf.setFontSize(7);
       pdf.setTextColor(INK_LIGHT[0], INK_LIGHT[1], INK_LIGHT[2]);
-      pdf.text('Safety Critical Labs \u00b7 safetycriticallabs.com \u00b7 Framework v2.1.2', ML, PH - 12);
+      pdf.text('Safety Critical Labs \u00b7 safetycriticallabs.com \u00b7 Framework v3.0', ML, PH - 12);
       pdf.text('Report ' + reportId + ' \u00b7 Page 1', PW - MR, PH - 12, { align: 'right' });
 
       /* ─────────────────────────────────────────────
@@ -1719,7 +1719,7 @@ document.addEventListener("click", function() {
         pdf.setFont('courier', 'normal');
         pdf.setFontSize(7);
         pdf.setTextColor(INK_LIGHT[0], INK_LIGHT[1], INK_LIGHT[2]);
-        pdf.text('Safety Critical Labs \u00b7 safetycriticallabs.com \u00b7 Framework v2.1.2', ML, PH - 12);
+        pdf.text('Safety Critical Labs \u00b7 safetycriticallabs.com \u00b7 Framework v3.0', ML, PH - 12);
         pdf.text('Report ' + reportId + ' \u00b7 Page ' + pageNum, PW - MR, PH - 12, { align: 'right' });
       }
 
@@ -1873,7 +1873,7 @@ document.addEventListener("click", function() {
       pdf.setFont('helvetica', 'italic');
       pdf.setFontSize(7.5);
       pdf.setTextColor(INK_LIGHT[0], INK_LIGHT[1], INK_LIGHT[2]);
-      var disclaimer = 'This report reflects a self assessment only. It does not constitute a formal certification, determination, or endorsement by Safety Critical Labs. The responses recorded herein have not been independently verified. To obtain a formal assessment against the SCL AI Requirements Framework, contact the SCL team. Safety Critical Labs \u00b7 DOI 10.5281/zenodo.19889843 \u00b7 Framework v2.1.2';
+      var disclaimer = 'This report reflects a self assessment only. It does not constitute a formal certification, determination, or endorsement by Safety Critical Labs. The responses recorded herein have not been independently verified. To obtain a formal assessment against the SCL AI Requirements Framework, contact the SCL team. Safety Critical Labs \u00b7 DOI 10.5281/zenodo.20060591 \u00b7 Framework v3.0';
       var dLines = wrapText(pdf, disclaimer, CW);
       pdf.text(dLines, ML, y);
 

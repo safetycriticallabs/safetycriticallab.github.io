@@ -722,7 +722,7 @@ const groups = [
     { id: "ai-presence", title: "AI Presence Screening" },
     { id: "classification", title: "Classification Tiers" },
     { id: "just-test-it", title: "Why Testing Alone Falls Short" },
-    { id: "requirements-overview", title: "Ten Requirements" },
+    { id: "requirements-overview", title: "Thirteen Requirements" },
     { id: "implementation-guidance", title: "Implementation Guidance" }
   ]},
   { label: "The Process", items: [
@@ -750,7 +750,7 @@ const sections = {
   "title": {
     group: "Introduction", title: "Cover", type: "title",
     data: {
-      eyebrow: "Published Framework · v2.1.2",
+      eyebrow: "Published Framework · v3.0",
       heading: 'AI Certification for <em>systems that cannot fail.</em>',
       subheading: "A published standard for assessing AI systems in safety-critical environments. Ten requirement sets, three classification tiers, one verifiable determination.",
       meta: [
@@ -804,15 +804,15 @@ const sections = {
         { id: "AI-9",  short: "Human AI Teaming",                q: "Is a human positioned to override when the stakes require it?" },
         { id: "AI-10", short: "Privacy and Data Protection",     q: "Is personal data handled lawfully throughout the pipeline?" }
       ],
-      closer: "Certification is not a claim that the weights are correct. Certification is a claim that the envelope around the weights is complete. Each of the ten requirements that follows is one wall of that envelope."
+      closer: "Certification is not a claim that the weights are correct. Certification is a claim that the envelope around the weights is complete. Each of the thirteen requirements that follows is one wall of that envelope."
     }
   },
   "framework-overview": {
     group: "The Framework", title: "Framework Overview", type: "overview",
     data: {
-      body: "<p>The SCL AI Requirements Framework is a published standard for assessing AI systems in safety critical environments. Version 2.1.2 covers the complete lifecycle from operational scope and data governance through operational monitoring, privacy, and human oversight.</p><p>The document defines <strong>ten requirement sets</strong> (AI-1 through AI-10), each paired with a corresponding verification method. Every requirement has a verification. Every verification traces to a requirement. Nothing is assessed without a defined method for assessing it.</p><p>The framework's vocabulary is anchored in ISO/IEC and NIST terminology, supplemented with framework specific terms introduced where existing standards did not cover the gap.</p>",
+      body: "<p>The SCL AI Requirements Framework is a published standard for assessing AI systems in safety critical environments. Version 3.0 covers the complete lifecycle from operational scope and data governance through operational monitoring, privacy, and human oversight.</p><p>The document defines <strong>thirteen requirement sets</strong> (AI-1 through AI-13), each paired with a corresponding verification method. Every requirement has a verification. Every verification traces to a requirement. Nothing is assessed without a defined method for assessing it.</p><p>The framework's vocabulary is anchored in ISO/IEC and NIST terminology, supplemented with framework specific terms introduced where existing standards did not cover the gap.</p>",
       stats: [
-        { num: "10", unit: "", label: "Requirement Sets" },
+        { num: "13", unit: "", label: "Requirement Sets" },
         { num: "3", unit: "", label: "Classification Tiers" },
         { num: "4", unit: "", label: "Main Sections" },
         { num: "4", unit: "", label: "Appendices" },
@@ -822,7 +822,7 @@ const sections = {
       tags: [
         { text: "CC BY 4.0", accent: true },
         { text: "Published with DOI", accent: true },
-        { text: "V2.1.2", accent: false },
+        { text: "V3.0", accent: false },
         { text: "ISO/IEC & NIST Aligned", accent: false },
         { text: "Domain Standards Cited Inline", accent: false },
         { text: "Every R Has a V", accent: false }
@@ -839,7 +839,7 @@ const sections = {
             { text: "1.5 Threshold category definitions (performance, confidence, drift, OOD, escalation)", summary: "Five threshold categories every AI system must document regardless of classification: performance degradation, confidence, data drift, out of distribution detection, and human escalation. The categories are mandatory. The actual values are project defined. Section 4.1 provides example ranges." }
           ]
         },
-        { num: "2", title: "Requirements", badge: "AI-1 through AI-10", desc: "Ten requirement sets, each addressing a specific AI failure mode not covered by traditional software verification. Verifications are placed alongside requirements for traceability.",
+        { num: "2", title: "Core Requirements", badge: "AI-1 through AI-10", desc: "Ten core requirement sets, each addressing a specific AI failure mode not covered by traditional software verification. Verifications are placed alongside requirements for traceability.",
           subs: [
             { text: "AI-1 Operational and Data Foundations", summary: "Establishes operational scope and data integrity sufficient to support reliable model behavior. Covers Operational Design Domain declaration (AI-1.0), dataset separation, partition use restriction, data provenance, ground truth labeling quality, and classification handling controls (pre-ingestion screening, inheritance, output awareness, audit trail)." },
             { text: "AI-2 Addressing AI Bias", summary: "Requires bias risk assessment identifying protected classes and demographic groups, performance monitoring across those groups, and documented mitigation when disparities are found. Ensures the model performs equitably across all operational populations." },
@@ -853,20 +853,26 @@ const sections = {
             { text: "AI-10 Privacy and Data Protection", summary: "Requires personal data protection mechanisms for AI systems that process personal data. Covers personal data identification and minimization, lawful basis and consent, data subject rights, privacy-enhancing techniques, cross-border data transfer controls, privacy impact assessment, and privacy compliance audit trail." }
           ]
         },
-        { num: "3", title: "Verification", badge: "Methods & Matrix", desc: "Defines the four verification methods (Inspection, Analysis, Demonstration, Test) tailored for AI/ML, provides the complete verification matrix, and establishes deployment format validation requirements.",
+        { num: "3", title: "Architecture and Paradigm Requirements", badge: "AI-11 through AI-13", desc: "Three conditional requirement sets that apply based on system design choices: multi-model coordination, neural network use, and continuous learning.",
           subs: [
-            { text: "3.1 Verification methods defined per IEEE 1012, tailored for AI/ML", summary: "Four methods: Inspection (review of documentation and artifacts), Analysis (evaluation using analytical techniques), Demonstration (functional exercise under defined conditions), and Test (execution with defined inputs and expected outputs). Each is adapted from IEEE 1012 for AI/ML characteristics." },
-            { text: "3.2 Verification matrix: requirements mapped to methods and evidence", summary: "The complete traceability matrix mapping every requirement to its verification method and the evidence artifact that satisfies it. Every requirement has a verification. Every verification traces to a requirement. Nothing is assessed without a defined method." },
-            { text: "3.3 Deployment format validation", summary: "Validates that the model is not corrupted or degraded during deployment conversion. Covers quantization, pruning, and framework conversion. Ensures the deployed model matches the verified model." }
+            { text: "AI-11 Multi-Model Systems Requirements", summary: "Applies when the system coordinates multiple AI models. Covers multi-model architecture documentation, cascading failure mitigation, ensemble coordination, combined confidence representation, and multi-model audit trail." },
+            { text: "AI-12 Neural Network Requirements", summary: "Applies when the system uses neural networks. Covers architecture documentation, confidence calibration, neural network explainability methods, training integrity, OOD detection extensions, adversarial vulnerability mitigation, generative model hallucination constraints, and deployment transformation validation." },
+            { text: "AI-13 Continuous Learning and Adaptation Requirements", summary: "Applies when the system continues learning after deployment. Covers continuous learning permission criteria, runtime learning controls, learning data validation, catastrophic forgetting mitigation, learning validation, rollback procedures, ODD evolvability declaration, and continuous learning audit trail." }
           ]
         },
-        { num: "4", title: "Implementation Guidance", badge: "Informative", desc: "Informative guidance for threshold selection, continuous learning controls, multi model architectures, neural network considerations, and AI specific hazard analysis integration.",
+        { num: "4", title: "Verification", badge: "Methods & Matrix", desc: "Defines the four verification methods (Inspection, Analysis, Demonstration, Test) tailored for AI/ML, provides the complete verification matrix, and establishes deployment format validation requirements.",
           subs: [
-            { text: "4.1 Threshold selection ranges by requirement", summary: "Provides example threshold ranges for bias metrics, drift PSI values, performance degradation limits, and other categories defined in Section 1.5. Informative, not prescriptive. Organizations select values appropriate to their operational context." },
-            { text: "4.2 Continuous learning: revalidation scope, approval gates, catastrophic forgetting", summary: "Guidance for systems that continue learning after deployment. Covers how much of the verification must be repeated after each update, approval workflows for model changes, and mitigation of catastrophic forgetting where new learning degrades previously validated capabilities." },
-            { text: "4.3 Multi model systems: cascading failures, ensemble voting, confidence aggregation", summary: "Addresses architectures where multiple AI models interact. Covers cascading failure analysis (one model's error propagating through others), ensemble voting strategies, and how to aggregate confidence scores from multiple models." },
-            { text: "4.4 Neural networks: explainability, training risks, deployment transformations", summary: "Neural network specific considerations including approaches to explainability (gradient based, attention based, concept based), training risks (overfitting, underfitting, mode collapse), and effects of deployment transformations on model behavior." },
-            { text: "4.5 AI specific hazard analysis: augmenting FMEA, FTA, and HAZOP", summary: "How to extend traditional hazard analysis methods for AI failure modes. Traditional FMEA assumes deterministic failure. AI failure modes are probabilistic, context dependent, and may emerge from data rather than component malfunction." }
+            { text: "4.1 Verification methods defined per IEEE 1012, tailored for AI/ML", summary: "Four methods: Inspection (review of documentation and artifacts), Analysis (evaluation using analytical techniques), Demonstration (functional exercise under defined conditions), and Test (execution with defined inputs and expected outputs). Each is adapted from IEEE 1012 for AI/ML characteristics." },
+            { text: "4.2 Verification matrix: requirements mapped to methods and evidence", summary: "The complete traceability matrix mapping every requirement to its verification method and the evidence artifact that satisfies it. Every requirement has a verification. Every verification traces to a requirement. Nothing is assessed without a defined method." },
+            { text: "4.3 Deployment format validation", summary: "Validates that the model is not corrupted or degraded during deployment conversion. Covers quantization, pruning, and framework conversion. Ensures the deployed model matches the verified model." }
+          ]
+        },
+        { num: "5", title: "Implementation Patterns", badge: "Informative", desc: "Informative guidance for threshold selection, AI specific hazard analysis integration, human-AI teaming, and privacy and data protection implementation.",
+          subs: [
+            { text: "5.1 Threshold selection guidance", summary: "Provides example threshold ranges for bias metrics, drift PSI values, performance degradation limits, and other categories defined in Section 1.5. Informative, not prescriptive. Organizations select values appropriate to their operational context." },
+            { text: "5.2 AI specific hazard analysis integration", summary: "How to extend traditional hazard analysis methods for AI failure modes. Traditional FMEA assumes deterministic failure. AI failure modes are probabilistic, context dependent, and may emerge from data rather than component malfunction." },
+            { text: "5.3 Human-AI teaming implementation guidance", summary: "Guidance for operator workload and attention management, trust calibration, operator role verification, operator qualification and training, and authority transfer between human and AI." },
+            { text: "5.4 Privacy and data protection implementation guidance", summary: "Guidance for data minimization, deidentification and re-identification risk, access controls and audit, data retention, inference and membership concerns, and cross-border data transfer." }
           ]
         },
         { num: "A", title: "Glossary", badge: "51 Terms", desc: "All defined terms with source traceability. 41 aligned with ISO/IEC 22989, ISO/IEC 5338, and NIST AI RMF. 10 framework specific.", subs: [] },
@@ -906,9 +912,9 @@ const sections = {
     data: {
       intro: "Classification determines which requirements apply and the level of tailoring authority available. Classification is driven by consequence, not probability.",
       tiers: [
-        { name: "Safety Critical AI", color: "red", desc: "AI outputs directly affect human safety or system survivability.", checklistQs: "Could AI malfunction result in loss of life or critical equipment? Is the AI in the control path for safety-critical functions?", examples: "Surgical guidance systems, autonomous vehicle collision avoidance, medical diagnostic AI that determines treatment, flight control systems", reqs: "AI-1 through AI-10 (all requirements, no tailoring without PSRB approval)" },
-        { name: "Mission Critical AI", color: "gold", desc: "AI outputs affect operational success but not human safety.", checklistQs: "Could AI malfunction result in loss of operational objectives? Is the AI in the decision path for mission-critical functions?", examples: "Predictive maintenance for aircraft engines, medical triage prioritization, financial fraud detection, spam filter for flight operations communications", reqs: "AI-1 through AI-6, AI-8, AI-9, AI-10; AI-7 tailored (tailoring permitted with CE approval)" },
-        { name: "Operational Support AI", color: "blue", desc: "AI supports operations but does not drive critical decisions.", checklistQs: "Does the AI support operations without driving critical decisions?", examples: "Corporate email spam filter, schedule optimization, meeting transcription, documentation assistants", reqs: "AI-1 through AI-6 and AI-10 minimum; AI-7 through AI-9 as tailored (SA approval)" }
+        { name: "Safety Critical AI", color: "red", desc: "AI outputs directly affect human safety or system survivability.", checklistQs: "Could AI malfunction result in loss of life or critical equipment? Is the AI in the control path for safety-critical functions?", examples: "Surgical guidance systems, autonomous vehicle collision avoidance, medical diagnostic AI that determines treatment, flight control systems", reqs: "AI-1 through AI-13 (all core requirements, no tailoring without PSRB approval)" },
+        { name: "Mission Critical AI", color: "gold", desc: "AI outputs affect operational success but not human safety.", checklistQs: "Could AI malfunction result in loss of operational objectives? Is the AI in the decision path for mission-critical functions?", examples: "Predictive maintenance for aircraft engines, medical triage prioritization, financial fraud detection, spam filter for flight operations communications", reqs: "AI-1 through AI-6, AI-8, AI-9, AI-10; AI-7 tailored (CE approval). AI-11, AI-12, AI-13 conditionally per system design" },
+        { name: "Operational Support AI", color: "blue", desc: "AI supports operations but does not drive critical decisions.", checklistQs: "Does the AI support operations without driving critical decisions?", examples: "Corporate email spam filter, schedule optimization, meeting transcription, documentation assistants", reqs: "AI-1 through AI-6 and AI-10 minimum; AI-7 through AI-9 as tailored (SA approval). AI-11, AI-12, AI-13 conditionally per system design" }
       ],
       footer: "The same AI capability can fall into different tiers depending on operational context. A spam filter for marketing emails is Operational Support. A spam filter for flight operations communications could be Mission Critical."
     }
@@ -924,11 +930,11 @@ const sections = {
         { title: "The World Changes, Your Test Suite Does Not", desc: "You wrote tests for MONEY, CASH, FUNDS. Spammers moved to CRYPTO, NFT, DIGITAL ASSETS. Your test suite still passes because it still tests the old patterns. The model still fails because the real world moved. Testing validates a snapshot. It does not validate ongoing fitness." },
         { title: "Passing Tests Is Not the Same as Understanding Behavior", desc: "A model can pass every test you write and still contain learned behaviors you would reject if you knew about them. Tests confirm specific input output pairs. They do not explain why the model made those decisions, whether it will generalize correctly to similar inputs, or whether it has learned spurious correlations that happen to produce correct answers on your test data." }
       ],
-      callout: "Testing is necessary. It is not sufficient. The ten requirements that follow define what else is needed: operational scope, data integrity, bias detection, continuous monitoring, explainability, adversarial robustness, human oversight, and privacy protection. Each one addresses a gap that testing alone cannot close."
+      callout: "Testing is necessary. It is not sufficient. The thirteen requirements that follow define what else is needed: operational scope, data integrity, bias detection, continuous monitoring, explainability, adversarial robustness, human oversight, and privacy protection. Each one addresses a gap that testing alone cannot close."
     }
   },
   "requirements-overview": {
-    group: "The Framework", title: "Ten Requirements", type: "requirements-tabs",
+    group: "The Framework", title: "Thirteen Requirements", type: "requirements-tabs",
     data: {
       intro: "Each requirement set addresses a specific verification gap that traditional software assurance does not cover. Select a requirement to explore what it means for our spam filter.",
       reqs: [
@@ -1018,7 +1024,7 @@ const sections = {
   "implementation-guidance": {
     group: "The Framework", title: "Implementation Guidance", type: "comparison",
     data: {
-      intro: "The ten requirements define what to verify. This section addresses how to calibrate verification for your system: what thresholds to set, what happens when you transform a model for deployment, and what controls apply when the model keeps learning.",
+      intro: "The thirteen requirements define what to verify. This section addresses how to calibrate verification for your system: what thresholds to set, what happens when you transform a model for deployment, and what controls apply when the model keeps learning.",
       tabs: ["Threshold Selection", "Deployment Validation", "Continuous Learning", "Tooling Integration"],
       content: [
         { title: "Threshold Selection", items: [
@@ -1068,7 +1074,7 @@ const sections = {
   "readiness-assess": {
     group: "Lifecycle", title: "Readiness Assessment", type: "readiness",
     data: {
-      intro: "The readiness assessment maps your current AI system practices against the ten requirement areas in the SCL framework. It identifies where you have coverage, where gaps exist, and which requirements apply at your classification tier.",
+      intro: "The readiness assessment maps your current AI system practices against the thirteen requirement areas in the SCL framework. It identifies where you have coverage, where gaps exist, and which requirements apply at your classification tier.",
       steps: [
         { num: "1", title: "Classification & Scope", desc: "Domain, consequence of failure, human override capability, and Operational Design Domain declaration. Determines your classification tier, the certification envelope, and which requirements apply.", reqs: "Tier Assignment + ODD" },
         { num: "2", title: "Data Foundations", desc: "Operational scope, dataset separation, provenance, labeling quality, and classification handling controls.", reqs: "AI-1" },
@@ -1135,7 +1141,7 @@ const sections = {
         { label: "Adaptation", value: "Continuous learning throughout the mission duration" },
         { label: "Team Mode", value: "Multi agent crew level model sharing high level readiness data across individual twins" }
       ],
-      classificationRationale: "Undetected cognitive decline during a critical mission phase (EVA, docking, emergency response) could result in loss of crew. The twin directly influences crew tasking and health decisions. This is Safety Critical AI. All ten requirements apply. No tailoring without PSRB approval."
+      classificationRationale: "Undetected cognitive decline during a critical mission phase (EVA, docking, emergency response) could result in loss of crew. The twin directly influences crew tasking and health decisions. This is Safety Critical AI. All core requirements apply. AI-11, AI-12, AI-13 conditionally per system design. No tailoring without PSRB approval."
     }
   },
   "ct-requirements": {
@@ -1213,13 +1219,13 @@ const sections = {
   "the-standard": {
     group: "Context", title: "The Published Standard", type: "standard",
     data: {
-      doi: "10.5281/zenodo.19889843",
-      title: "AI Requirements Framework for Safety Critical Systems, Version 2.1.2",
+      doi: "10.5281/zenodo.20060591",
+      title: "AI Requirements Framework for Safety Critical Systems, Version 3.0",
       publisher: "Safety Critical Labs",
       license: "CC BY 4.0",
       points: [
         { title: "Openly Published", desc: "Full requirement text, verification methods, and evidence standards are publicly available. No NDA required." },
-        { title: "Permanently Citable", desc: "The DOI is citable in regulatory filings, procurement documentation, and academic reference. v2.1.2 always resolves to v2.1.2." },
+        { title: "Permanently Citable", desc: "The DOI is citable in regulatory filings, procurement documentation, and academic reference. v3.0 always resolves to v3.0." },
         { title: "Open to Challenge", desc: "Technical challenges to requirements are accepted. A standard that cannot be challenged cannot improve." }
       ]
     }
@@ -1231,8 +1237,8 @@ const sections = {
       links: [
         { label: "Website", value: "safetycriticallabs.com", href: "https://safetycriticallabs.com" },
         { label: "Contact", value: "kevin.williams@safetycriticallabs.com", href: "mailto:kevin.williams@safetycriticallabs.com" },
-        { label: "Published Standard", value: "doi.org/10.5281/zenodo.19889843", href: "https://doi.org/10.5281/zenodo.19889843" },
-        { label: "Version", value: "Framework v2.1.2, CC BY 4.0", href: null }
+        { label: "Published Standard", value: "doi.org/10.5281/zenodo.20060591", href: "https://doi.org/10.5281/zenodo.20060591" },
+        { label: "Version", value: "Framework v3.0, CC BY 4.0", href: null }
       ]
     }
   }
@@ -1950,7 +1956,7 @@ function renderWTCertGap() {
       '<div class="wt-panel-label">The gap</div>' +
       '<div class="wt-text" style="margin-bottom:0;">The loss function says "be less wrong." The weights are 300 dimensional vectors. The behavior emerged from data, architecture, and randomness. <strong>Traditional V&V assumes you can trace behavior to source code. That assumption breaks with AI.</strong></div>' +
     '</div>' +
-    '<div class="wt-callout"><p><strong>This is why a new framework exists.</strong> Not because AI is dangerous. Because AI is verified differently. The ten requirements that follow address this gap.</p></div>' +
+    '<div class="wt-callout"><p><strong>This is why a new framework exists.</strong> Not because AI is dangerous. Because AI is verified differently. The thirteen requirements that follow address this gap.</p></div>' +
   '</div>';
 }
 
@@ -3219,7 +3225,7 @@ function ctWtNext() { if (ctWtStep < 4) ctWtGoTo(ctWtStep + 1); }
 
 function renderCTSystem(data) {
   var html = '<div class="wt-step active">';
-  html += '<div class="wt-title">A real system, ten requirements</div>';
+  html += '<div class="wt-title">A real system, thirteen requirements</div>';
   html += '<div class="wt-text">Everything in this presentation has used a spam filter. Now apply every concept to a system where the stakes are human life. The Cognitive Twin is an AI system proposed for long duration space missions. It monitors each astronaut\'s cognitive state and alerts the crew when it detects decline.</div>';
   
   html += '<div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:16px;">';

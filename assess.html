@@ -863,7 +863,106 @@
 
       <div class="assess-nav">
         <button class="assess-btn assess-btn-back" id="btn-back-4">Back</button>
-        <button class="assess-btn assess-btn-next" id="btn-next-4">See Results</button>
+        <button class="assess-btn assess-btn-next" id="btn-next-4">Continue</button>
+      </div>
+    </div>
+
+    <!-- STEP 5: Architecture & Paradigm Requirements (AI-11, AI-12, AI-13) -->
+    <div class="assess-step" id="step-5">
+      <div class="step-eyebrow">Step 5: Architecture &amp; Paradigm</div>
+      <div class="step-title">Multi-model, neural network, and continuous learning</div>
+      <div class="step-desc">These requirements apply conditionally based on your system's design choices. If your system does not use the indicated architecture or paradigm, select "Not applicable."</div>
+
+      <div class="q-card">
+        <div class="q-label">
+          AI-11: Multi-Model Systems
+          <div class="q-sublabel">If your system coordinates multiple AI models, is the multi-model architecture documented with cascading failure mitigation, ensemble coordination, combined confidence representation, and an audit trail?</div>
+        </div>
+        <div class="q-options" data-name="q-ai11">
+          <label class="q-option">
+            <input type="radio" name="q-ai11" value="3">
+            <span class="q-radio"></span>
+            <span class="q-option-text">Yes. Multi-model architecture is documented, cascading failures are mitigated, ensemble coordination is defined, and audit trails are maintained</span>
+          </label>
+          <label class="q-option">
+            <input type="radio" name="q-ai11" value="2">
+            <span class="q-radio"></span>
+            <span class="q-option-text">Some multi-model documentation exists, but not all components are formally defined or tested</span>
+          </label>
+          <label class="q-option">
+            <input type="radio" name="q-ai11" value="1">
+            <span class="q-radio"></span>
+            <span class="q-option-text">Multiple models are used but no formal coordination or failure mitigation framework is in place</span>
+          </label>
+          <label class="q-option">
+            <input type="radio" name="q-ai11" value="0">
+            <span class="q-radio"></span>
+            <span class="q-option-text">Not applicable. The system does not use multiple coordinated AI models</span>
+          </label>
+        </div>
+      </div>
+
+      <div class="q-card">
+        <div class="q-label">
+          AI-12: Neural Network Requirements
+          <div class="q-sublabel">If your system uses neural networks, is the architecture documented with confidence calibration, explainability methods, training integrity controls, and deployment transformation validation?</div>
+        </div>
+        <div class="q-options" data-name="q-ai12">
+          <label class="q-option">
+            <input type="radio" name="q-ai12" value="3">
+            <span class="q-radio"></span>
+            <span class="q-option-text">Yes. Architecture documented, confidence is calibrated, explainability methods are validated, training integrity is verified, and deployment transformations are tested</span>
+          </label>
+          <label class="q-option">
+            <input type="radio" name="q-ai12" value="2">
+            <span class="q-radio"></span>
+            <span class="q-option-text">Some neural network controls exist, but not all components are formally documented or verified</span>
+          </label>
+          <label class="q-option">
+            <input type="radio" name="q-ai12" value="1">
+            <span class="q-radio"></span>
+            <span class="q-option-text">Neural networks are used but no formal architecture documentation or verification controls are in place</span>
+          </label>
+          <label class="q-option">
+            <input type="radio" name="q-ai12" value="0">
+            <span class="q-radio"></span>
+            <span class="q-option-text">Not applicable. The system does not use neural networks</span>
+          </label>
+        </div>
+      </div>
+
+      <div class="q-card">
+        <div class="q-label">
+          AI-13: Continuous Learning and Adaptation
+          <div class="q-sublabel">If your system continues learning after deployment, are there defined permission criteria, runtime learning controls, catastrophic forgetting mitigation, rollback procedures, and a continuous learning audit trail?</div>
+        </div>
+        <div class="q-options" data-name="q-ai13">
+          <label class="q-option">
+            <input type="radio" name="q-ai13" value="3">
+            <span class="q-radio"></span>
+            <span class="q-option-text">Yes. Learning permission criteria, runtime controls, forgetting mitigation, rollback procedures, and audit trails are all formally defined</span>
+          </label>
+          <label class="q-option">
+            <input type="radio" name="q-ai13" value="2">
+            <span class="q-radio"></span>
+            <span class="q-option-text">Some continuous learning controls exist, but not all components are formally defined or tested</span>
+          </label>
+          <label class="q-option">
+            <input type="radio" name="q-ai13" value="1">
+            <span class="q-radio"></span>
+            <span class="q-option-text">The system learns post-deployment but no formal controls or rollback procedures are in place</span>
+          </label>
+          <label class="q-option">
+            <input type="radio" name="q-ai13" value="0">
+            <span class="q-radio"></span>
+            <span class="q-option-text">Not applicable. The system does not learn or adapt after deployment</span>
+          </label>
+        </div>
+      </div>
+
+      <div class="assess-nav">
+        <button class="assess-btn assess-btn-back" id="btn-back-5">Back</button>
+        <button class="assess-btn assess-btn-next" id="btn-next-5">See Results</button>
       </div>
     </div>
 
@@ -946,7 +1045,7 @@
 (function() {
   'use strict';
 
-  var TOTAL_STEPS = 4;
+  var TOTAL_STEPS = 5;
   var currentStep = 1;
 
   var reqMeta = {
@@ -959,7 +1058,10 @@
     'ai7': { id: 'AI-7', title: 'Adversarial robustness' },
     'ai8': { id: 'AI-8', title: 'Explainability' },
     'ai9': { id: 'AI-9', title: 'Human and AI teaming' },
-    'ai10': { id: 'AI-10', title: 'Privacy and data protection' }
+    'ai10': { id: 'AI-10', title: 'Privacy and data protection' },
+    'ai11': { id: 'AI-11', title: 'Multi-model systems' },
+    'ai12': { id: 'AI-12', title: 'Neural network requirements' },
+    'ai13': { id: 'AI-13', title: 'Continuous learning and adaptation' }
   };
 
   /* ── Question labels for error messages ───────── */
@@ -976,7 +1078,10 @@
     'q-ai7': 'AI-7: Adversarial Robustness',
     'q-ai8': 'AI-8: Explainability',
     'q-ai9': 'AI-9: Human and AI Teaming',
-    'q-ai10': 'AI-10: Privacy and Data Protection'
+    'q-ai10': 'AI-10: Privacy and Data Protection',
+    'q-ai11': 'AI-11: Multi-Model Systems',
+    'q-ai12': 'AI-12: Neural Network Requirements',
+    'q-ai13': 'AI-13: Continuous Learning and Adaptation'
   };
 
   function findCardFor(name) {
@@ -1082,7 +1187,8 @@
     1: ['q-domain', 'q-consequence', 'q-override'],
     2: ['q-ai1', 'q-ai2', 'q-ai3'],
     3: ['q-ai4', 'q-ai5', 'q-ai6'],
-    4: ['q-ai7', 'q-ai8', 'q-ai9', 'q-ai10']
+    4: ['q-ai7', 'q-ai8', 'q-ai9', 'q-ai10'],
+    5: ['q-ai11', 'q-ai12', 'q-ai13']
   };
 
   function validateStep(n) {
@@ -1129,7 +1235,7 @@
     var totalApplicable = 0;
     var totalScore = 0;
 
-    ['ai1','ai2','ai3','ai4','ai5','ai6','ai7','ai8','ai9','ai10'].forEach(function(key) {
+    ['ai1','ai2','ai3','ai4','ai5','ai6','ai7','ai8','ai9','ai10','ai11','ai12','ai13'].forEach(function(key) {
       var input = document.querySelector('input[name="q-' + key + '"]:checked');
       var val = input ? parseInt(input.value) : 0;
 
@@ -1217,7 +1323,7 @@
     // Render requirement cards
     var grid = document.getElementById('resultsGrid');
     grid.innerHTML = '';
-    ['ai1','ai2','ai3','ai4','ai5','ai6','ai7','ai8','ai9','ai10'].forEach(function(key) {
+    ['ai1','ai2','ai3','ai4','ai5','ai6','ai7','ai8','ai9','ai10','ai11','ai12','ai13'].forEach(function(key) {
       var s = r.scores[key];
       var m = reqMeta[key];
       var card = document.createElement('div');
@@ -1241,11 +1347,15 @@
     tryAdvance(3, function() { showStep(4); });
   });
   document.getElementById('btn-next-4').addEventListener('click', function() {
-    tryAdvance(4, function() { showResults(); });
+    tryAdvance(4, function() { showStep(5); });
+  });
+  document.getElementById('btn-next-5').addEventListener('click', function() {
+    tryAdvance(5, function() { showResults(); });
   });
   document.getElementById('btn-back-2').addEventListener('click', function() { clearStepErrors(2); showStep(1); });
   document.getElementById('btn-back-3').addEventListener('click', function() { clearStepErrors(3); showStep(2); });
   document.getElementById('btn-back-4').addEventListener('click', function() { clearStepErrors(4); showStep(3); });
+  document.getElementById('btn-back-5').addEventListener('click', function() { clearStepErrors(5); showStep(4); });
 
   // Initialize
   updateProgress();
@@ -1396,6 +1506,39 @@ document.addEventListener("click", function() {
         '1': 'No formal privacy controls or data protection framework in place',
         '0': 'Not applicable. The system does not process personal data'
       }
+    },
+    ai11: {
+      id: 'AI-11', title: 'Multi-Model Systems',
+      question: 'If your system coordinates multiple AI models, is the multi-model architecture documented with cascading failure mitigation, ensemble coordination, combined confidence representation, and an audit trail?',
+      context: 'AI-11 applies when the system coordinates multiple AI models. It requires multi-model architecture documentation, cascading failure mitigation to prevent one model\'s error from propagating, ensemble coordination protocols, combined confidence representation across model outputs, and a multi-model audit trail.',
+      answers: {
+        '3': 'Multi-model architecture is documented, cascading failures are mitigated, ensemble coordination is defined, and audit trails are maintained',
+        '2': 'Some multi-model documentation exists, but not all components are formally defined or tested',
+        '1': 'Multiple models are used but no formal coordination or failure mitigation framework is in place',
+        '0': 'Not applicable. The system does not use multiple coordinated AI models'
+      }
+    },
+    ai12: {
+      id: 'AI-12', title: 'Neural Network Requirements',
+      question: 'If your system uses neural networks, is the architecture documented with confidence calibration, explainability methods, training integrity controls, and deployment transformation validation?',
+      context: 'AI-12 applies when the system uses neural networks. It requires architecture documentation, confidence calibration, neural network explainability methods, training integrity verification, OOD detection extensions specific to neural networks, adversarial vulnerability mitigation, generative model hallucination constraints, and deployment transformation validation.',
+      answers: {
+        '3': 'Architecture documented, confidence is calibrated, explainability methods are validated, training integrity is verified, and deployment transformations are tested',
+        '2': 'Some neural network controls exist, but not all components are formally documented or verified',
+        '1': 'Neural networks are used but no formal architecture documentation or verification controls are in place',
+        '0': 'Not applicable. The system does not use neural networks'
+      }
+    },
+    ai13: {
+      id: 'AI-13', title: 'Continuous Learning and Adaptation',
+      question: 'If your system continues learning after deployment, are there defined permission criteria, runtime learning controls, catastrophic forgetting mitigation, rollback procedures, and a continuous learning audit trail?',
+      context: 'AI-13 applies when the system continues learning after deployment. It requires continuous learning permission criteria, runtime learning controls, learning data validation, catastrophic forgetting mitigation, learning validation, rollback procedures, ODD evolvability declaration, and a continuous learning audit trail.',
+      answers: {
+        '3': 'Learning permission criteria, runtime controls, forgetting mitigation, rollback procedures, and audit trails are all formally defined',
+        '2': 'Some continuous learning controls exist, but not all components are formally defined or tested',
+        '1': 'The system learns post-deployment but no formal controls or rollback procedures are in place',
+        '0': 'Not applicable. The system does not learn or adapt after deployment'
+      }
     }
   };
 
@@ -1466,7 +1609,7 @@ document.addEventListener("click", function() {
     var scores = {};
     var totalApplicable = 0;
     var totalScore = 0;
-    var keys = ['ai1','ai2','ai3','ai4','ai5','ai6','ai7','ai8','ai9','ai10'];
+    var keys = ['ai1','ai2','ai3','ai4','ai5','ai6','ai7','ai8','ai9','ai10','ai11','ai12','ai13'];
     keys.forEach(function(key) {
       var input = document.querySelector('input[name="q-' + key + '"]:checked');
       var val = input ? parseInt(input.value) : 0;
@@ -1640,7 +1783,7 @@ document.addEventListener("click", function() {
       pdf.text('RESULTS AT A GLANCE', ML, y);
       y += 8;
 
-      var keys = ['ai1','ai2','ai3','ai4','ai5','ai6','ai7','ai8','ai9','ai10'];
+      var keys = ['ai1','ai2','ai3','ai4','ai5','ai6','ai7','ai8','ai9','ai10','ai11','ai12','ai13'];
       keys.forEach(function(key) {
         y = checkPage(pdf, y, 8, MT, PH);
         var r = REQ_DATA[key];

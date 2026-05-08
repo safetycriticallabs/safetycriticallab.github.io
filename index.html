@@ -24,19 +24,6 @@
 <style>
 /* ─── INDEX PAGE STYLES ─────────────────────────────── */
 
-/* ─── SECTION EYEBROW OVERRIDE ────────────────────────────── */
-.page-section .section-eyebrow {
-  font-size: 12px;
-  font-weight: 500;
-  letter-spacing: 0.22em;
-  color: var(--blue);
-  margin-bottom: 22px;
-}
-.page-section .section-eyebrow::before {
-  width: 28px; height: 2px;
-  background: var(--blue);
-}
-
 /* ─── HOME HERO ───────────────────────────────────────────── */
 .home-hero {
   background: var(--bg);
@@ -64,14 +51,6 @@
   position: relative; z-index: 2;
   margin-right: -120px;
 }
-
-.hero-eyebrow {
-  font-family: var(--mono); font-size: 11px;
-  letter-spacing: 0.18em; text-transform: uppercase;
-  color: var(--ink-3); margin-bottom: 28px;
-  display: flex; align-items: center; gap: 12px;
-}
-.hero-eyebrow::before { content: ''; display: inline-block; width: 20px; height: 1px; background: var(--blue); }
 
 .home-hero h1 {
   font-family: var(--sans);
@@ -355,8 +334,8 @@
 }
 
 .nav-card-num {
-  font-family: var(--mono); font-size: 11px;
-  color: var(--blue); flex-shrink: 0; min-width: 28px;
+  font-family: var(--sans); font-size: 12px;
+  font-weight: 600; color: var(--blue); flex-shrink: 0; min-width: 28px;
 }
 .nav-card-body { flex: 1; }
 .nav-card-title { font-size: 14px; font-weight: 500; color: var(--ink); margin-bottom: 3px; }
@@ -395,8 +374,8 @@
 }
 
 .produces-card-label {
-  font-family: var(--mono); font-size: 10px;
-  letter-spacing: 0.14em; text-transform: uppercase;
+  font-family: var(--sans); font-size: 11px;
+  font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase;
   color: var(--blue); margin-bottom: 12px;
 }
 .produces-card-title {
@@ -408,8 +387,8 @@
 .btn-white {
   display: inline-block;
   background: #fff; color: var(--ink);
-  font-family: var(--mono); font-size: 11px;
-  letter-spacing: 0.1em; text-transform: uppercase;
+  font-family: var(--sans); font-size: 13px;
+  letter-spacing: 0.04em;
   padding: 13px 28px; border-radius: 2px;
   text-decoration: none; transition: all 0.15s;
   font-weight: 500;
@@ -427,8 +406,6 @@
 .reg-header {
   text-align: center; margin-bottom: 56px;
 }
-
-.reg-header .section-eyebrow { margin-bottom: 14px; }
 
 .reg-header .section-title { margin-bottom: 20px; }
 
@@ -466,8 +443,8 @@
 }
 
 .reg-col-flag {
-  font-family: var(--mono); font-size: 10px;
-  letter-spacing: 0.14em; text-transform: uppercase;
+  font-family: var(--sans); font-size: 11px;
+  font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase;
   color: var(--blue); margin-bottom: 6px;
   display: flex; align-items: center; gap: 8px;
 }
@@ -549,15 +526,16 @@
 
 .reg-unavailable {
   padding: 24px;
-  font-family: var(--mono); font-size: 11px;
+  font-family: var(--sans); font-size: 13px;
+  font-weight: 400;
   color: var(--ink-3); text-align: center;
-  letter-spacing: 0.04em;
 }
 
 .reg-footer-note {
   margin-top: 24px;
-  font-family: var(--mono); font-size: 10px;
-  color: var(--ink-3); letter-spacing: 0.04em;
+  font-family: var(--sans); font-size: 12px;
+  font-weight: 400;
+  color: var(--ink-3);
   text-align: center;
 }
 
@@ -714,13 +692,7 @@
         <h2 class="section-title">A certification authority<br>for <em>AI systems.</em></h2>
         <div class="what-body">
           <p>
-            Safety Critical Labs conducts structured assessments of AI systems against the SCL AI Requirements Framework. A formal determination is issued at a defined classification level with documented findings on record.
-          </p>
-          <p>
-            Assessments are conducted against a <strong>published, citable standard</strong>. The framework is publicly available, versioned, and open to review. Anyone can read it, audit it, and challenge it.
-          </p>
-          <p>
-            A certificate states what was assessed, against which version of the framework, at which classification level, and what was found. It records that a system was formally evaluated against a defined standard with a reproducible methodology.
+            AI systems are assessed against the SCL AI Requirements Framework, a <strong>published, citable standard</strong> that is versioned, publicly available, and open to review. A formal determination is issued at a defined classification level. The certificate records what was assessed, which framework version was applied, and what was found.
           </p>
         </div>
       </div>

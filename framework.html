@@ -22,19 +22,6 @@
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=IBM+Plex+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css">
 <style>
-/* ─── SECTION EYEBROW OVERRIDE ────────────────────────────── */
-.section-eyebrow {
-  font-size: 12px !important;
-  font-weight: 500 !important;
-  letter-spacing: 0.22em !important;
-  color: var(--blue) !important;
-  margin-bottom: 22px !important;
-}
-.section-eyebrow::before {
-  width: 28px !important; height: 2px !important;
-  background: var(--blue) !important;
-}
-
 /* ─── CLASSIFICATION KEY ──────────────────────────────────── */
 .class-key {
   display: flex; gap: 16px; flex-wrap: wrap;
@@ -43,8 +30,8 @@
 
 .class-item {
   display: flex; align-items: center; gap: 8px;
-  font-family: var(--mono); font-size: 10px;
-  letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-3);
+  font-family: var(--sans); font-size: 11px;
+  font-weight: 500; letter-spacing: 0.04em; text-transform: uppercase; color: var(--ink-3);
   padding: 5px 10px;
   border-radius: 3px;
   border: 1px solid transparent;
@@ -67,8 +54,8 @@
   outline-offset: 2px;
 }
 .class-key-hint {
-  font-family: var(--mono); font-size: 9px;
-  letter-spacing: 0.08em; text-transform: uppercase;
+  font-family: var(--sans); font-size: 10px;
+  font-weight: 400; letter-spacing: 0.02em;
   color: var(--ink-3);
   margin-top: 6px;
   width: 100%;
@@ -150,8 +137,8 @@
 
 .fw-scope {
   display: inline-block;
-  font-family: var(--mono); font-size: 9px;
-  letter-spacing: 0.08em; text-transform: uppercase;
+  font-family: var(--sans); font-size: 10px;
+  font-weight: 500; letter-spacing: 0.04em; text-transform: uppercase;
   border: 1px solid var(--rule); padding: 3px 8px; border-radius: 2px;
   color: var(--ink-3);
 }
@@ -174,8 +161,8 @@
 }
 
 .struct-col-title {
-  font-family: var(--mono); font-size: 10px;
-  letter-spacing: 0.12em; text-transform: uppercase;
+  font-family: var(--sans); font-size: 11px;
+  font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase;
   color: var(--blue); margin-bottom: 10px;
 }
 
@@ -237,8 +224,8 @@
 }
 
 .os-item-label {
-  font-family: var(--mono); font-size: 9px;
-  letter-spacing: 0.1em; text-transform: uppercase;
+  font-family: var(--sans); font-size: 11px;
+  font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase;
   color: var(--blue); padding-top: 2px;
 }
 .os-item-val { font-size: 14px; color: var(--ink-2); line-height: 1.5; }
@@ -275,8 +262,8 @@
   margin-bottom: 32px; object-fit: contain;
 }
 .inner-hero-breadcrumb {
-  font-family: var(--mono); font-size: 10px;
-  letter-spacing: 0.14em; text-transform: uppercase;
+  font-family: var(--sans); font-size: 11px;
+  font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase;
   color: rgba(255,255,255,0.3); margin-bottom: 12px;
   display: flex; align-items: center; gap: 8px;
 }
@@ -511,7 +498,7 @@
 <div class="open-standard-band">
   <div class="os-inner">
     <div class="os-left">
-      <div class="section-eyebrow" style="color: rgba(200,39,45,0.6)">What assessment produces</div>
+      <div class="section-eyebrow">What assessment produces</div>
       <h2>A formal determination.<br>Not a score.</h2>
       <p>
         Assessment against this framework produces one of two outcomes. Each determination is documented against a specific version of the framework, at a defined classification level, with every finding on record. There is no subjective rating, no maturity index, no percentage.
@@ -552,15 +539,15 @@
     </div>
     <div style="display: flex; flex-direction: column; gap: 12px;">
       <div style="background: var(--white); border: 1px solid var(--rule); border-radius: 4px; padding: 20px 24px; display: grid; grid-template-columns: 72px 1fr; gap: 16px; align-items: center;">
-        <span style="font-family: var(--mono); font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--blue);">Document</span>
+        <span style="font-family: var(--sans); font-size: 11px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; color: var(--blue);">Document</span>
         <span style="font-size: 14px; color: var(--ink-2); line-height: 1.5;">Requirements and Verification Standards for Artificial Intelligence in Safety-Critical Applications. Version 3.0</span>
       </div>
       <div style="background: var(--white); border: 1px solid var(--rule); border-radius: 4px; padding: 20px 24px; display: grid; grid-template-columns: 72px 1fr; gap: 16px; align-items: center;">
-        <span style="font-family: var(--mono); font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--blue);">DOI</span>
+        <span style="font-family: var(--sans); font-size: 11px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; color: var(--blue);">DOI</span>
         <span style="font-size: 14px; color: var(--ink-2); line-height: 1.5; font-family: var(--mono);">10.5281/zenodo.20060591</span>
       </div>
       <div style="background: var(--white); border: 1px solid var(--rule); border-radius: 4px; padding: 20px 24px; display: grid; grid-template-columns: 72px 1fr; gap: 16px; align-items: center;">
-        <span style="font-family: var(--mono); font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--blue);">License</span>
+        <span style="font-family: var(--sans); font-size: 11px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; color: var(--blue);">License</span>
         <span style="font-size: 14px; color: var(--ink-2); line-height: 1.5;">CC BY-SA 4.0. Free to read, cite, and reproduce with attribution</span>
       </div>
       <a href="https://doi.org/10.5281/zenodo.20060591" target="_blank" rel="noopener"

@@ -223,8 +223,8 @@ body {
 }
 
 .inner-hero-breadcrumb {
-  font-family: var(--mono); font-size: 10px;
-  letter-spacing: 0.14em; text-transform: uppercase;
+  font-family: var(--sans); font-size: 11px;
+  font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase;
   color: rgba(255,255,255,0.3); margin-bottom: 12px;
   display: flex; align-items: center; gap: 8px;
 }
@@ -248,18 +248,14 @@ body {
 }
 
 /* ─── SECTION BASE ────────────────────────────────────────── */
-.page-section { padding: 96px 40px; }
+.page-section { padding: 120px 40px; }
 .section-inner { max-width: 1200px; margin: 0 auto; }
 
 .section-eyebrow {
-  font-family: var(--mono); font-size: 11px;
-  letter-spacing: 0.16em; text-transform: uppercase;
-  color: var(--ink-3); margin-bottom: 16px;
-  display: flex; align-items: center; gap: 10px;
-}
-.section-eyebrow::before {
-  content: ''; display: inline-block;
-  width: 16px; height: 1px; background: currentColor;
+  font-family: var(--sans); font-size: 13px;
+  font-weight: 600; letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--blue); margin-bottom: 20px;
 }
 
 h2.section-title {
@@ -350,8 +346,8 @@ h2.section-title em { font-style: italic; color: var(--blue); font-family: var(-
 
 .req-scope {
   display: inline-block; margin-top: 14px;
-  font-family: var(--mono); font-size: 9px;
-  letter-spacing: 0.08em; text-transform: uppercase;
+  font-family: var(--sans); font-size: 10px;
+  font-weight: 500; letter-spacing: 0.04em; text-transform: uppercase;
   color: var(--ink-3); border: 1px solid var(--rule);
   padding: 3px 8px; border-radius: 2px;
 }
@@ -529,9 +525,9 @@ h2.section-title em { font-style: italic; color: var(--blue); font-family: var(-
   display: flex; gap: 16px; align-items: flex-start;
 }
 .note-label {
-  font-family: var(--mono); font-size: 9px;
-  letter-spacing: 0.1em; text-transform: uppercase;
-  color: var(--blue); flex-shrink: 0; padding-top: 3px; min-width: 80px;
+  font-family: var(--sans); font-size: 11px;
+  font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase;
+  color: var(--blue); flex-shrink: 0; padding-top: 2px; min-width: 80px;
 }
 .note-text { font-size: 13px; color: var(--ink-2); line-height: 1.65; }
 .note-text strong { color: var(--ink); }
@@ -557,12 +553,11 @@ h2.section-title em { font-style: italic; color: var(--blue); font-family: var(-
 }
 
 .hero-eyebrow {
-  font-family: var(--mono); font-size: 10px;
-  letter-spacing: 0.16em; text-transform: uppercase;
+  font-family: var(--sans); font-size: 13px;
+  font-weight: 600; letter-spacing: 0.06em;
+  text-transform: uppercase;
   color: var(--blue); margin-bottom: 24px;
-  display: flex; align-items: center; gap: 10px;
 }
-.hero-eyebrow::before { content: ''; display: inline-block; width: 20px; height: 1px; background: var(--blue); }
 
 .home-hero h1 {
   font-family: var(--serif);
@@ -596,8 +591,8 @@ h2.section-title em { font-style: italic; color: var(--blue); font-family: var(-
 }
 
 .hc-label {
-  font-family: var(--mono); font-size: 9px;
-  letter-spacing: 0.12em; text-transform: uppercase;
+  font-family: var(--sans); font-size: 11px;
+  font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase;
   color: var(--blue); margin-bottom: 6px;
 }
 .hc-title { font-size: 15px; font-weight: 500; color: #fff; margin-bottom: 6px; line-height: 1.3; }
@@ -637,8 +632,8 @@ h2.section-title em { font-style: italic; color: var(--blue); font-family: var(-
 .stat-num em { color: var(--blue); font-style: normal; }
 
 .stat-label {
-  font-family: var(--mono); font-size: 10px;
-  letter-spacing: 0.1em; text-transform: uppercase;
+  font-family: var(--sans); font-size: 11px;
+  font-weight: 500; letter-spacing: 0.04em; text-transform: uppercase;
   color: rgba(255,255,255,0.3); line-height: 1.4;
 }
 
@@ -657,8 +652,8 @@ h2.section-title em { font-style: italic; color: var(--blue); font-family: var(-
 .analogy-row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 28px; }
 
 .atag {
-  font-family: var(--mono); font-size: 10px;
-  letter-spacing: 0.07em; text-transform: uppercase;
+  font-family: var(--sans); font-size: 11px;
+  font-weight: 500; letter-spacing: 0.03em; text-transform: uppercase;
   border: 1px solid var(--rule); border-radius: 2px;
   padding: 6px 12px; color: var(--ink-3); background: transparent;
   cursor: default;
@@ -677,8 +672,8 @@ h2.section-title em { font-style: italic; color: var(--blue); font-family: var(-
 .ppc:hover { border-color: var(--blue); transform: translateX(4px); }
 
 .ppc-num {
-  font-family: var(--mono); font-size: 11px;
-  color: var(--blue); flex-shrink: 0; padding-top: 2px;
+  font-family: var(--sans); font-size: 12px;
+  font-weight: 600; color: var(--blue); flex-shrink: 0; padding-top: 2px;
   min-width: 28px;
 }
 .ppc-body { flex: 1; }
@@ -702,8 +697,7 @@ h2.section-title em { font-style: italic; color: var(--blue); font-family: var(-
   gap: 60px; align-items: end; margin-bottom: 48px;
 }
 
-.ub-header .section-eyebrow { color: rgba(255,255,255,0.3); }
-.ub-header .section-eyebrow::before { background: rgba(255,255,255,0.3); }
+.ub-header .section-eyebrow { color: rgba(255,255,255,0.4); }
 .ub-header h2.section-title { color: #fff; }
 
 .ub-lead {
@@ -729,8 +723,8 @@ h2.section-title em { font-style: italic; color: var(--blue); font-family: var(-
 }
 
 .ub-std {
-  font-family: var(--mono); font-size: 9px;
-  letter-spacing: 0.12em; text-transform: uppercase;
+  font-family: var(--sans); font-size: 11px;
+  font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase;
   color: var(--blue); margin-bottom: 10px;
 }
 .ub-title { font-size: 14px; font-weight: 500; color: rgba(255,255,255,0.85); margin-bottom: 6px; line-height: 1.35; }
@@ -757,8 +751,8 @@ h2.section-title em { font-style: italic; color: var(--blue); font-family: var(-
 }
 
 .fp-byline {
-  font-family: var(--mono); font-size: 10px;
-  letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-3);
+  font-family: var(--sans); font-size: 12px;
+  font-weight: 500; letter-spacing: 0.03em; text-transform: uppercase; color: var(--ink-3);
   margin-top: 20px; line-height: 1.7;
 }
 
@@ -769,16 +763,16 @@ h2.section-title em { font-style: italic; color: var(--blue); font-family: var(-
   border-radius: 4px; padding: 22px 24px;
 }
 .fp-card-org {
-  font-family: var(--mono); font-size: 9px;
-  letter-spacing: 0.12em; text-transform: uppercase;
+  font-family: var(--sans); font-size: 11px;
+  font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase;
   color: var(--blue); margin-bottom: 6px;
 }
 .fp-card-role { font-size: 14px; font-weight: 600; margin-bottom: 6px; color: var(--ink); }
 .fp-card-desc { font-size: 13px; color: var(--ink-2); line-height: 1.6; }
 .fp-card-award {
   display: inline-block; margin-top: 10px;
-  font-family: var(--mono); font-size: 9px;
-  letter-spacing: 0.08em; text-transform: uppercase;
+  font-family: var(--sans); font-size: 10px;
+  font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase;
   background: var(--blue-lt); border: 1px solid rgba(200,39,45,0.2);
   color: var(--blue); padding: 4px 10px; border-radius: 2px;
 }
@@ -800,8 +794,8 @@ h2.section-title em { font-style: italic; color: var(--blue); font-family: var(-
 
 .btn-outline-dark {
   display: inline-flex; align-items: center; justify-content: center;
-  font-family: var(--mono); font-size: 11px;
-  letter-spacing: 0.08em; text-transform: uppercase;
+  font-family: var(--sans); font-size: 13px;
+  font-weight: 500; letter-spacing: 0.04em;
   color: var(--ink); background: transparent;
   border: 1px solid rgba(15,35,64,0.25);
   padding: 14px 28px; border-radius: 3px;
@@ -890,7 +884,7 @@ h2.section-title em { font-style: italic; color: var(--blue); font-family: var(-
   }
   .inner-hero { padding: 60px 24px 48px; }
   .inner-hero-inner { grid-template-columns: 1fr; gap: 24px; }
-  .page-section { padding: 56px 24px; }
+  .page-section { padding: 72px 24px; }
   .framework-grid { grid-template-columns: 1fr 1fr; }
   .home-hero { padding: 60px 24px; }
   .home-hero-inner { grid-template-columns: 1fr; gap: 40px; }

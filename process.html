@@ -22,19 +22,6 @@
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=IBM+Plex+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css">
 <style>
-/* ─── SECTION EYEBROW OVERRIDE ────────────────────────────── */
-.page-section .section-eyebrow {
-  font-size: 12px;
-  font-weight: 500;
-  letter-spacing: 0.22em;
-  color: var(--blue);
-  margin-bottom: 22px;
-}
-.page-section .section-eyebrow::before {
-  width: 28px; height: 2px;
-  background: var(--blue);
-}
-
 /* ─── PROCESS PAGE STYLES ────────────────────────────────── */
 
 /* ═══════════════════════════════════════════════════════════
@@ -54,14 +41,14 @@
   width: 48px; height: 48px; border-radius: 50%;
   background: var(--ink); color: #fff;
   display: flex; align-items: center; justify-content: center;
-  font-family: var(--mono); font-size: 13px; font-weight: 500;
+  font-family: var(--sans); font-size: 14px; font-weight: 600;
   flex-shrink: 0;
 }
 .phase-title-block { flex: 1; }
 .phase-title { font-size: 22px; font-weight: 600; color: var(--ink); margin-bottom: 4px; line-height: 1.2; }
 .phase-subtitle {
-  font-family: var(--mono); font-size: 10px;
-  letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-3);
+  font-family: var(--sans); font-size: 11px;
+  font-weight: 500; letter-spacing: 0.04em; text-transform: uppercase; color: var(--ink-3);
 }
 .phase-body { font-size: 16px; color: var(--ink-2); line-height: 1.8; font-weight: 300; margin-bottom: 24px; }
 .phase-checklist { display: flex; flex-direction: column; gap: 8px; }
@@ -75,14 +62,9 @@
 .phase-note strong { color: var(--ink); }
 .phase-subsection { margin-top: 32px; }
 .phase-subsection-label {
-  font-family: var(--mono); font-size: 10px;
-  letter-spacing: 0.14em; text-transform: uppercase;
+  font-family: var(--sans); font-size: 11px;
+  font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase;
   color: var(--blue); margin-bottom: 12px;
-  display: flex; align-items: center; gap: 8px;
-}
-.phase-subsection-label::before {
-  content: ''; display: inline-block;
-  width: 14px; height: 1px; background: var(--blue);
 }
 .phase-subsection .ev-intro { font-size: 15px; color: var(--ink-2); line-height: 1.75; font-weight: 300; margin-bottom: 16px; }
 .phase-subsection .ev-list { margin-top: 16px; }
@@ -142,8 +124,8 @@
   display: grid; grid-template-columns: 160px 1fr; gap: 16px;
 }
 .ev-item-label {
-  font-family: var(--mono); font-size: 9px;
-  letter-spacing: 0.1em; text-transform: uppercase;
+  font-family: var(--sans); font-size: 11px;
+  font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase;
   color: var(--blue); padding-top: 2px;
 }
 .ev-item-desc { font-size: 13px; color: var(--ink-2); line-height: 1.55; }
@@ -158,8 +140,8 @@
   display: grid; grid-template-columns: 140px 1fr; gap: 14px;
 }
 .si-tier {
-  font-family: var(--mono); font-size: 9px;
-  letter-spacing: 0.1em; text-transform: uppercase; color: var(--blue);
+  font-family: var(--sans); font-size: 11px;
+  font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; color: var(--blue);
   padding-top: 2px;
 }
 .si-desc { font-size: 13px; color: rgba(255,255,255,0.45); line-height: 1.55; }

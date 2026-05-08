@@ -23,19 +23,6 @@
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=IBM+Plex+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css">
 <style>
-/* ─── SECTION EYEBROW OVERRIDE ────────────────────────────── */
-.section-eyebrow {
-  font-size: 12px !important;
-  font-weight: 500 !important;
-  letter-spacing: 0.22em !important;
-  color: var(--blue) !important;
-  margin-bottom: 22px !important;
-}
-.section-eyebrow::before {
-  width: 28px !important; height: 2px !important;
-  background: var(--blue) !important;
-}
-
 /* ─── CONTACT PAGE STYLES ────────────────────────────────── */
 
 /* ═══ PAGE STYLES ═══ */
@@ -70,8 +57,8 @@
 }
 
 .ci-label {
-  font-family: var(--mono); font-size: 9px;
-  letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-3);
+  font-family: var(--sans); font-size: 11px;
+  font-weight: 500; letter-spacing: 0.04em; text-transform: uppercase; color: var(--ink-3);
 }
 
 .ci-value {
@@ -91,8 +78,8 @@
 .pathway:hover { border-color: var(--blue); transform: translateX(4px); }
 
 .pathway-tag {
-  font-family: var(--mono); font-size: 9px;
-  letter-spacing: 0.12em; text-transform: uppercase;
+  font-family: var(--sans); font-size: 11px;
+  font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase;
   color: var(--blue); margin-bottom: 8px;
 }
 
@@ -102,8 +89,8 @@
 
 .pathway-cta {
   display: inline-flex; align-items: center; gap: 6px;
-  font-family: var(--mono); font-size: 10px;
-  letter-spacing: 0.1em; text-transform: uppercase;
+  font-family: var(--sans); font-size: 12px;
+  font-weight: 500; letter-spacing: 0.03em; text-transform: uppercase;
   color: var(--ink); text-decoration: none;
   border-bottom: 1px solid var(--rule); padding-bottom: 2px;
   transition: color 0.15s, border-color 0.15s;
@@ -149,8 +136,8 @@
 }
 
 .form-label {
-  font-family: var(--mono); font-size: 9px;
-  letter-spacing: 0.14em; text-transform: uppercase;
+  font-family: var(--sans); font-size: 11px;
+  font-weight: 500; letter-spacing: 0.04em; text-transform: uppercase;
   color: var(--ink-3);
 }
 
@@ -262,10 +249,9 @@
 }
 .form-toolbar .tb-hint {
   margin-left: auto;
-  font-family: var(--mono);
-  font-size: 9px;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+  font-family: var(--sans);
+  font-size: 11px;
+  font-weight: 400;
   color: var(--ink-3);
   padding-right: 4px;
 }

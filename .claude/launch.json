@@ -4,8 +4,8 @@
     {
       "name": "site",
       "runtimeExecutable": "/usr/bin/python3",
-      "runtimeArgs": ["-m", "http.server", "8080", "--directory", "/Users/kevinwilliams/Documents/Critical Labs/safetycriticallabs.github.io"],
-      "port": 8080
+      "runtimeArgs": ["-c", "import http.server, socketserver, os; os.chdir('/Users/kevinwilliams/Documents/Critical Labs/safetycriticallabs.github.io'); handler = http.server.SimpleHTTPRequestHandler; httpd = socketserver.TCPServer(('', 8090), handler); httpd.serve_forever()"],
+      "port": 8090
     }
   ]
 }

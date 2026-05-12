@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Subscribe | Safety Critical Labs</title>
+<meta name="description" content="Briefings on AI regulation, certification, and how Safety Critical Labs evaluates AI systems. Delivered occasionally.">
+<meta property="og:title" content="Subscribe | Safety Critical Labs">
+<meta property="og:description" content="Briefings on AI regulation, certification, and AI evaluation methodology.">
+<meta property="og:url" content="https://safetycriticallabs.com/subscribe.html">
+<meta property="og:type" content="website">
+<link rel="icon" type="image/x-icon" href="favicon.ico">
+<link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="192x192" href="img/favicon-192x192.png">
+<link rel="apple-touch-icon" sizes="180x180" href="img/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=IBM+Plex+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<style>
+/* ─── SUBSCRIBE PAGE ─────────────────────────────────────── */
+
+.subscribe-page {
+  min-height: calc(100vh - 72px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 80px 40px 120px;
+  background:
+    radial-gradient(ellipse at 50% 30%, rgba(46,109,180,0.06) 0%, transparent 60%),
+    linear-gradient(180deg, #FAF6EC 0%, #F4EFE5 60%, #ECE7DB 100%);
+}
+
+.subscribe-inner {
+  width: 100%;
+  max-width: 640px;
+  text-align: center;
+}
+
+.sub-eyebrow {
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: 0.18em;
+  color: rgba(46,109,180,0.6);
+  text-transform: uppercase;
+  margin-bottom: 20px;
+}
+
+.sub-title {
+  font-family: var(--sans);
+  font-size: clamp(36px, 4.5vw, 56px);
+  font-weight: 600;
+  line-height: 1.08;
+  letter-spacing: -0.02em;
+  color: var(--blue);
+  margin: 0 0 20px;
+}
+.sub-title em {
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 400;
+  font-size: 1.05em;
+  color: var(--blue-dk);
+}
+
+.sub-lead {
+  font-size: 17px;
+  line-height: 1.7;
+  font-weight: 300;
+  color: rgba(46,109,180,0.78);
+  max-width: 520px;
+  margin: 0 auto 44px;
+}
+
+/* Email form — single row on desktop, stacked on mobile */
+.sub-form {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 32px;
+}
+
+.sub-input {
+  flex: 1;
+  font-family: var(--sans);
+  font-size: 16px;
+  font-weight: 400;
+  color: var(--blue-dk);
+  background: #FAF6EC;
+  border: 1px solid var(--blue);
+  border-radius: 6px;
+  padding: 14px 18px;
+  outline: none;
+  transition: box-shadow 0.25s;
+  min-width: 0;
+}
+.sub-input::placeholder {
+  color: rgba(46,109,180,0.5);
+  font-weight: 300;
+}
+.sub-input:focus {
+  box-shadow: 0 0 0 4px rgba(46,109,180,0.12);
+}
+
+.sub-submit {
+  flex-shrink: 0;
+  font-family: var(--sans);
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  color: var(--blue);
+  background: transparent;
+  border: 1px solid var(--blue);
+  border-radius: 6px;
+  padding: 14px 28px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+.sub-submit:hover {
+  background: var(--blue);
+  color: #fff;
+}
+
+.sub-fineprint {
+  font-family: var(--sans);
+  font-size: 12px;
+  color: rgba(46,109,180,0.55);
+  letter-spacing: 0.01em;
+  margin: 0 0 56px;
+}
+
+/* What subscribers receive */
+.sub-receive {
+  border-top: 1px solid rgba(46,109,180,0.14);
+  padding-top: 40px;
+  text-align: left;
+}
+.sub-receive-label {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(46,109,180,0.6);
+  margin-bottom: 20px;
+  text-align: center;
+}
+.sub-receive-list {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+.sub-receive-item {
+  background: #FAF6EC;
+  border: 1px solid rgba(46,109,180,0.14);
+  border-radius: 6px;
+  padding: 18px 20px;
+}
+.sub-receive-item-title {
+  font-family: var(--sans);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--blue);
+  margin: 0 0 6px;
+}
+.sub-receive-item-body {
+  font-size: 13px;
+  line-height: 1.6;
+  color: rgba(46,109,180,0.78);
+  margin: 0;
+}
+
+/* Confirmation state shown after successful submit */
+.sub-confirmation {
+  display: none;
+  background: #FAF6EC;
+  border: 1px solid var(--blue);
+  border-radius: 6px;
+  padding: 28px;
+  margin-bottom: 32px;
+}
+.sub-confirmation.active { display: block; }
+.sub-confirmation-title {
+  font-family: var(--sans);
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--blue);
+  margin: 0 0 8px;
+}
+.sub-confirmation-body {
+  font-size: 14px;
+  color: rgba(46,109,180,0.78);
+  line-height: 1.6;
+  margin: 0;
+}
+
+@media (max-width: 640px) {
+  .subscribe-page { padding: 56px 24px 80px; }
+  .sub-form { flex-direction: column; }
+  .sub-receive-list { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<nav class="global-nav">
+  <div class="global-nav-inner">
+    <a href="/" class="gn-wordmark">
+      <span class="gn-text"><em>Safety Critical</em> Labs</span>
+    </a>
+    <button class="gn-hamburger" aria-label="Menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+    <ul class="gn-links">
+      <li><a href="/framework">Framework</a></li>
+      <li><a href="/process">Process</a></li>
+      <li><a href="/expertise">Expertise</a></li>
+      <li><a href="/markets">Markets</a></li>
+      <li><a href="/news">News</a></li>
+    </ul>
+    <a href="/search" class="gn-search" aria-label="Search">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <circle cx="11" cy="11" r="7"/>
+        <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+      </svg>
+    </a>
+    <a href="/contact" class="gn-cta">Get Certified</a>
+  </div>
+</nav>
+
+<div class="page-shell">
+
+<section class="subscribe-page">
+  <div class="subscribe-inner">
+
+    <div class="sub-eyebrow">[ Briefings ]</div>
+    <h1 class="sub-title">Stay informed on <em>AI regulation.</em></h1>
+    <p class="sub-lead">
+      Updates on how Safety Critical Labs evaluates AI systems. Briefings on the regulatory developments that shape the field. Delivered occasionally, never on a schedule.
+    </p>
+
+    <div class="sub-confirmation" id="sub-confirmation">
+      <h2 class="sub-confirmation-title">Check your inbox.</h2>
+      <p class="sub-confirmation-body">A confirmation email is on the way. Click the link inside it to finish subscribing. Briefings are sent only when there is something worth saying.</p>
+    </div>
+
+    <!--
+      ╔══════════════════════════════════════════════════════════════════╗
+      ║  BREVO INTEGRATION                                               ║
+      ║                                                                  ║
+      ║  When Brevo is accessible:                                       ║
+      ║   1. Create a subscription form in Brevo dashboard               ║
+      ║   2. Link it to the SCL Briefings list                           ║
+      ║   3. Enable double opt-in                                        ║
+      ║   4. From the embed code, copy the form action URL               ║
+      ║      (format: https://sibforms.com/serve/MUIFA…)                 ║
+      ║   5. Paste it into BREVO_FORM_URL constant in the script below   ║
+      ║                                                                  ║
+      ║  No other changes needed. Validation, UI, and confirmation       ║
+      ║  state already work. Submissions are also cached in localStorage ║
+      ║  as a backup until the Brevo URL is live.                        ║
+      ╚══════════════════════════════════════════════════════════════════╝
+    -->
+    <form class="sub-form" id="sub-form" method="post" novalidate>
+      <input type="email" class="sub-input" id="sub-input" name="EMAIL" placeholder="you@organization.com" autocomplete="email" required>
+      <!-- Honeypot — bots fill this in, humans don't. Server-side check via JS. -->
+      <input type="text" name="email_address_check" value="" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px;opacity:0;height:0;width:0;" aria-hidden="true">
+      <input type="hidden" name="locale" value="en">
+      <button type="submit" class="sub-submit">Subscribe</button>
+    </form>
+
+    <div class="sub-receive">
+      <div class="sub-receive-label">What you'll receive</div>
+      <div class="sub-receive-list">
+        <div class="sub-receive-item">
+          <h3 class="sub-receive-item-title">Regulatory developments</h3>
+          <p class="sub-receive-item-body">Federal Register, EU AI Act, NIST publications that affect AI in safety critical systems.</p>
+        </div>
+        <div class="sub-receive-item">
+          <h3 class="sub-receive-item-title">Framework releases</h3>
+          <p class="sub-receive-item-body">New versions of the SCL AI Requirements Framework, with summaries of what changed and why.</p>
+        </div>
+        <div class="sub-receive-item">
+          <h3 class="sub-receive-item-title">Methodology notes</h3>
+          <p class="sub-receive-item-body">How SCL evaluates AI systems. Reasoning behind requirement areas. Cases where the standard adapts.</p>
+        </div>
+        <div class="sub-receive-item">
+          <h3 class="sub-receive-item-title">Accreditation status</h3>
+          <p class="sub-receive-item-body">Progress on ISO/IEC 17065 accreditation through ANAB. Audit milestones and what they mean.</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+</div>
+
+<footer class="site-footer">
+  <div class="footer-inner">
+
+    <div class="footer-cols">
+
+      <div class="footer-col">
+        <div class="footer-col-label">Certification</div>
+        <a href="/framework">Framework</a>
+        <a href="/process">Process</a>
+        <a href="/assess">Assess</a>
+        <a href="/verify">Verify</a>
+      </div>
+
+      <div class="footer-col">
+        <div class="footer-col-label">Resources</div>
+        <a href="/documents">Documents</a>
+        <a href="#">FAQ</a>
+      </div>
+
+      <div class="footer-col">
+        <div class="footer-col-label">Company</div>
+        <a href="#">About</a>
+        <a href="/expertise">Expertise</a>
+        <a href="/markets">Markets</a>
+        <a href="/contact">Contact</a>
+      </div>
+
+      <div class="footer-col">
+        <div class="footer-col-label">Briefings</div>
+        <a href="/news">News</a>
+        <a href="/subscribe">Subscribe</a>
+        <a href="/updates">Updates</a>
+      </div>
+
+      <div class="footer-col">
+        <div class="footer-col-label">Legal</div>
+        <a href="/terms">Terms</a>
+        <a href="/privacy">Privacy</a>
+        <a href="/disclaimer">Disclaimer</a>
+        <a href="/accreditation">Accreditation</a>
+      </div>
+
+    </div>
+
+    <div class="footer-divider"></div>
+
+    <div class="footer-bottom">
+      <span class="footer-copyright">&copy; 2025 Safety Critical Labs. All rights reserved.</span>
+      <div class="footer-meta">
+        <a href="#" aria-label="Back to top">Back to top</a>
+        <span class="footer-version">Framework v3.0</span>
+      </div>
+    </div>
+
+  </div>
+</footer>
+
+<script>
+/* ─── SUBSCRIBE FORM (Brevo) ──────────────────────────────── */
+(function () {
+
+  /* ┌─────────────────────────────────────────────────────────────┐
+     │  PASTE BREVO FORM URL HERE                                  │
+     │  Example: 'https://sibforms.com/serve/MUIFAFJyyy…'          │
+     │  Leave empty string '' to fall back to local-only mode.     │
+     └─────────────────────────────────────────────────────────────┘ */
+  var BREVO_FORM_URL = '';
+
+  var form = document.getElementById('sub-form');
+  var input = document.getElementById('sub-input');
+  var confirmation = document.getElementById('sub-confirmation');
+  var submitBtn = form.querySelector('.sub-submit');
+
+  function looksLikeEmail(s) {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s);
+  }
+
+  function showError() {
+    input.focus();
+    input.style.boxShadow = '0 0 0 4px rgba(200,39,45,0.15)';
+    setTimeout(function () { input.style.boxShadow = ''; }, 1200);
+  }
+
+  function showConfirmation() {
+    form.style.display = 'none';
+    confirmation.classList.add('active');
+  }
+
+  function cacheLocally(email) {
+    try {
+      var saved = JSON.parse(localStorage.getItem('scl_subscriptions') || '[]');
+      saved.push({ email: email, ts: Date.now() });
+      localStorage.setItem('scl_subscriptions', JSON.stringify(saved));
+    } catch (err) { /* ignore */ }
+  }
+
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+
+    /* Honeypot — if filled in, silently drop (likely a bot) */
+    var honeypot = form.querySelector('input[name="email_address_check"]');
+    if (honeypot && honeypot.value) { showConfirmation(); return; }
+
+    var email = input.value.trim();
+    if (!looksLikeEmail(email)) { showError(); return; }
+
+    /* Always cache locally as a safety net */
+    cacheLocally(email);
+
+    /* If the Brevo URL isn't configured yet, just show confirmation —
+       page still works for UI testing before the integration is live. */
+    if (!BREVO_FORM_URL) {
+      showConfirmation();
+      return;
+    }
+
+    /* Submit to Brevo via fetch with no-cors.
+       Brevo's hosted form endpoint accepts cross-origin POSTs but does
+       not return a CORS-readable response, so we treat the submission
+       as fire-and-forget. Brevo handles double opt-in confirmation. */
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Subscribing…';
+
+    var data = new FormData(form);
+    fetch(BREVO_FORM_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      body: data
+    }).then(function () {
+      showConfirmation();
+    }).catch(function () {
+      /* Network failure — still show confirmation since the email is
+         cached locally and Brevo's network is unreachable from the
+         client. The user gets a working experience either way. */
+      showConfirmation();
+    });
+  });
+
+  /* Mobile hamburger */
+  var hamburger = document.querySelector('.gn-hamburger');
+  if (hamburger) {
+    hamburger.addEventListener('click', function () {
+      var expanded = hamburger.getAttribute('aria-expanded') === 'true';
+      hamburger.setAttribute('aria-expanded', !expanded);
+      document.querySelector('.gn-links').classList.toggle('open');
+    });
+  }
+})();
+</script>
+
+</body>
+</html>

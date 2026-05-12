@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Updates | Safety Critical Labs</title>
+<meta name="description" content="A running record of Safety Critical Labs activity. Framework releases, trademark filings, publications, accreditation progress.">
+<meta property="og:title" content="Updates | Safety Critical Labs">
+<meta property="og:description" content="A running record of Safety Critical Labs activity. Framework releases, trademark filings, publications, accreditation progress.">
+<meta property="og:url" content="https://safetycriticallabs.com/updates.html">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://safetycriticallabs.com/img/SCL%20Logo%203d.png">
+<link rel="icon" type="image/x-icon" href="favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="img/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="48x48" href="img/favicon-48x48.png">
+<link rel="icon" type="image/png" sizes="192x192" href="img/favicon-192x192.png">
+<link rel="apple-touch-icon" sizes="180x180" href="img/apple-touch-icon.png">
+<link rel="shortcut icon" href="favicon.ico">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=IBM+Plex+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<style>
+/* ─── UPDATES PAGE ────────────────────────────────────────── */
+
+/* Hero cursor glow */
+.inner-hero { z-index: 0; }
+.fw-hero-glow {
+  position: absolute; inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.4s;
+  background: radial-gradient(520px circle at var(--glow-x, 70%) var(--glow-y, 30%), rgba(46,109,180,0.10), transparent 60%);
+}
+.inner-hero:hover .fw-hero-glow { opacity: 1; }
+.inner-hero-inner { z-index: 2; position: relative; }
+
+/* Bracketed mono eyebrow (unused on this page but kept for parity) */
+.fw-eyebrow-mono {
+  font-family: var(--mono);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(46,109,180,0.6);
+  margin-bottom: 20px;
+}
+
+/* Page section */
+.updates-page-section {
+  background:
+    radial-gradient(ellipse at 50% 20%, rgba(46,109,180,0.06) 0%, transparent 60%),
+    linear-gradient(180deg, #F7F3EC 0%, #F4EFE5 100%);
+  padding: 88px 40px 120px;
+}
+.updates-page-inner {
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+/* Filter chips */
+.updates-filter-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 48px;
+  padding-bottom: 32px;
+  border-bottom: 1px solid rgba(46,109,180,0.10);
+}
+.updates-filter-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 8px 16px;
+  border: 1px solid var(--blue);
+  border-radius: 6px;
+  background: transparent;
+  color: var(--blue);
+  font-family: var(--sans);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  user-select: none;
+}
+.updates-filter-chip:hover {
+  background: var(--blue);
+  color: #fff;
+}
+.updates-filter-chip.active {
+  background: var(--blue);
+  border-color: var(--blue);
+  color: #fff;
+}
+.updates-filter-count {
+  margin-left: 6px;
+  font-family: var(--mono);
+  font-size: 11px;
+  opacity: 0.7;
+}
+
+/* Vertical timeline */
+.updates-timeline {
+  position: relative;
+  padding-left: 24px;
+}
+.updates-timeline::before {
+  content: '';
+  position: absolute;
+  left: 6px;
+  top: 8px;
+  bottom: 8px;
+  width: 1px;
+  background: rgba(46,109,180,0.18);
+}
+
+.update-row {
+  position: relative;
+  display: grid;
+  grid-template-columns: 130px 1fr;
+  gap: 32px;
+  padding: 0 0 40px;
+}
+.update-row:last-child { padding-bottom: 0; }
+.update-row::before {
+  content: '';
+  position: absolute;
+  left: -24px;
+  top: 8px;
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  background: #FAF6EC;
+  border: 2px solid var(--blue);
+  z-index: 1;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+.update-row:hover::before {
+  background: var(--blue);
+  transform: scale(1.15);
+}
+
+.update-date {
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(46,109,180,0.7);
+  padding-top: 4px;
+}
+
+.update-card {
+  background: #FAF6EC;
+  border: 1px solid rgba(46,109,180,0.12);
+  border-radius: 6px;
+  padding: 22px 26px;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease;
+}
+.update-card:hover {
+  border-color: rgba(46,109,180,0.30);
+  box-shadow: 0 8px 24px rgba(46,109,180,0.08);
+  transform: translateY(-2px);
+}
+
+.update-type {
+  display: inline-block;
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--blue-dk);
+  background: rgba(46,109,180,0.08);
+  border: 1px solid rgba(46,109,180,0.16);
+  padding: 4px 10px;
+  border-radius: 3px;
+  margin-bottom: 12px;
+}
+
+.update-title {
+  font-family: var(--sans);
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--blue);
+  margin: 0 0 10px;
+  line-height: 1.3;
+  letter-spacing: -0.005em;
+}
+.update-title em {
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 400;
+  color: var(--blue-dk);
+}
+
+.update-body {
+  font-size: 14px;
+  color: var(--ink-2);
+  line-height: 1.7;
+  font-weight: 300;
+  margin: 0 0 12px;
+}
+.update-body:last-child { margin-bottom: 0; }
+.update-body strong { color: var(--ink); font-weight: 500; }
+
+.update-link {
+  display: inline-flex;
+  align-items: center;
+  font-family: var(--sans);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--blue);
+  text-decoration: none;
+  margin-top: 4px;
+}
+.update-link:hover { color: var(--blue-dk); }
+
+/* Empty state */
+.updates-empty {
+  display: none;
+  text-align: center;
+  padding: 48px 0;
+  font-size: 14px;
+  color: var(--ink-3);
+}
+.updates-empty.is-visible { display: block; }
+
+/* Subscribe nudge — just the button, sitting on the page background */
+.updates-subscribe-band {
+  margin-top: 64px;
+  padding-top: 48px;
+  border-top: 1px solid rgba(46,109,180,0.10);
+  text-align: center;
+}
+
+@media (max-width: 760px) {
+  .update-row { grid-template-columns: 1fr; gap: 12px; }
+  .updates-timeline::before { display: none; }
+  .update-row::before { display: none; }
+  .updates-timeline { padding-left: 0; }
+  .updates-page-section { padding: 60px 24px 80px; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="global-nav">
+  <div class="global-nav-inner">
+    <a href="/" class="gn-wordmark">
+      <span class="gn-text"><em>Safety Critical</em> Labs</span>
+    </a>
+    <button class="gn-hamburger" aria-label="Menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+    <ul class="gn-links">
+      <li><a href="/framework">Framework</a></li>
+      <li><a href="/process">Process</a></li>
+      <li><a href="/expertise">Expertise</a></li>
+      <li><a href="/markets">Markets</a></li>
+      <li><a href="/news">News</a></li>
+    </ul>
+    <a href="/search" class="gn-search" aria-label="Search">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <circle cx="11" cy="11" r="7"/>
+        <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+      </svg>
+    </a>
+    <a href="/contact" class="gn-cta">Get Certified</a>
+  </div>
+</nav>
+
+<div class="page-shell">
+
+<!-- HERO -->
+<div class="inner-hero">
+  <div class="fw-hero-glow"></div>
+  <div class="inner-hero-inner">
+    <div>
+      <div class="inner-hero-breadcrumb">
+        <a href="/">Safety Critical Labs</a>
+        <span>/</span> Updates
+      </div>
+      <h1>Updates from<br>the <em>lab.</em></h1>
+    </div>
+    <p class="inner-hero-lead">
+      A running record of framework releases, trademark filings, publications submitted, and the institutional steps that build out the certification authority. Newest first.
+    </p>
+  </div>
+</div>
+
+<!-- TIMELINE -->
+<section class="updates-page-section">
+  <div class="updates-page-inner">
+
+    <div class="updates-filter-row" role="group" aria-label="Filter updates by type">
+      <button class="updates-filter-chip active" data-filter="all">All</button>
+      <button class="updates-filter-chip" data-filter="framework">Framework</button>
+      <button class="updates-filter-chip" data-filter="trademark">Trademark</button>
+      <button class="updates-filter-chip" data-filter="publication">Publication</button>
+      <button class="updates-filter-chip" data-filter="accreditation">Accreditation</button>
+      <button class="updates-filter-chip" data-filter="operations">Operations</button>
+    </div>
+
+    <div class="updates-timeline">
+
+      <!-- May 2026: Website redesign / docs library -->
+      <div class="update-row" data-type="operations">
+        <div class="update-date">May 2026</div>
+        <div class="update-card">
+          <span class="update-type">Operations</span>
+          <h3 class="update-title">Website refresh and source <em>document library</em> launched</h3>
+          <p class="update-body">
+            safetycriticallabs.com refreshed across every page in the cream and blue palette. A new <strong>Documents</strong> library publishes the full set of standards, regulations, and reference documents that inform the framework, with direct links to each official publisher.
+          </p>
+          <a href="/documents" class="update-link">View the document library →</a>
+        </div>
+      </div>
+
+      <!-- May 5, 2026: Framework v3.0 -->
+      <div class="update-row" data-type="framework">
+        <div class="update-date">May 5, 2026</div>
+        <div class="update-card">
+          <span class="update-type">Framework Release</span>
+          <h3 class="update-title">Framework v3.0 released &mdash; <em>Architecture and Paradigm Requirements</em></h3>
+          <p class="update-body">
+            Major structural revision. New <strong>Section 3</strong> adds three architecture and paradigm requirement sets: AI-11 Multi-Model Systems, AI-12 Neural Networks, and AI-13 Continuous Learning and Adaptation. These apply conditionally based on system design and resolve prior lexicon contradictions by separating normative architecture requirements from informative implementation patterns.
+          </p>
+          <a href="https://doi.org/10.5281/zenodo.20060591" class="update-link" target="_blank" rel="noopener">Download v3.0 (DOI) →</a>
+        </div>
+      </div>
+
+      <!-- May 4, 2026: Framework v2.1.3 -->
+      <div class="update-row" data-type="framework">
+        <div class="update-date">May 4, 2026</div>
+        <div class="update-card">
+          <span class="update-type">Framework Release</span>
+          <h3 class="update-title">Framework v2.1.3 &mdash; Deployment Format Validation</h3>
+          <p class="update-body">
+            Added AI-4.7 Deployment Format Validation covering model transformations (quantization, pruning, knowledge distillation, framework conversion). Added Section 4.4 Continuous and Periodic Verification and a Cadence column to the Verification Matrix. Editorial pass on Sections 1 through 3 for terminology and lexicon consistency.
+          </p>
+        </div>
+      </div>
+
+      <!-- April 2026: AIAA SciTech submission -->
+      <div class="update-row" data-type="publication">
+        <div class="update-date">April 2026</div>
+        <div class="update-card">
+          <span class="update-type">Publication</span>
+          <h3 class="update-title">Abstract submitted to <em>AIAA SciTech Forum 2027</em></h3>
+          <p class="update-body">
+            Framework abstract submitted to the Intelligent Systems: Space Trusted Autonomy track at the AIAA SciTech Forum 2027. Decision notification expected on or about August 24, 2026. First of a multi-venue formal publication push that also targets JAIS, SAFECOMP, and a NIST companion piece.
+          </p>
+        </div>
+      </div>
+
+      <!-- April 2026: ANAB intake -->
+      <div class="update-row" data-type="accreditation">
+        <div class="update-date">April 2026</div>
+        <div class="update-card">
+          <span class="update-type">Accreditation</span>
+          <h3 class="update-title">ANAB accreditation conversation <em>opened</em></h3>
+          <p class="update-body">
+            Intake response submitted to the ANSI National Accreditation Board, opening the formal conversation toward eventual ISO/IEC 17065 accreditation for certification bodies. ANAB accreditation is the path that transforms the SCL mark from a credible third-party determination into a regulatory instrument.
+          </p>
+        </div>
+      </div>
+
+      <!-- April 2026: Framework v2.1.1 -->
+      <div class="update-row" data-type="framework">
+        <div class="update-date">April 2026</div>
+        <div class="update-card">
+          <span class="update-type">Framework Release</span>
+          <h3 class="update-title">Framework v2.1.1 &mdash; Human factors expansion</h3>
+          <p class="update-body">
+            AI-9 Human and AI Teaming expanded with three new sub-requirements: AI-9.7 Operator Qualification, AI-9.8 Workload Management, and AI-9.9 Training Program Requirements. New AI-8.5 Public Disclosure Support covering external model cards, EU AI Act Article 13 user information, EO 14110 and OMB M-24-10 federal AI inventory, and EU AI Act Article 71 public database registration.
+          </p>
+        </div>
+      </div>
+
+      <!-- April 2026: Three trademark filings -->
+      <div class="update-row" data-type="trademark">
+        <div class="update-date">April 2026</div>
+        <div class="update-card">
+          <span class="update-type">Trademark</span>
+          <h3 class="update-title">Three USPTO trademark filings &mdash; <em>the mark on record</em></h3>
+          <p class="update-body">
+            Three applications filed with the United States Patent and Trademark Office under Class 42 (scientific and technological services): the <strong>Safety Critical Labs</strong> name, the <strong>SCL design mark</strong> covering the logo and seal, and the <strong>SCL Certified</strong> certification mark. All three now in formal review.
+          </p>
+        </div>
+      </div>
+
+      <!-- April 2026: Logo finalized -->
+      <div class="update-row" data-type="operations">
+        <div class="update-date">April 2026</div>
+        <div class="update-card">
+          <span class="update-type">Operations</span>
+          <h3 class="update-title">Logo and seal design <em>finalized</em></h3>
+          <p class="update-body">
+            Final mark design completed. The SCL seal is the visible identifier on certificates, the digital badge, and the verification page. Prerequisite for the design mark trademark filing that followed in the same month.
+          </p>
+        </div>
+      </div>
+
+      <!-- January 2026: Framework v2.1 -->
+      <div class="update-row" data-type="framework">
+        <div class="update-date">January 2026</div>
+        <div class="update-card">
+          <span class="update-type">Framework Release</span>
+          <h3 class="update-title">Framework v2.1 &mdash; ODD and Privacy</h3>
+          <p class="update-body">
+            Added <strong>AI-1.0 Operational Design Domain</strong> with Operational Claim and eight attribute categories, formalizing the certification scope envelope. Added <strong>AI-10 Privacy and Data Protection</strong> with seven sub-requirements. Section 1.3 introduced the Domain Standards Citation Convention. Mission Support tier renamed to Operational Support throughout.
+          </p>
+        </div>
+      </div>
+
+      <!-- October 2025: Framework v2.0 -->
+      <div class="update-row" data-type="framework">
+        <div class="update-date">October 2025</div>
+        <div class="update-card">
+          <span class="update-type">Framework Release</span>
+          <h3 class="update-title">Framework v2.0 &mdash; Risk Score Methodology</h3>
+          <p class="update-body">
+            Added AI-4.6 Operational Validation Without Ground Truth and AI-9.6 Operational Role Verification. Introduced <strong>Appendix D Risk Score Methodology</strong> &mdash; the structured, reproducible scoring system that issues a quantified risk score alongside every certification determination.
+          </p>
+        </div>
+      </div>
+
+      <!-- February 2025: Framework v1.0 -->
+      <div class="update-row" data-type="framework">
+        <div class="update-date">February 2025</div>
+        <div class="update-card">
+          <span class="update-type">Framework Release</span>
+          <h3 class="update-title">Framework v1.0 &mdash; <em>initial publication</em></h3>
+          <p class="update-body">
+            First public release of the SCL AI Requirements Framework, registered with a citable DOI on Zenodo. Initial set of requirement areas addressing AI-specific failure modes not covered by traditional software assurance practices.
+          </p>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="updates-empty" id="updatesEmpty">No updates match the selected filter.</div>
+
+    <div class="updates-subscribe-band">
+      <a href="/subscribe" class="btn btn-solid">Subscribe</a>
+    </div>
+
+  </div>
+</section>
+
+</div><!-- /page-shell -->
+
+<!-- FOOTER -->
+<footer class="site-footer">
+  <div class="footer-inner">
+
+    <div class="footer-cols">
+
+      <div class="footer-col">
+        <div class="footer-col-label">Certification</div>
+        <a href="/framework">Framework</a>
+        <a href="/process">Process</a>
+        <a href="/assess">Assess</a>
+        <a href="/verify">Verify</a>
+      </div>
+
+      <div class="footer-col">
+        <div class="footer-col-label">Resources</div>
+        <a href="/documents">Documents</a>
+        <a href="#">FAQ</a>
+      </div>
+
+      <div class="footer-col">
+        <div class="footer-col-label">Company</div>
+        <a href="#">About</a>
+        <a href="/expertise">Expertise</a>
+        <a href="/markets">Markets</a>
+        <a href="/contact">Contact</a>
+      </div>
+
+      <div class="footer-col">
+        <div class="footer-col-label">Briefings</div>
+        <a href="/news">News</a>
+        <a href="/subscribe">Subscribe</a>
+        <a href="/updates">Updates</a>
+      </div>
+
+      <div class="footer-col">
+        <div class="footer-col-label">Legal</div>
+        <a href="/terms">Terms</a>
+        <a href="/privacy">Privacy</a>
+        <a href="/disclaimer">Disclaimer</a>
+        <a href="/accreditation">Accreditation</a>
+      </div>
+
+    </div>
+
+    <div class="footer-divider"></div>
+
+    <div class="footer-bottom">
+      <span class="footer-copyright">&copy; 2025 Safety Critical Labs. All rights reserved.</span>
+      <div class="footer-meta">
+        <a href="#" aria-label="Back to top">Back to top</a>
+        <span class="footer-version">Framework v3.0</span>
+      </div>
+    </div>
+
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script>
+/* ─── Hero cursor glow ───────────────────────── */
+(function() {
+  var glow = document.querySelector('.fw-hero-glow');
+  var hero = document.querySelector('.inner-hero');
+  if (!glow || !hero) return;
+  hero.addEventListener('mousemove', function(e) {
+    var rect = hero.getBoundingClientRect();
+    glow.style.setProperty('--glow-x', (e.clientX - rect.left) + 'px');
+    glow.style.setProperty('--glow-y', (e.clientY - rect.top) + 'px');
+  });
+})();
+
+/* ─── Filter chips ───────────────────────────── */
+(function() {
+  var chips = document.querySelectorAll('.updates-filter-chip');
+  var rows = document.querySelectorAll('.update-row');
+  var empty = document.getElementById('updatesEmpty');
+
+  // Populate chip counts on load
+  var counts = { all: rows.length };
+  rows.forEach(function(r) {
+    var t = r.dataset.type;
+    counts[t] = (counts[t] || 0) + 1;
+  });
+  chips.forEach(function(chip) {
+    var f = chip.dataset.filter;
+    var n = counts[f] || 0;
+    if (n > 0 || f === 'all') {
+      var span = document.createElement('span');
+      span.className = 'updates-filter-count';
+      span.textContent = n;
+      chip.appendChild(span);
+    }
+  });
+
+  function applyFilter(filter) {
+    var visible = 0;
+    rows.forEach(function(r) {
+      var match = filter === 'all' || r.dataset.type === filter;
+      r.style.display = match ? '' : 'none';
+      if (match) visible++;
+    });
+    empty.classList.toggle('is-visible', visible === 0);
+  }
+
+  chips.forEach(function(chip) {
+    chip.addEventListener('click', function() {
+      chips.forEach(function(c) { c.classList.remove('active'); });
+      chip.classList.add('active');
+      applyFilter(chip.dataset.filter);
+    });
+  });
+})();
+
+/* ─── Mobile menu toggle ─────────────────────── */
+document.querySelector('.gn-hamburger').addEventListener('click', function() {
+  this.classList.toggle('open');
+  document.querySelector('.gn-links').classList.toggle('open');
+  this.setAttribute('aria-expanded', this.classList.contains('open'));
+  document.body.style.overflow = this.classList.contains('open') ? 'hidden' : '';
+});
+
+/* ─── Dropdown nav toggle ────────────────────── */
+document.querySelectorAll(".gn-dropdown-toggle").forEach(function(btn) {
+  btn.addEventListener("click", function(e) {
+    e.stopPropagation();
+    var dd = this.closest(".gn-dropdown");
+    var menu = dd.querySelector(".gn-dropdown-menu");
+    var isOpen = dd.classList.contains("open");
+    document.querySelectorAll(".gn-dropdown").forEach(function(d) {
+      d.classList.remove("open");
+      var m = d.querySelector(".gn-dropdown-menu");
+      if (m) m.style.display = "none";
+    });
+    if (!isOpen) {
+      dd.classList.add("open");
+      menu.style.display = "block";
+    }
+  });
+});
+document.addEventListener("click", function() {
+  document.querySelectorAll(".gn-dropdown").forEach(function(d) {
+    d.classList.remove("open");
+    var m = d.querySelector(".gn-dropdown-menu");
+    if (m) m.style.display = "none";
+  });
+});
+</script>
+<script src="ticker.js"></script>
+</body>
+</html>

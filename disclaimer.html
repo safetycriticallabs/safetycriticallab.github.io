@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Disclaimer | Safety Critical Labs</title>
+<meta name="description" content="What an SCL certificate represents, what it does not represent, and the limits of website content.">
+<meta property="og:title" content="Disclaimer | Safety Critical Labs">
+<meta property="og:description" content="Disclaimer for Safety Critical Labs certifications and website content.">
+<meta property="og:url" content="https://safetycriticallabs.com/disclaimer.html">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://safetycriticallabs.com/img/SCL%20Logo%203d.png">
+<link rel="icon" type="image/x-icon" href="favicon.ico">
+<link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="192x192" href="img/favicon-192x192.png">
+<link rel="apple-touch-icon" sizes="180x180" href="img/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=IBM+Plex+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<style>
+.inner-hero { z-index: 0; }
+.fw-hero-glow {
+  position: absolute; inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.4s;
+  background: radial-gradient(520px circle at var(--glow-x, 70%) var(--glow-y, 30%), rgba(46,109,180,0.10), transparent 60%);
+}
+.inner-hero:hover .fw-hero-glow { opacity: 1; }
+.inner-hero-inner { z-index: 2; position: relative; }
+
+.fw-eyebrow-mono {
+  font-family: var(--mono); font-size: 12px; font-weight: 500;
+  letter-spacing: 0.18em; text-transform: uppercase;
+  color: rgba(46,109,180,0.6); margin-bottom: 20px;
+}
+
+.legal-section {
+  background:
+    radial-gradient(ellipse at 50% 0%, rgba(46,109,180,0.05) 0%, transparent 50%),
+    #F7F3EC;
+  padding: 88px 40px 120px;
+}
+.legal-inner { max-width: 760px; margin: 0 auto; }
+
+.legal-meta {
+  display: flex; flex-wrap: wrap; gap: 24px;
+  padding-bottom: 24px; margin-bottom: 48px;
+  border-bottom: 1px solid rgba(46,109,180,0.12);
+}
+.legal-meta-item {
+  font-family: var(--mono); font-size: 11px;
+  letter-spacing: 0.14em; text-transform: uppercase;
+  color: rgba(46,109,180,0.6);
+}
+.legal-meta-item strong {
+  display: block; color: var(--blue); font-weight: 500;
+  margin-top: 4px; letter-spacing: 0.04em; text-transform: none;
+  font-family: var(--sans); font-size: 13px;
+}
+
+.legal-block { margin-bottom: 40px; }
+.legal-block:last-child { margin-bottom: 0; }
+.legal-block-num {
+  font-family: var(--mono); font-size: 11px;
+  letter-spacing: 0.18em; color: rgba(46,109,180,0.55);
+  margin-bottom: 6px;
+}
+.legal-block-title {
+  font-family: var(--sans); font-size: 22px;
+  font-weight: 600; color: var(--blue);
+  margin: 0 0 14px; line-height: 1.25; letter-spacing: -0.01em;
+}
+.legal-block-title em {
+  font-family: var(--serif); font-style: italic;
+  font-weight: 400; color: var(--blue-dk);
+}
+.legal-block p {
+  font-size: 15px; color: var(--ink-2);
+  line-height: 1.75; font-weight: 300; margin: 0 0 14px;
+}
+.legal-block p:last-child { margin-bottom: 0; }
+.legal-block p strong { color: var(--ink); font-weight: 500; }
+.legal-block a { color: var(--blue); text-decoration: none; border-bottom: 1px solid rgba(46,109,180,0.3); }
+.legal-block a:hover { color: var(--blue-dk); border-bottom-color: var(--blue-dk); }
+
+/* Two-up "does say / does not say" card */
+.cert-says-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-top: 18px;
+}
+.cert-says-card {
+  background: #FAF6EC;
+  border: 1px solid rgba(46,109,180,0.12);
+  border-radius: 4px;
+  padding: 22px;
+}
+.cert-says-card.is-yes { border-left: 3px solid #2D7A3A; }
+.cert-says-card.is-no  { border-left: 3px solid var(--blue); }
+.cert-says-label {
+  font-family: var(--mono); font-size: 10px;
+  font-weight: 500; letter-spacing: 0.18em;
+  text-transform: uppercase; margin-bottom: 10px;
+}
+.cert-says-card.is-yes .cert-says-label { color: #2D7A3A; }
+.cert-says-card.is-no  .cert-says-label { color: var(--blue); }
+.cert-says-list { list-style: none; padding: 0; margin: 0; }
+.cert-says-list li {
+  font-size: 13px; color: var(--ink-2);
+  line-height: 1.6; font-weight: 300;
+  padding-left: 18px;
+  position: relative;
+  margin-bottom: 8px;
+}
+.cert-says-list li:last-child { margin-bottom: 0; }
+.cert-says-list li::before {
+  content: ''; position: absolute;
+  left: 0; top: 9px;
+  width: 5px; height: 5px;
+  background: currentColor;
+  border-radius: 50%;
+  opacity: 0.55;
+}
+.cert-says-card.is-yes .cert-says-list li::before { background: #2D7A3A; }
+.cert-says-card.is-no  .cert-says-list li::before { background: var(--blue); }
+.cert-says-list li strong { color: var(--ink); font-weight: 500; }
+
+.legal-review-note {
+  margin-top: 56px;
+  padding: 20px 24px;
+  background: #FAF6EC;
+  border: 1px solid rgba(46,109,180,0.12);
+  border-left: 3px solid var(--blue);
+  border-radius: 4px;
+  font-size: 13px; color: var(--ink-2);
+  line-height: 1.65; font-weight: 300;
+}
+.legal-review-note strong { color: var(--ink); font-weight: 500; }
+
+@media (max-width: 580px) {
+  .cert-says-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<nav class="global-nav">
+  <div class="global-nav-inner">
+    <a href="/" class="gn-wordmark"><span class="gn-text"><em>Safety Critical</em> Labs</span></a>
+    <button class="gn-hamburger" aria-label="Menu" aria-expanded="false"><span></span><span></span><span></span></button>
+    <ul class="gn-links">
+      <li><a href="/framework">Framework</a></li>
+      <li><a href="/process">Process</a></li>
+      <li><a href="/expertise">Expertise</a></li>
+      <li><a href="/markets">Markets</a></li>
+      <li><a href="/news">News</a></li>
+    </ul>
+    <a href="/search" class="gn-search" aria-label="Search">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <circle cx="11" cy="11" r="7"/>
+        <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+      </svg>
+    </a>
+    <a href="/contact" class="gn-cta">Get Certified</a>
+  </div>
+</nav>
+
+<div class="page-shell">
+
+<div class="inner-hero">
+  <div class="fw-hero-glow"></div>
+  <div class="inner-hero-inner">
+    <div>
+      <div class="inner-hero-breadcrumb"><a href="/">Safety Critical Labs</a><span>/</span> Disclaimer</div>
+      <h1>What a certificate says.<br><em>And what it doesn't.</em></h1>
+    </div>
+    <p class="inner-hero-lead">
+      An SCL certificate is a formal determination against a published standard. It is not a safety claim, a regulatory approval, or a guarantee. This page is precise about the difference.
+    </p>
+  </div>
+</div>
+
+<section class="legal-section">
+  <div class="legal-inner">
+
+    <div class="legal-meta">
+      <div class="legal-meta-item">Effective<strong>May 12, 2026</strong></div>
+      <div class="legal-meta-item">Applies to<strong>Site content and certifications</strong></div>
+      <div class="legal-meta-item">Contact<strong><a href="/contact" style="color:var(--blue);text-decoration:none;">/contact</a></strong></div>
+    </div>
+
+    <div class="legal-block">
+      <div class="legal-block-num">01</div>
+      <h2 class="legal-block-title">What a Safety Critical Labs certificate <em>is</em></h2>
+      <p>An SCL certificate records that a defined AI system was assessed against a specific version of the SCL AI Requirements Framework, at a defined classification level, and that the applicable requirements were met at the time of assessment. Every certificate is issued alongside a Certification Determination Document that summarizes findings and the quantified risk score.</p>
+
+      <div class="cert-says-grid">
+        <div class="cert-says-card is-yes">
+          <div class="cert-says-label">A certificate does say</div>
+          <ul class="cert-says-list">
+            <li>This system was <strong>assessed against the SCL AI Requirements Framework</strong>, at the stated version</li>
+            <li>The applicable requirements for the stated <strong>classification level</strong> were met</li>
+            <li>The assessment was completed <strong>on the stated date</strong> and is subject to surveillance</li>
+            <li>A <strong>quantified risk score</strong> was determined per the methodology in Appendix D of the framework</li>
+          </ul>
+        </div>
+        <div class="cert-says-card is-no">
+          <div class="cert-says-label">A certificate does not say</div>
+          <ul class="cert-says-list">
+            <li>This system <strong>is safe</strong></li>
+            <li>This system <strong>will not fail</strong></li>
+            <li>This system is <strong>approved for any specific regulatory purpose</strong></li>
+            <li>This system will continue to meet the requirements <strong>without surveillance and revalidation</strong></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="legal-block">
+      <div class="legal-block-num">02</div>
+      <h2 class="legal-block-title">Point-in-time determination</h2>
+      <p>An SCL certificate reflects the state of the assessed system at the date of assessment. AI systems change behavior over time through data drift, retraining, environment shift, and operational evolution. Every certificate carries a defined surveillance schedule and triggered reassessment conditions. <strong>A certificate issued at deployment is not a certificate valid at month six.</strong> Continuous validation is built into the technical standard for that reason.</p>
+    </div>
+
+    <div class="legal-block">
+      <div class="legal-block-num">03</div>
+      <h2 class="legal-block-title">No regulatory approval</h2>
+      <p>Safety Critical Labs is not a government agency. An SCL determination is not a regulatory approval, type certificate, or premarket clearance from the FAA, FDA, EASA, NHTSA, or any other regulator. Where regulatory approval is required, the operator remains responsible for obtaining it.</p>
+      <p>SCL is pursuing ISO/IEC 17065 accreditation through ANAB. See <a href="/accreditation">/accreditation</a> for current status. Until accreditation is granted, SCL determinations are not accredited under ISO/IEC 17065.</p>
+    </div>
+
+    <div class="legal-block">
+      <div class="legal-block-num">04</div>
+      <h2 class="legal-block-title">Operator responsibility</h2>
+      <p>The operator of a certified AI system remains fully responsible for the safety, regulatory compliance, and operational fitness of that system. A certificate is evidence of rigorous third-party assessment against a published standard. It is not a transfer of operator responsibility to Safety Critical Labs.</p>
+    </div>
+
+    <div class="legal-block">
+      <div class="legal-block-num">05</div>
+      <h2 class="legal-block-title">Site content is informational</h2>
+      <p>Content on safetycriticallabs.com is provided for informational purposes. It does not constitute legal, engineering, regulatory, or safety advice for any specific system. Decisions about AI system development, deployment, certification, and operation should be made on the basis of qualified technical and legal review, not on website content alone.</p>
+      <p>The SCL AI Requirements Framework is published as an open standard. It describes verification methods and evidence standards. It is not a substitute for engineering judgment.</p>
+    </div>
+
+    <div class="legal-block">
+      <div class="legal-block-num">06</div>
+      <h2 class="legal-block-title">Forward-looking statements</h2>
+      <p>Some content on the Site describes work in progress, regulatory engagement, accreditation pursuit, and roadmap commitments. These reflect current intent. They do not constitute guarantees of outcome or timeline. Where the Site refers to a milestone as pursued, in progress, or planned, completion is not assured.</p>
+    </div>
+
+    <div class="legal-block">
+      <div class="legal-block-num">07</div>
+      <h2 class="legal-block-title">External references</h2>
+      <p>The Site references external standards, regulations, and reference materials (see <a href="/documents">/documents</a>). SCL does not own, control, or warrant the accuracy or availability of those external sources. Inclusion of a reference is not endorsement and does not imply that the referenced body endorses SCL.</p>
+    </div>
+
+    <div class="legal-block">
+      <div class="legal-block-num">08</div>
+      <h2 class="legal-block-title">Limitation of liability</h2>
+      <p>To the maximum extent permitted by law, Safety Critical Labs is not liable for indirect, incidental, consequential, or punitive damages arising from Site content, the framework, or the use of any SCL determination. Liability for paid certification engagements is governed by the executed engagement agreement, not by this disclaimer.</p>
+    </div>
+
+    <div class="legal-review-note">
+      <strong>Note.</strong> Final language is under legal review. The substance reflects how SCL describes its work today. For questions about a specific certificate, the certificate's own Determination Document governs in case of conflict with this page. Contact <a href="/contact" style="color:var(--blue);">SCL directly</a>.
+    </div>
+
+  </div>
+</section>
+
+</div>
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-cols">
+      <div class="footer-col"><div class="footer-col-label">Certification</div><a href="/framework">Framework</a><a href="/process">Process</a><a href="/assess">Assess</a><a href="/verify">Verify</a></div>
+      <div class="footer-col"><div class="footer-col-label">Resources</div><a href="/documents">Documents</a><a href="#">FAQ</a></div>
+      <div class="footer-col"><div class="footer-col-label">Company</div><a href="#">About</a><a href="/expertise">Expertise</a><a href="/markets">Markets</a><a href="/contact">Contact</a></div>
+      <div class="footer-col"><div class="footer-col-label">Briefings</div><a href="/news">News</a><a href="/subscribe">Subscribe</a><a href="/updates">Updates</a></div>
+      <div class="footer-col"><div class="footer-col-label">Legal</div><a href="/terms">Terms</a><a href="/privacy">Privacy</a><a href="/disclaimer">Disclaimer</a><a href="/accreditation">Accreditation</a></div>
+    </div>
+    <div class="footer-divider"></div>
+    <div class="footer-bottom">
+      <span class="footer-copyright">&copy; 2025 Safety Critical Labs. All rights reserved.</span>
+      <div class="footer-meta"><a href="#" aria-label="Back to top">Back to top</a><span class="footer-version">Framework v3.0</span></div>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function() {
+  var glow = document.querySelector('.fw-hero-glow');
+  var hero = document.querySelector('.inner-hero');
+  if (!glow || !hero) return;
+  hero.addEventListener('mousemove', function(e) {
+    var rect = hero.getBoundingClientRect();
+    glow.style.setProperty('--glow-x', (e.clientX - rect.left) + 'px');
+    glow.style.setProperty('--glow-y', (e.clientY - rect.top) + 'px');
+  });
+})();
+document.querySelector('.gn-hamburger').addEventListener('click', function() {
+  this.classList.toggle('open');
+  document.querySelector('.gn-links').classList.toggle('open');
+  this.setAttribute('aria-expanded', this.classList.contains('open'));
+  document.body.style.overflow = this.classList.contains('open') ? 'hidden' : '';
+});
+</script>
+<script src="ticker.js"></script>
+</body>
+</html>

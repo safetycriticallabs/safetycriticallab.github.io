@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Accreditation | Safety Critical Labs</title>
+<meta name="description" content="Safety Critical Labs is pursuing ISO/IEC 17065 accreditation through ANAB. The current state of that conversation and the path from intake to formal accreditation.">
+<meta property="og:title" content="Accreditation | Safety Critical Labs">
+<meta property="og:description" content="Pursuing ISO/IEC 17065 accreditation through ANAB. The current state and the path forward.">
+<meta property="og:url" content="https://safetycriticallabs.com/accreditation.html">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://safetycriticallabs.com/img/SCL%20Logo%203d.png">
+<link rel="icon" type="image/x-icon" href="favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="img/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="48x48" href="img/favicon-48x48.png">
+<link rel="icon" type="image/png" sizes="192x192" href="img/favicon-192x192.png">
+<link rel="apple-touch-icon" sizes="180x180" href="img/apple-touch-icon.png">
+<link rel="shortcut icon" href="favicon.ico">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=IBM+Plex+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<style>
+/* ─── ACCREDITATION PAGE ──────────────────────────────────── */
+
+/* Hero cursor glow */
+.inner-hero { z-index: 0; }
+.fw-hero-glow {
+  position: absolute; inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.4s;
+  background: radial-gradient(520px circle at var(--glow-x, 70%) var(--glow-y, 30%), rgba(46,109,180,0.10), transparent 60%);
+}
+.inner-hero:hover .fw-hero-glow { opacity: 1; }
+.inner-hero-inner { z-index: 2; position: relative; }
+
+/* Bracketed mono eyebrow + showcase title */
+.fw-eyebrow-mono {
+  font-family: var(--mono);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(46,109,180,0.6);
+  margin-bottom: 20px;
+}
+.fw-showcase-title {
+  font-family: var(--sans);
+  font-size: clamp(30px, 3.4vw, 46px);
+  font-weight: 600;
+  line-height: 1.08;
+  letter-spacing: -0.025em;
+  color: var(--blue);
+  margin-bottom: 20px;
+}
+.fw-showcase-title em {
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 400;
+  font-size: 1.05em;
+  color: var(--blue-dk);
+}
+
+/* "What it is" / "Why it matters" section */
+.accred-section-a {
+  background:
+    radial-gradient(ellipse at 50% 0%, rgba(46,109,180,0.05) 0%, transparent 50%),
+    #F7F3EC;
+  position: relative;
+}
+.accred-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  align-items: start;
+  margin-top: 48px;
+}
+.accred-grid p {
+  font-size: 16px;
+  color: var(--ink-2);
+  line-height: 1.8;
+  font-weight: 300;
+  margin-bottom: 18px;
+}
+.accred-grid p:last-child { margin-bottom: 0; }
+.accred-grid p strong { color: var(--ink); font-weight: 500; }
+
+/* Status card (current state) */
+.accred-status-card {
+  background: #FAF6EC;
+  border: 1px solid rgba(46,109,180,0.12);
+  border-left: 3px solid var(--blue);
+  border-radius: 4px;
+  padding: 28px;
+  margin-top: 32px;
+}
+.accred-status-label {
+  font-family: var(--mono); font-size: 11px;
+  letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--blue); margin-bottom: 10px;
+}
+.accred-status-body {
+  font-size: 15px;
+  color: var(--ink-2);
+  line-height: 1.7;
+  font-weight: 300;
+  margin: 0;
+}
+.accred-status-body strong { color: var(--ink); font-weight: 500; }
+
+/* Path band (cream gradient, steps in horizontal flow) */
+.accred-path-band {
+  background:
+    radial-gradient(ellipse at 30% 50%, rgba(46,109,180,0.06) 0%, transparent 55%),
+    #F7F3EC;
+  border-top: 1px solid rgba(46,109,180,0.10);
+  border-bottom: 1px solid rgba(46,109,180,0.10);
+  padding: 110px 40px;
+  position: relative;
+}
+.accred-path-inner {
+  max-width: 1140px;
+  margin: 0 auto;
+}
+.accred-steps {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin-top: 48px;
+}
+.accred-step {
+  background: #FAF6EC;
+  border: 1px solid rgba(46,109,180,0.12);
+  border-radius: 4px;
+  padding: 28px 24px;
+  position: relative;
+  transition: border-color 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
+}
+.accred-step:hover {
+  border-color: rgba(46,109,180,0.28);
+  transform: translateY(-3px);
+  box-shadow: 0 12px 30px rgba(46,109,180,0.10);
+}
+.accred-step.is-current {
+  border-color: rgba(46,109,180,0.30);
+  background: linear-gradient(180deg, #FAF6EC 0%, #FCFAF3 100%);
+  box-shadow: 0 6px 20px rgba(46,109,180,0.10);
+}
+.accred-step-num {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  color: var(--blue);
+  margin-bottom: 8px;
+  text-transform: uppercase;
+}
+.accred-step-title {
+  font-family: var(--sans);
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--ink);
+  margin: 0 0 10px;
+  line-height: 1.25;
+}
+.accred-step-desc {
+  font-size: 13px;
+  color: var(--ink-2);
+  line-height: 1.6;
+  font-weight: 300;
+  margin: 0;
+}
+.accred-step-status {
+  display: inline-block;
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  border-radius: 3px;
+  margin-top: 14px;
+}
+.accred-step-status.is-done {
+  background: rgba(45,122,58,0.10);
+  color: #2D7A3A;
+  border: 1px solid rgba(45,122,58,0.20);
+}
+.accred-step-status.is-active {
+  background: rgba(46,109,180,0.10);
+  color: var(--blue);
+  border: 1px solid rgba(46,109,180,0.20);
+}
+.accred-step-status.is-pending {
+  background: rgba(122,143,166,0.10);
+  color: var(--ink-3);
+  border: 1px solid rgba(122,143,166,0.20);
+}
+
+/* Closing section: what the mark becomes */
+.accred-meaning-band {
+  background:
+    radial-gradient(ellipse at 70% 50%, rgba(46,109,180,0.05) 0%, transparent 60%),
+    linear-gradient(180deg, #F4EFE5 0%, #ECE7DB 100%);
+  padding: 110px 40px 130px;
+  border-top: 1px solid rgba(46,109,180,0.10);
+}
+.accred-meaning-grid {
+  max-width: 1140px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: center;
+}
+.accred-meaning-right p {
+  font-size: 15px;
+  color: var(--ink-2);
+  line-height: 1.75;
+  font-weight: 300;
+  margin-bottom: 16px;
+}
+.accred-meaning-right p:last-child { margin-bottom: 0; }
+.accred-meaning-right p strong { color: var(--ink); font-weight: 500; }
+
+@media (max-width: 960px) {
+  .accred-steps { grid-template-columns: 1fr 1fr; }
+  .accred-meaning-grid { grid-template-columns: 1fr; gap: 36px; }
+}
+@media (max-width: 580px) {
+  .accred-grid { grid-template-columns: 1fr; gap: 36px; }
+  .accred-steps { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="global-nav">
+  <div class="global-nav-inner">
+    <a href="/" class="gn-wordmark">
+      <span class="gn-text"><em>Safety Critical</em> Labs</span>
+    </a>
+    <button class="gn-hamburger" aria-label="Menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+    <ul class="gn-links">
+      <li><a href="/framework">Framework</a></li>
+      <li><a href="/process">Process</a></li>
+      <li><a href="/expertise">Expertise</a></li>
+      <li><a href="/markets">Markets</a></li>
+      <li><a href="/news">News</a></li>
+    </ul>
+    <a href="/search" class="gn-search" aria-label="Search">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <circle cx="11" cy="11" r="7"/>
+        <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+      </svg>
+    </a>
+    <a href="/contact" class="gn-cta">Get Certified</a>
+  </div>
+</nav>
+
+<div class="page-shell">
+
+<!-- HERO -->
+<div class="inner-hero">
+  <div class="fw-hero-glow"></div>
+  <div class="inner-hero-inner">
+    <div>
+      <div class="inner-hero-breadcrumb">
+        <a href="/">Safety Critical Labs</a>
+        <span>/</span> Accreditation
+      </div>
+      <h1>Pursuing <em>ISO/IEC<br>17065</em> accreditation.</h1>
+    </div>
+    <p class="inner-hero-lead">
+      Accreditation is the step that turns a credible third-party determination into a regulatory instrument. Safety Critical Labs is on the formal path with ANAB.
+    </p>
+  </div>
+</div>
+
+<!-- WHAT IT IS / WHY IT MATTERS -->
+<section class="page-section accred-section-a">
+  <div class="section-inner">
+    <div class="fw-eyebrow-mono">[ What Accreditation Means ]</div>
+    <h2 class="fw-showcase-title">A recognized authority,<br>not just a <em>credible voice.</em></h2>
+
+    <div class="accred-grid">
+      <div>
+        <p>
+          ISO/IEC 17065 is the international standard for bodies that certify products, processes, and services. Accreditation under it is granted by a national accreditation body that has itself been audited against ISO/IEC 17011. In the United States, the recognized body is the ANSI National Accreditation Board (ANAB).
+        </p>
+        <p>
+          For Safety Critical Labs, accreditation does one specific thing. It moves the SCL mark from <strong>"a defensible third-party assessment against a published standard"</strong> to <strong>"an assessment whose conformity has been independently verified by a body that regulators already recognize."</strong>
+        </p>
+      </div>
+      <div>
+        <p>
+          The framework is open. The methodology is documented. The mark is filed for trademark protection. Accreditation is the missing piece that closes the loop between SCL determinations and the regulatory bodies whose recognition the mark is built to earn.
+        </p>
+        <p>
+          This is a multi-year path. It begins with documented quality management, demonstrated independence and impartiality, competency records for every assessor, and external audit. SCL has been preparing for this from the first version of the framework.
+        </p>
+
+        <div class="accred-status-card">
+          <div class="accred-status-label">Current Status &middot; April 2026</div>
+          <p class="accred-status-body">
+            Intake response submitted to ANAB. <strong>ANAB has confirmed the submitted certification scheme is sufficient to proceed with a formal fee estimate for ISO/IEC 17065 accreditation of Safety Critical Labs.</strong> The conversation is open and active.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- THE PATH -->
+<div class="accred-path-band">
+  <div class="accred-path-inner">
+    <div class="fw-eyebrow-mono">[ The Path ]</div>
+    <h2 class="fw-showcase-title">From intake to <em>accredited body.</em></h2>
+    <p style="font-size:16px;color:var(--ink-2);font-weight:300;line-height:1.75;max-width:620px;margin-top:0;">
+      Each step has a defined input and a defined output. The order is fixed. The timeline scales with the certification body's readiness, not the accreditor's.
+    </p>
+
+    <div class="accred-steps">
+      <div class="accred-step">
+        <div class="accred-step-num">01</div>
+        <h3 class="accred-step-title">Intake and scheme review</h3>
+        <p class="accred-step-desc">
+          Submit the certification scheme to ANAB for initial review. Confirm the scope, the published standard, and the methodology are sufficient to proceed.
+        </p>
+        <span class="accred-step-status is-done">Complete</span>
+      </div>
+      <div class="accred-step is-current">
+        <div class="accred-step-num">02</div>
+        <h3 class="accred-step-title">Fee estimate and engagement</h3>
+        <p class="accred-step-desc">
+          ANAB prepares a formal fee estimate based on the scheme. SCL accepts the engagement and formal accreditation activities begin.
+        </p>
+        <span class="accred-step-status is-active">In Progress</span>
+      </div>
+      <div class="accred-step">
+        <div class="accred-step-num">03</div>
+        <h3 class="accred-step-title">Gap assessment and document review</h3>
+        <p class="accred-step-desc">
+          ANAB reviews SCL's quality management system, methodology, assessor qualifications, and impartiality controls against the requirements of ISO/IEC 17065.
+        </p>
+        <span class="accred-step-status is-pending">Pending</span>
+      </div>
+      <div class="accred-step">
+        <div class="accred-step-num">04</div>
+        <h3 class="accred-step-title">On-site assessment</h3>
+        <p class="accred-step-desc">
+          ANAB conducts a formal on-site assessment, including witness audit of at least one SCL certification engagement. Findings are documented and any nonconformities are remediated.
+        </p>
+        <span class="accred-step-status is-pending">Pending</span>
+      </div>
+      <div class="accred-step">
+        <div class="accred-step-num">05</div>
+        <h3 class="accred-step-title">Accreditation decision</h3>
+        <p class="accred-step-desc">
+          ANAB issues a formal accreditation determination. Accredited bodies are listed in the ANAB public directory and may use the accreditation mark in conjunction with the SCL certification mark.
+        </p>
+        <span class="accred-step-status is-pending">Pending</span>
+      </div>
+      <div class="accred-step">
+        <div class="accred-step-num">06</div>
+        <h3 class="accred-step-title">Surveillance and reassessment</h3>
+        <p class="accred-step-desc">
+          Accreditation is maintained through periodic surveillance audits and full reassessment on a defined cycle. The framework's continuous validation discipline applies to the certification body itself.
+        </p>
+        <span class="accred-step-status is-pending">Pending</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- WHAT IT BECOMES -->
+<div class="accred-meaning-band">
+  <div class="accred-meaning-grid">
+    <div>
+      <div class="fw-eyebrow-mono">[ What the Mark Becomes ]</div>
+      <h2 class="fw-showcase-title">A certificate regulators<br>can <em>reference.</em></h2>
+    </div>
+    <div class="accred-meaning-right">
+      <p>
+        Today, an SCL certificate is a defensible record. After accreditation, it is also an instrument recognized by the framework regulators have been waiting for.
+      </p>
+      <p>
+        Procurement officers can cite it. Aviation authorities can reference it in airworthiness criteria. Medical device reviewers can accept it as evidence. The accreditation does not change what the certificate <em>means</em> &mdash; it changes what regulators can <strong>do</strong> with it.
+      </p>
+      <p>
+        Every assessment SCL conducts before accreditation is conducted to the same standard that will be audited after accreditation. Accreditation does not raise the bar. It validates that the bar is already where it should be.
+      </p>
+    </div>
+  </div>
+</div>
+
+</div><!-- /page-shell -->
+
+<!-- FOOTER -->
+<footer class="site-footer">
+  <div class="footer-inner">
+
+    <div class="footer-cols">
+
+      <div class="footer-col">
+        <div class="footer-col-label">Certification</div>
+        <a href="/framework">Framework</a>
+        <a href="/process">Process</a>
+        <a href="/assess">Assess</a>
+        <a href="/verify">Verify</a>
+      </div>
+
+      <div class="footer-col">
+        <div class="footer-col-label">Resources</div>
+        <a href="/documents">Documents</a>
+        <a href="#">FAQ</a>
+      </div>
+
+      <div class="footer-col">
+        <div class="footer-col-label">Company</div>
+        <a href="#">About</a>
+        <a href="/expertise">Expertise</a>
+        <a href="/markets">Markets</a>
+        <a href="/contact">Contact</a>
+      </div>
+
+      <div class="footer-col">
+        <div class="footer-col-label">Briefings</div>
+        <a href="/news">News</a>
+        <a href="/subscribe">Subscribe</a>
+        <a href="/updates">Updates</a>
+      </div>
+
+      <div class="footer-col">
+        <div class="footer-col-label">Legal</div>
+        <a href="/terms">Terms</a>
+        <a href="/privacy">Privacy</a>
+        <a href="/disclaimer">Disclaimer</a>
+        <a href="/accreditation">Accreditation</a>
+      </div>
+
+    </div>
+
+    <div class="footer-divider"></div>
+
+    <div class="footer-bottom">
+      <span class="footer-copyright">&copy; 2025 Safety Critical Labs. All rights reserved.</span>
+      <div class="footer-meta">
+        <a href="#" aria-label="Back to top">Back to top</a>
+        <span class="footer-version">Framework v3.0</span>
+      </div>
+    </div>
+
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script>
+/* ─── Hero cursor glow ───────────────────────── */
+(function() {
+  var glow = document.querySelector('.fw-hero-glow');
+  var hero = document.querySelector('.inner-hero');
+  if (!glow || !hero) return;
+  hero.addEventListener('mousemove', function(e) {
+    var rect = hero.getBoundingClientRect();
+    glow.style.setProperty('--glow-x', (e.clientX - rect.left) + 'px');
+    glow.style.setProperty('--glow-y', (e.clientY - rect.top) + 'px');
+  });
+})();
+
+/* ─── Mobile menu toggle ─────────────────────── */
+document.querySelector('.gn-hamburger').addEventListener('click', function() {
+  this.classList.toggle('open');
+  document.querySelector('.gn-links').classList.toggle('open');
+  this.setAttribute('aria-expanded', this.classList.contains('open'));
+  document.body.style.overflow = this.classList.contains('open') ? 'hidden' : '';
+});
+
+/* ─── Dropdown nav toggle ────────────────────── */
+document.querySelectorAll(".gn-dropdown-toggle").forEach(function(btn) {
+  btn.addEventListener("click", function(e) {
+    e.stopPropagation();
+    var dd = this.closest(".gn-dropdown");
+    var menu = dd.querySelector(".gn-dropdown-menu");
+    var isOpen = dd.classList.contains("open");
+    document.querySelectorAll(".gn-dropdown").forEach(function(d) {
+      d.classList.remove("open");
+      var m = d.querySelector(".gn-dropdown-menu");
+      if (m) m.style.display = "none";
+    });
+    if (!isOpen) {
+      dd.classList.add("open");
+      menu.style.display = "block";
+    }
+  });
+});
+document.addEventListener("click", function() {
+  document.querySelectorAll(".gn-dropdown").forEach(function(d) {
+    d.classList.remove("open");
+    var m = d.querySelector(".gn-dropdown-menu");
+    if (m) m.style.display = "none";
+  });
+});
+</script>
+<script src="ticker.js"></script>
+</body>
+</html>

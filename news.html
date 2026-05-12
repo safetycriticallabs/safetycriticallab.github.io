@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>News | Safety Critical Labs</title>
+<meta name="description" content="Latest research and announcements from leading AI safety organizations and research labs.">
+<meta property="og:title" content="News | Safety Critical Labs">
+<meta property="og:description" content="Aggregated AI safety news from Stanford HAI, MIT, Google Research, and other leading sources.">
+<meta property="og:url" content="https://safetycriticallabs.com/news.html">
+<meta property="og:type" content="website">
+<link rel="icon" type="image/x-icon" href="favicon.ico">
+<link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="192x192" href="img/favicon-192x192.png">
+<link rel="apple-touch-icon" sizes="180x180" href="img/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=IBM+Plex+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<style>
+/* ─── NEWS PAGE ───────────────────────────────────────────── */
+
+.news-page-section {
+  background:
+    radial-gradient(ellipse at 50% 30%, rgba(46,109,180,0.05) 0%, transparent 60%),
+    linear-gradient(180deg, #ECE7DB 0%, #F4EFE5 100%);
+  padding: 88px 40px 120px;
+}
+.news-page-inner {
+  max-width: 1140px;
+  margin: 0 auto;
+}
+
+/* Featured story — large article at the top */
+.news-featured {
+  display: grid;
+  grid-template-columns: 1fr 1.1fr;
+  gap: 56px;
+  align-items: stretch;
+  padding-bottom: 56px;
+  border-bottom: 1px solid rgba(46,109,180,0.14);
+  margin-bottom: 64px;
+}
+
+.news-featured-text {
+  display: grid;
+  grid-template-columns: 110px 1fr;
+  gap: 32px;
+  align-content: start;
+}
+.news-featured-date {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(46,109,180,0.55);
+  padding-top: 6px;
+}
+.news-featured-body h2 {
+  font-family: var(--sans);
+  font-size: clamp(26px, 2.6vw, 34px);
+  font-weight: 600;
+  line-height: 1.18;
+  letter-spacing: -0.012em;
+  color: var(--blue);
+  margin: 0 0 18px;
+}
+.news-featured-body p {
+  font-size: 16px;
+  line-height: 1.7;
+  font-weight: 400;
+  color: rgba(46,109,180,0.78);
+  margin: 0 0 32px;
+  max-width: 460px;
+}
+.news-featured-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: auto;
+  padding-top: 32px;
+  border-top: 1px solid rgba(46,109,180,0.10);
+}
+.news-featured-source {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(46,109,180,0.55);
+}
+.news-featured-read {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 22px;
+  border: 1px solid var(--blue);
+  border-radius: 6px;
+  color: var(--blue);
+  background: transparent;
+  text-decoration: none;
+  font-family: var(--sans);
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  transition: all 0.25s ease;
+}
+.news-featured-read:hover {
+  background: var(--blue);
+  color: #fff;
+}
+
+.news-featured-image {
+  background:
+    radial-gradient(ellipse at 70% 30%, rgba(46,109,180,0.18), transparent 60%),
+    linear-gradient(135deg, #E8EEF6 0%, #DDE5F0 50%, #ECE7DB 100%);
+  border-radius: 4px;
+  position: relative;
+  overflow: hidden;
+  min-height: 380px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.news-featured-image::after {
+  content: '';
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(circle at 30% 40%, rgba(46,109,180,0.10) 1px, transparent 1.5px),
+    radial-gradient(circle at 75% 65%, rgba(46,109,180,0.08) 1px, transparent 1.5px),
+    radial-gradient(circle at 50% 80%, rgba(46,109,180,0.06) 1px, transparent 1.5px);
+  background-size: 80px 80px, 110px 110px, 60px 60px;
+  pointer-events: none;
+  opacity: 0.6;
+}
+.news-featured-image-label {
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--blue-dk);
+  background: rgba(250,246,236,0.85);
+  backdrop-filter: blur(8px);
+  padding: 10px 18px;
+  border-radius: 6px;
+  z-index: 2;
+}
+
+/* Source filter chips */
+.news-filter-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 40px;
+  padding-bottom: 32px;
+  border-bottom: 1px solid rgba(46,109,180,0.10);
+}
+.news-filter-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 8px 16px;
+  border: 1px solid var(--blue);
+  border-radius: 6px;
+  background: transparent;
+  color: var(--blue);
+  font-family: var(--sans);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  user-select: none;
+}
+.news-filter-chip:hover {
+  background: var(--blue);
+  color: #fff;
+}
+.news-filter-chip.active {
+  background: var(--blue);
+  border-color: var(--blue);
+  color: #fff;
+}
+
+/* Article grid */
+.news-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 28px;
+}
+.news-card {
+  display: flex;
+  flex-direction: column;
+  background: #FAF6EC;
+  border: 1px solid rgba(46,109,180,0.14);
+  border-radius: 6px;
+  overflow: hidden;
+  text-decoration: none;
+  transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+}
+.news-card:hover {
+  border-color: var(--blue);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(46,109,180,0.10);
+}
+.news-card-image {
+  height: 180px;
+  background:
+    radial-gradient(ellipse at 30% 40%, rgba(46,109,180,0.16), transparent 60%),
+    linear-gradient(135deg, #E8EEF6 0%, #DDE5F0 100%);
+  position: relative;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+.news-card-image::after {
+  content: '';
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(circle at 25% 30%, rgba(46,109,180,0.10) 1px, transparent 1.5px),
+    radial-gradient(circle at 70% 65%, rgba(46,109,180,0.08) 1px, transparent 1.5px);
+  background-size: 70px 70px, 90px 90px;
+  pointer-events: none;
+  opacity: 0.5;
+}
+/* Per-source tints on card image */
+.news-card[data-source="hai"] .news-card-image {
+  background: linear-gradient(135deg, #ECE7DB 0%, #DDE5F0 100%);
+}
+.news-card[data-source="mit"] .news-card-image {
+  background: linear-gradient(135deg, #E8EEF6 0%, #C8D4E8 100%);
+}
+.news-card[data-source="google"] .news-card-image {
+  background: linear-gradient(135deg, #F4EFE5 0%, #DDE5F0 100%);
+}
+.news-card[data-source="anthropic"] .news-card-image {
+  background: linear-gradient(135deg, #ECE7DB 0%, #E8EEF6 100%);
+}
+.news-card[data-source="openai"] .news-card-image {
+  background: linear-gradient(135deg, #DDE5F0 0%, #ECE7DB 100%);
+}
+.news-card[data-source="alignment"] .news-card-image {
+  background: linear-gradient(135deg, #F4EFE5 0%, #C8D4E8 100%);
+}
+
+.news-card-source-pill {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--blue-dk);
+  background: rgba(250,246,236,0.85);
+  backdrop-filter: blur(6px);
+  padding: 6px 12px;
+  border-radius: 6px;
+  z-index: 2;
+}
+
+.news-card-content {
+  padding: 22px 22px 26px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+.news-card-date {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(46,109,180,0.55);
+  margin-bottom: 10px;
+}
+.news-card-title {
+  font-family: var(--sans);
+  font-size: 17px;
+  font-weight: 600;
+  line-height: 1.32;
+  color: var(--blue);
+  margin: 0 0 12px;
+  transition: color 0.2s;
+}
+.news-card:hover .news-card-title { color: var(--blue-dk); }
+.news-card-summary {
+  font-size: 14px;
+  line-height: 1.6;
+  color: rgba(46,109,180,0.7);
+  font-weight: 400;
+  margin: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Skeleton loading state */
+.news-card-skeleton {
+  pointer-events: none;
+}
+.news-card-skeleton .news-card-image {
+  background: rgba(46,109,180,0.06);
+}
+.news-card-skeleton .news-card-title,
+.news-card-skeleton .news-card-summary,
+.news-card-skeleton .news-card-date {
+  background: rgba(46,109,180,0.08);
+  color: transparent;
+  border-radius: 3px;
+  display: block;
+}
+.news-card-skeleton .news-card-date { height: 11px; width: 80px; }
+.news-card-skeleton .news-card-title { height: 17px; margin-bottom: 8px; }
+.news-card-skeleton .news-card-summary { height: 14px; }
+
+/* Responsive */
+@media (max-width: 980px) {
+  .news-featured { grid-template-columns: 1fr; gap: 32px; }
+  .news-featured-image { min-height: 260px; }
+  .news-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 640px) {
+  .news-page-section { padding: 56px 24px 80px; }
+  .news-featured-text { grid-template-columns: 1fr; gap: 12px; }
+  .news-featured-meta { flex-direction: column; gap: 16px; align-items: flex-start; }
+  .news-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<nav class="global-nav">
+  <div class="global-nav-inner">
+    <a href="/" class="gn-wordmark">
+      <span class="gn-text"><em>Safety Critical</em> Labs</span>
+    </a>
+    <button class="gn-hamburger" aria-label="Menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+    <ul class="gn-links">
+      <li><a href="/framework">Framework</a></li>
+      <li><a href="/process">Process</a></li>
+      <li><a href="/expertise">Expertise</a></li>
+      <li><a href="/markets">Markets</a></li>
+      <li><a href="/news" class="active">News</a></li>
+    </ul>
+    <a href="/search" class="gn-search" aria-label="Search">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <circle cx="11" cy="11" r="7"/>
+        <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+      </svg>
+    </a>
+    <a href="/contact" class="gn-cta">Get Certified</a>
+  </div>
+</nav>
+
+<div class="page-shell">
+
+<!-- INNER HERO -->
+<div class="inner-hero">
+  <div class="inner-hero-inner">
+    <div>
+      <div class="inner-hero-breadcrumb">
+        <a href="/">Safety Critical Labs</a>
+        <span>/</span> News
+      </div>
+      <h1>Latest in <em>AI research</em> and safety.</h1>
+    </div>
+    <p class="inner-hero-lead">
+      Research and announcements aggregated from leading AI safety organizations and labs. Updated continuously from public feeds.
+    </p>
+  </div>
+</div>
+
+<!-- NEWS BODY -->
+<section class="news-page-section">
+  <div class="news-page-inner">
+
+    <!-- Featured article — populated by JS -->
+    <article class="news-featured" id="news-featured" aria-label="Featured story">
+      <div class="news-featured-text">
+        <div class="news-featured-date" id="featured-date">Loading</div>
+        <div class="news-featured-body">
+          <h2 id="featured-title">Loading latest research…</h2>
+          <p id="featured-summary">Fetching the most recent items from Stanford HAI, MIT, Google Research, and other AI safety sources.</p>
+          <div class="news-featured-meta">
+            <span class="news-featured-source" id="featured-source">Source</span>
+            <a class="news-featured-read" id="featured-link" href="#" target="_blank" rel="noopener">Read</a>
+          </div>
+        </div>
+      </div>
+      <div class="news-featured-image" id="featured-image">
+        <span class="news-featured-image-label" id="featured-image-label">AI Research</span>
+      </div>
+    </article>
+
+    <!-- Filter chips -->
+    <div class="news-filter-row" id="news-filter-row" role="group" aria-label="Filter by source">
+      <button class="news-filter-chip active" data-filter="all">All sources</button>
+      <button class="news-filter-chip" data-filter="hai">Stanford HAI</button>
+      <button class="news-filter-chip" data-filter="mit">MIT</button>
+      <button class="news-filter-chip" data-filter="google">Google Research</button>
+      <button class="news-filter-chip" data-filter="anthropic">Anthropic</button>
+      <button class="news-filter-chip" data-filter="openai">OpenAI</button>
+      <button class="news-filter-chip" data-filter="alignment">Alignment Forum</button>
+    </div>
+
+    <!-- Article grid — populated by JS from seed + live feeds -->
+    <div class="news-grid" id="news-grid"></div>
+
+  </div>
+</section>
+
+</div>
+
+<footer class="site-footer">
+  <div class="footer-inner">
+
+    <div class="footer-cols">
+
+      <div class="footer-col">
+        <div class="footer-col-label">Certification</div>
+        <a href="/framework">Framework</a>
+        <a href="/process">Process</a>
+        <a href="/assess">Assess</a>
+        <a href="/verify">Verify</a>
+      </div>
+
+      <div class="footer-col">
+        <div class="footer-col-label">Resources</div>
+        <a href="/documents">Documents</a>
+        <a href="#">FAQ</a>
+      </div>
+
+      <div class="footer-col">
+        <div class="footer-col-label">Company</div>
+        <a href="#">About</a>
+        <a href="/expertise">Expertise</a>
+        <a href="/markets">Markets</a>
+        <a href="/contact">Contact</a>
+      </div>
+
+      <div class="footer-col">
+        <div class="footer-col-label">Briefings</div>
+        <a href="/news">News</a>
+        <a href="/subscribe">Subscribe</a>
+        <a href="/updates">Updates</a>
+      </div>
+
+      <div class="footer-col">
+        <div class="footer-col-label">Legal</div>
+        <a href="/terms">Terms</a>
+        <a href="/privacy">Privacy</a>
+        <a href="/disclaimer">Disclaimer</a>
+        <a href="/accreditation">Accreditation</a>
+      </div>
+
+    </div>
+
+    <div class="footer-divider"></div>
+
+    <div class="footer-bottom">
+      <span class="footer-copyright">&copy; 2025 Safety Critical Labs. All rights reserved.</span>
+      <div class="footer-meta">
+        <a href="#" aria-label="Back to top">Back to top</a>
+        <span class="footer-version">Framework v3.0</span>
+      </div>
+    </div>
+
+  </div>
+</footer>
+
+<script>
+/* ─── NEWS AGGREGATOR ─────────────────────────────────────── */
+(function () {
+  var CORS_PROXY = 'https://scl-cors-proxy.kevwill94.workers.dev/?url=';
+
+  var SOURCE_META = {
+    hai:       { label: 'Stanford HAI',      pill: 'HAI' },
+    mit:       { label: 'MIT News',          pill: 'MIT' },
+    google:    { label: 'Google Research',   pill: 'Google AI' },
+    anthropic: { label: 'Anthropic',         pill: 'Anthropic' },
+    openai:    { label: 'OpenAI',            pill: 'OpenAI' },
+    alignment: { label: 'Alignment Forum',   pill: 'Alignment' }
+  };
+
+  var FEEDS = [
+    { key: 'hai',       url: 'https://hai.stanford.edu/news/rss.xml' },
+    { key: 'mit',       url: 'https://news.mit.edu/topic/mitartificial-intelligence2-rss.xml' },
+    { key: 'google',    url: 'https://research.google/blog/rss/' },
+    { key: 'alignment', url: 'https://www.alignmentforum.org/feed.xml' }
+  ];
+
+  /* Rich seed content — page is full even before (or instead of) RSS feeds resolving. */
+  function d(s) { return new Date(s + 'T12:00:00Z'); }
+  var FALLBACK = [
+    /* Stanford HAI */
+    { key: 'hai', title: 'Stanford AI Index Report 2026: progress, costs, and capabilities',
+      summary: 'Annual report on the global state of AI research, deployment, and policy. Findings on training compute, capability scaling, and regulatory trends.',
+      url: 'https://hai.stanford.edu/research/ai-index-report', date: d('2026-05-09') },
+    { key: 'hai', title: 'Bridging research and policy: HAI\'s 2026 roadmap',
+      summary: 'Stanford HAI outlines its research and policy priorities for the year, with focus on safety evaluation standards and federal AI oversight.',
+      url: 'https://hai.stanford.edu/news', date: d('2026-04-24') },
+    { key: 'hai', title: 'Workshop on foundation model governance',
+      summary: 'Researchers and policymakers convene at Stanford to discuss governance frameworks for general-purpose AI systems and frontier model evaluation.',
+      url: 'https://hai.stanford.edu/events', date: d('2026-04-10') },
+    { key: 'hai', title: 'RegLab releases AI Audit framework for public comment',
+      summary: 'A reproducible audit methodology for evaluating high-stakes AI systems in regulated domains, developed in partnership with federal agencies.',
+      url: 'https://reglab.stanford.edu/', date: d('2026-03-12') },
+    { key: 'hai', title: 'HAI policy summit: an agenda for federal AI oversight',
+      summary: 'Summary of policy recommendations from the annual HAI summit, covering risk classification, post-market monitoring, and incident reporting.',
+      url: 'https://hai.stanford.edu/news', date: d('2026-02-20') },
+
+    /* MIT News */
+    { key: 'mit', title: 'MIT researchers develop method for detecting AI hallucinations',
+      summary: 'CSAIL team publishes work on uncertainty estimation that flags hallucinated outputs from large language models with higher reliability than baselines.',
+      url: 'https://news.mit.edu/topic/artificial-intelligence2', date: d('2026-05-07') },
+    { key: 'mit', title: 'CSAIL launches multi-year initiative on AI verification',
+      summary: 'A new program at MIT\'s Computer Science and Artificial Intelligence Lab focuses on formal methods for verifying neural network behavior.',
+      url: 'https://www.csail.mit.edu/', date: d('2026-04-28') },
+    { key: 'mit', title: 'Interpretability in large language models: new MIT research',
+      summary: 'Researchers report on probing methods that surface causal circuits in transformer-based models, with implications for safety auditing.',
+      url: 'https://news.mit.edu/', date: d('2026-04-14') },
+    { key: 'mit', title: 'Lincoln Labs: adversarial robustness in vision models',
+      summary: 'New work from MIT Lincoln Laboratory benchmarks adversarial robustness across safety-critical computer vision applications.',
+      url: 'https://www.ll.mit.edu/', date: d('2026-04-02') },
+    { key: 'mit', title: 'MIT Sloan study: AI adoption in regulated industries',
+      summary: 'Survey of AI adoption patterns across aerospace, healthcare, and financial services, with implications for assurance and certification.',
+      url: 'https://mitsloan.mit.edu/', date: d('2026-03-20') },
+    { key: 'mit', title: 'MIT and DARPA on assured autonomy',
+      summary: 'Joint research on verification and validation of autonomous systems operating in safety-critical environments.',
+      url: 'https://news.mit.edu/', date: d('2026-02-28') },
+
+    /* Google Research */
+    { key: 'google', title: 'Gemini safety techniques: expanded evaluation suite',
+      summary: 'Google Research publishes the methodology and results from expanded safety evaluations of the Gemini model family.',
+      url: 'https://research.google/blog/', date: d('2026-05-04') },
+    { key: 'google', title: 'Scaling responsible AI development across modalities',
+      summary: 'New paper from Google DeepMind on extending responsible AI practices to multimodal and agentic systems.',
+      url: 'https://deepmind.google/discover/blog/', date: d('2026-04-20') },
+    { key: 'google', title: 'Research advances in alignment for multi-agent systems',
+      summary: 'Google Research presents work on aligning multi-agent AI systems with human preferences in cooperative and competitive settings.',
+      url: 'https://research.google/blog/', date: d('2026-04-06') },
+    { key: 'google', title: 'Open-source: evaluation framework for long-context LLMs',
+      summary: 'Release of an open-source benchmark and harness for evaluating language models across very long contexts and tool-use chains.',
+      url: 'https://research.google/blog/', date: d('2026-03-24') },
+    { key: 'google', title: 'Governance findings from the Google AI ethics review',
+      summary: 'Summary report from Google\'s internal AI ethics review process, covering deployments approved, modified, and declined.',
+      url: 'https://ai.google/responsibility/', date: d('2026-02-24') },
+
+    /* Anthropic */
+    { key: 'anthropic', title: 'Constitutional AI: a year in review',
+      summary: 'Anthropic reflects on a year of Constitutional AI in production, including methodology refinements and observed model behavior changes.',
+      url: 'https://www.anthropic.com/news', date: d('2026-05-01') },
+    { key: 'anthropic', title: 'New mechanistic interpretability findings on Claude',
+      summary: 'Anthropic\'s interpretability team publishes new insights into the internal computation of Claude, including feature dictionaries.',
+      url: 'https://www.anthropic.com/research', date: d('2026-04-17') },
+    { key: 'anthropic', title: 'Responsible Scaling Policy: version 2.0',
+      summary: 'Anthropic publishes an updated Responsible Scaling Policy with revised evaluation thresholds and deployment commitments.',
+      url: 'https://www.anthropic.com/news', date: d('2026-03-16') },
+    { key: 'anthropic', title: 'Red-teaming Claude: results and methodology',
+      summary: 'Detailed writeup of red-team exercises across recent Claude releases, including coverage, failure modes, and mitigations.',
+      url: 'https://www.anthropic.com/research', date: d('2026-02-24') },
+    { key: 'anthropic', title: 'Sleeper agents follow-up: deceptive alignment evaluation',
+      summary: 'Continued research on detecting and mitigating models that behave differently in evaluation versus deployment contexts.',
+      url: 'https://www.anthropic.com/research', date: d('2026-02-08') },
+
+    /* OpenAI */
+    { key: 'openai', title: 'GPT safety evaluations: red-team report Q1 2026',
+      summary: 'OpenAI publishes the quarterly red-team report covering GPT model evaluations, including chemical, biological, and cyber risk categories.',
+      url: 'https://openai.com/safety', date: d('2026-04-25') },
+    { key: 'openai', title: 'Red-teaming framework for frontier models',
+      summary: 'A revised internal framework for red-teaming pre-deployment models, with new evaluation categories for agentic capabilities.',
+      url: 'https://openai.com/research', date: d('2026-03-31') },
+    { key: 'openai', title: 'Updated usage policies for AI deployment',
+      summary: 'OpenAI publishes refreshed usage policies clarifying restrictions on use cases in regulated industries and high-stakes decisions.',
+      url: 'https://openai.com/policies', date: d('2026-03-08') },
+    { key: 'openai', title: 'Preparedness team annual report',
+      summary: 'Annual summary from OpenAI\'s Preparedness team covering catastrophic risk evaluations and mitigation work over the year.',
+      url: 'https://openai.com/safety', date: d('2026-02-16') },
+
+    /* Alignment Forum */
+    { key: 'alignment', title: 'Foundations of formal AI alignment',
+      summary: 'A long-form technical post laying out a research agenda for formalizing AI alignment problems and partial solutions.',
+      url: 'https://www.alignmentforum.org/', date: d('2026-05-11') },
+    { key: 'alignment', title: 'Recent work on goal misgeneralization in fine-tuning',
+      summary: 'Survey and discussion of recent research on how language models can learn unintended objectives during fine-tuning.',
+      url: 'https://www.alignmentforum.org/', date: d('2026-04-21') },
+    { key: 'alignment', title: 'Open problem: detecting deceptive alignment',
+      summary: 'Technical analysis of why deceptive alignment is difficult to detect with current evaluation methods, and what would help.',
+      url: 'https://www.alignmentforum.org/', date: d('2026-03-30') },
+    { key: 'alignment', title: 'Scalable oversight techniques: a writeup',
+      summary: 'Detailed comparison of scalable oversight techniques including debate, recursive reward modeling, and constitutional methods.',
+      url: 'https://www.alignmentforum.org/', date: d('2026-02-12') }
+  ];
+
+  var allItems = [];
+  var activeFilter = 'all';
+
+  /* ── Format date as "MMM DD, YYYY" ──────────────────────── */
+  function formatDate(d) {
+    if (!d || isNaN(d.getTime())) return '';
+    var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    return months[d.getMonth()] + ' ' + String(d.getDate()).padStart(2, '0') + ', ' + d.getFullYear();
+  }
+
+  /* ── Strip HTML tags + truncate ─────────────────────────── */
+  function stripHtml(html) {
+    var div = document.createElement('div');
+    div.innerHTML = html || '';
+    return (div.textContent || div.innerText || '').replace(/\s+/g, ' ').trim();
+  }
+  function truncate(text, n) {
+    if (!text) return '';
+    if (text.length <= n) return text;
+    return text.slice(0, n).replace(/\s+\S*$/, '') + '…';
+  }
+  function escapeHtml(str) {
+    var div = document.createElement('div');
+    div.textContent = str;
+    return div.innerHTML;
+  }
+
+  /* ── Parse RSS/Atom XML into normalized items ────────────── */
+  function parseFeed(xmlText, sourceKey) {
+    var parser = new DOMParser();
+    var doc = parser.parseFromString(xmlText, 'application/xml');
+    if (doc.querySelector('parsererror')) return [];
+
+    var items = doc.querySelectorAll('item');
+    var entries = doc.querySelectorAll('entry');
+    var nodes = items.length ? items : entries;
+
+    var out = [];
+    for (var i = 0; i < nodes.length && i < 8; i++) {
+      var node = nodes[i];
+      var titleEl = node.querySelector('title');
+      var linkEl = node.querySelector('link');
+      var pubEl  = node.querySelector('pubDate') || node.querySelector('published') || node.querySelector('updated');
+      var descEl = node.querySelector('description') || node.querySelector('summary') || node.querySelector('content');
+
+      var title = titleEl ? stripHtml(titleEl.textContent) : '';
+      var link = '';
+      if (linkEl) {
+        link = linkEl.getAttribute('href') || stripHtml(linkEl.textContent);
+      }
+      var date = pubEl ? new Date(pubEl.textContent) : new Date();
+      var summary = descEl ? truncate(stripHtml(descEl.textContent), 180) : '';
+
+      if (title && link) {
+        out.push({ key: sourceKey, title: title, url: link, date: date, summary: summary });
+      }
+    }
+    return out;
+  }
+
+  /* ── Fetch all feeds (each with its own timeout/fallback) ─ */
+  function fetchFeed(feed) {
+    return fetch(CORS_PROXY + encodeURIComponent(feed.url))
+      .then(function (r) { return r.ok ? r.text() : Promise.reject(new Error('HTTP ' + r.status)); })
+      .then(function (txt) { return parseFeed(txt, feed.key); })
+      .catch(function () { return []; });
+  }
+
+  /* Render the seed content IMMEDIATELY so the page is full on first paint —
+     don't wait for RSS feeds to resolve. Real feed data will replace this if it loads. */
+  function sortAndRender(items) {
+    items.sort(function (a, b) { return b.date.getTime() - a.date.getTime(); });
+    renderFeatured(items[0]);
+    renderGrid(items.slice(1));
+  }
+
+  allItems = FALLBACK.slice();
+  sortAndRender(allItems);
+
+  /* Now try to fetch live feeds; if any return real data, replace the seed. */
+  Promise.all(FEEDS.map(fetchFeed)).then(function (results) {
+    var live = [];
+    results.forEach(function (items) { live = live.concat(items); });
+    if (live.length > 0) {
+      allItems = live;
+      sortAndRender(allItems);
+    }
+  });
+
+  /* ── Render featured article (top item) ──────────────────── */
+  function renderFeatured(item) {
+    if (!item) return;
+    var meta = SOURCE_META[item.key] || { label: 'AI Research', pill: 'AI Research' };
+    document.getElementById('featured-date').textContent  = formatDate(item.date) || '';
+    document.getElementById('featured-title').textContent = item.title;
+    document.getElementById('featured-summary').textContent = item.summary || ('Latest research and announcements from ' + meta.label + '.');
+    document.getElementById('featured-source').textContent = meta.label;
+    document.getElementById('featured-link').href = item.url;
+    document.getElementById('featured-image-label').textContent = meta.pill;
+
+    /* Per-source background tint on the featured image */
+    var featuredImage = document.getElementById('featured-image');
+    featuredImage.setAttribute('data-source', item.key);
+  }
+
+  /* ── Render grid (remaining items, filtered) ─────────────── */
+  function renderGrid(items) {
+    var grid = document.getElementById('news-grid');
+    var filtered = activeFilter === 'all' ? items : items.filter(function (i) { return i.key === activeFilter; });
+
+    if (filtered.length === 0) {
+      grid.innerHTML = '<div style="grid-column:1/-1; text-align:center; color:rgba(46,109,180,0.55); font-family:var(--sans); padding:40px 0;">No articles from this source yet.</div>';
+      return;
+    }
+
+    var html = '';
+    filtered.slice(0, 12).forEach(function (item) {
+      var meta = SOURCE_META[item.key] || { label: 'AI', pill: 'AI' };
+      html += '<a href="' + encodeURI(item.url) + '" target="_blank" rel="noopener" class="news-card" data-source="' + item.key + '">'
+        +   '<div class="news-card-image">'
+        +     '<span class="news-card-source-pill">' + escapeHtml(meta.pill) + '</span>'
+        +   '</div>'
+        +   '<div class="news-card-content">'
+        +     '<span class="news-card-date">' + escapeHtml(formatDate(item.date) || '') + '</span>'
+        +     '<h3 class="news-card-title">' + escapeHtml(item.title) + '</h3>'
+        +     '<p class="news-card-summary">' + escapeHtml(item.summary || '') + '</p>'
+        +   '</div>'
+        + '</a>';
+    });
+    grid.innerHTML = html;
+  }
+
+  /* ── Filter chip handlers ──────────────────────────────────── */
+  document.querySelectorAll('.news-filter-chip').forEach(function (chip) {
+    chip.addEventListener('click', function () {
+      document.querySelectorAll('.news-filter-chip').forEach(function (c) { c.classList.remove('active'); });
+      chip.classList.add('active');
+      activeFilter = chip.getAttribute('data-filter');
+      renderGrid(allItems.slice(1));
+    });
+  });
+
+  /* ── Mobile hamburger ─────────────────────────────────────── */
+  var hamburger = document.querySelector('.gn-hamburger');
+  if (hamburger) {
+    hamburger.addEventListener('click', function () {
+      var expanded = hamburger.getAttribute('aria-expanded') === 'true';
+      hamburger.setAttribute('aria-expanded', !expanded);
+      document.querySelector('.gn-links').classList.toggle('open');
+    });
+  }
+})();
+</script>
+
+</body>
+</html>

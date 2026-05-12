@@ -24,12 +24,20 @@
 <style>
 /* ─── INDEX PAGE STYLES ─────────────────────────────── */
 
-/* ─── HOME HERO ───────────────────────────────────────────── */
+/* ─── HOME HERO (pinned scroll reveal) ────────────────────── */
+.hero-pin-wrapper {
+  position: relative;
+  height: 250vh; /* total scroll distance for the reveal */
+  background: #F4EFE5;
+}
 .home-hero {
-  background: var(--bg);
-  min-height: calc(100vh - 88px);
-  display: flex; align-items: center;
-  padding: 100px 40px 120px;
+  /* Cream + soft blue space gradient */
+  background:
+    radial-gradient(ellipse at 50% 40%, rgba(46,109,180,0.10) 0%, rgba(46,109,180,0.04) 35%, transparent 70%),
+    linear-gradient(180deg, #FAF6EC 0%, #F4EFE5 50%, #ECE7DB 100%);
+  height: 100vh;
+  display: flex; align-items: center; justify-content: center;
+  padding: 88px 40px 0;
   position: relative;
   overflow: hidden;
 }
@@ -40,81 +48,196 @@
   pointer-events: none; z-index: 1;
 }
 
+.hero-cursor-glow {
+  position: absolute; inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.4s;
+  background: radial-gradient(600px circle at var(--glow-x, 50%) var(--glow-y, 50%), rgba(46,109,180,0.14), transparent 60%);
+}
+.home-hero:hover .hero-cursor-glow { opacity: 1; }
+
 .home-hero-inner {
-  max-width: 1200px; margin: 0 auto; width: 100%;
-  display: grid; grid-template-columns: 1fr 1fr;
-  align-items: center;
-  gap: 0;
+  max-width: 1400px; margin: 0 auto; width: 100%;
+  display: flex; align-items: center; justify-content: center;
+  position: relative; z-index: 2;
+  min-height: 100%;
 }
 
 .hero-text {
-  position: relative; z-index: 2;
-  margin-right: -120px;
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 5;
+  text-align: center;
+  max-width: 760px;
+  width: 100%;
+  padding: 0 40px;
+  opacity: 0;
+  pointer-events: none;
+}
+.hero-text.hero-text-active {
+  pointer-events: auto;
 }
 
 .home-hero h1 {
   font-family: var(--sans);
   font-size: clamp(48px, 5.5vw, 76px);
   font-weight: 600; line-height: 1.04;
-  color: var(--ink); letter-spacing: -0.03em;
+  color: var(--blue); letter-spacing: -0.03em;
   margin-bottom: 32px;
 }
-.home-hero h1 em { font-style: italic; color: var(--blue); font-family: var(--serif); font-weight: 400; font-size: 1.05em; }
+.home-hero h1 em { font-style: italic; color: var(--blue-dk); font-family: var(--serif); font-weight: 400; font-size: 1.05em; }
 
 .hero-body {
-  font-size: 18px; color: var(--ink-2);
-  font-weight: 300; line-height: 1.8; margin-bottom: 40px;
-  max-width: 480px;
+  font-size: 18px; color: rgba(46,109,180,0.78);
+  font-weight: 300; line-height: 1.8; margin: 0 auto 40px;
+  max-width: 540px;
+}
+
+/* ─── ORB → CERTIFICATE REVEAL ───────────────────────────── */
+.orb-container {
+  position: absolute; top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  /* z-index: auto — no stacking context, so bowl/closed/lid stack alongside cert-doc */
+  display: flex; align-items: center; justify-content: center;
+  pointer-events: none;
+}
+
+.orb-glow {
+  position: absolute; top: 50%; left: 50%;
+  width: 600px; height: 600px;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  /* Subtle warm halo just to anchor the orb on cream — no washed-out haze */
+  background: radial-gradient(circle, rgba(46,109,180,0.14) 0%, rgba(46,109,180,0.06) 35%, transparent 70%);
+  filter: blur(20px);
+  pointer-events: none;
+  z-index: 0;
+  transition: opacity 0.6s, transform 0.6s;
+  animation: orb-glow-pulse 3s ease-in-out infinite;
+}
+
+@keyframes orb-glow-pulse {
+  0%, 100% {
+    opacity: 0.85;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1.1);
+  }
+}
+
+/* 3D pokeball stage that holds the two halves */
+.orb-3d-stage {
+  position: relative;
+  width: 460px;
+  height: 460px;
+  perspective: 1400px;
+  transform-style: preserve-3d;
+  z-index: 2;
+}
+
+/* Shared image styles — closed ball, lid disc, bowl */
+.orb-closed,
+.orb-lid,
+.orb-bowl {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 460px;
+  height: auto;
+  pointer-events: none;
+  filter: drop-shadow(0 8px 24px rgba(15,35,64,0.18));
+  backface-visibility: visible;
+  transform-style: preserve-3d;
+  will-change: transform, opacity;
+}
+
+/* Closed ball — visible at start, fades out as the box opens */
+.orb-closed {
+  z-index: 4;
+}
+
+/* Bowl — hidden at start, fades in to anchor the base.
+   Slightly larger than the closed ball / lid so it reads as the base it rests in. */
+.orb-bowl {
+  z-index: 2;
+  opacity: 0;
+  width: 510px;
+}
+
+/* Lid disc — hidden at start, fades in, hinges back from its bottom edge */
+.orb-lid {
+  z-index: 5;
+  opacity: 0;
+  transform-origin: 50% 100%;
+  width: 400px;
+}
+
+/* Subtle pulsing on the intact orb (driven by the stage so both halves pulse together) */
+.orb-3d-stage {
+  animation: orb-stage-pulse 3.2s ease-in-out infinite;
+}
+@keyframes orb-stage-pulse {
+  0%, 100% { filter: drop-shadow(0 0 0 transparent); }
+  50%      { filter: drop-shadow(0 6px 32px rgba(46,109,180,0.18)); }
+}
+
+/* Grounding shadow — soft ellipse beneath the sphere to seat it on the surface */
+.pb-ground-shadow {
+  position: absolute;
+  top: 50%; left: 50%;
+  width: 380px;
+  height: 44px;
+  margin-left: -190px;
+  margin-top: 200px;
+  border-radius: 50%;
+  background: radial-gradient(ellipse at center, rgba(15,35,64,0.28) 0%, rgba(15,35,64,0.10) 45%, transparent 80%);
+  filter: blur(14px);
+  opacity: 0.85;
+  z-index: 0;
+  pointer-events: none;
 }
 
 /* ─── CERTIFICATE DISPLAY ─────────────────────────────────── */
 .cert-stage {
   display: flex; align-items: center; justify-content: center;
   position: relative; z-index: 1;
-  margin-left: -80px;
+  margin: 0;
   perspective: 1800px;
-  perspective-origin: 50% 40%;
+  perspective-origin: 50% 50%;
+  width: 100%;
+  height: 100%;
 }
 
 .cert-doc {
   background: #fff;
   border: 1px solid #c8ccd4;
-  width: 100%; max-width: 480px;
+  width: min(480px, 90vw);
   aspect-ratio: 8.5 / 11;
   padding: 28px 32px;
-  position: relative;
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%) scale(0);
+  transform-origin: 50% 50%;
   font-family: var(--sans);
-  transform: rotateY(-9deg) rotateX(5deg);
-  transform-style: preserve-3d;
-  transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1),
-              box-shadow 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+  z-index: 4;
   box-shadow:
-    0 2px 4px rgba(15, 35, 64, 0.04),
-    0 8px 16px rgba(15, 35, 64, 0.06),
-    -18px 30px 40px rgba(15, 35, 64, 0.10),
-    -30px 60px 90px rgba(15, 35, 64, 0.12);
+    0 0 0 rgba(46, 109, 180, 0),
+    0 30px 80px rgba(0, 0, 0, 0.5),
+    0 8px 24px rgba(0, 0, 0, 0.4);
   display: flex; flex-direction: column;
   overflow: hidden;
+  opacity: 0;
 }
 
-.cert-doc::after {
-  content: ''; position: absolute;
-  left: 6%; right: 10%;
-  bottom: -24px; height: 40px;
-  background: radial-gradient(ellipse at center, rgba(15,35,64,0.22), rgba(15,35,64,0) 70%);
-  filter: blur(10px);
-  z-index: -1;
-  transform: translateZ(-60px);
-  pointer-events: none;
-}
-
-.cert-stage:hover .cert-doc {
-  transform: rotateY(-3deg) rotateX(2deg);
-  box-shadow:
-    0 4px 8px rgba(15, 35, 64, 0.05),
-    0 14px 24px rgba(15, 35, 64, 0.07),
-    -10px 24px 40px rgba(15, 35, 64, 0.10),
-    -20px 50px 90px rgba(15, 35, 64, 0.12);
+.cert-doc.cert-revealed {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
 }
 
 .cert-body-region {
@@ -539,20 +662,757 @@
   text-align: center;
 }
 
+/* ─── FIREWORK SHOWCASE (the 13 framework areas radiating) ─ */
+.fw-showcase {
+  background:
+    radial-gradient(ellipse at 50% 50%, rgba(46,109,180,0.06) 0%, transparent 60%),
+    #F4EFE5;
+  padding: 140px 40px 160px;
+  position: relative;
+  overflow: hidden;
+  border-top: 1px solid rgba(46,109,180,0.12);
+  border-bottom: 1px solid rgba(46,109,180,0.12);
+}
+
+.fw-inner {
+  max-width: 1280px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.fw-eyebrow {
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: 0.18em;
+  color: rgba(46,109,180,0.6);
+  margin-bottom: 20px;
+  text-transform: uppercase;
+}
+
+.fw-title {
+  font-family: var(--sans);
+  font-size: clamp(40px, 5vw, 64px);
+  font-weight: 600;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  color: var(--blue);
+  margin-bottom: 28px;
+}
+.fw-title em {
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 400;
+  font-size: 1.05em;
+  color: var(--blue-dk);
+}
+
+.fw-body {
+  font-size: 17px;
+  line-height: 1.7;
+  font-weight: 300;
+  color: rgba(46,109,180,0.78);
+  max-width: 580px;
+  margin: 0 auto 60px;
+}
+
+.fw-canvas-container {
+  position: relative;
+  width: 100%;
+  max-width: 1080px;
+  margin: 0 auto 60px;
+  aspect-ratio: 1.35 / 1;
+}
+
+.fw-canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* Ray styling */
+.fw-ray {
+  stroke: var(--blue);
+  stroke-width: 1.2;
+  fill: none;
+  stroke-linecap: round;
+  opacity: 0.65;
+  /* draw animation defaults — overridden by JS */
+  stroke-dasharray: 1000;
+  stroke-dashoffset: 1000;
+  transition: stroke-dashoffset 1.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.fw-ray.fw-ray-drawn {
+  stroke-dashoffset: 0;
+}
+
+.fw-dot {
+  fill: var(--blue);
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+.fw-dot.fw-dot-shown { opacity: 1; }
+
+.fw-ray-id {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  fill: rgba(46,109,180,0.55);
+  font-weight: 500;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+.fw-ray-label {
+  font-family: var(--sans);
+  font-size: 12px;
+  font-weight: 500;
+  fill: var(--blue);
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+.fw-ray-id.fw-label-shown,
+.fw-ray-label.fw-label-shown { opacity: 1; }
+
+/* Center: SCL orb logo (uses the same symbol as the hero) */
+.fw-center-orb {
+  color: var(--blue-dk);
+  filter: drop-shadow(0 4px 18px rgba(46,109,180,0.20));
+  animation: fw-center-orb-pulse 4s ease-in-out infinite;
+}
+@keyframes fw-center-orb-pulse {
+  0%, 100% { filter: drop-shadow(0 4px 18px rgba(46,109,180,0.20)); }
+  50%      { filter: drop-shadow(0 4px 30px rgba(46,109,180,0.35)); }
+}
+
+/* Depth particles — background "space" effect: dim radiating lines + tiny squares */
+.fw-depth-line {
+  stroke: var(--blue);
+  stroke-width: 0.5;
+  fill: none;
+  pointer-events: none;
+  transition: opacity 0.3s ease-out, stroke-width 0.3s ease-out;
+}
+.fw-depth-dot {
+  fill: var(--blue);
+  pointer-events: none;
+  transition: opacity 0.3s ease-out;
+}
+
+/* Active depth particle — when cursor is closest to it, it lights up */
+.fw-depth-line.fw-depth-line-active {
+  stroke: var(--blue-dk);
+  stroke-width: 1.4;
+}
+.fw-depth-dot.fw-depth-dot-active {
+  fill: var(--blue-dk);
+  filter: drop-shadow(0 0 6px var(--blue));
+}
+
+/* Keep firework SVG content within its container so it doesn't bleed into other sections */
+.fw-canvas-container {
+  overflow: hidden;
+}
+
+/* Magnet active line — line from SCL logo center to attracted requirement.
+   Delayed transition so the REQUIREMENT moves first, then the line "shoots" in. */
+.fw-active-line {
+  stroke: var(--blue);
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  fill: none;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.35s ease-out 0.22s;
+}
+.fw-active-line.fw-line-shoot {
+  animation: fw-line-shoot 0.55s cubic-bezier(0.2, 0.8, 0.2, 1) 0.22s both;
+}
+@keyframes fw-line-shoot {
+  0%   { stroke-dasharray: 600; stroke-dashoffset: 600; }
+  100% { stroke-dasharray: 600; stroke-dashoffset: 0; }
+}
+
+/* Requirement group — wraps bubble + dot + labels so they move together.
+   No transform transition — mousemove updates apply instantly so the requirement
+   tracks the cursor at native pointer rate without inertia or restart-jitter. */
+.fw-req-group {
+  transition: none;
+  will-change: transform;
+}
+
+/* Bubble — repurposed as a pulse RING that radiates outward from the dot.
+   Always invisible by default; on activation it expands and fades. */
+.fw-req-bubble {
+  fill: none;
+  stroke: var(--blue);
+  stroke-width: 1.2;
+  opacity: 0;
+  transform: scale(0.3);
+  transform-box: fill-box;
+  transform-origin: center;
+  pointer-events: none;
+}
+.fw-req-active .fw-req-bubble {
+  animation: fw-pulse-ring 1.6s ease-out infinite;
+}
+@keyframes fw-pulse-ring {
+  0%   { opacity: 0.85; transform: scale(0.3); stroke-width: 1.5; }
+  100% { opacity: 0;    transform: scale(1.6); stroke-width: 0.5; }
+}
+
+/* Active state — requirement reacts: dot grows + glows, text bolds */
+.fw-req-active .fw-dot {
+  fill: var(--blue-dk);
+  r: 7;
+  filter: drop-shadow(0 0 10px rgba(46,109,180,0.8))
+          drop-shadow(0 0 20px rgba(46,109,180,0.4));
+}
+.fw-req-active .fw-ray-id,
+.fw-req-active .fw-ray-label {
+  fill: var(--blue-dk);
+  font-weight: 600;
+}
+
+.fw-dot {
+  transition: r 0.3s ease-out, fill 0.3s ease-out, opacity 0.4s ease;
+}
+.fw-ray-id, .fw-ray-label {
+  transition: fill 0.3s ease-out, font-weight 0.3s ease-out;
+}
+
+.fw-cta-bridge {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 28px;
+  margin-top: 24px;
+}
+
+.fw-cta-line {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: clamp(20px, 2.2vw, 26px);
+  font-weight: 400;
+  color: var(--blue-dk);
+  margin: 0;
+  text-align: center;
+  max-width: 600px;
+}
+
+.fw-cta-row {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.fw-cta {
+  display: inline-block;
+  padding: 10px 22px;
+  border: 1px solid var(--blue);
+  border-radius: 6px;
+  color: var(--blue);
+  text-decoration: none;
+  font-family: var(--sans);
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  transition: all 0.25s ease;
+  background: transparent;
+}
+.fw-cta:hover {
+  background: var(--blue);
+  color: #fff;
+}
+
+/* Primary variant — same outline style; preserved as a hook for future emphasis */
+.fw-cta-primary {
+  background: transparent;
+  color: var(--blue);
+}
+.fw-cta-primary:hover {
+  background: var(--blue);
+  color: #fff;
+}
+
+/* ─── ASK SCL (search/Q&A gateway) ────────────────────────── */
+.ask-scl {
+  background:
+    radial-gradient(ellipse at 50% 30%, rgba(46,109,180,0.08) 0%, transparent 65%),
+    #ECE7DB;
+  padding: 140px 40px 160px;
+  position: relative;
+  overflow: hidden;
+  border-top: 1px solid rgba(46,109,180,0.12);
+}
+
+.ask-inner {
+  max-width: 760px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.ask-eyebrow {
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: 0.18em;
+  color: rgba(46,109,180,0.6);
+  margin-bottom: 20px;
+  text-transform: uppercase;
+}
+
+.ask-title {
+  font-family: var(--sans);
+  font-size: clamp(36px, 4.5vw, 56px);
+  font-weight: 600;
+  line-height: 1.08;
+  letter-spacing: -0.02em;
+  color: var(--blue);
+  margin-bottom: 24px;
+}
+.ask-title em {
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 400;
+  font-size: 1.05em;
+  color: var(--blue-dk);
+}
+
+.ask-body {
+  font-size: 17px;
+  line-height: 1.7;
+  font-weight: 300;
+  color: rgba(46,109,180,0.78);
+  max-width: 560px;
+  margin: 0 auto 44px;
+}
+
+/* Big clickable search bar — Grok-style. Prompt top-left, arrow bottom-right. */
+.ask-search-bar {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 200px;
+  max-width: 720px;
+  margin: 0 auto;
+  background: #FAF6EC;
+  border: 1px solid rgba(46,109,180,0.22);
+  border-radius: 14px;
+  padding: 28px 32px;
+  text-decoration: none;
+  cursor: pointer;
+  transition: border-color 0.25s, box-shadow 0.25s, transform 0.25s;
+  box-shadow: 0 2px 12px rgba(15,35,64,0.04);
+}
+.ask-search-bar:hover {
+  border-color: var(--blue);
+  box-shadow: 0 4px 20px rgba(46,109,180,0.12);
+  transform: translateY(-1px);
+}
+
+.ask-search-prompt {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.ask-search-icon {
+  color: rgba(46,109,180,0.55);
+  flex-shrink: 0;
+  transition: color 0.25s;
+}
+.ask-search-bar:hover .ask-search-icon { color: var(--blue); }
+
+.ask-search-placeholder {
+  font-family: var(--sans);
+  font-size: 20px;
+  font-weight: 400;
+  color: rgba(46,109,180,0.55);
+  text-align: left;
+}
+
+.ask-search-arrow {
+  align-self: flex-end;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 1px solid rgba(46,109,180,0.35);
+  color: rgba(46,109,180,0.55);
+  background: transparent;
+  transition: all 0.25s ease;
+  flex-shrink: 0;
+}
+.ask-search-bar:hover .ask-search-arrow {
+  background: var(--blue);
+  border-color: var(--blue);
+  color: #fff;
+  transform: translateY(-2px);
+}
+
+@media (max-width: 720px) {
+  .ask-scl { padding: 80px 24px 100px; }
+  .ask-search-bar { padding: 22px 20px; gap: 12px; }
+  .ask-search-placeholder { font-size: 16px; }
+}
+
+/* ─── SUBSCRIBE CTA (cream + blue) ───────────────────────── */
+.subscribe-cta {
+  background:
+    radial-gradient(ellipse at 50% 50%, rgba(46,109,180,0.10) 0%, rgba(46,109,180,0.03) 35%, transparent 70%),
+    linear-gradient(180deg, #ECE7DB 0%, #F4EFE5 50%, #ECE7DB 100%);
+  padding: 140px 40px 160px;
+  position: relative;
+  overflow: hidden;
+  border-top: 1px solid rgba(46,109,180,0.12);
+}
+
+#subscribe-particles {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.6;
+}
+
+.subscribe-inner {
+  position: relative;
+  z-index: 2;
+  max-width: 720px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.subscribe-logo {
+  width: 80px; height: 80px;
+  object-fit: contain;
+  margin: 0 auto 32px;
+  display: block;
+  filter: drop-shadow(0 0 24px rgba(46,109,180,0.35)) drop-shadow(0 0 48px rgba(46,109,180,0.15));
+}
+
+.subscribe-title {
+  font-family: var(--sans);
+  font-size: clamp(36px, 4.5vw, 56px);
+  font-weight: 600;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  color: var(--blue);
+  margin-bottom: 24px;
+}
+.subscribe-title em {
+  font-style: italic;
+  font-family: var(--serif);
+  font-weight: 400;
+  font-size: 1.05em;
+  color: var(--blue-dk);
+}
+
+.subscribe-body {
+  font-size: 17px;
+  line-height: 1.7;
+  font-weight: 300;
+  color: rgba(46,109,180,0.78);
+  max-width: 520px;
+  margin: 0 auto 40px;
+}
+
+.subscribe-btn {
+  display: inline-block;
+  padding: 10px 22px;
+  border: 1px solid var(--blue);
+  border-radius: 6px;
+  color: var(--blue);
+  text-decoration: none;
+  font-family: var(--sans);
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  transition: all 0.25s ease;
+  background: transparent;
+}
+.subscribe-btn:hover {
+  background: var(--blue);
+  border-color: var(--blue);
+  color: #fff;
+}
+
+/* ─── NEWS SECTION (cream + blue) ────────────────────────── */
+.news-section {
+  background: #ECE7DB;
+  padding: 100px 40px 140px;
+  position: relative;
+}
+
+.news-inner {
+  max-width: 1280px;
+  margin: 0 auto;
+}
+
+.news-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  padding-bottom: 60px;
+  border-bottom: 1px solid rgba(46,109,180,0.18);
+  margin-bottom: 0;
+}
+
+.news-eyebrow {
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: 0.18em;
+  color: rgba(46,109,180,0.6);
+  margin-bottom: 16px;
+}
+
+.news-title {
+  font-family: var(--sans);
+  font-size: clamp(40px, 5vw, 64px);
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  color: var(--blue);
+  margin: 0;
+}
+
+.news-explore {
+  display: inline-block;
+  padding: 10px 22px;
+  border: 1px solid var(--blue);
+  border-radius: 6px;
+  color: var(--blue);
+  background: transparent;
+  text-decoration: none;
+  font-family: var(--sans);
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  transition: all 0.25s ease;
+  white-space: nowrap;
+}
+.news-explore:hover {
+  background: var(--blue);
+  border-color: var(--blue);
+  color: #fff;
+}
+
+.news-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.news-row {
+  display: grid;
+  grid-template-columns: 200px 1fr 480px;
+  gap: 60px;
+  align-items: stretch;
+  padding: 60px 0;
+  border-bottom: 1px solid rgba(46,109,180,0.18);
+  position: relative;
+  transition: background 0.3s ease;
+  text-decoration: none;
+  color: inherit;
+}
+.news-row:last-child { border-bottom: none; }
+
+.news-row-date {
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(46,109,180,0.6);
+  padding-top: 4px;
+}
+
+.news-row-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 240px;
+}
+
+.news-row-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.news-row-headline {
+  font-family: var(--sans);
+  font-size: clamp(20px, 2vw, 26px);
+  font-weight: 500;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+  color: var(--blue);
+  margin-bottom: 18px;
+}
+.news-row:hover .news-row-headline { color: var(--blue-dk); }
+
+.news-row-summary {
+  font-family: var(--sans);
+  font-size: 15px;
+  line-height: 1.6;
+  font-weight: 300;
+  color: rgba(46,109,180,0.78);
+  max-width: 440px;
+  margin-bottom: 24px;
+}
+
+.news-row-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: auto;
+  padding-top: 16px;
+}
+
+.news-row-source {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(46,109,180,0.6);
+}
+
+.news-row-read {
+  display: inline-block;
+  padding: 10px 22px;
+  border: 1px solid var(--blue);
+  border-radius: 6px;
+  color: var(--blue);
+  background: transparent;
+  text-decoration: none;
+  font-family: var(--sans);
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  transition: all 0.25s ease;
+}
+.news-row:hover .news-row-read,
+.news-row-read:hover {
+  background: var(--blue);
+  border-color: var(--blue);
+  color: #fff;
+}
+
+.news-row-image {
+  border-radius: 6px;
+  overflow: hidden;
+  position: relative;
+  min-height: 260px;
+  background:
+    radial-gradient(ellipse at 30% 40%, rgba(46,109,180,0.16), transparent 60%),
+    linear-gradient(135deg, #E8EEF6 0%, #DDE5F0 100%);
+  border: 1px solid rgba(46,109,180,0.14);
+}
+
+/* Per-source gradient tints — cream + blue family, no embedded imagery */
+.news-row-image-us {
+  background:
+    radial-gradient(ellipse at 30% 40%, rgba(46,109,180,0.18), transparent 60%),
+    linear-gradient(135deg, #E8EEF6 0%, #DDE5F0 50%, #ECE7DB 100%);
+}
+.news-row-image-eu {
+  background:
+    radial-gradient(ellipse at 70% 60%, rgba(46,109,180,0.16), transparent 55%),
+    linear-gradient(135deg, #DDE5F0 0%, #C8D4E8 100%);
+}
+.news-row-image-nist {
+  background:
+    radial-gradient(ellipse at 50% 30%, rgba(46,109,180,0.18), transparent 60%),
+    linear-gradient(135deg, #ECE7DB 0%, #DDE5F0 50%, #E8EEF6 100%);
+}
+
+.news-row-image::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(circle at 25% 30%, rgba(46,109,180,0.10) 1px, transparent 1.5px),
+    radial-gradient(circle at 70% 65%, rgba(46,109,180,0.08) 1px, transparent 1.5px),
+    radial-gradient(circle at 45% 85%, rgba(46,109,180,0.07) 1px, transparent 1.5px);
+  background-size: 70px 70px, 90px 90px, 110px 110px;
+  pointer-events: none;
+  opacity: 0.6;
+}
+
+/* Source pill — top-left, matches /news and /documents pattern */
+.news-row-image-label {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--blue-dk);
+  background: rgba(250,246,236,0.85);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  padding: 6px 12px;
+  border-radius: 6px;
+  z-index: 2;
+}
+
+/* Skeleton state for news */
+.news-row-skeleton .skel-line {
+  background: rgba(46,109,180,0.10);
+}
+.news-row-image-skeleton {
+  background: rgba(46,109,180,0.06);
+}
+
+/* ─── HERO ENTRANCE ───────────────────────────────────────── */
+@keyframes hero-orb-in {
+  from { opacity: 0; transform: translate(-50%, -50%) scale(0.4); }
+  to   { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+}
+.orb-container { animation: hero-orb-in 1.1s cubic-bezier(0.34, 1.56, 0.64, 1) 0.30s backwards; }
+
+/* ─── HERO BUTTON ──────────────────────────────────────────── */
+.home-hero .btn-solid {
+  background: transparent;
+  color: var(--blue);
+  border: 1px solid var(--blue);
+  border-radius: 6px;
+  padding: 10px 22px;
+  font-family: var(--sans);
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  text-transform: none;
+  text-decoration: none;
+  transition: all 0.25s ease;
+}
+.home-hero .btn-solid:hover {
+  background: var(--blue);
+  color: #fff;
+  border-color: var(--blue);
+}
+
 /* RESPONSIVE */
+@media (max-width: 980px) {
+  .news-row { grid-template-columns: 1fr; gap: 24px; padding: 40px 0; }
+  .news-row-date { padding-top: 0; }
+  .news-row-content { min-height: auto; }
+  .news-row-image { min-height: 240px; }
+  .news-header { flex-direction: column; align-items: flex-start; gap: 24px; padding-bottom: 40px; }
+}
 @media (max-width: 880px) {
-  .home-hero { padding: 72px 24px 80px; }
+  .home-hero { padding: 72px 24px 80px; min-height: auto; }
   .home-hero-inner { grid-template-columns: 1fr; }
   .hero-text { margin-right: 0; }
   .cert-stage { display: none; }
+  .orb-container { display: none; }
   .section-wwd { padding: 72px 24px; }
   .what-grid { grid-template-columns: 1fr; gap: 48px; }
   .section-produces { padding: 72px 24px; }
   .produces-header { grid-template-columns: 1fr; gap: 24px; margin-bottom: 40px; }
   .produces-grid { grid-template-columns: 1fr; }
-  .reg-landscape { padding-top: 72px; padding-bottom: 72px; }
-  .reg-header { text-align: center; }
-  .reg-grid { grid-template-columns: 1fr; gap: 20px; }
+  .subscribe-cta { padding: 80px 24px 100px; }
+  .news-section { padding: 60px 24px 80px; }
 }
 @media (max-width: 580px) {
   .home-hero h1 { font-size: clamp(36px, 8vw, 48px); }
@@ -563,35 +1423,34 @@
 
 <!-- NAV -->
 <nav class="global-nav">
-  <a href="/" class="gn-wordmark">
-    <span class="gn-text"><em>Safety Critical</em> Labs</span>
-  </a>
-  <button class="gn-hamburger" aria-label="Menu" aria-expanded="false">
-    <span></span><span></span><span></span>
-  </button>
-<ul class="gn-links">
-    <li class="gn-dropdown">
-      <a class="gn-dropdown-toggle" href="javascript:void(0)">Certification <span class="gn-dropdown-arrow"></span></a>
-      <ul class="gn-dropdown-menu" style="display:none">
-        <li><a href="/framework">Framework</a></li>
-        <li><a href="/process">Process</a></li>
-        <li><a href="/assess">Assess</a></li>
-      </ul>
-    </li>
-    <li><a href="/expertise">Expertise</a></li>
-    <li><a href="/markets">Markets</a></li>
-    <li><a href="/contact" class="gn-cta">Get Certified</a></li>
-  </ul>
+  <div class="global-nav-inner">
+    <a href="/" class="gn-wordmark">
+      <span class="gn-text"><em>Safety Critical</em> Labs</span>
+    </a>
+    <button class="gn-hamburger" aria-label="Menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+    <ul class="gn-links">
+      <li><a href="/framework">Framework</a></li>
+      <li><a href="/process">Process</a></li>
+      <li><a href="/expertise">Expertise</a></li>
+      <li><a href="/markets">Markets</a></li>
+      <li><a href="/news">News</a></li>
+    </ul>
+    <a href="/search" class="gn-search" aria-label="Search">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <circle cx="11" cy="11" r="7"/>
+        <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+      </svg>
+    </a>
+    <a href="/contact" class="gn-cta">Get Certified</a>
+  </div>
 </nav>
 
-<!-- CREDIBILITY TICKER -->
-<div class="reg-ticker" id="reg-ticker" aria-label="Recent regulatory activity">
-  <div class="reg-ticker-track" id="reg-ticker-track"></div>
-</div>
-
 <!-- HERO -->
-<div style="background: var(--bg); margin-top: 88px;">
+<div class="hero-pin-wrapper" style="margin-top: 72px;">
   <section class="home-hero">
+    <div class="hero-cursor-glow"></div>
     <div class="home-hero-inner">
       <div class="hero-text">
         <h1>
@@ -602,10 +1461,58 @@
         <p class="hero-body">
           Safety Critical Labs evaluates AI systems operating in aerospace, aviation, medical, and automotive environments. Assessments are conducted against a published standard. A formal determination is issued and placed on record.
         </p>
-        <a href="/assess" class="btn btn-solid">Begin an assessment</a>
       </div>
 
       <div class="cert-stage">
+        <div class="orb-container">
+          <div class="orb-glow"></div>
+
+          <!-- Shared SVG symbol — used by the 13-requirements firework's center logo -->
+          <svg width="0" height="0" style="position:absolute;overflow:hidden" aria-hidden="true">
+            <defs>
+              <symbol id="orb-symbol" viewBox="0 0 220 220">
+                <defs>
+                  <path id="orb-arc-top" d="M 110,110 m -72,0 a 72,72 0 0,1 144,0" />
+                  <path id="orb-arc-bottom" d="M 110,110 m 72,0 a 72,72 0 0,1 -144,0" />
+                </defs>
+                <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="110" cy="110" r="91" stroke-width="2"/>
+                  <circle cx="110" cy="110" r="86" stroke-width="3.5"/>
+                  <circle cx="110" cy="110" r="60" stroke-width="2.5"/>
+                  <circle cx="110" cy="110" r="48" stroke-width="1.2"/>
+                  <circle cx="110" cy="110" r="36" stroke-width="1.2"/>
+                </g>
+                <circle cx="110" cy="110" r="22" fill="none" stroke="currentColor" stroke-width="1.8"/>
+                <g fill="none" stroke="currentColor" stroke-linecap="round">
+                  <line x1="93" y1="110" x2="127" y2="110" stroke-width="2.2"/>
+                </g>
+                <circle cx="110" cy="110" r="4.5" fill="currentColor"/>
+                <g fill="currentColor" stroke="none">
+                  <path d="M 38,102 L 40,108 L 46,110 L 40,112 L 38,118 L 36,112 L 30,110 L 36,108 Z"/>
+                  <path d="M 182,102 L 184,108 L 190,110 L 184,112 L 182,118 L 180,112 L 174,110 L 180,108 Z"/>
+                </g>
+                <g fill="currentColor" font-family="'DM Sans', sans-serif" font-weight="600" letter-spacing="3.4">
+                  <text font-size="10.5">
+                    <textPath href="#orb-arc-top" startOffset="50%" text-anchor="middle">SAFETY CRITICAL LABS</textPath>
+                  </text>
+                  <text font-size="9" letter-spacing="2.8">
+                    <textPath href="#orb-arc-bottom" startOffset="50%" text-anchor="middle">AI CERTIFICATION AUTHORITY</textPath>
+                  </text>
+                </g>
+              </symbol>
+            </defs>
+          </svg>
+
+          <!-- 3D pokeball stage with two halves + bowl 3D cues -->
+          <div class="orb-3d-stage" id="orb-stage">
+            <!-- Grounding shadow under the bowl -->
+            <div class="pb-ground-shadow" id="pb-ground-shadow"></div>
+
+            <img class="orb-bowl" id="orb-bowl" src="img/SCL_bowl.png" alt="">
+            <img class="orb-closed" id="orb-closed" src="img/SCL_logo_ball_transparent.png" alt="Safety Critical Labs">
+          </div>
+        </div>
+        <img class="orb-lid" id="orb-lid" src="img/SCL_lid_disc.png" alt="">
         <div class="cert-doc">
 
           <div class="cert-head">
@@ -682,188 +1589,166 @@
       </div>
     </div>
   </section>
+</div>
 
-<!-- WHAT WE DO -->
-<section class="page-section section-wwd">
-  <div class="section-inner">
-    <div class="what-grid">
-      <div>
-        <div class="section-eyebrow">What we do</div>
-        <h2 class="section-title">A certification authority<br>for <em>AI systems.</em></h2>
-        <div class="what-body">
-          <p>
-            AI systems are assessed against the SCL AI Requirements Framework, a <strong>published, citable standard</strong> that is versioned, publicly available, and open to review. A formal determination is issued at a defined classification level. The certificate records what was assessed, which framework version was applied, and what was found.
-          </p>
-        </div>
-      </div>
-      <div>
-        <div class="section-eyebrow">Explore</div>
-        <div class="nav-cards stagger-in">
-          <a href="/framework" class="nav-card">
-            <span class="nav-card-num">01</span>
-            <div class="nav-card-body">
-              <div class="nav-card-title">The Framework</div>
-              <div class="nav-card-desc">Thirteen requirement areas covering AI specific failure modes.</div>
-            </div>
-            <span class="nav-card-arrow">&rarr;</span>
-          </a>
-          <a href="/process" class="nav-card">
-            <span class="nav-card-num">02</span>
-            <div class="nav-card-body">
-              <div class="nav-card-title">Certification Process</div>
-              <div class="nav-card-desc">Four phases from applicability determination to certificate issuance.</div>
-            </div>
-            <span class="nav-card-arrow">&rarr;</span>
-          </a>
-          <a href="/expertise" class="nav-card">
-            <span class="nav-card-num">03</span>
-            <div class="nav-card-body">
-              <div class="nav-card-title">Our Expertise</div>
-              <div class="nav-card-desc">The practitioner background behind the standard.</div>
-            </div>
-            <span class="nav-card-arrow">&rarr;</span>
-          </a>
-          <a href="/markets" class="nav-card">
-            <span class="nav-card-num">04</span>
-            <div class="nav-card-body">
-              <div class="nav-card-title">Markets We Serve</div>
-              <div class="nav-card-desc">Aerospace, aviation, medical devices, and automotive.</div>
-            </div>
-            <span class="nav-card-arrow">&rarr;</span>
-          </a>
-        </div>
+<!-- FIREWORK SHOWCASE -->
+<section class="fw-showcase" id="fw-showcase">
+  <div class="fw-inner">
+    <div class="fw-eyebrow">[ The Standard ]</div>
+    <h2 class="fw-title">Thirteen <em>requirement areas.</em><br>One framework.</h2>
+    <p class="fw-body">
+      The SCL AI Requirements Framework covers the failure modes that matter in safety critical environments. Every assessed system is evaluated across all thirteen.
+    </p>
+    <div class="fw-canvas-container">
+      <svg class="fw-canvas" id="fw-canvas" viewBox="0 0 1080 800" xmlns="http://www.w3.org/2000/svg">
+        <!-- Generated by JS -->
+      </svg>
+    </div>
+    <div class="fw-cta-bridge">
+      <p class="fw-cta-line">All thirteen are evaluated when you begin an assessment.</p>
+      <div class="fw-cta-row">
+        <a href="/framework" class="fw-cta">Read the framework</a>
       </div>
     </div>
   </div>
 </section>
 
-<!-- WHAT CERTIFICATION PRODUCES -->
-<section class="page-section section-produces">
-  <div class="section-inner">
-    <div class="produces-header">
-      <div>
-        <div class="section-eyebrow">What certification produces</div>
-        <h2 class="section-title">A formal record.<br><em>Issued on determination.</em></h2>
+<!-- ASK SCL -->
+<section class="ask-scl" id="ask-scl">
+  <div class="ask-inner">
+    <div class="ask-eyebrow">[ Ask SCL ]</div>
+    <h2 class="ask-title">Have a question about <em>certification?</em></h2>
+    <p class="ask-body">Ask anything about how AI systems get certified.</p>
+
+    <a class="ask-search-bar" href="/search">
+      <div class="ask-search-prompt">
+        <svg class="ask-search-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="11" cy="11" r="7"/>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+        </svg>
+        <span class="ask-search-placeholder">Ask anything about AI certification…</span>
       </div>
-      <p class="produces-lead">Each certificate records the system assessed, the framework version applied, the classification level, and the determination reached. The findings remain on record.</p>
-    </div>
-    <div class="produces-grid stagger-in">
-      <div class="produces-card">
-        <div class="produces-card-label">Documented findings</div>
-        <div class="produces-card-title">A complete assessment record</div>
-        <div class="produces-card-desc">Every assessment produces a formal findings document covering all thirteen requirement areas at the applicable classification level.</div>
-      </div>
-      <div class="produces-card">
-        <div class="produces-card-label">Classification level</div>
-        <div class="produces-card-title">Consequence based classification</div>
-        <div class="produces-card-desc">Systems are classified by consequence of failure using a structured likelihood versus consequence methodology.</div>
-      </div>
-      <div class="produces-card">
-        <div class="produces-card-label">Framework version</div>
-        <div class="produces-card-title">Assessed against a published standard</div>
-        <div class="produces-card-desc">Every determination references a specific framework version. The standard is publicly available and open to review by any party.</div>
-      </div>
-      <div class="produces-card">
-        <div class="produces-card-label">Surveillance requirement</div>
-        <div class="produces-card-title">Validity tied to configuration</div>
-        <div class="produces-card-desc">Certification is valid while the assessed configuration is maintained. Annual surveillance confirms continued compliance.</div>
-      </div>
-      <div class="produces-card">
-        <div class="produces-card-label">Formal determination</div>
-        <div class="produces-card-title">Two outcomes, documented regardless</div>
-        <div class="produces-card-desc">Certified or Not Certified. Each determination is documented and placed on record regardless of outcome.</div>
-      </div>
-      <div class="produces-card">
-        <div class="produces-card-label">Scope of assessment</div>
-        <div class="produces-card-title">Thirteen requirement areas assessed</div>
-        <div class="produces-card-desc">Thirteen requirement areas covering the AI specific failure modes that matter in safety critical environments. Every area is assessed at the applicable classification level.</div>
-      </div>
-    </div>
+      <span class="ask-search-arrow" aria-hidden="true">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="12" y1="19" x2="12" y2="5"/>
+          <polyline points="5 12 12 5 19 12"/>
+        </svg>
+      </span>
+    </a>
   </div>
 </section>
 
-<!-- REGULATORY LANDSCAPE -->
-<section class="page-section reg-landscape">
-  <div class="section-inner">
-    <div class="reg-header">
-      <div class="section-eyebrow">Regulatory landscape</div>
-      <h2 class="section-title">Government activity on <em>AI safety.</em></h2>
-      <p class="reg-lead">Recent regulatory actions, draft standards, and legislative developments from authorities shaping the governance of AI in safety critical domains.</p>
+<!-- SUBSCRIBE CTA -->
+<section class="subscribe-cta">
+  <canvas id="subscribe-particles"></canvas>
+  <div class="subscribe-inner">
+    <h2 class="subscribe-title">Stay informed on <em>AI regulation.</em></h2>
+    <p class="subscribe-body">
+      Updates on how Safety Critical Labs evaluates AI systems. Briefings on the regulatory developments that shape the field. Delivered occasionally, never on a schedule.
+    </p>
+    <a href="/subscribe" class="subscribe-btn">Sign up</a>
+  </div>
+</section>
+
+<!-- LATEST NEWS -->
+<section class="news-section">
+  <div class="news-inner">
+    <div class="news-header">
+      <div>
+        <div class="news-eyebrow">[ Regulatory ]</div>
+        <h2 class="news-title">Latest activity</h2>
+      </div>
+      <a href="/subscribe" class="news-explore">Get briefings</a>
     </div>
-    <div class="reg-grid">
 
-      <!-- US Federal Register -->
-      <div class="reg-column">
-        <div class="reg-col-header">
-          <div class="reg-col-flag"><span class="flag-dot"></span>United States</div>
-          <div class="reg-col-name">Federal Register</div>
-          <div class="reg-col-desc">Rules, proposed rules, and executive orders on AI</div>
+    <div class="news-list" id="news-list">
+      <!-- Populated by JS from API feeds -->
+      <div class="news-row news-row-skeleton">
+        <div class="news-row-date"><div class="skel-line" style="width:80px"></div></div>
+        <div class="news-row-content">
+          <div class="skel-line" style="width:60%;height:16px"></div>
+          <div class="skel-line" style="width:90%"></div>
+          <div class="skel-line" style="width:40%"></div>
         </div>
-        <ul class="reg-items" id="reg-feed-us">
-          <li class="reg-item-skeleton"><div class="skel-line"></div><div class="skel-line"></div><div class="skel-line"></div><div class="skel-line"></div></li>
-          <li class="reg-item-skeleton"><div class="skel-line"></div><div class="skel-line"></div><div class="skel-line"></div><div class="skel-line"></div></li>
-          <li class="reg-item-skeleton"><div class="skel-line"></div><div class="skel-line"></div><div class="skel-line"></div><div class="skel-line"></div></li>
-        </ul>
+        <div class="news-row-image news-row-image-skeleton"></div>
       </div>
-
-      <!-- EU AI Act -->
-      <div class="reg-column">
-        <div class="reg-col-header">
-          <div class="reg-col-flag"><span class="flag-dot"></span>European Union</div>
-          <div class="reg-col-name">EU AI Act</div>
-          <div class="reg-col-desc">Key legislation and implementing acts under the AI Act</div>
+      <div class="news-row news-row-skeleton">
+        <div class="news-row-date"><div class="skel-line" style="width:80px"></div></div>
+        <div class="news-row-content">
+          <div class="skel-line" style="width:60%;height:16px"></div>
+          <div class="skel-line" style="width:90%"></div>
+          <div class="skel-line" style="width:40%"></div>
         </div>
-        <ul class="reg-items" id="reg-feed-eu">
-          <li class="reg-item-skeleton"><div class="skel-line"></div><div class="skel-line"></div><div class="skel-line"></div><div class="skel-line"></div></li>
-          <li class="reg-item-skeleton"><div class="skel-line"></div><div class="skel-line"></div><div class="skel-line"></div><div class="skel-line"></div></li>
-          <li class="reg-item-skeleton"><div class="skel-line"></div><div class="skel-line"></div><div class="skel-line"></div><div class="skel-line"></div></li>
-        </ul>
+        <div class="news-row-image news-row-image-skeleton"></div>
       </div>
-
-      <!-- NIST -->
-      <div class="reg-column">
-        <div class="reg-col-header">
-          <div class="reg-col-flag"><span class="flag-dot"></span>NIST</div>
-          <div class="reg-col-name">AI Standards &amp; News</div>
-          <div class="reg-col-desc">AI safety standards, frameworks, and draft publications</div>
+      <div class="news-row news-row-skeleton">
+        <div class="news-row-date"><div class="skel-line" style="width:80px"></div></div>
+        <div class="news-row-content">
+          <div class="skel-line" style="width:60%;height:16px"></div>
+          <div class="skel-line" style="width:90%"></div>
+          <div class="skel-line" style="width:40%"></div>
         </div>
-        <ul class="reg-items" id="reg-feed-nist">
-          <li class="reg-item-skeleton"><div class="skel-line"></div><div class="skel-line"></div><div class="skel-line"></div><div class="skel-line"></div></li>
-          <li class="reg-item-skeleton"><div class="skel-line"></div><div class="skel-line"></div><div class="skel-line"></div><div class="skel-line"></div></li>
-          <li class="reg-item-skeleton"><div class="skel-line"></div><div class="skel-line"></div><div class="skel-line"></div><div class="skel-line"></div></li>
-        </ul>
+        <div class="news-row-image news-row-image-skeleton"></div>
       </div>
-
     </div>
-    <div class="reg-footer-note">Sources updated on page load from official government APIs</div>
   </div>
 </section>
 
 <!-- FOOTER -->
 <footer class="site-footer">
   <div class="footer-inner">
-    <div class="footer-top footer-top--row">
-      <a href="/" class="footer-wordmark" aria-label="Safety Critical Labs">
-        <img src="img/SCL_Logo_transparent_sm.png" alt="" class="footer-seal">
-        <span class="gn-text"><em>Safety Critical</em> Labs</span>
-      </a>
-      <div class="footer-content">
-        <div class="footer-nav-row">
-          <a href="/framework">Framework</a>
-          <a href="/process">Process</a>
-          <a href="/expertise">Expertise</a>
-          <a href="/markets">Markets</a>
-          <a href="/assess">Assess</a>
-          <a href="/contact">Contact</a>
-        </div>
-        <p class="footer-tagline">AI certification authority for safety critical systems.<br>Formal determinations issued against a published, citable standard.</p>
+
+    <div class="footer-cols">
+
+      <div class="footer-col">
+        <div class="footer-col-label">Certification</div>
+        <a href="/framework">Framework</a>
+        <a href="/process">Process</a>
+        <a href="/assess">Assess</a>
+        <a href="/verify">Verify</a>
       </div>
+
+      <div class="footer-col">
+        <div class="footer-col-label">Resources</div>
+        <a href="/documents">Documents</a>
+        <a href="#">FAQ</a>
+      </div>
+
+      <div class="footer-col">
+        <div class="footer-col-label">Company</div>
+        <a href="#">About</a>
+        <a href="/expertise">Expertise</a>
+        <a href="/markets">Markets</a>
+        <a href="/contact">Contact</a>
+      </div>
+
+      <div class="footer-col">
+        <div class="footer-col-label">Briefings</div>
+        <a href="/news">News</a>
+        <a href="/subscribe">Subscribe</a>
+        <a href="/updates">Updates</a>
+      </div>
+
+      <div class="footer-col">
+        <div class="footer-col-label">Legal</div>
+        <a href="/terms">Terms</a>
+        <a href="/privacy">Privacy</a>
+        <a href="/disclaimer">Disclaimer</a>
+        <a href="/accreditation">Accreditation</a>
+      </div>
+
     </div>
+
     <div class="footer-divider"></div>
+
     <div class="footer-bottom">
       <span class="footer-copyright">&copy; 2025 Safety Critical Labs. All rights reserved.</span>
-      <span class="footer-version">Framework v3.0</span>
+      <div class="footer-meta">
+        <a href="#" aria-label="Back to top">Back to top</a>
+        <span class="footer-version">Framework v3.0</span>
+      </div>
     </div>
+
   </div>
 </footer>
 
@@ -945,22 +1830,519 @@ gsap.utils.toArray('.slide-right').forEach(function(el) {
   );
 });
 
-/* Hero slide-together animation */
+/* Hero entrance — pure CSS animation (defined in stylesheet) */
+/* Elements visible by default; subtle fade-up handled via @keyframes */
+
+/* ─── 3D POKEBALL CLAMSHELL REVEAL ────────────────────────── */
 (function() {
+  var wrapper = document.querySelector('.hero-pin-wrapper');
+  var hero = document.querySelector('.home-hero');
+  var stage = document.getElementById('orb-stage');
+  var closedOrb = document.getElementById('orb-closed');
+  var lid = document.getElementById('orb-lid');
+  var bowl = document.getElementById('orb-bowl');
+  var orbGlow = document.querySelector('.orb-glow');
+  var groundShadow = document.getElementById('pb-ground-shadow');
   var heroText = document.querySelector('.hero-text');
-  var certStage = document.querySelector('.cert-stage');
-  if (heroText && certStage) {
-    var tl = gsap.timeline({ delay: 0.3 });
-    tl.fromTo(heroText,
-      { opacity: 0, x: -80 },
-      { opacity: 1, x: 0, duration: 1.2, ease: 'power3.out' }
-    );
-    tl.fromTo(certStage,
-      { opacity: 0, x: 80 },
-      { opacity: 1, x: 0, duration: 1.2, ease: 'power3.out' },
-      '<0.15'
-    );
+  var certDoc = document.querySelector('.cert-doc');
+  if (!wrapper || !hero || !stage || !closedOrb || !lid || !bowl || !certDoc) return;
+
+  /* Pinned timeline — 3D Pokeball open. Driven by scroll. */
+  var tl = gsap.timeline({
+    scrollTrigger: {
+      trigger: wrapper,
+      start: 'top top',
+      end: 'bottom bottom',
+      scrub: 0.5,
+      pin: hero,
+      pinSpacing: false,
+      anticipatePin: 1
+    }
+  });
+
+  /* Lock everything to CSS center before GSAP rewrites transforms */
+  gsap.set(certDoc, { xPercent: -50, yPercent: -50 });
+  gsap.set([closedOrb, lid, bowl], { xPercent: -50, yPercent: -50 });
+
+  /* Initial state — lid + bowl start AT THE CLOSED BALL POSITION (center)
+     so they appear to emerge from it rather than teleport to their final spots.
+     Lid: no rotation, no offset, invisible.
+     Bowl: slightly compressed, invisible.
+     Bowl interior + rim: invisible (they fade in with the bowl). */
+  gsap.set(lid,         { rotateX: 0,  x: 0, y: 0, opacity: 0 });
+  gsap.set(bowl,        { x: 0, y: 0, opacity: 0, scale: 0.88, transformOrigin: '50% 50%' });
+  /* Ground shadow needs to follow the bowl down. Starts where the closed ball
+     was grounded, animates to sit under the lowered bowl during the transition. */
+  gsap.set(groundShadow, { y: 0 });
+
+  /* ═══════════════════════════════════════════════════════════════════
+     PHASE 1 — Box opens, everything composes into initial placement
+     Scroll range: 0% → ~55% of the pinned scroll
+  ═══════════════════════════════════════════════════════════════════ */
+
+  /* Stage tilt for the "looking into the box" perspective */
+  tl.to(stage, { rotateX: 12, ease: 'none' }, 0);
+
+  /* Closed ball compresses vertically and fades out — paired with the lid's
+     fade-in below so the two opacities cross at the midpoint. Same start time,
+     same duration, same easing = a clean crossfade where one replaces the other. */
+  tl.to(closedOrb, {
+    scaleY: 0.82,
+    opacity: 0,
+    ease: 'power2.inOut',
+    duration: 0.22
+  }, 0);
+
+  /* Lid fades in mirroring the ball's fade-out. By the time you can see the lid,
+     the ball is correspondingly gone — no more ghost overlap. */
+  tl.to(lid, {
+    opacity: 1,
+    ease: 'power2.inOut',
+    duration: 0.22
+  }, 0);
+
+  /* Ground shadow widens + lightens during the split (ball lifting off) */
+  tl.to(groundShadow, {
+    scaleX: 1.18,
+    opacity: 0.45,
+    ease: 'power2.out',
+    duration: 0.20
+  }, 0);
+
+  /* Lid motion: rises up and rotates back. Starts slightly after the crossfade
+     begins so the opacity transition has time to read before the motion takes over. */
+  tl.to(lid, {
+    y: -360,
+    rotateX: -50,
+    ease: 'power2.out',
+    duration: 0.42
+  }, 0.08);
+
+  /* Bowl emerges and settles below center */
+  tl.to(bowl, {
+    opacity: 1,
+    scale: 1,
+    y: 150,
+    ease: 'back.out(1.2)',
+    duration: 0.35
+  }, 0.10);
+
+  /* Ground shadow narrows and slides to under the lowered bowl */
+  tl.to(groundShadow, {
+    scaleX: 0.92,
+    opacity: 0.62,
+    y: 150,
+    ease: 'power2.out',
+    duration: 0.30
+  }, 0.20);
+
+  /* Halo softens; hero text clears the stage */
+  tl.to(orbGlow, { scale: 1.3, opacity: 0.35, ease: 'none' }, 0.20);
+  tl.to(heroText, { opacity: 0, y: -20, ease: 'power2.out', duration: 0.25 }, 0.20);
+
+  /* Certificate fades in at its initial composed position — no dramatic rise,
+     it appears already placed inside the open box. The drama is saved for Phase 2. */
+  tl.fromTo(certDoc,
+    { opacity: 0, scale: 0.55, y: -50, rotation: 0 },
+    { opacity: 1, ease: 'power2.out', duration: 0.25 },
+    0.30
+  );
+
+  /* ═══════════════════════════════════════════════════════════════════
+     PHASE 2 — Showcase reveal: cert grows, lid + bowl separate further
+     Scroll range: ~55% → 100% of the pinned scroll
+     The certificate is the star. Box opens wider to frame it.
+  ═══════════════════════════════════════════════════════════════════ */
+
+  /* Lid lifts further, tilts back slightly more — gets out of the cert's way */
+  tl.to(lid, {
+    y: -560,
+    rotateX: -55,
+    ease: 'power2.inOut',
+    duration: 0.45
+  }, 0.60);
+
+  /* Bowl slides down to give the certificate room to expand */
+  tl.to(bowl, {
+    y: 340,
+    ease: 'power2.inOut',
+    duration: 0.45
+  }, 0.60);
+
+  /* Ground shadow follows the bowl down, fades slightly */
+  tl.to(groundShadow, {
+    y: 340,
+    scaleX: 0.85,
+    opacity: 0.50,
+    ease: 'power2.inOut',
+    duration: 0.45
+  }, 0.60);
+
+  /* THE MOMENT — certificate scales up from 0.55 to 0.95 with a soft overshoot.
+     Slight upward shift keeps it visually centered as the lid retreats. */
+  tl.to(certDoc, {
+    scale: 0.95,
+    y: -90,
+    ease: 'back.out(1.15)',
+    duration: 0.50
+  }, 0.60);
+})();
+
+/* ─── FIREWORK SHOWCASE (13 areas + magnet cursor interaction) ──── */
+(function() {
+  var svg = document.getElementById('fw-canvas');
+  if (!svg) return;
+
+  var SVG_NS = 'http://www.w3.org/2000/svg';
+  var W = 1080, H = 800;
+  var CX = W / 2, CY = H / 2;
+  var INNER_R = 130;
+  var OUTER_R = 320;
+  var LABEL_R = 360;
+  var MAGNET_RADIUS = 380;
+
+  var areas = [
+    { id: 'AI-1',  label: 'Operational and data foundations' },
+    { id: 'AI-2',  label: 'Addressing AI bias' },
+    { id: 'AI-3',  label: 'ML test coverage' },
+    { id: 'AI-4',  label: 'Continuous validation' },
+    { id: 'AI-5',  label: 'Hallucination prevention' },
+    { id: 'AI-6',  label: 'Out of distribution detection' },
+    { id: 'AI-7',  label: 'Adversarial robustness' },
+    { id: 'AI-8',  label: 'Explainability' },
+    { id: 'AI-9',  label: 'Human and AI teaming' },
+    { id: 'AI-10', label: 'Privacy and data protection' },
+    { id: 'AI-11', label: 'Multi-model systems' },
+    { id: 'AI-12', label: 'Neural network requirements' },
+    { id: 'AI-13', label: 'Continuous learning and adaptation' }
+  ];
+
+  var N = areas.length;
+
+  /* Depth layer — background particles for the "space dimension" feel.
+     Stored so we can highlight the closest one to the cursor. */
+  var DEPTH_COUNT = 64;
+  var depthParticles = [];
+  for (var d = 0; d < DEPTH_COUNT; d++) {
+    var dAngle = Math.random() * Math.PI * 2;
+    var dDist = 180 + Math.random() * 380;
+    var depth = Math.random();
+    var dx = CX + Math.cos(dAngle) * dDist;
+    var dy = CY + Math.sin(dAngle) * dDist;
+    var x1d = CX + Math.cos(dAngle) * 110;
+    var y1d = CY + Math.sin(dAngle) * 110;
+
+    var dLine = document.createElementNS(SVG_NS, 'line');
+    dLine.setAttribute('x1', x1d); dLine.setAttribute('y1', y1d);
+    dLine.setAttribute('x2', dx);  dLine.setAttribute('y2', dy);
+    dLine.setAttribute('class', 'fw-depth-line');
+    var baseLineOp = 0.04 + depth * 0.14;
+    dLine.style.opacity = baseLineOp;
+    svg.appendChild(dLine);
+
+    var size = 1.3 + depth * 3.2;
+    var dRect = document.createElementNS(SVG_NS, 'rect');
+    dRect.setAttribute('x', dx - size / 2);
+    dRect.setAttribute('y', dy - size / 2);
+    dRect.setAttribute('width', size);
+    dRect.setAttribute('height', size);
+    dRect.setAttribute('class', 'fw-depth-dot');
+    var baseDotOp = 0.18 + depth * 0.55;
+    dRect.style.opacity = baseDotOp;
+    svg.appendChild(dRect);
+
+    depthParticles.push({
+      line: dLine, dot: dRect,
+      x: dx, y: dy,
+      baseLineOp: baseLineOp,
+      baseDotOp: baseDotOp,
+      baseSize: size
+    });
   }
+
+  /* Active line — single line from SCL logo center to the magnet-attracted requirement */
+  var activeLine = document.createElementNS(SVG_NS, 'line');
+  activeLine.setAttribute('class', 'fw-active-line');
+  activeLine.setAttribute('x1', CX);
+  activeLine.setAttribute('y1', CY);
+  activeLine.setAttribute('x2', CX);
+  activeLine.setAttribute('y2', CY);
+  activeLine.style.opacity = 0;
+  svg.appendChild(activeLine);
+
+  /* Center: SCL orb logo (uses the symbol defined in the hero) */
+  var orbSize = 200;
+  var centerOrb = document.createElementNS(SVG_NS, 'use');
+  centerOrb.setAttribute('href', '#orb-symbol');
+  centerOrb.setAttribute('x', CX - orbSize / 2);
+  centerOrb.setAttribute('y', CY - orbSize / 2);
+  centerOrb.setAttribute('width', orbSize);
+  centerOrb.setAttribute('height', orbSize);
+  centerOrb.setAttribute('class', 'fw-center-orb');
+  svg.appendChild(centerOrb);
+
+  /* Generate rays + grouped dots/labels (so they can be moved together) */
+  var rays = [];
+  for (var i = 0; i < N; i++) {
+    var angle = (-90 + (360 / N) * i) * (Math.PI / 180);
+    var x1 = CX + Math.cos(angle) * INNER_R;
+    var y1 = CY + Math.sin(angle) * INNER_R;
+    var x2 = CX + Math.cos(angle) * OUTER_R;
+    var y2 = CY + Math.sin(angle) * OUTER_R;
+    var lx = CX + Math.cos(angle) * LABEL_R;
+    var ly = CY + Math.sin(angle) * LABEL_R;
+
+    /* Static ray line (faint, drawn on intersection) */
+    var ray = document.createElementNS(SVG_NS, 'line');
+    ray.setAttribute('x1', x1); ray.setAttribute('y1', y1);
+    ray.setAttribute('x2', x2); ray.setAttribute('y2', y2);
+    ray.setAttribute('class', 'fw-ray');
+    var len = OUTER_R - INNER_R;
+    ray.style.strokeDasharray = len;
+    ray.style.strokeDashoffset = len;
+    ray.style.transitionDelay = (i * 80) + 'ms';
+    svg.appendChild(ray);
+
+    /* Group containing bubble + dot + labels — magnet pull is applied via group transform */
+    var group = document.createElementNS(SVG_NS, 'g');
+    group.setAttribute('class', 'fw-req-group');
+
+    /* Bubble — soft halo that appears around the dot when this requirement is active */
+    var bubble = document.createElementNS(SVG_NS, 'circle');
+    bubble.setAttribute('cx', x2); bubble.setAttribute('cy', y2);
+    bubble.setAttribute('r', 28);
+    bubble.setAttribute('class', 'fw-req-bubble');
+    group.appendChild(bubble);
+
+    var dot = document.createElementNS(SVG_NS, 'circle');
+    dot.setAttribute('cx', x2); dot.setAttribute('cy', y2);
+    dot.setAttribute('r', 4);
+    dot.setAttribute('class', 'fw-dot');
+    dot.style.transitionDelay = (300 + i * 80) + 'ms';
+    group.appendChild(dot);
+
+    /* Pick label anchor based on horizontal direction (cos of the angle).
+       cos > 0 → label is on the right, extends rightward (anchor=start)
+       cos < 0 → label is on the left, extends leftward (anchor=end)
+       cos near 0 → label is near top/bottom, centered (anchor=middle) */
+    var horiz = Math.cos(angle);
+    var anchor = 'middle';
+    if (horiz > 0.15)       anchor = 'start';
+    else if (horiz < -0.15) anchor = 'end';
+
+    var idText = document.createElementNS(SVG_NS, 'text');
+    idText.setAttribute('x', lx);
+    idText.setAttribute('y', ly - 7);
+    idText.setAttribute('text-anchor', anchor);
+    idText.setAttribute('dominant-baseline', 'middle');
+    idText.setAttribute('class', 'fw-ray-id');
+    idText.textContent = areas[i].id;
+    idText.style.transitionDelay = (400 + i * 80) + 'ms';
+    group.appendChild(idText);
+
+    var labelText = document.createElementNS(SVG_NS, 'text');
+    labelText.setAttribute('x', lx);
+    labelText.setAttribute('y', ly + 8);
+    labelText.setAttribute('text-anchor', anchor);
+    labelText.setAttribute('dominant-baseline', 'middle');
+    labelText.setAttribute('class', 'fw-ray-label');
+    labelText.textContent = areas[i].label;
+    labelText.style.transitionDelay = (450 + i * 80) + 'ms';
+    group.appendChild(labelText);
+
+    svg.appendChild(group);
+
+    rays.push({
+      ray: ray,
+      group: group,
+      dot: dot,
+      idText: idText,
+      labelText: labelText,
+      x: x2, y: y2,
+      pairedParticle: null /* assigned after depth particles are created */
+    });
+  }
+
+  /* Assign each requirement its OWN dedicated background line.
+     Each requirement pairs with the closest unpaired depth particle. */
+  rays.forEach(function (r) {
+    var closest = null;
+    var minDist = Infinity;
+    depthParticles.forEach(function (p) {
+      if (p.pairedReq) return; /* already paired with another requirement */
+      var dx = p.x - r.x;
+      var dy = p.y - r.y;
+      var dist = Math.sqrt(dx * dx + dy * dy);
+      if (dist < minDist) { minDist = dist; closest = p; }
+    });
+    if (closest) {
+      closest.pairedReq = r;
+      r.pairedParticle = closest;
+    }
+  });
+
+  /* Trigger the firework draw when scrolled into view */
+  var triggered = false;
+  function fire() {
+    if (triggered) return;
+    triggered = true;
+    rays.forEach(function (r) {
+      r.ray.classList.add('fw-ray-drawn');
+      r.dot.classList.add('fw-dot-shown');
+      r.idText.classList.add('fw-label-shown');
+      r.labelText.classList.add('fw-label-shown');
+    });
+  }
+
+  if (typeof IntersectionObserver !== 'undefined') {
+    var obs = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting) { fire(); obs.disconnect(); }
+      });
+    }, { threshold: 0.25 });
+    obs.observe(document.getElementById('fw-showcase'));
+  } else {
+    fire();
+  }
+
+  /* Cursor interaction — pair closest requirement + closest background line.
+     Both pull toward the cursor and highlight together. They "come together" near
+     the cursor. When cursor moves to a different region, the pair breaks and a
+     new pair forms. */
+  var lastMx = -9999, lastMy = -9999;
+
+  function updateHighlight() {
+    /* Reset all labeled requirements */
+    rays.forEach(function (r) {
+      r.group.style.transform = '';
+      r.group.classList.remove('fw-req-active');
+    });
+
+    /* Reset all depth particles to base */
+    depthParticles.forEach(function (p) {
+      p.line.setAttribute('x2', p.x);
+      p.line.setAttribute('y2', p.y);
+      p.dot.setAttribute('x', p.x - p.baseSize / 2);
+      p.dot.setAttribute('y', p.y - p.baseSize / 2);
+      p.line.style.opacity = p.baseLineOp;
+      p.dot.style.opacity = p.baseDotOp;
+      p.line.classList.remove('fw-depth-line-active');
+      p.dot.classList.remove('fw-depth-dot-active');
+    });
+
+    /* Hide the active line — we don't use it anymore */
+    activeLine.style.opacity = 0;
+    activeLine.classList.remove('fw-line-shoot');
+
+    if (lastMx < -1000) return;
+
+    /* Find closest labeled requirement to cursor */
+    var closestReq = null;
+    var minReqDist = Infinity;
+    rays.forEach(function (r) {
+      var dx = r.x - lastMx;
+      var dy = r.y - lastMy;
+      var dist = Math.sqrt(dx * dx + dy * dy);
+      if (dist < minReqDist) { minReqDist = dist; closestReq = r; }
+    });
+
+    /* Use the requirement's PAIRED depth particle (consistent — same line every time) */
+    if (closestReq && minReqDist < MAGNET_RADIUS) {
+      /* Pull the requirement strongly toward the cursor so it tracks the pointer */
+      var reqPullStrength = 0.7;
+      var reqDx = (lastMx - closestReq.x) * reqPullStrength;
+      var reqDy = (lastMy - closestReq.y) * reqPullStrength;
+      var reqNewX = closestReq.x + reqDx;
+      var reqNewY = closestReq.y + reqDy;
+      closestReq.group.style.transform = 'translate(' + reqDx + 'px, ' + reqDy + 'px)';
+      closestReq.group.classList.add('fw-req-active');
+
+      /* Background line endpoint connects to the REQUIREMENT's new position (not the cursor) */
+      var pair = closestReq.pairedParticle;
+      if (pair) {
+        pair.line.setAttribute('x2', reqNewX);
+        pair.line.setAttribute('y2', reqNewY);
+        pair.dot.setAttribute('x', reqNewX - pair.baseSize / 2);
+        pair.dot.setAttribute('y', reqNewY - pair.baseSize / 2);
+        pair.line.style.opacity = 1;
+        pair.dot.style.opacity = 1;
+        pair.line.classList.add('fw-depth-line-active');
+        pair.dot.classList.add('fw-depth-dot-active');
+      }
+    }
+  }
+
+  function handleMove(e) {
+    var rect = svg.getBoundingClientRect();
+    var scaleX = W / rect.width;
+    var scaleY = H / rect.height;
+    lastMx = (e.clientX - rect.left) * scaleX;
+    lastMy = (e.clientY - rect.top) * scaleY;
+    updateHighlight();
+  }
+
+  function handleLeave() {
+    lastMx = -9999; lastMy = -9999;
+    updateHighlight();
+  }
+
+  svg.addEventListener('mousemove', handleMove);
+  svg.addEventListener('mouseleave', handleLeave);
+})();
+
+/* ─── SUBSCRIBE STARFIELD ─────────────────────────────────── */
+(function() {
+  var canvas = document.getElementById('subscribe-particles');
+  if (!canvas) return;
+  var ctx = canvas.getContext('2d');
+  var stars = [];
+  var STAR_COUNT = 120;
+
+  function resize() {
+    canvas.width = canvas.offsetWidth * window.devicePixelRatio;
+    canvas.height = canvas.offsetHeight * window.devicePixelRatio;
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+    ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  for (var i = 0; i < STAR_COUNT; i++) {
+    stars.push({
+      x: Math.random() * canvas.offsetWidth,
+      y: Math.random() * canvas.offsetHeight,
+      r: Math.random() * 1.4 + 0.3,
+      twinkle: Math.random() * Math.PI * 2,
+      speed: 0.01 + Math.random() * 0.02
+    });
+  }
+
+  function animate() {
+    ctx.clearRect(0, 0, canvas.offsetWidth, canvas.offsetHeight);
+    for (var i = 0; i < stars.length; i++) {
+      var s = stars[i];
+      s.twinkle += s.speed;
+      var opacity = 0.2 + Math.sin(s.twinkle) * 0.25 + 0.3;
+      ctx.beginPath();
+      ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+      ctx.fillStyle = 'rgba(46,109,180,' + opacity + ')';
+      ctx.fill();
+    }
+    requestAnimationFrame(animate);
+  }
+  animate();
+})();
+
+/* ─── CURSOR GLOW ─────────────────────────────────────────── */
+(function() {
+  var glow = document.querySelector('.hero-cursor-glow');
+  var hero = document.querySelector('.home-hero');
+  if (!glow || !hero) return;
+  hero.addEventListener('mousemove', function(e) {
+    var rect = hero.getBoundingClientRect();
+    glow.style.setProperty('--glow-x', (e.clientX - rect.left) + 'px');
+    glow.style.setProperty('--glow-y', (e.clientY - rect.top) + 'px');
+  });
 })();
 
 // Mobile menu toggle
@@ -1077,7 +2459,10 @@ document.addEventListener("click", function() {
   }
 
   function renderItems(containerId, items) {
-    const el = document.getElementById(containerId);
+    /* Legacy renderer — no-ops gracefully now that the column layout is gone.
+       News rendering is handled by addNewsItem() / renderNewsList() below. */
+    var el = document.getElementById(containerId);
+    if (!el) return;
     if (!items || items.length === 0) {
       el.innerHTML = '<li class="reg-unavailable">No recent items available</li>';
       return;
@@ -1095,8 +2480,79 @@ document.addEventListener("click", function() {
   }
 
   function renderError(containerId) {
-    document.getElementById(containerId).innerHTML =
-      '<li class="reg-unavailable">Currently unavailable</li>';
+    var el = document.getElementById(containerId);
+    if (el) el.innerHTML = '<li class="reg-unavailable">Currently unavailable</li>';
+  }
+
+  /* ── News list (xAI-style) ─────────────────────────── */
+  var SOURCE_META = {
+    us: {
+      label: 'Federal Register',
+      sublabel: 'Federal Register',
+      seal: 'img/federal-register.svg',
+      summary: 'Rules, proposed rules, and executive orders shaping how artificial intelligence is governed at the federal level.',
+      imageClass: 'news-row-image-us'
+    },
+    eu: {
+      label: 'EU AI Act',
+      sublabel: 'European Union',
+      seal: 'img/eu-flag.svg',
+      summary: 'Legislative proposals, implementing acts, and corrigenda to the AI Act and related Union law.',
+      imageClass: 'news-row-image-eu'
+    },
+    nist: {
+      label: 'NIST',
+      sublabel: 'NIST',
+      seal: 'img/nist.svg',
+      summary: 'AI safety standards, draft publications, and announcements from the National Institute of Standards and Technology.',
+      imageClass: 'news-row-image-nist'
+    }
+  };
+
+  /* The order news rows appear in the section */
+  var NEWS_ORDER = ['us', 'eu', 'nist'];
+  var newsLatest = {};
+
+  function addNewsItem(sourceKey, item) {
+    if (!item) return;
+    newsLatest[sourceKey] = item;
+    renderNewsList();
+  }
+
+  function renderNewsList() {
+    var container = document.getElementById('news-list');
+    if (!container) return;
+
+    var html = '';
+    NEWS_ORDER.forEach(function (key) {
+      var meta = SOURCE_META[key];
+      var item = newsLatest[key];
+      if (!meta || !item) return;
+
+      var safeUrl = encodeURI(item.url || '#');
+      var safeDate = escapeHtml(item.date || '');
+      var safeTitle = item.title || '';
+      var safeType = escapeHtml(item.type || meta.label);
+
+      html += '<a href="' + safeUrl + '" target="_blank" rel="noopener" class="news-row">'
+        +   '<div class="news-row-date">' + safeDate + '</div>'
+        +   '<div class="news-row-content">'
+        +     '<div class="news-row-text">'
+        +       '<div class="news-row-headline">' + safeTitle + '</div>'
+        +       '<div class="news-row-summary">' + meta.summary + '</div>'
+        +     '</div>'
+        +     '<div class="news-row-meta">'
+        +       '<span class="news-row-source">' + safeType + '</span>'
+        +       '<span class="news-row-read">Read</span>'
+        +     '</div>'
+        +   '</div>'
+        +   '<div class="news-row-image ' + meta.imageClass + '">'
+        +     '<span class="news-row-image-label">' + escapeHtml(meta.sublabel) + '</span>'
+        +   '</div>'
+        + '</a>';
+    });
+
+    if (html) container.innerHTML = html;
   }
 
   function escapeHtml(str) {
@@ -1131,6 +2587,7 @@ document.addEventListener("click", function() {
       }
       var items = filtered.length > 0 ? filtered : frFallback;
       renderItems('reg-feed-us', items);
+      addNewsItem('us', items[0]);
       /* Feed ticker */
       items.slice(0, 3).forEach(function (item) {
         tickerItems.push({
@@ -1144,6 +2601,7 @@ document.addEventListener("click", function() {
     })
     .catch(function () {
       renderItems('reg-feed-us', frFallback);
+      addNewsItem('us', frFallback[0]);
       frFallback.slice(0, 3).forEach(function (item) {
         tickerItems.push({ title: item.title, url: item.url, date: item.date, source: 'Federal Register', logo: LOGOS.us, sortDate: new Date(item.date).getTime() });
       });
@@ -1192,6 +2650,7 @@ document.addEventListener("click", function() {
       /* If RSS had AI matches, use them; otherwise show key AI Act documents */
       var euItems = filtered.length > 0 ? filtered : euAiFallback;
       renderItems('reg-feed-eu', euItems);
+      addNewsItem('eu', euItems[0]);
       /* Feed ticker */
       euItems.slice(0, 3).forEach(function (item) {
         tickerItems.push({
@@ -1204,6 +2663,7 @@ document.addEventListener("click", function() {
     })
     .catch(function () {
       renderItems('reg-feed-eu', euAiFallback);
+      addNewsItem('eu', euAiFallback[0]);
       euAiFallback.slice(0, 3).forEach(function (item) {
         tickerItems.push({
           title: item.title, url: item.url, date: item.date,
@@ -1290,6 +2750,7 @@ document.addEventListener("click", function() {
     items.forEach(function (item) { delete item.sortDate; });
 
     renderItems('reg-feed-nist', items);
+    addNewsItem('nist', items[0]);
     /* Feed ticker */
     items.slice(0, 3).forEach(function (item) {
       tickerItems.push({
@@ -1301,6 +2762,7 @@ document.addEventListener("click", function() {
     tickerSources.nist = true; tryBuildTicker();
   }).catch(function () {
     renderItems('reg-feed-nist', nistFallback);
+    addNewsItem('nist', nistFallback[0]);
     nistFallback.slice(0, 3).forEach(function (item) {
       tickerItems.push({ title: item.title, url: item.url, date: item.date, source: 'NIST', logo: LOGOS.nist, sortDate: new Date(item.date).getTime() });
     });

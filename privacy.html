@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Privacy | Safety Critical Labs</title>
+<meta name="description" content="How safetycriticallabs.com handles personal data. What is collected, what is not, and who processes it.">
+<meta property="og:title" content="Privacy | Safety Critical Labs">
+<meta property="og:description" content="Privacy policy for safetycriticallabs.com.">
+<meta property="og:url" content="https://safetycriticallabs.com/privacy.html">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://safetycriticallabs.com/img/SCL%20Logo%203d.png">
+<link rel="icon" type="image/x-icon" href="favicon.ico">
+<link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="192x192" href="img/favicon-192x192.png">
+<link rel="apple-touch-icon" sizes="180x180" href="img/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=IBM+Plex+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<style>
+.inner-hero { z-index: 0; }
+.fw-hero-glow {
+  position: absolute; inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.4s;
+  background: radial-gradient(520px circle at var(--glow-x, 70%) var(--glow-y, 30%), rgba(46,109,180,0.10), transparent 60%);
+}
+.inner-hero:hover .fw-hero-glow { opacity: 1; }
+.inner-hero-inner { z-index: 2; position: relative; }
+
+.fw-eyebrow-mono {
+  font-family: var(--mono); font-size: 12px; font-weight: 500;
+  letter-spacing: 0.18em; text-transform: uppercase;
+  color: rgba(46,109,180,0.6); margin-bottom: 20px;
+}
+
+.legal-section {
+  background:
+    radial-gradient(ellipse at 50% 0%, rgba(46,109,180,0.05) 0%, transparent 50%),
+    #F7F3EC;
+  padding: 88px 40px 120px;
+}
+.legal-inner { max-width: 760px; margin: 0 auto; }
+
+.legal-meta {
+  display: flex; flex-wrap: wrap; gap: 24px;
+  padding-bottom: 24px; margin-bottom: 48px;
+  border-bottom: 1px solid rgba(46,109,180,0.12);
+}
+.legal-meta-item {
+  font-family: var(--mono); font-size: 11px;
+  letter-spacing: 0.14em; text-transform: uppercase;
+  color: rgba(46,109,180,0.6);
+}
+.legal-meta-item strong {
+  display: block; color: var(--blue); font-weight: 500;
+  margin-top: 4px; letter-spacing: 0.04em; text-transform: none;
+  font-family: var(--sans); font-size: 13px;
+}
+
+.legal-block { margin-bottom: 40px; }
+.legal-block:last-child { margin-bottom: 0; }
+.legal-block-num {
+  font-family: var(--mono); font-size: 11px;
+  letter-spacing: 0.18em; color: rgba(46,109,180,0.55);
+  margin-bottom: 6px;
+}
+.legal-block-title {
+  font-family: var(--sans); font-size: 22px;
+  font-weight: 600; color: var(--blue);
+  margin: 0 0 14px; line-height: 1.25; letter-spacing: -0.01em;
+}
+.legal-block-title em {
+  font-family: var(--serif); font-style: italic;
+  font-weight: 400; color: var(--blue-dk);
+}
+.legal-block p {
+  font-size: 15px; color: var(--ink-2);
+  line-height: 1.75; font-weight: 300; margin: 0 0 14px;
+}
+.legal-block p:last-child { margin-bottom: 0; }
+.legal-block p strong { color: var(--ink); font-weight: 500; }
+.legal-block a { color: var(--blue); text-decoration: none; border-bottom: 1px solid rgba(46,109,180,0.3); }
+.legal-block a:hover { color: var(--blue-dk); border-bottom-color: var(--blue-dk); }
+
+.processor-list { display: flex; flex-direction: column; gap: 12px; margin-top: 8px; }
+.processor-item {
+  background: #FAF6EC;
+  border: 1px solid rgba(46,109,180,0.10);
+  border-radius: 4px;
+  padding: 16px 20px;
+  display: grid;
+  grid-template-columns: 130px 1fr;
+  gap: 16px;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+.processor-item:hover {
+  border-color: rgba(46,109,180,0.25);
+  box-shadow: 0 4px 14px rgba(46,109,180,0.08);
+}
+.processor-name {
+  font-family: var(--sans); font-size: 13px;
+  font-weight: 600; letter-spacing: 0.02em;
+  color: var(--blue);
+}
+.processor-desc {
+  font-size: 13px; color: var(--ink-2);
+  line-height: 1.6; font-weight: 300;
+}
+.processor-desc strong { color: var(--ink); font-weight: 500; }
+
+.legal-review-note {
+  margin-top: 56px;
+  padding: 20px 24px;
+  background: #FAF6EC;
+  border: 1px solid rgba(46,109,180,0.12);
+  border-left: 3px solid var(--blue);
+  border-radius: 4px;
+  font-size: 13px; color: var(--ink-2);
+  line-height: 1.65; font-weight: 300;
+}
+.legal-review-note strong { color: var(--ink); font-weight: 500; }
+
+@media (max-width: 580px) {
+  .processor-item { grid-template-columns: 1fr; gap: 4px; }
+}
+</style>
+</head>
+<body>
+
+<nav class="global-nav">
+  <div class="global-nav-inner">
+    <a href="/" class="gn-wordmark"><span class="gn-text"><em>Safety Critical</em> Labs</span></a>
+    <button class="gn-hamburger" aria-label="Menu" aria-expanded="false"><span></span><span></span><span></span></button>
+    <ul class="gn-links">
+      <li><a href="/framework">Framework</a></li>
+      <li><a href="/process">Process</a></li>
+      <li><a href="/expertise">Expertise</a></li>
+      <li><a href="/markets">Markets</a></li>
+      <li><a href="/news">News</a></li>
+    </ul>
+    <a href="/search" class="gn-search" aria-label="Search">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <circle cx="11" cy="11" r="7"/>
+        <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+      </svg>
+    </a>
+    <a href="/contact" class="gn-cta">Get Certified</a>
+  </div>
+</nav>
+
+<div class="page-shell">
+
+<div class="inner-hero">
+  <div class="fw-hero-glow"></div>
+  <div class="inner-hero-inner">
+    <div>
+      <div class="inner-hero-breadcrumb"><a href="/">Safety Critical Labs</a><span>/</span> Privacy</div>
+      <h1>What we collect.<br><em>What we don't.</em></h1>
+    </div>
+    <p class="inner-hero-lead">
+      We hold ourselves to the same data protection principles we evaluate AI systems against. This page describes what safetycriticallabs.com actually does with personal data.
+    </p>
+  </div>
+</div>
+
+<section class="legal-section">
+  <div class="legal-inner">
+
+    <div class="legal-meta">
+      <div class="legal-meta-item">Effective<strong>May 12, 2026</strong></div>
+      <div class="legal-meta-item">Scope<strong>safetycriticallabs.com</strong></div>
+      <div class="legal-meta-item">Contact<strong><a href="/contact" style="color:var(--blue);text-decoration:none;">/contact</a></strong></div>
+    </div>
+
+    <div class="legal-block">
+      <div class="legal-block-num">01</div>
+      <h2 class="legal-block-title">What we collect</h2>
+      <p>The Site collects information only when you choose to provide it:</p>
+      <p><strong>Contact form submissions</strong> — name, email, organization, and the content of your message. Submitted through the form on <a href="/contact">/contact</a>.</p>
+      <p><strong>Newsletter subscription</strong> — email address only. Submitted through <a href="/subscribe">/subscribe</a> when the integration is active.</p>
+      <p><strong>Readiness assessment</strong> — answers to the questions on <a href="/assess">/assess</a> are stored only in your browser. Nothing from the readiness assessment is transmitted to SCL unless you choose to download your report and share it with us.</p>
+    </div>
+
+    <div class="legal-block">
+      <div class="legal-block-num">02</div>
+      <h2 class="legal-block-title">What we do not collect</h2>
+      <p>We do not run third-party analytics on the Site. We do not track page-by-page browsing, build advertising profiles, or sell visitor data. We do not set marketing or advertising cookies.</p>
+    </div>
+
+    <div class="legal-block">
+      <div class="legal-block-num">03</div>
+      <h2 class="legal-block-title">How information is used</h2>
+      <p>Information you submit is used for one purpose only: to respond to you. Contact form messages are used to reply to your inquiry. Subscribed emails are used to send the briefings described on the subscribe page. We do not use submitted information for any other purpose, and we do not share it with third parties except the processors named below.</p>
+    </div>
+
+    <div class="legal-block">
+      <div class="legal-block-num">04</div>
+      <h2 class="legal-block-title">Third-party processors</h2>
+      <p>A small number of vendors process limited information on our behalf. Each is named here so you can review their own privacy practices:</p>
+      <div class="processor-list">
+        <div class="processor-item">
+          <span class="processor-name">Formspree</span>
+          <span class="processor-desc"><strong>Contact form handling.</strong> Receives submissions from /contact and forwards them to SCL email. See <a href="https://formspree.io/legal/privacy-policy" target="_blank" rel="noopener" style="color:var(--blue);">Formspree privacy policy</a>.</span>
+        </div>
+        <div class="processor-item">
+          <span class="processor-name">Brevo</span>
+          <span class="processor-desc"><strong>Newsletter delivery (pending).</strong> Will store subscriber email addresses for sending briefings when the integration is active. See <a href="https://www.brevo.com/legal/privacypolicy/" target="_blank" rel="noopener" style="color:var(--blue);">Brevo privacy policy</a>.</span>
+        </div>
+        <div class="processor-item">
+          <span class="processor-name">Zoho Mail</span>
+          <span class="processor-desc"><strong>Email infrastructure.</strong> Provides the email service used to receive and respond to inquiries. See <a href="https://www.zoho.com/privacy.html" target="_blank" rel="noopener" style="color:var(--blue);">Zoho privacy policy</a>.</span>
+        </div>
+        <div class="processor-item">
+          <span class="processor-name">GitHub Pages</span>
+          <span class="processor-desc"><strong>Static site hosting.</strong> Serves the Site. May log standard access information (IP address, user agent) for security and reliability. See <a href="https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement" target="_blank" rel="noopener" style="color:var(--blue);">GitHub privacy statement</a>.</span>
+        </div>
+        <div class="processor-item">
+          <span class="processor-name">Cloudflare</span>
+          <span class="processor-desc"><strong>DNS and security.</strong> Provides DNS resolution and edge security. May process standard request metadata. See <a href="https://www.cloudflare.com/privacypolicy/" target="_blank" rel="noopener" style="color:var(--blue);">Cloudflare privacy policy</a>.</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="legal-block">
+      <div class="legal-block-num">05</div>
+      <h2 class="legal-block-title">Cookies</h2>
+      <p>The Site does not set marketing or analytics cookies. The third-party processors named above may set functional cookies necessary to deliver their service (for example, Formspree may set a session cookie when you submit the form). No data is sold or shared with advertisers.</p>
+    </div>
+
+    <div class="legal-block">
+      <div class="legal-block-num">06</div>
+      <h2 class="legal-block-title">Your rights</h2>
+      <p>If you have submitted information through the Site, you may:</p>
+      <p><strong>Request a copy</strong> of what we hold about you. <strong>Request correction</strong> of inaccurate information. <strong>Request deletion</strong> of your information, subject to limited legal retention obligations.</p>
+      <p>To exercise any of these rights, contact <a href="/contact">SCL</a>. We will respond within a reasonable timeframe.</p>
+    </div>
+
+    <div class="legal-block">
+      <div class="legal-block-num">07</div>
+      <h2 class="legal-block-title">Data retention</h2>
+      <p>Contact form submissions and email correspondence are retained for the period necessary to respond to your inquiry and maintain a record of the engagement. Newsletter subscriptions are retained until you unsubscribe. Records related to certification engagements are retained for the period specified in the SCL Assessment Methodology (minimum ten years or the life of the certified system).</p>
+    </div>
+
+    <div class="legal-block">
+      <div class="legal-block-num">08</div>
+      <h2 class="legal-block-title">Changes</h2>
+      <p>This Privacy Policy may be revised. The current version is identified by the Effective date at the top of this page.</p>
+    </div>
+
+    <div class="legal-review-note">
+      <strong>Note.</strong> Final language is under legal review. The substance reflects current practice. For questions about your data, contact <a href="/contact" style="color:var(--blue);">SCL directly</a>.
+    </div>
+
+  </div>
+</section>
+
+</div>
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-cols">
+      <div class="footer-col"><div class="footer-col-label">Certification</div><a href="/framework">Framework</a><a href="/process">Process</a><a href="/assess">Assess</a><a href="/verify">Verify</a></div>
+      <div class="footer-col"><div class="footer-col-label">Resources</div><a href="/documents">Documents</a><a href="#">FAQ</a></div>
+      <div class="footer-col"><div class="footer-col-label">Company</div><a href="#">About</a><a href="/expertise">Expertise</a><a href="/markets">Markets</a><a href="/contact">Contact</a></div>
+      <div class="footer-col"><div class="footer-col-label">Briefings</div><a href="/news">News</a><a href="/subscribe">Subscribe</a><a href="/updates">Updates</a></div>
+      <div class="footer-col"><div class="footer-col-label">Legal</div><a href="/terms">Terms</a><a href="/privacy">Privacy</a><a href="/disclaimer">Disclaimer</a><a href="/accreditation">Accreditation</a></div>
+    </div>
+    <div class="footer-divider"></div>
+    <div class="footer-bottom">
+      <span class="footer-copyright">&copy; 2025 Safety Critical Labs. All rights reserved.</span>
+      <div class="footer-meta"><a href="#" aria-label="Back to top">Back to top</a><span class="footer-version">Framework v3.0</span></div>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function() {
+  var glow = document.querySelector('.fw-hero-glow');
+  var hero = document.querySelector('.inner-hero');
+  if (!glow || !hero) return;
+  hero.addEventListener('mousemove', function(e) {
+    var rect = hero.getBoundingClientRect();
+    glow.style.setProperty('--glow-x', (e.clientX - rect.left) + 'px');
+    glow.style.setProperty('--glow-y', (e.clientY - rect.top) + 'px');
+  });
+})();
+document.querySelector('.gn-hamburger').addEventListener('click', function() {
+  this.classList.toggle('open');
+  document.querySelector('.gn-links').classList.toggle('open');
+  this.setAttribute('aria-expanded', this.classList.contains('open'));
+  document.body.style.overflow = this.classList.contains('open') ? 'hidden' : '';
+});
+</script>
+<script src="ticker.js"></script>
+</body>
+</html>

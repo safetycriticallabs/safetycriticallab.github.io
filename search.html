@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ask SCL | Safety Critical Labs</title>
+<meta name="description" content="Ask anything about AI certification, the SCL framework, the process, or accreditation. Quick answers and direct links to documentation.">
+<meta property="og:title" content="Ask SCL | Safety Critical Labs">
+<meta property="og:description" content="Search SCL's documentation and ask anything about AI certification.">
+<meta property="og:url" content="https://safetycriticallabs.com/search.html">
+<meta property="og:type" content="website">
+<link rel="icon" type="image/x-icon" href="favicon.ico">
+<link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="192x192" href="img/favicon-192x192.png">
+<link rel="apple-touch-icon" sizes="180x180" href="img/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=IBM+Plex+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<style>
+/* ─── SEARCH / ASK PAGE — ChatGPT-style empty state ─────────── */
+
+.search-page {
+  min-height: calc(100vh - 72px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 80px 40px 120px;
+  background:
+    radial-gradient(ellipse at 50% 30%, rgba(46,109,180,0.06) 0%, transparent 60%),
+    linear-gradient(180deg, #FAF6EC 0%, #F4EFE5 60%, #ECE7DB 100%);
+}
+
+.search-inner {
+  width: 100%;
+  max-width: 760px;
+  text-align: center;
+}
+
+.search-eyebrow {
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: 0.18em;
+  color: rgba(46,109,180,0.6);
+  text-transform: uppercase;
+  margin-bottom: 20px;
+}
+
+.search-title {
+  font-family: var(--sans);
+  font-size: clamp(36px, 4.5vw, 56px);
+  font-weight: 600;
+  line-height: 1.08;
+  letter-spacing: -0.02em;
+  color: var(--blue);
+  margin: 0 0 20px;
+}
+.search-title em {
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 400;
+  font-size: 1.05em;
+  color: var(--blue-dk);
+}
+
+.search-lead {
+  font-size: 17px;
+  line-height: 1.7;
+  font-weight: 300;
+  color: rgba(46,109,180,0.78);
+  max-width: 540px;
+  margin: 0 auto 44px;
+}
+
+/* The bar — same visual language as the Ask SCL bar on index */
+.search-form {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 180px;
+  background: #FAF6EC;
+  border: 1px solid var(--blue);
+  border-radius: 6px;
+  padding: 24px 28px;
+  transition: border-color 0.25s, box-shadow 0.25s;
+  box-shadow: 0 2px 12px rgba(15,35,64,0.04);
+  text-align: left;
+}
+.search-form:focus-within {
+  box-shadow: 0 4px 24px rgba(46,109,180,0.16);
+}
+
+.search-input-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex: 1;
+}
+
+.search-icon {
+  color: var(--blue);
+  flex-shrink: 0;
+}
+
+.search-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  font-family: var(--sans);
+  font-size: 20px;
+  font-weight: 400;
+  color: var(--blue-dk);
+  padding: 8px 0;
+  min-width: 0;
+}
+.search-input::placeholder {
+  color: rgba(46,109,180,0.5);
+  font-weight: 300;
+}
+
+.search-submit {
+  align-self: flex-end;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 6px;
+  border: 1px solid var(--blue);
+  background: transparent;
+  color: var(--blue);
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+.search-submit:hover {
+  background: var(--blue);
+  color: #fff;
+}
+
+/* Starter prompt chips — quick-fill the input */
+.search-starters {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 32px;
+}
+.search-starter {
+  display: inline-flex;
+  align-items: center;
+  padding: 8px 16px;
+  border: 1px solid var(--blue);
+  border-radius: 6px;
+  background: transparent;
+  color: var(--blue);
+  font-family: var(--sans);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+.search-starter:hover {
+  background: var(--blue);
+  color: #fff;
+}
+
+/* Results list — hidden until search produces matches */
+.search-results {
+  margin-top: 40px;
+  text-align: left;
+}
+.search-results[hidden] { display: none; }
+
+.search-results-label {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(46,109,180,0.6);
+  margin-bottom: 16px;
+}
+
+.faq-item {
+  background: #FAF6EC;
+  border: 1px solid rgba(46,109,180,0.16);
+  border-radius: 6px;
+  padding: 22px 26px;
+  margin-bottom: 12px;
+  transition: border-color 0.25s, box-shadow 0.25s;
+}
+.faq-item:hover {
+  border-color: var(--blue);
+  box-shadow: 0 4px 14px rgba(46,109,180,0.08);
+}
+.faq-question {
+  font-family: var(--sans);
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--blue);
+  margin: 0 0 10px;
+}
+.faq-answer {
+  font-size: 15px;
+  line-height: 1.7;
+  color: rgba(46,109,180,0.85);
+  margin: 0 0 12px;
+}
+.faq-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--sans);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--blue);
+  text-decoration: none;
+  letter-spacing: 0.02em;
+  transition: color 0.2s;
+}
+.faq-link:hover { color: var(--blue-dk); }
+.faq-link::after { content: '→'; transition: transform 0.2s; }
+.faq-link:hover::after { transform: translateX(3px); }
+
+.search-empty {
+  text-align: center;
+  padding: 32px 0 8px;
+  font-family: var(--sans);
+  color: rgba(46,109,180,0.7);
+}
+.search-empty-text { font-size: 15px; margin-bottom: 16px; }
+.search-empty-cta {
+  display: inline-flex;
+  align-items: center;
+  padding: 10px 22px;
+  border: 1px solid var(--blue);
+  border-radius: 6px;
+  color: var(--blue);
+  background: transparent;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.25s ease;
+}
+.search-empty-cta:hover {
+  background: var(--blue);
+  color: #fff;
+}
+
+@media (max-width: 640px) {
+  .search-page { padding: 56px 24px 80px; }
+  .search-form { padding: 20px 22px; min-height: 160px; }
+  .search-input { font-size: 17px; }
+}
+</style>
+</head>
+<body>
+
+<nav class="global-nav">
+  <div class="global-nav-inner">
+    <a href="/" class="gn-wordmark">
+      <span class="gn-text"><em>Safety Critical</em> Labs</span>
+    </a>
+    <button class="gn-hamburger" aria-label="Menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+    <ul class="gn-links">
+      <li><a href="/framework">Framework</a></li>
+      <li><a href="/process">Process</a></li>
+      <li><a href="/expertise">Expertise</a></li>
+      <li><a href="/markets">Markets</a></li>
+      <li><a href="/news">News</a></li>
+    </ul>
+    <a href="/search" class="gn-search active" aria-label="Search">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <circle cx="11" cy="11" r="7"/>
+        <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+      </svg>
+    </a>
+    <a href="/contact" class="gn-cta">Get Certified</a>
+  </div>
+</nav>
+
+<div class="page-shell">
+
+<section class="search-page">
+  <div class="search-inner">
+
+    <div class="search-eyebrow">[ Ask SCL ]</div>
+    <h1 class="search-title">What do you want to <em>know?</em></h1>
+    <p class="search-lead">Ask anything about AI certification, the framework, the process, or accreditation.</p>
+
+    <form class="search-form" id="search-form">
+      <div class="search-input-row">
+        <svg class="search-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="11" cy="11" r="7"/>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+        </svg>
+        <input type="text" class="search-input" id="search-input" placeholder="Ask anything about AI certification…" autocomplete="off" autofocus>
+      </div>
+      <button type="submit" class="search-submit" aria-label="Submit">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <line x1="12" y1="19" x2="12" y2="5"/>
+          <polyline points="5 12 12 5 19 12"/>
+        </svg>
+      </button>
+    </form>
+
+    <div class="search-starters" id="search-starters">
+      <button class="search-starter" type="button">How do I get certified?</button>
+      <button class="search-starter" type="button">What is the SCL framework?</button>
+      <button class="search-starter" type="button">How long does certification take?</button>
+      <button class="search-starter" type="button">What does it cost?</button>
+      <button class="search-starter" type="button">Who reviews my system?</button>
+      <button class="search-starter" type="button">Is SCL accredited?</button>
+    </div>
+
+    <div class="search-results" id="search-results" hidden>
+      <div class="search-results-label" id="search-results-label">Matching answers</div>
+      <div id="search-results-list"></div>
+    </div>
+
+  </div>
+</section>
+
+</div>
+
+<footer class="site-footer">
+  <div class="footer-inner">
+
+    <div class="footer-cols">
+
+      <div class="footer-col">
+        <div class="footer-col-label">Certification</div>
+        <a href="/framework">Framework</a>
+        <a href="/process">Process</a>
+        <a href="/assess">Assess</a>
+        <a href="/verify">Verify</a>
+      </div>
+
+      <div class="footer-col">
+        <div class="footer-col-label">Resources</div>
+        <a href="/documents">Documents</a>
+        <a href="#">FAQ</a>
+      </div>
+
+      <div class="footer-col">
+        <div class="footer-col-label">Company</div>
+        <a href="#">About</a>
+        <a href="/expertise">Expertise</a>
+        <a href="/markets">Markets</a>
+        <a href="/contact">Contact</a>
+      </div>
+
+      <div class="footer-col">
+        <div class="footer-col-label">Briefings</div>
+        <a href="/news">News</a>
+        <a href="/subscribe">Subscribe</a>
+        <a href="/updates">Updates</a>
+      </div>
+
+      <div class="footer-col">
+        <div class="footer-col-label">Legal</div>
+        <a href="/terms">Terms</a>
+        <a href="/privacy">Privacy</a>
+        <a href="/disclaimer">Disclaimer</a>
+        <a href="/accreditation">Accreditation</a>
+      </div>
+
+    </div>
+
+    <div class="footer-divider"></div>
+
+    <div class="footer-bottom">
+      <span class="footer-copyright">&copy; 2025 Safety Critical Labs. All rights reserved.</span>
+      <div class="footer-meta">
+        <a href="#" aria-label="Back to top">Back to top</a>
+        <span class="footer-version">Framework v3.0</span>
+      </div>
+    </div>
+
+  </div>
+</footer>
+
+<script>
+/* ─── ASK SCL — FAQ filter ─────────────────────────────────── */
+(function () {
+  /* Static FAQ library — typing into the bar filters this list.
+     Each entry: keywords to match against, a short answer, and a follow-up link. */
+  var FAQ = [
+    {
+      q: 'How do I get certified?',
+      a: 'Begin with the self-assessment, then submit your system for formal evaluation. The process runs through Intake, Scope, Assessment, Determination, and Publication.',
+      href: '/process',
+      linkText: 'See the process',
+      keywords: ['certified', 'certification', 'get', 'start', 'begin', 'how do i', 'apply', 'register']
+    },
+    {
+      q: 'What is the SCL framework?',
+      a: 'Thirteen requirement areas covering every AI-specific failure mode not addressed by existing safety-critical software standards. Algorithm agnostic. Domain applicable. Openly published.',
+      href: '/framework',
+      linkText: 'View the framework',
+      keywords: ['framework', 'requirements', 'standard', 'AI-1', 'AI-13', 'thirteen', 'requirement areas', 'what is']
+    },
+    {
+      q: 'How long does certification take?',
+      a: 'A typical first-time assessment runs 6 to 12 weeks, depending on system scope, documentation readiness, and operational claim complexity. Recertification is generally faster.',
+      href: '/process',
+      linkText: 'See the process timeline',
+      keywords: ['long', 'time', 'weeks', 'months', 'timeline', 'duration', 'how long', 'fast']
+    },
+    {
+      q: 'What does certification cost?',
+      a: 'Assessment fees scale with system complexity and operational claim scope. Get a quote tailored to your system and intended use case.',
+      href: '/contact',
+      linkText: 'Request a quote',
+      keywords: ['cost', 'price', 'fee', 'pricing', 'how much', 'quote', 'expensive', 'cheap']
+    },
+    {
+      q: 'Who reviews my system?',
+      a: 'Practitioner-led assessment teams with direct experience in safety-critical AI programs. Structurally independent review at every phase.',
+      href: '/expertise',
+      linkText: 'See the expertise',
+      keywords: ['reviews', 'reviewer', 'who', 'panel', 'assess', 'assessor', 'team', 'evaluator', 'examiner']
+    },
+    {
+      q: 'Is SCL accredited?',
+      a: 'SCL is pursuing ISO/IEC 17065 accreditation through ANAB. The current accreditation status and audit progress are publicly documented.',
+      href: '/accreditation',
+      linkText: 'See accreditation status',
+      keywords: ['accredited', 'accreditation', 'iso', '17065', 'anab', 'authority', 'recognized', 'legitimate']
+    },
+    {
+      q: 'What systems can be certified?',
+      a: 'AI systems operating in aerospace, aviation, medical, and automotive environments. Domain applicable to any safety-critical operational claim.',
+      href: '/markets',
+      linkText: 'See markets served',
+      keywords: ['systems', 'qualify', 'eligible', 'industries', 'markets', 'aerospace', 'aviation', 'medical', 'automotive', 'domain']
+    },
+    {
+      q: 'How do I verify a certificate?',
+      a: 'Each SCL certificate carries a unique number and QR code. Enter the certificate number on the verification page or scan the QR.',
+      href: '/verify',
+      linkText: 'Verify a certificate',
+      keywords: ['verify', 'verification', 'authentic', 'check', 'qr', 'number', 'real', 'valid']
+    },
+    {
+      q: 'Where can I find SCL documents?',
+      a: 'The Documents page collects the SCL framework releases, regulatory references, and supporting documentation in one place.',
+      href: '/documents',
+      linkText: 'Open the documents page',
+      keywords: ['documents', 'pdf', 'whitepaper', 'paper', 'download', 'doc', 'reference']
+    },
+    {
+      q: 'How do I stay informed on AI regulation?',
+      a: 'The News page aggregates research from Stanford HAI, MIT, Google Research, and other AI safety sources. Briefings on regulatory developments.',
+      href: '/news',
+      linkText: 'See the latest',
+      keywords: ['news', 'regulation', 'regulatory', 'updates', 'stay informed', 'briefings', 'subscribe', 'mit', 'hai', 'stanford']
+    }
+  ];
+
+  var input        = document.getElementById('search-input');
+  var form         = document.getElementById('search-form');
+  var startersWrap = document.getElementById('search-starters');
+  var resultsWrap  = document.getElementById('search-results');
+  var resultsList  = document.getElementById('search-results-list');
+  var resultsLabel = document.getElementById('search-results-label');
+
+  /* Score how well a query matches an FAQ entry */
+  function score(query, item) {
+    var q = query.toLowerCase();
+    var bonus = 0;
+    if (item.q.toLowerCase().indexOf(q) !== -1) bonus += 5;
+    if (item.a.toLowerCase().indexOf(q) !== -1) bonus += 2;
+    item.keywords.forEach(function (k) {
+      if (q.indexOf(k) !== -1) bonus += 2;
+      if (k.indexOf(q) !== -1 && q.length > 2) bonus += 1;
+    });
+    return bonus;
+  }
+
+  function escapeHtml(str) {
+    var div = document.createElement('div');
+    div.textContent = str;
+    return div.innerHTML;
+  }
+
+  function renderResults(items, query) {
+    if (items.length === 0) {
+      resultsList.innerHTML =
+        '<div class="search-empty">'
+        + '<p class="search-empty-text">No quick answer in the FAQ. Send the question to us directly.</p>'
+        + '<a class="search-empty-cta" href="/contact?question=' + encodeURIComponent(query) + '">Send to SCL</a>'
+        + '</div>';
+      resultsLabel.textContent = 'No quick match';
+      return;
+    }
+    resultsLabel.textContent = items.length + ' answer' + (items.length === 1 ? '' : 's');
+    resultsList.innerHTML = items.map(function (it) {
+      return '<article class="faq-item">'
+        +   '<h3 class="faq-question">' + escapeHtml(it.q) + '</h3>'
+        +   '<p class="faq-answer">' + escapeHtml(it.a) + '</p>'
+        +   '<a class="faq-link" href="' + it.href + '">' + escapeHtml(it.linkText) + '</a>'
+        + '</article>';
+    }).join('');
+  }
+
+  /* Debounced input handler */
+  var debounce;
+  input.addEventListener('input', function () {
+    clearTimeout(debounce);
+    debounce = setTimeout(function () {
+      var query = input.value.trim();
+      if (query.length === 0) {
+        resultsWrap.setAttribute('hidden', '');
+        startersWrap.style.display = '';
+        return;
+      }
+      var scored = FAQ.map(function (it) { return { it: it, s: score(query, it) }; })
+                      .filter(function (x) { return x.s > 0; })
+                      .sort(function (a, b) { return b.s - a.s; })
+                      .map(function (x) { return x.it; })
+                      .slice(0, 5);
+      renderResults(scored, query);
+      resultsWrap.removeAttribute('hidden');
+      startersWrap.style.display = 'none';
+    }, 150);
+  });
+
+  /* Starter chips fill the input */
+  startersWrap.addEventListener('click', function (e) {
+    var btn = e.target.closest('.search-starter');
+    if (!btn) return;
+    input.value = btn.textContent;
+    input.dispatchEvent(new Event('input', { bubbles: true }));
+    input.focus();
+  });
+
+  /* Submit — if no FAQ match, send to /contact with the question pre-filled */
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var query = input.value.trim();
+    if (!query) return;
+    var scored = FAQ.map(function (it) { return { it: it, s: score(query, it) }; })
+                    .filter(function (x) { return x.s > 0; });
+    if (scored.length === 0) {
+      window.location.href = '/contact?question=' + encodeURIComponent(query);
+      return;
+    }
+    /* If there's a strong match, jump straight to its linked page */
+    scored.sort(function (a, b) { return b.s - a.s; });
+    if (scored[0].s >= 5) {
+      window.location.href = scored[0].it.href;
+      return;
+    }
+    /* Otherwise just trigger the result render (already done by input event) */
+    input.dispatchEvent(new Event('input', { bubbles: true }));
+  });
+
+  /* Mobile hamburger */
+  var hamburger = document.querySelector('.gn-hamburger');
+  if (hamburger) {
+    hamburger.addEventListener('click', function () {
+      var expanded = hamburger.getAttribute('aria-expanded') === 'true';
+      hamburger.setAttribute('aria-expanded', !expanded);
+      document.querySelector('.gn-links').classList.toggle('open');
+    });
+  }
+
+  /* If the page was opened with ?q=, pre-fill */
+  var params = new URLSearchParams(window.location.search);
+  var q = params.get('q');
+  if (q) {
+    input.value = q;
+    input.dispatchEvent(new Event('input', { bubbles: true }));
+  }
+})();
+</script>
+
+</body>
+</html>

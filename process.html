@@ -24,9 +24,69 @@
 <style>
 /* ─── PROCESS PAGE STYLES ────────────────────────────────── */
 
-/* ═══════════════════════════════════════════════════════════
-   PROCESS PAGE STYLES
-   ═══════════════════════════════════════════════════════════ */
+/* ─── HERO ENHANCEMENT (cursor glow) ──────────────────────── */
+.inner-hero { z-index: 0; }
+.fw-hero-glow {
+  position: absolute; inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.4s;
+  background: radial-gradient(520px circle at var(--glow-x, 70%) var(--glow-y, 30%), rgba(46,109,180,0.10), transparent 60%);
+}
+.inner-hero:hover .fw-hero-glow { opacity: 1; }
+.inner-hero-inner { z-index: 2; position: relative; }
+
+/* ─── BRACKETED MONO EYEBROW + SHOWCASE TITLE ─────────────── */
+.fw-eyebrow-mono {
+  font-family: var(--mono);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(46,109,180,0.6);
+  margin-bottom: 20px;
+}
+.fw-showcase-title {
+  font-family: var(--sans);
+  font-size: clamp(30px, 3.4vw, 46px);
+  font-weight: 600;
+  line-height: 1.08;
+  letter-spacing: -0.025em;
+  color: var(--blue);
+  margin-bottom: 48px;
+}
+.fw-showcase-title em {
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 400;
+  font-size: 1.05em;
+  color: var(--blue-dk);
+}
+
+/* ─── PHASES SECTION (cream + blue gradient) ──────────────── */
+.phases-section {
+  background:
+    radial-gradient(ellipse at 50% 0%, rgba(46,109,180,0.05) 0%, transparent 50%),
+    #F7F3EC;
+  position: relative;
+}
+
+/* Transition bridge to /expertise */
+.fw-transition-cta {
+  max-width: 1140px;
+  margin: 64px auto 0;
+  text-align: center;
+  position: relative;
+  z-index: 1;
+}
+.fw-transition-line {
+  font-size: 17px;
+  color: var(--ink-2);
+  line-height: 1.6;
+  font-weight: 300;
+  margin-bottom: 24px;
+}
 
 /* PHASES */
 .phases-layout {
@@ -34,15 +94,16 @@
 }
 
 .phases-detail { display: flex; flex-direction: column; gap: 0; }
-.phase-block { padding: 48px 0; border-top: 1px solid var(--rule); }
+.phase-block { padding: 48px 0; border-top: 1px solid rgba(46,109,180,0.12); }
 .phase-block:first-child { border-top: none; padding-top: 0; }
 .phase-header { display: flex; gap: 20px; align-items: flex-start; margin-bottom: 24px; }
 .phase-num-badge {
   width: 48px; height: 48px; border-radius: 50%;
-  background: var(--ink); color: #fff;
+  background: var(--blue); color: #fff;
   display: flex; align-items: center; justify-content: center;
   font-family: var(--sans); font-size: 14px; font-weight: 600;
   flex-shrink: 0;
+  box-shadow: 0 4px 14px rgba(46,109,180,0.25);
 }
 .phase-title-block { flex: 1; }
 .phase-title { font-size: 22px; font-weight: 600; color: var(--ink); margin-bottom: 4px; line-height: 1.2; }
@@ -55,9 +116,11 @@
 .phase-note {
   margin-top: 20px;
   padding: 14px 18px;
-  background: var(--white);
+  background: #FAF6EC;
+  border: 1px solid rgba(46,109,180,0.10);
   border-left: 3px solid var(--blue);
   font-size: 13px; color: var(--ink-2); line-height: 1.65;
+  border-radius: 3px;
 }
 .phase-note strong { color: var(--ink); }
 .phase-subsection { margin-top: 32px; }
@@ -68,13 +131,18 @@
 }
 .phase-subsection .ev-intro { font-size: 15px; color: var(--ink-2); line-height: 1.75; font-weight: 300; margin-bottom: 16px; }
 .phase-subsection .ev-list { margin-top: 16px; }
-.phase-subsection .ev-item { background: var(--white); }
-.phase-subsection .ev-note { margin-top: 14px; background: var(--white); }
+.phase-subsection .ev-item { background: #FAF6EC; }
+.phase-subsection .ev-note { margin-top: 14px; background: #FAF6EC; }
 .check-item {
   display: flex; gap: 12px; align-items: flex-start;
   padding: 14px 18px;
-  background: var(--white); border: 1px solid var(--rule);
-  border-radius: 3px;
+  background: #FAF6EC; border: 1px solid rgba(46,109,180,0.10);
+  border-radius: 4px;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+.check-item:hover {
+  border-color: rgba(46,109,180,0.25);
+  box-shadow: 0 4px 14px rgba(46,109,180,0.08);
 }
 .check-dot {
   width: 6px; height: 6px; border-radius: 50%;
@@ -83,10 +151,10 @@
 .check-text { font-size: 14px; color: var(--ink-2); line-height: 1.6; }
 .check-text strong { color: var(--ink); font-weight: 500; }
 
-/* risk score check item variant */
+/* risk score check item variant — emphasized cream with stronger blue tint */
 .check-item.check-item-score {
-  background: var(--bg);
-  border-color: var(--rule);
+  background: rgba(46,109,180,0.06);
+  border-color: rgba(46,109,180,0.20);
 }
 .check-item.check-item-score .check-dot { background: var(--blue); }
 .check-item.check-item-score .check-text strong { color: var(--ink); }
@@ -113,15 +181,21 @@
 .ev-intro { font-size: 16px; color: var(--ink-2); line-height: 1.8; font-weight: 300; margin-bottom: 24px; }
 .ev-note {
   padding: 16px 20px;
-  background: var(--bg); border-left: 3px solid var(--blue);
+  background: #FAF6EC; border-left: 3px solid var(--blue);
+  border-radius: 3px;
   font-size: 13px; color: var(--ink-2); line-height: 1.65;
 }
 .ev-note strong { color: var(--ink); }
 .ev-list { display: flex; flex-direction: column; gap: 8px; }
 .ev-item {
-  background: var(--bg); border: 1px solid var(--rule);
-  border-radius: 3px; padding: 16px 20px;
+  background: #FAF6EC; border: 1px solid rgba(46,109,180,0.10);
+  border-radius: 4px; padding: 16px 20px;
   display: grid; grid-template-columns: 160px 1fr; gap: 16px;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+.ev-item:hover {
+  border-color: rgba(46,109,180,0.25);
+  box-shadow: 0 4px 14px rgba(46,109,180,0.08);
 }
 .ev-item-label {
   font-family: var(--sans); font-size: 11px;
@@ -165,37 +239,35 @@
 
 <!-- NAV -->
 <nav class="global-nav">
-  <a href="/" class="gn-wordmark">
-    <span class="gn-text"><em>Safety Critical</em> Labs</span>
-  </a>
-  <button class="gn-hamburger" aria-label="Menu" aria-expanded="false">
-    <span></span><span></span><span></span>
-  </button>
-<ul class="gn-links">
-    <li><a href="/">Home</a></li>
-    <li class="gn-dropdown">
-      <a class="gn-dropdown-toggle has-active" href="javascript:void(0)">Certification <span class="gn-dropdown-arrow"></span></a>
-      <ul class="gn-dropdown-menu" style="display:none">
-        <li><a href="/framework">Framework</a></li>
-        <li><a href="/process" class="active">Process</a></li>
-        <li><a href="/assess">Assess</a></li>
-      </ul>
-    </li>
-    <li><a href="/expertise">Expertise</a></li>
-    <li><a href="/markets">Markets</a></li>
-    <li><a href="/contact" class="gn-cta">Get Certified</a></li>
-  </ul>
+  <div class="global-nav-inner">
+    <a href="/" class="gn-wordmark">
+      <span class="gn-text"><em>Safety Critical</em> Labs</span>
+    </a>
+    <button class="gn-hamburger" aria-label="Menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+    <ul class="gn-links">
+      <li><a href="/framework">Framework</a></li>
+      <li><a href="/process" class="active">Process</a></li>
+      <li><a href="/expertise">Expertise</a></li>
+      <li><a href="/markets">Markets</a></li>
+      <li><a href="/news">News</a></li>
+    </ul>
+    <a href="/search" class="gn-search" aria-label="Search">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <circle cx="11" cy="11" r="7"/>
+        <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+      </svg>
+    </a>
+    <a href="/contact" class="gn-cta">Get Certified</a>
+  </div>
 </nav>
-
-<!-- CREDIBILITY TICKER -->
-<div class="reg-ticker" id="reg-ticker" aria-label="Recent regulatory activity">
-  <div class="reg-ticker-track" id="reg-ticker-track"></div>
-</div>
 
 <div class="page-shell">
 
 <!-- HERO -->
 <div class="inner-hero">
+  <div class="fw-hero-glow"></div>
   <div class="inner-hero-inner">
     <div>
       <div class="inner-hero-breadcrumb">
@@ -211,9 +283,10 @@
 </div>
 
 <!-- PHASES -->
-<section class="page-section" style="background: var(--bg);">
+<section class="page-section phases-section">
   <div class="section-inner">
-    <div class="section-eyebrow">Four phases</div>
+    <div class="fw-eyebrow-mono">[ Four Phases ]</div>
+    <h2 class="fw-showcase-title">From kickoff to <em>certificate.</em></h2>
     <div class="phases-layout">
       <div class="phases-detail">
 
@@ -389,6 +462,11 @@
 
       </div>
     </div>
+
+    <div class="fw-transition-cta">
+      <p class="fw-transition-line">See where your system stands before engaging.</p>
+      <a href="/assess" class="btn btn-solid">Take the readiness assessment</a>
+    </div>
   </div>
 </section>
 
@@ -397,28 +475,58 @@
 <!-- FOOTER -->
 <footer class="site-footer">
   <div class="footer-inner">
-    <div class="footer-top footer-top--row">
-      <a href="/" class="footer-wordmark" aria-label="Safety Critical Labs">
-        <img src="img/SCL_Logo_transparent_sm.png" alt="" class="footer-seal">
-        <span class="gn-text"><em>Safety Critical</em> Labs</span>
-      </a>
-      <div class="footer-content">
-        <div class="footer-nav-row">
-          <a href="/framework">Framework</a>
-          <a href="/process">Process</a>
-          <a href="/expertise">Expertise</a>
-          <a href="/markets">Markets</a>
-          <a href="/assess">Assess</a>
-          <a href="/contact">Contact</a>
-        </div>
-        <p class="footer-tagline">AI certification authority for safety critical systems.<br>Formal determinations issued against a published, citable standard.</p>
+
+    <div class="footer-cols">
+
+      <div class="footer-col">
+        <div class="footer-col-label">Certification</div>
+        <a href="/framework">Framework</a>
+        <a href="/process">Process</a>
+        <a href="/assess">Assess</a>
+        <a href="/verify">Verify</a>
       </div>
+
+      <div class="footer-col">
+        <div class="footer-col-label">Resources</div>
+        <a href="/documents">Documents</a>
+        <a href="#">FAQ</a>
+      </div>
+
+      <div class="footer-col">
+        <div class="footer-col-label">Company</div>
+        <a href="#">About</a>
+        <a href="/expertise">Expertise</a>
+        <a href="/markets">Markets</a>
+        <a href="/contact">Contact</a>
+      </div>
+
+      <div class="footer-col">
+        <div class="footer-col-label">Briefings</div>
+        <a href="/news">News</a>
+        <a href="/subscribe">Subscribe</a>
+        <a href="/updates">Updates</a>
+      </div>
+
+      <div class="footer-col">
+        <div class="footer-col-label">Legal</div>
+        <a href="/terms">Terms</a>
+        <a href="/privacy">Privacy</a>
+        <a href="/disclaimer">Disclaimer</a>
+        <a href="/accreditation">Accreditation</a>
+      </div>
+
     </div>
+
     <div class="footer-divider"></div>
+
     <div class="footer-bottom">
       <span class="footer-copyright">&copy; 2025 Safety Critical Labs. All rights reserved.</span>
-      <span class="footer-version">Framework v3.0</span>
+      <div class="footer-meta">
+        <a href="#" aria-label="Back to top">Back to top</a>
+        <span class="footer-version">Framework v3.0</span>
+      </div>
     </div>
+
   </div>
 </footer>
 
@@ -500,6 +608,18 @@ gsap.utils.toArray('.slide-right').forEach(function(el) {
   );
 });
 
+
+/* ─── Hero cursor glow ───────────────────────── */
+(function() {
+  var glow = document.querySelector('.fw-hero-glow');
+  var hero = document.querySelector('.inner-hero');
+  if (!glow || !hero) return;
+  hero.addEventListener('mousemove', function(e) {
+    var rect = hero.getBoundingClientRect();
+    glow.style.setProperty('--glow-x', (e.clientX - rect.left) + 'px');
+    glow.style.setProperty('--glow-y', (e.clientY - rect.top) + 'px');
+  });
+})();
 
 // Scale certificate reveal iframe to fit its frame width
 function scaleCertReveal() {

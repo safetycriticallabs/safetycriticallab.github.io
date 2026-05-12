@@ -1,0 +1,903 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Documents | Safety Critical Labs</title>
+<meta name="description" content="The standards, regulations, and reference documents that inform the SCL AI Requirements Framework. Each entry links to the official source.">
+<meta property="og:title" content="Documents | Safety Critical Labs">
+<meta property="og:description" content="Library of source documents that inform the SCL AI Requirements Framework. ISO, NIST, NASA, FAA, IEEE, RTCA, AAMI, EU AI Act, GDPR, HIPAA, CCPA.">
+<meta property="og:url" content="https://safetycriticallabs.com/documents.html">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://safetycriticallabs.com/img/SCL%20Logo%203d.png">
+<link rel="icon" type="image/x-icon" href="favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="img/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="48x48" href="img/favicon-48x48.png">
+<link rel="icon" type="image/png" sizes="192x192" href="img/favicon-192x192.png">
+<link rel="apple-touch-icon" sizes="180x180" href="img/apple-touch-icon.png">
+<link rel="shortcut icon" href="favicon.ico">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=IBM+Plex+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<style>
+/* ─── DOCUMENTS PAGE ──────────────────────────────────────── */
+
+/* Hero cursor glow */
+.inner-hero { z-index: 0; }
+.fw-hero-glow {
+  position: absolute; inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.4s;
+  background: radial-gradient(520px circle at var(--glow-x, 70%) var(--glow-y, 30%), rgba(46,109,180,0.10), transparent 60%);
+}
+.inner-hero:hover .fw-hero-glow { opacity: 1; }
+.inner-hero-inner { z-index: 2; position: relative; }
+
+/* Bracketed mono eyebrow */
+.fw-eyebrow-mono {
+  font-family: var(--mono);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(46,109,180,0.6);
+  margin-bottom: 20px;
+}
+
+/* Library section — cream + radial blue */
+.docs-page-section {
+  background:
+    radial-gradient(ellipse at 50% 30%, rgba(46,109,180,0.05) 0%, transparent 60%),
+    linear-gradient(180deg, #F7F3EC 0%, #F4EFE5 100%);
+  padding: 88px 40px 120px;
+}
+.docs-page-inner {
+  max-width: 1140px;
+  margin: 0 auto;
+}
+
+/* Filter chips */
+.docs-filter-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 40px;
+  padding-bottom: 32px;
+  border-bottom: 1px solid rgba(46,109,180,0.10);
+}
+.docs-filter-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 8px 16px;
+  border: 1px solid var(--blue);
+  border-radius: 6px;
+  background: transparent;
+  color: var(--blue);
+  font-family: var(--sans);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  user-select: none;
+}
+.docs-filter-chip:hover {
+  background: var(--blue);
+  color: #fff;
+}
+.docs-filter-chip.active {
+  background: var(--blue);
+  border-color: var(--blue);
+  color: #fff;
+}
+.docs-filter-count {
+  margin-left: 6px;
+  font-family: var(--mono);
+  font-size: 11px;
+  opacity: 0.7;
+}
+
+/* Document grid */
+.docs-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 28px;
+}
+
+/* Document card */
+.docs-card {
+  display: flex;
+  flex-direction: column;
+  background: #FAF6EC;
+  border: 1px solid rgba(46,109,180,0.14);
+  border-radius: 6px;
+  overflow: hidden;
+  text-decoration: none;
+  color: inherit;
+  transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+}
+.docs-card:hover {
+  border-color: var(--blue);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(46,109,180,0.10);
+}
+.docs-card-cover {
+  height: 140px;
+  position: relative;
+  overflow: hidden;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background:
+    radial-gradient(ellipse at 30% 40%, rgba(46,109,180,0.18), transparent 60%),
+    linear-gradient(135deg, #E8EEF6 0%, #DDE5F0 100%);
+}
+.docs-card-cover::after {
+  content: '';
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(circle at 25% 30%, rgba(46,109,180,0.10) 1px, transparent 1.5px),
+    radial-gradient(circle at 70% 65%, rgba(46,109,180,0.08) 1px, transparent 1.5px);
+  background-size: 70px 70px, 90px 90px;
+  pointer-events: none;
+  opacity: 0.5;
+}
+/* Per-organization cover tints */
+.docs-card[data-org="iso"]    .docs-card-cover { background: linear-gradient(135deg, #E8EEF6 0%, #DDE5F0 100%); }
+.docs-card[data-org="nist"]   .docs-card-cover { background: linear-gradient(135deg, #ECE7DB 0%, #DDE5F0 100%); }
+.docs-card[data-org="ieee"]   .docs-card-cover { background: linear-gradient(135deg, #DDE5F0 0%, #C8D4E8 100%); }
+.docs-card[data-org="nasa"]   .docs-card-cover { background: linear-gradient(135deg, #F4EFE5 0%, #DDE5F0 100%); }
+.docs-card[data-org="faa"]    .docs-card-cover { background: linear-gradient(135deg, #ECE7DB 0%, #E8EEF6 100%); }
+.docs-card[data-org="rtca"]   .docs-card-cover { background: linear-gradient(135deg, #DDE5F0 0%, #ECE7DB 100%); }
+.docs-card[data-org="eu"]     .docs-card-cover { background: linear-gradient(135deg, #F4EFE5 0%, #C8D4E8 100%); }
+.docs-card[data-org="us"]     .docs-card-cover { background: linear-gradient(135deg, #E8EEF6 0%, #F4EFE5 100%); }
+.docs-card[data-org="aami"]   .docs-card-cover { background: linear-gradient(135deg, #ECE7DB 0%, #C8D4E8 100%); }
+
+.docs-card-org-pill {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--blue-dk);
+  background: rgba(250,246,236,0.85);
+  backdrop-filter: blur(6px);
+  padding: 6px 12px;
+  border-radius: 6px;
+  z-index: 2;
+}
+.docs-card-status-pill {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  padding: 5px 10px;
+  border-radius: 4px;
+  z-index: 2;
+}
+.docs-card-status-pill.is-normative {
+  color: var(--blue-dk);
+  background: rgba(250,246,236,0.85);
+  backdrop-filter: blur(6px);
+  border: 1px solid rgba(46,109,180,0.20);
+}
+.docs-card-status-pill.is-reference {
+  color: var(--ink-2);
+  background: rgba(250,246,236,0.70);
+  backdrop-filter: blur(6px);
+  border: 1px solid rgba(46,109,180,0.12);
+}
+.docs-card-status-pill.is-pending {
+  color: #8a6914;
+  background: rgba(250,246,236,0.85);
+  backdrop-filter: blur(6px);
+  border: 1px solid rgba(200,150,30,0.30);
+}
+
+.docs-card-id {
+  font-family: var(--mono);
+  font-size: 22px;
+  letter-spacing: 0.02em;
+  color: var(--blue-dk);
+  font-weight: 500;
+  text-align: center;
+  padding: 0 18px;
+  position: relative;
+  z-index: 1;
+}
+
+.docs-card-content {
+  padding: 22px 22px 24px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+.docs-card-title {
+  font-family: var(--sans);
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.32;
+  color: var(--ink);
+  margin-bottom: 10px;
+  letter-spacing: -0.005em;
+}
+.docs-card-desc {
+  font-size: 13px;
+  color: var(--ink-2);
+  line-height: 1.6;
+  font-weight: 300;
+  margin-bottom: 18px;
+  flex: 1;
+}
+.docs-card-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 14px;
+  border-top: 1px solid rgba(46,109,180,0.10);
+}
+.docs-card-org {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(46,109,180,0.6);
+}
+.docs-card-link {
+  font-family: var(--sans);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--blue);
+}
+.docs-card:hover .docs-card-link { color: var(--blue-dk); }
+
+/* Section heading between groups */
+.docs-section-heading {
+  font-family: var(--mono);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(46,109,180,0.7);
+  margin: 56px 0 20px;
+  padding-top: 32px;
+  border-top: 1px solid rgba(46,109,180,0.10);
+}
+.docs-section-heading:first-of-type { margin-top: 0; padding-top: 0; border-top: none; }
+.docs-section-heading-count {
+  margin-left: 8px;
+  font-family: var(--mono);
+  color: rgba(46,109,180,0.45);
+}
+.docs-section-heading-desc {
+  font-family: var(--sans);
+  font-size: 14px;
+  font-weight: 300;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--ink-2);
+  margin-top: 6px;
+  margin-bottom: 24px;
+  line-height: 1.6;
+  max-width: 640px;
+}
+
+.docs-empty {
+  display: none;
+  text-align: center;
+  padding: 48px 0;
+  font-size: 14px;
+  color: var(--ink-3);
+}
+.docs-empty.is-visible { display: block; }
+
+@media (max-width: 960px) {
+  .docs-grid { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 640px) {
+  .docs-grid { grid-template-columns: 1fr; }
+  .docs-page-section { padding: 60px 24px 80px; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="global-nav">
+  <div class="global-nav-inner">
+    <a href="/" class="gn-wordmark">
+      <span class="gn-text"><em>Safety Critical</em> Labs</span>
+    </a>
+    <button class="gn-hamburger" aria-label="Menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+    <ul class="gn-links">
+      <li><a href="/framework">Framework</a></li>
+      <li><a href="/process">Process</a></li>
+      <li><a href="/expertise">Expertise</a></li>
+      <li><a href="/markets">Markets</a></li>
+      <li><a href="/news">News</a></li>
+    </ul>
+    <a href="/search" class="gn-search" aria-label="Search">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <circle cx="11" cy="11" r="7"/>
+        <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+      </svg>
+    </a>
+    <a href="/contact" class="gn-cta">Get Certified</a>
+  </div>
+</nav>
+
+<div class="page-shell">
+
+<!-- HERO -->
+<div class="inner-hero">
+  <div class="fw-hero-glow"></div>
+  <div class="inner-hero-inner">
+    <div>
+      <div class="inner-hero-breadcrumb">
+        <a href="/">Safety Critical Labs</a>
+        <span>/</span> Documents
+      </div>
+      <h1>Every standard the<br>framework <em>builds on.</em></h1>
+    </div>
+    <p class="inner-hero-lead">
+      The SCL AI Requirements Framework is grounded in a defined set of standards, regulations, and reference documents. Each entry below links to the official publisher. No hosted copies. Authoritative sources only.
+    </p>
+  </div>
+</div>
+
+<!-- LIBRARY -->
+<section class="docs-page-section">
+  <div class="docs-page-inner">
+
+    <!-- Filter chips -->
+    <div class="docs-filter-row" role="group" aria-label="Filter documents by organization">
+      <button class="docs-filter-chip active" data-filter="all">All <span class="docs-filter-count">26</span></button>
+      <button class="docs-filter-chip" data-filter="iso">ISO/IEC <span class="docs-filter-count">8</span></button>
+      <button class="docs-filter-chip" data-filter="nist">NIST <span class="docs-filter-count">4</span></button>
+      <button class="docs-filter-chip" data-filter="ieee">IEEE <span class="docs-filter-count">1</span></button>
+      <button class="docs-filter-chip" data-filter="nasa">NASA <span class="docs-filter-count">2</span></button>
+      <button class="docs-filter-chip" data-filter="faa">FAA <span class="docs-filter-count">1</span></button>
+      <button class="docs-filter-chip" data-filter="rtca">RTCA <span class="docs-filter-count">5</span></button>
+      <button class="docs-filter-chip" data-filter="eu">EU <span class="docs-filter-count">2</span></button>
+      <button class="docs-filter-chip" data-filter="us">US Federal/State <span class="docs-filter-count">2</span></button>
+      <button class="docs-filter-chip" data-filter="aami">AAMI <span class="docs-filter-count">1</span></button>
+    </div>
+
+    <!-- Normative Standards -->
+    <div class="docs-section-heading">
+      [ Normative Standards ] <span class="docs-section-heading-count">10</span>
+    </div>
+    <p class="docs-section-heading-desc">
+      Applicable standards cited as normative references in the framework. Definitions, requirements, and verification methods used directly within SCL certification.
+    </p>
+
+    <div class="docs-grid">
+      <a class="docs-card" data-org="iso" data-status="normative" href="https://www.iso.org/standard/74296.html" target="_blank" rel="noopener">
+        <div class="docs-card-cover">
+          <span class="docs-card-org-pill">ISO/IEC</span>
+          <span class="docs-card-status-pill is-normative">Normative</span>
+          <span class="docs-card-id">22989:2022</span>
+        </div>
+        <div class="docs-card-content">
+          <div class="docs-card-title">AI Concepts and Terminology</div>
+          <div class="docs-card-desc">Source of foundational definitions used throughout the framework's glossary and core AI/ML terms.</div>
+          <div class="docs-card-meta"><span class="docs-card-org">ISO/IEC</span><span class="docs-card-link">View source →</span></div>
+        </div>
+      </a>
+
+      <a class="docs-card" data-org="iso" data-status="normative" href="https://www.iso.org/standard/81118.html" target="_blank" rel="noopener">
+        <div class="docs-card-cover">
+          <span class="docs-card-org-pill">ISO/IEC</span>
+          <span class="docs-card-status-pill is-normative">Normative</span>
+          <span class="docs-card-id">5338:2023</span>
+        </div>
+        <div class="docs-card-content">
+          <div class="docs-card-title">AI System Lifecycle Processes</div>
+          <div class="docs-card-desc">Lifecycle process model the framework's AI integration with software lifecycle is built against.</div>
+          <div class="docs-card-meta"><span class="docs-card-org">ISO/IEC</span><span class="docs-card-link">View source →</span></div>
+        </div>
+      </a>
+
+      <a class="docs-card" data-org="nist" data-status="normative" href="https://www.nist.gov/itl/ai-risk-management-framework" target="_blank" rel="noopener">
+        <div class="docs-card-cover">
+          <span class="docs-card-org-pill">NIST</span>
+          <span class="docs-card-status-pill is-normative">Normative</span>
+          <span class="docs-card-id">AI RMF 1.0</span>
+        </div>
+        <div class="docs-card-content">
+          <div class="docs-card-title">AI Risk Management Framework</div>
+          <div class="docs-card-desc">Risk taxonomy referenced throughout the framework for AI-specific risk identification and management.</div>
+          <div class="docs-card-meta"><span class="docs-card-org">NIST</span><span class="docs-card-link">View source →</span></div>
+        </div>
+      </a>
+
+      <a class="docs-card" data-org="rtca" data-status="normative" href="https://www.rtca.org/products/do-178c/" target="_blank" rel="noopener">
+        <div class="docs-card-cover">
+          <span class="docs-card-org-pill">RTCA</span>
+          <span class="docs-card-status-pill is-normative">Normative</span>
+          <span class="docs-card-id">DO-178C</span>
+        </div>
+        <div class="docs-card-content">
+          <div class="docs-card-title">Software Considerations in Airborne Systems and Equipment Certification</div>
+          <div class="docs-card-desc">Aviation software standard that SCL's AI framework sits alongside to address AI failure modes DO-178C does not cover.</div>
+          <div class="docs-card-meta"><span class="docs-card-org">RTCA</span><span class="docs-card-link">View source →</span></div>
+        </div>
+      </a>
+
+      <a class="docs-card" data-org="iso" data-status="normative" href="https://www.iso.org/standard/68383.html" target="_blank" rel="noopener">
+        <div class="docs-card-cover">
+          <span class="docs-card-org-pill">ISO</span>
+          <span class="docs-card-status-pill is-normative">Normative</span>
+          <span class="docs-card-id">26262</span>
+        </div>
+        <div class="docs-card-content">
+          <div class="docs-card-title">Road Vehicles &mdash; Functional Safety</div>
+          <div class="docs-card-desc">Automotive functional safety standard. The framework addresses AI failure modes ASIL decomposition cannot resolve.</div>
+          <div class="docs-card-meta"><span class="docs-card-org">ISO</span><span class="docs-card-link">View source →</span></div>
+        </div>
+      </a>
+
+      <a class="docs-card" data-org="iso" data-status="normative" href="https://www.iso.org/standard/71670.html" target="_blank" rel="noopener">
+        <div class="docs-card-cover">
+          <span class="docs-card-org-pill">ISO/IEC</span>
+          <span class="docs-card-status-pill is-normative">Normative</span>
+          <span class="docs-card-id">27701:2019</span>
+        </div>
+        <div class="docs-card-content">
+          <div class="docs-card-title">Privacy Information Management Extension to ISO/IEC 27001</div>
+          <div class="docs-card-desc">Source of privacy management controls referenced in AI-10 Privacy and Data Protection.</div>
+          <div class="docs-card-meta"><span class="docs-card-org">ISO/IEC</span><span class="docs-card-link">View source →</span></div>
+        </div>
+      </a>
+
+      <a class="docs-card" data-org="iso" data-status="normative" href="https://www.iso.org/standard/45123.html" target="_blank" rel="noopener">
+        <div class="docs-card-cover">
+          <span class="docs-card-org-pill">ISO/IEC</span>
+          <span class="docs-card-status-pill is-normative">Normative</span>
+          <span class="docs-card-id">29100:2011</span>
+        </div>
+        <div class="docs-card-content">
+          <div class="docs-card-title">Privacy Framework</div>
+          <div class="docs-card-desc">Defines privacy principles and terminology that AI-10 sub-requirements align with.</div>
+          <div class="docs-card-meta"><span class="docs-card-org">ISO/IEC</span><span class="docs-card-link">View source →</span></div>
+        </div>
+      </a>
+
+      <a class="docs-card" data-org="nist" data-status="normative" href="https://www.nist.gov/privacy-framework" target="_blank" rel="noopener">
+        <div class="docs-card-cover">
+          <span class="docs-card-org-pill">NIST</span>
+          <span class="docs-card-status-pill is-normative">Normative</span>
+          <span class="docs-card-id">Privacy v1.0</span>
+        </div>
+        <div class="docs-card-content">
+          <div class="docs-card-title">NIST Privacy Framework v1.0</div>
+          <div class="docs-card-desc">Enterprise privacy risk management framework referenced in AI-10's privacy risk taxonomy.</div>
+          <div class="docs-card-meta"><span class="docs-card-org">NIST</span><span class="docs-card-link">View source →</span></div>
+        </div>
+      </a>
+
+      <a class="docs-card" data-org="eu" data-status="normative" href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32024R1689" target="_blank" rel="noopener">
+        <div class="docs-card-cover">
+          <span class="docs-card-org-pill">EU</span>
+          <span class="docs-card-status-pill is-normative">Normative</span>
+          <span class="docs-card-id">AI Act</span>
+        </div>
+        <div class="docs-card-content">
+          <div class="docs-card-title">Regulation on Artificial Intelligence</div>
+          <div class="docs-card-desc">EU AI risk tiering regulation. SCL classifications are cross-referenced with Article 6 high-risk categories.</div>
+          <div class="docs-card-meta"><span class="docs-card-org">EU</span><span class="docs-card-link">View source →</span></div>
+        </div>
+      </a>
+
+      <a class="docs-card" data-org="ieee" data-status="normative" href="https://standards.ieee.org/ieee/1012/5609/" target="_blank" rel="noopener">
+        <div class="docs-card-cover">
+          <span class="docs-card-org-pill">IEEE</span>
+          <span class="docs-card-status-pill is-normative">Normative</span>
+          <span class="docs-card-id">1012-2016</span>
+        </div>
+        <div class="docs-card-content">
+          <div class="docs-card-title">System, Software, and Hardware Verification and Validation</div>
+          <div class="docs-card-desc">Source of the four verification methods (Inspection, Analysis, Demonstration, Test) used in the framework's verification matrix.</div>
+          <div class="docs-card-meta"><span class="docs-card-org">IEEE</span><span class="docs-card-link">View source →</span></div>
+        </div>
+      </a>
+    </div>
+
+    <!-- Reference Documents -->
+    <div class="docs-section-heading">
+      [ Reference Documents ] <span class="docs-section-heading-count">11</span>
+    </div>
+    <p class="docs-section-heading-desc">
+      Informative references cited throughout the framework. Domain regulations, lifecycle standards, and supporting guidance that inform requirement interpretation.
+    </p>
+
+    <div class="docs-grid">
+      <a class="docs-card" data-org="nasa" data-status="reference" href="https://nodis3.gsfc.nasa.gov/displayDir.cfm?Internal_ID=N_PR_7150_002D_&page_name=main" target="_blank" rel="noopener">
+        <div class="docs-card-cover">
+          <span class="docs-card-org-pill">NASA</span>
+          <span class="docs-card-status-pill is-reference">Reference</span>
+          <span class="docs-card-id">NPR 7150.2D</span>
+        </div>
+        <div class="docs-card-content">
+          <div class="docs-card-title">NASA Software Engineering Requirements</div>
+          <div class="docs-card-desc">Software lifecycle reference extended by the framework's AI-specific operations activities.</div>
+          <div class="docs-card-meta"><span class="docs-card-org">NASA</span><span class="docs-card-link">View source →</span></div>
+        </div>
+      </a>
+
+      <a class="docs-card" data-org="nasa" data-status="reference" href="https://standards.nasa.gov/standard/nasa/nasa-std-87398" target="_blank" rel="noopener">
+        <div class="docs-card-cover">
+          <span class="docs-card-org-pill">NASA</span>
+          <span class="docs-card-status-pill is-reference">Reference</span>
+          <span class="docs-card-id">STD-8739.8</span>
+        </div>
+        <div class="docs-card-content">
+          <div class="docs-card-title">Software Assurance and Software Safety Standard</div>
+          <div class="docs-card-desc">Safety analysis reference for traceable, logically inspectable safety cases &mdash; one of the gaps AI-8 Explainability addresses.</div>
+          <div class="docs-card-meta"><span class="docs-card-org">NASA</span><span class="docs-card-link">View source →</span></div>
+        </div>
+      </a>
+
+      <a class="docs-card" data-org="iso" data-status="reference" href="https://www.iso.org/standard/74438.html" target="_blank" rel="noopener">
+        <div class="docs-card-cover">
+          <span class="docs-card-org-pill">ISO/IEC</span>
+          <span class="docs-card-status-pill is-reference">Reference</span>
+          <span class="docs-card-id">23053:2022</span>
+        </div>
+        <div class="docs-card-content">
+          <div class="docs-card-title">Framework for AI Systems Using Machine Learning</div>
+          <div class="docs-card-desc">ML framework concepts including out-of-distribution and overfitting definitions used in AI-3 and AI-6.</div>
+          <div class="docs-card-meta"><span class="docs-card-org">ISO/IEC</span><span class="docs-card-link">View source →</span></div>
+        </div>
+      </a>
+
+      <a class="docs-card" data-org="iso" data-status="reference" href="https://www.iso.org/standard/77607.html" target="_blank" rel="noopener">
+        <div class="docs-card-cover">
+          <span class="docs-card-org-pill">ISO/IEC</span>
+          <span class="docs-card-status-pill is-reference">Reference</span>
+          <span class="docs-card-id">TR 24027:2021</span>
+        </div>
+        <div class="docs-card-content">
+          <div class="docs-card-title">Bias in AI Systems and AI-Aided Decision Making</div>
+          <div class="docs-card-desc">Bias assessment guidance and source of the fairness metrics referenced in AI-2 Addressing AI Bias.</div>
+          <div class="docs-card-meta"><span class="docs-card-org">ISO/IEC</span><span class="docs-card-link">View source →</span></div>
+        </div>
+      </a>
+
+      <a class="docs-card" data-org="nist" data-status="reference" href="https://www.nist.gov/publications/artificial-intelligence-risk-management-framework-generative-artificial-intelligence" target="_blank" rel="noopener">
+        <div class="docs-card-cover">
+          <span class="docs-card-org-pill">NIST</span>
+          <span class="docs-card-status-pill is-reference">Reference</span>
+          <span class="docs-card-id">AI 600-1</span>
+        </div>
+        <div class="docs-card-content">
+          <div class="docs-card-title">AI RMF: Generative AI Profile</div>
+          <div class="docs-card-desc">Source of the framework's hallucination definition (confabulation) and generative AI risk treatment.</div>
+          <div class="docs-card-meta"><span class="docs-card-org">NIST</span><span class="docs-card-link">View source →</span></div>
+        </div>
+      </a>
+
+      <a class="docs-card" data-org="faa" data-status="reference" href="https://www.faa.gov/aircraft/air_cert/step" target="_blank" rel="noopener">
+        <div class="docs-card-cover">
+          <span class="docs-card-org-pill">FAA</span>
+          <span class="docs-card-status-pill is-reference">Reference</span>
+          <span class="docs-card-id">AI Roadmap</span>
+        </div>
+        <div class="docs-card-content">
+          <div class="docs-card-title">FAA Roadmap for AI Safety Assurance</div>
+          <div class="docs-card-desc">FAA's acknowledged gap in AI certification criteria. The framework provides the precedent the roadmap will reference.</div>
+          <div class="docs-card-meta"><span class="docs-card-org">FAA</span><span class="docs-card-link">View source →</span></div>
+        </div>
+      </a>
+
+      <a class="docs-card" data-org="eu" data-status="reference" href="https://eur-lex.europa.eu/eli/reg/2016/679/oj" target="_blank" rel="noopener">
+        <div class="docs-card-cover">
+          <span class="docs-card-org-pill">EU</span>
+          <span class="docs-card-status-pill is-reference">Reference</span>
+          <span class="docs-card-id">GDPR</span>
+        </div>
+        <div class="docs-card-content">
+          <div class="docs-card-title">EU General Data Protection Regulation</div>
+          <div class="docs-card-desc">Personal data processing requirements referenced throughout AI-10 Privacy and Data Protection sub-requirements.</div>
+          <div class="docs-card-meta"><span class="docs-card-org">EU</span><span class="docs-card-link">View source →</span></div>
+        </div>
+      </a>
+
+      <a class="docs-card" data-org="us" data-status="reference" href="https://www.hhs.gov/hipaa/for-professionals/privacy/index.html" target="_blank" rel="noopener">
+        <div class="docs-card-cover">
+          <span class="docs-card-org-pill">HHS</span>
+          <span class="docs-card-status-pill is-reference">Reference</span>
+          <span class="docs-card-id">HIPAA</span>
+        </div>
+        <div class="docs-card-content">
+          <div class="docs-card-title">HIPAA Privacy and Security Rules</div>
+          <div class="docs-card-desc">45 CFR 164 Subparts C and E. Protected health information requirements applied to medical AI systems.</div>
+          <div class="docs-card-meta"><span class="docs-card-org">US Federal</span><span class="docs-card-link">View source →</span></div>
+        </div>
+      </a>
+
+      <a class="docs-card" data-org="us" data-status="reference" href="https://oag.ca.gov/privacy/ccpa" target="_blank" rel="noopener">
+        <div class="docs-card-cover">
+          <span class="docs-card-org-pill">CA OAG</span>
+          <span class="docs-card-status-pill is-reference">Reference</span>
+          <span class="docs-card-id">CCPA / CPRA</span>
+        </div>
+        <div class="docs-card-content">
+          <div class="docs-card-title">California Consumer Privacy Act</div>
+          <div class="docs-card-desc">Cal. Civ. Code §§ 1798.100 et seq. Consumer privacy requirements for AI systems processing California resident data.</div>
+          <div class="docs-card-meta"><span class="docs-card-org">US (CA)</span><span class="docs-card-link">View source →</span></div>
+        </div>
+      </a>
+
+      <a class="docs-card" data-org="nist" data-status="reference" href="https://csrc.nist.gov/pubs/sp/800/122/final" target="_blank" rel="noopener">
+        <div class="docs-card-cover">
+          <span class="docs-card-org-pill">NIST</span>
+          <span class="docs-card-status-pill is-reference">Reference</span>
+          <span class="docs-card-id">SP 800-122</span>
+        </div>
+        <div class="docs-card-content">
+          <div class="docs-card-title">Guide to Protecting the Confidentiality of PII</div>
+          <div class="docs-card-desc">PII handling guidance referenced in the framework's data minimization and de-identification controls.</div>
+          <div class="docs-card-meta"><span class="docs-card-org">NIST</span><span class="docs-card-link">View source →</span></div>
+        </div>
+      </a>
+
+      <a class="docs-card" data-org="iso" data-status="reference" href="https://www.iso.org/standard/78952.html" target="_blank" rel="noopener">
+        <div class="docs-card-cover">
+          <span class="docs-card-org-pill">ISO</span>
+          <span class="docs-card-status-pill is-reference">Reference</span>
+          <span class="docs-card-id">34503</span>
+        </div>
+        <div class="docs-card-content">
+          <div class="docs-card-title">Road Vehicles &mdash; Taxonomy for Operational Design Domain</div>
+          <div class="docs-card-desc">ODD attribute taxonomy from the automotive domain that informs the framework's domain-agnostic ODD declaration in AI-1.0.</div>
+          <div class="docs-card-meta"><span class="docs-card-org">ISO</span><span class="docs-card-link">View source →</span></div>
+        </div>
+      </a>
+    </div>
+
+    <!-- Pending Verification -->
+    <div class="docs-section-heading">
+      [ Pending Verification ] <span class="docs-section-heading-count">5</span>
+    </div>
+    <p class="docs-section-heading-desc">
+      Cited inline within the framework but not yet clause-verified against source. Retained as informative cross-references; will be re-verified when source documents become accessible. Not normative dependencies.
+    </p>
+
+    <div class="docs-grid">
+      <a class="docs-card" data-org="rtca" data-status="pending" href="https://www.rtca.org/" target="_blank" rel="noopener">
+        <div class="docs-card-cover">
+          <span class="docs-card-org-pill">RTCA</span>
+          <span class="docs-card-status-pill is-pending">Pending</span>
+          <span class="docs-card-id">DO-326A</span>
+        </div>
+        <div class="docs-card-content">
+          <div class="docs-card-title">Airworthiness Security Process Specification</div>
+          <div class="docs-card-desc">Aviation security process reference cited in AI-7 (Adversarial Robustness) aviation rows.</div>
+          <div class="docs-card-meta"><span class="docs-card-org">RTCA</span><span class="docs-card-link">View source →</span></div>
+        </div>
+      </a>
+
+      <a class="docs-card" data-org="rtca" data-status="pending" href="https://www.rtca.org/" target="_blank" rel="noopener">
+        <div class="docs-card-cover">
+          <span class="docs-card-org-pill">RTCA</span>
+          <span class="docs-card-status-pill is-pending">Pending</span>
+          <span class="docs-card-id">DO-330</span>
+        </div>
+        <div class="docs-card-content">
+          <div class="docs-card-title">Software Tool Qualification Considerations</div>
+          <div class="docs-card-desc">Tool qualification reference cited in AI-1 (Operational and Data Foundations) aviation row.</div>
+          <div class="docs-card-meta"><span class="docs-card-org">RTCA</span><span class="docs-card-link">View source →</span></div>
+        </div>
+      </a>
+
+      <a class="docs-card" data-org="rtca" data-status="pending" href="https://www.rtca.org/" target="_blank" rel="noopener">
+        <div class="docs-card-cover">
+          <span class="docs-card-org-pill">RTCA</span>
+          <span class="docs-card-status-pill is-pending">Pending</span>
+          <span class="docs-card-id">DO-355</span>
+        </div>
+        <div class="docs-card-content">
+          <div class="docs-card-title">Information Security Guidance for Continuing Airworthiness</div>
+          <div class="docs-card-desc">Continuing airworthiness security reference cited in AI-7.6 aviation row.</div>
+          <div class="docs-card-meta"><span class="docs-card-org">RTCA</span><span class="docs-card-link">View source →</span></div>
+        </div>
+      </a>
+
+      <a class="docs-card" data-org="rtca" data-status="pending" href="https://www.rtca.org/" target="_blank" rel="noopener">
+        <div class="docs-card-cover">
+          <span class="docs-card-org-pill">RTCA</span>
+          <span class="docs-card-status-pill is-pending">Pending</span>
+          <span class="docs-card-id">DO-356A</span>
+        </div>
+        <div class="docs-card-content">
+          <div class="docs-card-title">Airworthiness Security Methods and Considerations</div>
+          <div class="docs-card-desc">Aviation security methods reference cited in AI-7 (Adversarial Robustness) aviation rows.</div>
+          <div class="docs-card-meta"><span class="docs-card-org">RTCA</span><span class="docs-card-link">View source →</span></div>
+        </div>
+      </a>
+
+      <a class="docs-card" data-org="aami" data-status="pending" href="https://www.aami.org/" target="_blank" rel="noopener">
+        <div class="docs-card-cover">
+          <span class="docs-card-org-pill">AAMI</span>
+          <span class="docs-card-status-pill is-pending">Pending</span>
+          <span class="docs-card-id">HE75</span>
+        </div>
+        <div class="docs-card-content">
+          <div class="docs-card-title">Human Factors Engineering &mdash; Design of Medical Devices</div>
+          <div class="docs-card-desc">Human factors reference cited in AI-9.8 (Workload Management) medical row.</div>
+          <div class="docs-card-meta"><span class="docs-card-org">AAMI</span><span class="docs-card-link">View source →</span></div>
+        </div>
+      </a>
+    </div>
+
+    <div class="docs-empty" id="docsEmpty">No documents match the selected filter.</div>
+
+  </div>
+</section>
+
+</div><!-- /page-shell -->
+
+<!-- FOOTER -->
+<footer class="site-footer">
+  <div class="footer-inner">
+
+    <div class="footer-cols">
+
+      <div class="footer-col">
+        <div class="footer-col-label">Certification</div>
+        <a href="/framework">Framework</a>
+        <a href="/process">Process</a>
+        <a href="/assess">Assess</a>
+        <a href="/verify">Verify</a>
+      </div>
+
+      <div class="footer-col">
+        <div class="footer-col-label">Resources</div>
+        <a href="/documents">Documents</a>
+        <a href="#">FAQ</a>
+      </div>
+
+      <div class="footer-col">
+        <div class="footer-col-label">Company</div>
+        <a href="#">About</a>
+        <a href="/expertise">Expertise</a>
+        <a href="/markets">Markets</a>
+        <a href="/contact">Contact</a>
+      </div>
+
+      <div class="footer-col">
+        <div class="footer-col-label">Briefings</div>
+        <a href="/news">News</a>
+        <a href="/subscribe">Subscribe</a>
+        <a href="/updates">Updates</a>
+      </div>
+
+      <div class="footer-col">
+        <div class="footer-col-label">Legal</div>
+        <a href="/terms">Terms</a>
+        <a href="/privacy">Privacy</a>
+        <a href="/disclaimer">Disclaimer</a>
+        <a href="/accreditation">Accreditation</a>
+      </div>
+
+    </div>
+
+    <div class="footer-divider"></div>
+
+    <div class="footer-bottom">
+      <span class="footer-copyright">&copy; 2025 Safety Critical Labs. All rights reserved.</span>
+      <div class="footer-meta">
+        <a href="#" aria-label="Back to top">Back to top</a>
+        <span class="footer-version">Framework v3.0</span>
+      </div>
+    </div>
+
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script>
+/* ─── Hero cursor glow ───────────────────────── */
+(function() {
+  var glow = document.querySelector('.fw-hero-glow');
+  var hero = document.querySelector('.inner-hero');
+  if (!glow || !hero) return;
+  hero.addEventListener('mousemove', function(e) {
+    var rect = hero.getBoundingClientRect();
+    glow.style.setProperty('--glow-x', (e.clientX - rect.left) + 'px');
+    glow.style.setProperty('--glow-y', (e.clientY - rect.top) + 'px');
+  });
+})();
+
+/* ─── Filter chips ───────────────────────────── */
+(function() {
+  var chips = document.querySelectorAll('.docs-filter-chip');
+  var cards = document.querySelectorAll('.docs-card');
+  var sectionHeadings = document.querySelectorAll('.docs-section-heading, .docs-section-heading-desc');
+  var grids = document.querySelectorAll('.docs-grid');
+  var empty = document.getElementById('docsEmpty');
+
+  function applyFilter(filter) {
+    var visibleCount = 0;
+    cards.forEach(function(c) {
+      var match = filter === 'all' || c.dataset.org === filter;
+      c.style.display = match ? '' : 'none';
+      if (match) visibleCount++;
+    });
+    // Hide section headings whose grid has no visible cards
+    grids.forEach(function(grid) {
+      var anyVisible = Array.from(grid.querySelectorAll('.docs-card')).some(function(c) { return c.style.display !== 'none'; });
+      grid.style.display = anyVisible ? '' : 'none';
+      // Find preceding heading and desc, toggle them
+      var prev = grid.previousElementSibling;
+      var headings = [];
+      while (prev && (prev.classList.contains('docs-section-heading-desc') || prev.classList.contains('docs-section-heading'))) {
+        headings.push(prev);
+        prev = prev.previousElementSibling;
+      }
+      headings.forEach(function(h) { h.style.display = anyVisible ? '' : 'none'; });
+    });
+    empty.classList.toggle('is-visible', visibleCount === 0);
+  }
+
+  chips.forEach(function(chip) {
+    chip.addEventListener('click', function() {
+      chips.forEach(function(c) { c.classList.remove('active'); });
+      chip.classList.add('active');
+      applyFilter(chip.dataset.filter);
+    });
+  });
+})();
+
+/* ─── Mobile menu toggle ─────────────────────── */
+document.querySelector('.gn-hamburger').addEventListener('click', function() {
+  this.classList.toggle('open');
+  document.querySelector('.gn-links').classList.toggle('open');
+  this.setAttribute('aria-expanded', this.classList.contains('open'));
+  document.body.style.overflow = this.classList.contains('open') ? 'hidden' : '';
+});
+
+/* ─── Dropdown nav toggle ────────────────────── */
+document.querySelectorAll(".gn-dropdown-toggle").forEach(function(btn) {
+  btn.addEventListener("click", function(e) {
+    e.stopPropagation();
+    var dd = this.closest(".gn-dropdown");
+    var menu = dd.querySelector(".gn-dropdown-menu");
+    var isOpen = dd.classList.contains("open");
+    document.querySelectorAll(".gn-dropdown").forEach(function(d) {
+      d.classList.remove("open");
+      var m = d.querySelector(".gn-dropdown-menu");
+      if (m) m.style.display = "none";
+    });
+    if (!isOpen) {
+      dd.classList.add("open");
+      menu.style.display = "block";
+    }
+  });
+});
+document.addEventListener("click", function() {
+  document.querySelectorAll(".gn-dropdown").forEach(function(d) {
+    d.classList.remove("open");
+    var m = d.querySelector(".gn-dropdown-menu");
+    if (m) m.style.display = "none";
+  });
+});
+</script>
+<script src="ticker.js"></script>
+</body>
+</html>

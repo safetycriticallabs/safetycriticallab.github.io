@@ -22,9 +22,57 @@
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=IBM+Plex+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css">
 <style>
+/* Hero cursor glow */
+.inner-hero { z-index: 0; }
+.fw-hero-glow {
+  position: absolute; inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.4s;
+  background: radial-gradient(520px circle at var(--glow-x, 70%) var(--glow-y, 30%), rgba(46,109,180,0.10), transparent 60%);
+}
+.inner-hero:hover .fw-hero-glow { opacity: 1; }
+.inner-hero-inner { z-index: 2; position: relative; }
+
+/* Bracketed mono eyebrow + showcase title */
+.fw-eyebrow-mono {
+  font-family: var(--mono);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(46,109,180,0.6);
+  margin-bottom: 20px;
+}
+.fw-showcase-title {
+  font-family: var(--sans);
+  font-size: clamp(30px, 3.4vw, 46px);
+  font-weight: 600;
+  line-height: 1.08;
+  letter-spacing: -0.025em;
+  color: var(--blue);
+  margin-bottom: 20px;
+}
+.fw-showcase-title em {
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 400;
+  font-size: 1.05em;
+  color: var(--blue-dk);
+}
+
+/* Markets section background — cream + radial blue glow */
+.markets-section {
+  background:
+    radial-gradient(ellipse at 50% 0%, rgba(46,109,180,0.05) 0%, transparent 50%),
+    #F7F3EC;
+  position: relative;
+}
+
 /* ─── MARKET DETAIL BLOCKS ────────────────────────────────── */
 .market-block {
-  padding: 72px 0; border-top: 1px solid var(--rule);
+  padding: 72px 0; border-top: 1px solid rgba(46,109,180,0.12);
   display: grid; grid-template-columns: 320px 1fr; gap: 72px; align-items: start;
 }
 .market-block:first-child { border-top: none; padding-top: 0; }
@@ -56,9 +104,14 @@
 .market-gaps { display: flex; flex-direction: column; gap: 10px; margin-bottom: 28px; }
 
 .market-gap {
-  background: var(--white); border: 1px solid var(--rule);
-  border-radius: 3px; padding: 16px 20px;
+  background: #FAF6EC; border: 1px solid rgba(46,109,180,0.10);
+  border-radius: 4px; padding: 16px 20px;
   display: grid; grid-template-columns: 140px 1fr; gap: 16px;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+.market-gap:hover {
+  border-color: rgba(46,109,180,0.25);
+  box-shadow: 0 4px 14px rgba(46,109,180,0.08);
 }
 
 .mg-standard {
@@ -71,7 +124,14 @@
 .mg-gap strong { color: var(--ink); font-weight: 500; }
 
 /* ─── AGNOSTIC BAND ───────────────────────────────────────── */
-.agnostic-band { background: var(--bg); padding: 80px 40px; border-top: 1px solid var(--rule); }
+.agnostic-band {
+  background:
+    radial-gradient(ellipse at 50% 0%, rgba(46,109,180,0.06) 0%, transparent 55%),
+    linear-gradient(180deg, #F4EFE5 0%, #ECE7DB 100%);
+  padding: 110px 40px 130px;
+  border-top: 1px solid rgba(46,109,180,0.10);
+  position: relative;
+}
 
 .ag-inner { max-width: 1140px; margin: 0 auto; }
 
@@ -91,75 +151,40 @@
   .agnostic-band { padding: 60px 24px; }
 }
 
-/* INNER PAGE HERO — dark */
-.inner-hero {
-  background: var(--ink) !important;
-  padding: 72px 40px 64px;
-  border-bottom: 1px solid rgba(255,255,255,0.08);
-  position: relative; overflow: hidden;
-}
-.inner-hero::before { display: none; }
-.inner-hero-inner {
-  max-width: 1140px; margin: 0 auto; position: relative; z-index: 1;
-  display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: end;
-}
-.inner-hero-breadcrumb {
-  font-family: var(--sans); font-size: 11px;
-  font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase;
-  color: rgba(255,255,255,0.3); margin-bottom: 12px;
-  display: flex; align-items: center; gap: 8px;
-}
-.inner-hero-breadcrumb a { color: rgba(255,255,255,0.3); text-decoration: none; }
-.inner-hero-breadcrumb a:hover { color: rgba(255,255,255,0.6); }
-.inner-hero-breadcrumb span { color: rgba(255,255,255,0.15); }
-.inner-hero h1 {
-  font-family: var(--sans);
-  font-size: clamp(38px, 4.5vw, 60px);
-  font-weight: 600; line-height: 1.05;
-  color: #fff; letter-spacing: -0.025em;
-}
-.inner-hero h1 em { font-style: italic; color: var(--blue); font-family: var(--serif); font-weight: 400; font-size: 1.05em; }
-.inner-hero-lead {
-  font-size: 17px; color: rgba(255,255,255,0.5);
-  font-weight: 300; line-height: 1.75;
-  border-left: 2px solid var(--blue); padding-left: 20px;
-  align-self: end;
-}
+/* Inner hero styles live in styles.css now (cream + blue palette) */
 </style>
 </head>
 <body>
 
 <nav class="global-nav">
-  <a href="/" class="gn-wordmark">
-    <span class="gn-text"><em>Safety Critical</em> Labs</span>
-  </a>
-  <button class="gn-hamburger" aria-label="Menu" aria-expanded="false">
-    <span></span><span></span><span></span>
-  </button>
-<ul class="gn-links">
-    <li><a href="/">Home</a></li>
-    <li class="gn-dropdown">
-      <a class="gn-dropdown-toggle" href="javascript:void(0)">Certification <span class="gn-dropdown-arrow"></span></a>
-      <ul class="gn-dropdown-menu" style="display:none">
-        <li><a href="/framework">Framework</a></li>
-        <li><a href="/process">Process</a></li>
-        <li><a href="/assess">Assess</a></li>
-      </ul>
-    </li>
-    <li><a href="/expertise">Expertise</a></li>
-    <li><a href="/markets" class="active">Markets</a></li>
-    <li><a href="/contact" class="gn-cta">Get Certified</a></li>
-  </ul>
+  <div class="global-nav-inner">
+    <a href="/" class="gn-wordmark">
+      <span class="gn-text"><em>Safety Critical</em> Labs</span>
+    </a>
+    <button class="gn-hamburger" aria-label="Menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+    <ul class="gn-links">
+      <li><a href="/framework">Framework</a></li>
+      <li><a href="/process">Process</a></li>
+      <li><a href="/expertise">Expertise</a></li>
+      <li><a href="/markets" class="active">Markets</a></li>
+      <li><a href="/news">News</a></li>
+    </ul>
+    <a href="/search" class="gn-search" aria-label="Search">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <circle cx="11" cy="11" r="7"/>
+        <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+      </svg>
+    </a>
+    <a href="/contact" class="gn-cta">Get Certified</a>
+  </div>
 </nav>
-
-<!-- CREDIBILITY TICKER -->
-<div class="reg-ticker" id="reg-ticker" aria-label="Recent regulatory activity">
-  <div class="reg-ticker-track" id="reg-ticker-track"></div>
-</div>
 
 <div class="page-shell">
 
 <div class="inner-hero">
+  <div class="fw-hero-glow"></div>
   <div class="inner-hero-inner">
     <div>
       <div class="inner-hero-breadcrumb">
@@ -175,7 +200,7 @@
 </div>
 
 <!-- MARKET DETAILS -->
-<section class="page-section" style="background: var(--bg);">
+<section class="page-section markets-section">
   <div class="section-inner">
 
     <!-- AEROSPACE -->
@@ -339,7 +364,8 @@
 <!-- DOMAIN AGNOSTIC -->
 <div class="agnostic-band">
   <div class="ag-inner">
-    <h2 class="section-title">The failure modes are<br><em>the same everywhere.</em></h2>
+    <div class="fw-eyebrow-mono">[ Domain Agnostic ]</div>
+    <h2 class="fw-showcase-title">The failure modes are<br><em>the same everywhere.</em></h2>
     <div class="ag-prose">
       <p>
         A language model in a cockpit that hallucinates a clearance. A diagnostic imaging model in an operating room that misclassifies a scan. A perception system in an autonomous vehicle that fails to detect an out of distribution object. <strong>The failure mode is the same. The consequence differs only in specifics.</strong>
@@ -355,28 +381,58 @@
 
 <footer class="site-footer">
   <div class="footer-inner">
-    <div class="footer-top footer-top--row">
-      <a href="/" class="footer-wordmark" aria-label="Safety Critical Labs">
-        <img src="img/SCL_Logo_transparent_sm.png" alt="" class="footer-seal">
-        <span class="gn-text"><em>Safety Critical</em> Labs</span>
-      </a>
-      <div class="footer-content">
-        <div class="footer-nav-row">
-          <a href="/framework">Framework</a>
-          <a href="/process">Process</a>
-          <a href="/expertise">Expertise</a>
-          <a href="/markets">Markets</a>
-          <a href="/assess">Assess</a>
-          <a href="/contact">Contact</a>
-        </div>
-        <p class="footer-tagline">AI certification authority for safety critical systems.<br>Formal determinations issued against a published, citable standard.</p>
+
+    <div class="footer-cols">
+
+      <div class="footer-col">
+        <div class="footer-col-label">Certification</div>
+        <a href="/framework">Framework</a>
+        <a href="/process">Process</a>
+        <a href="/assess">Assess</a>
+        <a href="/verify">Verify</a>
       </div>
+
+      <div class="footer-col">
+        <div class="footer-col-label">Resources</div>
+        <a href="/documents">Documents</a>
+        <a href="#">FAQ</a>
+      </div>
+
+      <div class="footer-col">
+        <div class="footer-col-label">Company</div>
+        <a href="#">About</a>
+        <a href="/expertise">Expertise</a>
+        <a href="/markets">Markets</a>
+        <a href="/contact">Contact</a>
+      </div>
+
+      <div class="footer-col">
+        <div class="footer-col-label">Briefings</div>
+        <a href="/news">News</a>
+        <a href="/subscribe">Subscribe</a>
+        <a href="/updates">Updates</a>
+      </div>
+
+      <div class="footer-col">
+        <div class="footer-col-label">Legal</div>
+        <a href="/terms">Terms</a>
+        <a href="/privacy">Privacy</a>
+        <a href="/disclaimer">Disclaimer</a>
+        <a href="/accreditation">Accreditation</a>
+      </div>
+
     </div>
+
     <div class="footer-divider"></div>
+
     <div class="footer-bottom">
       <span class="footer-copyright">&copy; 2025 Safety Critical Labs. All rights reserved.</span>
-      <span class="footer-version">Framework v3.0</span>
+      <div class="footer-meta">
+        <a href="#" aria-label="Back to top">Back to top</a>
+        <span class="footer-version">Framework v3.0</span>
+      </div>
     </div>
+
   </div>
 </footer>
 
@@ -457,6 +513,18 @@ gsap.utils.toArray('.slide-right').forEach(function(el) {
     }
   );
 });
+
+/* Hero cursor glow */
+(function() {
+  var glow = document.querySelector('.fw-hero-glow');
+  var hero = document.querySelector('.inner-hero');
+  if (!glow || !hero) return;
+  hero.addEventListener('mousemove', function(e) {
+    var rect = hero.getBoundingClientRect();
+    glow.style.setProperty('--glow-x', (e.clientX - rect.left) + 'px');
+    glow.style.setProperty('--glow-y', (e.clientY - rect.top) + 'px');
+  });
+})();
 
 // Mobile menu toggle
 document.querySelector('.gn-hamburger').addEventListener('click', function() {

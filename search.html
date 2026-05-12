@@ -307,11 +307,11 @@
     </form>
 
     <div class="search-starters" id="search-starters">
+      <button class="search-starter" type="button">What is SCL?</button>
       <button class="search-starter" type="button">How do I get certified?</button>
       <button class="search-starter" type="button">What is the SCL framework?</button>
       <button class="search-starter" type="button">How long does certification take?</button>
       <button class="search-starter" type="button">What does it cost?</button>
-      <button class="search-starter" type="button">Who reviews my system?</button>
       <button class="search-starter" type="button">Is SCL accredited?</button>
     </div>
 
@@ -383,83 +383,281 @@
 </footer>
 
 <script>
-/* ─── ASK SCL — FAQ filter ─────────────────────────────────── */
+/* ─── ASK SCL — local keyword agent ─────────────────────────── */
 (function () {
-  /* Static FAQ library — typing into the bar filters this list.
-     Each entry: keywords to match against, a short answer, and a follow-up link. */
+
+  var STOPWORDS = {
+    the:1, a:1, an:1, is:1, are:1, was:1, were:1, be:1, been:1, being:1,
+    of:1, for:1, to:1, on:1, in:1, by:1, with:1, at:1, as:1, from:1,
+    and:1, or:1, but:1, if:1, then:1, so:1, also:1,
+    do:1, does:1, did:1, can:1, could:1, will:1, would:1, should:1, may:1, might:1,
+    i:1, my:1, me:1, you:1, your:1, we:1, our:1, us:1, they:1, them:1,
+    it:1, its:1, this:1, that:1, these:1, those:1,
+    there:1, here:1, not:1, please:1, just:1, like:1, some:1, any:1,
+    what:1, how:1, where:1, when:1, why:1, who:1, which:1
+  };
+
+  /* Static FAQ library. Each entry: question, short answer, optional follow-up
+     link, and a keyword bag for matching. */
   var FAQ = [
+    /* ─── Greetings ─────────────────────────────────────────── */
     {
-      q: 'How do I get certified?',
-      a: 'Begin with the self-assessment, then submit your system for formal evaluation. The process runs through Intake, Scope, Assessment, Determination, and Publication.',
-      href: '/process',
-      linkText: 'See the process',
-      keywords: ['certified', 'certification', 'get', 'start', 'begin', 'how do i', 'apply', 'register']
+      q: 'Hi there.',
+      a: 'Hi. Ask anything about AI certification, the framework, or the process.',
+      keywords: ['hello', 'hi', 'hey', 'howdy', 'yo', 'greetings', 'sup', 'hiya']
     },
     {
+      q: 'You are welcome.',
+      a: 'Anytime. Ask another question whenever you need to.',
+      keywords: ['thanks', 'thank you', 'thx', 'thank', 'appreciate', 'cheers']
+    },
+    {
+      q: 'Take care.',
+      a: 'The Ask SCL bar is here whenever you need it.',
+      keywords: ['bye', 'goodbye', 'later', 'cya', 'see you', 'farewell']
+    },
+    {
+      q: 'What is Ask SCL?',
+      a: 'A keyword search across the SCL documentation. Type a question and the closest answer surfaces below.',
+      keywords: ['ask scl', 'what is this', 'what are you', 'who are you', 'agent', 'bot', 'assistant', 'chatbot', 'search']
+    },
+
+    /* ─── About SCL ─────────────────────────────────────────── */
+    {
+      q: 'What is SCL?',
+      a: 'Safety Critical Labs is the certification authority for AI systems operating in safety critical environments.',
+      href: '/expertise', linkText: 'See the expertise',
+      keywords: ['scl', 'safety critical labs', 'what is scl', 'company', 'about scl', 'who is scl', 'organization']
+    },
+    {
+      q: 'Is SCL a government agency?',
+      a: 'No. SCL is an independent certification body pursuing ISO/IEC 17065 accreditation through ANAB.',
+      href: '/accreditation', linkText: 'See accreditation status',
+      keywords: ['government', 'agency', 'public', 'private', 'federal', 'regulator', 'independent', 'state']
+    },
+    {
+      q: 'Where is SCL based?',
+      a: 'SCL operates internationally. Assessments are conducted remotely worldwide and onsite where required.',
+      href: '/contact', linkText: 'Contact SCL',
+      keywords: ['based', 'located', 'location', 'office', 'headquarters', 'address', 'country', 'city']
+    },
+    {
+      q: 'How do I contact SCL?',
+      a: 'Send a message through the contact page. The SCL team responds directly.',
+      href: '/contact', linkText: 'Open the contact page',
+      keywords: ['contact', 'reach', 'talk', 'email', 'phone', 'message', 'speak', 'someone', 'get in touch']
+    },
+    {
+      q: 'Are there roles open at SCL?',
+      a: 'SCL is small and selective. Send a background through the contact form to be considered for future work.',
+      href: '/contact', linkText: 'Send your background',
+      keywords: ['jobs', 'careers', 'hiring', 'roles', 'open positions', 'work for', 'join', 'recruit', 'employment']
+    },
+
+    /* ─── Framework ─────────────────────────────────────────── */
+    {
       q: 'What is the SCL framework?',
-      a: 'Thirteen requirement areas covering every AI-specific failure mode not addressed by existing safety-critical software standards. Algorithm agnostic. Domain applicable. Openly published.',
-      href: '/framework',
-      linkText: 'View the framework',
-      keywords: ['framework', 'requirements', 'standard', 'AI-1', 'AI-13', 'thirteen', 'requirement areas', 'what is']
+      a: 'Thirteen requirement areas covering AI specific failure modes not addressed by existing safety critical software standards. Algorithm agnostic. Openly published.',
+      href: '/framework', linkText: 'View the framework',
+      keywords: ['framework', 'requirements', 'standard', 'standards', 'thirteen', 'requirement areas']
+    },
+    {
+      q: 'What are AI-1 through AI-13?',
+      a: 'The thirteen requirement areas in the SCL framework. Each covers a distinct AI specific failure mode: data, model, monitoring, accountability, and more.',
+      href: '/framework', linkText: 'See all requirement areas',
+      keywords: ['ai-1', 'ai-2', 'ai-3', 'ai-4', 'ai-5', 'ai-6', 'ai-7', 'ai-8', 'ai-9', 'ai-10', 'ai-11', 'ai-12', 'ai-13', 'ai1', 'ai13', 'thirteen']
+    },
+    {
+      q: 'What does algorithm agnostic mean?',
+      a: 'The framework applies regardless of the underlying technique. Deep learning, symbolic systems, hybrid approaches. The failure modes are general.',
+      href: '/framework', linkText: 'View the framework',
+      keywords: ['algorithm agnostic', 'agnostic', 'deep learning', 'neural', 'symbolic', 'llm', 'machine learning', 'technique', 'model type']
+    },
+    {
+      q: 'What are classification levels?',
+      a: 'Systems are classified by operational claim and criticality. Higher classes require deeper evidence and a more rigorous assessment.',
+      href: '/framework', linkText: 'See the framework',
+      keywords: ['classification', 'class', 'classes', 'levels', 'tier', 'tiers', 'criticality', 'severity', 'rating']
+    },
+    {
+      q: 'How is SCL different from ISO 42001 or NIST AI RMF?',
+      a: 'ISO 42001 is a management system standard. NIST AI RMF is a voluntary risk framework. SCL produces a formal pass or fail determination against published requirement areas.',
+      href: '/framework', linkText: 'View the framework',
+      keywords: ['iso 42001', '42001', 'nist', 'ai rmf', 'rmf', 'eu ai act', 'comparison', 'versus', 'vs', 'different', 'compared']
+    },
+    {
+      q: 'Is the framework specific to spaceflight?',
+      a: 'No. The framework was developed in spaceflight but applies to any AI system in any safety critical domain.',
+      href: '/framework', linkText: 'View the framework',
+      keywords: ['spaceflight', 'space', 'nasa', 'satellite', 'aviation only', 'general purpose']
+    },
+
+    /* ─── Process ───────────────────────────────────────────── */
+    {
+      q: 'How do I get certified?',
+      a: 'Begin with the self assessment, then submit your system for formal evaluation. The process runs through Intake, Scope, Assessment, Determination, and Publication.',
+      href: '/process', linkText: 'See the process',
+      keywords: ['certified', 'certification', 'get certified', 'start', 'begin', 'apply', 'register', 'submit', 'process']
+    },
+    {
+      q: 'What is Phase 1?',
+      a: 'Phase 1 is the applicability determination. SCL defines the system scope, classification level, and the evidence list needed for Phase 2.',
+      href: '/process', linkText: 'See the process',
+      keywords: ['phase 1', 'phase one', 'phase1', 'applicability', 'scoping', 'intake', 'first phase', 'kickoff']
+    },
+    {
+      q: 'What is Phase 2?',
+      a: 'Phase 2 is the assessment itself. SCL reviews the evidence package against each requirement area and issues the determination.',
+      href: '/process', linkText: 'See the process',
+      keywords: ['phase 2', 'phase two', 'phase2', 'assessment', 'evaluation', 'review phase', 'second phase']
+    },
+    {
+      q: 'What is the evidence package?',
+      a: 'Documentation that demonstrates compliance with each requirement area. Test results, design records, monitoring procedures, operational logs.',
+      href: '/process', linkText: 'See the process',
+      keywords: ['evidence', 'package', 'documentation', 'docs', 'submission', 'paperwork', 'records', 'artifacts']
+    },
+    {
+      q: 'What is the system boundary?',
+      a: 'The defined edges of what is being certified. The model, its inputs, its outputs, and its operational envelope.',
+      href: '/process', linkText: 'See the process',
+      keywords: ['boundary', 'system boundary', 'scope', 'edge', 'edges', 'inputs', 'outputs', 'envelope', 'perimeter']
+    },
+    {
+      q: 'What do I need to prepare?',
+      a: 'Understand your system boundary. Organize test documentation. Phase 1 tells you exactly what Phase 2 needs.',
+      href: '/process', linkText: 'See the process',
+      keywords: ['prepare', 'preparation', 'before', 'ready', 'first step', 'getting ready', 'checklist']
+    },
+    {
+      q: 'Remote or onsite assessment?',
+      a: 'Most assessments are conducted remotely. Onsite review may be required for higher classification levels or specific operational environments.',
+      href: '/process', linkText: 'See the process',
+      keywords: ['remote', 'onsite', 'on site', 'in person', 'travel', 'site visit', 'virtual', 'visit']
+    },
+    {
+      q: 'How often is recertification required?',
+      a: 'Recertification timing depends on classification level and material system changes. It is generally faster than the initial certification.',
+      href: '/process', linkText: 'See the process',
+      keywords: ['recertification', 'renew', 'renewal', 'annual', 'expire', 'expiration', 'often', 'again', 'cycle']
+    },
+    {
+      q: 'What if my system does not pass?',
+      a: 'Findings are graded Pass, Conditional Pass with remediation, or Fail. Conditional Pass comes with specific remediation guidance and reassessment criteria.',
+      href: '/process', linkText: 'See the process',
+      keywords: ['fail', 'failed', 'pass', 'not pass', 'conditional', 'remediation', 'reject', 'denied', 'retry', 'outcome']
     },
     {
       q: 'How long does certification take?',
-      a: 'A typical first-time assessment runs 6 to 12 weeks, depending on system scope, documentation readiness, and operational claim complexity. Recertification is generally faster.',
-      href: '/process',
-      linkText: 'See the process timeline',
-      keywords: ['long', 'time', 'weeks', 'months', 'timeline', 'duration', 'how long', 'fast']
+      a: 'A typical first time assessment runs 6 to 12 weeks. Timing depends on system scope, documentation readiness, and operational claim complexity.',
+      href: '/process', linkText: 'See the process timeline',
+      keywords: ['long', 'time', 'weeks', 'months', 'timeline', 'duration', 'how long', 'fast', 'quick', 'schedule']
     },
+
+    /* ─── Cost ──────────────────────────────────────────────── */
     {
       q: 'What does certification cost?',
-      a: 'Assessment fees scale with system complexity and operational claim scope. Get a quote tailored to your system and intended use case.',
-      href: '/contact',
-      linkText: 'Request a quote',
-      keywords: ['cost', 'price', 'fee', 'pricing', 'how much', 'quote', 'expensive', 'cheap']
+      a: 'Assessment fees scale with system complexity and operational claim scope. Pricing reflects the value of the determination.',
+      href: '/contact', linkText: 'Request a quote',
+      keywords: ['cost', 'price', 'pricing', 'fee', 'fees', 'how much', 'quote', 'expensive', 'budget', 'rate', 'money', 'afford']
+    },
+
+    /* ─── Markets ───────────────────────────────────────────── */
+    {
+      q: 'Which industries does SCL serve?',
+      a: 'Aerospace, aviation, medical, automotive, and any domain with a safety critical operational claim.',
+      href: '/markets', linkText: 'See markets served',
+      keywords: ['industries', 'industry', 'markets', 'sectors', 'domains', 'aerospace', 'aviation', 'medical', 'automotive', 'healthcare', 'defense', 'pharma']
     },
     {
-      q: 'Who reviews my system?',
-      a: 'Practitioner-led assessment teams with direct experience in safety-critical AI programs. Structurally independent review at every phase.',
-      href: '/expertise',
-      linkText: 'See the expertise',
-      keywords: ['reviews', 'reviewer', 'who', 'panel', 'assess', 'assessor', 'team', 'evaluator', 'examiner']
+      q: 'Can my system qualify?',
+      a: 'If it is an AI system with a safety critical operational claim, likely yes. Phase 1 confirms eligibility and scope.',
+      href: '/process', linkText: 'Start with Phase 1',
+      keywords: ['qualify', 'eligible', 'eligibility', 'fit', 'applicable', 'my system', 'covered']
     },
     {
-      q: 'Is SCL accredited?',
-      a: 'SCL is pursuing ISO/IEC 17065 accreditation through ANAB. The current accreditation status and audit progress are publicly documented.',
-      href: '/accreditation',
-      linkText: 'See accreditation status',
-      keywords: ['accredited', 'accreditation', 'iso', '17065', 'anab', 'authority', 'recognized', 'legitimate']
+      q: 'Can SCL certify systems outside the US?',
+      a: 'Yes. Remote assessments are conducted for organizations worldwide.',
+      href: '/markets', linkText: 'See markets served',
+      keywords: ['outside', 'us', 'usa', 'international', 'europe', 'asia', 'global', 'worldwide', 'foreign', 'overseas', 'abroad']
     },
-    {
-      q: 'What systems can be certified?',
-      a: 'AI systems operating in aerospace, aviation, medical, and automotive environments. Domain applicable to any safety-critical operational claim.',
-      href: '/markets',
-      linkText: 'See markets served',
-      keywords: ['systems', 'qualify', 'eligible', 'industries', 'markets', 'aerospace', 'aviation', 'medical', 'automotive', 'domain']
-    },
+
+    /* ─── Certificate ───────────────────────────────────────── */
     {
       q: 'How do I verify a certificate?',
-      a: 'Each SCL certificate carries a unique number and QR code. Enter the certificate number on the verification page or scan the QR.',
-      href: '/verify',
-      linkText: 'Verify a certificate',
-      keywords: ['verify', 'verification', 'authentic', 'check', 'qr', 'number', 'real', 'valid']
+      a: 'Each SCL certificate carries a unique number and QR code. Enter the number on the verification page or scan the QR.',
+      href: '/verify', linkText: 'Verify a certificate',
+      keywords: ['verify', 'verification', 'authentic', 'check', 'qr', 'serial', 'number', 'real', 'valid', 'genuine']
     },
+    {
+      q: 'What does the certificate mean?',
+      a: 'It records that the system met the framework standard at the time of assessment. It does not claim the system is safe. The standard is the unit of meaning.',
+      href: '/verify', linkText: 'See verification',
+      keywords: ['certificate', 'mark', 'meaning', 'mean', 'says', 'claims', 'guarantee', 'safe', 'safety']
+    },
+
+    /* ─── Accreditation ─────────────────────────────────────── */
+    {
+      q: 'Is SCL accredited?',
+      a: 'SCL is pursuing ISO/IEC 17065 accreditation through ANAB. Current status and audit progress are publicly documented.',
+      href: '/accreditation', linkText: 'See accreditation status',
+      keywords: ['accredited', 'accreditation', 'iso', '17065', 'anab', 'authority', 'recognized', 'legitimate', 'official']
+    },
+    {
+      q: 'What is ISO/IEC 17065?',
+      a: 'The international standard for bodies certifying products, processes, and services. SCL is pursuing accreditation under it through ANAB.',
+      href: '/accreditation', linkText: 'See accreditation status',
+      keywords: ['iso', '17065', 'iso 17065', 'iec', 'iso iec', 'international standard']
+    },
+    {
+      q: 'What is ANAB?',
+      a: 'The ANSI National Accreditation Board. SCL audit progress with ANAB is publicly documented.',
+      href: '/accreditation', linkText: 'See accreditation status',
+      keywords: ['anab', 'ansi', 'national accreditation board', 'accreditor']
+    },
+    {
+      q: 'How is SCL different from an AI audit?',
+      a: 'An audit produces observations and recommendations. An SCL assessment produces a formal pass or fail determination against a published standard.',
+      href: '/framework', linkText: 'View the framework',
+      keywords: ['audit', 'auditor', 'consultant', 'consulting', 'difference', 'vs audit', 'compared to audit']
+    },
+    {
+      q: 'Will this satisfy a regulator?',
+      a: 'An SCL certificate is a documented record of rigorous assessment against a published standard. Regulatory recognition builds over time.',
+      href: '/accreditation', linkText: 'See accreditation status',
+      keywords: ['regulator', 'regulatory', 'faa', 'fda', 'easa', 'satisfies', 'recognition', 'compliance', 'authority', 'government approval']
+    },
+
+    /* ─── Who reviews ───────────────────────────────────────── */
+    {
+      q: 'Who reviews my system?',
+      a: 'Practitioner led assessment teams with direct experience in safety critical AI programs. Structurally independent review at every phase.',
+      href: '/expertise', linkText: 'See the expertise',
+      keywords: ['reviews', 'reviewer', 'panel', 'assessor', 'team', 'evaluator', 'examiner', 'staff', 'people']
+    },
+
+    /* ─── Resources ─────────────────────────────────────────── */
     {
       q: 'Where can I find SCL documents?',
-      a: 'The Documents page collects the SCL framework releases, regulatory references, and supporting documentation in one place.',
-      href: '/documents',
-      linkText: 'Open the documents page',
-      keywords: ['documents', 'pdf', 'whitepaper', 'paper', 'download', 'doc', 'reference']
+      a: 'The Documents page collects framework releases, regulatory references, and supporting documentation in one place.',
+      href: '/documents', linkText: 'Open the documents page',
+      keywords: ['documents', 'pdf', 'whitepaper', 'paper', 'download', 'doc', 'reference', 'reading']
     },
     {
-      q: 'How do I stay informed on AI regulation?',
-      a: 'The News page aggregates research from Stanford HAI, MIT, Google Research, and other AI safety sources. Briefings on regulatory developments.',
-      href: '/news',
-      linkText: 'See the latest',
-      keywords: ['news', 'regulation', 'regulatory', 'updates', 'stay informed', 'briefings', 'subscribe', 'mit', 'hai', 'stanford']
+      q: 'How do I stay informed?',
+      a: 'The News page aggregates research from Stanford HAI, MIT, Google Research, and other AI safety sources. The Updates page tracks SCL releases.',
+      href: '/news', linkText: 'See the latest',
+      keywords: ['news', 'updates', 'regulation', 'regulatory', 'stay informed', 'briefings', 'mit', 'hai', 'stanford', 'research']
+    },
+    {
+      q: 'Can I subscribe to SCL briefings?',
+      a: 'Yes. Subscribe for periodic briefings on AI certification and regulatory developments.',
+      href: '/subscribe', linkText: 'Subscribe',
+      keywords: ['subscribe', 'subscription', 'newsletter', 'email list', 'mailing list', 'updates email', 'sign up']
     }
   ];
 
+  /* DOM refs */
   var input        = document.getElementById('search-input');
   var form         = document.getElementById('search-form');
   var startersWrap = document.getElementById('search-starters');
@@ -467,22 +665,40 @@
   var resultsList  = document.getElementById('search-results-list');
   var resultsLabel = document.getElementById('search-results-label');
 
-  /* Score how well a query matches an FAQ entry */
+  function tokenize(s) {
+    return s.toLowerCase().replace(/[^a-z0-9\s]/g, ' ').split(/\s+/)
+      .filter(function (t) { return t.length >= 2 && !STOPWORDS[t]; });
+  }
+
+  /* Score how well a query matches an FAQ entry.
+     Combines whole-phrase boosts with per-token keyword matches. */
   function score(query, item) {
-    var q = query.toLowerCase();
-    var bonus = 0;
-    if (item.q.toLowerCase().indexOf(q) !== -1) bonus += 5;
-    if (item.a.toLowerCase().indexOf(q) !== -1) bonus += 2;
+    var q = query.toLowerCase().trim();
+    if (!q) return 0;
+    var s = 0;
+
+    if (item.q.toLowerCase().indexOf(q) !== -1) s += 8;
+    if (item.a.toLowerCase().indexOf(q) !== -1) s += 3;
     item.keywords.forEach(function (k) {
-      if (q.indexOf(k) !== -1) bonus += 2;
-      if (k.indexOf(q) !== -1 && q.length > 2) bonus += 1;
+      if (q.indexOf(k) !== -1) s += 3;
     });
-    return bonus;
+
+    var tokens = tokenize(q);
+    var qLower = item.q.toLowerCase();
+    tokens.forEach(function (t) {
+      item.keywords.forEach(function (k) {
+        if (k === t) s += 4;
+        else if (k.indexOf(t) !== -1 || t.indexOf(k) !== -1) s += 1;
+      });
+      if (qLower.indexOf(t) !== -1) s += 1;
+    });
+
+    return s;
   }
 
   function escapeHtml(str) {
     var div = document.createElement('div');
-    div.textContent = str;
+    div.textContent = str || '';
     return div.innerHTML;
   }
 
@@ -490,7 +706,7 @@
     if (items.length === 0) {
       resultsList.innerHTML =
         '<div class="search-empty">'
-        + '<p class="search-empty-text">No quick answer in the FAQ. Send the question to us directly.</p>'
+        + '<p class="search-empty-text">No quick answer in the FAQ. Send the question to SCL directly.</p>'
         + '<a class="search-empty-cta" href="/contact?question=' + encodeURIComponent(query) + '">Send to SCL</a>'
         + '</div>';
       resultsLabel.textContent = 'No quick match';
@@ -498,64 +714,58 @@
     }
     resultsLabel.textContent = items.length + ' answer' + (items.length === 1 ? '' : 's');
     resultsList.innerHTML = items.map(function (it) {
+      var link = it.href
+        ? '<a class="faq-link" href="' + it.href + '">' + escapeHtml(it.linkText || 'Read more') + '</a>'
+        : '';
       return '<article class="faq-item">'
         +   '<h3 class="faq-question">' + escapeHtml(it.q) + '</h3>'
         +   '<p class="faq-answer">' + escapeHtml(it.a) + '</p>'
-        +   '<a class="faq-link" href="' + it.href + '">' + escapeHtml(it.linkText) + '</a>'
+        +   link
         + '</article>';
     }).join('');
   }
 
-  /* Debounced input handler */
+  function runSearch(query) {
+    var q = (query || '').trim();
+    if (!q) {
+      resultsWrap.setAttribute('hidden', '');
+      startersWrap.style.display = '';
+      return;
+    }
+    var scored = FAQ.map(function (it) { return { it: it, s: score(q, it) }; })
+                    .filter(function (x) { return x.s > 0; })
+                    .sort(function (a, b) { return b.s - a.s; })
+                    .map(function (x) { return x.it; })
+                    .slice(0, 5);
+    renderResults(scored, q);
+    resultsWrap.removeAttribute('hidden');
+    startersWrap.style.display = 'none';
+  }
+
+  /* Debounced typing */
   var debounce;
   input.addEventListener('input', function () {
     clearTimeout(debounce);
-    debounce = setTimeout(function () {
-      var query = input.value.trim();
-      if (query.length === 0) {
-        resultsWrap.setAttribute('hidden', '');
-        startersWrap.style.display = '';
-        return;
-      }
-      var scored = FAQ.map(function (it) { return { it: it, s: score(query, it) }; })
-                      .filter(function (x) { return x.s > 0; })
-                      .sort(function (a, b) { return b.s - a.s; })
-                      .map(function (x) { return x.it; })
-                      .slice(0, 5);
-      renderResults(scored, query);
-      resultsWrap.removeAttribute('hidden');
-      startersWrap.style.display = 'none';
-    }, 150);
+    debounce = setTimeout(function () { runSearch(input.value); }, 120);
   });
 
-  /* Starter chips fill the input */
+  /* Starter chips: fill input, render inline, scroll first answer into view */
   startersWrap.addEventListener('click', function (e) {
     var btn = e.target.closest('.search-starter');
     if (!btn) return;
     input.value = btn.textContent;
-    input.dispatchEvent(new Event('input', { bubbles: true }));
+    runSearch(input.value);
     input.focus();
+    setTimeout(function () {
+      var first = resultsList.querySelector('.faq-item, .search-empty');
+      if (first) first.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }, 60);
   });
 
-  /* Submit — if no FAQ match, send to /contact with the question pre-filled */
+  /* Submit: render inline. No auto-redirect. */
   form.addEventListener('submit', function (e) {
     e.preventDefault();
-    var query = input.value.trim();
-    if (!query) return;
-    var scored = FAQ.map(function (it) { return { it: it, s: score(query, it) }; })
-                    .filter(function (x) { return x.s > 0; });
-    if (scored.length === 0) {
-      window.location.href = '/contact?question=' + encodeURIComponent(query);
-      return;
-    }
-    /* If there's a strong match, jump straight to its linked page */
-    scored.sort(function (a, b) { return b.s - a.s; });
-    if (scored[0].s >= 5) {
-      window.location.href = scored[0].it.href;
-      return;
-    }
-    /* Otherwise just trigger the result render (already done by input event) */
-    input.dispatchEvent(new Event('input', { bubbles: true }));
+    runSearch(input.value);
   });
 
   /* Mobile hamburger */
@@ -568,13 +778,11 @@
     });
   }
 
-  /* If the page was opened with ?q=, pre-fill */
+  /* ?q= deep link */
   var params = new URLSearchParams(window.location.search);
   var q = params.get('q');
-  if (q) {
-    input.value = q;
-    input.dispatchEvent(new Event('input', { bubbles: true }));
-  }
+  if (q) { input.value = q; runSearch(q); }
+
 })();
 </script>
 

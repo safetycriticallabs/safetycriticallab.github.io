@@ -1433,39 +1433,60 @@
   .home-hero h1 { font-size: clamp(36px, 8vw, 48px); margin-bottom: 20px; }
   .hero-body { font-size: 15px; line-height: 1.65; }
 
-  /* Show the static closed ball, hide everything that's animation-only */
+  /* Show the static closed ball, hide everything that's animation-only.
+     Use !important + flattened positioning on mobile — the desktop layout
+     relies on absolute+translate inside a preserve-3d stage, which iOS
+     Safari renders unpredictably at narrow widths. Flat flow is safer. */
   .cert-stage {
-    display: flex;
-    position: relative;
-    height: auto;
+    display: flex !important;
+    position: relative !important;
+    height: auto !important;
     min-height: 280px;
-    perspective: none;
-    width: 100%;
+    perspective: none !important;
+    width: 100% !important;
+    align-items: center;
+    justify-content: center;
   }
   .orb-container {
-    display: flex;
-    position: relative;
-    top: auto; left: auto;
-    transform: none;
-    width: 100%;
-    height: 280px;
+    display: flex !important;
+    position: relative !important;
+    top: auto !important;
+    left: auto !important;
+    transform: none !important;
+    width: 100% !important;
+    height: 280px !important;
+    align-items: center;
+    justify-content: center;
+    /* Kill the hero-orb-in keyframe — its translate(-50%, -50%) shoves a
+       width:100% relative container half off-screen left during entrance. */
+    animation: none !important;
   }
   .orb-3d-stage {
-    width: 260px;
-    height: 260px;
-    animation: none;
-    perspective: none;
+    width: 260px !important;
+    height: 260px !important;
+    animation: none !important;
+    perspective: none !important;
+    transform-style: flat !important;
+    margin: 0 auto;
   }
-  .orb-closed { width: 260px; }
+  .orb-closed {
+    width: 260px !important;
+    height: 260px !important;
+    position: static !important;
+    transform: none !important;
+    transform-style: flat !important;
+    display: block;
+    margin: 0 auto;
+  }
   .orb-glow {
     width: 340px;
     height: 340px;
-    animation: none;
+    animation: none !important;
   }
   .orb-bowl,
   .orb-lid,
   .cert-doc,
-  .pb-ground-shadow { display: none; }
+  .pb-ground-shadow { display: none !important; }
 
   .section-wwd { padding: 72px 24px; }
   .what-grid { grid-template-columns: 1fr; gap: 48px; }

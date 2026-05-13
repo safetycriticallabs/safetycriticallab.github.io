@@ -1401,11 +1401,72 @@
   .news-header { flex-direction: column; align-items: flex-start; gap: 24px; padding-bottom: 40px; }
 }
 @media (max-width: 880px) {
-  .home-hero { padding: 72px 24px 80px; min-height: auto; }
-  .home-hero-inner { grid-template-columns: 1fr; }
-  .hero-text { margin-right: 0; }
-  .cert-stage { display: none; }
-  .orb-container { display: none; }
+  /* Kill the pinned-scroll wrapper — no GSAP timeline on mobile */
+  .hero-pin-wrapper { height: auto; background: transparent; }
+
+  .home-hero {
+    height: auto;
+    min-height: auto;
+    padding: 32px 24px 64px;
+    display: block;
+  }
+  .home-hero::after { display: none; }
+
+  .home-hero-inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 32px;
+    min-height: 0;
+  }
+
+  /* Hero text becomes a normal block above the static orb */
+  .hero-text {
+    position: static;
+    transform: none;
+    opacity: 1;
+    pointer-events: auto;
+    padding: 0;
+    max-width: 100%;
+    margin: 0;
+  }
+  .home-hero h1 { font-size: clamp(36px, 8vw, 48px); margin-bottom: 20px; }
+  .hero-body { font-size: 15px; line-height: 1.65; }
+
+  /* Show the static closed ball, hide everything that's animation-only */
+  .cert-stage {
+    display: flex;
+    position: relative;
+    height: auto;
+    min-height: 280px;
+    perspective: none;
+    width: 100%;
+  }
+  .orb-container {
+    display: flex;
+    position: relative;
+    top: auto; left: auto;
+    transform: none;
+    width: 100%;
+    height: 280px;
+  }
+  .orb-3d-stage {
+    width: 260px;
+    height: 260px;
+    animation: none;
+    perspective: none;
+  }
+  .orb-closed { width: 260px; }
+  .orb-glow {
+    width: 340px;
+    height: 340px;
+    animation: none;
+  }
+  .orb-bowl,
+  .orb-lid,
+  .cert-doc,
+  .pb-ground-shadow { display: none; }
+
   .section-wwd { padding: 72px 24px; }
   .what-grid { grid-template-columns: 1fr; gap: 48px; }
   .section-produces { padding: 72px 24px; }
@@ -1413,9 +1474,6 @@
   .produces-grid { grid-template-columns: 1fr; }
   .subscribe-cta { padding: 80px 24px 100px; }
   .news-section { padding: 60px 24px 80px; }
-}
-@media (max-width: 580px) {
-  .home-hero h1 { font-size: clamp(36px, 8vw, 48px); }
 }
 </style>
 </head>
@@ -1835,6 +1893,9 @@ gsap.utils.toArray('.slide-right').forEach(function(el) {
 
 /* ─── 3D POKEBALL CLAMSHELL REVEAL ────────────────────────── */
 (function() {
+  /* Mobile shows a static orb + hero text — skip the pinned scroll timeline. */
+  if (window.matchMedia('(max-width: 880px)').matches) return;
+
   var wrapper = document.querySelector('.hero-pin-wrapper');
   var hero = document.querySelector('.home-hero');
   var stage = document.getElementById('orb-stage');

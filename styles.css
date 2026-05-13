@@ -838,16 +838,27 @@ h2.section-title em { font-style: italic; color: var(--blue); font-family: var(-
 /* ─── RESPONSIVE ──────────────────────────────────────────── */
 @media (max-width: 880px) {
   .global-nav { padding: 0 20px; }
-  .gn-hamburger { display: flex; }
+  .global-nav-inner { padding: 0 20px; }
+
+  .gn-search { margin-left: auto; margin-right: 6px; order: 2; }
+  .gn-hamburger {
+    display: flex;
+    flex: 0 0 40px;
+    width: 40px; height: 40px;
+    padding: 10px 8px;
+    margin: 0;
+    order: 3;
+  }
+
   .gn-links {
     display: none;
     position: fixed;
-    top: 64px; left: 0; right: 0;
-    height: calc(100vh - 64px);
+    top: 72px; left: 0; right: 0;
+    height: calc(100vh - 72px);
     background: var(--ink);
     flex-direction: column;
     align-items: stretch;
-    padding: 16px 24px 32px;
+    padding: 16px 24px 120px;
     gap: 0;
     margin-left: 0;
     border-top: 1px solid rgba(250,250,248,0.1);
@@ -867,6 +878,32 @@ h2.section-title em { font-style: italic; color: var(--blue); font-family: var(-
   }
   .gn-links > li > a:hover { background: none; color: var(--blue); }
   .gn-links > li:last-child > a { border-bottom: none; }
+
+  /* Hide the inline Get Certified button — it would overflow */
+  .global-nav-inner > .gn-cta { display: none; }
+
+  /* Pin Get Certified inside the open slide-out menu.
+     .global-nav has backdrop-filter, which makes it the containing block
+     for fixed descendants — use 100vh math to anchor the CTA to the viewport. */
+  .gn-links.open ~ .gn-cta {
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    position: fixed !important;
+    top: calc(100vh - 80px - env(safe-area-inset-bottom, 0px)) !important;
+    left: 24px !important;
+    right: 24px !important;
+    bottom: auto !important;
+    margin: 0 !important;
+    z-index: 250;
+    background: var(--blue) !important;
+    color: #fff !important;
+    padding: 14px 24px !important;
+    border-radius: 6px !important;
+    border-color: var(--blue) !important;
+    text-align: center;
+  }
+
   .gn-cta {
     background: var(--blue) !important;
     color: #fff !important;
@@ -911,6 +948,9 @@ h2.section-title em { font-style: italic; color: var(--blue); font-family: var(-
   }
   .inner-hero { padding: 60px 24px 48px; }
   .inner-hero-inner { grid-template-columns: 1fr; gap: 24px; }
+  .inner-hero h1 { font-size: 32px; line-height: 1.1; letter-spacing: -0.02em; }
+  .inner-hero h1 em { font-size: 1.02em; }
+  .inner-hero-lead { font-size: 15px; padding-left: 16px; }
   .page-section { padding: 72px 24px; }
   .framework-grid { grid-template-columns: 1fr 1fr; }
   .home-hero { padding: 60px 24px; }

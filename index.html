@@ -91,7 +91,7 @@
 .home-hero h1 em { font-style: italic; color: var(--blue-dk); font-family: var(--serif); font-weight: 400; font-size: 1.05em; }
 
 .hero-body {
-  font-size: 18px; color: rgba(46,109,180,0.78);
+  font-size: clamp(18px, 1vw, 22px); color: rgba(46,109,180,0.78);
   font-weight: 300; line-height: 1.8; margin: 0 auto 40px;
   max-width: 540px;
 }
@@ -107,7 +107,7 @@
 
 .orb-glow {
   position: absolute; top: 50%; left: 50%;
-  width: 600px; height: 600px;
+  width: calc(var(--orb-size) * 1.304); height: calc(var(--orb-size) * 1.304);
   transform: translate(-50%, -50%);
   border-radius: 50%;
   /* Subtle warm halo just to anchor the orb on cream — no washed-out haze */
@@ -133,8 +133,8 @@
 /* 3D pokeball stage that holds the two halves */
 .orb-3d-stage {
   position: relative;
-  width: 460px;
-  height: 460px;
+  width: var(--orb-size);
+  height: var(--orb-size);
   perspective: 1400px;
   transform-style: preserve-3d;
   z-index: 2;
@@ -148,7 +148,7 @@
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
-  width: 460px;
+  width: var(--orb-size);
   height: auto;
   pointer-events: none;
   filter: drop-shadow(0 8px 24px rgba(15,35,64,0.18));
@@ -167,7 +167,7 @@
 .orb-bowl {
   z-index: 2;
   opacity: 0;
-  width: 510px;
+  width: calc(var(--orb-size) * 1.109);
 }
 
 /* Lid disc — hidden at start, fades in, hinges back from its bottom edge */
@@ -175,7 +175,7 @@
   z-index: 5;
   opacity: 0;
   transform-origin: 50% 100%;
-  width: 400px;
+  width: calc(var(--orb-size) * 0.870);
 }
 
 /* Subtle pulsing on the intact orb (driven by the stage so both halves pulse together) */
@@ -191,10 +191,10 @@
 .pb-ground-shadow {
   position: absolute;
   top: 50%; left: 50%;
-  width: 380px;
-  height: 44px;
-  margin-left: -190px;
-  margin-top: 200px;
+  width: calc(var(--orb-size) * 0.826);
+  height: calc(var(--orb-size) * 0.0957);
+  margin-left: calc(var(--orb-size) * -0.413);
+  margin-top: calc(var(--orb-size) * 0.4348);
   border-radius: 50%;
   background: radial-gradient(ellipse at center, rgba(15,35,64,0.28) 0%, rgba(15,35,64,0.10) 45%, transparent 80%);
   filter: blur(14px);
@@ -205,6 +205,9 @@
 
 /* ─── CERTIFICATE DISPLAY ─────────────────────────────────── */
 .cert-stage {
+  /* Scales the entire orb system with viewport so the hero composition
+     stays balanced from 13" laptops up through 5K and ultrawides. */
+  --orb-size: clamp(420px, 42vmin, 620px);
   display: flex; align-items: center; justify-content: center;
   position: relative; z-index: 1;
   margin: 0;
@@ -1553,7 +1556,7 @@
               <symbol id="orb-symbol" viewBox="0 0 220 220">
                 <defs>
                   <path id="orb-arc-top" d="M 110,110 m -72,0 a 72,72 0 0,1 144,0" />
-                  <path id="orb-arc-bottom" d="M 110,110 m 72,0 a 72,72 0 0,1 -144,0" />
+                  <path id="orb-arc-bottom" d="M 110,110 m -76,0 a 76,76 0 0,0 152,0" />
                 </defs>
                 <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
                   <circle cx="110" cy="110" r="91" stroke-width="2"/>

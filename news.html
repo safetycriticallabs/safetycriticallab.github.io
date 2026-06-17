@@ -239,6 +239,24 @@
 .news-card[data-source="alignment"] .news-card-image {
   background: linear-gradient(135deg, #F4EFE5 0%, #C8D4E8 100%);
 }
+.news-card[data-source="deepmind"] .news-card-image {
+  background: linear-gradient(135deg, #E8EEF6 0%, #DDE5F0 100%);
+}
+.news-card[data-source="techcrunch"] .news-card-image {
+  background: linear-gradient(135deg, #ECE7DB 0%, #D6E0EE 100%);
+}
+.news-card[data-source="ars"] .news-card-image {
+  background: linear-gradient(135deg, #E4EAF3 0%, #ECE7DB 100%);
+}
+.news-card[data-source="industry"] .news-card-image {
+  background: linear-gradient(135deg, #DDE5F0 0%, #E8EEF6 100%);
+}
+.news-card[data-source="openrouter"] .news-card-image {
+  background: linear-gradient(135deg, #E4EAF3 0%, #D6E0EE 100%);
+}
+.news-card[data-source="hf"] .news-card-image {
+  background: linear-gradient(135deg, #F4EFE5 0%, #E8EEF6 100%);
+}
 
 .news-card-source-pill {
   position: absolute;
@@ -366,7 +384,7 @@
       <h1>Latest in <em>AI research</em> and safety.</h1>
     </div>
     <p class="inner-hero-lead">
-      Research and announcements aggregated from leading AI safety organizations and labs. Updated continuously from public feeds.
+      Model releases, research, and announcements from leading AI labs and safety organizations. Updated continuously from public feeds.
     </p>
   </div>
 </div>
@@ -396,11 +414,13 @@
     <!-- Filter chips -->
     <div class="news-filter-row" id="news-filter-row" role="group" aria-label="Filter by source">
       <button class="news-filter-chip active" data-filter="all">All sources</button>
+      <button class="news-filter-chip" data-filter="models">Models</button>
+      <button class="news-filter-chip" data-filter="openai">OpenAI</button>
+      <button class="news-filter-chip" data-filter="anthropic">Anthropic</button>
+      <button class="news-filter-chip" data-filter="google">Google</button>
+      <button class="news-filter-chip" data-filter="press">Press</button>
       <button class="news-filter-chip" data-filter="hai">Stanford HAI</button>
       <button class="news-filter-chip" data-filter="mit">MIT</button>
-      <button class="news-filter-chip" data-filter="google">Google Research</button>
-      <button class="news-filter-chip" data-filter="anthropic">Anthropic</button>
-      <button class="news-filter-chip" data-filter="openai">OpenAI</button>
       <button class="news-filter-chip" data-filter="alignment">Alignment Forum</button>
     </div>
 
@@ -475,20 +495,51 @@
   var CORS_PROXY = 'https://scl-cors-proxy.kevwill94.workers.dev/?url=';
 
   var SOURCE_META = {
-    hai:       { label: 'Stanford HAI',      pill: 'HAI' },
-    mit:       { label: 'MIT News',          pill: 'MIT' },
-    google:    { label: 'Google Research',   pill: 'Google AI' },
-    anthropic: { label: 'Anthropic',         pill: 'Anthropic' },
-    openai:    { label: 'OpenAI',            pill: 'OpenAI' },
-    alignment: { label: 'Alignment Forum',   pill: 'Alignment' }
+    hai:        { label: 'Stanford HAI',     pill: 'HAI' },
+    mit:        { label: 'MIT News',         pill: 'MIT' },
+    google:     { label: 'Google Research',  pill: 'Google AI' },
+    deepmind:   { label: 'Google DeepMind',  pill: 'DeepMind' },
+    anthropic:  { label: 'Anthropic',        pill: 'Anthropic' },
+    openai:     { label: 'OpenAI',           pill: 'OpenAI' },
+    alignment:  { label: 'Alignment Forum',  pill: 'Alignment' },
+    techcrunch: { label: 'TechCrunch',       pill: 'TechCrunch' },
+    ars:        { label: 'Ars Technica',     pill: 'Ars Technica' },
+    industry:   { label: 'Industry News',    pill: 'Headlines' },
+    openrouter: { label: 'OpenRouter',       pill: 'New model' },
+    hf:         { label: 'Hugging Face',     pill: 'Trending' }
   };
 
+  /* filter:true → keep only AI-relevant items (broad press / aggregator feeds). */
   var FEEDS = [
-    { key: 'hai',       url: 'https://hai.stanford.edu/news/rss.xml' },
-    { key: 'mit',       url: 'https://news.mit.edu/topic/mitartificial-intelligence2-rss.xml' },
-    { key: 'google',    url: 'https://research.google/blog/rss/' },
-    { key: 'alignment', url: 'https://www.alignmentforum.org/feed.xml' }
+    { key: 'hai',        url: 'https://hai.stanford.edu/news/rss.xml' },
+    { key: 'mit',        url: 'https://news.mit.edu/topic/mitartificial-intelligence2-rss.xml' },
+    { key: 'google',     url: 'https://research.google/blog/rss/' },
+    { key: 'deepmind',   url: 'https://deepmind.google/blog/rss.xml' },
+    { key: 'openai',     url: 'https://openai.com/news/rss.xml' },
+    { key: 'alignment',  url: 'https://www.alignmentforum.org/feed.xml' },
+    { key: 'techcrunch', url: 'https://techcrunch.com/category/artificial-intelligence/feed/', filter: true },
+    { key: 'ars',        url: 'https://feeds.arstechnica.com/arstechnica/index', filter: true },
+    { key: 'industry',   url: 'https://news.google.com/rss/search?q=(OpenAI OR Anthropic OR Claude OR Gemini OR DeepMind OR Llama OR Mistral) (AI OR LLM OR model) when:14d&hl=en-US&gl=US&ceid=US:en', filter: true }
   ];
+
+  /* AI-relevance gate for the broad feeds so the page stays on-topic. */
+  var AI_KEYWORDS = /artificial intelligence|\bAI\b|\bLLM\b|language model|machine learning|neural|OpenAI|Anthropic|Claude|\bGPT\b|Gemini|DeepMind|Llama|Mistral|chatbot|generative|\bAGI\b|frontier model/i;
+
+  /* Sources eligible to be the big "Featured" hero — keeps a random
+     aggregator headline from becoming the face of the page. */
+  var HERO_SOURCES = { hai:1, mit:1, google:1, deepmind:1, openai:1, anthropic:1, alignment:1, techcrunch:1, ars:1 };
+
+  /* Filter chip → the source keys it covers. */
+  var FILTER_GROUPS = {
+    google: ['google', 'deepmind'],
+    press:  ['techcrunch', 'ars', 'industry'],
+    models: ['openrouter', 'hf']
+  };
+  function matchesFilter(item, filter) {
+    if (filter === 'all') return true;
+    var group = FILTER_GROUPS[filter];
+    return group ? group.indexOf(item.key) !== -1 : item.key === filter;
+  }
 
   /* Rich seed content — page is full even before (or instead of) RSS feeds resolving. */
   function d(s) { return new Date(s + 'T12:00:00Z'); }
@@ -593,7 +644,7 @@
       url: 'https://www.alignmentforum.org/', date: d('2026-02-12') }
   ];
 
-  var allItems = [];
+  var gridItems = [];
   var activeFilter = 'all';
 
   /* ── Format date as "MMM DD, YYYY" ──────────────────────── */
@@ -621,7 +672,7 @@
   }
 
   /* ── Parse RSS/Atom XML into normalized items ────────────── */
-  function parseFeed(xmlText, sourceKey) {
+  function parseFeed(xmlText, sourceKey, applyFilter) {
     var parser = new DOMParser();
     var doc = parser.parseFromString(xmlText, 'application/xml');
     if (doc.querySelector('parsererror')) return [];
@@ -631,7 +682,7 @@
     var nodes = items.length ? items : entries;
 
     var out = [];
-    for (var i = 0; i < nodes.length && i < 8; i++) {
+    for (var i = 0; i < nodes.length && out.length < 8; i++) {
       var node = nodes[i];
       var titleEl = node.querySelector('title');
       var linkEl = node.querySelector('link');
@@ -647,6 +698,7 @@
       var summary = descEl ? truncate(stripHtml(descEl.textContent), 180) : '';
 
       if (title && link) {
+        if (applyFilter && !AI_KEYWORDS.test(title + ' ' + summary)) continue;
         out.push({ key: sourceKey, title: title, url: link, date: date, summary: summary });
       }
     }
@@ -657,28 +709,115 @@
   function fetchFeed(feed) {
     return fetch(CORS_PROXY + encodeURIComponent(feed.url))
       .then(function (r) { return r.ok ? r.text() : Promise.reject(new Error('HTTP ' + r.status)); })
-      .then(function (txt) { return parseFeed(txt, feed.key); })
+      .then(function (txt) { return parseFeed(txt, feed.key, feed.filter); })
       .catch(function () { return []; });
   }
 
-  /* Render the seed content IMMEDIATELY so the page is full on first paint —
-     don't wait for RSS feeds to resolve. Real feed data will replace this if it loads. */
-  function sortAndRender(items) {
-    items.sort(function (a, b) { return b.date.getTime() - a.date.getTime(); });
-    renderFeatured(items[0]);
-    renderGrid(items.slice(1));
+  /* ── Model catalogs ─────────────────────────────────────────
+     "What's current with models", not stories about them. Both
+     APIs send CORS headers, so these fetch directly (no proxy). */
+
+  /* OpenRouter: newest models across every major provider
+     (Anthropic, OpenAI, Google, Meta, Mistral, xAI…). */
+  function fetchOpenRouter() {
+    return fetch('https://openrouter.ai/api/v1/models')
+      .then(function (r) { return r.ok ? r.json() : Promise.reject(); })
+      .then(function (j) {
+        var models = (j.data || []).filter(function (m) { return m.created && m.name; });
+        models.sort(function (a, b) { return b.created - a.created; });
+        return models.slice(0, 8).map(function (m) {
+          return {
+            key: 'openrouter',
+            title: m.name,
+            url: 'https://openrouter.ai/' + m.id,
+            date: new Date(m.created * 1000),
+            summary: truncate(stripHtml(m.description || ''), 170)
+                     || 'Newly available on OpenRouter.'
+          };
+        });
+      })
+      .catch(function () { return []; });
   }
 
-  allItems = FALLBACK.slice();
-  sortAndRender(allItems);
+  /* Hugging Face: trending models (skip derivative quant/GGUF repos
+     so the list stays to real base-model releases). */
+  function fetchHuggingFace() {
+    var derived = /gguf|gptq|\bawq\b|-bnb-|-i1-|\bquant|\bmlx\b|onnx|imatrix/i;
+    return fetch('https://huggingface.co/api/models?sort=trendingScore&direction=-1&limit=24&full=true')
+      .then(function (r) { return r.ok ? r.json() : Promise.reject(); })
+      .then(function (list) {
+        var out = [];
+        for (var i = 0; i < list.length && out.length < 6; i++) {
+          var m = list[i], id = m.id || m.modelId || '';
+          if (!id || derived.test(id)) continue;
+          var parts = ['Trending on Hugging Face'];
+          if (m.pipeline_tag) { var t = m.pipeline_tag.replace(/-/g, ' '); parts.push(t.charAt(0).toUpperCase() + t.slice(1)); }
+          if (m.downloads) parts.push(Intl.NumberFormat('en-US').format(m.downloads) + ' downloads');
+          out.push({
+            key: 'hf',
+            title: id,
+            url: 'https://huggingface.co/' + id,
+            date: m.createdAt ? new Date(m.createdAt) : new Date(),
+            summary: parts.join('. ') + '.'
+          });
+        }
+        return out;
+      })
+      .catch(function () { return []; });
+  }
 
-  /* Now try to fetch live feeds; if any return real data, replace the seed. */
-  Promise.all(FEEDS.map(fetchFeed)).then(function (results) {
-    var live = [];
-    results.forEach(function (items) { live = live.concat(items); });
+  /* Newest HERO-eligible item becomes the featured hero. */
+  function pickFeatured(items) {
+    for (var i = 0; i < items.length; i++) {
+      if (HERO_SOURCES[items[i].key]) return items[i];
+    }
+    return items[0];
+  }
+
+  /* Drop duplicate stories (same URL) so seed + live don't collide. */
+  function dedupe(items) {
+    var seen = {}, out = [];
+    items.forEach(function (it) {
+      var k = (it.url || it.title || '').trim();
+      if (k && !seen[k]) { seen[k] = 1; out.push(it); }
+    });
+    return out;
+  }
+
+  function sortAndRender(items) {
+    items = dedupe(items);
+    items.sort(function (a, b) { return b.date.getTime() - a.date.getTime(); });
+    var hero = pickFeatured(items);
+    renderFeatured(hero);
+    gridItems = items.filter(function (i) { return i !== hero; });
+    renderGrid();
+  }
+
+  /* Render the curated seed IMMEDIATELY so the page is full on first paint,
+     then let live feeds float fresh items to the top (seed backfills the grid). */
+  sortAndRender(FALLBACK.slice());
+
+  Promise.all([
+    Promise.all(FEEDS.map(fetchFeed)).then(function (results) {
+      var live = []; results.forEach(function (items) { live = live.concat(items); }); return live;
+    }),
+    fetchOpenRouter(),
+    fetchHuggingFace()
+  ]).then(function (parts) {
+    var feeds = parts[0], orouter = parts[1], hf = parts[2];
+
+    /* The same model can sit in both catalogs (e.g. GLM 5.2, Kimi K2.7).
+       Keep the OpenRouter card (cleaner name) and drop the Hugging Face copy. */
+    function modelKey(title) {
+      return String(title).split(/[:/]/).pop().toLowerCase().replace(/[^a-z0-9]/g, '');
+    }
+    var orKeys = {};
+    orouter.forEach(function (m) { orKeys[modelKey(m.title)] = 1; });
+    hf = hf.filter(function (m) { return !orKeys[modelKey(m.title)]; });
+
+    var live = feeds.concat(orouter, hf);
     if (live.length > 0) {
-      allItems = live;
-      sortAndRender(allItems);
+      sortAndRender(live.concat(FALLBACK));
     }
   });
 
@@ -699,9 +838,9 @@
   }
 
   /* ── Render grid (remaining items, filtered) ─────────────── */
-  function renderGrid(items) {
+  function renderGrid() {
     var grid = document.getElementById('news-grid');
-    var filtered = activeFilter === 'all' ? items : items.filter(function (i) { return i.key === activeFilter; });
+    var filtered = gridItems.filter(function (i) { return matchesFilter(i, activeFilter); });
 
     if (filtered.length === 0) {
       grid.innerHTML = '<div style="grid-column:1/-1; text-align:center; color:rgba(46,109,180,0.55); font-family:var(--sans); padding:40px 0;">No articles from this source yet.</div>';
@@ -731,7 +870,7 @@
       document.querySelectorAll('.news-filter-chip').forEach(function (c) { c.classList.remove('active'); });
       chip.classList.add('active');
       activeFilter = chip.getAttribute('data-filter');
-      renderGrid(allItems.slice(1));
+      renderGrid();
     });
   });
 

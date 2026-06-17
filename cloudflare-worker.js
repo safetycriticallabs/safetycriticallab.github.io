@@ -17,10 +17,22 @@
 // Domains this proxy will fetch from. Anything else is rejected so
 // the worker can't be abused as a general open proxy.
 const ALLOWED_HOSTS = [
+  // Regulatory feeds (homepage ticker)
   'eur-lex.europa.eu',
   'www.federalregister.gov',
   'www.nist.gov',
   'csrc.nist.gov',
+  // Research-lab feeds (News page)
+  'hai.stanford.edu',
+  'news.mit.edu',
+  'research.google',
+  'www.alignmentforum.org',
+  // LLM labs + AI press (News page)
+  'openai.com',
+  'deepmind.google',
+  'techcrunch.com',
+  'feeds.arstechnica.com',
+  'news.google.com',
 ];
 
 // Origin that's allowed to call this worker. '*' for any (less secure).

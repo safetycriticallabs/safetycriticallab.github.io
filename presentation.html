@@ -9,40 +9,56 @@
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=IBM+Plex+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
 <style>
 :root {
-  --bg: #FAFAF8;
-  --white: #FFFFFF;
+  /* Layered cream palette — no pure white anywhere.
+     surface (lightest, raised) → page (mid) → deep (insets/accents) */
+  --bg: #F1EADC;          /* page — mid cream */
+  --bg-cool: #FAFAF8;     /* original cool off-white, kept for reference */
+  --cream-deep: #E7DECC;  /* deeper tan — insets / strong accents */
+  --white: #FBF7EE;       /* surface cream — replaces pure white on cards/chrome */
   --ink: #0F2340;
   --ink2: #3D5068;
   --ink3: #7A8FA6;
-  --blue: #2B6CB0;
-  --blue-lt: #EEF4FB;
+  --blue: #2E6DB4;
+  --blue-dk: #1E5A9A;
+  --blue-lt: #EBF1F8;
   --rule: #E4E8EC;
   --green: #2D7A3A;
   --green-lt: #F3FAF5;
   --gold: #6B4E0A;
   --gold-lt: #FFFCF0;
+  /* Unified on DM Sans to match styles.css. The --serif and --mono
+     aliases are kept for backwards compatibility with existing markup. */
   --sans: 'DM Sans', system-ui, sans-serif;
-  --mono: 'IBM Plex Mono', monospace;
-  --serif: 'Instrument Serif', Georgia, serif;
+  --mono: 'DM Sans', system-ui, sans-serif;
+  --serif: 'DM Sans', system-ui, sans-serif;
 }
 * { margin: 0; padding: 0; box-sizing: border-box; }
 html, body { height: 100%; }
 body { background: var(--bg); color: var(--ink); font-family: var(--sans); }
+
+/* Constellation backdrop — subtle, deck-wide. Sits behind the app; shows
+   through the cream content area in the gaps between cards. */
+.constellation { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+.c-glow { position: absolute; inset: 0; background:
+  radial-gradient(900px circle at 76% 20%, rgba(46,109,180,0.07), transparent 60%),
+  radial-gradient(760px circle at 16% 82%, rgba(180,130,42,0.05), transparent 62%); }
+.c-star { position: absolute; border-radius: 50%; background: var(--blue); }
+.c-spark { position: absolute; color: var(--gold); line-height: 1; transform: translate(-50%, -50%); }
 ::-webkit-scrollbar { width: 5px; }
 ::-webkit-scrollbar-track { background: var(--bg); }
 ::-webkit-scrollbar-thumb { background: var(--rule); border-radius: 3px; }
 button { font-family: inherit; cursor: pointer; }
 
-.app { display: flex; flex-direction: column; height: 100vh; }
+.app { display: flex; flex-direction: column; height: 100vh; position: relative; z-index: 1; }
 
 /* Header */
 .header { padding: 12px 20px; border-bottom: 1px solid var(--rule); display: flex; align-items: center; gap: 14px; background: var(--white); flex-shrink: 0; }
 .header-logo { width: 60px; height: 60px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-.header-logo svg { width: 60px; height: 60px; }
+.header-logo img { width: 60px; height: 60px; object-fit: contain; }
 .header-text { display: flex; flex-direction: column; }
-.header-brand { font-size: 13px; font-weight: 600; color: var(--ink); letter-spacing: 0.02em; }
-.header-brand em { color: var(--blue); font-style: normal; }
-.header-sub { font-size: 10px; color: var(--ink3); font-family: var(--mono); letter-spacing: 0.04em; margin-top: 1px; }
+.header-brand { font-size: 13px; font-weight: 600; color: var(--blue); letter-spacing: 0.08em; text-transform: uppercase; }
+.header-brand em { color: var(--blue-dk); font-style: normal; }
+.header-sub { font-size: 10px; color: var(--ink3); font-family: var(--mono); letter-spacing: 0.1em; text-transform: uppercase; margin-top: 2px; }
 .header-counter { margin-left: auto; color: var(--ink3); font-size: 11px; font-family: var(--mono); }
 
 /* Main layout */
@@ -64,10 +80,11 @@ button { font-family: inherit; cursor: pointer; }
 
 /* Title slide */
 .title-slide { min-height: calc(100vh - 180px); display: flex; flex-direction: column; justify-content: center; padding: 20px 40px; max-width: 880px; margin: 0 auto; }
+.title-logo { width: 96px; height: 96px; object-fit: contain; margin-bottom: 30px; filter: drop-shadow(0 8px 22px rgba(15,35,64,0.12)); }
 .title-eyebrow { font-family: var(--mono); font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--blue); margin-bottom: 32px; display: flex; align-items: center; gap: 14px; }
 .title-eyebrow::before { content: ''; width: 28px; height: 2px; background: var(--blue); display: inline-block; }
-.title-heading { font-family: var(--serif); font-size: 72px; line-height: 1.05; color: var(--ink); margin-bottom: 20px; font-weight: 400; }
-.title-heading em { color: var(--blue); font-style: italic; }
+.title-heading { font-family: var(--sans); font-size: clamp(44px, 6vw, 68px); line-height: 1.06; letter-spacing: -0.025em; color: var(--blue); margin-bottom: 20px; font-weight: 600; }
+.title-heading em { color: var(--blue-dk); font-style: italic; font-weight: 600; }
 .title-subheading { font-size: 20px; line-height: 1.5; color: var(--ink2); margin-bottom: 48px; max-width: 640px; }
 .title-meta { display: flex; gap: 32px; padding-top: 24px; border-top: 1px solid var(--rule); }
 .title-meta-item { font-family: var(--mono); font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink3); }
@@ -81,7 +98,7 @@ button { font-family: inherit; cursor: pointer; }
 .overview-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--rule); border: 1px solid var(--rule); border-radius: 4px; overflow: hidden; }
 .ostat { background: var(--bg); padding: 24px 20px; transition: background 0.2s; }
 .ostat:hover { background: var(--white); }
-.ostat-num { font-family: var(--serif); font-size: 44px; color: var(--ink); line-height: 1; margin-bottom: 6px; }
+.ostat-num { font-family: var(--sans); font-size: 44px; font-weight: 600; letter-spacing: -0.02em; color: var(--ink); line-height: 1; margin-bottom: 6px; }
 .ostat-num em { color: var(--blue); font-style: normal; }
 .ostat-label { font-family: var(--mono); font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink3); line-height: 1.5; }
 .overview-strip { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 20px; }
@@ -170,7 +187,7 @@ button { font-family: inherit; cursor: pointer; }
 .wt-email.spam .wt-email-tag { color: var(--blue); }
 .wt-email.ham .wt-email-tag { color: var(--green); }
 .wt-email-content { font-size: 13px; color: var(--ink); line-height: 1.5; }
-.wt-email-content .hl { background: rgba(43,108,176,0.15); padding: 1px 4px; border-radius: 2px; }
+.wt-email-content .hl { background: rgba(46,109,180,0.15); padding: 1px 4px; border-radius: 2px; }
 
 /* Tokenization */
 .wt-token-flow { display: flex; flex-direction: column; gap: 12px; }
@@ -178,7 +195,7 @@ button { font-family: inherit; cursor: pointer; }
 .wt-token-label { font-family: var(--mono); font-size: 9px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink3); width: 70px; flex-shrink: 0; }
 .wt-tokens { display: flex; flex-wrap: wrap; gap: 6px; }
 .wt-token { padding: 4px 10px; background: var(--bg); border: 1px solid var(--rule); border-radius: 3px; font-family: var(--mono); font-size: 11px; color: var(--ink2); }
-.wt-token.hl { background: var(--blue-lt); border-color: rgba(43,108,176,0.3); color: var(--blue); }
+.wt-token.hl { background: var(--blue-lt); border-color: rgba(46,109,180,0.3); color: var(--blue); }
 .wt-arrow-down { text-align: center; color: var(--ink3); font-size: 18px; padding: 4px 0; }
 
 /* Embedding visualization */
@@ -200,7 +217,7 @@ button { font-family: inherit; cursor: pointer; }
 .wt-train-dot.money { background: var(--blue); }
 .wt-train-dot.related { background: var(--ink); }
 .wt-train-dot.unrelated { background: var(--ink3); }
-.wt-train-cluster { position: absolute; border: 2px dashed rgba(43,108,176,0.25); border-radius: 50%; pointer-events: none; transition: all 0.8s ease-out; }
+.wt-train-cluster { position: absolute; border: 2px dashed rgba(46,109,180,0.25); border-radius: 50%; pointer-events: none; transition: all 0.8s ease-out; }
 .wt-train-controls { display: flex; align-items: center; gap: 16px; margin-top: 14px; }
 .wt-train-btn { padding: 10px 20px; background: var(--blue); color: var(--white); border: none; border-radius: 4px; font-family: var(--mono); font-size: 11px; letter-spacing: 0.05em; }
 .wt-train-btn:hover { background: var(--ink); }
@@ -220,7 +237,7 @@ button { font-family: inherit; cursor: pointer; }
 .wt-space-dot.money { background: var(--blue); }
 .wt-space-dot.related { background: var(--ink); }
 .wt-space-dot.unrelated { background: var(--ink3); }
-.wt-space-cluster { position: absolute; border: 2px dashed rgba(43,108,176,0.3); border-radius: 50%; pointer-events: none; }
+.wt-space-cluster { position: absolute; border: 2px dashed rgba(46,109,180,0.3); border-radius: 50%; pointer-events: none; }
 .wt-space-insight { font-size: 13px; color: var(--ink2); line-height: 1.6; padding: 12px 14px; background: var(--white); border-radius: 4px; border: 1px solid var(--rule); }
 
 /* The problem */
@@ -240,7 +257,7 @@ button { font-family: inherit; cursor: pointer; }
 .wt-compare { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
 .wt-compare-col { padding: 16px; border-radius: 6px; }
 .wt-compare-col.trad { background: var(--green-lt); border: 1px solid rgba(45,122,58,0.2); }
-.wt-compare-col.ai { background: var(--blue-lt); border: 1px solid rgba(43,108,176,0.2); }
+.wt-compare-col.ai { background: var(--blue-lt); border: 1px solid rgba(46,109,180,0.2); }
 .wt-compare-label { font-family: var(--mono); font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 8px; }
 .wt-compare-col.trad .wt-compare-label { color: var(--green); }
 .wt-compare-col.ai .wt-compare-label { color: var(--blue); }
@@ -252,7 +269,7 @@ button { font-family: inherit; cursor: pointer; }
 
 .intro { color: var(--ink2); font-size: 14px; margin-bottom: 20px; line-height: 1.7; }
 .block { margin-bottom: 16px; padding: 18px 22px; background: var(--white); border: 1px solid var(--rule); border-radius: 4px; }
-.block.highlight { background: var(--blue-lt); border-color: rgba(43,108,176,0.2); border-left: 3px solid var(--blue); }
+.block.highlight { background: var(--blue-lt); border-color: rgba(46,109,180,0.2); border-left: 3px solid var(--blue); }
 .block h4 { margin: 0 0 8px; font-size: 15px; font-weight: 600; }
 .block.highlight h4 { color: var(--blue); }
 .block p { color: var(--ink2); font-size: 14px; line-height: 1.7; margin: 0; }
@@ -264,6 +281,19 @@ button { font-family: inherit; cursor: pointer; }
 
 .callout { margin-top: 20px; padding: 14px 18px; background: var(--blue-lt); border-left: 3px solid var(--blue); border-radius: 0 4px 4px 0; }
 .callout p { color: var(--ink2); font-size: 13px; line-height: 1.65; margin: 0; }
+
+/* Agenda / contents map */
+.agenda-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px; margin-top: 8px; }
+.agenda-group { background: var(--white); border: 1px solid var(--rule); border-radius: 6px; padding: 16px 18px 8px; }
+.agenda-group-label { font-family: var(--mono); font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--blue); margin-bottom: 8px; }
+.agenda-item { display: flex; align-items: baseline; gap: 12px; width: 100%; text-align: left; background: transparent; border: none; border-bottom: 1px solid var(--rule); padding: 11px 8px 11px 4px; margin: 0 -8px 0 -4px; border-radius: 4px; transition: background 0.15s; }
+.agenda-group .agenda-item:last-child { border-bottom: none; }
+.agenda-item:hover { background: var(--bg); }
+.agenda-num { font-family: var(--mono); font-size: 11px; font-weight: 600; color: var(--ink3); min-width: 22px; }
+.agenda-item:hover .agenda-num { color: var(--blue); }
+.agenda-title { flex: 1; font-size: 13px; color: var(--ink); font-weight: 500; line-height: 1.4; }
+.agenda-go { color: var(--ink3); font-size: 13px; opacity: 0; transform: translateX(-4px); transition: all 0.15s; }
+.agenda-item:hover .agenda-go { color: var(--blue); opacity: 1; transform: none; }
 
 .tabs { display: flex; gap: 8px; margin-bottom: 16px; }
 .tab-btn { padding: 8px 20px; background: var(--white); border: 1px solid var(--rule); border-radius: 4px; color: var(--ink3); font-size: 13px; font-weight: 500; }
@@ -329,8 +359,8 @@ td:first-child { color: var(--ink); font-weight: 500; }
 .tier[data-color="red"] .tier-badge { color: var(--blue); }
 .tier[data-color="gold"] { border-top: 3px solid #6B4E0A; }
 .tier[data-color="gold"] .tier-badge { color: #6B4E0A; }
-.tier[data-color="blue"] { border-top: 3px solid #1B4B7A; }
-.tier[data-color="blue"] .tier-badge { color: #1B4B7A; }
+.tier[data-color="blue"] { border-top: 3px solid var(--blue-dk); }
+.tier[data-color="blue"] .tier-badge { color: var(--blue-dk); }
 
 .req-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
 .req-card { padding: 14px; background: var(--white); border: 1px solid var(--rule); border-radius: 4px; cursor: pointer; text-align: left; transition: all 0.15s; }
@@ -349,7 +379,7 @@ td:first-child { color: var(--ink); font-weight: 500; }
 .scenario-header h4 { margin: 0; font-size: 14px; }
 .scenario-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
 .scenario-col { padding: 16px; border-radius: 4px; }
-.scenario-col.bad { background: var(--blue-lt); border: 1px solid rgba(43,108,176,0.18); }
+.scenario-col.bad { background: var(--blue-lt); border: 1px solid rgba(46,109,180,0.18); }
 .scenario-col.good { background: var(--green-lt); border: 1px solid rgba(45,122,58,0.18); }
 .scenario-col .label { font-family: var(--mono); font-size: 10px; font-weight: 600; margin-bottom: 10px; }
 .scenario-col.bad .label { color: var(--blue); }
@@ -396,8 +426,8 @@ td:first-child { color: var(--ink); font-weight: 500; }
 .doi-btn:hover { background: var(--blue); }
 
 .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; min-height: 280px; }
-.contact-left h2 { font-size: 28px; font-weight: 600; color: var(--ink); margin-bottom: 16px; line-height: 1.2; }
-.contact-left h2 em { font-family: var(--serif); font-style: italic; color: var(--blue); }
+.contact-left h2 { font-size: 28px; font-weight: 600; letter-spacing: -0.02em; color: var(--ink); margin-bottom: 16px; line-height: 1.2; }
+.contact-left h2 em { font-family: var(--sans); font-style: italic; font-weight: 600; color: var(--blue); }
 .contact-left p { font-size: 14px; color: var(--ink3); line-height: 1.75; max-width: 360px; }
 .contact-item { padding-top: 14px; margin-top: 14px; border-top: 1px solid var(--rule); }
 .contact-item:first-child { border-top: none; padding-top: 0; margin-top: 0; }
@@ -516,7 +546,7 @@ td:first-child { color: var(--ink); font-weight: 500; }
 .crew-card.alert { background: rgba(200,39,45,0.15); }
 .crew-role { font-family: var(--mono); font-size: 8px; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.4); margin-bottom: 6px; }
 .crew-name { font-size: 13px; font-weight: 500; color: rgba(255,255,255,0.9); margin-bottom: 10px; }
-.crew-score { font-family: var(--serif); font-size: 32px; line-height: 1; margin-bottom: 4px; transition: color 0.4s ease; }
+.crew-score { font-family: var(--sans); font-size: 32px; font-weight: 600; letter-spacing: -0.02em; line-height: 1; margin-bottom: 4px; transition: color 0.4s ease; }
 .crew-score.green { color: #4ADE80; }
 .crew-score.amber { color: #FBBF24; }
 .crew-score.red { color: #F87171; }
@@ -557,7 +587,7 @@ td:first-child { color: var(--ink); font-weight: 500; }
 .crew-override-input.visible { display: block; }
 .crew-override-input textarea { width: 100%; padding: 10px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.15); border-radius: 4px; color: rgba(255,255,255,0.8); font-family: var(--sans); font-size: 12px; resize: none; outline: none; }
 .crew-override-input textarea::placeholder { color: rgba(255,255,255,0.25); }
-.crew-req-tag { display: inline-block; font-family: var(--mono); font-size: 8px; letter-spacing: 0.06em; padding: 2px 6px; border-radius: 2px; background: rgba(43,108,176,0.15); color: rgba(43,108,176,0.8); margin-left: 6px; vertical-align: middle; }
+.crew-req-tag { display: inline-block; font-family: var(--mono); font-size: 8px; letter-spacing: 0.06em; padding: 2px 6px; border-radius: 2px; background: rgba(46,109,180,0.15); color: rgba(46,109,180,0.8); margin-left: 6px; vertical-align: middle; }
 .crew-dash-footer { padding: 10px 18px; border-top: 1px solid rgba(255,255,255,0.06); display: flex; gap: 12px; flex-wrap: wrap; }
 .crew-dash-footer .crew-req-tag { background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.3); }
 .crew-trigger-wrap { text-align: center; margin-top: 16px; }
@@ -655,44 +685,12 @@ td:first-child { color: var(--ink); font-weight: 500; }
 </style>
 </head>
 <body>
+<div class="constellation" id="constellation" aria-hidden="true"></div>
 
 <div class="app">
   <div class="header">
     <div class="header-logo">
-      <svg viewBox="0 0 200 200" fill="none">
-        <circle cx="100" cy="100" r="97" stroke="#1B3A6B" stroke-width=".6" opacity=".25"/>
-        <circle cx="100" cy="100" r="93" stroke="#1B3A6B" stroke-width="2.8" stroke-dasharray="3.2 3.8" opacity=".55"/>
-        <circle cx="100" cy="100" r="89" stroke="#1B3A6B" stroke-width=".8" opacity=".3"/>
-        <path id="s-top-arc" d="M 21,100 A 79,79 0 0,1 179,100" fill="none"/>
-        <text font-family="'IBM Plex Mono',monospace" font-size="9.2" font-weight="500" letter-spacing="4.8" fill="#1B3A6B" opacity=".85">
-          <textPath href="#s-top-arc" startOffset="50%" text-anchor="middle">SAFETY CRITICAL LABS</textPath>
-        </text>
-        <path id="s-bot-arc" d="M 16,100 A 84,84 0 0,0 184,100" fill="none"/>
-        <text font-family="'IBM Plex Mono',monospace" font-size="8" font-weight="400" letter-spacing="3.2" fill="#1B3A6B" opacity=".6">
-          <textPath href="#s-bot-arc" startOffset="50%" text-anchor="middle">AI CERTIFICATION AUTHORITY</textPath>
-        </text>
-        <text x="14" y="103" text-anchor="middle" font-size="5" fill="#B4822A" opacity=".8">✦</text>
-        <text x="186" y="103" text-anchor="middle" font-size="5" fill="#B4822A" opacity=".8">✦</text>
-        <circle cx="100" cy="100" r="73" stroke="#1B3A6B" stroke-width=".8" opacity=".2"/>
-        <circle cx="100" cy="100" r="70" stroke="#1B3A6B" stroke-width=".4" opacity=".15"/>
-        <circle cx="100" cy="100" r="67" fill="#EAF0F8" stroke="#1B3A6B" stroke-width=".5" opacity=".9"/>
-        <circle cx="100" cy="100" r="50" stroke="#1B3A6B" stroke-width="1" fill="none" opacity=".35"/>
-        <circle cx="100" cy="100" r="38" stroke="#1B3A6B" stroke-width=".8" fill="none" opacity=".4"/>
-        <circle cx="100" cy="100" r="27" stroke="#1B3A6B" stroke-width=".7" fill="none" opacity=".45"/>
-        <line x1="100" y1="70" x2="100" y2="75.5" stroke="#1B3A6B" stroke-width="1.2" stroke-linecap="round" opacity=".5"/>
-        <line x1="100" y1="124.5" x2="100" y2="130" stroke="#1B3A6B" stroke-width="1.2" stroke-linecap="round" opacity=".5"/>
-        <line x1="70" y1="100" x2="75.5" y2="100" stroke="#1B3A6B" stroke-width="1.2" stroke-linecap="round" opacity=".5"/>
-        <line x1="124.5" y1="100" x2="130" y2="100" stroke="#1B3A6B" stroke-width="1.2" stroke-linecap="round" opacity=".5"/>
-        <line x1="78.8" y1="78.8" x2="82.7" y2="82.7" stroke="#1B3A6B" stroke-width="1" stroke-linecap="round" opacity=".35"/>
-        <line x1="117.3" y1="117.3" x2="121.2" y2="121.2" stroke="#1B3A6B" stroke-width="1" stroke-linecap="round" opacity=".35"/>
-        <line x1="121.2" y1="78.8" x2="117.3" y2="82.7" stroke="#1B3A6B" stroke-width="1" stroke-linecap="round" opacity=".35"/>
-        <line x1="82.7" y1="117.3" x2="78.8" y2="121.2" stroke="#1B3A6B" stroke-width="1" stroke-linecap="round" opacity=".35"/>
-        <circle cx="100" cy="100" r="17" fill="#1B3A6B" stroke="#B4822A" stroke-width="1.4"/>
-        <circle cx="100" cy="100" r="11" fill="#1B3A6B" stroke="#B4822A" stroke-width=".6" opacity=".5"/>
-        <line x1="86" y1="100" x2="114" y2="100" stroke="#2B6CB0" stroke-width="2.2" stroke-linecap="round"/>
-        <circle cx="100" cy="100" r="4.5" fill="#2B6CB0"/>
-        <text x="102" y="161" text-anchor="middle" font-family="'IBM Plex Mono',monospace" font-size="7" font-weight="500" letter-spacing="4" fill="#1B3A6B" opacity=".5">SCL</text>
-      </svg>
+      <img src="img/SCL_Logo_transparent.png" alt="Safety Critical Labs">
     </div>
     <div class="header-text">
       <div class="header-brand"><em>Safety Critical</em> Labs</div>
@@ -710,7 +708,8 @@ td:first-child { color: var(--ink); font-weight: 500; }
 <script>
 const groups = [
   { label: "Introduction", items: [
-    { id: "title", title: "Cover" }
+    { id: "title", title: "Cover" },
+    { id: "agenda", title: "Contents" }
   ]},
   { label: "Foundation", items: [
     { id: "why-different", title: "Where Intent Goes" },
@@ -758,6 +757,12 @@ const sections = {
         { label: "Authority", value: "AI Certification" },
         { label: "Year", value: "2026" }
       ]
+    }
+  },
+  "agenda": {
+    group: "Introduction", title: "Contents", type: "agenda",
+    data: {
+      intro: "The full arc of the deck, from first principles to the published standard and how to engage. Jump to any section, or step through start to finish."
     }
   },
   "why-different": {
@@ -1297,6 +1302,7 @@ function renderContent() {
 function renderSection(section) {
   switch(section.type) {
     case 'title': return renderTitle(section.data);
+    case 'agenda': return renderAgenda(section.data);
     case 'overview': return renderOverview(section.data);
     case 'ml-walkthrough': return renderMLWalkthrough(section.data);
     case 'concept': return renderConcept(section.data);
@@ -1507,7 +1513,7 @@ function renderWTIntent() {
         '<polygon points="507,121 517,127 509,130" fill="var(--rule)"/>' +
 
         // Spam output
-        '<rect x="520" y="100" width="140" height="50" rx="4" fill="var(--blue-lt)" stroke="rgba(43,108,176,0.3)" stroke-width="1.5"/>' +
+        '<rect x="520" y="100" width="140" height="50" rx="4" fill="var(--blue-lt)" stroke="rgba(46,109,180,0.3)" stroke-width="1.5"/>' +
         '<text x="590" y="122" text-anchor="middle" font-family="var(--mono)" font-size="9" letter-spacing="0.08em" fill="var(--blue)">OUTPUT</text>' +
         '<text x="590" y="138" text-anchor="middle" font-family="var(--sans)" font-size="13" font-weight="500" fill="var(--blue)">Spam</text>' +
       '</svg>' +
@@ -2282,8 +2288,8 @@ function showEmbedComparison() {
   // Axes
   svg += '<line x1="' + pad + '" y1="' + (H - pad) + '" x2="' + (W - 20) + '" y2="' + (H - pad) + '" stroke="#E4E8EC" stroke-width="1"/>';
   svg += '<line x1="' + pad + '" y1="20" x2="' + pad + '" y2="' + (H - pad) + '" stroke="#E4E8EC" stroke-width="1"/>';
-  svg += '<text x="' + (W / 2) + '" y="' + (H - 8) + '" text-anchor="middle" font-size="9" fill="#8E99A4" font-family="IBM Plex Mono,monospace" letter-spacing="0.06em">DIMENSION 1</text>';
-  svg += '<text x="12" y="' + (H / 2) + '" text-anchor="middle" font-size="9" fill="#8E99A4" font-family="IBM Plex Mono,monospace" letter-spacing="0.06em" transform="rotate(-90,12,' + (H / 2) + ')">DIMENSION 2</text>';
+  svg += '<text x="' + (W / 2) + '" y="' + (H - 8) + '" text-anchor="middle" font-size="9" fill="#8E99A4" font-family="DM Sans,system-ui,sans-serif" letter-spacing="0.06em">DIMENSION 1</text>';
+  svg += '<text x="12" y="' + (H / 2) + '" text-anchor="middle" font-size="9" fill="#8E99A4" font-family="DM Sans,system-ui,sans-serif" letter-spacing="0.06em" transform="rotate(-90,12,' + (H / 2) + ')">DIMENSION 2</text>';
   
   // Connection line between selected words
   const x1 = pad + v1.x / 100 * (W - pad - 20);
@@ -2300,7 +2306,7 @@ function showEmbedComparison() {
   const offX = -(dy/len) * 24, offY = (dx/len) * 24;
   const lx = mx + offX, ly = my + offY;
   svg += '<rect x="' + (lx - 20) + '" y="' + (ly - 9) + '" width="40" height="18" rx="3" fill="white" stroke="' + lineColor + '" stroke-width="0.5"/>';
-  svg += '<text x="' + lx + '" y="' + (ly + 4) + '" text-anchor="middle" font-size="9" fill="' + lineColor + '" font-family="IBM Plex Mono,monospace" font-weight="600">' + pct + '%</text>';
+  svg += '<text x="' + lx + '" y="' + (ly + 4) + '" text-anchor="middle" font-size="9" fill="' + lineColor + '" font-family="DM Sans,system-ui,sans-serif" font-weight="600">' + pct + '%</text>';
   
   // Cluster regions (subtle ellipses)
   const clusters = {};
@@ -2316,7 +2322,7 @@ function showEmbedComparison() {
     svg += '<ellipse cx="' + cx + '" cy="' + cy + '" rx="' + rx + '" ry="' + ry + '" fill="' + clusterColors[name] + '" fill-opacity="0.06" stroke="' + clusterColors[name] + '" stroke-width="0.5" stroke-dasharray="3,3" opacity="0.8"/>';
     const labelBelow = name !== 'pressure';
     const labelY = labelBelow ? cy + ry + 12 : cy - ry - 6;
-    svg += '<text x="' + cx + '" y="' + labelY + '" text-anchor="middle" font-size="8" fill="' + clusterColors[name] + '" font-family="IBM Plex Mono,monospace" letter-spacing="0.05em" opacity="0.7">' + name.toUpperCase() + '</text>';
+    svg += '<text x="' + cx + '" y="' + labelY + '" text-anchor="middle" font-size="8" fill="' + clusterColors[name] + '" font-family="DM Sans,system-ui,sans-serif" letter-spacing="0.05em" opacity="0.7">' + name.toUpperCase() + '</text>';
   });
   
   // All dots - per-word label offsets to avoid overlap
@@ -2448,7 +2454,7 @@ function runDrift() {
     monthEl.innerHTML = 'Month: <span>' + driftMonths[step] + '</span>';
     
     // Color the dot based on threshold
-    dot.setAttribute('fill', isOk ? '#0F2340' : '#2B6CB0');
+    dot.setAttribute('fill', isOk ? '#0F2340' : '#2E6DB4');
     
     // Fire alert when crossing threshold
     if (!alertFired && acc < 85) {
@@ -2471,7 +2477,7 @@ function runDrift() {
       }, 30);
       alertEl.classList.add('visible');
       // Change line color to red from here on
-      line.setAttribute('stroke', '#2B6CB0');
+      line.setAttribute('stroke', '#2E6DB4');
     }
     
     step++;
@@ -2493,7 +2499,7 @@ function setPartition(level) {
     bar.innerHTML = 
       '<div class="rv-partition-seg" style="flex:80;background:var(--green-lt);border:1px solid rgba(45,122,58,0.3);"><span class="seg-label" style="color:var(--green);">Training</span></div>' +
       '<div class="rv-partition-wall"></div>' +
-      '<div class="rv-partition-seg" style="flex:20;background:var(--blue-lt);border:1px solid rgba(43,108,176,0.3);"><span class="seg-label" style="color:var(--blue);">Test</span></div>';
+      '<div class="rv-partition-seg" style="flex:20;background:var(--blue-lt);border:1px solid rgba(46,109,180,0.3);"><span class="seg-label" style="color:var(--blue);">Test</span></div>';
     explain.innerHTML = '<strong>Minimum: two way split.</strong> Training data for model fitting. Test data held out for final evaluation. This is valid. The framework does not prescribe a specific number of partitions.';
   }
   else if (level === 1) {
@@ -2502,7 +2508,7 @@ function setPartition(level) {
       '<div class="rv-partition-wall"></div>' +
       '<div class="rv-partition-seg" style="flex:15;background:var(--gold-lt);border:1px solid rgba(107,78,10,0.3);"><span class="seg-label" style="color:var(--gold);">Validation</span></div>' +
       '<div class="rv-partition-wall"></div>' +
-      '<div class="rv-partition-seg" style="flex:15;background:var(--blue-lt);border:1px solid rgba(43,108,176,0.3);"><span class="seg-label" style="color:var(--blue);">Test</span></div>';
+      '<div class="rv-partition-seg" style="flex:15;background:var(--blue-lt);border:1px solid rgba(46,109,180,0.3);"><span class="seg-label" style="color:var(--blue);">Test</span></div>';
     explain.innerHTML = '<strong>Three way split.</strong> Validation data added for hyperparameter tuning and model selection. Test data remains locked until final evaluation. This is common practice but still not the full picture.';
   }
   else if (level === 2) {
@@ -2512,7 +2518,7 @@ function setPartition(level) {
       '<div class="rv-partition-wall"></div>' +
       '<div class="rv-partition-seg" style="flex:8;background:var(--gold-lt);border:1px solid rgba(107,78,10,0.3);"><span class="seg-label" style="color:var(--gold);font-size:7px;">Valid.</span></div>' +
       '<div class="rv-partition-wall"></div>' +
-      '<div class="rv-partition-seg" style="flex:8;background:var(--blue-lt);border:1px solid rgba(43,108,176,0.3);"><span class="seg-label" style="color:var(--blue);font-size:7px;">Test</span></div>' +
+      '<div class="rv-partition-seg" style="flex:8;background:var(--blue-lt);border:1px solid rgba(46,109,180,0.3);"><span class="seg-label" style="color:var(--blue);font-size:7px;">Test</span></div>' +
       '<div class="rv-partition-wall"></div>' +
       '<div class="rv-partition-seg" style="flex:8;background:#EDE8F5;border:1px solid rgba(93,63,160,0.3);"><span class="seg-label" style="color:#5D3FA0;font-size:6.5px;">AI-2</span></div>' +
       '<div class="rv-partition-wall"></div>' +
@@ -2555,15 +2561,15 @@ function toggleAdversarial() {
     
     // Tokens break apart
     tokens.innerHTML = 
-      '<span style="padding:3px 8px;background:var(--blue-lt);border:1px solid rgba(43,108,176,0.3);border-radius:3px;font-family:var(--mono);font-size:11px;color:var(--blue);">M</span>' +
+      '<span style="padding:3px 8px;background:var(--blue-lt);border:1px solid rgba(46,109,180,0.3);border-radius:3px;font-family:var(--mono);font-size:11px;color:var(--blue);">M</span>' +
       '<span style="padding:3px 4px;font-family:var(--mono);font-size:9px;color:var(--blue);">?</span>' +
-      '<span style="padding:3px 8px;background:var(--blue-lt);border:1px solid rgba(43,108,176,0.3);border-radius:3px;font-family:var(--mono);font-size:11px;color:var(--blue);">O</span>' +
+      '<span style="padding:3px 8px;background:var(--blue-lt);border:1px solid rgba(46,109,180,0.3);border-radius:3px;font-family:var(--mono);font-size:11px;color:var(--blue);">O</span>' +
       '<span style="padding:3px 4px;font-family:var(--mono);font-size:9px;color:var(--blue);">?</span>' +
-      '<span style="padding:3px 8px;background:var(--blue-lt);border:1px solid rgba(43,108,176,0.3);border-radius:3px;font-family:var(--mono);font-size:11px;color:var(--blue);">N</span>' +
+      '<span style="padding:3px 8px;background:var(--blue-lt);border:1px solid rgba(46,109,180,0.3);border-radius:3px;font-family:var(--mono);font-size:11px;color:var(--blue);">N</span>' +
       '<span style="padding:3px 4px;font-family:var(--mono);font-size:9px;color:var(--blue);">?</span>' +
-      '<span style="padding:3px 8px;background:var(--blue-lt);border:1px solid rgba(43,108,176,0.3);border-radius:3px;font-family:var(--mono);font-size:11px;color:var(--blue);">E</span>' +
+      '<span style="padding:3px 8px;background:var(--blue-lt);border:1px solid rgba(46,109,180,0.3);border-radius:3px;font-family:var(--mono);font-size:11px;color:var(--blue);">E</span>' +
       '<span style="padding:3px 4px;font-family:var(--mono);font-size:9px;color:var(--blue);">?</span>' +
-      '<span style="padding:3px 8px;background:var(--blue-lt);border:1px solid rgba(43,108,176,0.3);border-radius:3px;font-family:var(--mono);font-size:11px;color:var(--blue);">Y</span>';
+      '<span style="padding:3px 8px;background:var(--blue-lt);border:1px solid rgba(46,109,180,0.3);border-radius:3px;font-family:var(--mono);font-size:11px;color:var(--blue);">Y</span>';
     
     result.innerHTML = '→ No keyword match. PASSED AS LEGITIMATE.';
     result.style.color = 'var(--blue)';
@@ -2614,7 +2620,7 @@ function runCoverageTest() {
   } else {
     covMissCount++;
     result.style.background = 'var(--blue-lt)';
-    result.style.border = '1px solid rgba(43,108,176,0.2)';
+    result.style.border = '1px solid rgba(46,109,180,0.2)';
     result.style.color = 'var(--blue)';
     result.innerHTML = '✗ MISSED. "' + input + '" is not in the test suite. This variant reaches the inbox.';
   }
@@ -2874,7 +2880,7 @@ function renderMiniSpace(type) {
   // Base dot positions matching Foundation "The Result" step
   // MONEY(300,33) CASH(320,39) FUNDS(280,44) DOLLARS(328,28) MEETING(80,77) LUNCH(120,66) HELLO(60,50)
   var baseDots = 
-    '<circle cx="300" cy="33" r="5" fill="#2B6CB0"/>' +
+    '<circle cx="300" cy="33" r="5" fill="#2E6DB4"/>' +
     '<circle cx="320" cy="39" r="4" fill="#0F2340"/>' +
     '<circle cx="280" cy="44" r="4" fill="#0F2340"/>' +
     '<circle cx="328" cy="28" r="4" fill="#0F2340"/>' +
@@ -2882,17 +2888,17 @@ function renderMiniSpace(type) {
     '<circle cx="120" cy="66" r="4" fill="#7A8FA6"/>' +
     '<circle cx="60" cy="50" r="4" fill="#7A8FA6"/>';
   var baseLabels =
-    '<text x="300" y="23" font-family="IBM Plex Mono,monospace" font-size="7" fill="#2B6CB0" text-anchor="middle" font-weight="600">MONEY</text>' +
-    '<text x="320" y="51" font-family="IBM Plex Mono,monospace" font-size="7" fill="#3D5068" text-anchor="middle">CASH</text>' +
-    '<text x="280" y="56" font-family="IBM Plex Mono,monospace" font-size="7" fill="#3D5068" text-anchor="middle">FUNDS</text>' +
-    '<text x="340" y="22" font-family="IBM Plex Mono,monospace" font-size="7" fill="#3D5068" text-anchor="start">DOLLARS</text>' +
-    '<text x="80" y="89" font-family="IBM Plex Mono,monospace" font-size="7" fill="#7A8FA6" text-anchor="middle">MEETING</text>' +
-    '<text x="120" y="78" font-family="IBM Plex Mono,monospace" font-size="7" fill="#7A8FA6" text-anchor="middle">LUNCH</text>' +
-    '<text x="60" y="42" font-family="IBM Plex Mono,monospace" font-size="7" fill="#7A8FA6" text-anchor="middle">HELLO</text>';
+    '<text x="300" y="23" font-family="DM Sans,system-ui,sans-serif" font-size="7" fill="#2E6DB4" text-anchor="middle" font-weight="600">MONEY</text>' +
+    '<text x="320" y="51" font-family="DM Sans,system-ui,sans-serif" font-size="7" fill="#3D5068" text-anchor="middle">CASH</text>' +
+    '<text x="280" y="56" font-family="DM Sans,system-ui,sans-serif" font-size="7" fill="#3D5068" text-anchor="middle">FUNDS</text>' +
+    '<text x="340" y="22" font-family="DM Sans,system-ui,sans-serif" font-size="7" fill="#3D5068" text-anchor="start">DOLLARS</text>' +
+    '<text x="80" y="89" font-family="DM Sans,system-ui,sans-serif" font-size="7" fill="#7A8FA6" text-anchor="middle">MEETING</text>' +
+    '<text x="120" y="78" font-family="DM Sans,system-ui,sans-serif" font-size="7" fill="#7A8FA6" text-anchor="middle">LUNCH</text>' +
+    '<text x="60" y="42" font-family="DM Sans,system-ui,sans-serif" font-size="7" fill="#7A8FA6" text-anchor="middle">HELLO</text>';
   // Axis labels
   var axes =
-    '<text x="12" y="55" font-family="IBM Plex Mono,monospace" font-size="7" fill="#7A8FA6" text-anchor="middle" transform="rotate(-90,12,55)">everyday</text>' +
-    '<text x="395" y="35" font-family="IBM Plex Mono,monospace" font-size="7" fill="#7A8FA6" text-anchor="middle" transform="rotate(-90,395,35)">financial</text>';
+    '<text x="12" y="55" font-family="DM Sans,system-ui,sans-serif" font-size="7" fill="#7A8FA6" text-anchor="middle" transform="rotate(-90,12,55)">everyday</text>' +
+    '<text x="395" y="35" font-family="DM Sans,system-ui,sans-serif" font-size="7" fill="#7A8FA6" text-anchor="middle" transform="rotate(-90,395,35)">financial</text>';
 
   var overlay = '';
   var caption = '';
@@ -2901,10 +2907,10 @@ function renderMiniSpace(type) {
     // Green dashed circle around the tested cluster, "?" in void
     overlay =
       '<ellipse cx="305" cy="36" rx="42" ry="22" fill="none" stroke="#2D7A3A" stroke-width="1.5" stroke-dasharray="4,3"/>' +
-      '<text x="305" y="70" font-family="IBM Plex Mono,monospace" font-size="8" fill="#2D7A3A" text-anchor="middle" font-weight="500">TESTED</text>' +
-      '<text x="180" y="40" font-family="DM Sans,sans-serif" font-size="16" fill="#2B6CB0" text-anchor="middle" opacity="0.5">?</text>' +
-      '<text x="200" y="80" font-family="DM Sans,sans-serif" font-size="14" fill="#2B6CB0" text-anchor="middle" opacity="0.4">?</text>' +
-      '<text x="160" y="62" font-family="DM Sans,sans-serif" font-size="12" fill="#2B6CB0" text-anchor="middle" opacity="0.3">?</text>';
+      '<text x="305" y="70" font-family="DM Sans,system-ui,sans-serif" font-size="8" fill="#2D7A3A" text-anchor="middle" font-weight="500">TESTED</text>' +
+      '<text x="180" y="40" font-family="DM Sans,sans-serif" font-size="16" fill="#2E6DB4" text-anchor="middle" opacity="0.5">?</text>' +
+      '<text x="200" y="80" font-family="DM Sans,sans-serif" font-size="14" fill="#2E6DB4" text-anchor="middle" opacity="0.4">?</text>' +
+      '<text x="160" y="62" font-family="DM Sans,sans-serif" font-size="12" fill="#2E6DB4" text-anchor="middle" opacity="0.3">?</text>';
     caption = '<strong>Remember: MONEY is geometry now.</strong> Your test suite validated this cluster. Everything outside it is untested space where variants, new terminology, and encoding tricks live undetected.';
   }
   else if (type === 'drift') {
@@ -2916,26 +2922,26 @@ function renderMiniSpace(type) {
       '<circle cx="320" cy="39" r="3.5" fill="#0F2340" opacity="0.15"/>' +
       '<circle cx="280" cy="44" r="3.5" fill="#0F2340" opacity="0.15"/>' +
       '<circle cx="328" cy="28" r="3.5" fill="#0F2340" opacity="0.15"/>' +
-      '<text x="305" y="16" font-family="IBM Plex Mono,monospace" font-size="7" fill="#7A8FA6" text-anchor="middle" opacity="0.5">CERTIFIED POSITIONS</text>' +
+      '<text x="305" y="16" font-family="DM Sans,system-ui,sans-serif" font-size="7" fill="#7A8FA6" text-anchor="middle" opacity="0.5">CERTIFIED POSITIONS</text>' +
       // Shifted cluster (current, moved down-left)
-      '<ellipse cx="260" cy="52" rx="42" ry="22" fill="none" stroke="#2B6CB0" stroke-width="1.5" stroke-dasharray="4,3"/>' +
-      '<circle cx="255" cy="49" r="5" fill="#2B6CB0"/>' +
-      '<circle cx="275" cy="55" r="4" fill="#2B6CB0" opacity="0.8"/>' +
-      '<circle cx="240" cy="58" r="4" fill="#2B6CB0" opacity="0.8"/>' +
-      '<circle cx="280" cy="45" r="4" fill="#2B6CB0" opacity="0.8"/>' +
-      '<text x="260" y="80" font-family="IBM Plex Mono,monospace" font-size="7" fill="#2B6CB0" text-anchor="middle" font-weight="500">CURRENT POSITIONS</text>' +
+      '<ellipse cx="260" cy="52" rx="42" ry="22" fill="none" stroke="#2E6DB4" stroke-width="1.5" stroke-dasharray="4,3"/>' +
+      '<circle cx="255" cy="49" r="5" fill="#2E6DB4"/>' +
+      '<circle cx="275" cy="55" r="4" fill="#2E6DB4" opacity="0.8"/>' +
+      '<circle cx="240" cy="58" r="4" fill="#2E6DB4" opacity="0.8"/>' +
+      '<circle cx="280" cy="45" r="4" fill="#2E6DB4" opacity="0.8"/>' +
+      '<text x="260" y="80" font-family="DM Sans,system-ui,sans-serif" font-size="7" fill="#2E6DB4" text-anchor="middle" font-weight="500">CURRENT POSITIONS</text>' +
       // Drift arrows
-      '<line x1="298" y1="34" x2="258" y2="49" stroke="#2B6CB0" stroke-width="0.75" stroke-dasharray="2,2" opacity="0.5" marker-end="url(#arrowhead)"/>' +
-      '<defs><marker id="arrowhead" markerWidth="6" markerHeight="4" refX="5" refY="2" orient="auto"><path d="M0,0 L6,2 L0,4" fill="#2B6CB0" opacity="0.5"/></marker></defs>';
+      '<line x1="298" y1="34" x2="258" y2="49" stroke="#2E6DB4" stroke-width="0.75" stroke-dasharray="2,2" opacity="0.5" marker-end="url(#arrowhead)"/>' +
+      '<defs><marker id="arrowhead" markerWidth="6" markerHeight="4" refX="5" refY="2" orient="auto"><path d="M0,0 L6,2 L0,4" fill="#2E6DB4" opacity="0.5"/></marker></defs>';
     // Hide the base dots since we are drawing our own
     baseDots =
       '<circle cx="80" cy="77" r="4" fill="#7A8FA6"/>' +
       '<circle cx="120" cy="66" r="4" fill="#7A8FA6"/>' +
       '<circle cx="60" cy="50" r="4" fill="#7A8FA6"/>';
     baseLabels =
-      '<text x="80" y="89" font-family="IBM Plex Mono,monospace" font-size="7" fill="#7A8FA6" text-anchor="middle">MEETING</text>' +
-      '<text x="120" y="78" font-family="IBM Plex Mono,monospace" font-size="7" fill="#7A8FA6" text-anchor="middle">LUNCH</text>' +
-      '<text x="60" y="42" font-family="IBM Plex Mono,monospace" font-size="7" fill="#7A8FA6" text-anchor="middle">HELLO</text>';
+      '<text x="80" y="89" font-family="DM Sans,system-ui,sans-serif" font-size="7" fill="#7A8FA6" text-anchor="middle">MEETING</text>' +
+      '<text x="120" y="78" font-family="DM Sans,system-ui,sans-serif" font-size="7" fill="#7A8FA6" text-anchor="middle">LUNCH</text>' +
+      '<text x="60" y="42" font-family="DM Sans,system-ui,sans-serif" font-size="7" fill="#7A8FA6" text-anchor="middle">HELLO</text>';
     caption = '<strong>Remember: these positions are learned, not fixed.</strong> The geometry you certified in January is not the geometry running in July. The words drifted. The cluster shifted. No code changed.';
   }
   else if (type === 'adversarial') {
@@ -2943,12 +2949,12 @@ function renderMiniSpace(type) {
     overlay =
       '<ellipse cx="305" cy="36" rx="42" ry="22" fill="none" stroke="#0F2340" stroke-width="1" stroke-dasharray="3,3" opacity="0.3"/>' +
       // Attacked dot far from cluster
-      '<circle cx="165" cy="42" r="5" fill="#2B6CB0" stroke="#2B6CB0" stroke-width="2" opacity="0.8"/>' +
-      '<text x="165" y="34" font-family="IBM Plex Mono,monospace" font-size="7" fill="#2B6CB0" text-anchor="middle" font-weight="600">M&#8203;O&#8203;N&#8203;E&#8203;Y</text>' +
-      '<text x="165" y="56" font-family="IBM Plex Mono,monospace" font-size="6" fill="#2B6CB0" text-anchor="middle">(with zero-width chars)</text>' +
+      '<circle cx="165" cy="42" r="5" fill="#2E6DB4" stroke="#2E6DB4" stroke-width="2" opacity="0.8"/>' +
+      '<text x="165" y="34" font-family="DM Sans,system-ui,sans-serif" font-size="7" fill="#2E6DB4" text-anchor="middle" font-weight="600">M&#8203;O&#8203;N&#8203;E&#8203;Y</text>' +
+      '<text x="165" y="56" font-family="DM Sans,system-ui,sans-serif" font-size="6" fill="#2E6DB4" text-anchor="middle">(with zero-width chars)</text>' +
       // Dashed line between real and attacked
-      '<line x1="170" y1="42" x2="295" y2="34" stroke="#2B6CB0" stroke-width="1" stroke-dasharray="4,3" opacity="0.4"/>' +
-      '<text x="230" y="30" font-family="IBM Plex Mono,monospace" font-size="6" fill="#2B6CB0" text-anchor="middle" opacity="0.7">same word to humans</text>';
+      '<line x1="170" y1="42" x2="295" y2="34" stroke="#2E6DB4" stroke-width="1" stroke-dasharray="4,3" opacity="0.4"/>' +
+      '<text x="230" y="30" font-family="DM Sans,system-ui,sans-serif" font-size="6" fill="#2E6DB4" text-anchor="middle" opacity="0.7">same word to humans</text>';
     caption = '<strong>Remember: MONEY dissolved into coordinates.</strong> Insert invisible characters and the tokenizer produces different coordinates. Same word to your eyes. Different point in space. The spam cluster never sees it.';
   }
 
@@ -2970,7 +2976,7 @@ function renderReqVisual(type) {
           '<div class="rv-partition-bar" id="partition-bar">' +
             '<div class="rv-partition-seg" id="p-train" style="flex:80;background:var(--green-lt);border:1px solid rgba(45,122,58,0.3);"><span class="seg-label" style="color:var(--green);">Training</span></div>' +
             '<div class="rv-partition-wall"></div>' +
-            '<div class="rv-partition-seg" id="p-test" style="flex:20;background:var(--blue-lt);border:1px solid rgba(43,108,176,0.3);"><span class="seg-label" style="color:var(--blue);">Test</span></div>' +
+            '<div class="rv-partition-seg" id="p-test" style="flex:20;background:var(--blue-lt);border:1px solid rgba(46,109,180,0.3);"><span class="seg-label" style="color:var(--blue);">Test</span></div>' +
           '</div>' +
         '</div>' +
         '<div class="rv-partition-controls">' +
@@ -3030,36 +3036,36 @@ function renderReqVisual(type) {
           '<svg id="drift-svg" viewBox="0 0 420 180">' +
             '<defs><linearGradient id="driftFill" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#0F2340" stop-opacity="0.08"/><stop offset="100%" stop-color="#0F2340" stop-opacity="0"/></linearGradient></defs>' +
             '<!-- Y axis labels -->' +
-            '<text x="28" y="18" font-family="IBM Plex Mono,monospace" font-size="9" fill="#7A8FA6" text-anchor="end">96%</text>' +
-            '<text x="28" y="52" font-family="IBM Plex Mono,monospace" font-size="9" fill="#7A8FA6" text-anchor="end">90%</text>' +
-            '<text x="28" y="86" font-family="IBM Plex Mono,monospace" font-size="9" fill="#2B6CB0" font-weight="600" text-anchor="end">85%</text>' +
-            '<text x="28" y="120" font-family="IBM Plex Mono,monospace" font-size="9" fill="#7A8FA6" text-anchor="end">80%</text>' +
-            '<text x="28" y="154" font-family="IBM Plex Mono,monospace" font-size="9" fill="#7A8FA6" text-anchor="end">75%</text>' +
+            '<text x="28" y="18" font-family="DM Sans,system-ui,sans-serif" font-size="9" fill="#7A8FA6" text-anchor="end">96%</text>' +
+            '<text x="28" y="52" font-family="DM Sans,system-ui,sans-serif" font-size="9" fill="#7A8FA6" text-anchor="end">90%</text>' +
+            '<text x="28" y="86" font-family="DM Sans,system-ui,sans-serif" font-size="9" fill="#2E6DB4" font-weight="600" text-anchor="end">85%</text>' +
+            '<text x="28" y="120" font-family="DM Sans,system-ui,sans-serif" font-size="9" fill="#7A8FA6" text-anchor="end">80%</text>' +
+            '<text x="28" y="154" font-family="DM Sans,system-ui,sans-serif" font-size="9" fill="#7A8FA6" text-anchor="end">75%</text>' +
             '<!-- Grid lines -->' +
             '<line x1="36" y1="14" x2="408" y2="14" stroke="#E4E8EC" stroke-width="0.5"/>' +
             '<line x1="36" y1="48" x2="408" y2="48" stroke="#E4E8EC" stroke-width="0.5"/>' +
-            '<line x1="36" y1="82" x2="408" y2="82" stroke="#2B6CB0" stroke-width="1" stroke-dasharray="6,4" opacity="0.4"/>' +
+            '<line x1="36" y1="82" x2="408" y2="82" stroke="#2E6DB4" stroke-width="1" stroke-dasharray="6,4" opacity="0.4"/>' +
             '<line x1="36" y1="116" x2="408" y2="116" stroke="#E4E8EC" stroke-width="0.5"/>' +
             '<line x1="36" y1="150" x2="408" y2="150" stroke="#E4E8EC" stroke-width="0.5"/>' +
             '<!-- Threshold label -->' +
-            '<text x="412" y="86" font-family="IBM Plex Mono,monospace" font-size="8" fill="#2B6CB0" text-anchor="end">THRESHOLD</text>' +
+            '<text x="412" y="86" font-family="DM Sans,system-ui,sans-serif" font-size="8" fill="#2E6DB4" text-anchor="end">THRESHOLD</text>' +
             '<!-- Month labels -->' +
-            '<text x="40" y="172" font-family="IBM Plex Mono,monospace" font-size="8" fill="#7A8FA6">Jan</text>' +
-            '<text x="74" y="172" font-family="IBM Plex Mono,monospace" font-size="8" fill="#7A8FA6">Feb</text>' +
-            '<text x="108" y="172" font-family="IBM Plex Mono,monospace" font-size="8" fill="#7A8FA6">Mar</text>' +
-            '<text x="142" y="172" font-family="IBM Plex Mono,monospace" font-size="8" fill="#7A8FA6">Apr</text>' +
-            '<text x="176" y="172" font-family="IBM Plex Mono,monospace" font-size="8" fill="#7A8FA6">May</text>' +
-            '<text x="210" y="172" font-family="IBM Plex Mono,monospace" font-size="8" fill="#7A8FA6">Jun</text>' +
-            '<text x="244" y="172" font-family="IBM Plex Mono,monospace" font-size="8" fill="#7A8FA6">Jul</text>' +
-            '<text x="278" y="172" font-family="IBM Plex Mono,monospace" font-size="8" fill="#7A8FA6">Aug</text>' +
-            '<text x="312" y="172" font-family="IBM Plex Mono,monospace" font-size="8" fill="#7A8FA6">Sep</text>' +
-            '<text x="346" y="172" font-family="IBM Plex Mono,monospace" font-size="8" fill="#7A8FA6">Oct</text>' +
-            '<text x="380" y="172" font-family="IBM Plex Mono,monospace" font-size="8" fill="#7A8FA6">Nov</text>' +
+            '<text x="40" y="172" font-family="DM Sans,system-ui,sans-serif" font-size="8" fill="#7A8FA6">Jan</text>' +
+            '<text x="74" y="172" font-family="DM Sans,system-ui,sans-serif" font-size="8" fill="#7A8FA6">Feb</text>' +
+            '<text x="108" y="172" font-family="DM Sans,system-ui,sans-serif" font-size="8" fill="#7A8FA6">Mar</text>' +
+            '<text x="142" y="172" font-family="DM Sans,system-ui,sans-serif" font-size="8" fill="#7A8FA6">Apr</text>' +
+            '<text x="176" y="172" font-family="DM Sans,system-ui,sans-serif" font-size="8" fill="#7A8FA6">May</text>' +
+            '<text x="210" y="172" font-family="DM Sans,system-ui,sans-serif" font-size="8" fill="#7A8FA6">Jun</text>' +
+            '<text x="244" y="172" font-family="DM Sans,system-ui,sans-serif" font-size="8" fill="#7A8FA6">Jul</text>' +
+            '<text x="278" y="172" font-family="DM Sans,system-ui,sans-serif" font-size="8" fill="#7A8FA6">Aug</text>' +
+            '<text x="312" y="172" font-family="DM Sans,system-ui,sans-serif" font-size="8" fill="#7A8FA6">Sep</text>' +
+            '<text x="346" y="172" font-family="DM Sans,system-ui,sans-serif" font-size="8" fill="#7A8FA6">Oct</text>' +
+            '<text x="380" y="172" font-family="DM Sans,system-ui,sans-serif" font-size="8" fill="#7A8FA6">Nov</text>' +
             '<!-- Animated elements -->' +
             '<path id="drift-area" d="" fill="url(#driftFill)"/>' +
             '<polyline id="drift-line" points="" fill="none" stroke="#0F2340" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>' +
             '<circle id="drift-dot" cx="0" cy="0" r="5" fill="#0F2340" opacity="0"/>' +
-            '<circle id="drift-alert-dot" cx="0" cy="0" r="0" fill="#2B6CB0" opacity="0"/>' +
+            '<circle id="drift-alert-dot" cx="0" cy="0" r="0" fill="#2E6DB4" opacity="0"/>' +
           '</svg>' +
         '</div>' +
         '<div class="rv-drift-controls">' +
@@ -3167,6 +3173,7 @@ function renderOutcomes(data) {
 
 function renderTitle(data) {
   let html = '<div class="title-slide">';
+  html += '<img class="title-logo" src="img/SCL_Logo_transparent.png" alt="Safety Critical Labs">';
   if (data.eyebrow) html += '<div class="title-eyebrow">' + data.eyebrow + '</div>';
   html += '<h1 class="title-heading">' + data.heading + '</h1>';
   if (data.subheading) html += '<p class="title-subheading">' + data.subheading + '</p>';
@@ -3177,6 +3184,25 @@ function renderTitle(data) {
     });
     html += '</div>';
   }
+  html += '</div>';
+  return html;
+}
+
+function renderAgenda(data) {
+  let html = '';
+  if (data && data.intro) html += '<p class="intro">' + data.intro + '</p>';
+  html += '<div class="agenda-grid">';
+  groups.forEach(group => {
+    const items = group.items.filter(it => it.id !== 'agenda' && it.id !== 'title');
+    if (!items.length) return;
+    html += '<div class="agenda-group"><div class="agenda-group-label">' + group.label + '</div>';
+    items.forEach(it => {
+      const idx = flatSections.indexOf(it.id);
+      const num = String(idx + 1).padStart(2, '0');
+      html += '<button class="agenda-item" onclick="goTo(' + idx + ')"><span class="agenda-num">' + num + '</span><span class="agenda-title">' + it.title + '</span><span class="agenda-go">&#8594;</span></button>';
+    });
+    html += '</div>';
+  });
   html += '</div>';
   return html;
 }
@@ -3271,7 +3297,7 @@ function renderCTAstronaut() {
     html += '<div style="font-family:var(--mono);font-size:20px;font-weight:600;color:var(--blue);margin-bottom:4px;">' + s.abbr + '</div>';
     html += '<div style="font-size:13px;font-weight:500;color:var(--ink);margin-bottom:8px;">' + s.name + '</div>';
     html += '<div style="font-size:12px;color:var(--ink2);line-height:1.6;">' + s.desc + '</div>';
-    html += '<div style="margin-top:8px;"><span class="crew-req-tag" style="background:rgba(43,108,176,0.1);color:var(--blue);">' + s.req + ' Data Provenance</span></div>';
+    html += '<div style="margin-top:8px;"><span class="crew-req-tag" style="background:rgba(46,109,180,0.1);color:var(--blue);">' + s.req + ' Data Provenance</span></div>';
     html += '</div>';
   });
   
@@ -3736,6 +3762,39 @@ document.addEventListener('keydown', e => {
 });
 
 render();
+
+/* ─── Constellation backdrop generator ─────────────── */
+(function() {
+  var c = document.getElementById('constellation');
+  if (!c) return;
+  var glow = document.createElement('div');
+  glow.className = 'c-glow';
+  c.appendChild(glow);
+  // Seeded pseudo-random so the field is stable across reloads.
+  var seed = 1337;
+  function rnd(min, max) { seed = (seed * 9301 + 49297) % 233280; return min + (max - min) * (seed / 233280); }
+  for (var i = 0; i < 42; i++) {
+    var s = document.createElement('div');
+    s.className = 'c-star';
+    var sz = rnd(1, 2.6);
+    s.style.width = sz + 'px';
+    s.style.height = sz + 'px';
+    s.style.left = rnd(1.5, 98.5) + '%';
+    s.style.top = rnd(2.5, 97.5) + '%';
+    s.style.opacity = rnd(0.06, 0.22).toFixed(2);
+    c.appendChild(s);
+  }
+  for (var j = 0; j < 5; j++) {
+    var sp = document.createElement('div');
+    sp.className = 'c-spark';
+    sp.textContent = '✦';
+    sp.style.left = rnd(7, 93) + '%';
+    sp.style.top = rnd(9, 91) + '%';
+    sp.style.fontSize = rnd(7, 12).toFixed(0) + 'px';
+    sp.style.opacity = rnd(0.10, 0.22).toFixed(2);
+    c.appendChild(sp);
+  }
+})();
 </script>
 </body>
 </html>

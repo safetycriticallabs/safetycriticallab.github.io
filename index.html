@@ -183,8 +183,8 @@
 .stamp-seal {
   position: absolute;
   left: 50%; top: 50%;
-  width: clamp(190px, 28vmin, 280px);
-  height: clamp(190px, 28vmin, 280px);
+  width: clamp(300px, 44vmin, 460px);
+  height: clamp(300px, 44vmin, 460px);
   transform-origin: center center;
   pointer-events: none;
   z-index: 10;
@@ -202,6 +202,25 @@
 /* Flight — plays once on first scroll. Picks up from hover state. */
 .stamp-stage.stamp-flying .stamp-seal {
   animation: stamp-seal-flight var(--stamp-flight-duration) var(--stamp-easing-flight) 0s forwards;
+}
+
+/* Idle — an eager, springy bounce once the seal settles, before the first
+   scroll. It coils (anticipation squash) then leaps with a stretch and a small
+   landing overshoot, on a short loop, so the seal reads as excited and about to
+   react — and invites a click. Rest state is scale 0.85 so entry/flight chain
+   seamlessly; pointer-events on while idle so the emblem is clickable. */
+.stamp-stage.stamp-idle .stamp-seal {
+  opacity: 1;
+  pointer-events: auto;
+  cursor: pointer;
+  animation: stamp-seal-idle 1.6s ease-in-out infinite;
+}
+@keyframes stamp-seal-idle {
+  0%, 55%, 100% { transform: translate(-50%, -50%) scale(0.85, 0.85); }    /* rest / eager pause */
+  62% { transform: translate(-50%, calc(-50% + 5px)) scale(0.91, 0.79); }  /* coil — dip + squash */
+  74% { transform: translate(-50%, calc(-50% - 22px)) scale(0.81, 0.93); } /* leap — up + stretch */
+  84% { transform: translate(-50%, calc(-50% - 3px)) scale(0.88, 0.83); }  /* land — overshoot */
+  92% { transform: translate(-50%, -50%) scale(0.855, 0.845); }            /* settle */
 }
 
 /* ENTRY: punch in huge, shrink with kinetic rotation, settle at hover scale.
@@ -264,9 +283,9 @@
 .stamp-shockwave {
   position: absolute;
   left: 50%; top: 50%;
-  width: 220px; height: 220px;
+  width: 340px; height: 340px;
   border-radius: 50%;
-  border: 2px solid var(--ink);
+  border: 2.5px solid var(--blue);
   opacity: 0;
   transform: translate(-50%, calc(-50% - 345px)) scale(0.5);
   pointer-events: none;
@@ -1489,8 +1508,8 @@
     padding: 22px 24px 18px;
   }
   .stamp-seal {
-    width: clamp(140px, 34vw, 185px);
-    height: clamp(140px, 34vw, 185px);
+    width: clamp(200px, 52vw, 300px);
+    height: clamp(200px, 52vw, 300px);
   }
 
   .section-wwd { padding: 72px 24px; }
@@ -1678,6 +1697,9 @@
            center logo) that flies in and stamps the certificate. -->
       <svg class="stamp-seal" viewBox="0 0 220 220" aria-hidden="true">
         <use href="#orb-symbol"/>
+        <!-- Transparent hit target — makes the whole emblem clickable while the
+             seal is idling, so a click triggers the flight (see stamp JS). -->
+        <circle class="stamp-hit" cx="110" cy="110" r="95" fill="none" pointer-events="all"/>
       </svg>
 
     </div>
@@ -1941,8 +1963,8 @@ gsap.utils.toArray('.slide-right').forEach(function(el) {
   var W = 1280, H = 900;
   var CENTER_X = W / 2, CENTER_Y = H / 2;
   var CENTER_AVOID = 180;
-  var CLUSTER_COUNT = 9;
-  var SOLO_COUNT = 42;
+  var CLUSTER_COUNT = 12;
+  var SOLO_COUNT = 52;
   var CLUSTER_REACH = 58;
   /* Gravity-style attraction: a wide field of effect (cursor influences distant
      clusters too), capped maximum displacement, and a small LERP factor so it
@@ -1994,24 +2016,45 @@ gsap.utils.toArray('.slide-right').forEach(function(el) {
     var g = document.createElementNS(SVG_NS, 'g');
     g.setAttribute('class', 'hero-cluster');
 
-    /* K-nearest-neighbor mesh: connect each star to its 2 nearest cluster-
-       mates. Deduplicate so we don't draw the same edge twice. Creates the
-       criss-crossing triangulated look from the reference image. */
+    /* Nearest-neighbour spanning tree (Prim's): wire every star into one
+       connected, branching path — dots joined by lines, like a real
+       constellation — instead of triangulating into closed polygons. Then
+       ~40% of clusters get a single extra link so the field still has the
+       occasional closed shape and never feels uniform. */
     var edges = new Set();
-    for (var i = 0; i < stars.length; i++) {
-      var neighbors = stars
-        .map(function (s, idx) {
-          if (idx === i) return null;
-          var dx = s.x - stars[i].x, dy = s.y - stars[i].y;
-          return { idx: idx, d: Math.sqrt(dx*dx + dy*dy) };
-        })
-        .filter(Boolean)
-        .sort(function (a, b) { return a.d - b.d; })
-        .slice(0, 2);
-      neighbors.forEach(function (n) {
-        var key = i < n.idx ? i + '-' + n.idx : n.idx + '-' + i;
+    if (stars.length > 1) {
+      var inTree = [0];
+      var remaining = [];
+      for (var ri = 1; ri < stars.length; ri++) remaining.push(ri);
+      while (remaining.length) {
+        var best = { d: Infinity, from: 0, to: remaining[0], rj: 0 };
+        for (var ti = 0; ti < inTree.length; ti++) {
+          for (var rj = 0; rj < remaining.length; rj++) {
+            var a = stars[inTree[ti]], b = stars[remaining[rj]];
+            var dx = a.x - b.x, dy = a.y - b.y;
+            var dd = dx*dx + dy*dy;
+            if (dd < best.d) { best = { d: dd, from: inTree[ti], to: remaining[rj], rj: rj }; }
+          }
+        }
+        var key = best.from < best.to ? best.from + '-' + best.to : best.to + '-' + best.from;
         edges.add(key);
-      });
+        inTree.push(best.to);
+        remaining.splice(best.rj, 1);
+      }
+      if (stars.length >= 3 && Math.random() < 0.4) {
+        var i1 = Math.floor(Math.random() * stars.length);
+        var second = stars
+          .map(function (s, idx) {
+            if (idx === i1) return null;
+            var ex = s.x - stars[i1].x, ey = s.y - stars[i1].y;
+            return { idx: idx, d: ex*ex + ey*ey };
+          })
+          .filter(Boolean)
+          .sort(function (a, b) { return a.d - b.d; })[1];
+        if (second) {
+          edges.add(i1 < second.idx ? i1 + '-' + second.idx : second.idx + '-' + i1);
+        }
+      }
     }
     edges.forEach(function (key) {
       var parts = key.split('-');
@@ -2180,6 +2223,7 @@ gsap.utils.toArray('.slide-right').forEach(function(el) {
     if (flightStarted) return;
     flightStarted = true;
     stage.classList.remove('stamp-entered');
+    stage.classList.remove('stamp-idle');
     stage.classList.add('stamp-flying');
   }
 
@@ -2194,6 +2238,7 @@ gsap.utils.toArray('.slide-right').forEach(function(el) {
     if (e.animationName === 'stamp-seal-entry') {
       entryComplete = true;
       if (flightQueued) startFlight();
+      else stage.classList.add('stamp-idle');
     }
   });
 
@@ -2207,6 +2252,10 @@ gsap.utils.toArray('.slide-right').forEach(function(el) {
   scrollEvents.forEach(function (ev) {
     window.addEventListener(ev, tryFlight, { passive: true });
   });
+
+  /* Clicking the seal also triggers it — the idle bounce invites the tap.
+     (pointer-events on the seal are enabled by the .stamp-idle CSS.) */
+  seal.addEventListener('click', tryFlight);
   window.addEventListener('keydown', function (e) {
     var k = e.key;
     if (k === 'ArrowDown' || k === 'ArrowUp' || k === 'PageDown' || k === 'PageUp' ||

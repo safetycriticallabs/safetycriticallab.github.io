@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Position | Safety Critical Labs</title>
+<meta name="description" content="Where Safety Critical Labs stands on AI safety and the responsible use of these tools. Safety is a property of a tool used within stated, checked limits, not a property the tool has on its own.">
+<meta property="og:title" content="Position | Safety Critical Labs">
+<meta property="og:description" content="On AI safety and the responsible use of these tools. Why a consequential system should not be the sole judge of its own safety.">
+<meta property="og:url" content="https://safetycriticallabs.com/position.html">
+<meta property="og:type" content="article">
+<meta property="og:image" content="https://safetycriticallabs.com/img/SCL%20Logo%203d.png">
+<link rel="icon" type="image/x-icon" href="favicon.ico">
+<link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="192x192" href="img/favicon-192x192.png">
+<link rel="apple-touch-icon" sizes="180x180" href="img/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=IBM+Plex+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<style>
+.inner-hero { z-index: 0; }
+.fw-hero-glow {
+  position: absolute; inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.4s;
+  background: radial-gradient(520px circle at var(--glow-x, 70%) var(--glow-y, 30%), rgba(46,109,180,0.10), transparent 60%);
+}
+.inner-hero:hover .fw-hero-glow { opacity: 1; }
+.inner-hero-inner { z-index: 2; position: relative; }
+
+.position-section {
+  background:
+    radial-gradient(ellipse at 50% 0%, rgba(46,109,180,0.05) 0%, transparent 50%),
+    #F7F3EC;
+  padding: 88px 40px 120px;
+}
+.position-inner { max-width: 720px; margin: 0 auto; }
+
+/* Lede — the thesis, set apart in serif above the body */
+.position-lede {
+  font-family: var(--serif);
+  font-size: 26px;
+  line-height: 1.5;
+  color: var(--blue-dk);
+  font-weight: 400;
+  margin: 0;
+  padding-bottom: 44px;
+  border-bottom: 1px solid rgba(46,109,180,0.12);
+}
+
+.position-block { margin-top: 54px; }
+.position-block h2 {
+  font-family: var(--sans);
+  font-size: 25px;
+  font-weight: 600;
+  color: var(--blue);
+  letter-spacing: -0.01em;
+  line-height: 1.3;
+  margin: 0 0 22px;
+}
+.position-block p {
+  font-size: 17px;
+  color: var(--ink-2);
+  line-height: 1.8;
+  font-weight: 300;
+  margin: 0 0 20px;
+}
+.position-block p:last-child { margin-bottom: 0; }
+.position-block p strong { color: var(--ink); font-weight: 500; }
+
+/* Mid-essay pull quote — the hinge of the argument */
+.position-pull {
+  margin: 64px 0;
+  padding: 0 0 0 28px;
+  border-left: 3px solid var(--blue);
+  font-family: var(--serif);
+  font-size: 27px;
+  line-height: 1.4;
+  color: var(--blue);
+  font-weight: 400;
+}
+
+/* Closing stance — set in a quiet card to mark the conclusion */
+.position-block.is-stance {
+  margin-top: 64px;
+  padding: 44px 44px 46px;
+  background: #FAF6EC;
+  border: 1px solid rgba(46,109,180,0.12);
+  border-left: 3px solid var(--blue);
+  border-radius: 4px;
+}
+
+@media (max-width: 640px) {
+  .position-section { padding: 60px 24px 88px; }
+  .position-lede { font-size: 21px; padding-bottom: 36px; }
+  .position-block { margin-top: 44px; }
+  .position-block h2 { font-size: 21px; }
+  .position-block p { font-size: 16px; }
+  .position-pull { font-size: 22px; margin: 48px 0; padding-left: 20px; }
+  .position-block.is-stance { padding: 28px 24px 30px; }
+}
+</style>
+</head>
+<body>
+
+<nav class="global-nav">
+  <div class="global-nav-inner">
+    <a href="/" class="gn-wordmark"><span class="gn-text"><em>Safety Critical</em> Labs</span></a>
+    <button class="gn-hamburger" aria-label="Menu" aria-expanded="false"><span></span><span></span><span></span></button>
+    <ul class="gn-links">
+      <li><a href="/framework">Framework</a></li>
+      <li><a href="/process">Process</a></li>
+      <li><a href="/expertise">Expertise</a></li>
+      <li><a href="/markets">Markets</a></li>
+      <li><a href="/position" class="active">Position</a></li>
+      <li><a href="/news">News</a></li>
+      <li class="gn-mobile-link"><a href="/contact">Contact</a></li>
+    </ul>
+    <a href="/search" class="gn-search" aria-label="Search">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <circle cx="11" cy="11" r="7"/>
+        <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+      </svg>
+    </a>
+    <a href="/contact" class="gn-cta">Get Certified</a>
+  </div>
+</nav>
+
+<div class="page-shell">
+
+<div class="inner-hero">
+  <div class="fw-hero-glow"></div>
+  <div class="inner-hero-inner">
+    <div>
+      <div class="inner-hero-breadcrumb"><a href="/">Safety Critical Labs</a><span>/</span> Position</div>
+      <h1>On AI safety,<br><em>and the responsible use of these tools.</em></h1>
+    </div>
+    <p class="inner-hero-lead">
+      AI tools have moved from demonstrations into decisions. They screen applications, flag transactions, summarize records, draft recommendations, and in a growing number of settings they act with little review. The capability is real and often useful. What has not kept pace is a shared understanding of what these tools are, where they can be trusted, and what it takes to use them without harming the people on the other side of the decision.
+    </p>
+  </div>
+</div>
+
+<section class="position-section">
+  <div class="position-inner">
+
+    <p class="position-lede">
+      That last part is the work we care about. Safety is not a property a tool has on its own. It is a property of a tool used within limits that someone has actually established and continues to check.
+    </p>
+
+    <div class="position-block">
+      <h2>The risk is rarely where people look for it</h2>
+      <p>Most organizations deploy AI the way they deploy ordinary software, expecting that if it worked in testing it will work in use. Conventional software is deterministic. The same input gives the same output, and a test that passes describes behavior you can count on. Learned systems do not work this way. Their outputs are probabilistic, their behavior shifts with conditions, and a result that looked correct a hundred times can fail on the hundred and first in a way no one anticipated.</p>
+      <p>Because of this, the danger usually does not live inside the tool. It lives in the gap between the conditions a system was validated against and the conditions it is later used in. A model checked on one population is pointed at another. A tool built to assist is leaned on to decide. Nothing about the system changed. The setting did, and the original assurance quietly stopped applying.</p>
+      <p>Two patterns deserve particular attention. The first is <strong>drift</strong>. A tool introduced as advisory has its outputs treated as authoritative over time, until human judgment has left a process without anyone having decided to remove it. The second is <strong>opacity</strong>. The reasoning of these systems cannot be audited the way source code can be read, and the people who build them often cannot fully explain why a given output appeared. That has a direct consequence for what safety can mean here. It cannot come from understanding the logic. It has to come from bounding the behavior, characterizing how the system performs and fails inside that boundary, and watching the outcomes over time.</p>
+    </div>
+
+    <div class="position-block">
+      <h2>Why good intentions are not a safeguard</h2>
+      <p>Knowing that a tool carries risk is not the same as managing it. Careful, well meaning teams still ship systems whose limits no one has written down and no independent party has checked. Intentions do not scale, and they cannot be audited.</p>
+      <p>Every field that places technology near human safety has reached a version of the same conclusion. Aviation, medicine, and automotive engineering do not rely on the builder's confidence. They rely on stated requirements, evidence that those requirements were met, and verification by someone with no stake in shipping. This is what regulation, at its most useful, actually is. Not a statement about responsibility, but a structure that turns a claim of safety into something a third party can examine and either confirm or refuse.</p>
+      <p>The comparison should be made honestly. Those regimes took decades to build, and most were written in response to failures that were sudden and visible. The harms from AI are often the opposite, diffuse and slow, an accuracy that quietly degrades, a group the system was never fair to, a skill that atrophies once people stop exercising it. So the analogy is a direction of travel rather than a finished answer. What carries over is not the specific rulebook but the principle that a consequential system should not be the sole judge of its own safety. AI, in most of its uses today, has not yet built even that much.</p>
+    </div>
+
+    <blockquote class="position-pull">
+      A consequential system should not be the sole judge of its own safety.
+    </blockquote>
+
+    <div class="position-block">
+      <h2>What protecting the user actually requires</h2>
+      <p>Protecting a user means the burden of proof sits with the system and the people deploying it, not with the person affected by the result. It means the limits of a tool are stated plainly, so that no one discovers the boundary by being harmed at it. And it means the assurance is kept current, because a system that was safe at launch can drift into conditions it was never tested for.</p>
+      <p>None of this requires treating AI as dangerous by default. It requires treating it as consequential, which it now is.</p>
+    </div>
+
+    <div class="position-block">
+      <h2>Implementing these tools properly</h2>
+      <p>Responsible implementation is not complicated to describe, even where it is demanding to do.</p>
+      <p>Be explicit about where a system is meant to operate, and treat anything outside that as out of scope until shown otherwise. Test against conditions that resemble real use, not a convenient sample. Claim only what was tested, and state the rest as a limit rather than a hope.</p>
+      <p>Treat verification as continuous rather than a single event. A model is not a fixed object. It is retrained, tuned, and connected to new data and new actions, and each change can move behavior underneath an assurance that was true a release ago. The faster the underlying capability advances, the less a one time stamp is worth, and the more the work has to shift toward ongoing monitoring and a clearly bounded scope, because no one can reverify a system from nothing on every update.</p>
+      <p>Match a system's authority to what it has actually shown it can do. Where a person still makes the decision, keep that accountability real, and make sure it does not erode as the tool becomes routine. Where the system acts on its own, which a growing share of deployment is now built to do, the control is different. Its scope of action should be bounded, its actions should be reversible wherever the stakes are high, and the reach it is given should follow the reliability it has demonstrated under real conditions, not the reliability hoped for it.</p>
+      <p>These are not exotic ideas. They are the ordinary discipline of building things people depend on, applied to a kind of system that has mostly escaped it so far.</p>
+    </div>
+
+    <div class="position-block is-stance">
+      <h2>Where we stand</h2>
+      <p>We are direct about what this kind of verification does and does not do. A certificate is not a promise that a system is correct, or that it will never fail. It is a bounded statement that a system was checked against stated criteria, behaves and fails in characterized ways inside a defined scope, and is being monitored to stay there. <strong>That is meaningful, and it is partial, and both halves matter.</strong> A scheme that claimed more than that would be selling the same false confidence it exists to prevent.</p>
+      <p>We are also clear that independent verification is necessary infrastructure, not a complete answer. It reaches the deployers who choose to be checked, and the actors most likely to cause harm are often the least likely to seek a certificate. Where AI carries the highest consequences, verification has to sit alongside obligations that are not optional, and the people building these systems owe the public an honest account of what they can and cannot yet do. The market will not supply that candor on its own quickly enough.</p>
+      <p>The promise of these tools is real, and we have no interest in slowing it down. We are interested in the conditions under which it can be trusted. Where AI touches safety, livelihood, or care, someone should be able to say, on the record and from outside the room where it was built, what the system can and cannot be relied upon to do. That is what AI safety means to us, and it is the standard we believe these tools should meet before they are placed where a mistake is felt by a person.</p>
+    </div>
+
+  </div>
+</section>
+
+</div>
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-cols">
+      <div class="footer-col"><div class="footer-col-label">Certification</div><a href="/framework">Framework</a><a href="/process">Process</a><a href="/assess">Assess</a><a href="/verify">Verify</a></div>
+      <div class="footer-col"><div class="footer-col-label">Resources</div><a href="/documents">Documents</a><a href="#">FAQ</a></div>
+      <div class="footer-col"><div class="footer-col-label">Company</div><a href="#">About</a><a href="/position">Position</a><a href="/expertise">Expertise</a><a href="/markets">Markets</a><a href="/contact">Contact</a></div>
+      <div class="footer-col"><div class="footer-col-label">Briefings</div><a href="/news">News</a><a href="/subscribe">Subscribe</a><a href="/updates">Updates</a></div>
+      <div class="footer-col"><div class="footer-col-label">Legal</div><a href="/terms">Terms</a><a href="/privacy">Privacy</a><a href="/disclaimer">Disclaimer</a><a href="/accreditation">Accreditation</a></div>
+    </div>
+    <div class="footer-divider"></div>
+    <div class="footer-bottom">
+      <span class="footer-copyright">&copy; 2025 Safety Critical Labs. All rights reserved.</span>
+      <div class="footer-meta"><a href="#" aria-label="Back to top">Back to top</a><span class="footer-version">Framework v3.3</span></div>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function() {
+  var glow = document.querySelector('.fw-hero-glow');
+  var hero = document.querySelector('.inner-hero');
+  if (!glow || !hero) return;
+  hero.addEventListener('mousemove', function(e) {
+    var rect = hero.getBoundingClientRect();
+    glow.style.setProperty('--glow-x', (e.clientX - rect.left) + 'px');
+    glow.style.setProperty('--glow-y', (e.clientY - rect.top) + 'px');
+  });
+})();
+document.querySelector('.gn-hamburger').addEventListener('click', function() {
+  this.classList.toggle('open');
+  document.querySelector('.gn-links').classList.toggle('open');
+  this.setAttribute('aria-expanded', this.classList.contains('open'));
+  document.body.style.overflow = this.classList.contains('open') ? 'hidden' : '';
+});
+</script>
+<script src="ticker.js"></script>
+<script src="/footer.js" defer></script>
+</body>
+</html>

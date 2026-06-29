@@ -1494,9 +1494,13 @@
 }
 @media (max-width: 880px) {
   .home-hero {
-    min-height: 100vh;
-    padding: 96px 24px 64px;
+    /* Fill exactly the space below the fixed 72px nav (no page overflow), and
+       lift the seal to true viewport center: extra bottom padding offsets the
+       top-heavy nav margin so it no longer sits low on open. */
+    min-height: calc(100vh - 72px);
+    padding: 24px 24px 96px;
   }
+  .home-hero-inner { min-height: 0; }
   .home-hero::after { display: none; }
 
   /* Tighter stage on mobile — the seal arc and cert both shrink */

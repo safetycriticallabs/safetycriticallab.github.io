@@ -140,25 +140,41 @@
    overhanging the top edge like a wax seal pressed onto the document. */
 
 .cert-doc {
-  background: #fff;
-  border: 1px solid #c8ccd4;
+  /* 3D container holding the two faces; the white panels live on .cert-face.
+     (overflow:hidden can't sit here — it would flatten preserve-3d.) */
   width: min(420px, 88vw);
   aspect-ratio: 8.5 / 11;
-  padding: 26px 32px 22px;
   position: absolute;
   top: 50%; left: 50%;
   transform: translate(-50%, -50%) translateY(60px) scale(0.94);
   transform-origin: 50% 50%;
-  font-family: var(--sans);
+  transform-style: preserve-3d;
   z-index: 4;
-  box-shadow:
-    0 1px 2px rgba(15, 35, 64, 0.04),
-    0 8px 20px rgba(15, 35, 64, 0.06),
-    0 32px 80px rgba(15, 35, 64, 0.08);
+  opacity: 0;
+  user-select: none; -webkit-user-select: none;
+}
+
+/* The two physical sides of the card */
+.cert-face {
+  position: absolute; inset: 0;
+  background: #fff;
+  border: 1px solid #c8ccd4;
+  padding: 26px 32px 22px;
+  font-family: var(--sans);
   display: flex; flex-direction: column;
   overflow: hidden;
-  opacity: 0;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  box-shadow:
+    0 2px 6px rgba(15, 35, 64, 0.06),
+    0 20px 44px rgba(15, 35, 64, 0.10),
+    0 52px 120px rgba(15, 35, 64, 0.13);
 }
+.cert-back { transform: rotateY(180deg); }
+/* Hide whichever face points away. backface-visibility alone is unreliable on
+   faces with overflow:hidden, so the stamp JS sets .cert-show-back each frame. */
+.cert-doc:not(.cert-show-back) .cert-back  { visibility: hidden; }
+.cert-doc.cert-show-back        .cert-front { visibility: hidden; }
 /* Cert reveal — only animates during the flight phase */
 .stamp-stage.stamp-flying .cert-doc {
   animation: stamp-cert-reveal var(--stamp-flight-duration) var(--stamp-easing-flight) 0s forwards;
@@ -193,11 +209,10 @@
     rotateX(var(--cert-rx, 0deg))
     rotateY(var(--cert-ry, 0deg));
   will-change: transform;
-  box-shadow:
-    0 2px 6px rgba(15, 35, 64, 0.06),
-    0 20px 44px rgba(15, 35, 64, 0.10),
-    0 52px 120px rgba(15, 35, 64, 0.13);
+  cursor: grab;
+  touch-action: pan-y;        /* keep vertical page scroll on touch; we take horizontal */
 }
+.stamp-stage.stamp-done .cert-doc.is-grabbing { cursor: grabbing; }
 
 /* Specular + iridescent sheen sweeping the surface. The faint shaded edges
    either side of the bright core give the band contrast against the white
@@ -218,13 +233,53 @@
   transition: opacity 0.45s ease-out;
 }
 
-/* Parallax — inner layers drift against the tilt for depth */
+/* Parallax — only the background watermark drifts for depth. The head logo
+   stays locked to the wordmark (an independent logo drift read as "off-center",
+   especially mirrored on the back face). */
 .stamp-stage.stamp-done .cert-watermark {
   transform: translate(-50%, -50%) translate(var(--wm-x, 0px), var(--wm-y, 0px));
 }
-.stamp-stage.stamp-done .cert-head-logo {
-  transform: translate(var(--fg-x, 0px), var(--fg-y, 0px));
+
+/* ─── CERT BACK (verification "proof" face) ─────────────────────────── */
+.cert-areas {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 5px 14px; margin-bottom: 12px;
 }
+.cert-area { display: flex; gap: 6px; align-items: baseline; text-align: left; }
+.cert-area-id {
+  font-family: var(--mono); font-size: 6px; font-weight: 600;
+  letter-spacing: 0.04em; color: var(--blue);
+  min-width: 26px; flex-shrink: 0;
+}
+.cert-area-label { font-size: 7px; line-height: 1.3; color: var(--ink-2); }
+.cert-back-note {
+  font-family: var(--serif); font-style: italic;
+  font-size: 7.5px; line-height: 1.55; color: var(--ink-2);
+  text-align: center; max-width: 300px; margin: 0 auto;
+}
+.cert-back-note strong { color: var(--ink); font-weight: 600; font-style: normal; }
+.cert-back-verify { text-align: center; }
+.cert-qr-lg { width: 86px; height: 86px; margin: 0 auto 6px; }
+.cert-back-doi {
+  font-family: var(--mono); font-size: 6px; letter-spacing: 0.08em;
+  color: var(--ink-3); margin-top: 4px;
+}
+
+/* Flip affordance — subtle pill, appears on hover (always shown on touch) */
+.cert-flip-hint {
+  position: absolute; bottom: 9px; right: 11px; z-index: 6;
+  font-family: var(--mono); font-size: 5px; font-weight: 500;
+  letter-spacing: 0.16em; text-transform: uppercase;
+  color: var(--ink-3);
+  background: rgba(255, 255, 255, 0.72);
+  border: 1px solid var(--rule); border-radius: 999px;
+  padding: 3px 9px; cursor: pointer;
+  opacity: 0; transition: opacity .25s ease, color .2s ease, border-color .2s ease;
+  backface-visibility: hidden;
+}
+.cert-face:hover .cert-flip-hint { opacity: 0.9; }
+.cert-flip-hint:hover { color: var(--blue); border-color: var(--blue); }
+@media (hover: none) { .cert-flip-hint { opacity: 0.8; } }
 
 /* ─── THE SEAL (SVG orb line-drawing — two-phase animation) ─────────── */
 /* Phase 1 (entry, on page load): logo punches in big, settles to hover scale.
@@ -1673,8 +1728,12 @@
       <!-- Shockwave (visible only on impact) -->
       <div class="stamp-shockwave"></div>
 
-      <!-- Certificate (fades up during the seal's flight) -->
+      <!-- Certificate (fades up during the seal's flight; flips to a
+           verification "proof" face on click or a drag past 90°) -->
       <div class="cert-doc">
+
+        <!-- FRONT — the certificate of conformance -->
+        <div class="cert-face cert-front">
 
           <div class="cert-head">
             <img src="img/SCL_Logo_3d_sm.png" alt="Safety Critical Labs" class="cert-head-logo">
@@ -1749,7 +1808,70 @@
           <!-- Light-catching sheen overlay (animated on tilt, see stamp JS) -->
           <div class="cert-sheen" aria-hidden="true"></div>
 
+          <button class="cert-flip-hint" type="button" aria-label="Flip to verification details">Verification &#8635;</button>
         </div>
+
+        <!-- BACK — the verification / proof face -->
+        <div class="cert-face cert-back">
+
+          <div class="cert-head">
+            <img src="img/SCL_Logo_3d_sm.png" alt="" class="cert-head-logo">
+            <div class="cert-head-wordmark">Safety Critical Labs</div>
+            <div class="cert-head-sub">Conformance Verification</div>
+          </div>
+
+          <div class="cert-top-rule"></div>
+
+          <div class="cert-body-region">
+            <img src="img/SCL_Logo_transparent.png" alt="" class="cert-watermark">
+            <div class="cert-body-content">
+
+              <div class="cert-doc-type">Assessed Requirement Areas</div>
+
+              <div class="cert-areas">
+                <div class="cert-area"><span class="cert-area-id">AI-1</span><span class="cert-area-label">Operational and data foundations</span></div>
+                <div class="cert-area"><span class="cert-area-id">AI-2</span><span class="cert-area-label">Addressing AI bias</span></div>
+                <div class="cert-area"><span class="cert-area-id">AI-3</span><span class="cert-area-label">ML test coverage</span></div>
+                <div class="cert-area"><span class="cert-area-id">AI-4</span><span class="cert-area-label">Continuous validation</span></div>
+                <div class="cert-area"><span class="cert-area-id">AI-5</span><span class="cert-area-label">Hallucination prevention</span></div>
+                <div class="cert-area"><span class="cert-area-id">AI-6</span><span class="cert-area-label">Out of distribution detection</span></div>
+                <div class="cert-area"><span class="cert-area-id">AI-7</span><span class="cert-area-label">Adversarial robustness</span></div>
+                <div class="cert-area"><span class="cert-area-id">AI-8</span><span class="cert-area-label">Explainability</span></div>
+                <div class="cert-area"><span class="cert-area-id">AI-9</span><span class="cert-area-label">Human and AI teaming</span></div>
+                <div class="cert-area"><span class="cert-area-id">AI-10</span><span class="cert-area-label">Privacy and data protection</span></div>
+                <div class="cert-area"><span class="cert-area-id">AI-11</span><span class="cert-area-label">Multi-model systems</span></div>
+                <div class="cert-area"><span class="cert-area-id">AI-12</span><span class="cert-area-label">Neural network requirements</span></div>
+                <div class="cert-area"><span class="cert-area-id">AI-13</span><span class="cert-area-label">Continuous learning and adaptation</span></div>
+              </div>
+
+              <div class="cert-mid-rule"></div>
+
+              <div class="cert-back-note">
+                Evaluated across all thirteen areas of the <strong>SCL AI Requirements Framework</strong>. Scan to confirm this record against the public register.
+              </div>
+
+            </div>
+
+            <div class="cert-body-footer">
+              <div class="cert-back-verify">
+                <div class="cert-qr cert-qr-lg" id="cert-back-qr"></div>
+                <div class="cert-verify-text">
+                  <strong>Verify Online</strong>
+                  safetycriticallabs.com/verify?id=SCL-CERT-2025-001
+                </div>
+                <div class="cert-back-doi">DOI 10.5281/zenodo.20692966</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="cert-accred">Independent Certification &middot; Safety Critical Labs</div>
+
+          <div class="cert-sheen" aria-hidden="true"></div>
+
+          <button class="cert-flip-hint" type="button" aria-label="Flip to certificate">Certificate &#8635;</button>
+        </div>
+
+      </div>
 
       <!-- The seal — SVG line-drawing version of the SCL orb (same as framework's
            center logo) that flies in and stamps the certificate. -->
@@ -2299,72 +2421,188 @@ gsap.utils.toArray('.slide-right').forEach(function(el) {
       else stage.classList.add('stamp-idle');
     } else if (e.animationName === 'stamp-seal-flight') {
       /* Flight done: the seal has vanished and the cert is resting. Hand the
-         cert over to the interactive tilt/sheen state. */
+         cert over to the interactive tilt / grab-spin / flip state. */
       stage.classList.add('stamp-done');
-      initCertTilt();
+      initCertInteraction();
     }
   });
 
-  /* ── Interactive resting state: the cert tilts toward the cursor in 3D with
-     a light-catching sheen + layer parallax. Pointer-driven on desktop; falls
-     back to a slow ambient drift when the cursor isn't guiding it. ── */
-  var tiltInited = false;
-  function initCertTilt() {
-    if (tiltInited) return;
-    tiltInited = true;
+  /* ── Interactive resting state ──────────────────────────────────────────
+     After the stamp lands the cert becomes a physical object you can play
+     with: it tilts in 3D with a light-catching sheen + layer parallax
+     (desktop hover / mobile gyro), you can grab and spin it with momentum,
+     and a click — or a spin past 90° — flips it to the verification face. ── */
+  var interactionInited = false;
+  function initCertInteraction() {
+    if (interactionInited) return;
+    interactionInited = true;
 
     var cert = stage.querySelector('.cert-doc');
     if (!cert) return;
     var hero = stage.closest('.home-hero') || stage;
 
-    var MAX_TILT = 9;        // degrees of rotation at the edges
-    var IDLE_MS  = 2400;     // stillness before ambient drift takes over
+    var MAX_TILT  = 9;     // hover tilt at the edges (deg)
+    var GYRO_TILT = 14;    // gyro tilt range (deg)
+    var IDLE_MS   = 2400;  // stillness before ambient drift
+    var DRAG_SENS = 0.5;   // deg of rotation per px dragged
+    var FRICTION  = 0.94;  // momentum decay per frame
+    var EASE      = 0.10;  // ease toward rest in hover
 
-    var tRX = 0, tRY = 0, tSheen = 0;          // targets
-    var rx = 0, ry = 0, sheen = 0;             // current (eased)
-    var guiding = false, lastMove = 0;
+    function clamp(v, a, b){ return v < a ? a : (v > b ? b : v); }
 
-    function onMove(e) {
+    var flipped = false;                 // false = front, true = back
+    var rx = 0, ry = 0, sheen = 0;       // current rotation (ry includes flip)
+    var prevRX = 0, prevRY = 0;
+    var tiltX = 0, tiltY = 0;            // hover/gyro tilt offset
+    var mode = 'hover';                  // 'hover' | 'drag' | 'fling'
+    var guiding = false, lastInput = 0;
+
+    // drag / fling state
+    var dragging = false, moved = false, ptr = null;
+    var sx = 0, sy = 0, sRX = 0, sRY = 0;
+    var lpx = 0, lpy = 0, lpt = 0, velX = 0, velY = 0;
+
+    function restY(){ return flipped ? 180 : 0; }
+    function flipCard(){ flipped = !flipped; guiding = true; lastInput = performance.now(); }
+
+    /* Hover tilt (desktop pointer) */
+    function onHover(e){
+      if (mode === 'drag') return;
       var r = cert.getBoundingClientRect();
-      var nx = (e.clientX - (r.left + r.width  / 2)) / (r.width  * 0.9);
-      var ny = (e.clientY - (r.top  + r.height / 2)) / (r.height * 0.9);
-      nx = Math.max(-1, Math.min(1, nx));
-      ny = Math.max(-1, Math.min(1, ny));
-      tRY =  nx * MAX_TILT;
-      tRX = -ny * MAX_TILT;
-      tSheen = Math.min(0.7, Math.hypot(nx, ny) * 0.55 + 0.08);
-      guiding = true;
-      lastMove = performance.now();
+      var nx = clamp((e.clientX - (r.left + r.width  / 2)) / (r.width  * 0.9), -1, 1);
+      var ny = clamp((e.clientY - (r.top  + r.height / 2)) / (r.height * 0.9), -1, 1);
+      tiltY =  nx * MAX_TILT;
+      tiltX = -ny * MAX_TILT;
+      guiding = true; lastInput = performance.now();
     }
-    function onLeave() { guiding = false; }
+    hero.addEventListener('mousemove', onHover);
+    hero.addEventListener('mouseleave', function(){ guiding = false; });
 
-    hero.addEventListener('mousemove', onMove);
-    hero.addEventListener('mouseleave', onLeave);
-
-    var running = true;
-    function frame(t) {
-      if (!running) return;
-      if (!guiding || (t - lastMove) > IDLE_MS) {   // ambient drift
-        var s = t / 1000;
-        tRY = Math.sin(s * 0.55) * 2.4;
-        tRX = Math.cos(s * 0.42) * 1.7;
-        tSheen = 0.18 + Math.sin(s * 0.55) * 0.08;
+    /* Grab + spin */
+    cert.addEventListener('pointerdown', function(e){
+      if (e.button && e.button !== 0) return;
+      dragging = true; moved = false; ptr = e.pointerId;
+      sx = e.clientX; sy = e.clientY; sRX = rx; sRY = ry;
+      lpx = e.clientX; lpy = e.clientY; lpt = performance.now();
+      velX = 0; velY = 0;
+      maybeEnableGyro();   // first touch is the user gesture iOS needs
+    });
+    window.addEventListener('pointermove', function(e){
+      if (!dragging || (ptr != null && e.pointerId !== ptr)) return;
+      if (!moved){
+        if (Math.hypot(e.clientX - sx, e.clientY - sy) <= 6) return;
+        moved = true; mode = 'drag';
+        sx = e.clientX; sy = e.clientY; sRX = rx; sRY = ry;   // seamless grab from here
+        lpx = e.clientX; lpy = e.clientY; lpt = performance.now();
+        cert.classList.add('is-grabbing');
+        try { cert.setPointerCapture(ptr); } catch(_){}
       }
-      rx    += (tRX    - rx)    * 0.08;
-      ry    += (tRY    - ry)    * 0.08;
-      sheen += (tSheen - sheen) * 0.07;
+      var dx = e.clientX - sx, dy = e.clientY - sy;
+      ry = sRY + dx * DRAG_SENS;
+      rx = clamp(sRX - dy * DRAG_SENS * 0.5, -30, 30);   // limited pitch; never edge-on vertically
+      var now = performance.now(), dt = Math.max(8, now - lpt);
+      velY = clamp((e.clientX - lpx) * DRAG_SENS * 16 / dt, -25, 25);  // horizontal spin momentum only
+      lpx = e.clientX; lpy = e.clientY; lpt = now;
+    });
+    function endDrag(cancel){
+      if (!dragging) return;
+      dragging = false;
+      try { cert.releasePointerCapture(ptr); } catch(_){}
+      cert.classList.remove('is-grabbing');
+      ptr = null;
+      if (!moved && !cancel) { flipCard(); mode = 'hover'; }   // a click flips it
+      else if (moved)        { mode = 'fling'; }               // a drag throws it
+      else                   { mode = 'hover'; }
+    }
+    window.addEventListener('pointerup',     function(e){ if (ptr == null || e.pointerId === ptr) endDrag(false); });
+    window.addEventListener('pointercancel', function(e){ if (ptr == null || e.pointerId === ptr) endDrag(true);  });
+
+    /* Flip buttons — keyboard accessible, kept out of the drag/click path */
+    Array.prototype.forEach.call(cert.querySelectorAll('.cert-flip-hint'), function(btn){
+      btn.addEventListener('pointerdown', function(ev){ ev.stopPropagation(); });
+      btn.addEventListener('click',       function(ev){ ev.stopPropagation(); flipCard(); });
+    });
+
+    /* Gyro tilt (mobile) */
+    var gyroOn = false;
+    function enableGyro(){
+      if (gyroOn) return; gyroOn = true;
+      window.addEventListener('deviceorientation', function(e){
+        if (mode === 'drag' || e.gamma == null || e.beta == null) return;
+        tiltY =  clamp(e.gamma, -45, 45) / 45 * GYRO_TILT;
+        tiltX = -clamp(e.beta - 45, -45, 45) / 45 * GYRO_TILT;
+        guiding = true; lastInput = performance.now();
+      });
+    }
+    function maybeEnableGyro(){
+      if (gyroOn) return;
+      var DOE = window.DeviceOrientationEvent;
+      if (DOE && typeof DOE.requestPermission === 'function')
+        DOE.requestPermission().then(function(s){ if (s === 'granted') enableGyro(); }).catch(function(){});
+      else if (DOE) enableGyro();
+    }
+    // Non-iOS touch devices can attach gyro right away (no permission gate)
+    if ('ontouchstart' in window) {
+      var DOE0 = window.DeviceOrientationEvent;
+      if (DOE0 && typeof DOE0.requestPermission !== 'function') enableGyro();
+    }
+
+    /* Animation loop */
+    var running = true;
+    function frame(t){
+      if (!running) return;
+
+      if (mode === 'hover'){
+        var tX, tY;
+        if (guiding && (t - lastInput) <= IDLE_MS) { tX = tiltX; tY = tiltY; }
+        else { var s = t / 1000; tY = Math.sin(s * 0.55) * 2.4; tX = Math.cos(s * 0.42) * 1.7; }
+        rx += ((0 + tX) - rx) * EASE;
+        ry += ((restY() + tY) - ry) * EASE;
+      } else if (mode === 'fling'){
+        ry += velY;
+        velY *= FRICTION;
+        rx += (0 - rx) * 0.12;                          // pitch eases straight back to flat
+        if (Math.abs(velY) < 0.25){
+          var n = ((ry % 360) + 360) % 360;
+          flipped = (n > 90 && n < 270);                // settle on whichever face is forward
+          ry = flipped ? n : (n > 180 ? n - 360 : n);   // normalize for a short ease home
+          mode = 'hover';
+        }
+      }
+      /* mode 'drag' leaves rx/ry as set by the pointer handler */
+
+      var speed = Math.abs(rx - prevRX) + Math.abs(ry - prevRY);
+      prevRX = rx; prevRY = ry;
+      var sTarget;
+      if (mode === 'hover'){
+        if (guiding && (t - lastInput) <= IDLE_MS)
+          sTarget = Math.min(0.7, Math.hypot(tiltX, tiltY) / MAX_TILT * 0.5 + 0.08);
+        else sTarget = 0.16 + Math.sin(t / 1000 * 0.55) * 0.07;
+      } else sTarget = Math.min(0.78, 0.18 + speed * 0.05);
+      sheen += (sTarget - sheen) * 0.12;
+
+      var dY = ry - restY();          // tilt deviation from the facing rest
+
+      // Hide whichever face points away (robust replacement for backface-visibility)
+      var norm = ((ry % 360) + 360) % 360;
+      var showBack = norm > 90 && norm < 270;
+      if (showBack !== cert.classList.contains('cert-show-back'))
+        cert.classList.toggle('cert-show-back', showBack);
+
+      // Depth offsets (parallax + sheen) follow only the gentle viewing tilt —
+      // clamped so a flip/spin's large rotation never throws layers off the card.
+      var pDY = clamp(dY, -18, 18);
+      var pRX = clamp(rx, -18, 18);
 
       var st = cert.style;
       st.setProperty('--cert-rx', rx.toFixed(2) + 'deg');
       st.setProperty('--cert-ry', ry.toFixed(2) + 'deg');
       st.setProperty('--sheen-opacity', sheen.toFixed(3));
-      st.setProperty('--sheen-tx', (-ry * 4).toFixed(1) + 'px');
-      st.setProperty('--sheen-ty', ( rx * 4).toFixed(1) + 'px');
-      st.setProperty('--sheen-angle', (110 + ry * 1.6).toFixed(1) + 'deg');
-      st.setProperty('--wm-x', ( ry * 0.7).toFixed(1) + 'px');   // deep layer drifts with tilt
-      st.setProperty('--wm-y', (-rx * 0.7).toFixed(1) + 'px');
-      st.setProperty('--fg-x', (-ry * 1.1).toFixed(1) + 'px');   // near layer drifts against
-      st.setProperty('--fg-y', ( rx * 1.1).toFixed(1) + 'px');
+      st.setProperty('--sheen-tx', (-pDY * 4).toFixed(1) + 'px');
+      st.setProperty('--sheen-ty', ( pRX * 4).toFixed(1) + 'px');
+      st.setProperty('--sheen-angle', (110 + pDY * 1.6).toFixed(1) + 'deg');
+      st.setProperty('--wm-x', ( pDY * 0.7).toFixed(1) + 'px');   // background watermark drifts for depth
+      st.setProperty('--wm-y', (-pRX * 0.7).toFixed(1) + 'px');
 
       requestAnimationFrame(frame);
     }
@@ -3244,14 +3482,18 @@ document.addEventListener("click", function() {
 <script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js"></script>
 <script>
   (function () {
-    var target = document.getElementById('cert-mini-qr');
-    if (!target || typeof qrcode === 'undefined') return;
-    try {
-      var qr = qrcode(0, 'M');
-      qr.addData('https://safetycriticallabs.com/verify?id=SCL-CERT-2025-001');
-      qr.make();
-      target.innerHTML = qr.createSvgTag({ cellSize: 4, margin: 0, scalable: true });
-    } catch (e) { /* leaves QR fallback */ }
+    if (typeof qrcode === 'undefined') return;
+    var url = 'https://safetycriticallabs.com/verify?id=SCL-CERT-2025-001';
+    ['cert-mini-qr', 'cert-back-qr'].forEach(function (id) {
+      var target = document.getElementById(id);
+      if (!target) return;
+      try {
+        var qr = qrcode(0, 'M');
+        qr.addData(url);
+        qr.make();
+        target.innerHTML = qr.createSvgTag({ cellSize: 4, margin: 0, scalable: true });
+      } catch (e) { /* leaves QR fallback */ }
+    });
   })();
 </script>
 <script src="/footer.js" defer></script>

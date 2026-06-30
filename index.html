@@ -176,6 +176,56 @@
   100%     { opacity: 1; transform: translate(-50%, -50%) translateY(0)    scale(1.22); }
 }
 
+/* ─── CERT INTERACTIVE RESTING STATE (after the stamp lands) ──────────
+   Once the flight finishes (.stamp-done) the cert stops being a flat,
+   static image and becomes a light-catching object: it tilts toward the
+   cursor in 3D, a specular/iridescent sheen tracks the light across the
+   surface, and inner layers parallax for depth. All driven by CSS custom
+   properties updated each frame in the stamp JS. */
+.stamp-stage { perspective: 1300px; perspective-origin: 50% 42%; }
+
+.stamp-stage.stamp-done .cert-doc {
+  animation: none;
+  opacity: 1;
+  transform:
+    translate(-50%, -50%)
+    scale(1.22)
+    rotateX(var(--cert-rx, 0deg))
+    rotateY(var(--cert-ry, 0deg));
+  will-change: transform;
+  box-shadow:
+    0 2px 6px rgba(15, 35, 64, 0.06),
+    0 20px 44px rgba(15, 35, 64, 0.10),
+    0 52px 120px rgba(15, 35, 64, 0.13);
+}
+
+/* Specular + iridescent sheen sweeping the surface. The faint shaded edges
+   either side of the bright core give the band contrast against the white
+   paper so it reads as a glossy security laminate, not just a white smear. */
+.cert-sheen {
+  position: absolute; inset: 0;
+  z-index: 5;
+  pointer-events: none;
+  opacity: var(--sheen-opacity, 0);
+  background: linear-gradient(
+    var(--sheen-angle, 110deg),
+    transparent 43%,
+    rgba(150, 195, 255, 0.12) 47%,   /* cool iridescence */
+    rgba(255, 255, 255, 0.42) 50%,   /* specular core */
+    rgba(210, 165, 255, 0.12) 53%,   /* warm iridescence */
+    transparent 57%);
+  transform: translate(var(--sheen-tx, 0px), var(--sheen-ty, 0px)) scale(1.25);
+  transition: opacity 0.45s ease-out;
+}
+
+/* Parallax — inner layers drift against the tilt for depth */
+.stamp-stage.stamp-done .cert-watermark {
+  transform: translate(-50%, -50%) translate(var(--wm-x, 0px), var(--wm-y, 0px));
+}
+.stamp-stage.stamp-done .cert-head-logo {
+  transform: translate(var(--fg-x, 0px), var(--fg-y, 0px));
+}
+
 /* ─── THE SEAL (SVG orb line-drawing — two-phase animation) ─────────── */
 /* Phase 1 (entry, on page load): logo punches in big, settles to hover scale.
    Phase 2 (flight, on first scroll/wheel/touch): big aerial choreography,
@@ -1696,6 +1746,9 @@
 
           <div class="cert-accred">Independent Certification &middot; Safety Critical Labs</div>
 
+          <!-- Light-catching sheen overlay (animated on tilt, see stamp JS) -->
+          <div class="cert-sheen" aria-hidden="true"></div>
+
         </div>
 
       <!-- The seal — SVG line-drawing version of the SCL orb (same as framework's
@@ -2244,8 +2297,89 @@ gsap.utils.toArray('.slide-right').forEach(function(el) {
       entryComplete = true;
       if (flightQueued) startFlight();
       else stage.classList.add('stamp-idle');
+    } else if (e.animationName === 'stamp-seal-flight') {
+      /* Flight done: the seal has vanished and the cert is resting. Hand the
+         cert over to the interactive tilt/sheen state. */
+      stage.classList.add('stamp-done');
+      initCertTilt();
     }
   });
+
+  /* ── Interactive resting state: the cert tilts toward the cursor in 3D with
+     a light-catching sheen + layer parallax. Pointer-driven on desktop; falls
+     back to a slow ambient drift when the cursor isn't guiding it. ── */
+  var tiltInited = false;
+  function initCertTilt() {
+    if (tiltInited) return;
+    tiltInited = true;
+
+    var cert = stage.querySelector('.cert-doc');
+    if (!cert) return;
+    var hero = stage.closest('.home-hero') || stage;
+
+    var MAX_TILT = 9;        // degrees of rotation at the edges
+    var IDLE_MS  = 2400;     // stillness before ambient drift takes over
+
+    var tRX = 0, tRY = 0, tSheen = 0;          // targets
+    var rx = 0, ry = 0, sheen = 0;             // current (eased)
+    var guiding = false, lastMove = 0;
+
+    function onMove(e) {
+      var r = cert.getBoundingClientRect();
+      var nx = (e.clientX - (r.left + r.width  / 2)) / (r.width  * 0.9);
+      var ny = (e.clientY - (r.top  + r.height / 2)) / (r.height * 0.9);
+      nx = Math.max(-1, Math.min(1, nx));
+      ny = Math.max(-1, Math.min(1, ny));
+      tRY =  nx * MAX_TILT;
+      tRX = -ny * MAX_TILT;
+      tSheen = Math.min(0.7, Math.hypot(nx, ny) * 0.55 + 0.08);
+      guiding = true;
+      lastMove = performance.now();
+    }
+    function onLeave() { guiding = false; }
+
+    hero.addEventListener('mousemove', onMove);
+    hero.addEventListener('mouseleave', onLeave);
+
+    var running = true;
+    function frame(t) {
+      if (!running) return;
+      if (!guiding || (t - lastMove) > IDLE_MS) {   // ambient drift
+        var s = t / 1000;
+        tRY = Math.sin(s * 0.55) * 2.4;
+        tRX = Math.cos(s * 0.42) * 1.7;
+        tSheen = 0.18 + Math.sin(s * 0.55) * 0.08;
+      }
+      rx    += (tRX    - rx)    * 0.08;
+      ry    += (tRY    - ry)    * 0.08;
+      sheen += (tSheen - sheen) * 0.07;
+
+      var st = cert.style;
+      st.setProperty('--cert-rx', rx.toFixed(2) + 'deg');
+      st.setProperty('--cert-ry', ry.toFixed(2) + 'deg');
+      st.setProperty('--sheen-opacity', sheen.toFixed(3));
+      st.setProperty('--sheen-tx', (-ry * 4).toFixed(1) + 'px');
+      st.setProperty('--sheen-ty', ( rx * 4).toFixed(1) + 'px');
+      st.setProperty('--sheen-angle', (110 + ry * 1.6).toFixed(1) + 'deg');
+      st.setProperty('--wm-x', ( ry * 0.7).toFixed(1) + 'px');   // deep layer drifts with tilt
+      st.setProperty('--wm-y', (-rx * 0.7).toFixed(1) + 'px');
+      st.setProperty('--fg-x', (-ry * 1.1).toFixed(1) + 'px');   // near layer drifts against
+      st.setProperty('--fg-y', ( rx * 1.1).toFixed(1) + 'px');
+
+      requestAnimationFrame(frame);
+    }
+
+    /* Pause the loop while the hero is scrolled out of view */
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver(function (entries) {
+        var vis = entries[0].isIntersecting;
+        if (vis && !running) { running = true; requestAnimationFrame(frame); }
+        else if (!vis) { running = false; }
+      }, { threshold: 0 }).observe(hero);
+    }
+
+    requestAnimationFrame(frame);
+  }
 
   /* Kick off entry shortly after load so the constellation has settled first */
   window.addEventListener('load', function () {

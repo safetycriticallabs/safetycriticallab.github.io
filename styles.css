@@ -62,6 +62,7 @@ body {
   font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--blue);
 }
 .gn-text em { color: var(--blue-dk); font-style: normal; }
+.gn-text-abbr { display: none; }   /* shown only on phones (see max-width:480) */
 
 .gn-links {
   display: flex; align-items: center;
@@ -1036,9 +1037,11 @@ h2.section-title em { font-style: italic; color: var(--blue); font-family: var(-
 }
 
 @media (max-width: 480px) {
-  /* Shrink the nav wordmark on phones so it balances the compact
-     search + menu icons rather than dominating the bar. */
-  .gn-text { font-size: 13px; letter-spacing: 0.05em; }
+  /* On phones use the "SCL" abbreviation so the wordmark balances the compact
+     search + menu icons. Full name kept for desktop + screen readers (the
+     .gn-wordmark link carries an aria-label). */
+  .gn-text-full { display: none; }
+  .gn-text-abbr { display: inline; }
 }
 
 @media (max-width: 580px) {

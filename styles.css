@@ -70,9 +70,9 @@ body {
 .gn-text-abbr {
   display: none;
   background: linear-gradient(110deg,
-    #0F2340 0%, #1E5A9A 13%, #3E8FD6 25%,
-    #6FD3E6 37%, #EAF6FF 47%, #FFFFFF 50%, #EAF6FF 53%,
-    #9AA7F2 61%, #3E8FD6 74%, #1E5A9A 87%, #0F2340 100%);
+    #0F2340 0%, #1E5A9A 24%, #2E6DB4 42%,
+    #8FD8EC 46%, #FFFFFF 50%, #AEB8F6 54%,
+    #2E6DB4 58%, #1E5A9A 76%, #0F2340 100%);
   background-size: 250% 100%;
   background-repeat: no-repeat;
   background-position: var(--scl-shine, 50%) 0;
@@ -1066,7 +1066,7 @@ h2.section-title em { font-style: italic; color: var(--blue); font-family: var(-
   .gn-text-full { display: none; }
   .gn-text-abbr {
     display: inline;
-    font-size: 22px;              /* bigger, more logo-like */
+    font-size: 24px;              /* bigger, more logo-like */
     letter-spacing: 0.06em;
   }
 }

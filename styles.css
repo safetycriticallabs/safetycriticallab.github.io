@@ -64,17 +64,18 @@ body {
 .gn-text em { color: var(--blue-dk); font-style: normal; }
 
 /* "SCL" abbreviation — shown only on phones (see max-width:480). Filled with a
-   metallic chrome-blue gradient; a specular glint sweeps continuously across the
-   letters (scl-shine keyframes, enabled in the max-width:480 block). */
+   holographic chrome-blue gradient (cyan hint one side of the glint, violet-blue
+   the other) whose reflection tracks the swipe/scroll — the glint position
+   (--scl-shine) is set in footer.js. */
 .gn-text-abbr {
   display: none;
   background: linear-gradient(110deg,
-    #0F2340 0%, #1E5A9A 20%, #4E8FD0 38%,
-    #CFE6FF 47%, #FFFFFF 50%, #CFE6FF 53%,
-    #4E8FD0 62%, #1E5A9A 80%, #0F2340 100%);
+    #0F2340 0%, #1E5A9A 13%, #3E8FD6 25%,
+    #6FD3E6 37%, #EAF6FF 47%, #FFFFFF 50%, #EAF6FF 53%,
+    #9AA7F2 61%, #3E8FD6 74%, #1E5A9A 87%, #0F2340 100%);
   background-size: 250% 100%;
   background-repeat: no-repeat;
-  background-position: 50% 0;
+  background-position: var(--scl-shine, 50%) 0;
   filter: drop-shadow(0 1px 1px rgba(15, 35, 64, 0.16));
 }
 @supports ((-webkit-background-clip: text) or (background-clip: text)) {
@@ -84,11 +85,6 @@ body {
     -webkit-text-fill-color: transparent;
     color: transparent;
   }
-}
-/* Glint sweeps back and forth across the letters (see max-width:480). */
-@keyframes scl-shine {
-  from { background-position: 20% 0; }
-  to   { background-position: 80% 0; }
 }
 
 .gn-links {
@@ -1072,11 +1068,7 @@ h2.section-title em { font-style: italic; color: var(--blue); font-family: var(-
     display: inline;
     font-size: 22px;              /* bigger, more logo-like */
     letter-spacing: 0.06em;
-    animation: scl-shine 3s ease-in-out infinite alternate;
   }
-}
-@media (prefers-reduced-motion: reduce) {
-  .gn-text-abbr { animation: none; }   /* static centered glint */
 }
 
 @media (max-width: 580px) {

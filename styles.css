@@ -62,7 +62,29 @@ body {
   font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--blue);
 }
 .gn-text em { color: var(--blue-dk); font-style: normal; }
-.gn-text-abbr { display: none; }   /* shown only on phones (see max-width:480) */
+
+/* "SCL" abbreviation — shown only on phones (see max-width:480). Filled with a
+   metallic chrome-blue gradient; the specular glint position (--scl-shine) is
+   driven by scroll + a slow idle drift in footer.js. */
+.gn-text-abbr {
+  display: none;
+  background: linear-gradient(110deg,
+    #0F2340 0%, #1E5A9A 20%, #4E8FD0 38%,
+    #CFE6FF 47%, #FFFFFF 50%, #CFE6FF 53%,
+    #4E8FD0 62%, #1E5A9A 80%, #0F2340 100%);
+  background-size: 250% 100%;
+  background-repeat: no-repeat;
+  background-position: var(--scl-shine, 50%) 0;
+  filter: drop-shadow(0 1px 1px rgba(15, 35, 64, 0.16));
+}
+@supports ((-webkit-background-clip: text) or (background-clip: text)) {
+  .gn-text-abbr {
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+  }
+}
 
 .gn-links {
   display: flex; align-items: center;

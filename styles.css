@@ -1036,7 +1036,9 @@ h2.section-title em { font-style: italic; color: var(--blue); font-family: var(-
 }
 
 @media (max-width: 480px) {
-  /* (accordion handles narrow widths already) */
+  /* Shrink the nav wordmark on phones so it balances the compact
+     search + menu icons rather than dominating the bar. */
+  .gn-text { font-size: 13px; letter-spacing: 0.05em; }
 }
 
 @media (max-width: 580px) {

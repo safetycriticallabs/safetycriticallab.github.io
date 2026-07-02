@@ -63,19 +63,17 @@ body {
 }
 .gn-text em { color: var(--blue-dk); font-style: normal; }
 
-/* "SCL" abbreviation — shown only on phones (see max-width:480). Filled with a
-   holographic chrome-blue gradient (cyan hint one side of the glint, violet-blue
-   the other) whose reflection tracks the swipe/scroll — the glint position
-   (--scl-shine) is set in footer.js. */
+/* "SCL" abbreviation — shown only on phones (see max-width:480). A fixed
+   metallic blue-chrome fill (deep navy → brand blue → light-blue sheen → navy),
+   offset slightly for a "caught light" look. Static — no motion — clean and
+   always readable. */
 .gn-text-abbr {
   display: none;
-  background: linear-gradient(110deg,
-    #0F2340 0%, #1E5A9A 24%, #2E6DB4 42%,
-    #8FD8EC 46%, #FFFFFF 50%, #AEB8F6 54%,
-    #2E6DB4 58%, #1E5A9A 76%, #0F2340 100%);
-  background-size: 250% 100%;
+  background: linear-gradient(115deg,
+    #12325C 0%, #2E6DB4 32%, #86BCEB 44%,
+    #2E6DB4 56%, #163C6B 100%);
+  background-size: 100% 100%;
   background-repeat: no-repeat;
-  background-position: var(--scl-shine, 50%) 0;
   filter: drop-shadow(0 1px 1px rgba(15, 35, 64, 0.16));
 }
 @supports ((-webkit-background-clip: text) or (background-clip: text)) {

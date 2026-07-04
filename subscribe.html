@@ -191,6 +191,10 @@
   line-height: 1.6;
   margin: 0;
 }
+.sub-confirmation-body a {
+  color: var(--blue);
+  text-decoration: underline;
+}
 
 @media (max-width: 640px) {
   .subscribe-page { padding: 56px 24px 80px; }
@@ -240,8 +244,8 @@
     </p>
 
     <div class="sub-confirmation" id="sub-confirmation">
-      <h2 class="sub-confirmation-title">Check your inbox.</h2>
-      <p class="sub-confirmation-body">A confirmation email is on the way. Click the link inside it to finish subscribing. Briefings are sent only when there is something worth saying.</p>
+      <h2 class="sub-confirmation-title" id="sub-confirmation-title">Briefings are getting set up.</h2>
+      <p class="sub-confirmation-body" id="sub-confirmation-body">Email <a href="mailto:kevin.williams@safetycriticallabs.com?subject=Subscribe">kevin.williams@safetycriticallabs.com</a> with the subject Subscribe and you will be added when the first briefing goes out.</p>
     </div>
 
     <!--
@@ -256,14 +260,17 @@
       ║      (format: https://sibforms.com/serve/MUIFA…)                 ║
       ║   5. Paste it into BREVO_FORM_URL constant in the script below   ║
       ║                                                                  ║
-      ║  No other changes needed. Validation, UI, and confirmation       ║
-      ║  state already work. Submissions are also cached in localStorage ║
-      ║  as a backup until the Brevo URL is live.                        ║
+      ║  No other changes needed. Validation, UI, success and error      ║
+      ║  states already work. While BREVO_FORM_URL is empty, the form    ║
+      ║  shows an interim notice directing readers to subscribe by       ║
+      ║  email. cacheLocally writes only to the visitor's own            ║
+      ║  localStorage; SCL cannot read it, so it is not a delivery       ║
+      ║  channel.                                                        ║
       ╚══════════════════════════════════════════════════════════════════╝
     -->
-    <form class="sub-form" id="sub-form" method="post" novalidate>
+    <form class="sub-form" id="sub-form" novalidate>
       <input type="email" class="sub-input" id="sub-input" name="EMAIL" placeholder="you@organization.com" autocomplete="email" required>
-      <!-- Honeypot — bots fill this in, humans don't. Server-side check via JS. -->
+      <!-- Honeypot. Bots fill this in, humans don't. Checked client-side in the submit handler below. -->
       <input type="text" name="email_address_check" value="" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px;opacity:0;height:0;width:0;" aria-hidden="true">
       <input type="hidden" name="locale" value="en">
       <button type="submit" class="sub-submit">Subscribe</button>
@@ -286,7 +293,7 @@
         </div>
         <div class="sub-receive-item">
           <h3 class="sub-receive-item-title">Accreditation status</h3>
-          <p class="sub-receive-item-body">Progress on ISO/IEC 17065 accreditation through ANAB. Audit milestones and what they mean.</p>
+          <p class="sub-receive-item-body">Updates on ISO/IEC 17065 accreditation through ANAB. Intake and scheme review are complete, and formal engagement is deferred until certification volume supports it.</p>
         </div>
       </div>
     </div>
@@ -312,12 +319,12 @@
       <div class="footer-col">
         <div class="footer-col-label">Resources</div>
         <a href="/documents">Documents</a>
-        <a href="#">FAQ</a>
+        <a href="/search.html">FAQ</a>
       </div>
 
       <div class="footer-col">
         <div class="footer-col-label">Company</div>
-        <a href="#">About</a><a href="/position">Position</a>
+        <a href="/position">Position</a>
         <a href="/expertise">Expertise</a>
         <a href="/markets">Markets</a>
         <a href="/contact">Contact</a>
@@ -343,7 +350,7 @@
     <div class="footer-divider"></div>
 
     <div class="footer-bottom">
-      <span class="footer-copyright">&copy; 2025 Safety Critical Labs. All rights reserved.</span>
+      <span class="footer-copyright">&copy; 2026 Safety Critical Labs. All rights reserved.</span>
       <div class="footer-meta">
         <a href="#" aria-label="Back to top">Back to top</a>
         <span class="footer-version">Framework v3.3</span>
@@ -360,13 +367,16 @@
   /* ┌─────────────────────────────────────────────────────────────┐
      │  PASTE BREVO FORM URL HERE                                  │
      │  Example: 'https://sibforms.com/serve/MUIFAFJyyy…'          │
-     │  Leave empty string '' to fall back to local-only mode.     │
+     │  While it is an empty string '' the form shows an interim   │
+     │  notice directing readers to subscribe by email.            │
      └─────────────────────────────────────────────────────────────┘ */
   var BREVO_FORM_URL = '';
 
   var form = document.getElementById('sub-form');
   var input = document.getElementById('sub-input');
   var confirmation = document.getElementById('sub-confirmation');
+  var confirmTitle = document.getElementById('sub-confirmation-title');
+  var confirmBody = document.getElementById('sub-confirmation-body');
   var submitBtn = form.querySelector('.sub-submit');
 
   function looksLikeEmail(s) {
@@ -402,11 +412,13 @@
     var email = input.value.trim();
     if (!looksLikeEmail(email)) { showError(); return; }
 
-    /* Always cache locally as a safety net */
+    /* Note the address in the visitor's own localStorage. Client-side
+       convenience only; SCL cannot read it. */
     cacheLocally(email);
 
-    /* If the Brevo URL isn't configured yet, just show confirmation —
-       page still works for UI testing before the integration is live. */
+    /* No provider configured yet, so there is no delivery channel.
+       Show the honest interim notice (the default confirmation copy)
+       instead of pretending a confirmation email was sent. */
     if (!BREVO_FORM_URL) {
       showConfirmation();
       return;
@@ -425,12 +437,17 @@
       mode: 'no-cors',
       body: data
     }).then(function () {
+      confirmTitle.textContent = 'Check your inbox.';
+      confirmBody.textContent = 'A confirmation email is on the way. Click the link inside it to finish subscribing. Briefings are sent only when there is something worth saying.';
       showConfirmation();
     }).catch(function () {
-      /* Network failure — still show confirmation since the email is
-         cached locally and Brevo's network is unreachable from the
-         client. The user gets a working experience either way. */
-      showConfirmation();
+      /* Network failure. The submission did not reach Brevo, so show
+         an error instead of claiming success. */
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Subscribe';
+      confirmTitle.textContent = 'Something went wrong.';
+      confirmBody.innerHTML = 'The subscription request did not go through. Try again, or email <a href="mailto:kevin.williams@safetycriticallabs.com?subject=Subscribe">kevin.williams@safetycriticallabs.com</a> with the subject Subscribe.';
+      confirmation.classList.add('active');
     });
   });
 

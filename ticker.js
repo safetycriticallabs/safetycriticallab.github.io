@@ -22,10 +22,57 @@
     return d.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
   }
 
-  function escapeHtml(str) {
-    var div = document.createElement('div');
-    div.textContent = str;
-    return div.innerHTML;
+  /* Accept only http:/https: URLs from feeds; anything else becomes ''. */
+  function safeUrl(url) {
+    try {
+      var u = new URL(url);
+      if (u.protocol === 'http:' || u.protocol === 'https:') return u.href;
+    } catch (e) { /* invalid URL */ }
+    return '';
+  }
+
+  /* Build one pass of ticker items with DOM APIs. Feed-derived values
+     (url, title, source, date) are set via el.href/textContent, never
+     interpolated into HTML. The logo markup is a trusted local constant. */
+  function buildTickerRun(items) {
+    var frag = document.createDocumentFragment();
+    for (var i = 0; i < items.length; i++) {
+      var item = items[i];
+      var a = document.createElement('a');
+      a.className = 'reg-ticker-item';
+      var url = safeUrl(item.url); /* re-validated here so cached items are covered too */
+      if (url) a.href = url;
+      a.target = '_blank';
+      a.rel = 'noopener';
+      a.setAttribute('draggable', 'false');
+
+      var icon = document.createElement('span');
+      icon.className = 'reg-ticker-icon';
+      icon.innerHTML = logoMap[item.source] || '';
+      a.appendChild(icon);
+
+      var source = document.createElement('span');
+      source.className = 'reg-ticker-source';
+      source.textContent = item.source;
+      a.appendChild(source);
+
+      var text = document.createElement('span');
+      text.className = 'reg-ticker-text';
+      text.textContent = item.title;
+      a.appendChild(text);
+
+      var date = document.createElement('span');
+      date.className = 'reg-ticker-date';
+      date.textContent = item.date;
+      a.appendChild(date);
+
+      frag.appendChild(a);
+
+      var sep = document.createElement('span');
+      sep.className = 'reg-ticker-sep';
+      frag.appendChild(sep);
+    }
+    return frag;
   }
 
   function renderTicker(items) {
@@ -34,18 +81,10 @@
 
     items.sort(function (a, b) { return (b.sortDate || 0) - (a.sortDate || 0); });
 
-    var html = '';
-    for (var i = 0; i < items.length; i++) {
-      var item = items[i];
-      var logo = logoMap[item.source] || '';
-      html += '<a class="reg-ticker-item" href="' + item.url + '" target="_blank" rel="noopener" draggable="false">'
-        + '<span class="reg-ticker-icon">' + logo + '</span>'
-        + '<span class="reg-ticker-source">' + item.source + '</span>'
-        + '<span class="reg-ticker-text">' + item.title + '</span>'
-        + '<span class="reg-ticker-date">' + item.date + '</span>'
-        + '</a><span class="reg-ticker-sep"></span>';
-    }
-    track.innerHTML = html + html;
+    track.textContent = '';
+    /* Two identical runs, same as the previous html + html duplication */
+    track.appendChild(buildTickerRun(items));
+    track.appendChild(buildTickerRun(items));
     /* Set speed based on content width: consistent 50px/s */
     track.classList.remove('scrolling');
     void track.offsetWidth;
@@ -89,7 +128,7 @@
   var frAiKeywords = /artificial intelligence|AI safety|AI system|AI risk|machine learning|algorithmic|autonomous|neural network|AI governance|AI regulation/i;
 
   fetch('https://www.federalregister.gov/api/v1/documents.json?conditions%5Bterm%5D=%22artificial+intelligence%22&order=newest&per_page=100&fields%5B%5D=title&fields%5B%5D=publication_date&fields%5B%5D=html_url&fields%5B%5D=type')
-    .then(function (r) { return r.json(); })
+    .then(function (r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
     .then(function (data) {
       var filtered = [];
       for (var i = 0; i < data.results.length && filtered.length < 3; i++) {
@@ -97,7 +136,7 @@
       }
       filtered.forEach(function (doc) {
         tickerItems.push({
-          title: escapeHtml(doc.title), url: doc.html_url,
+          title: doc.title, url: safeUrl(doc.html_url),
           date: formatDate(doc.publication_date), source: 'Federal Register',
           sortDate: new Date(doc.publication_date).getTime()
         });
@@ -116,7 +155,7 @@
   var euAiKeywords = /artificial intelligence|AI Act|2024\/1689|high-risk AI|AI system|AI regulation|machine learning|algorithmic|AI agent|2025\/454/i;
 
   fetch(CORS_PROXY + encodeURIComponent('https://eur-lex.europa.eu/EN/display-feed.rss?rssId=162'))
-    .then(function (r) { return r.text(); })
+    .then(function (r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.text(); })
     .then(function (xml) {
       var parser = new DOMParser();
       var doc = parser.parseFromString(xml, 'text/xml');
@@ -130,7 +169,7 @@
           var pubDate = rssItems[i].querySelector('pubDate') ? rssItems[i].querySelector('pubDate').textContent : '';
           var cleanTitle = title.replace(/^CELEX:\S+:\s*/, '').replace(/^CELEX:\S+\s*/, '');
           if (!cleanTitle || cleanTitle.length < 5) cleanTitle = title;
-          filtered.push({ title: escapeHtml(cleanTitle), url: link, date: pubDate ? formatDate(pubDate) : '' });
+          filtered.push({ title: cleanTitle, url: safeUrl(link), date: pubDate ? formatDate(pubDate) : '' });
         }
       }
       var euItems = filtered.length > 0 ? filtered : euAiFallback;
@@ -150,8 +189,8 @@
   var nistAiKeywords = /artificial intelligence|AI |AI-|machine learning|cybersecurity framework|risk management framework|AI agent|agentic|neural network/i;
 
   Promise.all([
-    fetch(CORS_PROXY + encodeURIComponent('https://www.nist.gov/news-events/news/rss.xml')).then(function (r) { return r.text(); }).catch(function () { return ''; }),
-    fetch(CORS_PROXY + encodeURIComponent('https://csrc.nist.gov/CSRC/media/feeds/pubs/drafts-open-for-comment.json')).then(function (r) { return r.text(); }).catch(function () { return ''; })
+    fetch(CORS_PROXY + encodeURIComponent('https://www.nist.gov/news-events/news/rss.xml')).then(function (r) { return r.ok ? r.text() : ''; }).catch(function () { return ''; }),
+    fetch(CORS_PROXY + encodeURIComponent('https://csrc.nist.gov/CSRC/media/feeds/pubs/drafts-open-for-comment.json')).then(function (r) { return r.ok ? r.text() : ''; }).catch(function () { return ''; })
   ]).then(function (results) {
     var nistItems = [];
 
@@ -165,7 +204,7 @@
         if (nistAiKeywords.test(title) || nistAiKeywords.test(desc)) {
           var link = rssItems[i].querySelector('link') ? rssItems[i].querySelector('link').textContent : '';
           var pubDate = rssItems[i].querySelector('pubDate') ? rssItems[i].querySelector('pubDate').textContent : '';
-          nistItems.push({ title: escapeHtml(title), url: link, date: pubDate ? formatDate(pubDate) : '', sortDate: pubDate ? new Date(pubDate).getTime() : 0 });
+          nistItems.push({ title: title, url: safeUrl(link), date: pubDate ? formatDate(pubDate) : '', sortDate: pubDate ? new Date(pubDate).getTime() : 0 });
         }
       }
     }
@@ -175,7 +214,7 @@
         var data = JSON.parse(results[1].replace(/^\uFEFF/, ''));
         (data.entries || []).forEach(function (entry) {
           var t = (entry.title || '').replace(/^(SP|IR|FIPS|Other)\s*\[.*?\]\s*/i, '').replace(/Initial Public Draft\s*$/i, '').replace(/Final Public Draft\s*$/i, '').trim();
-          nistItems.push({ title: escapeHtml(t), url: entry.link || entry.id || '', date: entry.published ? formatDate(entry.published) : '', sortDate: entry.published ? new Date(entry.published).getTime() : 0 });
+          nistItems.push({ title: t, url: safeUrl(entry.link || entry.id || ''), date: entry.published ? formatDate(entry.published) : '', sortDate: entry.published ? new Date(entry.published).getTime() : 0 });
         });
       } catch (e) { /* skip */ }
     }

@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Page Not Found | Safety Critical Labs</title>
+<meta name="robots" content="noindex">
+<link rel="icon" type="image/x-icon" href="/favicon.ico">
+<link rel="icon" type="image/png" sizes="32x32" href="/img/favicon-32x32.png">
+<script>
+/* GitHub Pages serves this file for any unknown path. Certificates
+   print the path form safetycriticallabs.com/verify/<id>, so rewrite
+   that form to the real static page, preserving the id. */
+(function () {
+  var match = window.location.pathname.match(/\/verify\/([^\/?#]+)/);
+  if (match) {
+    var id = decodeURIComponent(match[1]).replace(/[^A-Za-z0-9_\-]/g, '');
+    if (id) window.location.replace('/verify.html?id=' + encodeURIComponent(id));
+  }
+})();
+</script>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { height: 100%; }
+  body {
+    background: #F4EFE5;
+    color: #0F2340;
+    font-family: 'DM Sans', system-ui, sans-serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    -webkit-font-smoothing: antialiased;
+  }
+  .nf-card {
+    width: 100%;
+    max-width: 520px;
+    background: #FAF6EC;
+    border: 1px solid rgba(46,109,180,0.12);
+    border-radius: 6px;
+    padding: 56px 48px;
+    text-align: center;
+    box-shadow: 0 12px 40px rgba(46,109,180,0.08);
+  }
+  .nf-eyebrow {
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(46,109,180,0.6);
+    margin-bottom: 20px;
+  }
+  .nf-title {
+    font-size: 32px;
+    font-weight: 600;
+    letter-spacing: -0.025em;
+    color: #2E6DB4;
+    line-height: 1.15;
+    margin-bottom: 18px;
+  }
+  .nf-body {
+    font-size: 15px;
+    line-height: 1.7;
+    font-weight: 300;
+    color: #3D5068;
+    margin-bottom: 32px;
+  }
+  .nf-actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+  .nf-btn {
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    padding: 12px 26px;
+    border-radius: 4px;
+    text-decoration: none;
+    transition: all 0.25s ease;
+    display: inline-block;
+  }
+  .nf-btn-solid { color: #2E6DB4; border: 1px solid #2E6DB4; }
+  .nf-btn-solid:hover { background: #2E6DB4; color: #fff; }
+  .nf-btn-outline { color: #3D5068; border: 1px solid #E4E8EC; }
+  .nf-btn-outline:hover { border-color: #0F2340; color: #0F2340; }
+</style>
+</head>
+<body>
+
+<div class="nf-card">
+  <div class="nf-eyebrow">[ 404 ]</div>
+  <h1 class="nf-title">Page not found.</h1>
+  <p class="nf-body">
+    Nothing exists at this address. If you followed a certificate link, it can be checked on the verification page.
+  </p>
+  <div class="nf-actions">
+    <a href="/" class="nf-btn nf-btn-solid">Safety Critical Labs</a>
+    <a href="/verify.html" class="nf-btn nf-btn-outline">Verify a certificate</a>
+  </div>
+</div>
+
+</body>
+</html>

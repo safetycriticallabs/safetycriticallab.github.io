@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Measured Evidence | Safety Critical Labs</title>
+<meta name="description" content="Real measured AI verification results from the SCL framework applied to public NASA C-MAPSS turbofan data. Data leakage, drift, out-of-distribution detection, and calibration, with the failures retained.">
+<meta property="og:title" content="Measured Evidence | Safety Critical Labs">
+<meta property="og:description" content="AI verification measured on public data. Leakage, drift, OOD, and calibration evidence, including the methods that failed their own subject.">
+<meta property="og:url" content="https://safetycriticallabs.com/evidence.html">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://safetycriticallabs.com/img/SCL%20Logo%203d.png">
+<link rel="icon" type="image/x-icon" href="favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="img/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="48x48" href="img/favicon-48x48.png">
+<link rel="icon" type="image/png" sizes="192x192" href="img/favicon-192x192.png">
+<link rel="apple-touch-icon" sizes="180x180" href="img/apple-touch-icon.png">
+<link rel="shortcut icon" href="favicon.ico">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=IBM+Plex+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<style>
+/* ─── EVIDENCE PAGE ───────────────────────────────────────── */
+
+/* Methodology strip */
+.ev-method {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1px;
+  background: var(--rule);
+  border: 1px solid var(--rule);
+  border-radius: 8px;
+  overflow: hidden;
+  margin-bottom: 56px;
+}
+.ev-method-cell {
+  background: var(--white);
+  padding: 22px 24px;
+}
+.ev-method-label {
+  font-size: 11px; font-weight: 600; letter-spacing: 0.08em;
+  text-transform: uppercase; color: var(--ink-3);
+  margin-bottom: 8px;
+}
+.ev-method-value {
+  font-size: 15px; font-weight: 500; color: var(--ink); line-height: 1.4;
+}
+.ev-method-value span { display: block; font-weight: 300; font-size: 13px; color: var(--ink-2); margin-top: 3px; }
+
+/* Panel grid */
+.ev-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  margin-bottom: 56px;
+}
+.ev-panel {
+  background: var(--white);
+  border: 1px solid var(--rule);
+  border-radius: 10px;
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+}
+.ev-panel::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; width: 100%; height: 3px;
+  background: var(--accent, var(--blue));
+}
+.ev-panel-head {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 16px; margin-bottom: 18px;
+}
+.ev-areas { display: flex; gap: 6px; flex-wrap: wrap; }
+.ev-area-tag {
+  font-family: var(--mono); font-size: 12px; font-weight: 500;
+  letter-spacing: 0.06em; color: var(--blue);
+  background: var(--blue-lt); border-radius: 4px;
+  padding: 3px 9px;
+}
+.ev-chip {
+  font-size: 11px; font-weight: 600; letter-spacing: 0.07em;
+  text-transform: uppercase; white-space: nowrap;
+  padding: 5px 11px; border-radius: 999px;
+  border: 1px solid;
+}
+.ev-chip.pass   { color: #2D7A3A; border-color: #2D7A3A; background: rgba(45,122,58,0.06); }
+.ev-chip.warn   { color: #B5751A; border-color: #B5751A; background: rgba(181,117,26,0.07); }
+.ev-chip.deny   { color: #A63D2F; border-color: #A63D2F; background: rgba(166,61,47,0.06); }
+
+.ev-panel-title {
+  font-size: 21px; font-weight: 600; letter-spacing: -0.02em;
+  color: var(--ink); line-height: 1.25; margin-bottom: 20px;
+}
+.ev-metric {
+  display: flex; align-items: baseline; gap: 12px;
+  padding: 18px 20px; margin-bottom: 20px;
+  background: var(--bg); border-radius: 8px;
+  flex-wrap: wrap;
+}
+.ev-metric-num {
+  font-family: var(--mono); font-size: 30px; font-weight: 500;
+  color: var(--ink); letter-spacing: -0.01em;
+}
+.ev-metric-num.deny { color: #A63D2F; }
+.ev-metric-label { font-size: 13px; color: var(--ink-2); font-weight: 300; line-height: 1.5; flex: 1; min-width: 160px; }
+.ev-body {
+  font-size: 14.5px; line-height: 1.7; font-weight: 300;
+  color: var(--ink-2); margin-bottom: 18px;
+}
+.ev-body strong { font-weight: 600; color: var(--ink); }
+.ev-targets {
+  margin-top: auto; padding-top: 16px;
+  border-top: 1px solid var(--rule);
+  font-size: 13px; color: var(--ink-3); line-height: 1.6;
+}
+.ev-targets b { color: var(--blue); font-weight: 500; }
+
+/* "Failures retained" callout */
+.ev-callout {
+  background: var(--ink);
+  border-radius: 12px;
+  padding: 48px 44px;
+  margin-bottom: 56px;
+}
+.ev-callout .fw-eyebrow-mono { color: rgba(255,255,255,0.5); }
+.ev-callout h2 {
+  font-size: 28px; font-weight: 600; letter-spacing: -0.02em;
+  color: #fff; line-height: 1.25; margin: 8px 0 18px;
+}
+.ev-callout h2 em { font-style: italic; color: #8FB8E4; }
+.ev-callout p {
+  font-size: 16px; line-height: 1.75; font-weight: 300;
+  color: rgba(255,255,255,0.8); max-width: 680px; margin: 0;
+}
+
+/* Source / repo band */
+.ev-source-band {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center;
+}
+.ev-source-rows { display: flex; flex-direction: column; gap: 12px; }
+.ev-source-row {
+  display: grid; grid-template-columns: 110px 1fr; gap: 16px;
+  padding-bottom: 12px; border-bottom: 1px solid var(--rule);
+  font-size: 14px;
+}
+.ev-source-row-label { color: var(--ink-3); font-weight: 500; }
+.ev-source-row-value { color: var(--ink-2); font-weight: 300; line-height: 1.5; }
+.ev-source-row-value.is-mono { font-family: var(--mono); font-size: 13px; }
+.ev-btns { display: flex; flex-direction: column; gap: 12px; align-items: flex-start; margin-top: 4px; }
+
+.ev-scope-note {
+  font-size: 13px; color: var(--ink-3); line-height: 1.7; font-weight: 300;
+  max-width: 760px; margin: 40px auto 0; text-align: center;
+}
+
+@media (max-width: 860px) {
+  .ev-method { grid-template-columns: 1fr 1fr; }
+  .ev-grid { grid-template-columns: 1fr; }
+  .ev-source-band { grid-template-columns: 1fr; gap: 32px; }
+}
+@media (max-width: 480px) {
+  .ev-method { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<nav class="global-nav">
+  <div class="global-nav-inner">
+    <a href="/" class="gn-wordmark" aria-label="Safety Critical Labs">
+      <span class="gn-text gn-text-full"><em>Safety Critical</em> Labs</span><span class="gn-text gn-text-abbr" aria-hidden="true">SCL</span>
+    </a>
+    <button class="gn-hamburger" aria-label="Menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+    <ul class="gn-links">
+      <li><a href="/framework">Framework</a></li>
+      <li><a href="/process">Process</a></li>
+      <li><a href="/expertise">Expertise</a></li>
+      <li><a href="/markets">Markets</a></li>
+      <li><a href="/position">Position</a></li>
+      <li><a href="/news">News</a></li>
+      <li class="gn-mobile-link"><a href="/contact">Contact</a></li>
+    </ul>
+    <a href="/search" class="gn-search" aria-label="Search">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <circle cx="11" cy="11" r="7"/>
+        <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+      </svg>
+    </a>
+    <a href="/contact" class="gn-cta">Get Certified</a>
+  </div>
+</nav>
+
+<div class="page-shell">
+
+<!-- INNER HERO -->
+<div class="inner-hero">
+  <div class="fw-hero-glow"></div>
+  <div class="inner-hero-inner">
+    <div>
+      <div class="inner-hero-breadcrumb">
+        <a href="/">Safety Critical Labs</a>
+        <span>/</span> Measured Evidence
+      </div>
+      <h1>Verification you can<br><em>measure.</em> On public data.</h1>
+    </div>
+    <p class="inner-hero-lead">
+      The framework is only as good as the evidence its requirements produce. These are measured results from applying SCL verification methods to a public dataset, NASA C-MAPSS turbofan degradation. Every number is reproducible from the open repository. The methods that failed their own subject are kept in view, because a verification bench that cannot fail is not a verification bench.
+    </p>
+  </div>
+</div>
+
+<!-- METHODOLOGY -->
+<section class="page-section">
+  <div class="section-inner">
+    <div class="fw-eyebrow-mono">[ Subject Under Test ]</div>
+    <div class="ev-method">
+      <div class="ev-method-cell">
+        <div class="ev-method-label">Dataset</div>
+        <div class="ev-method-value">NASA C-MAPSS<span>FD001 turbofan run-to-failure. Public.</span></div>
+      </div>
+      <div class="ev-method-cell">
+        <div class="ev-method-label">Model</div>
+        <div class="ev-method-value">3-class RUL classifier<span>Nominal / degraded / critical remaining life</span></div>
+      </div>
+      <div class="ev-method-cell">
+        <div class="ev-method-label">Split</div>
+        <div class="ev-method-value">60 / 20 / 20 by unit<span>No engine appears in two splits</span></div>
+      </div>
+      <div class="ev-method-cell">
+        <div class="ev-method-label">Baseline accuracy</div>
+        <div class="ev-method-value">80.3%<span>Held-out test, honest split</span></div>
+      </div>
+    </div>
+
+    <div class="ev-grid">
+
+      <!-- AI-1 : Data leakage -->
+      <div class="ev-panel" style="--accent:#B5751A;">
+        <div class="ev-panel-head">
+          <div class="ev-areas"><span class="ev-area-tag">AI-1</span></div>
+          <span class="ev-chip warn">Leakage caught</span>
+        </div>
+        <div class="ev-panel-title">A leaky split inflates measured accuracy</div>
+        <div class="ev-metric">
+          <span class="ev-metric-num">+2.72 pp</span>
+          <span class="ev-metric-label">test accuracy when engines are allowed to bleed across train and test, versus a clean unit-level split</span>
+        </div>
+        <p class="ev-body">
+          Splitting the data by row instead of by engine lets the same asset appear in both training and test. Measured accuracy rises from <strong>80.3% to 83.1%</strong>. The gain is not skill. It is memorization the evaluation failed to prevent. A pass threshold set on the leaky number would certify a system that the honest split does not support.
+        </p>
+        <div class="ev-targets">This is the failure mode <b>AI-1</b> targets: train, validation, and test separation with documented provenance.</div>
+      </div>
+
+      <!-- AI-4 : Drift monitoring -->
+      <div class="ev-panel" style="--accent:#2D7A3A;">
+        <div class="ev-panel-head">
+          <div class="ev-areas"><span class="ev-area-tag">AI-4</span></div>
+          <span class="ev-chip pass">Monitor qualified</span>
+        </div>
+        <div class="ev-panel-title">A drift monitor earned through four failed designs</div>
+        <div class="ev-metric">
+          <span class="ev-metric-num">0.58&sigma; / 1.17&sigma;</span>
+          <span class="ev-metric-label">injected bias at first alert and at inhibit, once the monitor was designed against a measured no-drift floor</span>
+        </div>
+        <p class="ev-body">
+          Naive drift designs fired false alarms on healthy data, population indices past <strong>7.8</strong> where the real signal was noise. Only after declaring regime, per-asset baseline, and window and bin design did the monitor become trustworthy: it alerts at 0.58&sigma; of injected bias and inhibits at 1.17&sigma;. Left unmonitored, the classifier's false-fault rate climbs to <strong>0.70</strong> under full bias.
+        </p>
+        <div class="ev-targets">This is the failure mode <b>AI-4</b> targets: post-deployment drift monitoring with thresholds meaningful against a sampling floor.</div>
+      </div>
+
+      <!-- AI-6 / AI-12 : OOD detection -->
+      <div class="ev-panel" style="--accent:#A63D2F;">
+        <div class="ev-panel-head">
+          <div class="ev-areas"><span class="ev-area-tag">AI-6</span><span class="ev-area-tag">AI-12</span></div>
+          <span class="ev-chip deny">Denial finding</span>
+        </div>
+        <div class="ev-panel-title">Softmax confidence detects OOD worse than chance</div>
+        <div class="ev-metric">
+          <span class="ev-metric-num deny">AUROC 0.117</span>
+          <span class="ev-metric-label">for max-softmax OOD scoring: below 0.5 means the model is most confident exactly when it is most wrong</span>
+        </div>
+        <p class="ev-body">
+          The popular softmax-confidence detector scores out-of-distribution inputs <strong>worse than a coin flip</strong>. A Mahalanobis detector recovers gross regime shift perfectly (AUROC 1.0) but catches the subtle near-boundary fan fault only <strong>44%</strong> of the time at a 2% false-positive budget. No single OOD method passed every regime. That result is reported as a denial, not smoothed over.
+        </p>
+        <div class="ev-targets">This is the failure mode <b>AI-6</b> and <b>AI-12</b> target: a characterized OOD response, not a confidence threshold assumed to work.</div>
+      </div>
+
+      <!-- AI-8 / AI-12 : Calibration -->
+      <div class="ev-panel" style="--accent:#2D7A3A;">
+        <div class="ev-panel-head">
+          <div class="ev-areas"><span class="ev-area-tag">AI-8</span><span class="ev-area-tag">AI-12</span></div>
+          <span class="ev-chip pass">Fail &rarr; pass</span>
+        </div>
+        <div class="ev-panel-title">Confidence miscalibrated, then corrected and re-checked</div>
+        <div class="ev-metric">
+          <span class="ev-metric-num">0.160 &rarr; 0.030</span>
+          <span class="ev-metric-label">expected calibration error before and after temperature scaling, against a 0.05 pass criterion</span>
+        </div>
+        <p class="ev-body">
+          Out of the box the model's stated confidence was <strong>off by 0.16</strong> expected calibration error, a clear fail. A single temperature parameter fitted on validation data brought it to <strong>0.030</strong>, a pass. The requirement is not that the model is born calibrated. It is that calibration is measured, corrected, and verified before the confidence is trusted.
+        </p>
+        <div class="ev-targets">This is the failure mode <b>AI-8</b> and <b>AI-12</b> target: confidence that means what it says, demonstrated by measurement.</div>
+      </div>
+
+    </div>
+
+    <!-- Failures retained -->
+    <div class="ev-callout">
+      <div class="fw-eyebrow-mono">[ Why the failures stay in ]</div>
+      <h2>A bench that cannot fail its subject<br>is not <em>evidence.</em></h2>
+      <p>
+        Two of the four results above are failures. The softmax detector performs worse than chance. The out-of-the-box calibration does not pass. They are kept because they are the point. A verification method that certifies whatever it is pointed at proves nothing. These are held to the same pass and fail criteria a real assessment would apply, and they are allowed to fail.
+      </p>
+    </div>
+
+    <!-- Source -->
+    <div class="fw-eyebrow-mono">[ Reproduce It ]</div>
+    <div class="ev-source-band" style="margin-top: 8px;">
+      <div>
+        <h2 class="section-title" style="margin-bottom: 16px;">Open pipeline.<br>Open <em>data.</em></h2>
+        <p style="font-size: 15px; color: var(--ink-2); line-height: 1.8; font-weight: 300;">
+          The full pipeline, configuration, seeds, and result files are public. Every figure on this page traces to a JSON artifact in the repository, produced under a pre-declared configuration. The framework these methods verify against is openly published under a citable DOI.
+        </p>
+      </div>
+      <div class="ev-source-rows">
+        <div class="ev-source-row">
+          <span class="ev-source-row-label">Repository</span>
+          <span class="ev-source-row-value is-mono">github.com/safetycriticallabs/cmapss-verification-demo</span>
+        </div>
+        <div class="ev-source-row">
+          <span class="ev-source-row-label">Data</span>
+          <span class="ev-source-row-value">NASA C-MAPSS FD001. Public, no license restriction on use.</span>
+        </div>
+        <div class="ev-source-row">
+          <span class="ev-source-row-label">Framework</span>
+          <span class="ev-source-row-value is-mono">10.5281/zenodo.19024420 (cite this)</span>
+        </div>
+        <div class="ev-btns">
+          <a href="https://github.com/safetycriticallabs/cmapss-verification-demo" target="_blank" rel="noopener" class="btn btn-solid" style="margin-top: 4px;">
+            View the repository
+          </a>
+          <a href="/framework" class="btn btn-outline" style="margin-top: 4px;">
+            Read the framework
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <p class="ev-scope-note">
+      This is a demonstration of SCL verification methods on a public dataset. It is not an issued certification, and it makes no safety claim about any real turbofan engine. It exists to show that the framework's requirements resolve to measurements that can pass, and can fail.
+    </p>
+
+  </div>
+</section>
+
+</div><!-- /page-shell -->
+
+<!-- FOOTER -->
+<footer class="site-footer">
+  <div class="footer-inner">
+
+    <div class="footer-cols">
+
+      <div class="footer-col">
+        <div class="footer-col-label">Certification</div>
+        <a href="/framework">Framework</a>
+        <a href="/process">Process</a>
+        <a href="/assess">Assess</a>
+        <a href="/verify">Verify</a>
+      </div>
+
+      <div class="footer-col">
+        <div class="footer-col-label">Resources</div>
+        <a href="/documents">Documents</a>
+        <a href="/evidence">Evidence</a>
+        <a href="/search.html">FAQ</a>
+      </div>
+
+      <div class="footer-col">
+        <div class="footer-col-label">Company</div>
+        <a href="/position">Position</a>
+        <a href="/expertise">Expertise</a>
+        <a href="/markets">Markets</a>
+        <a href="/contact">Contact</a>
+      </div>
+
+      <div class="footer-col">
+        <div class="footer-col-label">Briefings</div>
+        <a href="/news">News</a>
+        <a href="/subscribe">Subscribe</a>
+        <a href="/updates">Updates</a>
+      </div>
+
+      <div class="footer-col">
+        <div class="footer-col-label">Legal</div>
+        <a href="/terms">Terms</a>
+        <a href="/privacy">Privacy</a>
+        <a href="/disclaimer">Disclaimer</a>
+        <a href="/accreditation">Accreditation</a>
+      </div>
+
+    </div>
+
+    <div class="footer-divider"></div>
+
+    <div class="footer-bottom">
+      <span class="footer-copyright">&copy; 2026 Safety Critical Labs. All rights reserved.</span>
+      <div class="footer-meta">
+        <a href="#" aria-label="Back to top">Back to top</a>
+        <span class="footer-version">Framework v3.3</span>
+      </div>
+    </div>
+
+  </div>
+</footer>
+
+<script>
+// Mobile menu toggle
+document.querySelector('.gn-hamburger').addEventListener('click', function() {
+  this.classList.toggle('open');
+  document.querySelector('.gn-links').classList.toggle('open');
+  this.setAttribute('aria-expanded', this.classList.contains('open'));
+  document.body.style.overflow = this.classList.contains('open') ? 'hidden' : '';
+});
+
+/* Hero cursor glow (matches other inner pages) */
+(function() {
+  var glow = document.querySelector('.fw-hero-glow');
+  var hero = document.querySelector('.inner-hero');
+  if (!glow || !hero) return;
+  hero.addEventListener('mousemove', function(e) {
+    var rect = hero.getBoundingClientRect();
+    glow.style.setProperty('--glow-x', (e.clientX - rect.left) + 'px');
+    glow.style.setProperty('--glow-y', (e.clientY - rect.top) + 'px');
+  });
+})();
+</script>
+<script src="/footer.js" defer></script>
+</body>
+</html>

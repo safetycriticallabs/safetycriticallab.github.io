@@ -397,12 +397,12 @@
       <div class="footer-col">
         <div class="footer-col-label">Resources</div>
         <a href="/documents">Documents</a>
-        <a href="#">FAQ</a>
+        <a href="/search.html">FAQ</a>
       </div>
 
       <div class="footer-col">
         <div class="footer-col-label">Company</div>
-        <a href="#">About</a><a href="/position">Position</a>
+        <a href="/position">Position</a>
         <a href="/expertise">Expertise</a>
         <a href="/markets">Markets</a>
         <a href="/contact">Contact</a>
@@ -428,7 +428,7 @@
     <div class="footer-divider"></div>
 
     <div class="footer-bottom">
-      <span class="footer-copyright">&copy; 2025 Safety Critical Labs. All rights reserved.</span>
+      <span class="footer-copyright">&copy; 2026 Safety Critical Labs. All rights reserved.</span>
       <div class="footer-meta">
         <a href="#" aria-label="Back to top">Back to top</a>
         <span class="footer-version">Framework v3.3</span>
@@ -534,32 +534,6 @@ document.querySelector('.gn-hamburger').addEventListener('click', function() {
   document.querySelector('.gn-links').classList.toggle('open');
   this.setAttribute('aria-expanded', this.classList.contains('open'));
   document.body.style.overflow = this.classList.contains('open') ? 'hidden' : '';
-});
-
-/* Dropdown nav toggle */
-document.querySelectorAll(".gn-dropdown-toggle").forEach(function(btn) {
-  btn.addEventListener("click", function(e) {
-    e.stopPropagation();
-    var dd = this.closest(".gn-dropdown");
-    var menu = dd.querySelector(".gn-dropdown-menu");
-    var isOpen = dd.classList.contains("open");
-    document.querySelectorAll(".gn-dropdown").forEach(function(d) {
-      d.classList.remove("open");
-      var m = d.querySelector(".gn-dropdown-menu");
-      if (m) m.style.display = "none";
-    });
-    if (!isOpen) {
-      dd.classList.add("open");
-      menu.style.display = "block";
-    }
-  });
-});
-document.addEventListener("click", function() {
-  document.querySelectorAll(".gn-dropdown").forEach(function(d) {
-    d.classList.remove("open");
-    var m = d.querySelector(".gn-dropdown-menu");
-    if (m) m.style.display = "none";
-  });
 });
 </script>
 <script src="ticker.js"></script>

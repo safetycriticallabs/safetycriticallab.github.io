@@ -1,0 +1,22 @@
+{
+  "register": {
+    "authority": "Safety Critical Labs",
+    "updated": "2026-07-04",
+    "issued_count": 0
+  },
+  "certificates": [
+    {
+      "id": "SCL-CERT-2025-001",
+      "status": "specimen",
+      "system": "Specimen certificate",
+      "organization": "Safety Critical Labs",
+      "classification": null,
+      "framework_version": "v3.3",
+      "framework_doi": "10.5281/zenodo.20692966",
+      "issued": null,
+      "expires": null,
+      "sha256": null,
+      "note": "Demonstration record for the specimen certificate shown on this site. Not an issued certification."
+    }
+  ]
+}

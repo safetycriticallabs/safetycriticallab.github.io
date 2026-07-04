@@ -364,6 +364,10 @@
 <section class="docs-page-section">
   <div class="docs-page-inner">
 
+    <p style="font-size:14px;color:var(--ink-3);font-weight:300;line-height:1.65;margin:0 0 28px;">
+      These are the external standards the framework builds on. For SCL's own measured verification results on public data, see the <a href="/evidence" style="color:var(--blue);font-weight:500;">measured evidence</a>.
+    </p>
+
     <!-- Filter chips -->
     <div class="docs-filter-row" role="group" aria-label="Filter documents by organization">
       <button class="docs-filter-chip active" data-filter="all">All <span class="docs-filter-count">26</span></button>
@@ -548,7 +552,7 @@
         </div>
         <div class="docs-card-content">
           <div class="docs-card-title">Software Assurance and Software Safety Standard</div>
-          <div class="docs-card-desc">Safety analysis reference for traceable, logically inspectable safety cases &mdash; one of the gaps AI-8 Explainability addresses.</div>
+          <div class="docs-card-desc">Safety analysis reference for traceable, logically inspectable safety cases. This is one of the gaps AI-8 Explainability addresses.</div>
           <div class="docs-card-meta"><span class="docs-card-org">NASA</span><span class="docs-card-link">View source →</span></div>
         </div>
       </a>
@@ -770,12 +774,12 @@
       <div class="footer-col">
         <div class="footer-col-label">Resources</div>
         <a href="/documents">Documents</a>
-        <a href="#">FAQ</a>
+        <a href="/search.html">FAQ</a>
       </div>
 
       <div class="footer-col">
         <div class="footer-col-label">Company</div>
-        <a href="#">About</a><a href="/position">Position</a>
+        <a href="/position">Position</a>
         <a href="/expertise">Expertise</a>
         <a href="/markets">Markets</a>
         <a href="/contact">Contact</a>
@@ -801,7 +805,7 @@
     <div class="footer-divider"></div>
 
     <div class="footer-bottom">
-      <span class="footer-copyright">&copy; 2025 Safety Critical Labs. All rights reserved.</span>
+      <span class="footer-copyright">&copy; 2026 Safety Critical Labs. All rights reserved.</span>
       <div class="footer-meta">
         <a href="#" aria-label="Back to top">Back to top</a>
         <span class="footer-version">Framework v3.3</span>
@@ -811,8 +815,6 @@
   </div>
 </footer>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 <script>
 /* ─── Hero cursor glow ───────────────────────── */
 (function() {
@@ -872,32 +874,6 @@ document.querySelector('.gn-hamburger').addEventListener('click', function() {
   document.querySelector('.gn-links').classList.toggle('open');
   this.setAttribute('aria-expanded', this.classList.contains('open'));
   document.body.style.overflow = this.classList.contains('open') ? 'hidden' : '';
-});
-
-/* ─── Dropdown nav toggle ────────────────────── */
-document.querySelectorAll(".gn-dropdown-toggle").forEach(function(btn) {
-  btn.addEventListener("click", function(e) {
-    e.stopPropagation();
-    var dd = this.closest(".gn-dropdown");
-    var menu = dd.querySelector(".gn-dropdown-menu");
-    var isOpen = dd.classList.contains("open");
-    document.querySelectorAll(".gn-dropdown").forEach(function(d) {
-      d.classList.remove("open");
-      var m = d.querySelector(".gn-dropdown-menu");
-      if (m) m.style.display = "none";
-    });
-    if (!isOpen) {
-      dd.classList.add("open");
-      menu.style.display = "block";
-    }
-  });
-});
-document.addEventListener("click", function() {
-  document.querySelectorAll(".gn-dropdown").forEach(function(d) {
-    d.classList.remove("open");
-    var m = d.querySelector(".gn-dropdown-menu");
-    if (m) m.style.display = "none";
-  });
 });
 </script>
 <script src="ticker.js"></script>

@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>SCL Certificate of Conformance</title>
+<meta name="robots" content="noindex">
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@300;400;500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -26,6 +27,7 @@
     color: var(--navy);
     min-height: 100vh;
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
     padding: 40px 20px;
@@ -73,6 +75,52 @@
     display: flex;
     flex-direction: column;
     flex: 1;
+  }
+
+  /* SPECIMEN overlay: diagonal repeating text above all content.
+     Built from real text elements, not a background image, so it
+     always prints even when background graphics are disabled. */
+  .specimen-overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    overflow: hidden;
+    pointer-events: none;
+    user-select: none;
+    -webkit-user-select: none;
+  }
+  .specimen-overlay-inner {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 220%;
+    transform: translate(-50%, -50%) rotate(-30deg);
+    display: flex;
+    flex-direction: column;
+    gap: 1.1in;
+    text-align: center;
+  }
+  .specimen-overlay-inner span {
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 700;
+    font-size: 52px;
+    letter-spacing: 0.35em;
+    word-spacing: 0.5em;
+    text-transform: uppercase;
+    color: rgba(15,35,64,0.07);
+    white-space: nowrap;
+  }
+
+  /* Caption below the certificate (screen only; the overlay carries
+     the specimen marking on paper) */
+  .specimen-caption {
+    margin-top: 18px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--navy-light);
+    text-align: center;
   }
 
   /* BODY REGION: bounded area between header rule and accreditation rule, hosts watermark */
@@ -350,12 +398,30 @@
       width: 8.5in;
       height: 11in;
     }
+    /* The certificate fills the page exactly; the caption would spill
+       onto a blank second sheet. The SPECIMEN overlay still prints. */
+    .specimen-caption { display: none; }
   }
 </style>
 </head>
 <body>
 
 <div class="certificate">
+
+  <!-- SPECIMEN overlay: always present on this public template -->
+  <div class="specimen-overlay" aria-hidden="true">
+    <div class="specimen-overlay-inner">
+      <span>Specimen&ensp;Specimen&ensp;Specimen&ensp;Specimen&ensp;Specimen</span>
+      <span>Specimen&ensp;Specimen&ensp;Specimen&ensp;Specimen&ensp;Specimen</span>
+      <span>Specimen&ensp;Specimen&ensp;Specimen&ensp;Specimen&ensp;Specimen</span>
+      <span>Specimen&ensp;Specimen&ensp;Specimen&ensp;Specimen&ensp;Specimen</span>
+      <span>Specimen&ensp;Specimen&ensp;Specimen&ensp;Specimen&ensp;Specimen</span>
+      <span>Specimen&ensp;Specimen&ensp;Specimen&ensp;Specimen&ensp;Specimen</span>
+      <span>Specimen&ensp;Specimen&ensp;Specimen&ensp;Specimen&ensp;Specimen</span>
+      <span>Specimen&ensp;Specimen&ensp;Specimen&ensp;Specimen&ensp;Specimen</span>
+      <span>Specimen&ensp;Specimen&ensp;Specimen&ensp;Specimen&ensp;Specimen</span>
+    </div>
+  </div>
 
   <div class="content">
 
@@ -459,10 +525,18 @@
   </div>
 </div>
 
+<p class="specimen-caption">Specimen certificate. Shown to demonstrate the format. Not an issued certification.</p>
+
 <!-- ============================================================
      CERTIFICATE DATA
      Edit values below to populate this certificate.
      The fields here drive both the visible text and the QR code.
+
+     NOTE: This public copy is ALWAYS specimen-marked. The issuance
+     copy of this template, without the SPECIMEN overlay, lives in
+     the private SCL internal repository. SCL-CERT-2025-001 is
+     carried in /registry.json as a specimen record, so the QR code
+     below resolves honestly on the verification page.
      ============================================================ -->
 <script>
   const CERT = {

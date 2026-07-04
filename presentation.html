@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex">
 <title>SCL AI Requirements Framework</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -751,7 +752,7 @@ const sections = {
     data: {
       eyebrow: "Published Framework · v3.3",
       heading: 'AI Certification for <em>systems that cannot fail.</em>',
-      subheading: "A published standard for assessing AI systems in safety-critical environments. Ten requirement sets, three classification tiers, one verifiable determination.",
+      subheading: "A published standard for assessing AI systems in safety-critical environments. Thirteen requirement sets, three classification tiers, one verifiable determination.",
       meta: [
         { label: "Presented by", value: "Safety Critical Labs" },
         { label: "Authority", value: "AI Certification" },
@@ -809,7 +810,7 @@ const sections = {
         { id: "AI-9",  short: "Human AI Teaming",                q: "Is a human positioned to override when the stakes require it?" },
         { id: "AI-10", short: "Privacy and Data Protection",     q: "Is personal data handled lawfully throughout the pipeline?" }
       ],
-      closer: "Certification is not a claim that the weights are correct. Certification is a claim that the envelope around the weights is complete. Each of the thirteen requirements that follows is one wall of that envelope."
+      closer: "Certification is not a claim that the weights are correct. Certification is a claim that the envelope around the weights is complete. Each of the ten core requirements that follows is one wall of that envelope. Three conditional sets extend it where the architecture demands."
     }
   },
   "framework-overview": {
@@ -917,7 +918,7 @@ const sections = {
     data: {
       intro: "Classification determines which requirements apply and the level of tailoring authority available. Classification is driven by consequence, not probability.",
       tiers: [
-        { name: "Safety Critical AI", color: "red", desc: "AI outputs directly affect human safety or system survivability.", checklistQs: "Could AI malfunction result in loss of life or critical equipment? Is the AI in the control path for safety-critical functions?", examples: "Surgical guidance systems, autonomous vehicle collision avoidance, medical diagnostic AI that determines treatment, flight control systems", reqs: "AI-1 through AI-13 (all core requirements, no tailoring without PSRB approval)" },
+        { name: "Safety Critical AI", color: "red", desc: "AI outputs directly affect human safety or system survivability.", checklistQs: "Could AI malfunction result in loss of life or critical equipment? Is the AI in the control path for safety-critical functions?", examples: "Surgical guidance systems, autonomous vehicle collision avoidance, medical diagnostic AI that determines treatment, flight control systems", reqs: "AI-1 through AI-10 (all core requirements, no tailoring without PSRB approval), plus AI-11 through AI-13 as the architecture requires." },
         { name: "Mission Critical AI", color: "gold", desc: "AI outputs affect operational success but not human safety.", checklistQs: "Could AI malfunction result in loss of operational objectives? Is the AI in the decision path for mission-critical functions?", examples: "Predictive maintenance for aircraft engines, medical triage prioritization, financial fraud detection, spam filter for flight operations communications", reqs: "AI-1 through AI-6, AI-8, AI-9, AI-10; AI-7 tailored (CE approval). AI-11, AI-12, AI-13 conditionally per system design" },
         { name: "Operational Support AI", color: "blue", desc: "AI supports operations but does not drive critical decisions.", checklistQs: "Does the AI support operations without driving critical decisions?", examples: "Corporate email spam filter, schedule optimization, meeting transcription, documentation assistants", reqs: "AI-1 through AI-6 and AI-10 minimum; AI-7 through AI-9 as tailored (SA approval). AI-11, AI-12, AI-13 conditionally per system design" }
       ],

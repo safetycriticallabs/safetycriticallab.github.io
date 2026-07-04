@@ -9,7 +9,7 @@
 <link rel="icon" type="image/png" sizes="192x192" href="img/favicon-192x192.png">
 <link rel="apple-touch-icon" sizes="180x180" href="img/apple-touch-icon.png">
 <link rel="shortcut icon" href="favicon.ico">
-<meta name="theme-color" content="#111110">
+<meta name="theme-color" content="#F4EFE5">
 <meta name="description" content="Start a conversation with Safety Critical Labs. Reach out to discuss certification for your AI system.">
 <meta property="og:title" content="Contact | Safety Critical Labs">
 <meta property="og:description" content="Begin a certification assessment or readiness evaluation for your AI system. Safety Critical Labs conducts assessments worldwide.">
@@ -320,77 +320,12 @@
   padding-right: 4px;
 }
 
-/* File attachment */
-.form-file-wrap {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  border: 1px dashed rgba(46,109,180,0.25);
-  border-radius: 4px;
-  padding: 12px 14px;
-  background: #FAF6EC;
-  transition: border-color 0.15s, background 0.15s;
-}
-.form-file-wrap.has-file { border-style: solid; border-color: var(--blue); background: #FCFAF3; }
-.form-file-wrap input[type="file"] {
-  position: absolute;
-  width: 1px; height: 1px;
-  padding: 0; margin: -1px;
-  overflow: hidden;
-  clip: rect(0,0,0,0);
-  border: 0;
-}
-.form-file-btn {
-  font-family: var(--sans); font-size: 13px;
-  font-weight: 500; letter-spacing: 0.04em;
-  padding: 7px 14px;
-  border-radius: 4px;
-  background: transparent;
-  color: var(--blue);
-  border: 1px solid var(--blue);
-  cursor: pointer;
-  transition: all 0.25s ease;
-  flex-shrink: 0;
-}
-.form-file-btn:hover {
-  background: var(--blue);
-  color: #fff;
-}
-.form-file-name {
-  font-size: 13px;
-  color: var(--ink-3);
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  flex: 1;
-  min-width: 0;
-}
-.form-file-wrap.has-file .form-file-name { color: var(--ink); font-weight: 500; }
-.form-file-clear {
-  background: none;
-  border: none;
-  color: var(--ink-3);
-  font-size: 18px;
-  cursor: pointer;
-  padding: 0 4px;
-  line-height: 1;
-  display: none;
-}
-.form-file-wrap.has-file .form-file-clear { display: inline-block; }
-.form-file-clear:hover { color: var(--blue); }
-.form-file-hint {
-  font-size: 11px;
-  color: var(--ink-3);
-  margin-top: 4px;
-  font-weight: 300;
-}
-.form-file-error {
+.form-note {
   font-size: 12px;
-  color: #C8272D;
-  margin-top: 4px;
-  display: none;
+  color: var(--ink-3);
+  font-weight: 300;
+  line-height: 1.6;
 }
-.form-file-error.visible { display: block; }
 
 .form-submit {
   display: inline-block;
@@ -409,6 +344,25 @@
   background: var(--blue);
   color: #fff;
 }
+.form-submit:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+.form-submit:disabled:hover {
+  background: transparent;
+  color: var(--blue);
+}
+
+.form-error {
+  display: none;
+  padding: 14px 18px;
+  background: #FAF6EC; border: 1px solid rgba(200,39,45,0.35);
+  border-radius: 4px;
+  font-size: 14px; color: var(--ink-2); line-height: 1.6;
+}
+.form-error.visible { display: block; }
+.form-error a { color: var(--blue); text-decoration: none; }
+.form-error a:hover { text-decoration: underline; }
 
 .form-success {
   display: none;
@@ -507,7 +461,6 @@
           id="contactForm"
           action="https://formspree.io/f/xbdpdvye"
           method="POST"
-          enctype="multipart/form-data"
         >
           <div class="form-row">
             <div class="form-field">
@@ -548,15 +501,9 @@
               <input type="hidden" name="message" id="message">
             </div>
           </div>
-          <div class="form-field">
-            <label class="form-label" for="attachment">Attachment</label>
-            <div class="form-file-wrap" id="fileWrap">
-              <button type="button" class="form-file-btn" id="fileBtn">Choose file</button>
-              <span class="form-file-name" id="fileName">No file chosen</span>
-              <button type="button" class="form-file-clear" id="fileClear" aria-label="Remove file">&times;</button>
-              <input type="file" id="attachment" name="attachment" accept=".pdf,.doc,.docx,.html,.htm,.txt,.md,.json,.csv,.xlsx,.zip,image/*">
-            </div>
-            <div class="form-file-error" id="fileError">File is too large. Please attach a smaller file or share via email.</div>
+          <p class="form-note">Supporting documents can be sent by email after first contact.</p>
+          <div class="form-error" id="formError" role="alert">
+            Your message could not be sent. Please email <a href="mailto:kevin.williams@safetycriticallabs.com">kevin.williams@safetycriticallabs.com</a> instead.
           </div>
           <button type="submit" class="form-submit">Send message</button>
         </form>
@@ -598,12 +545,12 @@
       <div class="footer-col">
         <div class="footer-col-label">Resources</div>
         <a href="/documents">Documents</a>
-        <a href="#">FAQ</a>
+        <a href="/search.html">FAQ</a>
       </div>
 
       <div class="footer-col">
         <div class="footer-col-label">Company</div>
-        <a href="#">About</a><a href="/position">Position</a>
+        <a href="/position">Position</a>
         <a href="/expertise">Expertise</a>
         <a href="/markets">Markets</a>
         <a href="/contact">Contact</a>
@@ -629,7 +576,7 @@
     <div class="footer-divider"></div>
 
     <div class="footer-bottom">
-      <span class="footer-copyright">&copy; 2025 Safety Critical Labs. All rights reserved.</span>
+      <span class="footer-copyright">&copy; 2026 Safety Critical Labs. All rights reserved.</span>
       <div class="footer-meta">
         <a href="#" aria-label="Back to top">Back to top</a>
         <span class="footer-version">Framework v3.3</span>
@@ -639,84 +586,7 @@
   </div>
 </footer>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
-
 <script>
-/* ─── GSAP SCROLL ANIMATIONS ─────────────────────────────── */
-gsap.registerPlugin(ScrollTrigger);
-
-/* Fade-up elements */
-gsap.utils.toArray('.fade-up').forEach(function(el, i) {
-  gsap.fromTo(el,
-    { opacity: 0, y: 40 },
-    { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out',
-      scrollTrigger: {
-        trigger: el,
-        start: 'top 88%',
-        once: true
-      }
-    }
-  );
-});
-
-/* Stagger children (grids, lists) */
-gsap.utils.toArray('.stagger-in').forEach(function(container) {
-  gsap.fromTo(container.children,
-    { opacity: 0, y: 30 },
-    { opacity: 1, y: 0, duration: 0.7, ease: 'power3.out',
-      stagger: 0.12,
-      scrollTrigger: {
-        trigger: container,
-        start: 'top 85%',
-        once: true
-      }
-    }
-  );
-});
-
-/* Scale-in elements (cards, images) */
-gsap.utils.toArray('.scale-in').forEach(function(el) {
-  gsap.fromTo(el,
-    { opacity: 0, scale: 0.95, y: 20 },
-    { opacity: 1, scale: 1, y: 0, duration: 0.9, ease: 'power3.out',
-      scrollTrigger: {
-        trigger: el,
-        start: 'top 85%',
-        once: true
-      }
-    }
-  );
-});
-
-/* Slide from left */
-gsap.utils.toArray('.slide-left').forEach(function(el) {
-  gsap.fromTo(el,
-    { opacity: 0, x: -60 },
-    { opacity: 1, x: 0, duration: 0.9, ease: 'power3.out',
-      scrollTrigger: {
-        trigger: el,
-        start: 'top 85%',
-        once: true
-      }
-    }
-  );
-});
-
-/* Slide from right */
-gsap.utils.toArray('.slide-right').forEach(function(el) {
-  gsap.fromTo(el,
-    { opacity: 0, x: 60 },
-    { opacity: 1, x: 0, duration: 0.9, ease: 'power3.out',
-      scrollTrigger: {
-        trigger: el,
-        start: 'top 85%',
-        once: true
-      }
-    }
-  );
-});
-
 /* ─── Rich-text (contenteditable) editor ─────── */
 (function() {
   const editable = document.getElementById('messageEditable');
@@ -887,60 +757,30 @@ if (form) {
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
     if (typeof window.__messageToText === 'function') window.__messageToText();
-    const data = new FormData(form);
-    const response = await fetch(form.action, {
-      method: 'POST',
-      body: data,
-      headers: { 'Accept': 'application/json' }
-    });
-    if (response.ok) {
-      form.style.display = 'none';
-      success.classList.add('visible');
+    const submitBtn = form.querySelector('.form-submit');
+    const errorEl = document.getElementById('formError');
+    if (errorEl) errorEl.classList.remove('visible');
+    if (submitBtn) submitBtn.disabled = true;
+    try {
+      const data = new FormData(form);
+      const response = await fetch(form.action, {
+        method: 'POST',
+        body: data,
+        headers: { 'Accept': 'application/json' }
+      });
+      if (response.ok) {
+        form.style.display = 'none';
+        success.classList.add('visible');
+      } else {
+        if (errorEl) errorEl.classList.add('visible');
+        if (submitBtn) submitBtn.disabled = false;
+      }
+    } catch (err) {
+      if (errorEl) errorEl.classList.add('visible');
+      if (submitBtn) submitBtn.disabled = false;
     }
   });
 }
-
-/* ─── File attachment UI ─────────────────────── */
-(function() {
-  const input = document.getElementById('attachment');
-  const wrap = document.getElementById('fileWrap');
-  const btn = document.getElementById('fileBtn');
-  const nameEl = document.getElementById('fileName');
-  const clearBtn = document.getElementById('fileClear');
-  const errEl = document.getElementById('fileError');
-  if (!input || !wrap) return;
-
-  const MAX_BYTES = 10 * 1024 * 1024; // 10 MB
-
-  function formatSize(bytes) {
-    if (bytes < 1024) return bytes + ' B';
-    if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
-    return (bytes / (1024 * 1024)).toFixed(2) + ' MB';
-  }
-
-  function reset() {
-    input.value = '';
-    wrap.classList.remove('has-file');
-    nameEl.textContent = 'No file chosen';
-    errEl.classList.remove('visible');
-  }
-
-  btn.addEventListener('click', () => input.click());
-  clearBtn.addEventListener('click', reset);
-
-  input.addEventListener('change', function() {
-    const file = this.files && this.files[0];
-    if (!file) { reset(); return; }
-    if (file.size > MAX_BYTES) {
-      errEl.classList.add('visible');
-      reset();
-      return;
-    }
-    errEl.classList.remove('visible');
-    wrap.classList.add('has-file');
-    nameEl.textContent = file.name + ' (' + formatSize(file.size) + ')';
-  });
-})();
 
 /* Hero cursor glow */
 (function() {
@@ -960,32 +800,6 @@ document.querySelector('.gn-hamburger').addEventListener('click', function() {
   document.querySelector('.gn-links').classList.toggle('open');
   this.setAttribute('aria-expanded', this.classList.contains('open'));
   document.body.style.overflow = this.classList.contains('open') ? 'hidden' : '';
-});
-
-/* Dropdown nav toggle */
-document.querySelectorAll(".gn-dropdown-toggle").forEach(function(btn) {
-  btn.addEventListener("click", function(e) {
-    e.stopPropagation();
-    var dd = this.closest(".gn-dropdown");
-    var menu = dd.querySelector(".gn-dropdown-menu");
-    var isOpen = dd.classList.contains("open");
-    document.querySelectorAll(".gn-dropdown").forEach(function(d) {
-      d.classList.remove("open");
-      var m = d.querySelector(".gn-dropdown-menu");
-      if (m) m.style.display = "none";
-    });
-    if (!isOpen) {
-      dd.classList.add("open");
-      menu.style.display = "block";
-    }
-  });
-});
-document.addEventListener("click", function() {
-  document.querySelectorAll(".gn-dropdown").forEach(function(d) {
-    d.classList.remove("open");
-    var m = d.querySelector(".gn-dropdown-menu");
-    if (m) m.style.display = "none";
-  });
 });
 </script>
 <script src="ticker.js"></script>

@@ -449,12 +449,12 @@
       <div class="footer-col">
         <div class="footer-col-label">Resources</div>
         <a href="/documents">Documents</a>
-        <a href="#">FAQ</a>
+        <a href="/search.html">FAQ</a>
       </div>
 
       <div class="footer-col">
         <div class="footer-col-label">Company</div>
-        <a href="#">About</a><a href="/position">Position</a>
+        <a href="/position">Position</a>
         <a href="/expertise">Expertise</a>
         <a href="/markets">Markets</a>
         <a href="/contact">Contact</a>
@@ -480,7 +480,7 @@
     <div class="footer-divider"></div>
 
     <div class="footer-bottom">
-      <span class="footer-copyright">&copy; 2025 Safety Critical Labs. All rights reserved.</span>
+      <span class="footer-copyright">&copy; 2026 Safety Critical Labs. All rights reserved.</span>
       <div class="footer-meta">
         <a href="#" aria-label="Back to top">Back to top</a>
         <span class="footer-version">Framework v3.3</span>
@@ -545,104 +545,59 @@
   /* Rich seed content — page is full even before (or instead of) RSS feeds resolving. */
   function d(s) { return new Date(s + 'T12:00:00Z'); }
   var FALLBACK = [
+    /* Anthropic */
+    { key: 'anthropic', title: 'Agentic Misalignment: How LLMs could be insider threats',
+      summary: 'Anthropic tested 16 leading models in simulated corporate scenarios. When facing replacement or goal conflict, some models chose harmful insider actions such as blackmail.',
+      url: 'https://www.anthropic.com/research/agentic-misalignment', date: d('2025-06-20') },
+    { key: 'anthropic', title: 'Tracing the thoughts of a large language model',
+      summary: 'Interpretability research examining Claude\'s internal computation, with evidence of forward planning and of explanations that do not always match the model\'s actual reasoning.',
+      url: 'https://www.anthropic.com/news/tracing-thoughts-language-model', date: d('2025-03-27') },
+    { key: 'anthropic', title: 'Announcing our updated Responsible Scaling Policy',
+      summary: 'Anthropic\'s updated risk governance framework defines capability thresholds that trigger stronger safeguards as frontier models advance.',
+      url: 'https://www.anthropic.com/news/announcing-our-updated-responsible-scaling-policy', date: d('2024-10-15') },
+    { key: 'anthropic', title: 'Mapping the Mind of a Large Language Model',
+      summary: 'Anthropic\'s interpretability team extracted millions of interpretable features from Claude 3 Sonnet, a detailed look inside a production language model.',
+      url: 'https://www.anthropic.com/news/mapping-mind-language-model', date: d('2024-05-21') },
+
+    /* Google DeepMind */
+    { key: 'deepmind', title: 'Taking a responsible path to AGI',
+      summary: 'Google DeepMind outlines its approach to AGI safety and security across four risk areas: misuse, misalignment, accidents, and structural risks.',
+      url: 'https://deepmind.google/discover/blog/taking-a-responsible-path-to-agi/', date: d('2025-04-02') },
+    { key: 'deepmind', title: 'Introducing the Frontier Safety Framework',
+      summary: 'Protocols for identifying and mitigating severe risks from future frontier models, built around critical capability levels in areas including autonomy, biosecurity, and cybersecurity.',
+      url: 'https://deepmind.google/discover/blog/introducing-the-frontier-safety-framework/', date: d('2024-05-17') },
+
     /* Stanford HAI */
-    { key: 'hai', title: 'Stanford AI Index Report 2026: progress, costs, and capabilities',
-      summary: 'Annual report on the global state of AI research, deployment, and policy. Findings on training compute, capability scaling, and regulatory trends.',
-      url: 'https://hai.stanford.edu/research/ai-index-report', date: d('2026-05-09') },
-    { key: 'hai', title: 'Bridging research and policy: HAI\'s 2026 roadmap',
-      summary: 'Stanford HAI outlines its research and policy priorities for the year, with focus on safety evaluation standards and federal AI oversight.',
-      url: 'https://hai.stanford.edu/news', date: d('2026-04-24') },
-    { key: 'hai', title: 'Workshop on foundation model governance',
-      summary: 'Researchers and policymakers convene at Stanford to discuss governance frameworks for general-purpose AI systems and frontier model evaluation.',
-      url: 'https://hai.stanford.edu/events', date: d('2026-04-10') },
-    { key: 'hai', title: 'RegLab releases AI Audit framework for public comment',
-      summary: 'A reproducible audit methodology for evaluating high-stakes AI systems in regulated domains, developed in partnership with federal agencies.',
-      url: 'https://reglab.stanford.edu/', date: d('2026-03-12') },
-    { key: 'hai', title: 'HAI policy summit: an agenda for federal AI oversight',
-      summary: 'Summary of policy recommendations from the annual HAI summit, covering risk classification, post-market monitoring, and incident reporting.',
-      url: 'https://hai.stanford.edu/news', date: d('2026-02-20') },
+    { key: 'hai', title: 'AI Index 2025: State of AI in 10 Charts',
+      summary: 'Key findings from Stanford HAI\'s annual AI Index, covering technical progress, inference costs, responsible AI evaluations, and regulation.',
+      url: 'https://hai.stanford.edu/news/ai-index-2025-state-of-ai-in-10-charts', date: d('2025-04-07') },
+    { key: 'hai', title: 'Safeguarding Third-Party AI Research',
+      summary: 'A Stanford HAI policy brief on the barriers independent researchers face when evaluating AI systems, proposing safe harbors for good faith research by third parties.',
+      url: 'https://hai.stanford.edu/policy/safeguarding-third-party-ai-research', date: d('2025-02-13') },
 
     /* MIT News */
-    { key: 'mit', title: 'MIT researchers develop method for detecting AI hallucinations',
-      summary: 'CSAIL team publishes work on uncertainty estimation that flags hallucinated outputs from large language models with higher reliability than baselines.',
-      url: 'https://news.mit.edu/topic/artificial-intelligence2', date: d('2026-05-07') },
-    { key: 'mit', title: 'CSAIL launches multi-year initiative on AI verification',
-      summary: 'A new program at MIT\'s Computer Science and Artificial Intelligence Lab focuses on formal methods for verifying neural network behavior.',
-      url: 'https://www.csail.mit.edu/', date: d('2026-04-28') },
-    { key: 'mit', title: 'Interpretability in large language models: new MIT research',
-      summary: 'Researchers report on probing methods that surface causal circuits in transformer-based models, with implications for safety auditing.',
-      url: 'https://news.mit.edu/', date: d('2026-04-14') },
-    { key: 'mit', title: 'Lincoln Labs: adversarial robustness in vision models',
-      summary: 'New work from MIT Lincoln Laboratory benchmarks adversarial robustness across safety-critical computer vision applications.',
-      url: 'https://www.ll.mit.edu/', date: d('2026-04-02') },
-    { key: 'mit', title: 'MIT Sloan study: AI adoption in regulated industries',
-      summary: 'Survey of AI adoption patterns across aerospace, healthcare, and financial services, with implications for assurance and certification.',
-      url: 'https://mitsloan.mit.edu/', date: d('2026-03-20') },
-    { key: 'mit', title: 'MIT and DARPA on assured autonomy',
-      summary: 'Joint research on verification and validation of autonomous systems operating in safety-critical environments.',
-      url: 'https://news.mit.edu/', date: d('2026-02-28') },
-
-    /* Google Research */
-    { key: 'google', title: 'Gemini safety techniques: expanded evaluation suite',
-      summary: 'Google Research publishes the methodology and results from expanded safety evaluations of the Gemini model family.',
-      url: 'https://research.google/blog/', date: d('2026-05-04') },
-    { key: 'google', title: 'Scaling responsible AI development across modalities',
-      summary: 'New paper from Google DeepMind on extending responsible AI practices to multimodal and agentic systems.',
-      url: 'https://deepmind.google/discover/blog/', date: d('2026-04-20') },
-    { key: 'google', title: 'Research advances in alignment for multi-agent systems',
-      summary: 'Google Research presents work on aligning multi-agent AI systems with human preferences in cooperative and competitive settings.',
-      url: 'https://research.google/blog/', date: d('2026-04-06') },
-    { key: 'google', title: 'Open-source: evaluation framework for long-context LLMs',
-      summary: 'Release of an open-source benchmark and harness for evaluating language models across very long contexts and tool-use chains.',
-      url: 'https://research.google/blog/', date: d('2026-03-24') },
-    { key: 'google', title: 'Governance findings from the Google AI ethics review',
-      summary: 'Summary report from Google\'s internal AI ethics review process, covering deployments approved, modified, and declined.',
-      url: 'https://ai.google/responsibility/', date: d('2026-02-24') },
-
-    /* Anthropic */
-    { key: 'anthropic', title: 'Constitutional AI: a year in review',
-      summary: 'Anthropic reflects on a year of Constitutional AI in production, including methodology refinements and observed model behavior changes.',
-      url: 'https://www.anthropic.com/news', date: d('2026-05-01') },
-    { key: 'anthropic', title: 'New mechanistic interpretability findings on Claude',
-      summary: 'Anthropic\'s interpretability team publishes new insights into the internal computation of Claude, including feature dictionaries.',
-      url: 'https://www.anthropic.com/research', date: d('2026-04-17') },
-    { key: 'anthropic', title: 'Responsible Scaling Policy: version 2.0',
-      summary: 'Anthropic publishes an updated Responsible Scaling Policy with revised evaluation thresholds and deployment commitments.',
-      url: 'https://www.anthropic.com/news', date: d('2026-03-16') },
-    { key: 'anthropic', title: 'Red-teaming Claude: results and methodology',
-      summary: 'Detailed writeup of red-team exercises across recent Claude releases, including coverage, failure modes, and mitigations.',
-      url: 'https://www.anthropic.com/research', date: d('2026-02-24') },
-    { key: 'anthropic', title: 'Sleeper agents follow-up: deceptive alignment evaluation',
-      summary: 'Continued research on detecting and mitigating models that behave differently in evaluation versus deployment contexts.',
-      url: 'https://www.anthropic.com/research', date: d('2026-02-08') },
-
-    /* OpenAI */
-    { key: 'openai', title: 'GPT safety evaluations: red-team report Q1 2026',
-      summary: 'OpenAI publishes the quarterly red-team report covering GPT model evaluations, including chemical, biological, and cyber risk categories.',
-      url: 'https://openai.com/safety', date: d('2026-04-25') },
-    { key: 'openai', title: 'Red-teaming framework for frontier models',
-      summary: 'A revised internal framework for red-teaming pre-deployment models, with new evaluation categories for agentic capabilities.',
-      url: 'https://openai.com/research', date: d('2026-03-31') },
-    { key: 'openai', title: 'Updated usage policies for AI deployment',
-      summary: 'OpenAI publishes refreshed usage policies clarifying restrictions on use cases in regulated industries and high-stakes decisions.',
-      url: 'https://openai.com/policies', date: d('2026-03-08') },
-    { key: 'openai', title: 'Preparedness team annual report',
-      summary: 'Annual summary from OpenAI\'s Preparedness team covering catastrophic risk evaluations and mitigation work over the year.',
-      url: 'https://openai.com/safety', date: d('2026-02-16') },
+    { key: 'mit', title: 'Explained: Generative AI\'s environmental impact',
+      summary: 'MIT researchers examine the electricity and water demands of training and serving generative AI models, and the environmental costs that follow.',
+      url: 'https://news.mit.edu/2025/explained-generative-ai-environmental-impact-0117', date: d('2025-01-17') },
+    { key: 'mit', title: 'Researchers reduce bias in AI models while preserving or improving accuracy',
+      summary: 'A technique from MIT identifies and removes the training examples that drive failures on underrepresented groups, reducing bias while maintaining overall accuracy.',
+      url: 'https://news.mit.edu/2024/researchers-reduce-bias-ai-models-while-preserving-improving-accuracy-1211', date: d('2024-12-11') },
+    { key: 'mit', title: 'Reasoning and reliability in AI',
+      summary: 'Researchers at the MIT-IBM Watson AI Lab work on making language models more trustworthy through uncertainty quantification, compositional reasoning, and human interaction studies.',
+      url: 'https://news.mit.edu/2024/reasoning-and-reliability-in-ai-0118', date: d('2024-01-18') },
 
     /* Alignment Forum */
-    { key: 'alignment', title: 'Foundations of formal AI alignment',
-      summary: 'A long-form technical post laying out a research agenda for formalizing AI alignment problems and partial solutions.',
-      url: 'https://www.alignmentforum.org/', date: d('2026-05-11') },
-    { key: 'alignment', title: 'Recent work on goal misgeneralization in fine-tuning',
-      summary: 'Survey and discussion of recent research on how language models can learn unintended objectives during fine-tuning.',
-      url: 'https://www.alignmentforum.org/', date: d('2026-04-21') },
-    { key: 'alignment', title: 'Open problem: detecting deceptive alignment',
-      summary: 'Technical analysis of why deceptive alignment is difficult to detect with current evaluation methods, and what would help.',
-      url: 'https://www.alignmentforum.org/', date: d('2026-03-30') },
-    { key: 'alignment', title: 'Scalable oversight techniques: a writeup',
-      summary: 'Detailed comparison of scalable oversight techniques including debate, recursive reward modeling, and constitutional methods.',
-      url: 'https://www.alignmentforum.org/', date: d('2026-02-12') }
+    { key: 'alignment', title: 'Alignment Faking in Large Language Models',
+      summary: 'Anthropic and Redwood Research show Claude 3 Opus selectively complying with a conflicting training objective to avoid having its behavior modified, an empirical demonstration of alignment faking.',
+      url: 'https://www.alignmentforum.org/posts/njAZwT8nkHnjipJku/alignment-faking-in-large-language-models', date: d('2024-12-18') },
+    { key: 'alignment', title: 'The case for ensuring that powerful AIs are controlled',
+      summary: 'Redwood Research argues that labs should pair alignment work with control measures that hold even if models are misaligned and actively try to subvert safeguards.',
+      url: 'https://www.alignmentforum.org/posts/kcKrE9mzEHrdqtDpE/the-case-for-ensuring-that-powerful-ais-are-controlled', date: d('2024-01-24') },
+
+    /* Press */
+    { key: 'techcrunch', title: 'MIT researchers release a repository of AI risks',
+      summary: 'Coverage of the MIT AI Risk Repository, a database of more than 700 documented AI risks organized by cause and domain for policymakers and researchers.',
+      url: 'https://techcrunch.com/2024/08/14/mit-researchers-release-a-repository-of-ai-risks/', date: d('2024-08-14') }
   ];
 
   var gridItems = [];
@@ -672,6 +627,15 @@
     return div.innerHTML;
   }
 
+  /* ── Accept only http(s) URLs; returns normalized href or '' ─ */
+  function safeUrl(url) {
+    try {
+      var u = new URL(url);
+      if (u.protocol === 'http:' || u.protocol === 'https:') return u.href;
+    } catch (e) {}
+    return '';
+  }
+
   /* ── Parse RSS/Atom XML into normalized items ────────────── */
   function parseFeed(xmlText, sourceKey, applyFilter) {
     var parser = new DOMParser();
@@ -695,6 +659,7 @@
       if (linkEl) {
         link = linkEl.getAttribute('href') || stripHtml(linkEl.textContent);
       }
+      link = safeUrl(link);
       var date = pubEl ? new Date(pubEl.textContent) : new Date();
       var summary = descEl ? truncate(stripHtml(descEl.textContent), 180) : '';
 
@@ -730,7 +695,7 @@
           return {
             key: 'openrouter',
             title: m.name,
-            url: 'https://openrouter.ai/' + m.id,
+            url: safeUrl('https://openrouter.ai/' + m.id),
             date: new Date(m.created * 1000),
             summary: truncate(stripHtml(m.description || ''), 170)
                      || 'Newly available on OpenRouter.'
@@ -757,7 +722,7 @@
           out.push({
             key: 'hf',
             title: id,
-            url: 'https://huggingface.co/' + id,
+            url: safeUrl('https://huggingface.co/' + id),
             date: m.createdAt ? new Date(m.createdAt) : new Date(),
             summary: parts.join('. ') + '.'
           });
@@ -851,7 +816,7 @@
     var html = '';
     filtered.slice(0, 12).forEach(function (item) {
       var meta = SOURCE_META[item.key] || { label: 'AI', pill: 'AI' };
-      html += '<a href="' + encodeURI(item.url) + '" target="_blank" rel="noopener" class="news-card" data-source="' + item.key + '">'
+      html += '<a href="' + item.url + '" target="_blank" rel="noopener" class="news-card" data-source="' + item.key + '">'
         +   '<div class="news-card-image">'
         +     '<span class="news-card-source-pill">' + escapeHtml(meta.pill) + '</span>'
         +   '</div>'

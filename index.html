@@ -25,6 +25,19 @@
 <style>
 /* ─── INDEX PAGE STYLES ─────────────────────────────── */
 
+/* Visually hidden — screen-reader-only text */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
 /* ─── HOME HERO ("the stamp" — flat seal flies in and stamps the cert) ── */
 .home-hero {
   /* Cream + soft blue space gradient */
@@ -81,12 +94,8 @@
   to   { opacity: 1; }
 }
 
-/* Cluster groups — transform set inline every frame by the rAF loop. No
-   transform transition so drift + cursor pull are smooth/continuous. */
-.hero-cluster {
-  /* fill/opacity transitions stay; transform updates frame-by-frame */
-}
-
+/* Cluster groups get their transform set inline every frame by the rAF loop.
+   No transform transition so drift + cursor pull are smooth/continuous. */
 .hero-cluster-line {
   stroke: var(--blue);
   stroke-width: 0.45;
@@ -286,6 +295,7 @@
 }
 .cert-face:hover .cert-flip-hint { opacity: 0.9; }
 .cert-flip-hint:hover { color: var(--blue); border-color: var(--blue); }
+.cert-flip-hint:focus-visible { opacity: 0.9; }
 @media (hover: none) { .cert-flip-hint { opacity: 0.8; } }
 
 /* ─── THE SEAL (SVG orb line-drawing — two-phase animation) ─────────── */
@@ -334,6 +344,12 @@
   84% { transform: translate(-50%, calc(-50% - 3px)) scale(0.88, 0.83); }  /* land — overshoot */
   92% { transform: translate(-50%, -50%) scale(0.855, 0.845); }            /* settle */
 }
+
+/* Invisible click target inside the seal — only active while the seal idles.
+   Without this gate the circle keeps catching pointer events after the stamp
+   lands and blocks grabbing the cert near its top edge. */
+.stamp-hit { pointer-events: none; }
+.stamp-stage.stamp-idle .stamp-hit { pointer-events: all; }
 
 /* ENTRY: punch in huge, shrink with kinetic rotation, settle at hover scale.
    Mirrors the previous animation's 0–28% beats but as a standalone 2s clip. */
@@ -576,238 +592,7 @@
   padding-top: 5px; border-top: 1px solid var(--rule);
 }
 
-/* ─── SECTION FLOW & DEPTH ────────────────────────────────── */
-.section-wwd {
-  background: #F7F3EC;
-  position: relative;
-  padding: 120px 40px;
-}
-.section-wwd::after {
-  content: ''; position: absolute; bottom: 0; left: 0; right: 0;
-  height: 180px;
-  background: linear-gradient(to bottom, transparent, var(--white));
-  pointer-events: none;
-}
-.section-produces {
-  background: var(--white);
-  position: relative;
-  padding: 120px 40px;
-}
-.section-produces::after {
-  content: ''; position: absolute; bottom: 0; left: 0; right: 0;
-  height: 180px;
-  background: linear-gradient(to bottom, transparent, #EEF2F7);
-  pointer-events: none;
-}
-
-/* ─── WHAT WE DO ──────────────────────────────────────────── */
-.what-grid {
-  display: grid; grid-template-columns: 1fr 1fr;
-  gap: 80px; align-items: start;
-}
-
-.what-body p {
-  font-size: 17px; color: var(--ink-2); line-height: 1.85;
-  font-weight: 300; margin-bottom: 22px;
-}
-.what-body p strong { color: var(--ink); font-weight: 500; }
-
-.nav-cards {
-  display: flex; flex-direction: column;
-  border: 1px solid var(--rule);
-  border-radius: 6px; overflow: hidden;
-}
-
-.nav-card {
-  display: flex; align-items: center; gap: 18px;
-  padding: 20px 24px; background: var(--white);
-  border-bottom: 1px solid var(--rule);
-  text-decoration: none; color: inherit;
-  transition: background 0.25s, transform 0.25s, box-shadow 0.25s;
-}
-.nav-card:last-child { border-bottom: none; }
-.nav-card:hover {
-  background: #FAFBFC;
-  transform: translateX(4px);
-  box-shadow: -4px 0 0 var(--blue);
-}
-
-.nav-card-num {
-  font-family: var(--sans); font-size: 12px;
-  font-weight: 600; color: var(--blue); flex-shrink: 0; min-width: 28px;
-}
-.nav-card-body { flex: 1; }
-.nav-card-title { font-size: 14px; font-weight: 500; color: var(--ink); margin-bottom: 3px; }
-.nav-card-desc { font-size: 13px; color: var(--ink-3); line-height: 1.55; }
-.nav-card-arrow { color: var(--rule); font-size: 14px; flex-shrink: 0; transition: color 0.2s, transform 0.2s; }
-.nav-card:hover .nav-card-arrow { color: var(--blue); transform: translateX(2px); }
-
-/* ─── WHAT CERTIFICATION PRODUCES ────────────────────────── */
-.produces-header {
-  display: grid; grid-template-columns: 1fr 1fr;
-  gap: 72px; align-items: end; margin-bottom: 56px;
-}
-
-.produces-lead {
-  font-size: 17px; color: var(--ink-2);
-  font-weight: 300; line-height: 1.8;
-  border-left: 2px solid var(--rule);
-  padding-left: 24px; align-self: end;
-}
-
-.produces-grid {
-  display: grid; grid-template-columns: repeat(3, 1fr);
-  gap: 20px; background: transparent;
-}
-
-.produces-card {
-  background: var(--white);
-  padding: 32px 28px;
-  border: 1px solid var(--rule);
-  border-radius: 6px;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-.produces-card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 8px 24px rgba(15,35,64,0.08);
-}
-
-.produces-card-label {
-  font-family: var(--sans); font-size: 11px;
-  font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase;
-  color: var(--blue); margin-bottom: 12px;
-}
-.produces-card-title {
-  font-size: 15px; font-weight: 500;
-  color: var(--ink); margin-bottom: 10px; line-height: 1.4;
-}
-.produces-card-desc { font-size: 14px; color: var(--ink-2); line-height: 1.65; }
-
-.btn-white {
-  display: inline-block;
-  background: #fff; color: var(--ink);
-  font-family: var(--sans); font-size: 13px;
-  letter-spacing: 0.04em;
-  padding: 13px 28px; border-radius: 2px;
-  text-decoration: none; transition: all 0.15s;
-  font-weight: 500;
-}
-.btn-white:hover { background: var(--bg); }
-
-/* ─── REGULATORY LANDSCAPE ───────────────────────────────── */
-.reg-landscape {
-  background: #EEF2F7;
-  position: relative;
-  border-top: none;
-  padding-top: 120px; padding-bottom: 120px;
-}
-
-.reg-header {
-  text-align: center; margin-bottom: 56px;
-}
-
-.reg-header .section-title { margin-bottom: 20px; }
-
-.reg-lead {
-  font-size: 17px; color: var(--ink-2);
-  font-weight: 300; line-height: 1.8;
-  max-width: 620px; margin: 0 auto;
-  border-left: none; padding-left: 0;
-}
-
-.reg-grid {
-  display: grid; grid-template-columns: repeat(3, 1fr);
-  gap: 24px; background: none;
-  border: none;
-}
-
-.reg-column {
-  background: var(--white);
-  display: flex; flex-direction: column;
-  border-radius: 8px;
-  border-left: 3px solid var(--blue);
-  box-shadow: 0 2px 12px rgba(15,35,64,0.06);
-  overflow: hidden;
-  transition: transform 0.25s, box-shadow 0.25s;
-}
-.reg-column:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 8px 24px rgba(15,35,64,0.1);
-}
-
-.reg-col-header {
-  padding: 28px 28px 20px;
-  border-bottom: 1px solid var(--rule);
-  background: var(--white);
-}
-
-.reg-col-flag {
-  font-family: var(--sans); font-size: 11px;
-  font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase;
-  color: var(--blue); margin-bottom: 6px;
-  display: flex; align-items: center; gap: 8px;
-}
-
-.reg-col-flag .flag-dot {
-  width: 6px; height: 6px; border-radius: 50%;
-  background: var(--blue); opacity: 0.5;
-}
-
-.reg-col-name {
-  font-size: 17px; font-weight: 600;
-  color: var(--ink); line-height: 1.35;
-}
-
-.reg-col-desc {
-  font-size: 13px; color: var(--ink-3);
-  line-height: 1.55; margin-top: 6px;
-}
-
-.reg-items {
-  padding: 0; flex: 1;
-  list-style: none;
-}
-
-.reg-item {
-  padding: 18px 28px;
-  border-bottom: 1px solid var(--rule);
-  transition: background 0.2s ease;
-}
-.reg-item:last-child { border-bottom: none; }
-.reg-item:hover { background: #F8F9FB; }
-
-.reg-item a {
-  text-decoration: none; color: inherit;
-  display: block;
-}
-
-.reg-item-type {
-  font-family: var(--mono); font-size: 9px;
-  letter-spacing: 0.1em; text-transform: uppercase;
-  color: var(--ink-3); margin-bottom: 4px;
-}
-
-.reg-item-title {
-  font-size: 14px; font-weight: 400;
-  color: var(--ink); line-height: 1.55;
-  margin-bottom: 8px;
-  display: -webkit-box; -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical; overflow: hidden;
-}
-
-.reg-item a:hover .reg-item-title { color: var(--blue); }
-
-.reg-item-date {
-  font-family: var(--mono); font-size: 10px;
-  color: var(--ink-3); letter-spacing: 0.04em;
-}
-
-.reg-item-skeleton {
-  padding: 16px 24px;
-  border-bottom: 1px solid var(--rule);
-}
-.reg-item-skeleton:last-child { border-bottom: none; }
-
+/* ─── LOADING SKELETON (used by the news section) ─────────── */
 .skel-line {
   height: 10px; background: var(--rule);
   border-radius: 2px; margin-bottom: 8px;
@@ -821,21 +606,6 @@
 @keyframes shimmer {
   from { opacity: 0.5; }
   to { opacity: 1; }
-}
-
-.reg-unavailable {
-  padding: 24px;
-  font-family: var(--sans); font-size: 13px;
-  font-weight: 400;
-  color: var(--ink-3); text-align: center;
-}
-
-.reg-footer-note {
-  margin-top: 24px;
-  font-family: var(--sans); font-size: 12px;
-  font-weight: 400;
-  color: var(--ink-3);
-  text-align: center;
 }
 
 /* ─── FIREWORK SHOWCASE (the 13 framework areas radiating) ─ */
@@ -904,6 +674,57 @@
   height: 100%;
   display: block;
 }
+
+/* Clickable nodes + requirement detail panel */
+.fw-hit { fill: transparent; pointer-events: all; }
+.fw-req-group:focus { outline: none; }
+.fw-req-group:focus-visible .fw-dot,
+.fw-req-group:focus-visible .fw-req-bubble { stroke: var(--blue); stroke-width: 2; opacity: 1; }
+
+.fw-detail {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%) scale(0.96);
+  width: min(360px, 88%);
+  background: #fff;
+  border: 1px solid var(--rule);
+  border-radius: 12px;
+  box-shadow: 0 24px 70px rgba(15,35,64,0.22);
+  padding: 28px 30px 26px;
+  z-index: 5;
+  text-align: left;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+.fw-detail.is-open { opacity: 1; transform: translate(-50%, -50%) scale(1); pointer-events: auto; }
+.fw-detail[hidden] { display: none; }
+.fw-detail-close {
+  position: absolute; top: 12px; right: 14px;
+  background: none; border: none; font-size: 24px; line-height: 1;
+  color: var(--ink-3); cursor: pointer; padding: 4px;
+}
+.fw-detail-close:hover { color: var(--ink); }
+.fw-detail-id {
+  font-family: var(--mono); font-size: 13px; font-weight: 600;
+  letter-spacing: 0.08em; color: var(--blue); margin-bottom: 6px;
+}
+.fw-detail-title {
+  font-size: 20px; font-weight: 600; letter-spacing: -0.02em;
+  color: var(--ink); line-height: 1.25; margin-bottom: 18px;
+}
+.fw-detail-prevents-label {
+  font-size: 11px; font-weight: 600; letter-spacing: 0.07em;
+  text-transform: uppercase; color: var(--ink-3); margin-bottom: 6px;
+}
+.fw-detail-prevents {
+  font-size: 14.5px; line-height: 1.6; font-weight: 300;
+  color: var(--ink-2); margin: 0 0 20px;
+}
+.fw-detail-link {
+  font-size: 14px; font-weight: 500; color: var(--blue); text-decoration: none;
+}
+.fw-detail-link:hover { text-decoration: underline; }
 
 /* Ray styling */
 .fw-ray {
@@ -986,25 +807,6 @@
 /* Keep firework SVG content within its container so it doesn't bleed into other sections */
 .fw-canvas-container {
   overflow: hidden;
-}
-
-/* Magnet active line — line from SCL logo center to attracted requirement.
-   Delayed transition so the REQUIREMENT moves first, then the line "shoots" in. */
-.fw-active-line {
-  stroke: var(--blue);
-  stroke-width: 1.6;
-  stroke-linecap: round;
-  fill: none;
-  pointer-events: none;
-  opacity: 0;
-  transition: opacity 0.35s ease-out 0.22s;
-}
-.fw-active-line.fw-line-shoot {
-  animation: fw-line-shoot 0.55s cubic-bezier(0.2, 0.8, 0.2, 1) 0.22s both;
-}
-@keyframes fw-line-shoot {
-  0%   { stroke-dasharray: 600; stroke-dashoffset: 600; }
-  100% { stroke-dasharray: 600; stroke-dashoffset: 0; }
 }
 
 /* Requirement group — wraps bubble + dot + labels so they move together.
@@ -1198,12 +1000,26 @@
 }
 .ask-search-bar:hover .ask-search-icon { color: var(--blue); }
 
-.ask-search-placeholder {
+.ask-search-input {
+  flex: 1;
+  min-width: 0;
+  background: transparent;
+  border: none;
+  outline: none;
   font-family: var(--sans);
   font-size: 20px;
   font-weight: 400;
-  color: rgba(46,109,180,0.55);
+  color: var(--blue-dk);
   text-align: left;
+  padding: 0;
+}
+.ask-search-input::placeholder {
+  color: rgba(46,109,180,0.55);
+  font-weight: 300;
+}
+.ask-search-bar:focus-within {
+  border-color: var(--blue);
+  box-shadow: 0 4px 20px rgba(46,109,180,0.12);
 }
 
 .ask-search-arrow {
@@ -1213,10 +1029,12 @@
   justify-content: center;
   width: 48px;
   height: 48px;
+  padding: 0;
   border-radius: 50%;
   border: 1px solid rgba(46,109,180,0.35);
   color: rgba(46,109,180,0.55);
   background: transparent;
+  cursor: pointer;
   transition: all 0.25s ease;
   flex-shrink: 0;
 }
@@ -1230,7 +1048,7 @@
 @media (max-width: 720px) {
   .ask-scl { padding: 80px 24px 100px; }
   .ask-search-bar { padding: 22px 20px; gap: 12px; }
-  .ask-search-placeholder { font-size: 16px; }
+  .ask-search-input { font-size: 16px; }
 }
 
 /* ─── SUBSCRIBE CTA (cream + blue) ───────────────────────── */
@@ -1259,14 +1077,6 @@
   max-width: 720px;
   margin: 0 auto;
   text-align: center;
-}
-
-.subscribe-logo {
-  width: 80px; height: 80px;
-  object-fit: contain;
-  margin: 0 auto 32px;
-  display: block;
-  filter: drop-shadow(0 0 24px rgba(46,109,180,0.35)) drop-shadow(0 0 48px rgba(46,109,180,0.15));
 }
 
 .subscribe-title {
@@ -1573,27 +1383,6 @@
   background: rgba(46,109,180,0.06);
 }
 
-/* ─── HERO BUTTON ──────────────────────────────────────────── */
-.home-hero .btn-solid {
-  background: transparent;
-  color: var(--blue);
-  border: 1px solid var(--blue);
-  border-radius: 6px;
-  padding: 10px 22px;
-  font-family: var(--sans);
-  font-size: 14px;
-  font-weight: 500;
-  letter-spacing: 0.01em;
-  text-transform: none;
-  text-decoration: none;
-  transition: all 0.25s ease;
-}
-.home-hero .btn-solid:hover {
-  background: var(--blue);
-  color: #fff;
-  border-color: var(--blue);
-}
-
 /* RESPONSIVE */
 @media (max-width: 980px) {
   .news-row { grid-template-columns: 1fr; gap: 24px; padding: 40px 0; }
@@ -1617,11 +1406,6 @@
 
   .stamp-stage { height: clamp(420px, 80vw, 540px); }
 
-  .section-wwd { padding: 72px 24px; }
-  .what-grid { grid-template-columns: 1fr; gap: 48px; }
-  .section-produces { padding: 72px 24px; }
-  .produces-header { grid-template-columns: 1fr; gap: 24px; margin-bottom: 40px; }
-  .produces-grid { grid-template-columns: 1fr; }
   .subscribe-cta { padding: 80px 24px 100px; }
   .news-section { padding: 60px 24px 80px; }
 }
@@ -1654,6 +1438,10 @@
     transform: translate(-50%, -50%) !important;
   }
   .stamp-shockwave { opacity: 0 !important; }
+  /* Flip works without the 3D rotation: the flip buttons toggle
+     .cert-show-back, which swaps face visibility. Un-rotate the back face so
+     it reads normally. */
+  .cert-doc.cert-show-back .cert-back { transform: none; }
 }
 </style>
 </head>
@@ -1696,6 +1484,8 @@
        aria-hidden="true"></svg>
   <div class="hero-cursor-glow"></div>
   <div class="home-hero-inner">
+
+    <h1 class="visually-hidden">Safety Critical Labs. AI certification for safety critical systems.</h1>
 
     <!-- Shared SVG symbol — used by the 13-requirements firework's center logo -->
     <svg width="0" height="0" style="position:absolute;overflow:hidden" aria-hidden="true">
@@ -1754,7 +1544,7 @@
           <div class="cert-top-rule"></div>
 
           <div class="cert-body-region">
-            <img src="img/SCL_Logo_transparent.png" alt="" class="cert-watermark">
+            <img src="img/SCL_Logo_watermark.png" alt="" class="cert-watermark">
             <div class="cert-body-content">
 
               <div class="cert-doc-type">Certificate of Conformance</div>
@@ -1833,7 +1623,7 @@
           <div class="cert-top-rule"></div>
 
           <div class="cert-body-region">
-            <img src="img/SCL_Logo_transparent.png" alt="" class="cert-watermark">
+            <img src="img/SCL_Logo_watermark.png" alt="" class="cert-watermark">
             <div class="cert-body-content">
 
               <div class="cert-doc-type">Assessed Requirement Areas</div>
@@ -1889,7 +1679,7 @@
         <use href="#orb-symbol"/>
         <!-- Transparent hit target — makes the whole emblem clickable while the
              seal is idling, so a click triggers the flight (see stamp JS). -->
-        <circle class="stamp-hit" cx="110" cy="110" r="95" fill="none" pointer-events="all"/>
+        <circle class="stamp-hit" cx="110" cy="110" r="95" fill="none"/>
       </svg>
 
     </div>
@@ -1909,6 +1699,15 @@
       <svg class="fw-canvas" id="fw-canvas" viewBox="0 0 1080 800" xmlns="http://www.w3.org/2000/svg">
         <!-- Generated by JS -->
       </svg>
+      <!-- Requirement detail panel — populated when a node is clicked -->
+      <div class="fw-detail" id="fw-detail" role="dialog" aria-modal="true" aria-labelledby="fw-detail-id" hidden>
+        <button class="fw-detail-close" id="fw-detail-close" type="button" aria-label="Close">&times;</button>
+        <div class="fw-detail-id" id="fw-detail-id"></div>
+        <div class="fw-detail-title" id="fw-detail-title"></div>
+        <div class="fw-detail-prevents-label">The failure it prevents</div>
+        <p class="fw-detail-prevents" id="fw-detail-prevents"></p>
+        <a class="fw-detail-link" id="fw-detail-link" href="/framework">View in the framework &rarr;</a>
+      </div>
     </div>
     <div class="fw-cta-bridge">
       <p class="fw-cta-line">All thirteen are evaluated when you begin an assessment.</p>
@@ -1919,28 +1718,28 @@
   </div>
 </section>
 
-<!-- ASK SCL -->
+<!-- COMMON QUESTIONS (searches run on /search.html) -->
 <section class="ask-scl" id="ask-scl">
   <div class="ask-inner">
-    <div class="ask-eyebrow">[ Ask SCL ]</div>
+    <div class="ask-eyebrow">[ Common Questions ]</div>
     <h2 class="ask-title">Have a question about <em>certification?</em></h2>
-    <p class="ask-body">Ask anything about how AI systems get certified.</p>
+    <p class="ask-body">Search common questions about how AI systems get certified.</p>
 
-    <a class="ask-search-bar" href="/search">
+    <form class="ask-search-bar" action="/search.html" method="get">
       <div class="ask-search-prompt">
         <svg class="ask-search-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <circle cx="11" cy="11" r="7"/>
           <line x1="21" y1="21" x2="16.65" y2="16.65"/>
         </svg>
-        <span class="ask-search-placeholder">Ask anything about AI certification…</span>
+        <input type="text" name="q" class="ask-search-input" placeholder="Search common questions" aria-label="Search common questions" autocomplete="off">
       </div>
-      <span class="ask-search-arrow" aria-hidden="true">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+      <button type="submit" class="ask-search-arrow" aria-label="Search">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <line x1="12" y1="19" x2="12" y2="5"/>
           <polyline points="5 12 12 5 19 12"/>
         </svg>
-      </span>
-    </a>
+      </button>
+    </form>
   </div>
 </section>
 
@@ -2020,12 +1819,12 @@
       <div class="footer-col">
         <div class="footer-col-label">Resources</div>
         <a href="/documents">Documents</a>
-        <a href="#">FAQ</a>
+        <a href="/search.html">FAQ</a>
       </div>
 
       <div class="footer-col">
         <div class="footer-col-label">Company</div>
-        <a href="#">About</a><a href="/position">Position</a>
+        <a href="/position">Position</a>
         <a href="/expertise">Expertise</a>
         <a href="/markets">Markets</a>
         <a href="/contact">Contact</a>
@@ -2051,7 +1850,7 @@
     <div class="footer-divider"></div>
 
     <div class="footer-bottom">
-      <span class="footer-copyright">&copy; 2025 Safety Critical Labs. All rights reserved.</span>
+      <span class="footer-copyright">&copy; 2026 Safety Critical Labs. All rights reserved.</span>
       <div class="footer-meta">
         <a href="#" aria-label="Back to top">Back to top</a>
         <span class="footer-version">Framework v3.3</span>
@@ -2061,84 +1860,7 @@
   </div>
 </footer>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
-
 <script>
-/* ─── GSAP SCROLL ANIMATIONS ─────────────────────────────── */
-gsap.registerPlugin(ScrollTrigger);
-
-/* Fade-up elements */
-gsap.utils.toArray('.fade-up').forEach(function(el, i) {
-  gsap.fromTo(el,
-    { opacity: 0, y: 40 },
-    { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out',
-      scrollTrigger: {
-        trigger: el,
-        start: 'top 88%',
-        once: true
-      }
-    }
-  );
-});
-
-/* Stagger children (grids, lists) */
-gsap.utils.toArray('.stagger-in').forEach(function(container) {
-  gsap.fromTo(container.children,
-    { opacity: 0, y: 30 },
-    { opacity: 1, y: 0, duration: 0.7, ease: 'power3.out',
-      stagger: 0.12,
-      scrollTrigger: {
-        trigger: container,
-        start: 'top 85%',
-        once: true
-      }
-    }
-  );
-});
-
-/* Scale-in elements (cards, images) */
-gsap.utils.toArray('.scale-in').forEach(function(el) {
-  gsap.fromTo(el,
-    { opacity: 0, scale: 0.95, y: 20 },
-    { opacity: 1, scale: 1, y: 0, duration: 0.9, ease: 'power3.out',
-      scrollTrigger: {
-        trigger: el,
-        start: 'top 85%',
-        once: true
-      }
-    }
-  );
-});
-
-/* Slide from left */
-gsap.utils.toArray('.slide-left').forEach(function(el) {
-  gsap.fromTo(el,
-    { opacity: 0, x: -60 },
-    { opacity: 1, x: 0, duration: 0.9, ease: 'power3.out',
-      scrollTrigger: {
-        trigger: el,
-        start: 'top 85%',
-        once: true
-      }
-    }
-  );
-});
-
-/* Slide from right */
-gsap.utils.toArray('.slide-right').forEach(function(el) {
-  gsap.fromTo(el,
-    { opacity: 0, x: 60 },
-    { opacity: 1, x: 0, duration: 0.9, ease: 'power3.out',
-      scrollTrigger: {
-        trigger: el,
-        start: 'top 85%',
-        once: true
-      }
-    }
-  );
-});
-
 /* ─── HERO STARFIELD (drifting clusters + solos + cursor pull) ─────────── */
 /* Small connected clusters (3–5 stars, all wired into closed shapes like
    triangles/quadrilaterals) float autonomously across the hero, mixed with
@@ -2356,7 +2078,9 @@ gsap.utils.toArray('.slide-right').forEach(function(el) {
     };
   }
 
+  var constellationRunning = false;
   function tick(time) {
+    if (!constellationRunning) return;
     /* Clusters: drift + LERP-smoothed pull, applied as a single group transform */
     for (var i = 0; i < clusters.length; i++) {
       var c = clusters[i];
@@ -2385,8 +2109,18 @@ gsap.utils.toArray('.slide-right').forEach(function(el) {
     requestAnimationFrame(tick);
   }
 
+  /* Run the loop only while the hero is on screen (mirrors the cert loop) */
   if (!reducedMotion) {
-    requestAnimationFrame(tick);
+    if ('IntersectionObserver' in window && hero) {
+      new IntersectionObserver(function (entries) {
+        var vis = entries[0].isIntersecting;
+        if (vis && !constellationRunning) { constellationRunning = true; requestAnimationFrame(tick); }
+        else if (!vis) { constellationRunning = false; }
+      }, { threshold: 0 }).observe(hero);
+    } else {
+      constellationRunning = true;
+      requestAnimationFrame(tick);
+    }
   }
 })();
 
@@ -2402,8 +2136,19 @@ gsap.utils.toArray('.slide-right').forEach(function(el) {
   var seal = stage && stage.querySelector('.stamp-seal');
   if (!stage || !seal) return;
 
-  /* Reduced motion — final state pinned via CSS @media; no JS triggers */
-  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  /* Reduced motion — final state pinned via CSS @media; no flight, no tilt.
+     The flip buttons still work: they toggle the face swap directly. */
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    var rmCert = stage.querySelector('.cert-doc');
+    if (rmCert) {
+      Array.prototype.forEach.call(rmCert.querySelectorAll('.cert-flip-hint'), function (btn) {
+        btn.addEventListener('click', function () {
+          rmCert.classList.toggle('cert-show-back');
+        });
+      });
+    }
+    return;
+  }
 
   var entryComplete = false;
   var flightStarted = false;
@@ -2666,22 +2411,49 @@ gsap.utils.toArray('.slide-right').forEach(function(el) {
   var MAGNET_RADIUS = 380;
 
   var areas = [
-    { id: 'AI-1',  label: 'Operational and data foundations' },
-    { id: 'AI-2',  label: 'Addressing AI bias' },
-    { id: 'AI-3',  label: 'ML test coverage' },
-    { id: 'AI-4',  label: 'Continuous validation' },
-    { id: 'AI-5',  label: 'Hallucination prevention' },
-    { id: 'AI-6',  label: 'Out of distribution detection' },
-    { id: 'AI-7',  label: 'Adversarial robustness' },
-    { id: 'AI-8',  label: 'Explainability' },
-    { id: 'AI-9',  label: 'Human and AI teaming' },
-    { id: 'AI-10', label: 'Privacy and data protection' },
-    { id: 'AI-11', label: 'Multi-model systems' },
-    { id: 'AI-12', label: 'Neural network requirements' },
-    { id: 'AI-13', label: 'Continuous learning and adaptation' }
+    { id: 'AI-1',  label: 'Operational and data foundations', prevents: 'A system evaluated on data it effectively trained on, reporting skill it does not have outside its declared operating domain.' },
+    { id: 'AI-2',  label: 'Addressing AI bias', prevents: 'Outcomes that are systematically worse for some users because the training data encoded a historical bias.' },
+    { id: 'AI-3',  label: 'ML test coverage', prevents: 'Strong average performance that hides untested edge cases, boundary conditions, and injected failure modes.' },
+    { id: 'AI-4',  label: 'Continuous validation', prevents: 'A model accurate at deployment quietly drifting wrong as the world changes around it.' },
+    { id: 'AI-5',  label: 'Hallucination prevention', prevents: 'An AI stating fabricated facts, policies, or values with the same confidence as correct ones.' },
+    { id: 'AI-6',  label: 'Out of distribution detection', prevents: 'The model meeting an input unlike anything it was trained on and responding as if it were routine.' },
+    { id: 'AI-7',  label: 'Adversarial robustness', prevents: 'Inputs, training data, or the model itself manipulated by an adversary to force a chosen failure.' },
+    { id: 'AI-8',  label: 'Explainability', prevents: 'A safety-critical decision that cannot be inspected, questioned, or justified after the fact.' },
+    { id: 'AI-9',  label: 'Human and AI teaming', prevents: 'Operators who over-trust, under-trust, or lose the authority to override the AI when it matters.' },
+    { id: 'AI-10', label: 'Privacy and data protection', prevents: 'Personal or protected data exposed, retained, or transferred without lawful basis or control.' },
+    { id: 'AI-11', label: 'Multi-model systems', prevents: 'One model’s error cascading through a chain of models into a system-level failure.' },
+    { id: 'AI-12', label: 'Neural network requirements', prevents: 'Network-specific failures: miscalibrated confidence, brittle features, and unverified deployment transforms.' },
+    { id: 'AI-13', label: 'Continuous learning and adaptation', prevents: 'A model that keeps learning after deployment teaching itself the wrong thing, unnoticed.' }
   ];
 
   var N = areas.length;
+
+  /* ─── Requirement detail panel (opened by clicking a node) ─── */
+  var detail = document.getElementById('fw-detail');
+  function openDetail(a) {
+    if (!detail) return;
+    detail.querySelector('#fw-detail-id').textContent = a.id;
+    detail.querySelector('#fw-detail-title').textContent = a.label;
+    detail.querySelector('#fw-detail-prevents').textContent = a.prevents;
+    detail.querySelector('#fw-detail-link').setAttribute('href', '/framework#' + a.id.toLowerCase());
+    detail.hidden = false;
+    /* next frame so the transition runs */
+    requestAnimationFrame(function () { detail.classList.add('is-open'); });
+    var closeBtn = detail.querySelector('#fw-detail-close');
+    if (closeBtn) closeBtn.focus();
+  }
+  function closeDetail() {
+    if (!detail || detail.hidden) return;
+    detail.classList.remove('is-open');
+    detail.hidden = true;
+  }
+  if (detail) {
+    detail.querySelector('#fw-detail-close').addEventListener('click', function (e) { e.stopPropagation(); closeDetail(); });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeDetail(); });
+    document.addEventListener('click', function (e) {
+      if (!detail.hidden && !detail.contains(e.target)) closeDetail();
+    });
+  }
 
   /* Depth layer — background particles for the "space dimension" feel.
      Stored so we can highlight the closest one to the cursor. */
@@ -2724,16 +2496,6 @@ gsap.utils.toArray('.slide-right').forEach(function(el) {
     });
   }
 
-  /* Active line — single line from SCL logo center to the magnet-attracted requirement */
-  var activeLine = document.createElementNS(SVG_NS, 'line');
-  activeLine.setAttribute('class', 'fw-active-line');
-  activeLine.setAttribute('x1', CX);
-  activeLine.setAttribute('y1', CY);
-  activeLine.setAttribute('x2', CX);
-  activeLine.setAttribute('y2', CY);
-  activeLine.style.opacity = 0;
-  svg.appendChild(activeLine);
-
   /* Center: SCL orb logo (uses the symbol defined in the hero) */
   var orbSize = 200;
   var centerOrb = document.createElementNS(SVG_NS, 'use');
@@ -2770,6 +2532,25 @@ gsap.utils.toArray('.slide-right').forEach(function(el) {
     /* Group containing bubble + dot + labels — magnet pull is applied via group transform */
     var group = document.createElementNS(SVG_NS, 'g');
     group.setAttribute('class', 'fw-req-group');
+
+    /* Generous invisible hit target so the tiny dot is easy to click/tap */
+    var hit = document.createElementNS(SVG_NS, 'circle');
+    hit.setAttribute('cx', x2); hit.setAttribute('cy', y2);
+    hit.setAttribute('r', 32);
+    hit.setAttribute('class', 'fw-hit');
+    group.appendChild(hit);
+
+    /* Make each node an accessible button that opens its requirement detail */
+    (function (g, a) {
+      g.style.cursor = 'pointer';
+      g.setAttribute('tabindex', '0');
+      g.setAttribute('role', 'button');
+      g.setAttribute('aria-label', a.id + ', ' + a.label + '. Open requirement detail.');
+      g.addEventListener('click', function (ev) { ev.stopPropagation(); openDetail(a); });
+      g.addEventListener('keydown', function (ev) {
+        if (ev.key === 'Enter' || ev.key === ' ') { ev.preventDefault(); openDetail(a); }
+      });
+    })(group, areas[i]);
 
     /* Bubble — soft halo that appears around the dot when this requirement is active */
     var bubble = document.createElementNS(SVG_NS, 'circle');
@@ -2894,10 +2675,6 @@ gsap.utils.toArray('.slide-right').forEach(function(el) {
       p.dot.classList.remove('fw-depth-dot-active');
     });
 
-    /* Hide the active line — we don't use it anymore */
-    activeLine.style.opacity = 0;
-    activeLine.classList.remove('fw-line-shoot');
-
     if (lastMx < -1000) return;
 
     /* Find closest labeled requirement to cursor */
@@ -2958,6 +2735,7 @@ gsap.utils.toArray('.slide-right').forEach(function(el) {
 (function() {
   var canvas = document.getElementById('subscribe-particles');
   if (!canvas) return;
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
   var ctx = canvas.getContext('2d');
   var stars = [];
   var STAR_COUNT = 120;
@@ -2981,7 +2759,9 @@ gsap.utils.toArray('.slide-right').forEach(function(el) {
     });
   }
 
+  var starfieldRunning = false;
   function animate() {
+    if (!starfieldRunning) return;
     ctx.clearRect(0, 0, canvas.offsetWidth, canvas.offsetHeight);
     for (var i = 0; i < stars.length; i++) {
       var s = stars[i];
@@ -2994,7 +2774,19 @@ gsap.utils.toArray('.slide-right').forEach(function(el) {
     }
     requestAnimationFrame(animate);
   }
-  animate();
+
+  /* Run the loop only while the subscribe section is on screen */
+  var section = canvas.closest('.subscribe-cta') || canvas;
+  if ('IntersectionObserver' in window) {
+    new IntersectionObserver(function (entries) {
+      var vis = entries[0].isIntersecting;
+      if (vis && !starfieldRunning) { starfieldRunning = true; requestAnimationFrame(animate); }
+      else if (!vis) { starfieldRunning = false; }
+    }, { threshold: 0 }).observe(section);
+  } else {
+    starfieldRunning = true;
+    requestAnimationFrame(animate);
+  }
 })();
 
 /* ─── CURSOR GLOW ─────────────────────────────────────────── */
@@ -3017,32 +2809,6 @@ document.querySelector('.gn-hamburger').addEventListener('click', function() {
   document.body.style.overflow = this.classList.contains('open') ? 'hidden' : '';
 });
 
-/* Dropdown nav toggle */
-document.querySelectorAll(".gn-dropdown-toggle").forEach(function(btn) {
-  btn.addEventListener("click", function(e) {
-    e.stopPropagation();
-    var dd = this.closest(".gn-dropdown");
-    var menu = dd.querySelector(".gn-dropdown-menu");
-    var isOpen = dd.classList.contains("open");
-    document.querySelectorAll(".gn-dropdown").forEach(function(d) {
-      d.classList.remove("open");
-      var m = d.querySelector(".gn-dropdown-menu");
-      if (m) m.style.display = "none";
-    });
-    if (!isOpen) {
-      dd.classList.add("open");
-      menu.style.display = "block";
-    }
-  });
-});
-document.addEventListener("click", function() {
-  document.querySelectorAll(".gn-dropdown").forEach(function(d) {
-    d.classList.remove("open");
-    var m = d.querySelector(".gn-dropdown-menu");
-    if (m) m.style.display = "none";
-  });
-});
-
 </script>
 
 <script>
@@ -3057,57 +2823,15 @@ document.addEventListener("click", function() {
     nist: '<img src="img/nist.svg" alt="NIST" style="height:100%;object-fit:contain;">'
   };
 
-  /* ── Ticker cache + builder ─────────────────────────── */
+  /* ── Ticker cache (write only) — this page has no ticker; it just warms
+     scl_ticker_cache in sessionStorage for the pages that render one. ── */
   var CACHE_KEY = 'scl_ticker_cache';
-  var CACHE_MAX_AGE = 10 * 60 * 1000;
-  var logoMap = { 'Federal Register': LOGOS.us, 'EU': LOGOS.eu, 'NIST': LOGOS.nist };
 
   var tickerItems = [];
   var tickerSources = { us: false, eu: false, nist: false };
-  var cacheWasUsed = false;
-
-  function renderTickerHtml(items) {
-    var track = document.getElementById('reg-ticker-track');
-    if (!track || items.length === 0) return;
-    items.sort(function (a, b) { return (b.sortDate || 0) - (a.sortDate || 0); });
-    var html = '';
-    for (var i = 0; i < items.length; i++) {
-      var item = items[i];
-      var logo = item.logo || logoMap[item.source] || '';
-      html += '<a class="reg-ticker-item" href="' + item.url + '" target="_blank" rel="noopener" draggable="false">'
-        + '<span class="reg-ticker-icon">' + logo + '</span>'
-        + '<span class="reg-ticker-source">' + item.source + '</span>'
-        + '<span class="reg-ticker-text">' + item.title + '</span>'
-        + '<span class="reg-ticker-date">' + item.date + '</span>'
-        + '</a><span class="reg-ticker-sep"></span>';
-    }
-    track.innerHTML = html + html;
-    /* Set speed based on content width: consistent 50px/s */
-    track.classList.remove('scrolling');
-    void track.offsetWidth;
-    var halfWidth = track.scrollWidth / 2;
-    var duration = halfWidth / 50;
-    track.style.animationDuration = duration + 's';
-    track.classList.add('scrolling');
-  }
-
-  /* Try loading from sessionStorage for instant render */
-  try {
-    var raw = sessionStorage.getItem(CACHE_KEY);
-    if (raw) {
-      var cached = JSON.parse(raw);
-      if (Date.now() - cached.ts < CACHE_MAX_AGE) {
-        renderTickerHtml(cached.items);
-        cacheWasUsed = true;
-      }
-    }
-  } catch (e) { /* ignore */ }
 
   function tryBuildTicker() {
     if (!tickerSources.us || !tickerSources.eu || !tickerSources.nist) return;
-    if (!cacheWasUsed) {
-      renderTickerHtml(tickerItems);
-    }
     /* Save to cache for other pages */
     try {
       var cacheItems = tickerItems.map(function (item) {
@@ -3118,34 +2842,11 @@ document.addEventListener("click", function() {
   }
 
   function formatDate(dateStr) {
-    const d = new Date(dateStr);
+    /* Date-only strings ("2023-10-30") parse as UTC midnight and display one
+       day early in US timezones, so build those as local dates instead. */
+    var m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(dateStr);
+    const d = m ? new Date(+m[1], +m[2] - 1, +m[3]) : new Date(dateStr);
     return d.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
-  }
-
-  function renderItems(containerId, items) {
-    /* Legacy renderer — no-ops gracefully now that the column layout is gone.
-       News rendering is handled by addNewsItem() / renderNewsList() below. */
-    var el = document.getElementById(containerId);
-    if (!el) return;
-    if (!items || items.length === 0) {
-      el.innerHTML = '<li class="reg-unavailable">No recent items available</li>';
-      return;
-    }
-    el.innerHTML = items.map(function (item) {
-      var safeUrl  = encodeURI(item.url || '');
-      var safeType = escapeHtml(item.type || '');
-      var safeDate = escapeHtml(item.date || '');
-      return '<li class="reg-item"><a href="' + safeUrl + '" target="_blank" rel="noopener">'
-        + '<div class="reg-item-type">' + safeType + '</div>'
-        + '<div class="reg-item-title">' + item.title + '</div>'
-        + '<div class="reg-item-date">' + safeDate + '</div>'
-        + '</a></li>';
-    }).join('');
-  }
-
-  function renderError(containerId) {
-    var el = document.getElementById(containerId);
-    if (el) el.innerHTML = '<li class="reg-unavailable">Currently unavailable</li>';
   }
 
   /* ── News list (xAI-style) ─────────────────────────── */
@@ -3302,7 +3003,6 @@ document.addEventListener("click", function() {
         }
       }
       var items = filtered.length > 0 ? filtered : frFallback;
-      renderItems('reg-feed-us', items);
       addNewsItem('us', items[0]);
       /* Feed ticker */
       items.slice(0, 3).forEach(function (item) {
@@ -3316,7 +3016,6 @@ document.addEventListener("click", function() {
       tickerSources.us = true; tryBuildTicker();
     })
     .catch(function () {
-      renderItems('reg-feed-us', frFallback);
       addNewsItem('us', frFallback[0]);
       frFallback.slice(0, 3).forEach(function (item) {
         tickerItems.push({ title: item.title, url: item.url, date: item.date, source: 'Federal Register', logo: LOGOS.us, sortDate: new Date(item.date).getTime() });
@@ -3365,7 +3064,6 @@ document.addEventListener("click", function() {
       }
       /* If RSS had AI matches, use them; otherwise show key AI Act documents */
       var euItems = filtered.length > 0 ? filtered : euAiFallback;
-      renderItems('reg-feed-eu', euItems);
       addNewsItem('eu', euItems[0]);
       /* Feed ticker */
       euItems.slice(0, 3).forEach(function (item) {
@@ -3378,7 +3076,6 @@ document.addEventListener("click", function() {
       tickerSources.eu = true; tryBuildTicker();
     })
     .catch(function () {
-      renderItems('reg-feed-eu', euAiFallback);
       addNewsItem('eu', euAiFallback[0]);
       euAiFallback.slice(0, 3).forEach(function (item) {
         tickerItems.push({
@@ -3465,7 +3162,6 @@ document.addEventListener("click", function() {
     /* Remove sortDate before render */
     items.forEach(function (item) { delete item.sortDate; });
 
-    renderItems('reg-feed-nist', items);
     addNewsItem('nist', items[0]);
     /* Feed ticker */
     items.slice(0, 3).forEach(function (item) {
@@ -3477,7 +3173,6 @@ document.addEventListener("click", function() {
     });
     tickerSources.nist = true; tryBuildTicker();
   }).catch(function () {
-    renderItems('reg-feed-nist', nistFallback);
     addNewsItem('nist', nistFallback[0]);
     nistFallback.slice(0, 3).forEach(function (item) {
       tickerItems.push({ title: item.title, url: item.url, date: item.date, source: 'NIST', logo: LOGOS.nist, sortDate: new Date(item.date).getTime() });
@@ -3489,9 +3184,11 @@ document.addEventListener("click", function() {
 </script>
 
 <!-- Mini-cert QR code -->
-<script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js" defer></script>
 <script>
-  (function () {
+  /* Deferred scripts finish before DOMContentLoaded, so the library is
+     available by the time this runs. */
+  document.addEventListener('DOMContentLoaded', function () {
     if (typeof qrcode === 'undefined') return;
     var url = 'https://safetycriticallabs.com/verify?id=SCL-CERT-2025-001';
     ['cert-mini-qr', 'cert-back-qr'].forEach(function (id) {
@@ -3504,7 +3201,7 @@ document.addEventListener("click", function() {
         target.innerHTML = qr.createSvgTag({ cellSize: 4, margin: 0, scalable: true });
       } catch (e) { /* leaves QR fallback */ }
     });
-  })();
+  });
 </script>
 <script src="/footer.js" defer></script>
 </body>

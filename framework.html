@@ -400,6 +400,67 @@
 .inner-hero-inner { z-index: 2; }
 
 /* Inner hero styles live in styles.css now (cream + blue palette) */
+
+/* Deep-link anchors (from the home firework) clear the sticky nav */
+.fw-card[id] { scroll-margin-top: 96px; }
+.fw-card:target {
+  outline: 2px solid var(--blue);
+  outline-offset: 3px;
+}
+
+/* ─── FAILURE-MODE GALLERY ────────────────────────────────── */
+.failmode-section { background: var(--bg); }
+.failmode-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  margin-top: 40px;
+}
+.failmode-card {
+  background: var(--white);
+  border: 1px solid var(--rule);
+  border-radius: 10px;
+  padding: 26px 26px 22px;
+  display: flex;
+  flex-direction: column;
+}
+.failmode-incident {
+  font-size: 12px; font-weight: 600; letter-spacing: 0.06em;
+  text-transform: uppercase; color: var(--ink-3);
+  margin-bottom: 10px;
+}
+.failmode-title {
+  font-size: 18px; font-weight: 600; letter-spacing: -0.015em;
+  color: var(--ink); line-height: 1.3; margin-bottom: 12px;
+}
+.failmode-body {
+  font-size: 14px; line-height: 1.65; font-weight: 300;
+  color: var(--ink-2); margin-bottom: 18px;
+}
+.failmode-map {
+  margin-top: auto; padding-top: 16px;
+  border-top: 1px solid var(--rule);
+  display: flex; align-items: baseline; gap: 10px;
+}
+.failmode-map a {
+  font-family: var(--mono); font-size: 12px; font-weight: 500;
+  letter-spacing: 0.05em; color: var(--blue);
+  background: var(--blue-lt); border-radius: 4px;
+  padding: 4px 9px; text-decoration: none; white-space: nowrap;
+  transition: background 0.2s ease;
+}
+.failmode-map a:hover { background: #DCE8F5; }
+.failmode-map span { font-size: 13px; color: var(--ink-3); font-weight: 300; line-height: 1.5; }
+.failmode-foot {
+  margin-top: 36px;
+  display: flex; align-items: center; gap: 20px; flex-wrap: wrap;
+}
+.failmode-foot p {
+  font-size: 14px; color: var(--ink-3); font-weight: 300; margin: 0;
+  max-width: 480px; line-height: 1.6;
+}
+@media (max-width: 900px) { .failmode-grid { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 620px) { .failmode-grid { grid-template-columns: 1fr; } }
 </style>
 </head>
 <body>
@@ -446,7 +507,7 @@
       <h1>Thirteen requirement<br>areas. Every <em>AI<br>failure mode</em> covered.</h1>
     </div>
     <p class="inner-hero-lead">
-      The SCL AI Requirements Framework establishes verifiable, pass/fail requirements for each AI specific failure mode not addressed by existing safety critical software standards. Algorithm agnostic. Domain applicable. Openly published under a citable DOI.
+      The SCL AI Requirements Framework establishes verifiable, pass/fail requirements for each AI specific failure mode not addressed by existing safety critical software standards. Requirements are defined by the failures they prevent, not the capabilities they enable. Algorithm agnostic. Domain applicable. Openly published under a citable DOI.
     </p>
   </div>
 </div>
@@ -466,74 +527,135 @@
     </div>
 
     <div class="fw-full-grid stagger-in">
-      <div class="fw-card" data-tiers="safety mission operational">
+      <div class="fw-card" id="ai-1" data-tiers="safety mission operational">
         <div class="fw-card-id">AI-1</div>
         <div class="fw-card-title">Operational and data foundations</div>
         <div class="fw-card-body">A declared Operational Design Domain (ODD) bounding the certification claim, training/validation/test separation with documented provenance, and CUI and ITAR classification inheritance through AI output channels.</div>
       </div>
-      <div class="fw-card" data-tiers="safety mission operational">
+      <div class="fw-card" id="ai-2" data-tiers="safety mission operational">
         <div class="fw-card-id">AI-2</div>
         <div class="fw-card-title">Addressing AI bias</div>
-        <div class="fw-card-body">Bias free baseline performance across user classes and operational contexts, bias free training data, continuous bias monitoring, and bias threshold alerting and response.</div>
+        <div class="fw-card-body">Bias risk assessment across user classes and operational contexts, training data bias evaluation, continuous bias monitoring, and bias threshold alerting and response.</div>
       </div>
-      <div class="fw-card" data-tiers="safety mission operational">
+      <div class="fw-card" id="ai-3" data-tiers="safety mission operational">
         <div class="fw-card-id">AI-3</div>
         <div class="fw-card-title">ML test coverage</div>
         <div class="fw-card-body">A defined test matrix serving as the ML equivalent of code coverage. Covers nominal performance, edge cases, failure mode injection, and distributional boundary testing.</div>
       </div>
-      <div class="fw-card" data-tiers="safety mission operational">
+      <div class="fw-card" id="ai-4" data-tiers="safety mission operational">
         <div class="fw-card-id">AI-4</div>
         <div class="fw-card-title">Continuous validation</div>
         <div class="fw-card-body">Post deployment data drift monitoring, performance threshold maintenance, model maintenance criteria, and periodic model validation. Addresses a gap not covered by existing safety critical software standards.</div>
       </div>
-      <div class="fw-card" data-tiers="safety mission operational">
+      <div class="fw-card" id="ai-5" data-tiers="safety mission operational">
         <div class="fw-card-id">AI-5</div>
         <div class="fw-card-title">Hallucination prevention</div>
         <div class="fw-card-body">Hallucination criteria definition, detection, response, and logging, with independent output validation for safety critical decisions. Graceful degradation to human override below threshold.</div>
       </div>
-      <div class="fw-card" data-tiers="safety mission operational">
+      <div class="fw-card" id="ai-6" data-tiers="safety mission operational">
         <div class="fw-card-id">AI-6</div>
         <div class="fw-card-title">Out of distribution detection</div>
         <div class="fw-card-body">Training distribution characterization, runtime OOD detection, defined OOD response, and event logging. This is the condition under which AI behavior is least predictable.</div>
       </div>
-      <div class="fw-card" data-tiers="safety mission" data-tailored-at="mission">
+      <div class="fw-card" id="ai-7" data-tiers="safety mission" data-tailored-at="mission">
         <div class="fw-card-id">AI-7</div>
         <div class="fw-card-title">Adversarial robustness</div>
         <div class="fw-card-body">Data poisoning protection, adversarial input protection, model inversion and extraction protection, model integrity, adversarial event logging, and AI supply chain security.</div>
       </div>
-      <div class="fw-card" data-tiers="safety mission">
+      <div class="fw-card" id="ai-8" data-tiers="safety mission">
         <div class="fw-card-id">AI-8</div>
         <div class="fw-card-title">Explainability</div>
         <div class="fw-card-body">Operator accessible decision reasoning with traceable decision basis, confidence indication, reasoning inspection capability, and public disclosure support. Required for any AI system where a traditional safety case would demand logical inspection.</div>
       </div>
-      <div class="fw-card" data-tiers="safety mission">
+      <div class="fw-card" id="ai-9" data-tiers="safety mission">
         <div class="fw-card-id">AI-9</div>
         <div class="fw-card-title">Human and AI teaming</div>
         <div class="fw-card-body">Human decision authority, operational situational awareness, trust calibration, graceful degradation, interaction logging, operator qualification, workload management, and training program requirements.</div>
       </div>
-      <div class="fw-card" data-tiers="safety mission operational">
+      <div class="fw-card" id="ai-10" data-tiers="safety mission operational">
         <div class="fw-card-id">AI-10</div>
         <div class="fw-card-title">Privacy and data protection</div>
         <div class="fw-card-body">Personal data identification and minimization, lawful basis and consent management, data subject rights, privacy enhancing techniques, and cross border transfer controls. Applies where the system processes personal data; otherwise documented Not Applicable with rationale.</div>
       </div>
-      <div class="fw-card" data-tiers="safety mission operational" data-conditional="true">
+      <div class="fw-card" id="ai-11" data-tiers="safety mission operational" data-conditional="true">
         <div class="fw-card-id">AI-11</div>
         <div class="fw-card-title">Multi-model systems</div>
         <div class="fw-card-body">Multi-model architecture documentation, cascading failure mitigation, ensemble coordination, combined confidence representation, and multi-model audit trail. Applies when the system coordinates multiple AI models.</div>
         <div class="fw-card-detail"><span class="fw-scope">Conditional</span></div>
       </div>
-      <div class="fw-card" data-tiers="safety mission operational" data-conditional="true">
+      <div class="fw-card" id="ai-12" data-tiers="safety mission operational" data-conditional="true">
         <div class="fw-card-id">AI-12</div>
         <div class="fw-card-title">Neural network requirements</div>
         <div class="fw-card-body">Architecture documentation, confidence calibration, neural network explainability methods, training integrity, OOD detection extensions, adversarial vulnerability mitigation, generative model hallucination constraints, and deployment transformation validation.</div>
         <div class="fw-card-detail"><span class="fw-scope">Conditional</span></div>
       </div>
-      <div class="fw-card" data-tiers="safety mission operational" data-conditional="true">
+      <div class="fw-card" id="ai-13" data-tiers="safety mission operational" data-conditional="true">
         <div class="fw-card-id">AI-13</div>
         <div class="fw-card-title">Continuous learning and adaptation</div>
         <div class="fw-card-body">Continuous learning permission criteria, runtime learning controls, learning data validation, catastrophic forgetting mitigation, learning validation, rollback procedures, ODD evolvability declaration, and continuous learning audit trail.</div>
         <div class="fw-card-detail"><span class="fw-scope">Conditional</span></div>
       </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAILURE-MODE GALLERY -->
+<section class="page-section failmode-section">
+  <div class="section-inner">
+    <div class="fw-eyebrow-mono">[ Requirements Defined by Failure ]</div>
+    <h2 class="section-title" style="margin-bottom: 16px;">The failures these<br>requirements <em>target.</em></h2>
+    <p style="font-size:16px;color:var(--ink-2);font-weight:300;line-height:1.75;max-width:640px;">
+      Each requirement area exists because a class of AI failure has already happened in the field. These are documented public cases, each mapped to the area written to catch that failure mode. The mapping names the target. It does not claim any outcome would have changed.
+    </p>
+    <div class="failmode-grid">
+
+      <div class="failmode-card">
+        <div class="failmode-incident">Uber ATG &middot; Tempe, 2018</div>
+        <div class="failmode-title">An automated vehicle did not classify a pedestrian in time</div>
+        <div class="failmode-body">The NTSB investigation found the automated driving system alternated between classifications for a pedestrian crossing outside a crosswalk, and did not brake in time to avoid a fatal collision.</div>
+        <div class="failmode-map"><a href="/framework#ai-6">AI-6</a><span>The failure mode out-of-distribution detection targets.</span></div>
+      </div>
+
+      <div class="failmode-card">
+        <div class="failmode-incident">Air Canada &middot; Tribunal, 2024</div>
+        <div class="failmode-title">A support chatbot stated a refund policy that did not exist</div>
+        <div class="failmode-body">A civil resolution tribunal held the airline liable after its website assistant described a bereavement refund it did not in fact offer, and ruled the company responsible for what its bot said.</div>
+        <div class="failmode-map"><a href="/framework#ai-5">AI-5</a><span>The failure mode hallucination prevention targets.</span></div>
+      </div>
+
+      <div class="failmode-card">
+        <div class="failmode-incident">Zillow Offers &middot; 2021</div>
+        <div class="failmode-title">A home-pricing model drifted out of its market</div>
+        <div class="failmode-body">Zillow wound down its algorithmic home-buying unit after model price forecasts diverged from a fast-moving housing market, taking an inventory writedown reported above 300 million dollars.</div>
+        <div class="failmode-map"><a href="/framework#ai-4">AI-4</a><span>The failure mode continuous validation targets.</span></div>
+      </div>
+
+      <div class="failmode-card">
+        <div class="failmode-incident">Amazon &middot; Recruiting, 2018</div>
+        <div class="failmode-title">A hiring model learned to penalize women</div>
+        <div class="failmode-body">Amazon scrapped an internal recruiting model, reported in 2018, after finding it downgraded resumes that referenced women's activities, a bias absorbed from a decade of historical hiring data.</div>
+        <div class="failmode-map"><a href="/framework#ai-2">AI-2</a><span>The failure mode addressing AI bias targets.</span></div>
+      </div>
+
+      <div class="failmode-card">
+        <div class="failmode-incident">Cruise &middot; San Francisco, 2023</div>
+        <div class="failmode-title">A robotaxi mishandled the moment after a collision</div>
+        <div class="failmode-body">California regulators suspended Cruise's driverless permits after one of its vehicles, following an initial impact from another car, executed a pull-over maneuver that dragged a pedestrian who was in its path.</div>
+        <div class="failmode-map"><a href="/framework#ai-9">AI-9</a><span>The failure mode human and AI teaming targets.</span></div>
+      </div>
+
+      <div class="failmode-card">
+        <div class="failmode-incident">Microsoft Tay &middot; 2016</div>
+        <div class="failmode-title">A live-learning bot was corrupted within a day</div>
+        <div class="failmode-body">Microsoft withdrew its conversational bot Tay less than a day after release, when users exploited its habit of learning from live interactions to steer it into offensive output.</div>
+        <div class="failmode-map"><a href="/framework#ai-13">AI-13</a><span>The failure mode continuous learning and adaptation targets.</span></div>
+      </div>
+
+    </div>
+
+    <div class="failmode-foot">
+      <a href="/evidence" class="btn btn-solid">See these failure modes measured</a>
+      <p>The same classes of failure, run as pass and fail measurements on public data.</p>
     </div>
   </div>
 </section>
@@ -616,12 +738,9 @@
   <div class="os-inner">
     <div class="os-left">
       <div class="fw-eyebrow-mono">[ What Assessment Produces ]</div>
-      <h2>A formal determination.<br>Not a <em>score.</em></h2>
+      <h2>A binary determination.<br>A documented <em>risk score.</em></h2>
       <p>
-        Assessment against this framework produces one of two outcomes. Each determination is documented against a specific version of the framework, at a defined classification level, with every finding on record. There is no subjective rating, no maturity index, no percentage.
-      </p>
-      <p>
-        The standard is publicly available so you can read every requirement before engaging with SCL. That transparency is deliberate. A certification is only defensible to regulators and procurement officers if anyone can verify what it was measured against.
+        Assessment against this framework produces one of two outcomes, accompanied by a quantified risk score. Each determination is documented against a specific version of the framework, at a defined classification level, with every finding on record. There is no maturity index and no subjective rating.
       </p>
 
     </div>
@@ -653,7 +772,7 @@
         Read every requirement<br>before you <em>engage.</em>
       </h2>
       <p style="font-size: 15px; color: var(--ink-2); line-height: 1.8; font-weight: 300; margin-bottom: 16px;">
-        The framework is openly published under a citable DOI. Every requirement, verification method, and evidence standard is available for review before any assessment begins.
+        The framework is openly published under a citable DOI. Every requirement, verification method, and evidence standard is available for review before any assessment begins. Verification is co-located: every requirement carries its verification, and every verification traces to a requirement.
       </p>
       <p style="font-size: 15px; color: var(--ink-2); line-height: 1.8; font-weight: 300;">
         If you believe a requirement is technically incorrect, insufficiently grounded, or missing coverage for a known AI failure mode, SCL welcomes that challenge. The standard improves through scrutiny.
@@ -667,6 +786,10 @@
       <div class="pub-standard-row">
         <span class="pub-standard-row-label">DOI</span>
         <span class="pub-standard-row-value is-mono">10.5281/zenodo.20692966</span>
+      </div>
+      <div class="pub-standard-row">
+        <span class="pub-standard-row-label">All versions</span>
+        <span class="pub-standard-row-value is-mono">10.5281/zenodo.19024420 (cite this)</span>
       </div>
       <div class="pub-standard-row">
         <span class="pub-standard-row-label">License</span>
@@ -703,12 +826,12 @@
       <div class="footer-col">
         <div class="footer-col-label">Resources</div>
         <a href="/documents">Documents</a>
-        <a href="#">FAQ</a>
+        <a href="/search.html">FAQ</a>
       </div>
 
       <div class="footer-col">
         <div class="footer-col-label">Company</div>
-        <a href="#">About</a><a href="/position">Position</a>
+        <a href="/position">Position</a>
         <a href="/expertise">Expertise</a>
         <a href="/markets">Markets</a>
         <a href="/contact">Contact</a>
@@ -734,7 +857,7 @@
     <div class="footer-divider"></div>
 
     <div class="footer-bottom">
-      <span class="footer-copyright">&copy; 2025 Safety Critical Labs. All rights reserved.</span>
+      <span class="footer-copyright">&copy; 2026 Safety Critical Labs. All rights reserved.</span>
       <div class="footer-meta">
         <a href="#" aria-label="Back to top">Back to top</a>
         <span class="footer-version">Framework v3.3</span>
@@ -748,7 +871,12 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 
 <script>
-/* ─── GSAP SCROLL ANIMATIONS ─────────────────────────────── */
+/* ─── GSAP SCROLL ANIMATIONS (guarded: cdnjs may be blocked) ── */
+if (!window.gsap || !window.ScrollTrigger) {
+  /* GSAP unavailable: reveal everything immediately so content is never hidden. */
+  document.querySelectorAll('.fade-up, .scale-in, .slide-left, .slide-right, .stagger-in > *')
+    .forEach(function (el) { el.style.opacity = '1'; el.style.transform = 'none'; });
+} else {
 gsap.registerPlugin(ScrollTrigger);
 
 /* Fade-up elements */
@@ -821,6 +949,7 @@ gsap.utils.toArray('.slide-right').forEach(function(el) {
     }
   );
 });
+} /* end GSAP guard */
 
 // Mobile menu toggle
 document.querySelector('.gn-hamburger').addEventListener('click', function() {

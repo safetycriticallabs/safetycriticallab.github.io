@@ -10,7 +10,6 @@
 <meta property="og:url" content="https://safetycriticallabs.com/verify.html">
 <meta property="og:type" content="website">
 <meta property="og:image" content="https://safetycriticallabs.com/img/SCL%20Logo%203d.png">
-<meta name="robots" content="noindex">
 <link rel="icon" type="image/x-icon" href="favicon.ico">
 <link rel="icon" type="image/png" sizes="16x16" href="img/favicon-16x16.png">
 <link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32x32.png">
@@ -107,6 +106,100 @@
   content: ''; width: 6px; height: 6px;
   border-radius: 50%; background: var(--blue);
 }
+.verify-status.is-ok { color: #256C3B; border-color: rgba(37,108,59,0.35); }
+.verify-status.is-ok::before { background: #2E8B4F; }
+.verify-status.is-warn { color: #8A5A14; border-color: rgba(138,90,20,0.35); }
+.verify-status.is-warn::before { background: #C98A1B; }
+.verify-status.is-bad { color: #8F2F23; border-color: rgba(143,47,35,0.35); }
+.verify-status.is-bad::before { background: #C0392B; }
+.verify-record {
+  max-width: 420px; margin: 0 auto 28px;
+  text-align: left;
+  background: #FCFAF3;
+  border: 1px solid rgba(46,109,180,0.12);
+  border-radius: 4px;
+  padding: 16px 24px;
+}
+.verify-record-row {
+  display: flex; justify-content: space-between; gap: 16px;
+  padding: 7px 0;
+  border-bottom: 1px solid rgba(46,109,180,0.08);
+}
+.verify-record-row:last-child { border-bottom: none; }
+.verify-record-label {
+  font-family: var(--mono); font-size: 9px;
+  letter-spacing: 0.18em; text-transform: uppercase;
+  color: rgba(46,109,180,0.55);
+  padding-top: 3px; flex-shrink: 0;
+}
+.verify-record-value {
+  font-family: var(--mono); font-size: 12.5px;
+  color: var(--ink); text-align: right;
+  word-break: break-word;
+}
+.verify-record-note {
+  font-size: 12.5px; line-height: 1.6;
+  color: var(--ink-2); font-weight: 300;
+  padding-top: 10px;
+}
+.verify-lookup { max-width: 420px; margin: 0 auto 28px; }
+.verify-lookup-row { display: flex; gap: 10px; }
+.verify-lookup input {
+  flex: 1; min-width: 0;
+  font-family: var(--mono); font-size: 13px;
+  color: var(--ink);
+  background: #FCFAF3;
+  border: 1px solid rgba(46,109,180,0.25);
+  border-radius: 4px;
+  padding: 10px 14px;
+}
+.verify-lookup input:focus { outline: none; border-color: var(--blue); }
+.verify-lookup .btn { padding: 10px 22px; }
+.verify-file {
+  max-width: 420px; margin: 32px auto 0;
+  padding-top: 28px;
+  border-top: 1px solid rgba(46,109,180,0.12);
+}
+.verify-file-label {
+  font-family: var(--mono); font-size: 10px;
+  letter-spacing: 0.18em; text-transform: uppercase;
+  color: rgba(46,109,180,0.7);
+  margin-bottom: 10px;
+}
+.verify-file-copy {
+  font-size: 12.5px; line-height: 1.6;
+  color: var(--ink-2); font-weight: 300;
+  margin-bottom: 14px;
+}
+.verify-drop {
+  border: 1.5px dashed rgba(46,109,180,0.35);
+  border-radius: 4px;
+  background: #FCFAF3;
+  padding: 20px 16px;
+  font-family: var(--mono); font-size: 12px;
+  color: var(--ink-2);
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s;
+}
+.verify-drop:hover, .verify-drop.dragover {
+  border-color: var(--blue);
+  background: #F2F6FB;
+}
+.verify-file-result {
+  margin-top: 12px;
+  font-family: var(--mono); font-size: 12px;
+  line-height: 1.6;
+  color: var(--ink-2);
+}
+.verify-file-result.is-ok { color: #256C3B; }
+.verify-file-result.is-warn { color: #8A5A14; }
+.verify-file-result.is-bad { color: #8F2F23; }
+.verify-file-result .verify-fp {
+  display: block;
+  font-size: 10px; color: var(--ink-3);
+  word-break: break-all;
+  margin-top: 6px;
+}
 .verify-body {
   font-size: 15px; line-height: 1.75;
   color: var(--ink-2);
@@ -156,7 +249,7 @@
 
 <div class="verify-page">
   <div class="verify-page-glow"></div>
-  <div class="verify-card fade-up">
+  <div class="verify-card">
     <div class="verify-eyebrow">[ Certificate Verification ]</div>
     <h1 class="verify-title">Independent record<br>of <em>conformance.</em></h1>
 
@@ -165,15 +258,43 @@
       <div class="verify-id-value" id="verify-id"><span class="verify-id-empty">No certificate number provided</span></div>
     </div>
 
-    <div class="verify-status">Lookup pending</div>
+    <div class="verify-status" id="verify-status">Checking register</div>
 
-    <p class="verify-body">
-      The public verification portal is being staged. Until it is live, certificate authenticity can be confirmed by request. Reference the certificate number above and contact Safety Critical Labs. The Certification Determination Document is the binding artifact and governs in case of conflict.
+    <p class="verify-body" id="verify-body">
+      Checking the certificate number against the public SCL register.
     </p>
 
+    <noscript>
+      <p class="verify-body">
+        JavaScript is disabled in this browser. The register is a plain file at <a href="/registry.json">registry.json</a> and can be read directly, or contact Safety Critical Labs to confirm a certificate.
+      </p>
+    </noscript>
+
+    <div class="verify-record" id="verify-record" hidden></div>
+
+    <form class="verify-lookup" action="/verify" method="get">
+      <div class="verify-id-label" style="margin-bottom: 8px;">Look up a certificate number</div>
+      <div class="verify-lookup-row">
+        <input type="text" name="id" placeholder="SCL-CERT-YYYY-NNN" aria-label="Certificate number" maxlength="64" autocomplete="off" spellcheck="false">
+        <button type="submit" class="btn btn-solid">Check</button>
+      </div>
+    </form>
+
     <div class="verify-actions">
-      <a href="/contact" class="btn btn-solid">Request verification</a>
+      <a href="/contact" class="btn btn-outline">Contact SCL</a>
       <a href="/framework" class="btn btn-outline">View the framework</a>
+    </div>
+
+    <div class="verify-file" id="verify-file" hidden>
+      <div class="verify-file-label">Check a certificate file</div>
+      <p class="verify-file-copy">
+        Compare a certificate document against the fingerprint held in the register for this record. The file is read and hashed in your browser with SHA-256. Nothing is uploaded.
+      </p>
+      <div class="verify-drop" id="verify-drop" role="button" tabindex="0" aria-label="Choose a certificate file to check">
+        Drop the certificate file here or click to browse
+      </div>
+      <input type="file" id="verify-file-input" hidden>
+      <div class="verify-file-result" id="verify-file-result" hidden></div>
     </div>
   </div>
 </div>
@@ -197,12 +318,12 @@
       <div class="footer-col">
         <div class="footer-col-label">Resources</div>
         <a href="/documents">Documents</a>
-        <a href="#">FAQ</a>
+        <a href="/search.html">FAQ</a>
       </div>
 
       <div class="footer-col">
         <div class="footer-col-label">Company</div>
-        <a href="#">About</a><a href="/position">Position</a>
+        <a href="/position">Position</a>
         <a href="/expertise">Expertise</a>
         <a href="/markets">Markets</a>
         <a href="/contact">Contact</a>
@@ -228,7 +349,7 @@
     <div class="footer-divider"></div>
 
     <div class="footer-bottom">
-      <span class="footer-copyright">&copy; 2025 Safety Critical Labs. All rights reserved.</span>
+      <span class="footer-copyright">&copy; 2026 Safety Critical Labs. All rights reserved.</span>
       <div class="footer-meta">
         <a href="#" aria-label="Back to top">Back to top</a>
         <span class="footer-version">Framework v3.3</span>
@@ -238,38 +359,201 @@
   </div>
 </footer>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<!-- No GSAP on this page. Verification must work with zero third-party
+     runtime dependencies, including behind proxies that block CDNs. -->
 
 <script src="ticker.js"></script>
 <script>
-/* ─── Read certificate ID from URL ─────────────────────────── */
+/* ─── Mobile menu toggle (bound first, no dependencies) ────── */
+document.querySelector('.gn-hamburger').addEventListener('click', function() {
+  this.classList.toggle('open');
+  document.querySelector('.gn-links').classList.toggle('open');
+  this.setAttribute('aria-expanded', this.classList.contains('open'));
+  document.body.style.overflow = this.classList.contains('open') ? 'hidden' : '';
+});
+
+/* ─── Register lookup ──────────────────────────────────────── */
 (function () {
   // Accept either ?id=SCL-CERT-XXXX or trailing path /verify/SCL-CERT-XXXX
+  // (the path form is rewritten to ?id= by 404.html on GitHub Pages).
   var params = new URLSearchParams(window.location.search);
   var id = params.get('id');
   if (!id) {
     var match = window.location.pathname.match(/\/verify\/([^\/?#]+)/);
     if (match) id = decodeURIComponent(match[1]);
   }
-  if (id) {
-    // Sanitize: only allow alphanumerics, dash, underscore
-    id = id.replace(/[^A-Za-z0-9_\-]/g, '');
-    if (id) {
-      var el = document.getElementById('verify-id');
-      el.textContent = id;
-    }
+  // Sanitize: only allow alphanumerics, dash, underscore
+  if (id) id = id.replace(/[^A-Za-z0-9_\-]/g, '').slice(0, 64);
+
+  var idEl = document.getElementById('verify-id');
+  var statusEl = document.getElementById('verify-status');
+  var bodyEl = document.getElementById('verify-body');
+  var recordEl = document.getElementById('verify-record');
+
+  if (id) idEl.textContent = id;
+
+  function setStatus(text, cls) {
+    statusEl.textContent = text;
+    statusEl.className = 'verify-status' + (cls ? ' ' + cls : '');
   }
+
+  function addRow(label, value) {
+    if (value === null || value === undefined || value === '') return;
+    var row = document.createElement('div');
+    row.className = 'verify-record-row';
+    var l = document.createElement('div');
+    l.className = 'verify-record-label';
+    l.textContent = label;
+    var v = document.createElement('div');
+    v.className = 'verify-record-value';
+    v.textContent = value;
+    row.appendChild(l);
+    row.appendChild(v);
+    recordEl.appendChild(row);
+  }
+
+  function renderRecord(record) {
+    recordEl.textContent = '';
+    addRow('System', record.system);
+    addRow('Organization', record.organization);
+    addRow('Classification', record.classification);
+    addRow('Framework', record.framework_version);
+    addRow('Framework DOI', record.framework_doi);
+    addRow('Issued', record.issued);
+    addRow('Valid through', record.expires);
+    if (record.status === 'specimen' && record.note) {
+      var note = document.createElement('p');
+      note.className = 'verify-record-note';
+      note.textContent = record.note;
+      recordEl.appendChild(note);
+    }
+    recordEl.hidden = false;
+
+    if (record.status === 'valid') {
+      var expired = record.expires && !isNaN(Date.parse(record.expires)) && Date.parse(record.expires) < Date.now();
+      if (expired) {
+        setStatus('Expired', 'is-warn');
+        bodyEl.textContent = 'This certificate appears in the SCL register but has passed its validity date. Contact Safety Critical Labs for the current status.';
+      } else {
+        setStatus('Valid', 'is-ok');
+        bodyEl.textContent = 'This certificate number appears in the SCL register with status Valid. Confirm that the details below match the certificate in hand. The Certification Determination Document is the binding artifact and governs in case of conflict.';
+      }
+    } else if (record.status === 'specimen') {
+      setStatus('Specimen', 'is-warn');
+      bodyEl.textContent = 'This number belongs to a specimen record. It demonstrates the certificate format and does not represent an issued certification.';
+    } else if (record.status === 'suspended') {
+      setStatus('Suspended', 'is-warn');
+      bodyEl.textContent = 'This certificate is suspended and should not be relied on while the suspension is in effect. Contact Safety Critical Labs for the current status.';
+    } else if (record.status === 'withdrawn') {
+      setStatus('Withdrawn', 'is-bad');
+      bodyEl.textContent = 'This certificate has been withdrawn and is no longer valid.';
+    } else {
+      setStatus('On record', 'is-warn');
+      bodyEl.textContent = 'This certificate number appears in the SCL register. Contact Safety Critical Labs to confirm its current status.';
+    }
+    window.SCL_VERIFY_RECORD = record;
+    document.getElementById('verify-file').hidden = false;
+  }
+
+  fetch('/registry.json', { cache: 'no-store' })
+    .then(function (res) {
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      return res.json();
+    })
+    .then(function (registry) {
+      if (!id) {
+        var count = (registry.register && typeof registry.register.issued_count === 'number')
+          ? registry.register.issued_count : 0;
+        setStatus('Register live');
+        bodyEl.textContent = 'The register is live. Certificates issued to date: ' + count + '. Issued certificates appear here upon publication.';
+        return;
+      }
+      var record = null;
+      (registry.certificates || []).forEach(function (r) {
+        if (r && r.id && String(r.id).toUpperCase() === id.toUpperCase()) record = r;
+      });
+      if (record) {
+        renderRecord(record);
+      } else {
+        setStatus('No record', 'is-bad');
+        bodyEl.textContent = 'No certificate with this number appears in the SCL register. Check the number as printed on the certificate, or contact Safety Critical Labs.';
+      }
+    })
+    .catch(function () {
+      setStatus('Register unavailable', 'is-warn');
+      bodyEl.textContent = 'The register could not be loaded. Certificate authenticity can be confirmed by request. Reference the certificate number above and contact Safety Critical Labs.';
+    });
 })();
 
-/* ─── Fade-up animation ────────────────────────────────────── */
-gsap.registerPlugin(ScrollTrigger);
-gsap.utils.toArray('.fade-up').forEach(function(el) {
-  gsap.fromTo(el,
-    { opacity: 0, y: 30 },
-    { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out' }
-  );
-});
+/* ─── Check a certificate file (SHA-256, computed locally) ── */
+(function () {
+  var drop = document.getElementById('verify-drop');
+  var input = document.getElementById('verify-file-input');
+  var result = document.getElementById('verify-file-result');
+  if (!drop || !input || !result) return;
+
+  function showResult(cls, text, fingerprint) {
+    result.className = 'verify-file-result' + (cls ? ' ' + cls : '');
+    result.textContent = text;
+    if (fingerprint) {
+      var fp = document.createElement('span');
+      fp.className = 'verify-fp';
+      fp.textContent = 'SHA-256 ' + fingerprint;
+      result.appendChild(fp);
+    }
+    result.hidden = false;
+  }
+
+  function handleFile(file) {
+    if (!file) return;
+    var record = window.SCL_VERIFY_RECORD;
+    if (!record) {
+      showResult('is-warn', 'Look up a certificate number first, then check the file against its record.');
+      return;
+    }
+    if (!(window.crypto && window.crypto.subtle && window.FileReader)) {
+      showResult('is-warn', 'This browser cannot compute the fingerprint locally. Open the page over https in a current browser.');
+      return;
+    }
+    showResult('', 'Computing the SHA-256 fingerprint of ' + file.name + ' in your browser.');
+    var reader = new FileReader();
+    reader.onerror = function () {
+      showResult('is-warn', 'The file could not be read. Try again.');
+    };
+    reader.onload = function () {
+      window.crypto.subtle.digest('SHA-256', reader.result).then(function (digest) {
+        var bytes = new Uint8Array(digest);
+        var hex = '';
+        for (var i = 0; i < bytes.length; i++) {
+          hex += ('0' + bytes[i].toString(16)).slice(-2);
+        }
+        if (!record.sha256) {
+          showResult('is-warn', 'No fingerprint on file for this record.', hex);
+        } else if (String(record.sha256).toLowerCase() === hex) {
+          showResult('is-ok', 'Match. The file fingerprint matches the register record.', hex);
+        } else {
+          showResult('is-bad', 'Mismatch. The file fingerprint does not match the register record. Do not rely on this file. Contact Safety Critical Labs.', hex);
+        }
+      }).catch(function () {
+        showResult('is-warn', 'The fingerprint could not be computed. Try again.');
+      });
+    };
+    reader.readAsArrayBuffer(file);
+  }
+
+  drop.addEventListener('click', function () { input.click(); });
+  drop.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); input.click(); }
+  });
+  drop.addEventListener('dragover', function (e) { e.preventDefault(); drop.classList.add('dragover'); });
+  drop.addEventListener('dragleave', function () { drop.classList.remove('dragover'); });
+  drop.addEventListener('drop', function (e) {
+    e.preventDefault();
+    drop.classList.remove('dragover');
+    handleFile(e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0]);
+  });
+  input.addEventListener('change', function () { handleFile(input.files && input.files[0]); });
+})();
 
 /* ─── Cursor glow on the verify page background ───────────── */
 (function() {
@@ -282,14 +566,6 @@ gsap.utils.toArray('.fade-up').forEach(function(el) {
     glow.style.setProperty('--glow-y', (e.clientY - rect.top) + 'px');
   });
 })();
-
-/* ─── Mobile menu toggle ───────────────────────────────────── */
-document.querySelector('.gn-hamburger').addEventListener('click', function() {
-  this.classList.toggle('open');
-  document.querySelector('.gn-links').classList.toggle('open');
-  this.setAttribute('aria-expanded', this.classList.contains('open'));
-  document.body.style.overflow = this.classList.contains('open') ? 'hidden' : '';
-});
 
 /* ─── Dropdown nav toggle ──────────────────────────────────── */
 document.querySelectorAll(".gn-dropdown-toggle").forEach(function(btn) {

@@ -678,30 +678,71 @@
 /* Clickable nodes + requirement detail panel */
 .fw-hit { fill: transparent; pointer-events: all; }
 .fw-req-group:focus { outline: none; }
-.fw-req-group:focus-visible .fw-dot,
-.fw-req-group:focus-visible .fw-req-bubble { stroke: var(--blue); stroke-width: 2; opacity: 1; }
+.fw-req-group:focus-visible .fw-dot { stroke: var(--blue); stroke-width: 2; }
 
+/* Focus mode: dim the diagram, keep the selected node + its ray lit */
+.fw-canvas.fw-focus .fw-ray,
+.fw-canvas.fw-focus .fw-ray-id,
+.fw-canvas.fw-focus .fw-ray-label,
+.fw-canvas.fw-focus .fw-dot {
+  opacity: 0.1 !important;
+  transition: opacity 0.35s ease;
+}
+/* Depth texture dims BELOW its faintest base value (0.05) so nothing brightens */
+.fw-canvas.fw-focus .fw-depth-line,
+.fw-canvas.fw-focus .fw-depth-dot {
+  opacity: 0.04 !important;
+  transition: opacity 0.35s ease;
+}
+/* Hovering another node while a card is open previews it at half-lift… */
+.fw-canvas.fw-focus .fw-req-active .fw-dot,
+.fw-canvas.fw-focus .fw-req-active .fw-ray-id,
+.fw-canvas.fw-focus .fw-req-active .fw-ray-label { opacity: 0.55 !important; }
+.fw-canvas.fw-focus .fw-ray.fw-ray-armed { opacity: 0.55 !important; }
+/* …but the selected node always wins (rule order matters: selected last). */
+.fw-canvas.fw-focus .fw-req-selected .fw-dot,
+.fw-canvas.fw-focus .fw-req-selected .fw-ray-id,
+.fw-canvas.fw-focus .fw-req-selected .fw-ray-label { opacity: 1 !important; }
+.fw-canvas.fw-focus .fw-ray.fw-ray-selected { opacity: 0.7 !important; }
+
+/* Dashed connector from the lit node to the card */
+.fw-connector {
+  stroke: var(--blue);
+  stroke-width: 1.4;
+  stroke-dasharray: 3 4;
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+/* Detail card — docked to a corner on the node's side, clear of the center orb */
 .fw-detail {
   position: absolute;
-  top: 50%; left: 50%;
-  transform: translate(-50%, -50%) scale(0.96);
-  width: min(360px, 88%);
+  width: min(300px, 36%);
   background: #fff;
   border: 1px solid var(--rule);
-  border-radius: 12px;
-  box-shadow: 0 24px 70px rgba(15,35,64,0.22);
-  padding: 28px 30px 26px;
+  border-top: 3px solid var(--blue);
+  border-radius: 10px;
+  box-shadow: 0 14px 44px rgba(15,35,64,0.13);
+  padding: 24px 26px 22px;
   z-index: 5;
   text-align: left;
   opacity: 0;
   pointer-events: none;
-  transition: opacity 0.2s ease, transform 0.2s ease;
+  transform: scale(0.97);
+  transition: opacity 0.25s ease, transform 0.25s ease;
 }
-.fw-detail.is-open { opacity: 1; transform: translate(-50%, -50%) scale(1); pointer-events: auto; }
+.fw-detail--tl { top: 5%; left: 2%; }
+.fw-detail--tr { top: 5%; right: 2%; }
+.fw-detail--bl { bottom: 5%; left: 2%; }
+.fw-detail--br { bottom: 5%; right: 2%; }
+.fw-detail.is-open { opacity: 1; transform: scale(1); pointer-events: auto; }
 .fw-detail[hidden] { display: none; }
+/* Quick content crossfade when the open card retargets to another node */
+@keyframes fw-detail-swap { from { opacity: 0.35; } to { opacity: 1; } }
+.fw-detail.fw-detail-swapping { animation: fw-detail-swap 0.18s ease-out; }
 .fw-detail-close {
-  position: absolute; top: 12px; right: 14px;
-  background: none; border: none; font-size: 24px; line-height: 1;
+  position: absolute; top: 10px; right: 12px;
+  background: none; border: none; font-size: 22px; line-height: 1;
   color: var(--ink-3); cursor: pointer; padding: 4px;
 }
 .fw-detail-close:hover { color: var(--ink); }
@@ -710,21 +751,36 @@
   letter-spacing: 0.08em; color: var(--blue); margin-bottom: 6px;
 }
 .fw-detail-title {
-  font-size: 20px; font-weight: 600; letter-spacing: -0.02em;
-  color: var(--ink); line-height: 1.25; margin-bottom: 18px;
+  font-size: 19px; font-weight: 600; letter-spacing: -0.02em;
+  color: var(--ink); line-height: 1.25; margin-bottom: 16px;
 }
 .fw-detail-prevents-label {
   font-size: 11px; font-weight: 600; letter-spacing: 0.07em;
   text-transform: uppercase; color: var(--ink-3); margin-bottom: 6px;
 }
 .fw-detail-prevents {
-  font-size: 14.5px; line-height: 1.6; font-weight: 300;
-  color: var(--ink-2); margin: 0 0 20px;
+  font-size: 14px; line-height: 1.6; font-weight: 300;
+  color: var(--ink-2); margin: 0 0 18px;
 }
 .fw-detail-link {
   font-size: 14px; font-weight: 500; color: var(--blue); text-decoration: none;
 }
 .fw-detail-link:hover { text-decoration: underline; }
+
+/* Tablet / mobile / short landscape viewports: card becomes a fixed bottom
+   sheet, never over the diagram (max-height catches landscape phones whose
+   width exceeds 900px — the corner card would dock below the fold there) */
+@media (max-width: 900px), (max-height: 560px) {
+  .fw-detail,
+  .fw-detail--tl, .fw-detail--tr, .fw-detail--bl, .fw-detail--br {
+    position: fixed;
+    top: auto; right: auto;
+    left: 50%; bottom: 14px;
+    width: min(520px, calc(100% - 28px));
+    transform: translate(-50%, 16px) scale(1);
+  }
+  .fw-detail.is-open { transform: translate(-50%, 0) scale(1); }
+}
 
 /* Ray styling */
 .fw-ray {
@@ -736,11 +792,14 @@
   /* draw animation defaults — overridden by JS */
   stroke-dasharray: 1000;
   stroke-dashoffset: 1000;
-  transition: stroke-dashoffset 1.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+  transition: stroke-dashoffset 1.2s cubic-bezier(0.2, 0.8, 0.2, 1),
+              opacity 0.15s ease, stroke-width 0.15s ease;
 }
 .fw-ray.fw-ray-drawn {
   stroke-dashoffset: 0;
 }
+/* Armed (hovered/focused) ray: full-strength, thicker — the preview of selection */
+.fw-ray.fw-ray-armed { opacity: 1; stroke-width: 2; }
 
 .fw-dot {
   fill: var(--blue);
@@ -773,35 +832,18 @@
 .fw-center-orb {
   color: var(--blue-dk);
   filter: drop-shadow(0 4px 18px rgba(46,109,180,0.20));
-  animation: fw-center-orb-pulse 4s ease-in-out infinite;
-}
-@keyframes fw-center-orb-pulse {
-  0%, 100% { filter: drop-shadow(0 4px 18px rgba(46,109,180,0.20)); }
-  50%      { filter: drop-shadow(0 4px 30px rgba(46,109,180,0.35)); }
 }
 
-/* Depth particles — background "space" effect: dim radiating lines + tiny squares */
+/* Depth particles — static background texture: dim radiating lines + tiny squares */
 .fw-depth-line {
   stroke: var(--blue);
   stroke-width: 0.5;
   fill: none;
   pointer-events: none;
-  transition: opacity 0.3s ease-out, stroke-width 0.3s ease-out;
 }
 .fw-depth-dot {
   fill: var(--blue);
   pointer-events: none;
-  transition: opacity 0.3s ease-out;
-}
-
-/* Active depth particle — when cursor is closest to it, it lights up */
-.fw-depth-line.fw-depth-line-active {
-  stroke: var(--blue-dk);
-  stroke-width: 1.4;
-}
-.fw-depth-dot.fw-depth-dot-active {
-  fill: var(--blue-dk);
-  filter: drop-shadow(0 0 6px var(--blue));
 }
 
 /* Keep firework SVG content within its container so it doesn't bleed into other sections */
@@ -809,16 +851,8 @@
   overflow: hidden;
 }
 
-/* Requirement group — wraps bubble + dot + labels so they move together.
-   No transform transition — mousemove updates apply instantly so the requirement
-   tracks the cursor at native pointer rate without inertia or restart-jitter. */
-.fw-req-group {
-  transition: none;
-  will-change: transform;
-}
-
-/* Bubble — repurposed as a pulse RING that radiates outward from the dot.
-   Always invisible by default; on activation it expands and fades. */
+/* Bubble — a one-shot "lock-on" RING that radiates outward from the dot
+   once when the node arms or is selected. No infinite loops. */
 .fw-req-bubble {
   fill: none;
   stroke: var(--blue);
@@ -829,23 +863,27 @@
   transform-origin: center;
   pointer-events: none;
 }
-.fw-req-active .fw-req-bubble {
-  animation: fw-pulse-ring 1.6s ease-out infinite;
+.fw-req-active .fw-req-bubble,
+.fw-req-selected .fw-req-bubble {
+  animation: fw-pulse-ring 0.6s ease-out 1;
 }
 @keyframes fw-pulse-ring {
   0%   { opacity: 0.85; transform: scale(0.3); stroke-width: 1.5; }
   100% { opacity: 0;    transform: scale(1.6); stroke-width: 0.5; }
 }
 
-/* Active state — requirement reacts: dot grows + glows, text bolds */
-.fw-req-active .fw-dot {
+/* Armed / selected state — flat, engineered: dot grows and darkens, text bolds.
+   Emphasis by weight and color only, matching the card's type language.
+   One unified size for hover-preview and selection. */
+.fw-req-active .fw-dot,
+.fw-req-selected .fw-dot {
   fill: var(--blue-dk);
-  r: 7;
-  filter: drop-shadow(0 0 10px rgba(46,109,180,0.8))
-          drop-shadow(0 0 20px rgba(46,109,180,0.4));
+  r: 6.5;
 }
 .fw-req-active .fw-ray-id,
-.fw-req-active .fw-ray-label {
+.fw-req-active .fw-ray-label,
+.fw-req-selected .fw-ray-id,
+.fw-req-selected .fw-ray-label {
   fill: var(--blue-dk);
   font-weight: 600;
 }
@@ -854,7 +892,17 @@
   transition: r 0.3s ease-out, fill 0.3s ease-out, opacity 0.4s ease;
 }
 .fw-ray-id, .fw-ray-label {
-  transition: fill 0.3s ease-out, font-weight 0.3s ease-out;
+  /* opacity must stay in this list — this rule overrides the base transition,
+     and dropping opacity would kill the staggered draw-in fade */
+  transition: fill 0.3s ease-out, font-weight 0.3s ease-out, opacity 0.5s ease;
+}
+
+/* Reduced motion: diagram appears fully drawn, no sweep, no rings */
+@media (prefers-reduced-motion: reduce) {
+  .fw-ray { transition: none; stroke-dashoffset: 0 !important; }
+  .fw-dot, .fw-ray-id, .fw-ray-label { transition: none; opacity: 1; }
+  .fw-req-active .fw-req-bubble,
+  .fw-req-selected .fw-req-bubble { animation: none; }
 }
 
 .fw-cta-bridge {
@@ -1700,7 +1748,7 @@
         <!-- Generated by JS -->
       </svg>
       <!-- Requirement detail panel — populated when a node is clicked -->
-      <div class="fw-detail" id="fw-detail" role="dialog" aria-modal="true" aria-labelledby="fw-detail-id" hidden>
+      <div class="fw-detail" id="fw-detail" role="dialog" aria-live="polite" aria-labelledby="fw-detail-id" hidden>
         <button class="fw-detail-close" id="fw-detail-close" type="button" aria-label="Close">&times;</button>
         <div class="fw-detail-id" id="fw-detail-id"></div>
         <div class="fw-detail-title" id="fw-detail-title"></div>
@@ -2397,7 +2445,7 @@
   });
 })();
 
-/* ─── FIREWORK SHOWCASE (13 areas + magnet cursor interaction) ──── */
+/* ─── FIREWORK SHOWCASE (13 areas, instrument-panel interaction) ──── */
 (function() {
   var svg = document.getElementById('fw-canvas');
   if (!svg) return;
@@ -2408,7 +2456,16 @@
   var INNER_R = 130;
   var OUTER_R = 320;
   var LABEL_R = 360;
-  var MAGNET_RADIUS = 380;
+  var HOVER_OK = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+  var REDUCED_MOTION = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* Magnetic lean feel — the "play" layer. Tune here:
+     FIELD_R   how close (viewBox units) the cursor must be before a node responds
+     MAX_PULL  max lean distance (viewBox units; ~14 ≈ 5px rendered)
+     LEAN_DAMP spring damping per frame (0..1, higher = snappier) */
+  var FIELD_R   = 220;
+  var MAX_PULL  = 14;
+  var LEAN_DAMP = 0.16;
 
   var areas = [
     { id: 'AI-1',  label: 'Operational and data foundations', prevents: 'A system evaluated on data it effectively trained on, reporting skill it does not have outside its declared operating domain.' },
@@ -2428,41 +2485,152 @@
 
   var N = areas.length;
 
-  /* ─── Requirement detail panel (opened by clicking a node) ─── */
+  /* ─── Requirement detail panel (opened by clicking a node) ─────
+     The card docks to the clicked node's side, the rest of the
+     diagram dims, and a connector links the lit node to the card so
+     the center logo is never covered. */
   var detail = document.getElementById('fw-detail');
-  function openDetail(a) {
+  var detailOpen = false;
+  var cardEverOpened = false;
+  var currentNode = null;
+  var connector = null;
+
+  function findNode(area) {
+    for (var k = 0; k < rays.length; k++) { if (rays[k].area === area) return rays[k]; }
+    return null;
+  }
+
+  function clearSelection() {
+    if (currentNode) {
+      currentNode.group.classList.remove('fw-req-selected');
+      currentNode.ray.classList.remove('fw-ray-selected');
+      currentNode.group.setAttribute('aria-expanded', 'false');
+      currentNode = null;
+    }
+    if (svg) svg.classList.remove('fw-focus');
+    if (connector) connector.style.display = 'none';
+    if (detail) detail.classList.remove('fw-detail--tl', 'fw-detail--tr', 'fw-detail--bl', 'fw-detail--br');
+  }
+
+  function drawConnector(node) {
+    if (!node || !detail) return;
+    if (!connector) {
+      connector = document.createElementNS(SVG_NS, 'line');
+      connector.setAttribute('class', 'fw-connector');
+      svg.appendChild(connector);
+    }
+    /* When the card is a bottom sheet — no connector. Same media query as the
+       CSS so JS and stylesheet always agree (innerWidth is the visual viewport
+       on iOS and disagrees under pinch zoom). */
+    if (window.matchMedia('(max-width: 900px), (max-height: 560px)').matches) { connector.style.display = 'none'; return; }
+    var svgRect = svg.getBoundingClientRect();
+    var cardRect = detail.getBoundingClientRect();
+    var sx = W / svgRect.width, sy = H / svgRect.height;
+    /* Draw to the closest point on the card's edge for a clean short line */
+    var nodeScreenX = svgRect.left + node.x / sx;
+    var nodeScreenY = svgRect.top + node.y / sy;
+    var px = Math.max(cardRect.left, Math.min(nodeScreenX, cardRect.right));
+    var py = Math.max(cardRect.top, Math.min(nodeScreenY, cardRect.bottom));
+    connector.setAttribute('x1', node.x);
+    connector.setAttribute('y1', node.y);
+    connector.setAttribute('x2', (px - svgRect.left) * sx);
+    connector.setAttribute('y2', (py - svgRect.top) * sy);
+    connector.style.display = '';
+  }
+
+  function openDetail(area) {
     if (!detail) return;
-    detail.querySelector('#fw-detail-id').textContent = a.id;
-    detail.querySelector('#fw-detail-title').textContent = a.label;
-    detail.querySelector('#fw-detail-prevents').textContent = a.prevents;
-    detail.querySelector('#fw-detail-link').setAttribute('href', '/framework#' + a.id.toLowerCase());
+    var node = findNode(area);
+    var wasOpen = detailOpen;
+
+    clearStagger();
+    clearSelection();
+
+    /* Un-hide BEFORE populating: the aria-live region only announces content
+       changes made while it is visible (the card is still opacity:0 here, so
+       nothing flashes). */
     detail.hidden = false;
-    /* next frame so the transition runs */
-    requestAnimationFrame(function () { detail.classList.add('is-open'); });
-    var closeBtn = detail.querySelector('#fw-detail-close');
-    if (closeBtn) closeBtn.focus();
-  }
-  function closeDetail() {
-    if (!detail || detail.hidden) return;
-    detail.classList.remove('is-open');
-    detail.hidden = true;
-  }
-  if (detail) {
-    detail.querySelector('#fw-detail-close').addEventListener('click', function (e) { e.stopPropagation(); closeDetail(); });
-    document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeDetail(); });
-    document.addEventListener('click', function (e) {
-      if (!detail.hidden && !detail.contains(e.target)) closeDetail();
+    detail.querySelector('#fw-detail-id').textContent = area.id;
+    detail.querySelector('#fw-detail-title').textContent = area.label;
+    detail.querySelector('#fw-detail-prevents').textContent = area.prevents;
+    detail.querySelector('#fw-detail-link').setAttribute('href', '/framework#' + area.id.toLowerCase());
+
+    /* Card corner: same horizontal side as the node (so the connector never
+       crosses the orb) but the opposite vertical half (so it never covers
+       the lit node). */
+    var horiz = (node && node.x < CX) ? 'l' : 'r';
+    var vert = (node && node.y < CY) ? 'b' : 't';
+    detail.classList.add('fw-detail--' + vert + horiz);
+
+    if (svg) svg.classList.add('fw-focus');
+    if (node) {
+      node.group.classList.add('fw-req-selected');
+      node.ray.classList.add('fw-ray-selected');
+      node.group.setAttribute('aria-expanded', 'true');
+      currentNode = node;
+    }
+
+    detailOpen = true;
+    cardEverOpened = true;
+    kickLean(); /* leaned nodes glide home — the diagram is an exhibit while a card is open */
+    /* Retargeting an already-open card: quick content crossfade, no close/reopen */
+    if (wasOpen) {
+      detail.classList.remove('fw-detail-swapping');
+      void detail.offsetWidth;
+      detail.classList.add('fw-detail-swapping');
+    }
+    requestAnimationFrame(function () {
+      detail.classList.add('is-open');
+      drawConnector(node);
     });
   }
 
-  /* Depth layer — background particles for the "space dimension" feel.
-     Stored so we can highlight the closest one to the cursor. */
-  var DEPTH_COUNT = 64;
-  var depthParticles = [];
+  function closeDetail(returnFocus) {
+    if (!detail || detail.hidden) return;
+    var node = currentNode;
+    detail.classList.remove('is-open', 'fw-detail-swapping');
+    detail.hidden = true;
+    detailOpen = false;
+    clearSelection();
+    /* Esc / X return focus to the node so keyboard position isn't lost */
+    if (returnFocus && node) node.group.focus();
+  }
+
+  if (detail) {
+    detail.querySelector('#fw-detail-close').addEventListener('click', function (e) { e.stopPropagation(); closeDetail(true); });
+    document.addEventListener('keydown', function (e) {
+      if (e.key !== 'Escape' || detail.hidden) return;
+      /* Only pull focus back to the diagram if the user is still IN the card
+         or diagram — Esc from elsewhere on the page (e.g. the search input)
+         closes the card without yanking focus and scroll position back up. */
+      var af = document.activeElement;
+      closeDetail(detail.contains(af) || (svg && svg.contains(af)));
+    });
+    document.addEventListener('click', function (e) {
+      if (!detail.hidden && !detail.contains(e.target)) closeDetail(false);
+    });
+    window.addEventListener('resize', function () {
+      if (detailOpen && currentNode) { drawConnector(currentNode); }
+    });
+  }
+
+  /* Depth layer — static background texture for the "space dimension" feel.
+     Seeded PRNG (mulberry32) so the flagship diagram is the SAME drawing on
+     every load, like a controlled document. Seed = the framework's concept DOI. */
+  function mulberry32(a) {
+    return function () {
+      a |= 0; a = a + 0x6D2B79F5 | 0;
+      var t = Math.imul(a ^ a >>> 15, 1 | a);
+      t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t;
+      return ((t ^ t >>> 14) >>> 0) / 4294967296;
+    };
+  }
+  var seededRand = mulberry32(19024420);
+  var DEPTH_COUNT = 32;
   for (var d = 0; d < DEPTH_COUNT; d++) {
-    var dAngle = Math.random() * Math.PI * 2;
-    var dDist = 180 + Math.random() * 380;
-    var depth = Math.random();
+    var dAngle = seededRand() * Math.PI * 2;
+    var dDist = 180 + seededRand() * 380;
+    var depth = seededRand();
     var dx = CX + Math.cos(dAngle) * dDist;
     var dy = CY + Math.sin(dAngle) * dDist;
     var x1d = CX + Math.cos(dAngle) * 110;
@@ -2472,8 +2640,7 @@
     dLine.setAttribute('x1', x1d); dLine.setAttribute('y1', y1d);
     dLine.setAttribute('x2', dx);  dLine.setAttribute('y2', dy);
     dLine.setAttribute('class', 'fw-depth-line');
-    var baseLineOp = 0.04 + depth * 0.14;
-    dLine.style.opacity = baseLineOp;
+    dLine.style.opacity = 0.04 + depth * 0.14;
     svg.appendChild(dLine);
 
     var size = 1.3 + depth * 3.2;
@@ -2483,17 +2650,8 @@
     dRect.setAttribute('width', size);
     dRect.setAttribute('height', size);
     dRect.setAttribute('class', 'fw-depth-dot');
-    var baseDotOp = 0.18 + depth * 0.55;
-    dRect.style.opacity = baseDotOp;
+    dRect.style.opacity = 0.18 + depth * 0.55;
     svg.appendChild(dRect);
-
-    depthParticles.push({
-      line: dLine, dot: dRect,
-      x: dx, y: dy,
-      baseLineOp: baseLineOp,
-      baseDotOp: baseDotOp,
-      baseSize: size
-    });
   }
 
   /* Center: SCL orb logo (uses the symbol defined in the hero) */
@@ -2533,24 +2691,51 @@
     var group = document.createElementNS(SVG_NS, 'g');
     group.setAttribute('class', 'fw-req-group');
 
-    /* Generous invisible hit target so the tiny dot is easy to click/tap */
+    /* Generous invisible hit target so the tiny dot is easy to click/tap
+       (r=56 clears WCAG target size on phones; adjacent dots are ~153 units apart) */
     var hit = document.createElementNS(SVG_NS, 'circle');
     hit.setAttribute('cx', x2); hit.setAttribute('cy', y2);
-    hit.setAttribute('r', 32);
+    hit.setAttribute('r', 56);
     hit.setAttribute('class', 'fw-hit');
     group.appendChild(hit);
 
-    /* Make each node an accessible button that opens its requirement detail */
-    (function (g, a) {
+    /* Make each node an accessible button that opens its requirement detail.
+       Roving tabindex: the ring is ONE tab stop; arrows move between stations. */
+    (function (g, a, idx) {
       g.style.cursor = 'pointer';
-      g.setAttribute('tabindex', '0');
+      g.setAttribute('tabindex', idx === 0 ? '0' : '-1');
       g.setAttribute('role', 'button');
-      g.setAttribute('aria-label', a.id + ', ' + a.label + '. Open requirement detail.');
-      g.addEventListener('click', function (ev) { ev.stopPropagation(); openDetail(a); });
-      g.addEventListener('keydown', function (ev) {
-        if (ev.key === 'Enter' || ev.key === ' ') { ev.preventDefault(); openDetail(a); }
+      g.setAttribute('aria-label', a.id + ', ' + a.label + '. Show requirement detail.');
+      g.setAttribute('aria-expanded', 'false');
+      g.setAttribute('data-fw-idx', idx);
+      /* Click toggles: same node again puts the card away; another node retargets it */
+      g.addEventListener('click', function (ev) {
+        ev.stopPropagation();
+        if (detailOpen && currentNode && currentNode.area === a) closeDetail(false);
+        else openDetail(a);
       });
-    })(group, areas[i]);
+      g.addEventListener('keydown', function (ev) {
+        if (ev.key === 'Enter' || ev.key === ' ') {
+          ev.preventDefault();
+          if (detailOpen && currentNode && currentNode.area === a) closeDetail(true);
+          else openDetail(a);
+        }
+      });
+      /* Hover arms the station (real pointers only — taps must not stick).
+         Leaving re-arms a still-focused station so keyboard state survives
+         a mouse brushing across the ring. */
+      if (HOVER_OK) {
+        g.addEventListener('pointerenter', function () { armStation(idx); armedByHover = true; });
+        g.addEventListener('pointerleave', function () {
+          disarm();
+          armedByHover = false;
+          var ae = document.activeElement;
+          if (ae && svg.contains(ae) && ae.classList && ae.classList.contains('fw-req-group')) {
+            armStation(focusIdx);
+          }
+        });
+      }
+    })(group, areas[i], i);
 
     /* Bubble — soft halo that appears around the dot when this requirement is active */
     var bubble = document.createElementNS(SVG_NS, 'circle');
@@ -2603,28 +2788,184 @@
       dot: dot,
       idText: idText,
       labelText: labelText,
+      bubble: bubble,
+      area: areas[i],
       x: x2, y: y2,
-      pairedParticle: null /* assigned after depth particles are created */
+      dx: 0, dy: 0,          /* current lean displacement */
+      leanApplied: false
     });
   }
 
-  /* Assign each requirement its OWN dedicated background line.
-     Each requirement pairs with the closest unpaired depth particle. */
-  rays.forEach(function (r) {
-    var closest = null;
-    var minDist = Infinity;
-    depthParticles.forEach(function (p) {
-      if (p.pairedReq) return; /* already paired with another requirement */
-      var dx = p.x - r.x;
-      var dy = p.y - r.y;
-      var dist = Math.sqrt(dx * dx + dy * dy);
-      if (dist < minDist) { minDist = dist; closest = p; }
+  /* ── Armed state — one station at a time, set identically by hover,
+     keyboard focus, or the lamp-test sweep. Nothing ever moves. ── */
+  var armedIdx = -1;
+  var focusIdx = 0;
+  var userEngaged = false;
+  var armedByHover = false;
+  var armedBySweep = false;
+  var staggerCleared = false;
+
+  /* The draw-in stagger lives in inline transitionDelay on every element;
+     it must be gone before any armed/dim transition or those lag by up to
+     ~1.4s. Called at the 2.3s settle mark AND on first interaction. Also
+     retires the dash-draw machinery so a lean-stretched ray can't open a
+     gap at its tip (the draw's dasharray equals the ray's resting length). */
+  function clearStagger() {
+    if (staggerCleared) return;
+    staggerCleared = true;
+    rays.forEach(function (r) {
+      r.ray.style.transitionDelay = '0ms';
+      r.dot.style.transitionDelay = '0ms';
+      r.idText.style.transitionDelay = '0ms';
+      r.labelText.style.transitionDelay = '0ms';
+      r.ray.style.strokeDasharray = 'none';
+      r.ray.style.strokeDashoffset = '0';
     });
-    if (closest) {
-      closest.pairedReq = r;
-      r.pairedParticle = closest;
+  }
+
+  function armStation(i, fromSweep) {
+    if (!fromSweep) { userEngaged = true; clearStagger(); }
+    armedBySweep = !!fromSweep;
+    if (i === armedIdx) return;
+    disarm();
+    armedIdx = i;
+    rays[i].group.classList.add('fw-req-active');
+    rays[i].ray.classList.add('fw-ray-armed');
+  }
+
+  function disarm() {
+    if (armedIdx < 0) return;
+    rays[armedIdx].group.classList.remove('fw-req-active');
+    rays[armedIdx].ray.classList.remove('fw-ray-armed');
+    armedIdx = -1;
+  }
+
+  /* Keyboard focus arms a station exactly like hover (focusin bubbles,
+     so one delegated listener covers all 13 groups). It also resyncs the
+     roving tabindex, since click/tap and Esc-focus-return can land focus
+     on a station the arrow keys didn't know about. */
+  svg.addEventListener('focusin', function (e) {
+    var g = e.target.closest ? e.target.closest('.fw-req-group') : null;
+    if (!g) return;
+    var idx = parseInt(g.getAttribute('data-fw-idx'), 10);
+    if (isNaN(idx)) return;
+    if (idx !== focusIdx) {
+      rays[focusIdx].group.setAttribute('tabindex', '-1');
+      rays[idx].group.setAttribute('tabindex', '0');
     }
+    focusIdx = idx;
+    armedByHover = false;
+    armStation(idx);
   });
+  /* Tab-out only disarms a focus-armed station — never one the pointer is
+     still resting on. */
+  svg.addEventListener('focusout', function () { if (!armedByHover) disarm(); });
+
+  /* ── Magnetic lean — every node in range leans toward the cursor with
+     proximity falloff (closer = stronger) and spring damping. The ray's
+     endpoint travels WITH its dot, so the line flexes like an instrument
+     needle and nothing ever detaches. Arming/click/keyboard are untouched:
+     the hit circles ride along with the lean. Activated after the draw-in
+     settles (see fire), mouse devices only. ── */
+  var leanRunning = false;
+  var cursorOn = false;
+  var curX = 0, curY = 0;
+
+  function kickLean() {
+    if (REDUCED_MOTION || !HOVER_OK) return;
+    if (!leanRunning) { leanRunning = true; requestAnimationFrame(leanTick); }
+  }
+
+  function leanTick() {
+    var settled = true;
+    for (var k = 0; k < rays.length; k++) {
+      var r = rays[k];
+      var tx = 0, ty = 0;
+      /* While a card is open the diagram is a stable exhibit — lean home. */
+      if (cursorOn && !detailOpen) {
+        var ddx = curX - r.x, ddy = curY - r.y;
+        var dist = Math.sqrt(ddx * ddx + ddy * ddy);
+        if (dist < FIELD_R && dist > 1) {
+          var t = 1 - dist / FIELD_R;
+          var pull = MAX_PULL * t * t;
+          tx = ddx / dist * pull;
+          ty = ddy / dist * pull;
+        }
+      }
+      if (Math.abs(tx - r.dx) + Math.abs(ty - r.dy) > 0.05) settled = false;
+      r.dx += (tx - r.dx) * LEAN_DAMP;
+      r.dy += (ty - r.dy) * LEAN_DAMP;
+      if (Math.abs(r.dx) < 0.05 && Math.abs(r.dy) < 0.05) {
+        if (r.leanApplied) {
+          r.group.style.transform = '';
+          r.ray.setAttribute('x2', r.x);
+          r.ray.setAttribute('y2', r.y);
+          r.leanApplied = false;
+        }
+        continue;
+      }
+      r.group.style.transform = 'translate(' + r.dx.toFixed(2) + 'px, ' + r.dy.toFixed(2) + 'px)';
+      r.ray.setAttribute('x2', (r.x + r.dx).toFixed(2));
+      r.ray.setAttribute('y2', (r.y + r.dy).toFixed(2));
+      r.leanApplied = true;
+    }
+    if (settled) { leanRunning = false; return; }
+    requestAnimationFrame(leanTick);
+  }
+
+  /* Listeners are attached by fire() once the entrance has settled, so the
+     lean never fights the draw-in choreography. */
+  function initLean() {
+    if (REDUCED_MOTION || !HOVER_OK) return;
+    svg.addEventListener('mousemove', function (e) {
+      userEngaged = true; /* playing with the diagram — the lamp test yields */
+      var rect = svg.getBoundingClientRect();
+      curX = (e.clientX - rect.left) * (W / rect.width);
+      curY = (e.clientY - rect.top) * (H / rect.height);
+      cursorOn = true;
+      kickLean();
+    });
+    svg.addEventListener('mouseleave', function () { cursorOn = false; kickLean(); });
+  }
+
+  /* Arrow keys walk the ring from its single tab stop; with a card open
+     they retarget it (browse mode). */
+  svg.addEventListener('keydown', function (e) {
+    var step = 0;
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown') step = 1;
+    else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') step = -1;
+    else if (e.key === 'Home') { step = -focusIdx; }
+    else if (e.key === 'End') { step = (N - 1) - focusIdx; }
+    else return;
+    e.preventDefault();
+    var next = ((focusIdx + step) % N + N) % N;
+    rays[focusIdx].group.setAttribute('tabindex', '-1');
+    rays[next].group.setAttribute('tabindex', '0');
+    rays[next].group.focus();
+    focusIdx = next;
+    armedByHover = false;
+    armStation(next); /* don't rely on the focus event alone */
+    if (detailOpen) openDetail(areas[next]);
+  });
+
+  /* One-time "check sequence" after the draw — each station arms for ~110ms
+     in order, like a pre-flight lamp test. It teaches (on every input device)
+     that the stations are live controls, then the diagram rests. Aborts the
+     moment the visitor interacts. */
+  function lampTest() {
+    var i = 0;
+    var timer = setInterval(function () {
+      if (userEngaged || detailOpen || cardEverOpened) {
+        clearInterval(timer);
+        /* drop a leftover sweep-armed station unless the user's own
+           hover/focus has since armed one */
+        if (armedBySweep) disarm();
+        return;
+      }
+      if (i >= N) { clearInterval(timer); disarm(); return; }
+      armStation(i++, true);
+    }, 110);
+  }
 
   /* Trigger the firework draw when scrolled into view */
   var triggered = false;
@@ -2637,6 +2978,15 @@
       r.idText.classList.add('fw-label-shown');
       r.labelText.classList.add('fw-label-shown');
     });
+    /* Once the staggered draw has finished (~2.2s worst case), clear the
+       inline stagger delays so armed-state transitions fire instantly,
+       then run the lamp test (skipped if the visitor already engaged —
+       hovered, focused, or opened a card, even one they've since closed). */
+    setTimeout(function () {
+      clearStagger();
+      initLean();
+      if (!REDUCED_MOTION && !userEngaged && !detailOpen && !cardEverOpened) lampTest();
+    }, 2300);
   }
 
   if (typeof IntersectionObserver !== 'undefined') {
@@ -2649,86 +2999,6 @@
   } else {
     fire();
   }
-
-  /* Cursor interaction — pair closest requirement + closest background line.
-     Both pull toward the cursor and highlight together. They "come together" near
-     the cursor. When cursor moves to a different region, the pair breaks and a
-     new pair forms. */
-  var lastMx = -9999, lastMy = -9999;
-
-  function updateHighlight() {
-    /* Reset all labeled requirements */
-    rays.forEach(function (r) {
-      r.group.style.transform = '';
-      r.group.classList.remove('fw-req-active');
-    });
-
-    /* Reset all depth particles to base */
-    depthParticles.forEach(function (p) {
-      p.line.setAttribute('x2', p.x);
-      p.line.setAttribute('y2', p.y);
-      p.dot.setAttribute('x', p.x - p.baseSize / 2);
-      p.dot.setAttribute('y', p.y - p.baseSize / 2);
-      p.line.style.opacity = p.baseLineOp;
-      p.dot.style.opacity = p.baseDotOp;
-      p.line.classList.remove('fw-depth-line-active');
-      p.dot.classList.remove('fw-depth-dot-active');
-    });
-
-    if (lastMx < -1000) return;
-
-    /* Find closest labeled requirement to cursor */
-    var closestReq = null;
-    var minReqDist = Infinity;
-    rays.forEach(function (r) {
-      var dx = r.x - lastMx;
-      var dy = r.y - lastMy;
-      var dist = Math.sqrt(dx * dx + dy * dy);
-      if (dist < minReqDist) { minReqDist = dist; closestReq = r; }
-    });
-
-    /* Use the requirement's PAIRED depth particle (consistent — same line every time) */
-    if (closestReq && minReqDist < MAGNET_RADIUS) {
-      /* Pull the requirement strongly toward the cursor so it tracks the pointer */
-      var reqPullStrength = 0.7;
-      var reqDx = (lastMx - closestReq.x) * reqPullStrength;
-      var reqDy = (lastMy - closestReq.y) * reqPullStrength;
-      var reqNewX = closestReq.x + reqDx;
-      var reqNewY = closestReq.y + reqDy;
-      closestReq.group.style.transform = 'translate(' + reqDx + 'px, ' + reqDy + 'px)';
-      closestReq.group.classList.add('fw-req-active');
-
-      /* Background line endpoint connects to the REQUIREMENT's new position (not the cursor) */
-      var pair = closestReq.pairedParticle;
-      if (pair) {
-        pair.line.setAttribute('x2', reqNewX);
-        pair.line.setAttribute('y2', reqNewY);
-        pair.dot.setAttribute('x', reqNewX - pair.baseSize / 2);
-        pair.dot.setAttribute('y', reqNewY - pair.baseSize / 2);
-        pair.line.style.opacity = 1;
-        pair.dot.style.opacity = 1;
-        pair.line.classList.add('fw-depth-line-active');
-        pair.dot.classList.add('fw-depth-dot-active');
-      }
-    }
-  }
-
-  function handleMove(e) {
-    var rect = svg.getBoundingClientRect();
-    var scaleX = W / rect.width;
-    var scaleY = H / rect.height;
-    lastMx = (e.clientX - rect.left) * scaleX;
-    lastMy = (e.clientY - rect.top) * scaleY;
-    updateHighlight();
-  }
-
-  function handleLeave() {
-    lastMx = -9999; lastMy = -9999;
-    updateHighlight();
-  }
-
-  svg.addEventListener('mousemove', handleMove);
-  svg.addEventListener('mouseleave', handleLeave);
 })();
 
 /* ─── SUBSCRIBE STARFIELD ─────────────────────────────────── */

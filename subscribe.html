@@ -276,6 +276,10 @@
       <button type="submit" class="sub-submit">Subscribe</button>
     </form>
 
+    <p id="sub-interim-note" hidden style="margin-top:18px;font-size:14px;font-weight:300;color:var(--ink-2);line-height:1.6;">
+      Briefings go out by email for now. To join the list, email <a href="mailto:kevin.williams@safetycriticallabs.com?subject=Subscribe" style="color:var(--blue);text-decoration:underline;">kevin.williams@safetycriticallabs.com</a> with the subject Subscribe.
+    </p>
+
     <div class="sub-receive">
       <div class="sub-receive-label">What you'll receive</div>
       <div class="sub-receive-list">
@@ -353,7 +357,7 @@
       <span class="footer-copyright">&copy; 2026 Safety Critical Labs. All rights reserved.</span>
       <div class="footer-meta">
         <a href="#" aria-label="Back to top">Back to top</a>
-        <span class="footer-version">Framework v3.3</span>
+        <span class="footer-version">Framework v3.4</span>
       </div>
     </div>
 
@@ -378,6 +382,12 @@
   var confirmTitle = document.getElementById('sub-confirmation-title');
   var confirmBody = document.getElementById('sub-confirmation-body');
   var submitBtn = form.querySelector('.sub-submit');
+
+  /* No provider wired yet: surface an honest, actionable path so a visitor's
+     interest is not silently dropped. Auto-hides the moment BREVO_FORM_URL
+     (or any provider URL) is set. */
+  var interimNote = document.getElementById('sub-interim-note');
+  if (interimNote && !BREVO_FORM_URL) interimNote.hidden = false;
 
   function looksLikeEmail(s) {
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s);

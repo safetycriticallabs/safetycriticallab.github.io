@@ -24,6 +24,20 @@
 <style>
 /* ─── EVIDENCE PAGE ───────────────────────────────────────── */
 
+/* Hero cursor glow (matches the other inner pages; the markup + mousemove
+   script were already here but this rule was dropped in the redesign) */
+.inner-hero { z-index: 0; }
+.fw-hero-glow {
+  position: absolute; inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.4s;
+  background: radial-gradient(520px circle at var(--glow-x, 70%) var(--glow-y, 30%), rgba(46,109,180,0.10), transparent 60%);
+}
+.inner-hero:hover .fw-hero-glow { opacity: 1; }
+.inner-hero-inner { z-index: 2; position: relative; }
+
 /* Bracketed mono eyebrow (base rule — navy house style) */
 .fw-eyebrow-mono {
   font-family: var(--mono);
@@ -259,7 +273,7 @@
       </div>
       <div class="ev-method-cell">
         <div class="ev-method-label">Baseline accuracy</div>
-        <div class="ev-method-value">80.3%<span>Held-out test, honest split</span></div>
+        <div class="ev-method-value">80.33%<span>Held-out test, honest split</span></div>
       </div>
     </div>
 
@@ -277,7 +291,7 @@
           <span class="ev-metric-label">test accuracy when engines are allowed to bleed across train and test, versus a clean unit-level split</span>
         </div>
         <p class="ev-body">
-          Splitting the data by row instead of by engine lets the same asset appear in both training and test. Measured accuracy rises from <strong>80.3% to 83.1%</strong>. The gain is not skill. It is memorization the evaluation failed to prevent. A pass threshold set on the leaky number would certify a system that the honest split does not support.
+          Splitting the data by row instead of by engine lets the same asset appear in both training and test. Measured accuracy rises from <strong>80.33% to 83.05%</strong>. The gain is not skill. It is memorization the evaluation failed to prevent. A pass threshold set on the leaky number would certify a system that the honest split does not support.
         </p>
         <div class="ev-targets">This is the failure mode <b>AI-1</b> targets: train, validation, and test separation with documented provenance.</div>
       </div>

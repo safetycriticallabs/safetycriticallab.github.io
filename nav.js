@@ -19,6 +19,18 @@
     });
   }
 
+  /* Mobile menu CTA: the bar's "Get Certified" pill is hidden at phone
+     widths, so clone it in as the menu's last item. Cloned here (one
+     shared file) instead of editing every page's nav markup; CSS shows
+     .gn-menu-cta-item only inside the ≤880px menu. */
+  var cta = document.querySelector('.global-nav .gn-cta');
+  if (cta && links && !links.querySelector('.gn-cta')) {
+    var ctaItem = document.createElement('li');
+    ctaItem.className = 'gn-menu-cta-item';
+    ctaItem.appendChild(cta.cloneNode(true));
+    links.appendChild(ctaItem);
+  }
+
   /* Dropdown menus (Company / Briefings) */
   document.querySelectorAll('.gn-dropdown-toggle').forEach(function (btn) {
     btn.addEventListener('click', function (e) {

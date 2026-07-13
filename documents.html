@@ -277,7 +277,10 @@
   padding-top: 32px;
   border-top: 1px solid rgba(46,109,180,0.10);
 }
-.docs-section-heading:first-of-type { margin-top: 0; padding-top: 0; border-top: none; }
+/* :first-of-type never matched here (the filter row is an earlier div sibling,
+   so no heading is first of its type), leaving a doubled rule + dead gap under
+   the chips. Key off the position after the filter row instead. */
+.docs-filter-row + .docs-section-heading { margin-top: 0; padding-top: 0; border-top: none; }
 .docs-section-heading-count {
   margin-left: 8px;
   font-family: var(--mono);
@@ -885,7 +888,6 @@
 })();
 
 </script>
-<script src="ticker.js"></script>
 <script src="/footer.js" defer></script>
 <script src="/nav.js" defer></script>
 </body>

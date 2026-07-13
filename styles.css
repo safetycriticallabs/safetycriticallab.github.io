@@ -972,8 +972,6 @@ h2.section-title em { font-style: italic; color: var(--ink); font-family: var(--
   .footer-inner { padding: 48px 24px 24px; }
   .footer-top {
     flex-direction: column;
-    align-items: center;
-    text-align: center;
     gap: 28px;
   }
   .footer-top--row {
@@ -1008,57 +1006,6 @@ h2.section-title em { font-style: italic; color: var(--ink); font-family: var(--
     text-align: center;
   }
 
-  /* Footer accordion — each section heading becomes a tappable row with a +/− toggle.
-     Sections collapsed by default; tap to expand. JS adds role=button and toggles
-     .is-open on the parent .footer-col. */
-  .footer-inner { padding: 48px 24px 28px; }
-  .footer-cols {
-    grid-template-columns: 1fr;
-    gap: 0;
-    margin-bottom: 32px;
-  }
-  .footer-col {
-    gap: 0;
-    border-bottom: 1px solid rgba(46,109,180,0.12);
-  }
-  .footer-col:first-child { border-top: 1px solid rgba(46,109,180,0.12); }
-  .footer-col-label {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 18px 0;
-    margin: 0;
-    cursor: pointer;
-    user-select: none;
-    -webkit-tap-highlight-color: transparent;
-  }
-  .footer-col-label::after {
-    content: '+';
-    font-family: var(--sans);
-    font-size: 22px;
-    font-weight: 300;
-    line-height: 1;
-    color: var(--blue);
-    letter-spacing: 0;
-    transition: transform 0.25s ease;
-  }
-  .footer-col.is-open > .footer-col-label::after {
-    content: '−';
-  }
-  /* Hide the link list by default; expand when .is-open is set */
-  .footer-col > a {
-    max-height: 0;
-    overflow: hidden;
-    padding: 0;
-    opacity: 0;
-    transition: max-height 0.3s ease, opacity 0.2s ease, padding 0.25s ease;
-  }
-  .footer-col.is-open > a {
-    max-height: 60px;
-    opacity: 1;
-    padding: 10px 0;
-  }
-  .footer-col.is-open > a:last-of-type { padding-bottom: 18px; }
 }
 
 @media (max-width: 480px) {
@@ -1191,6 +1138,10 @@ h2.section-title em { font-style: italic; color: var(--ink); font-family: var(--
 @media (max-width: 880px) {
   .gn-dropdown-toggle { text-transform: uppercase; letter-spacing: -0.01em; color: #0C2242; }
   .gn-dropdown-menu a { color: rgba(12,34,66,0.72); }
+  /* Match the plain menu links to the ink-navy dropdown toggles (the earlier
+     mobile block sets them blue, which reads as a highlight it isn't). The
+     active page keeps its 600 weight from the shell rule above. */
+  .gn-links > li > a { color: #0C2242; }
 }
 
 /* ── Ticker: flat cream ── */
@@ -1240,3 +1191,59 @@ h2.section-title em { font-style: italic; color: var(--ink); font-family: var(--
   .site-footer .footer-col-label::after { display: none; }
 }
 @media (max-width: 560px) { .footer-cols { grid-template-columns: 1fr; } }
+
+/* ── Footer accordion (phones only): each group label is a tappable row with a
+   +/− toggle; the link list collapses beneath it. footer.js toggles .is-open on
+   the .footer-col-group and mirrors it in aria-expanded. Selectors carry extra
+   specificity (+!important where needed) so they also beat the page-local shell
+   copies in index.html / process.html, whose label/::after rules use !important. */
+@media (max-width: 560px) {
+  .site-footer .footer-cols { gap: 0; }
+  .site-footer .footer-col { gap: 0 !important; }
+  .site-footer .footer-col-group { border-bottom: 1px solid rgba(250,249,245,0.16); }
+  .site-footer .footer-col:first-child .footer-col-group:first-child {
+    border-top: 1px solid rgba(250,249,245,0.16);
+  }
+  .site-footer .footer-col .footer-col-label {
+    display: flex !important;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 0 !important;
+    margin-bottom: 0 !important;
+    cursor: pointer;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .site-footer .footer-col .footer-col-label::after {
+    content: '+';
+    display: block !important;
+    font-family: var(--sans);
+    font-size: 22px;
+    font-weight: 300;
+    line-height: 1;
+    color: rgba(250,249,245,0.65);
+  }
+  .site-footer .footer-col-group.is-open > .footer-col-label::after { content: '−'; }
+  .site-footer .footer-col-group a {
+    max-height: 0;
+    opacity: 0;
+    overflow: hidden;
+    padding: 0 !important;
+    transition: max-height 0.3s ease, opacity 0.2s ease, padding 0.25s ease;
+  }
+  .site-footer .footer-col-group.is-open a {
+    max-height: 60px;
+    opacity: 1;
+    padding: 9px 0 !important;
+  }
+  .site-footer .footer-col-group.is-open a:last-of-type { padding-bottom: 16px !important; }
+}
+
+/* ── Mobile-menu CTA (cloned in by nav.js) ── The bar's "Get Certified" pill
+   is hidden at ≤880px, so nav.js clones it in as the menu's last item. Menu
+   copy only exists to be shown there; keep it out of the desktop inline row. */
+.gn-links .gn-menu-cta-item { display: none; }
+@media (max-width: 880px) {
+  .gn-links .gn-menu-cta-item { display: block; padding: 24px 0 0; }
+  .gn-menu-cta-item .gn-cta { width: 100%; }
+}

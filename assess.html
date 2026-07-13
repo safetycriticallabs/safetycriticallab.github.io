@@ -557,7 +557,7 @@
       <div class="assess-progress-bar">
         <div class="assess-progress-fill" id="progressFill"></div>
       </div>
-      <div class="assess-progress-label" id="progressLabel">Step 1 of 4</div>
+      <div class="assess-progress-label" id="progressLabel">Step 1 of 5</div>
     </div>
 
     <!-- STEP 1: Classification -->
@@ -1129,8 +1129,6 @@
   </div>
 </footer>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 
 <script>
 /* ─── ASSESSMENT ENGINE ───────────────────────────────────── */
@@ -1863,7 +1861,7 @@
       y += 4;
 
       /* Classification detail */
-      pdf.setFont('helvetica', 'italic');
+      pdf.setFont('helvetica', 'normal');
       pdf.setFontSize(8.5);
       pdf.setTextColor(INK_MID[0], INK_MID[1], INK_MID[2]);
       var classLines = wrapText(pdf, data.classification.desc, CW);
@@ -2022,7 +2020,7 @@
         y += 7;
 
         /* Question */
-        pdf.setFont('helvetica', 'italic');
+        pdf.setFont('helvetica', 'normal');
         pdf.setFontSize(8.5);
         pdf.setTextColor(INK_MID[0], INK_MID[1], INK_MID[2]);
         var qLines = wrapText(pdf, r.question, CW);
@@ -2110,7 +2108,7 @@
       y += 8;
 
       /* Disclaimer */
-      pdf.setFont('helvetica', 'italic');
+      pdf.setFont('helvetica', 'normal');
       pdf.setFontSize(7.5);
       pdf.setTextColor(INK_LIGHT[0], INK_LIGHT[1], INK_LIGHT[2]);
       var disclaimer = 'This report reflects a self assessment only. It does not constitute a formal certification, determination, or endorsement by Safety Critical Labs. The responses recorded herein have not been independently verified. To obtain a formal assessment against the SCL AI Requirements Framework, contact the SCL team. Safety Critical Labs \u00b7 DOI 10.5281/zenodo.20692967 \u00b7 Framework v3.4';
@@ -2140,7 +2138,6 @@
 })();
 </script>
 
-<script src="ticker.js"></script>
 <script src="/footer.js" defer></script>
 <script src="/nav.js" defer></script>
 </body>

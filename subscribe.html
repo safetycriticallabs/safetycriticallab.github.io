@@ -400,6 +400,13 @@
   var interimNote = document.getElementById('sub-interim-note');
   if (interimNote && !BREVO_FORM_URL) interimNote.hidden = false;
 
+  /* Prefill from ?email= — the homepage Stay-informed card submits here,
+     so the address the visitor already typed carries over. */
+  try {
+    var qEmail = new URLSearchParams(location.search).get('email');
+    if (qEmail && !input.value) input.value = qEmail;
+  } catch (err) { /* ignore */ }
+
   function looksLikeEmail(s) {
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s);
   }
@@ -412,6 +419,9 @@
 
   function showConfirmation() {
     form.style.display = 'none';
+    /* The confirmation carries the same instruction as the interim note;
+       hide the note so the mailto guidance doesn't appear twice. */
+    if (interimNote) interimNote.hidden = true;
     confirmation.classList.add('active');
   }
 

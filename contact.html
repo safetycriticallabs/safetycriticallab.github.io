@@ -492,7 +492,6 @@
             <div class="form-editor" id="messageEditor">
               <div class="form-toolbar" role="toolbar" aria-label="Formatting">
                 <button type="button" class="tb-bold" data-action="bold" title="Bold" aria-label="Bold">B</button>
-                <button type="button" class="tb-italic" data-action="italic" title="Italic" aria-label="Italic">I</button>
                 <span class="tb-sep" aria-hidden="true"></span>
                 <button type="button" data-action="h2" title="Heading" aria-label="Heading">H</button>
                 <button type="button" data-action="bullet" title="Bulleted list" aria-label="Bulleted list">• List</button>
@@ -615,6 +614,16 @@
   editable.addEventListener('focus', updatePlaceholder);
   updatePlaceholder();
 
+  /* Prefill from ?question= — the Ask SCL no-match CTA ("Send to SCL")
+     links here with the visitor's query so their question isn't lost. */
+  try {
+    const q = new URLSearchParams(location.search).get('question');
+    if (q && isEmpty()) {
+      editable.textContent = q;
+      updatePlaceholder();
+    }
+  } catch (err) { /* ignore */ }
+
   function exec(cmd, value) {
     editable.focus();
     document.execCommand(cmd, false, value || null);
@@ -687,7 +696,6 @@
     e.preventDefault();
     const action = btn.dataset.action;
     if (action === 'bold') exec('bold');
-    else if (action === 'italic') exec('italic');
     else if (action === 'bullet') exec('insertUnorderedList');
     else if (action === 'number') exec('insertOrderedList');
     else if (action === 'h2') exec('formatBlock', 'H2');
@@ -802,7 +810,6 @@ if (form) {
   });
 })();
 </script>
-<script src="ticker.js"></script>
 <script src="/footer.js" defer></script>
 <script src="/nav.js" defer></script>
 </body>

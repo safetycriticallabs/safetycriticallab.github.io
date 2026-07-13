@@ -392,6 +392,25 @@
     border-top: 1px solid var(--rule);
   }
 
+  /* Small screens: scale the fixed 8.5in sheet to fit the viewport. Without
+     this the flex-centered 816px sheet overflows both edges and the left
+     half is unreachable (you can't scroll into negative x). `zoom` scales
+     layout; `safe center` + overflow-x keep a pannable fallback where zoom
+     is unsupported. Screen only — print and ?embed are untouched. */
+  @media screen and (max-width: 880px) {
+    html:not(.embed) body { padding: 24px 12px; align-items: safe center; overflow-x: auto; }
+    html:not(.embed) .certificate { zoom: 0.72; }
+  }
+  @media screen and (max-width: 620px) {
+    html:not(.embed) .certificate { zoom: 0.55; }
+  }
+  @media screen and (max-width: 460px) {
+    html:not(.embed) .certificate { zoom: 0.44; }
+  }
+  @media screen and (max-width: 350px) {
+    html:not(.embed) .certificate { zoom: 0.38; }
+  }
+
   /* PRINT */
   @media print {
     body {
@@ -443,7 +462,7 @@
 
     <!-- BODY REGION: contains watermark and main body content; bounded between header and footer rules -->
     <div class="body-region">
-      <img src="img/SCL_Logo_transparent.png" alt="" class="watermark">
+      <img src="img/SCL_Logo_watermark_cert.png" alt="" class="watermark">
       <div class="body-content">
 
     <!-- DOC TYPE -->

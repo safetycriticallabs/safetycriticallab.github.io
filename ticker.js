@@ -5,6 +5,12 @@
    rendering on subsequent page navigations.
    ──────────────────────────────────────────────────────────── */
 (function () {
+  /* No mount point on this page → nothing to render. Bail before any
+     feed fetches so pages can't waste proxy quota on an invisible ticker.
+     (The redesign removed the ticker bar; this guard keeps the script
+     safe if it is ever re-included.) */
+  if (!document.getElementById('reg-ticker-track')) return;
+
   var CORS_PROXY = 'https://scl-cors-proxy.kevwill94.workers.dev/?url=';
   var CACHE_KEY = 'scl_ticker_cache';
   var CACHE_MAX_AGE = 10 * 60 * 1000; /* 10 minutes */

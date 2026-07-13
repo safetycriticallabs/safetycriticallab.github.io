@@ -84,7 +84,7 @@
   font-weight: 500; color: var(--ink);
   letter-spacing: 0.02em; word-break: break-all;
 }
-.verify-id-empty { color: var(--ink-3); font-style: italic; }
+.verify-id-empty { color: var(--ink-3); }
 .verify-status {
   display: inline-flex; align-items: center; gap: 8px;
   font-family: var(--mono); font-size: 10px;
@@ -369,7 +369,6 @@
 <!-- No GSAP on this page. Verification must work with zero third-party
      runtime dependencies, including behind proxies that block CDNs. -->
 
-<script src="ticker.js"></script>
 <script>
 /* ─── Register lookup ──────────────────────────────────────── */
 (function () {

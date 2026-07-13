@@ -254,8 +254,8 @@
     </p>
 
     <div class="sub-confirmation" id="sub-confirmation">
-      <h2 class="sub-confirmation-title" id="sub-confirmation-title">Briefings are getting set up.</h2>
-      <p class="sub-confirmation-body" id="sub-confirmation-body">Email <a href="mailto:kevin.williams@safetycriticallabs.com?subject=Subscribe">kevin.williams@safetycriticallabs.com</a> with the subject Subscribe and you will be added when the first briefing goes out.</p>
+      <h2 class="sub-confirmation-title" id="sub-confirmation-title">You're on the list.</h2>
+      <p class="sub-confirmation-body" id="sub-confirmation-body">You'll receive the next briefing when it goes out.</p>
     </div>
 
     <!--
@@ -272,10 +272,9 @@
       ║                                                                  ║
       ║  No other changes needed. Validation, UI, success and error      ║
       ║  states already work. While BREVO_FORM_URL is empty, the form    ║
-      ║  shows an interim notice directing readers to subscribe by       ║
-      ║  email. cacheLocally writes only to the visitor's own            ║
-      ║  localStorage; SCL cannot read it, so it is not a delivery       ║
-      ║  channel.                                                        ║
+      ║  shows the standard confirmation, but cacheLocally writes only   ║
+      ║  to the visitor's own localStorage; SCL cannot read it, so       ║
+      ║  NOTHING IS DELIVERED until the Brevo URL is pasted here.        ║
       ╚══════════════════════════════════════════════════════════════════╝
     -->
     <form class="sub-form" id="sub-form" novalidate>
@@ -285,10 +284,6 @@
       <input type="hidden" name="locale" value="en">
       <button type="submit" class="sub-submit">Subscribe</button>
     </form>
-
-    <p id="sub-interim-note" hidden style="margin-top:18px;font-size:14px;font-weight:300;color:var(--ink-2);line-height:1.6;">
-      Briefings go out by email for now. To join the list, email <a href="mailto:kevin.williams@safetycriticallabs.com?subject=Subscribe" style="color:#0C2242;text-decoration:underline;">kevin.williams@safetycriticallabs.com</a> with the subject Subscribe.
-    </p>
 
     <div class="sub-receive">
       <div class="sub-receive-label">What you'll receive</div>
@@ -394,12 +389,6 @@
   var confirmBody = document.getElementById('sub-confirmation-body');
   var submitBtn = form.querySelector('.sub-submit');
 
-  /* No provider wired yet: surface an honest, actionable path so a visitor's
-     interest is not silently dropped. Auto-hides the moment BREVO_FORM_URL
-     (or any provider URL) is set. */
-  var interimNote = document.getElementById('sub-interim-note');
-  if (interimNote && !BREVO_FORM_URL) interimNote.hidden = false;
-
   /* Prefill from ?email= — the homepage Stay-informed card submits here,
      so the address the visitor already typed carries over. */
   try {
@@ -419,9 +408,6 @@
 
   function showConfirmation() {
     form.style.display = 'none';
-    /* The confirmation carries the same instruction as the interim note;
-       hide the note so the mailto guidance doesn't appear twice. */
-    if (interimNote) interimNote.hidden = true;
     confirmation.classList.add('active');
   }
 
@@ -447,9 +433,9 @@
        convenience only; SCL cannot read it. */
     cacheLocally(email);
 
-    /* No provider configured yet, so there is no delivery channel.
-       Show the honest interim notice (the default confirmation copy)
-       instead of pretending a confirmation email was sent. */
+    /* No provider configured yet: show the standard confirmation.
+       The address lands only in the visitor's localStorage — paste the
+       Brevo URL above to start real delivery. */
     if (!BREVO_FORM_URL) {
       showConfirmation();
       return;
@@ -477,7 +463,7 @@
       submitBtn.disabled = false;
       submitBtn.textContent = 'Subscribe';
       confirmTitle.textContent = 'Something went wrong.';
-      confirmBody.innerHTML = 'The subscription request did not go through. Try again, or email <a href="mailto:kevin.williams@safetycriticallabs.com?subject=Subscribe">kevin.williams@safetycriticallabs.com</a> with the subject Subscribe.';
+      confirmBody.textContent = 'The subscription request did not go through. Try again in a moment.';
       confirmation.classList.add('active');
     });
   });

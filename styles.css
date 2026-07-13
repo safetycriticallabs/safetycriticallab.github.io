@@ -5,10 +5,10 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
-  --bg:       #FAFAF8;
-  --white:    #FFFFFF;
-  --ink:      #0F2340;
-  --ink-2:    #3D5068;
+  --bg:       #FAF9F5;
+  --white:    #FAF9F5;
+  --ink:      #0C2242;
+  --ink-2:    #33475F;
   --ink-3:    #7A8FA6;
   --blue:      #2E6DB4;
   --blue-dk:   #1E5A9A;
@@ -22,9 +22,9 @@
   --mono:     'DM Sans', system-ui, sans-serif;
 }
 
-html { font-size: 16px; scroll-behavior: smooth; overflow-x: hidden; background: #F4EFE5; }
+html { font-size: 16px; scroll-behavior: smooth; overflow-x: hidden; background: #FAF9F5; }
 body {
-  background: #F4EFE5;
+  background: #FAF9F5;
   color: var(--ink);
   font-family: var(--sans);
   font-weight: 400;
@@ -32,6 +32,10 @@ body {
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
 }
+
+/* One consistent style site-wide: DM Sans, no italics anywhere (matches the
+   homepage). Kills the legacy Instrument-Serif-era italic emphasis. */
+body, body * { font-style: normal !important; }
 
 /* ─── GLOBAL NAV (cream + blue, xAI-style layout) ─────────── */
 .global-nav {
@@ -292,9 +296,9 @@ body {
   font-family: var(--sans);
   font-size: clamp(38px, 4.5vw, 60px);
   font-weight: 600; line-height: 1.05;
-  color: var(--blue); letter-spacing: -0.025em;
+  color: var(--ink); letter-spacing: -0.025em;
 }
-.inner-hero h1 em { font-style: italic; color: var(--blue-dk); font-family: var(--serif); font-weight: 400; font-size: 1.05em; }
+.inner-hero h1 em { font-style: italic; color: var(--ink); font-family: var(--serif); font-weight: 400; font-size: 1.05em; }
 
 .inner-hero-lead {
   font-size: 17px; color: rgba(46,109,180,0.78);
@@ -321,7 +325,7 @@ h2.section-title {
   color: var(--ink); margin-bottom: 20px;
   letter-spacing: -0.025em;
 }
-h2.section-title em { font-style: italic; color: var(--blue); font-family: var(--serif); font-size: 1.05em; font-weight: 400; }
+h2.section-title em { font-style: italic; color: var(--ink); font-family: var(--serif); font-size: 1.05em; font-weight: 400; }
 
 .section-lead {
   font-size: 18px; color: var(--ink-2);
@@ -1140,3 +1144,99 @@ h2.section-title em { font-style: italic; color: var(--blue); font-family: var(-
   color: var(--bg);
   font-weight: 500;
 }
+
+/* ═══════════════════════════════════════════════════════════
+   SHARED SHELL — matches index.html (2026-07-11)
+   Navy ink shell + flat cream + dropdown nav + wordmark collapse
+   + solid-navy CTA + dark-navy footer. Applies to every page that
+   links this sheet, so the header/footer can't drift out of sync.
+   (index.html + process.html carry their own equal copies; page
+   bodies are polished individually.)
+   ═══════════════════════════════════════════════════════════ */
+
+/* ── Nav: flat cream, navy ink, no hairline/frost ── */
+.global-nav { background: #FAF9F5; backdrop-filter: none; -webkit-backdrop-filter: none; border-bottom: none; }
+.gn-text { color: #0C2242; font-weight: 700; letter-spacing: 0.02em; }
+.gn-text em { color: #0C2242; }
+.gn-text-full { font-size: 19px; }
+.gn-links a { color: #0C2242; }
+.gn-links a:hover { color: #0C2242; }
+.gn-links a.active { color: #0C2242; font-weight: 600; }
+.gn-search { color: #0C2242; }
+.gn-cta {
+  background: #0C2242 !important; color: #FAF9F5 !important; border-color: #0C2242 !important;
+  border-radius: 8px !important; height: 40px !important; padding: 0 26px !important;
+  display: inline-flex !important; align-items: center; justify-content: center; font-size: 14px !important;
+}
+.gn-cta:hover { background: #081A34 !important; border-color: #081A34 !important; color: #FAF9F5 !important; }
+
+/* Wordmark scroll-collapse — full name wipes to "SCL" past 40px */
+@media (min-width: 481px) {
+  .gn-wordmark { position: relative; overflow: hidden; display: inline-flex; align-items: center; height: 30px; }
+  .gn-text-full, .gn-text-abbr { display: block; height: 30px; line-height: 30px; white-space: nowrap; }
+  .gn-text-full { opacity: 1; clip-path: inset(0 0 0 0); transition: opacity 0.34s ease 0.30s, clip-path 0.44s cubic-bezier(0.5,0,0.2,1) 0.30s; }
+  .gn-text-abbr { position: absolute; left: 0; top: 0; font-size: 22px; opacity: 0; pointer-events: none; transition: opacity 0.3s ease 0s; background: none !important; -webkit-text-fill-color: #0C2242 !important; color: #0C2242 !important; filter: none !important; }
+  .global-nav.gn-compact .gn-text-full { opacity: 0; clip-path: inset(0 100% 0 0); transition: opacity 0.34s ease 0s, clip-path 0.44s cubic-bezier(0.5,0,0.2,1) 0s; }
+  .global-nav.gn-compact .gn-text-abbr { opacity: 1; transition: opacity 0.34s ease 0.34s; }
+}
+@media (min-width: 881px) {
+  .gn-links { margin-left: auto; gap: clamp(18px, 2vw, 28px); }
+  .gn-search { margin-left: 12px; }
+  .gn-dropdown-toggle { font-family: var(--sans); font-size: 13px; font-weight: 500; letter-spacing: 0.04em; text-transform: uppercase; color: #0C2242; padding: 8px 0; }
+  .gn-dropdown-menu { left: 0; right: auto; background: #ECE5D5; border: 1px solid rgba(12,34,66,0.10); box-shadow: 0 14px 34px rgba(12,34,66,0.22); border-radius: 10px; padding: 8px; }
+  .gn-dropdown-menu a { color: rgba(12,34,66,0.78); padding: 9px 14px; border-radius: 6px; }
+  .gn-dropdown-menu a:hover { color: #0C2242; background: rgba(12,34,66,0.06); }
+  .gn-dropdown-menu a.active { color: #0C2242; }
+}
+@media (max-width: 880px) {
+  .gn-dropdown-toggle { text-transform: uppercase; letter-spacing: -0.01em; color: #0C2242; }
+  .gn-dropdown-menu a { color: rgba(12,34,66,0.72); }
+}
+
+/* ── Ticker: flat cream ── */
+.reg-ticker { background: #FAF9F5; box-shadow: none; }
+
+/* ── Inner hero: flat cream, navy ink ── */
+.inner-hero { background: #FAF9F5; border-bottom: none; }
+.inner-hero h1 { color: #0C2242; }
+.inner-hero-lead { color: #0C2242; }
+.inner-hero-breadcrumb { color: rgba(12,34,66,0.55); }
+.inner-hero-breadcrumb a { color: rgba(12,34,66,0.55); }
+.inner-hero-breadcrumb a:hover { color: #0C2242; }
+.inner-hero-breadcrumb span { color: rgba(12,34,66,0.28); }
+
+/* ── Section eyebrow → navy ── */
+.section-eyebrow { color: #0C2242; }
+
+/* ── In-page buttons → solid-navy pill (consistent with the nav CTA) ── */
+.btn-solid, .btn-red {
+  background: #0C2242; border: 1px solid #0C2242; color: #FAF9F5; border-radius: 8px;
+}
+.btn-solid:hover, .btn-red:hover { background: #081A34; border-color: #081A34; color: #FAF9F5; }
+/* Secondary buttons → navy outline (fills navy on hover) */
+.btn-outline { border: 1px solid #0C2242; color: #0C2242; background: transparent; border-radius: 8px; }
+.btn-outline:hover { background: #0C2242; border-color: #0C2242; color: #FAF9F5; }
+
+/* ── Footer: dark-navy block (SCL mark + grouped columns, no socials) ── */
+.site-footer { background: #0C2242; border-top: none; margin-top: 40px; }
+.site-footer .footer-inner { padding-top: 156px; padding-bottom: 116px; min-height: 480px; }
+.footer-top { display: flex; gap: clamp(56px, 9vw, 150px); align-items: stretch; }
+.footer-brand { flex: 0 0 auto; min-width: 240px; display: flex; flex-direction: column; justify-content: space-between; gap: 60px; }
+.footer-logo { font-family: var(--sans); font-weight: 700; font-size: 56px; letter-spacing: -0.02em; line-height: 1; color: #FAF9F5; }
+.footer-brand-bottom { display: flex; flex-direction: column; gap: 16px; }
+.site-footer .footer-copyright { margin: 0; font-size: 13px; line-height: 1.6; color: rgba(250,249,245,0.5); }
+.footer-cols { flex: 1; display: grid; grid-template-columns: repeat(4,1fr); gap: 30px; margin-bottom: 0; }
+.footer-col { display: flex; flex-direction: column; gap: 52px; border: none; }
+.footer-col-group { display: flex; flex-direction: column; }
+.site-footer .footer-col-label { font-size: 14px; font-weight: 600; color: #FAF9F5; margin-bottom: 18px; text-transform: none; letter-spacing: 0; padding: 0; }
+.footer-col-group a { display: block; font-size: 14px; color: rgba(250,249,245,0.6); text-decoration: none; padding: 7px 0; transition: color .2s ease; letter-spacing: 0.01em; }
+.footer-col-group a:hover { color: #FAF9F5; }
+@media (max-width: 900px) {
+  .site-footer .footer-inner { padding-top: 64px; padding-bottom: 56px; }
+  .footer-top { flex-direction: column; gap: 48px; }
+  .footer-brand { flex: none; gap: 28px; }
+  .footer-cols { grid-template-columns: repeat(2,1fr); gap: 44px 30px; }
+  .footer-col { gap: 36px; }
+  .site-footer .footer-col-label::after { display: none; }
+}
+@media (max-width: 560px) { .footer-cols { grid-template-columns: 1fr; } }

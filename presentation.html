@@ -7,16 +7,16 @@
 <title>SCL AI Requirements Framework</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=IBM+Plex+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 :root {
   /* Layered cream palette — no pure white anywhere.
      surface (lightest, raised) → page (mid) → deep (insets/accents) */
   --bg: #F1EADC;          /* page — mid cream */
-  --bg-cool: #FAFAF8;     /* original cool off-white, kept for reference */
+  --bg-cool: #FAF9F5;     /* original cool off-white, kept for reference */
   --cream-deep: #E7DECC;  /* deeper tan — insets / strong accents */
-  --white: #FBF7EE;       /* surface cream — replaces pure white on cards/chrome */
-  --ink: #0F2340;
+  --white: #FAF9F5;       /* surface cream — replaces pure white on cards/chrome */
+  --ink: #0C2242;
   --ink2: #3D5068;
   --ink3: #7A8FA6;
   --blue: #2E6DB4;
@@ -84,8 +84,8 @@ button { font-family: inherit; cursor: pointer; }
 .title-logo { width: 96px; height: 96px; object-fit: contain; margin-bottom: 30px; filter: drop-shadow(0 8px 22px rgba(15,35,64,0.12)); }
 .title-eyebrow { font-family: var(--mono); font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--blue); margin-bottom: 32px; display: flex; align-items: center; gap: 14px; }
 .title-eyebrow::before { content: ''; width: 28px; height: 2px; background: var(--blue); display: inline-block; }
-.title-heading { font-family: var(--sans); font-size: clamp(44px, 6vw, 68px); line-height: 1.06; letter-spacing: -0.025em; color: var(--blue); margin-bottom: 20px; font-weight: 600; }
-.title-heading em { color: var(--blue-dk); font-style: italic; font-weight: 600; }
+.title-heading { font-family: var(--sans); font-size: clamp(44px, 6vw, 68px); line-height: 1.06; letter-spacing: -0.025em; color: var(--ink); margin-bottom: 20px; font-weight: 600; }
+.title-heading em { color: var(--ink); font-style: normal; font-weight: 600; }
 .title-subheading { font-size: 20px; line-height: 1.5; color: var(--ink2); margin-bottom: 48px; max-width: 640px; }
 .title-meta { display: flex; gap: 32px; padding-top: 24px; border-top: 1px solid var(--rule); }
 .title-meta-item { font-family: var(--mono); font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink3); }
@@ -2344,7 +2344,7 @@ function showEmbedComparison() {
     const py = 20 + data.y / 100 * (H - pad - 20);
     const isSelected = word === w1 || word === w2;
     const r = isSelected ? 5 : 3.5;
-    const fillColor = isSelected ? (word === w1 ? '#C8272D' : '#0F2340') : clusterColors[data.cluster];
+    const fillColor = isSelected ? (word === w1 ? '#C8272D' : '#0C2242') : clusterColors[data.cluster];
     const opacity = isSelected ? 1 : 0.5;
     
     const lo = labelOffsets[word] || { dx: 10, dy: 4, anchor: 'start' };
@@ -2455,7 +2455,7 @@ function runDrift() {
     monthEl.innerHTML = 'Month: <span>' + driftMonths[step] + '</span>';
     
     // Color the dot based on threshold
-    dot.setAttribute('fill', isOk ? '#0F2340' : '#2E6DB4');
+    dot.setAttribute('fill', isOk ? '#0C2242' : '#2E6DB4');
     
     // Fire alert when crossing threshold
     if (!alertFired && acc < 85) {
@@ -2882,9 +2882,9 @@ function renderMiniSpace(type) {
   // MONEY(300,33) CASH(320,39) FUNDS(280,44) DOLLARS(328,28) MEETING(80,77) LUNCH(120,66) HELLO(60,50)
   var baseDots = 
     '<circle cx="300" cy="33" r="5" fill="#2E6DB4"/>' +
-    '<circle cx="320" cy="39" r="4" fill="#0F2340"/>' +
-    '<circle cx="280" cy="44" r="4" fill="#0F2340"/>' +
-    '<circle cx="328" cy="28" r="4" fill="#0F2340"/>' +
+    '<circle cx="320" cy="39" r="4" fill="#0C2242"/>' +
+    '<circle cx="280" cy="44" r="4" fill="#0C2242"/>' +
+    '<circle cx="328" cy="28" r="4" fill="#0C2242"/>' +
     '<circle cx="80" cy="77" r="4" fill="#7A8FA6"/>' +
     '<circle cx="120" cy="66" r="4" fill="#7A8FA6"/>' +
     '<circle cx="60" cy="50" r="4" fill="#7A8FA6"/>';
@@ -2918,11 +2918,11 @@ function renderMiniSpace(type) {
     // Ghost dots at original positions, current dots shifted down-left
     // Ghost cluster (original positions, faded)
     overlay =
-      '<ellipse cx="305" cy="36" rx="42" ry="22" fill="none" stroke="#0F2340" stroke-width="1" stroke-dasharray="3,3" opacity="0.2"/>' +
-      '<circle cx="300" cy="33" r="4" fill="#0F2340" opacity="0.15"/>' +
-      '<circle cx="320" cy="39" r="3.5" fill="#0F2340" opacity="0.15"/>' +
-      '<circle cx="280" cy="44" r="3.5" fill="#0F2340" opacity="0.15"/>' +
-      '<circle cx="328" cy="28" r="3.5" fill="#0F2340" opacity="0.15"/>' +
+      '<ellipse cx="305" cy="36" rx="42" ry="22" fill="none" stroke="#0C2242" stroke-width="1" stroke-dasharray="3,3" opacity="0.2"/>' +
+      '<circle cx="300" cy="33" r="4" fill="#0C2242" opacity="0.15"/>' +
+      '<circle cx="320" cy="39" r="3.5" fill="#0C2242" opacity="0.15"/>' +
+      '<circle cx="280" cy="44" r="3.5" fill="#0C2242" opacity="0.15"/>' +
+      '<circle cx="328" cy="28" r="3.5" fill="#0C2242" opacity="0.15"/>' +
       '<text x="305" y="16" font-family="DM Sans,system-ui,sans-serif" font-size="7" fill="#7A8FA6" text-anchor="middle" opacity="0.5">CERTIFIED POSITIONS</text>' +
       // Shifted cluster (current, moved down-left)
       '<ellipse cx="260" cy="52" rx="42" ry="22" fill="none" stroke="#2E6DB4" stroke-width="1.5" stroke-dasharray="4,3"/>' +
@@ -2948,7 +2948,7 @@ function renderMiniSpace(type) {
   else if (type === 'adversarial') {
     // Normal MONEY in cluster, attacked version landing elsewhere
     overlay =
-      '<ellipse cx="305" cy="36" rx="42" ry="22" fill="none" stroke="#0F2340" stroke-width="1" stroke-dasharray="3,3" opacity="0.3"/>' +
+      '<ellipse cx="305" cy="36" rx="42" ry="22" fill="none" stroke="#0C2242" stroke-width="1" stroke-dasharray="3,3" opacity="0.3"/>' +
       // Attacked dot far from cluster
       '<circle cx="165" cy="42" r="5" fill="#2E6DB4" stroke="#2E6DB4" stroke-width="2" opacity="0.8"/>' +
       '<text x="165" y="34" font-family="DM Sans,system-ui,sans-serif" font-size="7" fill="#2E6DB4" text-anchor="middle" font-weight="600">M&#8203;O&#8203;N&#8203;E&#8203;Y</text>' +
@@ -3035,7 +3035,7 @@ function renderReqVisual(type) {
       return renderMiniSpace('drift') + '<div class="rv-drift">' +
         '<div class="rv-drift-chart">' +
           '<svg id="drift-svg" viewBox="0 0 420 180">' +
-            '<defs><linearGradient id="driftFill" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#0F2340" stop-opacity="0.08"/><stop offset="100%" stop-color="#0F2340" stop-opacity="0"/></linearGradient></defs>' +
+            '<defs><linearGradient id="driftFill" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#0C2242" stop-opacity="0.08"/><stop offset="100%" stop-color="#0C2242" stop-opacity="0"/></linearGradient></defs>' +
             '<!-- Y axis labels -->' +
             '<text x="28" y="18" font-family="DM Sans,system-ui,sans-serif" font-size="9" fill="#7A8FA6" text-anchor="end">96%</text>' +
             '<text x="28" y="52" font-family="DM Sans,system-ui,sans-serif" font-size="9" fill="#7A8FA6" text-anchor="end">90%</text>' +
@@ -3064,8 +3064,8 @@ function renderReqVisual(type) {
             '<text x="380" y="172" font-family="DM Sans,system-ui,sans-serif" font-size="8" fill="#7A8FA6">Nov</text>' +
             '<!-- Animated elements -->' +
             '<path id="drift-area" d="" fill="url(#driftFill)"/>' +
-            '<polyline id="drift-line" points="" fill="none" stroke="#0F2340" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>' +
-            '<circle id="drift-dot" cx="0" cy="0" r="5" fill="#0F2340" opacity="0"/>' +
+            '<polyline id="drift-line" points="" fill="none" stroke="#0C2242" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>' +
+            '<circle id="drift-dot" cx="0" cy="0" r="5" fill="#0C2242" opacity="0"/>' +
             '<circle id="drift-alert-dot" cx="0" cy="0" r="0" fill="#2E6DB4" opacity="0"/>' +
           '</svg>' +
         '</div>' +

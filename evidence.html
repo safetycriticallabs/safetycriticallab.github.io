@@ -19,10 +19,21 @@
 <link rel="shortcut icon" href="favicon.ico">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=IBM+Plex+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css">
 <style>
 /* ─── EVIDENCE PAGE ───────────────────────────────────────── */
+
+/* Bracketed mono eyebrow (base rule — navy house style) */
+.fw-eyebrow-mono {
+  font-family: var(--mono);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(12,34,66,0.6);
+  margin-bottom: 20px;
+}
 
 /* Methodology strip */
 .ev-method {
@@ -79,7 +90,7 @@
 .ev-areas { display: flex; gap: 6px; flex-wrap: wrap; }
 .ev-area-tag {
   font-family: var(--mono); font-size: 12px; font-weight: 500;
-  letter-spacing: 0.06em; color: var(--blue);
+  letter-spacing: 0.06em; color: #0C2242;
   background: var(--blue-lt); border-radius: 4px;
   padding: 3px 9px;
 }
@@ -119,7 +130,7 @@
   border-top: 1px solid var(--rule);
   font-size: 13px; color: var(--ink-3); line-height: 1.6;
 }
-.ev-targets b { color: var(--blue); font-weight: 500; }
+.ev-targets b { color: #0C2242; font-weight: 500; }
 
 /* "Failures retained" callout */
 .ev-callout {
@@ -133,7 +144,7 @@
   font-size: 28px; font-weight: 600; letter-spacing: -0.02em;
   color: #fff; line-height: 1.25; margin: 8px 0 18px;
 }
-.ev-callout h2 em { font-style: italic; color: #8FB8E4; }
+.ev-callout h2 em { font-size: inherit !important; font-weight: inherit !important; font-style: normal !important; color: inherit !important; }
 .ev-callout p {
   font-size: 16px; line-height: 1.75; font-weight: 300;
   color: rgba(255,255,255,0.8); max-width: 680px; margin: 0;
@@ -182,11 +193,23 @@
     <ul class="gn-links">
       <li><a href="/framework">Framework</a></li>
       <li><a href="/process">Process</a></li>
-      <li><a href="/expertise">Expertise</a></li>
-      <li><a href="/markets">Markets</a></li>
-      <li><a href="/position">Position</a></li>
-      <li><a href="/news">News</a></li>
-      <li class="gn-mobile-link"><a href="/contact">Contact</a></li>
+      <li class="gn-dropdown">
+        <button class="gn-dropdown-toggle" type="button" aria-expanded="false" aria-haspopup="true">Company <span class="gn-dropdown-arrow" aria-hidden="true"></span></button>
+        <ul class="gn-dropdown-menu">
+          <li><a href="/position">Position</a></li>
+          <li><a href="/expertise">Expertise</a></li>
+          <li><a href="/markets">Markets</a></li>
+          <li><a href="/contact">Contact</a></li>
+        </ul>
+      </li>
+      <li class="gn-dropdown">
+        <button class="gn-dropdown-toggle" type="button" aria-expanded="false" aria-haspopup="true">Briefings <span class="gn-dropdown-arrow" aria-hidden="true"></span></button>
+        <ul class="gn-dropdown-menu">
+          <li><a href="/news">News</a></li>
+          <li><a href="/updates">Updates</a></li>
+          <li><a href="/subscribe">Subscribe</a></li>
+        </ul>
+      </li>
     </ul>
     <a href="/search" class="gn-search" aria-label="Search">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -209,7 +232,7 @@
         <a href="/">Safety Critical Labs</a>
         <span>/</span> Measured Evidence
       </div>
-      <h1>Verification you can<br><em>measure.</em> On public data.</h1>
+      <h1>Verification you can<br>measure. On public data.</h1>
     </div>
     <p class="inner-hero-lead">
       The framework is only as good as the evidence its requirements produce. These are measured results from applying SCL verification methods to a public dataset, NASA C-MAPSS turbofan degradation. Every number is reproducible from the open repository. The methods that failed their own subject are kept in view, because a verification bench that cannot fail is not a verification bench.
@@ -315,7 +338,7 @@
     <!-- Failures retained -->
     <div class="ev-callout">
       <div class="fw-eyebrow-mono">[ Why the failures stay in ]</div>
-      <h2>A bench that cannot fail its subject<br>is not <em>evidence.</em></h2>
+      <h2>A bench that cannot fail its subject<br>is not evidence.</h2>
       <p>
         Two of the four results above are failures. The softmax detector performs worse than chance. The out-of-the-box calibration does not pass. They are kept because they are the point. A verification method that certifies whatever it is pointed at proves nothing. These are held to the same pass and fail criteria a real assessment would apply, and they are allowed to fail.
       </p>
@@ -325,7 +348,7 @@
     <div class="fw-eyebrow-mono">[ Reproduce It ]</div>
     <div class="ev-source-band" style="margin-top: 8px;">
       <div>
-        <h2 class="section-title" style="margin-bottom: 16px;">Open pipeline.<br>Open <em>data.</em></h2>
+        <h2 class="section-title" style="margin-bottom: 16px;">Open pipeline.<br>Open data.</h2>
         <p style="font-size: 15px; color: var(--ink-2); line-height: 1.8; font-weight: 300;">
           The full pipeline, configuration, seeds, and result files are public. Every figure on this page traces to a JSON artifact in the repository, produced under a pre-declared configuration. The framework these methods verify against is openly published under a citable DOI.
         </p>
@@ -366,71 +389,63 @@
 <!-- FOOTER -->
 <footer class="site-footer">
   <div class="footer-inner">
-
-    <div class="footer-cols">
-
-      <div class="footer-col">
-        <div class="footer-col-label">Certification</div>
-        <a href="/framework">Framework</a>
-        <a href="/process">Process</a>
-        <a href="/assess">Assess</a>
-        <a href="/verify">Verify</a>
+    <div class="footer-top">
+      <div class="footer-brand">
+        <div class="footer-logo" aria-label="Safety Critical Labs">SCL</div>
+        <div class="footer-brand-bottom">
+          <span class="footer-copyright">&copy; 2026 Safety Critical Labs</span>
+        </div>
       </div>
-
-      <div class="footer-col">
-        <div class="footer-col-label">Resources</div>
-        <a href="/documents">Documents</a>
-        <a href="/evidence">Evidence</a>
-        <a href="/search.html">FAQ</a>
+      <div class="footer-cols">
+        <div class="footer-col">
+          <div class="footer-col-group">
+            <div class="footer-col-label">Certification</div>
+            <a href="/framework">Framework</a>
+            <a href="/process">Process</a>
+            <a href="/assess">Assess</a>
+            <a href="/verify">Verify</a>
+            <a href="/evidence">Evidence</a>
+          </div>
+        </div>
+        <div class="footer-col">
+          <div class="footer-col-group">
+            <div class="footer-col-label">Resources</div>
+            <a href="/documents">Documents</a>
+            <a href="/presentation">Presentation</a>
+            <a href="/certificate-template">Certificate template</a>
+            <a href="/search.html">FAQ</a>
+          </div>
+        </div>
+        <div class="footer-col">
+          <div class="footer-col-group">
+            <div class="footer-col-label">Company</div>
+            <a href="/position">Position</a>
+            <a href="/expertise">Expertise</a>
+            <a href="/markets">Markets</a>
+            <a href="/contact">Contact</a>
+          </div>
+          <div class="footer-col-group">
+            <div class="footer-col-label">Briefings</div>
+            <a href="/news">News</a>
+            <a href="/updates">Updates</a>
+            <a href="/subscribe">Subscribe</a>
+          </div>
+        </div>
+        <div class="footer-col">
+          <div class="footer-col-group">
+            <div class="footer-col-label">Legal</div>
+            <a href="/terms">Terms</a>
+            <a href="/privacy">Privacy</a>
+            <a href="/disclaimer">Disclaimer</a>
+            <a href="/accreditation">Accreditation</a>
+          </div>
+        </div>
       </div>
-
-      <div class="footer-col">
-        <div class="footer-col-label">Company</div>
-        <a href="/position">Position</a>
-        <a href="/expertise">Expertise</a>
-        <a href="/markets">Markets</a>
-        <a href="/contact">Contact</a>
-      </div>
-
-      <div class="footer-col">
-        <div class="footer-col-label">Briefings</div>
-        <a href="/news">News</a>
-        <a href="/subscribe">Subscribe</a>
-        <a href="/updates">Updates</a>
-      </div>
-
-      <div class="footer-col">
-        <div class="footer-col-label">Legal</div>
-        <a href="/terms">Terms</a>
-        <a href="/privacy">Privacy</a>
-        <a href="/disclaimer">Disclaimer</a>
-        <a href="/accreditation">Accreditation</a>
-      </div>
-
     </div>
-
-    <div class="footer-divider"></div>
-
-    <div class="footer-bottom">
-      <span class="footer-copyright">&copy; 2026 Safety Critical Labs. All rights reserved.</span>
-      <div class="footer-meta">
-        <a href="#" aria-label="Back to top">Back to top</a>
-        <span class="footer-version">Framework v3.4</span>
-      </div>
-    </div>
-
   </div>
 </footer>
 
 <script>
-// Mobile menu toggle
-document.querySelector('.gn-hamburger').addEventListener('click', function() {
-  this.classList.toggle('open');
-  document.querySelector('.gn-links').classList.toggle('open');
-  this.setAttribute('aria-expanded', this.classList.contains('open'));
-  document.body.style.overflow = this.classList.contains('open') ? 'hidden' : '';
-});
-
 /* Hero cursor glow (matches other inner pages) */
 (function() {
   var glow = document.querySelector('.fw-hero-glow');
@@ -444,5 +459,6 @@ document.querySelector('.gn-hamburger').addEventListener('click', function() {
 })();
 </script>
 <script src="/footer.js" defer></script>
+<script src="/nav.js" defer></script>
 </body>
 </html>

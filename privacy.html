@@ -16,7 +16,7 @@
 <link rel="apple-touch-icon" sizes="180x180" href="img/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=IBM+Plex+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css">
 <style>
 .inner-hero { z-index: 0; }
@@ -34,13 +34,11 @@
 .fw-eyebrow-mono {
   font-family: var(--mono); font-size: 12px; font-weight: 500;
   letter-spacing: 0.18em; text-transform: uppercase;
-  color: rgba(46,109,180,0.6); margin-bottom: 20px;
+  color: rgba(12,34,66,0.6); margin-bottom: 20px;
 }
 
 .legal-section {
-  background:
-    radial-gradient(ellipse at 50% 0%, rgba(46,109,180,0.05) 0%, transparent 50%),
-    #F7F3EC;
+  background: #FAF9F5;
   padding: 88px 40px 120px;
 }
 .legal-inner { max-width: 760px; margin: 0 auto; }
@@ -53,10 +51,10 @@
 .legal-meta-item {
   font-family: var(--mono); font-size: 11px;
   letter-spacing: 0.14em; text-transform: uppercase;
-  color: rgba(46,109,180,0.6);
+  color: rgba(12,34,66,0.6);
 }
 .legal-meta-item strong {
-  display: block; color: var(--blue); font-weight: 500;
+  display: block; color: #0C2242; font-weight: 500;
   margin-top: 4px; letter-spacing: 0.04em; text-transform: none;
   font-family: var(--sans); font-size: 13px;
 }
@@ -65,17 +63,17 @@
 .legal-block:last-child { margin-bottom: 0; }
 .legal-block-num {
   font-family: var(--mono); font-size: 11px;
-  letter-spacing: 0.18em; color: rgba(46,109,180,0.55);
+  letter-spacing: 0.18em; color: rgba(12,34,66,0.55);
   margin-bottom: 6px;
 }
 .legal-block-title {
   font-family: var(--sans); font-size: 22px;
-  font-weight: 600; color: var(--blue);
+  font-weight: 600; color: #0C2242;
   margin: 0 0 14px; line-height: 1.25; letter-spacing: -0.01em;
 }
 .legal-block-title em {
-  font-family: var(--serif); font-style: italic;
-  font-weight: 400; color: var(--blue-dk);
+  font-family: inherit; font-size: inherit !important; font-weight: inherit !important;
+  font-style: normal !important; color: inherit !important;
 }
 .legal-block p {
   font-size: 15px; color: var(--ink-2);
@@ -88,23 +86,24 @@
 
 .processor-list { display: flex; flex-direction: column; gap: 12px; margin-top: 8px; }
 .processor-item {
-  background: #FAF6EC;
+  background: #FAF9F5;
   border: 1px solid rgba(46,109,180,0.10);
-  border-radius: 4px;
+  border-radius: 14px;
   padding: 16px 20px;
   display: grid;
   grid-template-columns: 130px 1fr;
   gap: 16px;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
 }
 .processor-item:hover {
   border-color: rgba(46,109,180,0.25);
-  box-shadow: 0 4px 14px rgba(46,109,180,0.08);
+  box-shadow: 0 10px 28px rgba(15,35,64,0.10);
+  transform: translateY(-3px);
 }
 .processor-name {
   font-family: var(--sans); font-size: 13px;
   font-weight: 600; letter-spacing: 0.02em;
-  color: var(--blue);
+  color: #0C2242;
 }
 .processor-desc {
   font-size: 13px; color: var(--ink-2);
@@ -115,10 +114,10 @@
 .legal-review-note {
   margin-top: 56px;
   padding: 20px 24px;
-  background: #FAF6EC;
+  background: #FAF9F5;
   border: 1px solid rgba(46,109,180,0.12);
   border-left: 3px solid var(--blue);
-  border-radius: 4px;
+  border-radius: 14px;
   font-size: 13px; color: var(--ink-2);
   line-height: 1.65; font-weight: 300;
 }
@@ -138,11 +137,23 @@
     <ul class="gn-links">
       <li><a href="/framework">Framework</a></li>
       <li><a href="/process">Process</a></li>
-      <li><a href="/expertise">Expertise</a></li>
-      <li><a href="/markets">Markets</a></li>
-      <li><a href="/position">Position</a></li>
-      <li><a href="/news">News</a></li>
-      <li class="gn-mobile-link"><a href="/contact">Contact</a></li>
+      <li class="gn-dropdown">
+        <button class="gn-dropdown-toggle" type="button" aria-expanded="false" aria-haspopup="true">Company <span class="gn-dropdown-arrow" aria-hidden="true"></span></button>
+        <ul class="gn-dropdown-menu">
+          <li><a href="/position">Position</a></li>
+          <li><a href="/expertise">Expertise</a></li>
+          <li><a href="/markets">Markets</a></li>
+          <li><a href="/contact">Contact</a></li>
+        </ul>
+      </li>
+      <li class="gn-dropdown">
+        <button class="gn-dropdown-toggle" type="button" aria-expanded="false" aria-haspopup="true">Briefings <span class="gn-dropdown-arrow" aria-hidden="true"></span></button>
+        <ul class="gn-dropdown-menu">
+          <li><a href="/news">News</a></li>
+          <li><a href="/updates">Updates</a></li>
+          <li><a href="/subscribe">Subscribe</a></li>
+        </ul>
+      </li>
     </ul>
     <a href="/search" class="gn-search" aria-label="Search">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -161,7 +172,7 @@
   <div class="inner-hero-inner">
     <div>
       <div class="inner-hero-breadcrumb"><a href="/">Safety Critical Labs</a><span>/</span> Privacy</div>
-      <h1>What we collect.<br><em>What we don't.</em></h1>
+      <h1>What we collect.<br>What we don't.</h1>
     </div>
     <p class="inner-hero-lead">
       We hold ourselves to the same data protection principles we evaluate AI systems against. This page describes what safetycriticallabs.com actually does with personal data.
@@ -175,7 +186,7 @@
     <div class="legal-meta">
       <div class="legal-meta-item">Effective<strong>May 12, 2026</strong></div>
       <div class="legal-meta-item">Scope<strong>safetycriticallabs.com</strong></div>
-      <div class="legal-meta-item">Contact<strong><a href="/contact" style="color:var(--blue);text-decoration:none;">/contact</a></strong></div>
+      <div class="legal-meta-item">Contact<strong><a href="/contact" style="color:#0C2242;text-decoration:none;">/contact</a></strong></div>
     </div>
 
     <div class="legal-block">
@@ -206,23 +217,23 @@
       <div class="processor-list">
         <div class="processor-item">
           <span class="processor-name">Formspree</span>
-          <span class="processor-desc"><strong>Contact form handling.</strong> Receives submissions from /contact and forwards them to SCL email. See <a href="https://formspree.io/legal/privacy-policy" target="_blank" rel="noopener" style="color:var(--blue);">Formspree privacy policy</a>.</span>
+          <span class="processor-desc"><strong>Contact form handling.</strong> Receives submissions from /contact and forwards them to SCL email. See <a href="https://formspree.io/legal/privacy-policy" target="_blank" rel="noopener" style="color:#0C2242;">Formspree privacy policy</a>.</span>
         </div>
         <div class="processor-item">
           <span class="processor-name">Brevo</span>
-          <span class="processor-desc"><strong>Newsletter delivery (pending).</strong> Will store subscriber email addresses for sending briefings when the integration is active. See <a href="https://www.brevo.com/legal/privacypolicy/" target="_blank" rel="noopener" style="color:var(--blue);">Brevo privacy policy</a>.</span>
+          <span class="processor-desc"><strong>Newsletter delivery (pending).</strong> Will store subscriber email addresses for sending briefings when the integration is active. See <a href="https://www.brevo.com/legal/privacypolicy/" target="_blank" rel="noopener" style="color:#0C2242;">Brevo privacy policy</a>.</span>
         </div>
         <div class="processor-item">
           <span class="processor-name">Zoho Mail</span>
-          <span class="processor-desc"><strong>Email infrastructure.</strong> Provides the email service used to receive and respond to inquiries. See <a href="https://www.zoho.com/privacy.html" target="_blank" rel="noopener" style="color:var(--blue);">Zoho privacy policy</a>.</span>
+          <span class="processor-desc"><strong>Email infrastructure.</strong> Provides the email service used to receive and respond to inquiries. See <a href="https://www.zoho.com/privacy.html" target="_blank" rel="noopener" style="color:#0C2242;">Zoho privacy policy</a>.</span>
         </div>
         <div class="processor-item">
           <span class="processor-name">GitHub Pages</span>
-          <span class="processor-desc"><strong>Static site hosting.</strong> Serves the Site. May log standard access information (IP address, user agent) for security and reliability. See <a href="https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement" target="_blank" rel="noopener" style="color:var(--blue);">GitHub privacy statement</a>.</span>
+          <span class="processor-desc"><strong>Static site hosting.</strong> Serves the Site. May log standard access information (IP address, user agent) for security and reliability. See <a href="https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement" target="_blank" rel="noopener" style="color:#0C2242;">GitHub privacy statement</a>.</span>
         </div>
         <div class="processor-item">
           <span class="processor-name">Cloudflare</span>
-          <span class="processor-desc"><strong>DNS and security.</strong> Provides DNS resolution and edge security. May process standard request metadata. See <a href="https://www.cloudflare.com/privacypolicy/" target="_blank" rel="noopener" style="color:var(--blue);">Cloudflare privacy policy</a>.</span>
+          <span class="processor-desc"><strong>DNS and security.</strong> Provides DNS resolution and edge security. May process standard request metadata. See <a href="https://www.cloudflare.com/privacypolicy/" target="_blank" rel="noopener" style="color:#0C2242;">Cloudflare privacy policy</a>.</span>
         </div>
       </div>
     </div>
@@ -254,7 +265,7 @@
     </div>
 
     <div class="legal-review-note">
-      <strong>Note.</strong> Final language is under legal review. The substance reflects current practice. For questions about your data, contact <a href="/contact" style="color:var(--blue);">SCL directly</a>.
+      <strong>Note.</strong> Final language is under legal review. The substance reflects current practice. For questions about your data, contact <a href="/contact" style="color:#0C2242;">SCL directly</a>.
     </div>
 
   </div>
@@ -264,17 +275,58 @@
 
 <footer class="site-footer">
   <div class="footer-inner">
-    <div class="footer-cols">
-      <div class="footer-col"><div class="footer-col-label">Certification</div><a href="/framework">Framework</a><a href="/process">Process</a><a href="/assess">Assess</a><a href="/verify">Verify</a></div>
-      <div class="footer-col"><div class="footer-col-label">Resources</div><a href="/documents">Documents</a><a href="#">FAQ</a></div>
-      <div class="footer-col"><div class="footer-col-label">Company</div><a href="#">About</a><a href="/position">Position</a><a href="/expertise">Expertise</a><a href="/markets">Markets</a><a href="/contact">Contact</a></div>
-      <div class="footer-col"><div class="footer-col-label">Briefings</div><a href="/news">News</a><a href="/subscribe">Subscribe</a><a href="/updates">Updates</a></div>
-      <div class="footer-col"><div class="footer-col-label">Legal</div><a href="/terms">Terms</a><a href="/privacy">Privacy</a><a href="/disclaimer">Disclaimer</a><a href="/accreditation">Accreditation</a></div>
-    </div>
-    <div class="footer-divider"></div>
-    <div class="footer-bottom">
-      <span class="footer-copyright">&copy; 2025 Safety Critical Labs. All rights reserved.</span>
-      <div class="footer-meta"><a href="#" aria-label="Back to top">Back to top</a><span class="footer-version">Framework v3.4</span></div>
+    <div class="footer-top">
+      <div class="footer-brand">
+        <div class="footer-logo" aria-label="Safety Critical Labs">SCL</div>
+        <div class="footer-brand-bottom">
+          <span class="footer-copyright">&copy; 2026 Safety Critical Labs</span>
+        </div>
+      </div>
+      <div class="footer-cols">
+        <div class="footer-col">
+          <div class="footer-col-group">
+            <div class="footer-col-label">Certification</div>
+            <a href="/framework">Framework</a>
+            <a href="/process">Process</a>
+            <a href="/assess">Assess</a>
+            <a href="/verify">Verify</a>
+            <a href="/evidence">Evidence</a>
+          </div>
+        </div>
+        <div class="footer-col">
+          <div class="footer-col-group">
+            <div class="footer-col-label">Resources</div>
+            <a href="/documents">Documents</a>
+            <a href="/presentation">Presentation</a>
+            <a href="/certificate-template">Certificate template</a>
+            <a href="/search.html">FAQ</a>
+          </div>
+        </div>
+        <div class="footer-col">
+          <div class="footer-col-group">
+            <div class="footer-col-label">Company</div>
+            <a href="/position">Position</a>
+            <a href="/expertise">Expertise</a>
+            <a href="/markets">Markets</a>
+            <a href="/contact">Contact</a>
+          </div>
+          <div class="footer-col-group">
+            <div class="footer-col-label">Briefings</div>
+            <a href="/news">News</a>
+            <a href="/updates">Updates</a>
+            <a href="/subscribe">Subscribe</a>
+          </div>
+        </div>
+        <div class="footer-col">
+          <div class="footer-col-group">
+            <div class="footer-col-label">Legal</div>
+            <a href="/terms">Terms</a>
+            <a href="/privacy">Privacy</a>
+            <a href="/disclaimer">Disclaimer</a>
+            <a href="/accreditation">Accreditation</a>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </footer>
@@ -290,14 +342,9 @@
     glow.style.setProperty('--glow-y', (e.clientY - rect.top) + 'px');
   });
 })();
-document.querySelector('.gn-hamburger').addEventListener('click', function() {
-  this.classList.toggle('open');
-  document.querySelector('.gn-links').classList.toggle('open');
-  this.setAttribute('aria-expanded', this.classList.contains('open'));
-  document.body.style.overflow = this.classList.contains('open') ? 'hidden' : '';
-});
 </script>
 <script src="ticker.js"></script>
 <script src="/footer.js" defer></script>
+<script src="/nav.js" defer></script>
 </body>
 </html>

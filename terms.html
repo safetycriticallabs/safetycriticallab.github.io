@@ -16,7 +16,7 @@
 <link rel="apple-touch-icon" sizes="180x180" href="img/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=IBM+Plex+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css">
 <style>
 /* Shared legal page styles */
@@ -38,14 +38,12 @@
   font-weight: 500;
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: rgba(46,109,180,0.6);
+  color: rgba(12,34,66,0.6);
   margin-bottom: 20px;
 }
 
 .legal-section {
-  background:
-    radial-gradient(ellipse at 50% 0%, rgba(46,109,180,0.05) 0%, transparent 50%),
-    #F7F3EC;
+  background: #FAF9F5;
   padding: 88px 40px 120px;
 }
 .legal-inner {
@@ -66,11 +64,11 @@
   font-size: 11px;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: rgba(46,109,180,0.6);
+  color: rgba(12,34,66,0.6);
 }
 .legal-meta-item strong {
   display: block;
-  color: var(--blue);
+  color: #0C2242;
   font-weight: 500;
   margin-top: 4px;
   letter-spacing: 0.04em;
@@ -87,23 +85,24 @@
   font-family: var(--mono);
   font-size: 11px;
   letter-spacing: 0.18em;
-  color: rgba(46,109,180,0.55);
+  color: rgba(12,34,66,0.55);
   margin-bottom: 6px;
 }
 .legal-block-title {
   font-family: var(--sans);
   font-size: 22px;
   font-weight: 600;
-  color: var(--blue);
+  color: #0C2242;
   margin: 0 0 14px;
   line-height: 1.25;
   letter-spacing: -0.01em;
 }
 .legal-block-title em {
-  font-family: var(--serif);
-  font-style: italic;
-  font-weight: 400;
-  color: var(--blue-dk);
+  font-family: inherit;
+  font-size: inherit !important;
+  font-weight: inherit !important;
+  font-style: normal !important;
+  color: inherit !important;
 }
 .legal-block p {
   font-size: 15px;
@@ -145,10 +144,10 @@
 .legal-review-note {
   margin-top: 56px;
   padding: 20px 24px;
-  background: #FAF6EC;
+  background: #FAF9F5;
   border: 1px solid rgba(46,109,180,0.12);
   border-left: 3px solid var(--blue);
-  border-radius: 4px;
+  border-radius: 14px;
   font-size: 13px;
   color: var(--ink-2);
   line-height: 1.65;
@@ -166,11 +165,23 @@
     <ul class="gn-links">
       <li><a href="/framework">Framework</a></li>
       <li><a href="/process">Process</a></li>
-      <li><a href="/expertise">Expertise</a></li>
-      <li><a href="/markets">Markets</a></li>
-      <li><a href="/position">Position</a></li>
-      <li><a href="/news">News</a></li>
-      <li class="gn-mobile-link"><a href="/contact">Contact</a></li>
+      <li class="gn-dropdown">
+        <button class="gn-dropdown-toggle" type="button" aria-expanded="false" aria-haspopup="true">Company <span class="gn-dropdown-arrow" aria-hidden="true"></span></button>
+        <ul class="gn-dropdown-menu">
+          <li><a href="/position">Position</a></li>
+          <li><a href="/expertise">Expertise</a></li>
+          <li><a href="/markets">Markets</a></li>
+          <li><a href="/contact">Contact</a></li>
+        </ul>
+      </li>
+      <li class="gn-dropdown">
+        <button class="gn-dropdown-toggle" type="button" aria-expanded="false" aria-haspopup="true">Briefings <span class="gn-dropdown-arrow" aria-hidden="true"></span></button>
+        <ul class="gn-dropdown-menu">
+          <li><a href="/news">News</a></li>
+          <li><a href="/updates">Updates</a></li>
+          <li><a href="/subscribe">Subscribe</a></li>
+        </ul>
+      </li>
     </ul>
     <a href="/search" class="gn-search" aria-label="Search">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -189,7 +200,7 @@
   <div class="inner-hero-inner">
     <div>
       <div class="inner-hero-breadcrumb"><a href="/">Safety Critical Labs</a><span>/</span> Terms</div>
-      <h1>Terms of <em>use.</em></h1>
+      <h1>Terms of use.</h1>
     </div>
     <p class="inner-hero-lead">
       These terms govern access to and use of safetycriticallabs.com. They apply to the website. Engagements with Safety Critical Labs for assessment or certification are governed by separate written agreements.
@@ -203,7 +214,7 @@
     <div class="legal-meta">
       <div class="legal-meta-item">Effective<strong>May 12, 2026</strong></div>
       <div class="legal-meta-item">Jurisdiction<strong>United States</strong></div>
-      <div class="legal-meta-item">Contact<strong><a href="/contact" style="color:var(--blue);text-decoration:none;">/contact</a></strong></div>
+      <div class="legal-meta-item">Contact<strong><a href="/contact" style="color:#0C2242;text-decoration:none;">/contact</a></strong></div>
     </div>
 
     <div class="legal-block">
@@ -264,7 +275,7 @@
     </div>
 
     <div class="legal-review-note">
-      <strong>Note.</strong> Final language is under legal review. The substance reflects current practice. For questions about these Terms, contact <a href="/contact" style="color:var(--blue);">SCL directly</a>.
+      <strong>Note.</strong> Final language is under legal review. The substance reflects current practice. For questions about these Terms, contact <a href="/contact" style="color:#0C2242;">SCL directly</a>.
     </div>
 
   </div>
@@ -274,17 +285,58 @@
 
 <footer class="site-footer">
   <div class="footer-inner">
-    <div class="footer-cols">
-      <div class="footer-col"><div class="footer-col-label">Certification</div><a href="/framework">Framework</a><a href="/process">Process</a><a href="/assess">Assess</a><a href="/verify">Verify</a></div>
-      <div class="footer-col"><div class="footer-col-label">Resources</div><a href="/documents">Documents</a><a href="#">FAQ</a></div>
-      <div class="footer-col"><div class="footer-col-label">Company</div><a href="#">About</a><a href="/position">Position</a><a href="/expertise">Expertise</a><a href="/markets">Markets</a><a href="/contact">Contact</a></div>
-      <div class="footer-col"><div class="footer-col-label">Briefings</div><a href="/news">News</a><a href="/subscribe">Subscribe</a><a href="/updates">Updates</a></div>
-      <div class="footer-col"><div class="footer-col-label">Legal</div><a href="/terms">Terms</a><a href="/privacy">Privacy</a><a href="/disclaimer">Disclaimer</a><a href="/accreditation">Accreditation</a></div>
-    </div>
-    <div class="footer-divider"></div>
-    <div class="footer-bottom">
-      <span class="footer-copyright">&copy; 2025 Safety Critical Labs. All rights reserved.</span>
-      <div class="footer-meta"><a href="#" aria-label="Back to top">Back to top</a><span class="footer-version">Framework v3.4</span></div>
+    <div class="footer-top">
+      <div class="footer-brand">
+        <div class="footer-logo" aria-label="Safety Critical Labs">SCL</div>
+        <div class="footer-brand-bottom">
+          <span class="footer-copyright">&copy; 2026 Safety Critical Labs</span>
+        </div>
+      </div>
+      <div class="footer-cols">
+        <div class="footer-col">
+          <div class="footer-col-group">
+            <div class="footer-col-label">Certification</div>
+            <a href="/framework">Framework</a>
+            <a href="/process">Process</a>
+            <a href="/assess">Assess</a>
+            <a href="/verify">Verify</a>
+            <a href="/evidence">Evidence</a>
+          </div>
+        </div>
+        <div class="footer-col">
+          <div class="footer-col-group">
+            <div class="footer-col-label">Resources</div>
+            <a href="/documents">Documents</a>
+            <a href="/presentation">Presentation</a>
+            <a href="/certificate-template">Certificate template</a>
+            <a href="/search.html">FAQ</a>
+          </div>
+        </div>
+        <div class="footer-col">
+          <div class="footer-col-group">
+            <div class="footer-col-label">Company</div>
+            <a href="/position">Position</a>
+            <a href="/expertise">Expertise</a>
+            <a href="/markets">Markets</a>
+            <a href="/contact">Contact</a>
+          </div>
+          <div class="footer-col-group">
+            <div class="footer-col-label">Briefings</div>
+            <a href="/news">News</a>
+            <a href="/updates">Updates</a>
+            <a href="/subscribe">Subscribe</a>
+          </div>
+        </div>
+        <div class="footer-col">
+          <div class="footer-col-group">
+            <div class="footer-col-label">Legal</div>
+            <a href="/terms">Terms</a>
+            <a href="/privacy">Privacy</a>
+            <a href="/disclaimer">Disclaimer</a>
+            <a href="/accreditation">Accreditation</a>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </footer>
@@ -300,14 +352,9 @@
     glow.style.setProperty('--glow-y', (e.clientY - rect.top) + 'px');
   });
 })();
-document.querySelector('.gn-hamburger').addEventListener('click', function() {
-  this.classList.toggle('open');
-  document.querySelector('.gn-links').classList.toggle('open');
-  this.setAttribute('aria-expanded', this.classList.contains('open'));
-  document.body.style.overflow = this.classList.contains('open') ? 'hidden' : '';
-});
 </script>
 <script src="ticker.js"></script>
 <script src="/footer.js" defer></script>
+<script src="/nav.js" defer></script>
 </body>
 </html>

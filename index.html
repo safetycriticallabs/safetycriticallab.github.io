@@ -20,7 +20,7 @@
 <link rel="shortcut icon" href="favicon.ico">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=IBM+Plex+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css">
 <style>
 /* ─── INDEX PAGE STYLES ─────────────────────────────── */
@@ -43,7 +43,7 @@
   /* Cream + soft blue space gradient */
   background:
     radial-gradient(ellipse at 50% 40%, rgba(46,109,180,0.10) 0%, rgba(46,109,180,0.04) 35%, transparent 70%),
-    linear-gradient(180deg, #FAF6EC 0%, #F4EFE5 50%, #ECE7DB 100%);
+    linear-gradient(180deg, #FAF6EC 0%, #FAF9F5 50%, #ECE7DB 100%);
   min-height: 100vh;
   display: flex; align-items: center; justify-content: center;
   padding: 120px 40px 80px;
@@ -127,23 +127,7 @@
   opacity: 0.40 !important;
 }
 
-/* ─── STAMP STAGE (where the seal flies and the cert lands) ───────────── */
-.stamp-stage {
-  position: relative;
-  width: 100%;
-  max-width: 920px;
-  height: clamp(520px, 60vh, 680px);
-}
-
-/* Animation tokens — tuneable in one place */
-.stamp-stage {
-  --stamp-entry-duration: 2s;
-  --stamp-flight-duration: 9s;
-  --stamp-easing-flight: cubic-bezier(0.45, 0.02, 0.25, 1);
-  --stamp-easing-drop:   cubic-bezier(0.55, 0.05, 0.20, 1);
-}
-
-/* ─── CERTIFICATE DISPLAY (lives inside .stamp-stage, fades up early) ─── */
+/* ─── CERTIFICATE DISPLAY (lives inside the cert card stage) ─── */
 /* The cert renders faithfully to the template — full head (logo + wordmark +
    subtitle + top rule) all visible. The stamp seal lands ABOVE the cert,
    overhanging the top edge like a wax seal pressed onto the document. */
@@ -156,20 +140,20 @@
   aspect-ratio: 8.5 / 11;
   position: absolute;
   top: 50%; left: 50%;
-  transform: translate(-50%, -50%) translateY(60px) scale(0.94);
+  transform: translate(-50%, -50%);
   transform-origin: 50% 50%;
   transform-style: preserve-3d;
   z-index: 4;
-  opacity: 0;
+  opacity: 1;
   user-select: none; -webkit-user-select: none;
 }
 
 /* The two physical sides of the card */
 .cert-face {
   position: absolute; inset: 0;
-  background: #fff;
+  background: #FAF9F5;
   border: 1px solid #c8ccd4;
-  padding: 26px 32px 22px;
+  padding: 26px 32px;
   font-family: var(--sans);
   display: flex; flex-direction: column;
   overflow: hidden;
@@ -185,32 +169,14 @@
    faces with overflow:hidden, so the stamp JS sets .cert-show-back each frame. */
 .cert-doc:not(.cert-show-back) .cert-back  { visibility: hidden; }
 .cert-doc.cert-show-back        .cert-front { visibility: hidden; }
-/* Cert reveal — only animates during the flight phase */
-.stamp-stage.stamp-flying .cert-doc {
-  animation: stamp-cert-reveal var(--stamp-flight-duration) var(--stamp-easing-flight) 0s forwards;
-}
+/* ─── CERT INTERACTIVE RESTING STATE ──────────
+   The cert is a light-catching object: it tilts toward the cursor in 3D, a
+   specular/iridescent sheen tracks the light across the surface, and inner
+   layers parallax for depth. All driven by CSS custom properties updated
+   each frame in the cert-interaction JS. */
+.cert-stage { position: relative; perspective: 1300px; perspective-origin: 50% 42%; }
 
-@keyframes stamp-cert-reveal {
-  /* Cert stays hidden while the seal is doing its off-screen excursion (0–38%),
-     fades up as the seal swoops back into frame (38–58%), holds at scale 1.0
-     through the tap (~72%), then expands dramatically with a back-ease
-     overshoot during the seal's spin-and-vanish — the visual finale. */
-  0%, 38%  { opacity: 0; transform: translate(-50%, -50%) translateY(60px) scale(0.94); }
-  58%      { opacity: 1; transform: translate(-50%, -50%) translateY(0)    scale(1.00); }
-  82%      { opacity: 1; transform: translate(-50%, -50%) translateY(0)    scale(1.00);
-             animation-timing-function: cubic-bezier(0.34, 1.45, 0.64, 1); }
-  100%     { opacity: 1; transform: translate(-50%, -50%) translateY(0)    scale(var(--cert-rest, 1.22)); }
-}
-
-/* ─── CERT INTERACTIVE RESTING STATE (after the stamp lands) ──────────
-   Once the flight finishes (.stamp-done) the cert stops being a flat,
-   static image and becomes a light-catching object: it tilts toward the
-   cursor in 3D, a specular/iridescent sheen tracks the light across the
-   surface, and inner layers parallax for depth. All driven by CSS custom
-   properties updated each frame in the stamp JS. */
-.stamp-stage { perspective: 1300px; perspective-origin: 50% 42%; }
-
-.stamp-stage.stamp-done .cert-doc {
+.cert-stage .cert-doc {
   animation: none;
   opacity: 1;
   transform:
@@ -222,7 +188,7 @@
   cursor: grab;
   touch-action: pan-y;        /* keep vertical page scroll on touch; we take horizontal */
 }
-.stamp-stage.stamp-done .cert-doc.is-grabbing { cursor: grabbing; }
+.cert-stage .cert-doc.is-grabbing { cursor: grabbing; }
 
 /* Larger cert on roomy desktop screens. Gated on BOTH width and height (and
    stepped by height) so it never grows tall enough to clip — short laptops
@@ -252,14 +218,14 @@
 /* Parallax — only the background watermark drifts for depth. The head logo
    stays locked to the wordmark (an independent logo drift read as "off-center",
    especially mirrored on the back face). */
-.stamp-stage.stamp-done .cert-watermark {
+.cert-stage .cert-watermark {
   transform: translate(-50%, -50%) translate(var(--wm-x, 0px), var(--wm-y, 0px));
 }
 
 /* ─── CERT BACK (verification "proof" face) ─────────────────────────── */
 .cert-areas {
   display: grid; grid-template-columns: 1fr 1fr;
-  gap: 5px 14px; margin-bottom: 12px;
+  gap: 2px 14px; margin-bottom: 2px;
 }
 .cert-area { display: flex; gap: 6px; align-items: baseline; text-align: left; }
 .cert-area-id {
@@ -267,18 +233,18 @@
   letter-spacing: 0.04em; color: var(--blue);
   min-width: 26px; flex-shrink: 0;
 }
-.cert-area-label { font-size: 7px; line-height: 1.3; color: var(--ink-2); }
+.cert-area-label { font-size: 7px; line-height: 1.15; color: var(--ink-2); }
 .cert-back-note {
   font-family: var(--serif); font-style: italic;
-  font-size: 7.5px; line-height: 1.55; color: var(--ink-2);
+  font-size: 7px; line-height: 1.3; color: var(--ink-2);
   text-align: center; max-width: 300px; margin: 0 auto;
 }
 .cert-back-note strong { color: var(--ink); font-weight: 600; font-style: normal; }
 .cert-back-verify { text-align: center; }
-.cert-qr-lg { width: 86px; height: 86px; margin: 0 auto 6px; }
+.cert-qr.cert-qr-lg { width: 42px; height: 42px; margin: 0 auto 2px; }  /* .cert-qr (56px, later) would otherwise win */
 .cert-back-doi {
   font-family: var(--mono); font-size: 6px; letter-spacing: 0.08em;
-  color: var(--ink-3); margin-top: 4px;
+  color: var(--ink-3); margin-top: 1px;
 }
 
 /* Flip affordance — subtle pill, appears on hover (always shown on touch) */
@@ -297,139 +263,6 @@
 .cert-flip-hint:hover { color: var(--blue); border-color: var(--blue); }
 .cert-flip-hint:focus-visible { opacity: 0.9; }
 @media (hover: none) { .cert-flip-hint { opacity: 0.8; } }
-
-/* ─── THE SEAL (SVG orb line-drawing — two-phase animation) ─────────── */
-/* Phase 1 (entry, on page load): logo punches in big, settles to hover scale.
-   Phase 2 (flight, on first scroll/wheel/touch): big aerial choreography,
-   off-screen excursion, tap the cert, spin, disappear. */
-.stamp-seal {
-  position: absolute;
-  left: 50%; top: 50%;
-  width: clamp(300px, 44vmin, 460px);
-  height: clamp(300px, 44vmin, 460px);
-  transform-origin: center center;
-  pointer-events: none;
-  z-index: 10;
-  opacity: 0;
-  color: var(--blue);
-  filter: drop-shadow(0 18px 28px rgba(15, 35, 64, 0.18));
-  overflow: visible;
-}
-
-/* Entry — plays once on load. Ends with seal at hover state, waiting. */
-.stamp-stage.stamp-entered .stamp-seal {
-  animation: stamp-seal-entry var(--stamp-entry-duration) ease-out 0s forwards;
-}
-
-/* Flight — plays once on first scroll. Picks up from hover state. */
-.stamp-stage.stamp-flying .stamp-seal {
-  animation: stamp-seal-flight var(--stamp-flight-duration) var(--stamp-easing-flight) 0s forwards;
-}
-
-/* Idle — an eager, springy bounce once the seal settles, before the first
-   scroll. It coils (anticipation squash) then leaps with a stretch and a small
-   landing overshoot, on a short loop, so the seal reads as excited and about to
-   react — and invites a click. Rest state is scale 0.85 so entry/flight chain
-   seamlessly; pointer-events on while idle so the emblem is clickable. */
-.stamp-stage.stamp-idle .stamp-seal {
-  opacity: 1;
-  pointer-events: auto;
-  cursor: pointer;
-  animation: stamp-seal-idle 1.6s ease-in-out infinite;
-}
-@keyframes stamp-seal-idle {
-  0%, 55%, 100% { transform: translate(-50%, -50%) scale(0.85, 0.85); }    /* rest / eager pause */
-  62% { transform: translate(-50%, calc(-50% + 5px)) scale(0.91, 0.79); }  /* coil — dip + squash */
-  74% { transform: translate(-50%, calc(-50% - 22px)) scale(0.81, 0.93); } /* leap — up + stretch */
-  84% { transform: translate(-50%, calc(-50% - 3px)) scale(0.88, 0.83); }  /* land — overshoot */
-  92% { transform: translate(-50%, -50%) scale(0.855, 0.845); }            /* settle */
-}
-
-/* Invisible click target inside the seal — only active while the seal idles.
-   Without this gate the circle keeps catching pointer events after the stamp
-   lands and blocks grabbing the cert near its top edge. */
-.stamp-hit { pointer-events: none; }
-.stamp-stage.stamp-idle .stamp-hit { pointer-events: all; }
-
-/* ENTRY: punch in huge, shrink with kinetic rotation, settle at hover scale.
-   Mirrors the previous animation's 0–28% beats but as a standalone 2s clip. */
-@keyframes stamp-seal-entry {
-  0%   { opacity: 0; transform: translate(-50%, -50%) scale(2.05) rotate(-14deg); }
-  10%  { opacity: 1; transform: translate(-50%, -50%) scale(2.05) rotate(-14deg); }
-  28%  { opacity: 1; transform: translate(-50%, -50%) scale(1.92) rotate(-8deg); }
-  55%  { opacity: 1; transform: translate(-50%, -50%) scale(1.15) rotate(4deg); }
-  78%  { opacity: 1; transform: translate(-50%, -50%) scale(0.80) rotate(-1deg); }
-  100% { opacity: 1; transform: translate(-50%, -50%) scale(0.85) rotate(0deg); }
-}
-
-/* FLIGHT: wake → big swoop → OFF-SCREEN R → re-enter from L (off-screen) →
-   swoop back → hover → tap → spin → disappear.
-   Starts at hover state to chain seamlessly from entry's end state. */
-@keyframes stamp-seal-flight {
-  /* Resting at hover (matches entry's end) */
-  0%   { opacity: 1; transform: translate(-50%, -50%) scale(0.85) rotate(0deg); }
-  /* Wake up — lift + tilt */
-  5%   { opacity: 1; transform: translate(-50%, calc(-50% - 60px)) scale(0.95) rotate(-10deg); }
-  /* Big swoop to upper-right, scale up, rotate as it flies */
-  14%  { opacity: 1; transform: translate(calc(-50% + 350px), calc(-50% - 200px)) scale(1.15) rotate(35deg); }
-  /* OFF-SCREEN upper-right — clipped by hero overflow */
-  22%  { opacity: 1; transform: translate(calc(-50% + 900px), calc(-50% - 300px)) scale(1.20) rotate(80deg); }
-  /* Pause off-screen (effectively gone), preparing to re-enter from left */
-  26%  { opacity: 1; transform: translate(calc(-50% + 950px), calc(-50% - 250px)) scale(1.20) rotate(120deg); }
-  /* RE-ENTER from upper-left off-screen */
-  30%  { opacity: 1; transform: translate(calc(-50% - 900px), calc(-50% - 250px)) scale(1.20) rotate(-30deg); }
-  /* Swooping back into frame */
-  38%  { opacity: 1; transform: translate(calc(-50% - 350px), calc(-50% - 100px)) scale(1.12) rotate(-20deg); }
-  /* Through center-low */
-  46%  { opacity: 1; transform: translate(calc(-50% + 120px), calc(-50% + 20px)) scale(1.05) rotate(15deg); }
-  /* Arc up over the cert area */
-  52%  { opacity: 1; transform: translate(-50%, calc(-50% - 250px)) scale(1.02) rotate(5deg); }
-  /* Settle hovering above the cert's top edge */
-  58%  { opacity: 1; transform: translate(-50%, calc(-50% - 411px)) scale(1.00) rotate(0deg);
-         animation-timing-function: var(--stamp-easing-drop); }
-  /* Pre-tap pause */
-  65%  { opacity: 1; transform: translate(-50%, calc(-50% - 401px)) scale(0.98) rotate(0deg); }
-  /* TAP — quick drop */
-  72%  { opacity: 1; transform: translate(-50%, calc(-50% - 331px)) scale(0.92) rotate(0deg); }
-  /* Small bounce */
-  76%  { opacity: 1; transform: translate(-50%, calc(-50% - 357px)) scale(0.96) rotate(0deg); }
-  /* Settle on cert top */
-  80%  { opacity: 1; transform: translate(-50%, calc(-50% - 345px)) scale(0.94) rotate(0deg); }
-  /* Brief still beat before the spin */
-  82%  { opacity: 1; transform: translate(-50%, calc(-50% - 345px)) scale(0.94) rotate(0deg); }
-  /* SPIN starts — first full rotation */
-  87%  { opacity: 1; transform: translate(-50%, calc(-50% - 345px)) scale(0.95) rotate(360deg); }
-  /* Second rotation, still bright */
-  91%  { opacity: 0.85; transform: translate(-50%, calc(-50% - 345px)) scale(0.92) rotate(720deg); }
-  /* Third rotation, starting to vanish */
-  95%  { opacity: 0.45; transform: translate(-50%, calc(-50% - 345px)) scale(0.78) rotate(1080deg); }
-  /* Gone — fourth rotation completes as opacity hits 0 */
-  100% { opacity: 0;    transform: translate(-50%, calc(-50% - 345px)) scale(0.50) rotate(1440deg); }
-}
-
-/* Shockwave on impact — fires at the tap moment during flight */
-.stamp-shockwave {
-  position: absolute;
-  left: 50%; top: 50%;
-  width: 340px; height: 340px;
-  border-radius: 50%;
-  border: 2.5px solid var(--blue);
-  opacity: 0;
-  transform: translate(-50%, calc(-50% - 345px)) scale(0.5);
-  pointer-events: none;
-  z-index: 9;
-}
-.stamp-stage.stamp-flying .stamp-shockwave {
-  animation: stamp-shockwave var(--stamp-flight-duration) ease-out 0s forwards;
-}
-
-@keyframes stamp-shockwave {
-  /* Fires at the seal's tap moment (~72%) on the new flight timeline */
-  0%, 71% { opacity: 0;    transform: translate(-50%, calc(-50% - 345px)) scale(0.5); }
-  73%     { opacity: 0.55; transform: translate(-50%, calc(-50% - 345px)) scale(0.7); }
-  79%     { opacity: 0;    transform: translate(-50%, calc(-50% - 345px)) scale(1.7); }
-  100%    { opacity: 0;    transform: translate(-50%, calc(-50% - 345px)) scale(1.7); }
-}
 
 
 .cert-body-region {
@@ -475,7 +308,7 @@
 .cert-doc-type {
   font-family: var(--mono); font-size: 6.5px; font-weight: 600;
   letter-spacing: 0.26em; text-transform: uppercase;
-  color: var(--ink); text-align: center; margin-bottom: 12px;
+  color: var(--ink); text-align: center; margin-bottom: 5px;
 }
 
 .cert-focal { text-align: center; margin-bottom: 14px; }
@@ -520,7 +353,7 @@
 
 .cert-mid-rule {
   width: 100%; height: 1px;
-  background: var(--rule); margin-bottom: 10px;
+  background: var(--rule); margin-bottom: 5px;
 }
 
 .cert-admin {
@@ -567,7 +400,7 @@
   text-transform: uppercase; margin-bottom: 2px;
 }
 .cert-qr {
-  width: 56px; height: 56px; flex-shrink: 0;
+  width: 42px; height: 42px; flex-shrink: 0;   /* match the back-face QR for front/back consistency */
   position: relative;
 }
 .cert-qr svg { width: 100%; height: 100%; display: block; }
@@ -612,7 +445,7 @@
 .fw-showcase {
   background:
     radial-gradient(ellipse at 50% 50%, rgba(46,109,180,0.06) 0%, transparent 60%),
-    #F4EFE5;
+    #FAF9F5;
   padding: 140px 40px 160px;
   position: relative;
   overflow: hidden;
@@ -718,7 +551,7 @@
 .fw-detail {
   position: absolute;
   width: min(300px, 36%);
-  background: #fff;
+  background: #FAF9F5;
   border: 1px solid var(--rule);
   border-top: 3px solid var(--blue);
   border-radius: 10px;
@@ -947,7 +780,7 @@
 }
 .fw-cta:hover {
   background: var(--blue);
-  color: #fff;
+  color: #FAF9F5;
 }
 
 /* Primary variant — same outline style; preserved as a hook for future emphasis */
@@ -957,7 +790,7 @@
 }
 .fw-cta-primary:hover {
   background: var(--blue);
-  color: #fff;
+  color: #FAF9F5;
 }
 
 /* ─── ASK SCL (search/Q&A gateway) ────────────────────────── */
@@ -1089,7 +922,7 @@
 .ask-search-bar:hover .ask-search-arrow {
   background: var(--blue);
   border-color: var(--blue);
-  color: #fff;
+  color: #FAF9F5;
   transform: translateY(-2px);
 }
 
@@ -1103,7 +936,7 @@
 .subscribe-cta {
   background:
     radial-gradient(ellipse at 50% 50%, rgba(46,109,180,0.10) 0%, rgba(46,109,180,0.03) 35%, transparent 70%),
-    linear-gradient(180deg, #ECE7DB 0%, #F4EFE5 50%, #ECE7DB 100%);
+    linear-gradient(180deg, #ECE7DB 0%, #FAF9F5 50%, #ECE7DB 100%);
   padding: 140px 40px 160px;
   position: relative;
   overflow: hidden;
@@ -1170,7 +1003,7 @@
 .subscribe-btn:hover {
   background: var(--blue);
   border-color: var(--blue);
-  color: #fff;
+  color: #FAF9F5;
 }
 
 /* ─── NEWS SECTION (cream + blue) ────────────────────────── */
@@ -1249,7 +1082,7 @@
 .news-explore:hover {
   background: var(--blue);
   border-color: var(--blue);
-  color: #fff;
+  color: #FAF9F5;
 }
 
 .news-list {
@@ -1347,7 +1180,7 @@
 .news-row-read:hover {
   background: var(--blue);
   border-color: var(--blue);
-  color: #fff;
+  color: #FAF9F5;
 }
 
 .news-row-image {
@@ -1452,91 +1285,757 @@
   .home-hero-inner { min-height: 0; }
   .home-hero::after { display: none; }
 
-  .stamp-stage { height: clamp(420px, 80vw, 540px); }
-
   .subscribe-cta { padding: 80px 24px 100px; }
   .news-section { padding: 60px 24px 80px; }
 }
 
-/* Phones — below ~480px the viewport is narrower than the cert's 420px design
-   width, so shrinking the cert would clip its (fixed-size) content and pull the
-   seal's landing out of alignment. Instead keep the cert at full design size so
-   the layout is identical to desktop, and scale the whole stage (seal + cert
-   together) down to fit. Alignment and content-fit are preserved. */
-@media (max-width: 480px) {
-  .cert-doc { width: 420px; }
-  .stamp-stage {
-    transform: scale(0.66);
-    transform-origin: center center;
-    height: 460px;
-  }
-}
-
-/* Reduced motion — skip both entry and flight; show cert at its final visible
-   state. The seal stays hidden (its final state is opacity 0). */
+/* Reduced motion — show the cert at its resting state; no tilt/flight. */
 @media (prefers-reduced-motion: reduce) {
-  .stamp-seal,
-  .cert-doc,
-  .stamp-shockwave {
-    animation: none !important;
-  }
-  .stamp-seal { opacity: 0 !important; }
   .cert-doc {
+    animation: none !important;
     opacity: 1 !important;
     transform: translate(-50%, -50%) !important;
   }
-  .stamp-shockwave { opacity: 0 !important; }
   /* Flip works without the 3D rotation: the flip buttons toggle
      .cert-show-back, which swaps face visibility. Un-rotate the back face so
      it reads normally. */
   .cert-doc.cert-show-back .cert-back { transform: none; }
 }
 </style>
+
+<!-- ─── HOME-ONLY UNIFORM CREAM ───────────────────────────────────────
+     One flat cream (#FAF9F5, Anthropic's exact ground) across the ENTIRE
+     homepage. Scoped to this page only: loads after styles.css and after
+     index.html's own <style>, so it wins here without touching the shared
+     sheet or the other 23 pages. It flattens every section gradient, tan
+     band, card and the ticker to the same single cream — no shades, no ramps.
+     Delete this one block to revert. -->
+<style>
+  :root { --bg: #FAF9F5 !important; --white: #FAF9F5 !important; }
+  html, body { background: #FAF9F5 !important; }
+
+  /* ── PAGE WIDTH ── One shared max-width for every homepage container (nav,
+     hero/cards, news, footer) so the logo and CTA sit at the same left/right
+     edges as the content below. Tune --page-w to widen or narrow the whole
+     page; --page-gut is the edge gutter on narrow screens. Was a mismatched
+     1080 / 1200 / 1280 before. */
+  :root { --page-w: 1280px; --page-gut: 40px; }
+
+  /* ── SECTION SPACING ── One consistent, generous vertical gap between every
+     section (hero→tiles, tiles→news, news→footer). A gap = two half-paddings, so
+     the hero's margin-bottom uses the full value and each section boundary uses
+     half on each side. Tune --section-space in ONE place. ── */
+  :root { --section-space: clamp(90px, 11vw, 168px); }
+  .sc-hero { margin-bottom: var(--section-space) !important; }
+  .showcase-cards { padding-bottom: calc(var(--section-space) / 2) !important; }
+  .news-section { padding-top: calc(var(--section-space) / 2) !important; padding-bottom: calc(var(--section-space) / 2) !important; }
+  .site-footer { margin-top: calc(var(--section-space) / 2) !important; }
+
+  .global-nav-inner { max-width: var(--page-w) !important; }
+  .sc-inner        { max-width: var(--page-w) !important; }
+  .news-inner      { max-width: var(--page-w) !important; }
+  .site-footer .footer-inner { max-width: var(--page-w) !important; }
+  /* Move the nav's gutter from the inner (which insets the logo 40px past the
+     content columns) onto the outer bar, so the logo/CTA align flush with the
+     cards, news and footer below. Uniform --page-gut on every section keeps
+     the alignment on narrower screens too. */
+  .global-nav { padding-left: var(--page-gut) !important; padding-right: var(--page-gut) !important; }
+  .global-nav-inner { padding-left: 0 !important; padding-right: 0 !important; }
+  .showcase-cards { padding-left: var(--page-gut) !important; padding-right: var(--page-gut) !important; }
+  /* Footer-inner carries its own 40px padding (base sheet) on top of the
+     section gutter — zero it so the footer brand lines up with the columns. */
+  .site-footer .footer-inner { padding-left: 0 !important; padding-right: 0 !important; }
+
+  /* All lettering → one dark NAVY BLUE (reads blue, not black). Same brand-blue
+     hue as #2E6DB4, darkened into navy. Also pulls the currentColor SVG
+     seal/constellation to the same navy. */
+  body, body * { color: #0C2242 !important; }
+  /* CTA text is pinned by a higher-specificity !important in styles.css;
+     match it here so it flips too (its blue border is left as-is). */
+  .gn-cta { color: #0C2242 !important; }
+
+  /* Every background surface → the same flat cream. Using the `background`
+     shorthand also wipes the baked-in gradients/tints on these sections. */
+  .global-nav, .reg-ticker, .page-shell, footer, .site-footer,
+  section, .home-hero, .fw-showcase, .ask-scl, .subscribe-cta, .news-section,
+  .cert-doc, .cert-face, .cert-front, .cert-back, .fw-detail, .cert-qr,
+  .ask-search-bar, .news-row, .news-row-image, .news-row-image-skeleton {
+    background: #FAF9F5 !important;
+    box-shadow: none !important;
+  }
+  /* Remove the hero fade overlays and the decorative glow/sheen so nothing
+     tints the flat cream. */
+  .home-hero::after, .home-hero::before,
+  .hero-cursor-glow, .cert-sheen { background: none !important; }
+  /* Drop the frosted blur so the bar is the same solid cream as everything. */
+  .global-nav { backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
+
+  /* Wordmark collapse — a SEQUENCED right-to-left wipe. Collapsing: the full
+     "SAFETY CRITICAL LABS" wipes out from its right edge inward (clip-path)
+     AND fades, THEN "SCL" fades in — the two are never on screen together, so
+     there's no overlap at any scroll speed or direction. Expanding reverses
+     the sequence. Slot width stays constant so nothing else shifts. Desktop
+     only; phones already show SCL. */
+  @media (min-width: 481px) {
+    .gn-wordmark {
+      position: relative; overflow: hidden;
+      display: inline-flex; align-items: center;
+      height: 30px;
+    }
+    .gn-text-full, .gn-text-abbr {
+      display: block; height: 30px; line-height: 30px; white-space: nowrap;
+    }
+    /* Expanding (returning to top): SCL leaves first, then the full name wipes
+       back in from the left — hence the 0.30s delay on the full name here. */
+    .gn-text-full {
+      opacity: 1; clip-path: inset(0 0 0 0);
+      transition: opacity 0.34s ease 0.30s,
+                  clip-path 0.44s cubic-bezier(0.5, 0, 0.2, 1) 0.30s;
+    }
+    .gn-text-abbr {
+      position: absolute; left: 0; top: 0;
+      font-size: 22px;
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.3s ease 0s;
+      /* override the committed metallic gradient → flat navy like the rest */
+      background: none !important;
+      -webkit-text-fill-color: #0C2242 !important;
+      color: #0C2242 !important;
+      filter: none !important;
+    }
+    /* Collapsing: the full name wipes out immediately, SCL fades in after. */
+    .global-nav.gn-compact .gn-text-full {
+      opacity: 0; clip-path: inset(0 100% 0 0);
+      transition: opacity 0.34s ease 0s,
+                  clip-path 0.44s cubic-bezier(0.5, 0, 0.2, 1) 0s;
+    }
+    .global-nav.gn-compact .gn-text-abbr {
+      opacity: 1;
+      transition: opacity 0.34s ease 0.34s;
+    }
+  }
+
+  /* ── Anthropic-style header: bigger + bolder wordmark on the left, nav links
+     and button clustered on the right, and a SOLID filled "Get Certified"
+     button (theirs is black; ours is the brand blue) with light text. ── */
+  .gn-text { font-weight: 700; letter-spacing: 0.02em; }
+  .gn-text-full { font-size: 19px; }
+  @media (min-width: 881px) {
+    .gn-links { margin-left: auto; gap: clamp(18px, 2vw, 28px); }  /* right cluster + tighter word spacing */
+    .gn-search { margin-left: 12px !important; }  /* nudge the words a bit further right */
+  }
+  .gn-cta {
+    background: #0C2242 !important;
+    color: #FAF9F5 !important;
+    border-color: #0C2242 !important;
+    border-radius: 8px !important;
+    /* Unified button size — shared height + horizontal padding, wider than tall */
+    height: 40px !important;
+    padding: 0 26px !important;
+    display: inline-flex !important;
+    align-items: center; justify-content: center;
+    font-size: 14px !important;
+  }
+  .gn-cta:hover {
+    background: #081A34 !important;
+    border-color: #081A34 !important;
+    color: #FAF9F5 !important;
+  }
+  /* No hairline under the header. */
+  .global-nav { border-bottom: none !important; }
+
+  /* ── Nav dropdowns (Company / Briefings) — reuse the shared .gn-dropdown
+     component (styles.css). Desktop only: match the toggle to the other nav
+     links and recolor the flyout panel to this page's palette (dark navy panel
+     + cream items; the body* navy rule would otherwise hide cream text). Mobile
+     uses the shared hamburger-accordion styling untouched. ── */
+  @media (min-width: 881px) {
+    .gn-dropdown-toggle {
+      font-family: var(--sans); font-size: 13px; font-weight: 500;
+      letter-spacing: 0.04em; text-transform: uppercase;
+      color: #0C2242 !important; padding: 8px 0;
+    }
+    .gn-dropdown-menu {
+      left: 0; right: auto;                 /* open left-aligned directly under the trigger */
+      background: #ECE5D5 !important;        /* darker beige panel (the news-card tan) */
+      border: 1px solid rgba(12,34,66,0.10) !important;
+      box-shadow: 0 14px 34px rgba(12, 34, 66,0.22) !important;
+      border-radius: 10px !important;
+      padding: 8px !important;
+    }
+    .gn-dropdown-menu a {
+      color: rgba(12,34,66,0.78) !important;   /* navy items, readable on beige */
+      padding: 9px 14px !important;
+      border-radius: 6px;
+    }
+    .gn-dropdown-menu a:hover {
+      color: #0C2242 !important;
+      background: rgba(12,34,66,0.06) !important;
+    }
+  }
+  /* Mobile: keep the shared hamburger-accordion look (inline items, no floating
+     panel) with readable navy items. The base desktop .gn-dropdown-menu rule in
+     styles.css otherwise leaks its dark panel + low-contrast text onto mobile. */
+  @media (max-width: 880px) {
+    .gn-dropdown-toggle { text-transform: uppercase; letter-spacing: -0.01em; }  /* match FRAMEWORK/PROCESS casing */
+    .gn-dropdown-menu {
+      position: static !important; background: none !important;
+      border: none !important; box-shadow: none !important;
+      border-radius: 0 !important; padding: 0 !important; min-width: 0 !important;
+    }
+    .gn-dropdown-menu a { color: rgba(12, 34, 66,0.72) !important; }
+  }
+
+  /* ── One consistent font style: no italics anywhere on the home page. ── */
+  body, body * { font-style: normal !important; }
+  em { font-size: inherit !important; }
+
+  /* ── xAI-style CTA row: a filled primary + an outline secondary, both pill-
+     shaped, reusing the existing links. ── */
+  .fw-cta {
+    border-radius: 999px !important;
+    padding: 13px 28px !important;
+    font-size: 15px !important;
+    border: 1px solid #0C2242 !important;
+    color: #0C2242 !important;
+    background: transparent !important;
+  }
+  .fw-cta:hover { background: #0C2242 !important; color: #FAF9F5 !important; }
+  .fw-cta-primary { background: #0C2242 !important; color: #FAF9F5 !important; }
+  .fw-cta-primary:hover { background: #081A34 !important; border-color: #081A34 !important; color: #FAF9F5 !important; }
+
+  /* ── Showcase cards: the mark + the framework as dark-panel cards (xAI grid,
+     Anthropic color). Cream section, navy cards, blue-glow previews. ── */
+  .showcase-cards { padding: 224px 24px 40px; }   /* more room between the nav and the headline */
+  .sc-inner { max-width: 1080px; margin: 0 auto; }
+  .sc-eyebrow { font-family: var(--mono); font-size: 12px; letter-spacing: 0.22em; text-transform: uppercase; text-align: center; }
+  .sc-heading { text-align: center; font-size: clamp(26px, 3.2vw, 40px); font-weight: 700; letter-spacing: -0.01em; margin: 12px 0 28px; }
+
+  /* ── Hero: Anthropic-style two-column — big left-aligned headline + CTA on the
+     left, a high-level positioning paragraph on the right. ── */
+  .sc-hero { display:grid; grid-template-columns:1.55fr 1fr; gap:clamp(40px,6vw,96px); align-items:start; text-align:left; margin-bottom:clamp(56px,7vw,88px); }
+  .sc-hero .sc-eyebrow { text-align:left; }
+  .sc-hero .sc-heading { text-align:left; font-size:clamp(34px,5vw,60px); line-height:1.04; letter-spacing:-0.02em; margin:16px 0 0; }
+  .sc-head-link { color:inherit; text-decoration:underline; text-underline-offset:7px; text-decoration-thickness:3px; text-decoration-color:rgba(12, 34, 66,0.3); transition:text-decoration-color .2s ease; }
+  .sc-head-link:hover { text-decoration-color:#0C2242; }
+  .sc-hero .sc-intro-cta { justify-content:flex-start; margin:34px 0 0; }
+  .sc-hero-aside { padding-top:clamp(8px,3.2vw,42px); }
+  .sc-hero-lead { font-size:clamp(16px,1.35vw,19px); line-height:1.55; color:rgba(12, 34, 66,0.74) !important; max-width:44ch; }
+  @media (max-width:860px){ .sc-hero { grid-template-columns:1fr; gap:22px; margin-bottom:44px; } .sc-hero-aside { padding-top:0; } }
+  .sc-grid { display: grid; grid-template-columns: 1fr 1fr; grid-auto-rows: 1fr; gap: 30px; }
+  .sc-card { position: relative; background: #0C2242 !important; border: none; border-radius: 16px; padding: 22px; min-height: 300px; cursor: pointer; text-align: left; overflow: hidden; display: flex; flex-direction: column; font-family: var(--sans); transition: transform 0.32s cubic-bezier(.16,1,.3,1), box-shadow 0.32s ease; }
+  .sc-card:hover { transform: translateY(-5px); box-shadow: 0 18px 42px rgba(15,35,64,0.22); }
+  .sc-label { font-size: 16px; font-weight: 600; color: #FAF9F5 !important; }
+  .sc-sub { font-size: 13px; line-height: 1.5; color: rgba(250,249,245,0.62) !important; margin-top: 4px; }
+  .sc-foot { text-align: center; font-size: 13px; color: rgba(12, 34, 66,0.6) !important; margin-top: 18px; }
+  .sc-stage { flex: 1; display: flex; align-items: center; justify-content: center; margin: 6px 0 10px; }
+  .sc-expand { position: absolute; top: 20px; right: 22px; z-index: 5; cursor: pointer; font-family: var(--mono); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: #FAF9F5 !important; background: none; border: none; padding: 0; display: inline-flex; align-items: center; gap: 7px; opacity: 0.55; transition: opacity 0.25s ease; }
+  .sc-card:hover .sc-expand { opacity: 1; }
+  .sc-expand-arw { display: inline-block; transition: transform 0.25s ease; }
+  .sc-expand:hover .sc-expand-arw { transform: translateX(4px); }
+  .sc-doc { width: 152px; background: #F4F1E9; border-radius: 7px; padding: 14px; box-shadow: 0 10px 24px rgba(0,0,0,0.3); animation: sc-float 5.5s ease-in-out infinite; }
+  @keyframes sc-float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)} }
+  .sc-docseal { width: 28px; height: 28px; border-radius: 50%; border: 2px solid #0C2242; margin: 0 auto 8px; position: relative; }
+  .sc-docseal::after { content:""; position:absolute; inset:5px; border-radius:50%; border:1px solid #7FA6DA; }
+  .sc-docttl { height: 5px; width: 68%; background: #0C2242; border-radius: 2px; margin: 0 auto 9px; }
+  .sc-docln { height: 3px; background: #CBCEC7; border-radius: 2px; margin: 5px 0; }
+  .sc-docqr { width: 24px; height: 24px; margin-top: 9px; background: #0C2242; border-radius: 2px; opacity: 0.85; }
+  .sc-fw-svg .ln { stroke: #4E7BB8; stroke-width: 1; opacity: 0.5; }
+  .sc-fw-svg .dot { fill: #6E9BD8; }
+  .sc-puls { animation: sc-puls 3s ease-in-out infinite; }
+  @keyframes sc-puls { 0%,100%{opacity:0.4} 50%{opacity:1} }
+  .sc-nlbl { fill: #8FABD4; font-size: 8px; font-family: var(--mono); letter-spacing: .5px; }
+  @media (max-width: 640px) { .sc-grid { grid-template-columns: 1fr; } }
+
+  /* ── Cards: SCROLL-SCRUBBED WIDEN. Contained (aligned to the hero's 1280
+     column) when the section sits low in the viewport; as you SCROLL it upward
+     the grid width is driven CONTINUOUSLY by --expand (0..1, written every scroll
+     frame by JS) out to a moderate cap, and narrows again as you scroll back up.
+     So the cards visibly expand out while you scroll. Height is frozen up front
+     (JS pins --sc-rowh + the firework panel's --sc-fwh, both measured at the
+     contained width, so the freeze is invisible), which detaches width from
+     height: widening can no longer grow the cards taller, so the news feed below
+     never shifts. NO transition on width (it would lag the scrub). NO transform /
+     contain / will-change — .sc-grid-wide is the ancestor of the position:fixed
+     cert/firework modals and any of those would make it their containing block
+     and break click-to-expand.
+     Tunables: --sc-max (how far it breaks out), the START/END scroll window in
+     the JS (where in the scroll it goes from contained→full), the 1360px floor. ── */
+  .sc-grid-wide {
+    --sc-max: 1560px;               /* wide cap — moderate, well under full-bleed */
+    --expand: 0;                    /* 0..1, written by JS on scroll */
+    max-width: calc(var(--page-w) + (min(var(--sc-max), 100vw - 64px) - var(--page-w)) * var(--expand));
+    margin-inline: auto;
+  }
+  .sc-grid-wide.sc-pinned { grid-auto-rows: var(--sc-rowh, 1fr); }
+  .sc-grid-wide.sc-pinned #sc-fw #fw-showcase:not(.is-expanded) { height: var(--sc-fwh); }
+  @media (prefers-reduced-motion: reduce) { .sc-grid-wide { --expand: 0 !important; } }
+  @media (max-width: 1360px) { .sc-grid-wide { max-width: var(--page-w) !important; } }
+
+  /* ═══ INTERACTIVE SHOWCASE — live cert + firework in-card, expand to modal ═══ */
+
+  /* Cert card-scale sizing (small in card, larger when expanded) */
+  #sc-cert-stage .cert-doc { width: 300px; --cert-rest: 0.68; }
+  /* Cert card sits on cream (a white cert floating on paper, not on navy). */
+  #sc-cert { background:
+      radial-gradient(ellipse 54% 46% at 50% 40%, rgba(255,255,255,0.82), rgba(255,255,255,0) 56%),
+      radial-gradient(ellipse 98% 94% at 50% 44%, transparent 42%, rgba(12, 34, 66,0.15) 100%),
+      #FAF9F5 !important; border: 1px solid rgba(12, 34, 66,0.12); box-shadow: 0 2px 26px rgba(12, 34, 66,0.06); }
+  #sc-cert .sc-label { color: #0C2242 !important; }
+  /* In the card (not expanded), the cert slowly floats + rotates in 3D so the
+     depth effect is self-evident — no caption needed. Expanding stops it so the
+     grab/tilt interaction takes over. */
+  #sc-cert-stage:not(.is-expanded) .cert-doc {
+    animation: cert-turntable 16s linear infinite;
+  }
+  /* Tiled, the cert isn't grab-rotatable — the turntable animation above owns the
+     transform and you only interact after expanding. So the cursor invites opening
+     it (not grabbing), and a click anywhere on the cert expands it (see JS). */
+  #sc-cert-stage:not(.is-expanded) .cert-doc,
+  #sc-cert-stage:not(.is-expanded) .cert-doc.is-grabbing { cursor: pointer; }
+  /* Full 360° turntable — front certificate through the front half of the turn,
+     back (verification / requirement areas) through the back half. NOTE:
+     backface-visibility is UNRELIABLE on these faces (they carry overflow:hidden
+     — see ~line 168), so forcing both faces visible and hoping the GPU culls the
+     away one bled the MIRRORED front face through the back. Instead each face's
+     visibility is driven by its OWN keyframe animation, phase-locked to the 16s
+     rotation: front visible 270°→0°→90°, back visible 90°→180°→270°. The switch
+     lands at 90°/270°, where the face is edge-on (zero width) → imperceptible.
+     A live face is always forward, so the stale-flip "empty tile" bug can't recur. */
+  #sc-cert-stage:not(.is-expanded) .cert-front { animation: cert-vis-front 16s linear infinite; }
+  #sc-cert-stage:not(.is-expanded) .cert-back  { animation: cert-vis-back  16s linear infinite; }
+  @keyframes cert-vis-front {
+    0%, 25%      { visibility: visible; }
+    25.01%, 75%  { visibility: hidden; }
+    75.01%, 100% { visibility: visible; }
+  }
+  @keyframes cert-vis-back {
+    0%, 25%      { visibility: hidden; }
+    25.01%, 75%  { visibility: visible; }
+    75.01%, 100% { visibility: hidden; }
+  }
+  @keyframes cert-turntable {
+    0%   { transform: translate(-50%,-50%) scale(var(--cert-rest,0.68)) rotateX(5deg) rotateY(0deg); }
+    100% { transform: translate(-50%,-50%) scale(var(--cert-rest,0.68)) rotateX(5deg) rotateY(360deg); }
+  }
+  /* Expanded cert: big enough to fill the modal but sized + shifted up ~34px so
+     it sits FULLY above the bottom CTA (which is pinned at bottom:26px, ~66px
+     tall zone) — keeps the admin row (cert no. / issued / DOI) visible and the
+     whitespace even above and below. Height-gated so it never clips. */
+  #sc-cert-stage.is-expanded .cert-doc { --cert-rest: 1.15; top: calc(50% - 34px); }
+  @media (min-width:900px) and (min-height:760px)  { #sc-cert-stage.is-expanded .cert-doc{ --cert-rest:1.3; } }
+  @media (min-width:900px) and (min-height:880px)  { #sc-cert-stage.is-expanded .cert-doc{ --cert-rest:1.42; } }
+  @media (min-width:900px) and (min-height:1000px) { #sc-cert-stage.is-expanded .cert-doc{ --cert-rest:1.52; } }
+  /* Phones: the tiles are shorter, so shrink the card cert a touch to keep the
+     full 360° turntable clear of the tile edges. */
+  @media (max-width:640px){ #sc-cert-stage:not(.is-expanded) .cert-doc { --cert-rest: 0.52; } }
+
+  /* ── Depth for the top two tiles — make the rotating cert and the 3D burst
+     read as objects inside a lit display box: a soft spotlight vignette (lit
+     centre, shaded surround), a grounding contact shadow under the cert, a faint
+     energy glow behind the burst core, and a stronger perspective on both. ── */
+  #sc-cert-stage:not(.is-expanded) { perspective: 1080px !important; }
+  #sc-cert-stage:not(.is-expanded)::after {
+    content: ""; position: absolute; left: 50%; bottom: 10%; z-index: 0; pointer-events: none;
+    width: 46%; height: 26px; transform: translateX(-50%);
+    background: radial-gradient(ellipse at 50% 50%, rgba(12, 34, 66,0.38), transparent 72%);
+    filter: blur(8px);
+  }
+  #sc-fw #fw-showcase:not(.is-expanded)::before {
+    content: ""; position: absolute; inset: 0; z-index: 0; pointer-events: none;
+    background: radial-gradient(circle 96px at 50% 46%, rgba(46,109,180,0.20), transparent 68%);
+  }
+
+  /* Firework light ground */
+  #fw-showcase { background:#FAF9F5; border-radius:12px; }
+  /* Firework card → cream (matches cert): central seal removed, inner panel
+     transparent (burst sits on the cream card), label navy, and the whole
+     radiating burst slowly tilts/rotates in 3D. Card is a visual preview
+     (pointer-events off); expand for the interactive labeled map. */
+  #sc-fw { background:
+      radial-gradient(ellipse 54% 46% at 50% 40%, rgba(255,255,255,0.82), rgba(255,255,255,0) 56%),
+      radial-gradient(ellipse 98% 94% at 50% 44%, transparent 42%, rgba(12, 34, 66,0.15) 100%),
+      #FAF9F5 !important; border:1px solid rgba(12, 34, 66,0.12); box-shadow:0 2px 26px rgba(12, 34, 66,0.06); }
+  #sc-fw .sc-label { color:#0C2242 !important; }
+  /* Bottom two tiles: the same lit display-box treatment, navy version (keeps
+     their light-on-dark content readable) — a cool spotlight glow at the centre
+     over a navy radial that darkens toward the corners. */
+  #sc-ask, #sc-feed { background:
+      radial-gradient(ellipse 58% 52% at 50% 40%, rgba(120,160,220,0.16), rgba(120,160,220,0) 58%),
+      radial-gradient(ellipse 100% 96% at 50% 44%, #173A64 0%, #0B1D37 100%)
+      !important; border:1px solid rgba(250,249,245,0.06); }
+  #sc-fw #fw-showcase:not(.is-expanded) { background:transparent !important; perspective:780px; aspect-ratio:2.1/1; }  /* wider ratio = shorter card; tighter perspective = more depth */
+  #fw-showcase .fw-center-orb { display:none !important; }
+  /* Card view = a real 3D particle burst (.fw3d, generated by JS); the flat SVG
+     map is used ONLY for the expanded interactive view. */
+  /* The 3D particle burst is the firework in BOTH the card and the expanded
+     modal. The flat SVG map is retired (kept in the DOM, hidden). */
+  #fw-canvas { display:none !important; }
+  .fw3d { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; pointer-events:none; }
+  .fw3d-scene { position:relative; width:0; height:0; transform-style:preserve-3d; animation:fw3d-orbit 34s linear infinite; }
+  @keyframes fw3d-orbit { from{ transform:rotateX(-15deg) rotateY(0deg);} to{ transform:rotateX(-15deg) rotateY(360deg);} }
+  .fw3d-core { position:absolute; left:-4px; top:-4px; width:8px; height:8px; border-radius:50%; background:#0C2242; box-shadow:0 0 10px rgba(12, 34, 66,0.5); }
+  .fw3d-spark { position:absolute; left:0; top:0; width:0; height:0; transform-style:preserve-3d; transition:opacity .22s ease; transform:var(--tf-card); }
+  .fw3d-ray { position:absolute; left:0; top:-1px; height:2px; transform-origin:0 50%; border-radius:2px; pointer-events:none; }
+  .fw3d-dot { position:absolute; top:0; transform:translate(-50%,-50%); border-radius:50%; }
+  /* --- Expanded modal: settle into a readable, labeled 3D burst --- */
+  #fw-showcase.is-expanded { perspective:1500px; }
+  #fw-showcase.is-expanded .fw3d { pointer-events:auto; }
+  #fw-showcase.is-expanded .fw3d-spark { transform:var(--tf-exp); }
+  #fw-showcase.is-expanded .fw3d-scene { animation:fw3d-wobble 24s ease-in-out infinite; }
+  #fw-showcase.is-expanded .fw3d-scene.is-paused { animation-play-state:paused; }
+  @keyframes fw3d-wobble {
+    0%,100% { transform:translateY(-34px) scale(1.92) rotateX(-15deg) rotateY(-12deg); }
+    50%     { transform:translateY(-34px) scale(1.92) rotateX(-8deg)  rotateY(12deg); }
+  }
+  #fw-showcase.is-expanded .fw3d-dot { pointer-events:auto; cursor:pointer; transition:transform .16s ease; }
+  #fw-showcase.is-expanded .fw3d-dot.is-hot { transform:translate(-50%,-50%) scale(2.3); }
+  #fw-showcase.has-selection .fw3d-spark:not(.is-sel) { opacity:0.18; }
+  /* Always-on requirement labels — 2D overlay chips tracked by rAF while expanded */
+  .fw3d-labels { position:absolute; inset:0; z-index:6; pointer-events:none; }
+  #fw-showcase:not(.is-expanded) .fw3d-labels { display:none; }
+  .fw3d-lbl { position:absolute; transform:translate(-50%,-50%); pointer-events:auto; cursor:pointer; font-family:var(--mono); font-size:11px; line-height:1.2; white-space:nowrap; padding:4px 9px; border-radius:9px; background:rgba(250,249,245,0.82); -webkit-backdrop-filter:blur(2px); backdrop-filter:blur(2px); box-shadow:0 2px 10px rgba(12, 34, 66,0.1); transition:opacity .2s ease, box-shadow .2s ease; will-change:left,top; }
+  .fw3d-lbl .l-id { color:#2E6DB4 !important; margin-right:6px; letter-spacing:.03em; }
+  .fw3d-lbl .l-name { color:#0C2242 !important; font-weight:500; }
+  .fw3d-lbl.is-hot, .fw3d-lbl.is-sel { box-shadow:0 4px 16px rgba(12, 34, 66,0.22); }
+  #fw-showcase.has-selection .fw3d-lbl:not(.is-sel) { opacity:0.2; }
+  /* Hover tooltip + click detail for the expanded burst */
+  .fw3d-tip { position:absolute; z-index:7; transform:translate(-50%,-155%); background:#0C2242; color:#FAF9F5 !important; font-family:var(--mono); font-size:12px; padding:6px 11px; border-radius:8px; white-space:nowrap; opacity:0; pointer-events:none; transition:opacity .15s ease; box-shadow:0 6px 18px rgba(10,20,38,.28); }
+  .fw3d-tip.is-on { opacity:1; }
+  .fw3d-tip span { color:#FAF9F5 !important; }
+  .fw3d-tip .fw3d-tip-id { opacity:.55; margin-right:8px; }
+  #fw-showcase:not(.is-expanded) .fw3d-tip { display:none; }
+  .fw3d-detail { position:absolute; left:38px; bottom:34px; width:min(360px,44%); z-index:7; background:rgba(250,249,245,0.94); backdrop-filter:blur(3px); -webkit-backdrop-filter:blur(3px); border:1px solid rgba(12, 34, 66,0.1); border-radius:14px; padding:20px 22px; box-shadow:0 12px 32px rgba(10,20,38,0.12); opacity:0; transform:translateY(10px); pointer-events:none; transition:opacity .28s ease, transform .28s ease; }
+  .fw3d-detail.is-on { opacity:1; transform:none; pointer-events:auto; }
+  #fw-showcase:not(.is-expanded) .fw3d-detail { display:none; }
+  .fw3d-detail-close { position:absolute; top:6px; right:10px; border:none; background:transparent; color:#0C2242 !important; font-size:22px; line-height:1; cursor:pointer; opacity:.45; }
+  .fw3d-detail-close:hover { opacity:1; }
+  .fw3d-d-id { font-family:var(--mono); font-size:12px; letter-spacing:.08em; color:#2E6DB4 !important; }
+  .fw3d-d-title { font-size:23px; font-weight:600; line-height:1.2; margin:4px 0 14px; color:#0C2242 !important; }
+  .fw3d-d-prevents-label { font-family:var(--mono); font-size:10px; letter-spacing:.16em; text-transform:uppercase; color:rgba(12, 34, 66,0.5) !important; }
+  .fw3d-d-prevents { font-size:15px; line-height:1.55; margin:6px 0 14px; color:rgba(12, 34, 66,0.82) !important; }
+  .fw3d-d-link { font-family:var(--mono); font-size:12.5px; color:#2E6DB4 !important; text-decoration:none; }
+  .fw3d-d-link:hover { text-decoration:underline; }
+
+  /* Compact-mode firework legibility (labels off, detail as inline sheet) */
+  #fw-showcase:not(.is-expanded) .fw-ray-id,
+  #fw-showcase:not(.is-expanded) .fw-ray-label { display:none; }
+  #fw-showcase:not(.is-expanded) .fw-detail.is-open{ position:absolute; left:8px; right:8px; bottom:8px; top:auto; width:auto; max-width:none; }
+  #fw-showcase:not(.is-expanded) .fw-connector{ display:none; }
+
+  /* Intro sub + expand/close controls */
+  .sc-intro-sub{ text-align:center; max-width:640px; margin:0 auto 30px; font-size:clamp(15px,1.6vw,18px); line-height:1.5; color:rgba(12, 34, 66,0.72)!important; }
+  .sc-intro-cta{ display:flex; justify-content:center; gap:14px; flex-wrap:wrap; margin:0 0 72px; }
+  .sc-intro-cta .fw-cta{ border-radius:8px !important; height:40px !important; padding:0 26px !important; display:inline-flex !important; align-items:center; justify-content:center; font-size:14px !important; }
+  #sc-cert .sc-expand, #sc-fw .sc-expand{ color:#0C2242 !important; }
+  .sc-modal-close{ position:absolute; top:16px; right:16px; z-index:8; display:none; border:none; background:#0C2242; color:#FAF9F5 !important; border-radius:50%; width:42px; height:42px; font-size:0; line-height:1; cursor:pointer; box-shadow:0 4px 16px rgba(10,20,38,.32); transition:background .2s ease, transform .2s ease; }
+  /* The × glyph doesn't sit at its own box centre (font metrics offset it), so
+     hide it (font-size:0) and draw the X from two bars pinned to the exact
+     centre — pixel-perfectly centred in the circle. aria-label keeps it a11y. */
+  .sc-modal-close::before, .sc-modal-close::after{ content:""; position:absolute; top:50%; left:50%; width:16px; height:2px; background:#FAF9F5; border-radius:1px; }
+  .sc-modal-close::before{ transform:translate(-50%,-50%) rotate(45deg); }
+  .sc-modal-close::after{ transform:translate(-50%,-50%) rotate(-45deg); }
+  .sc-modal-close:hover{ background:#081A34; transform:scale(1.08); }
+  .is-expanded .sc-modal-close{ display:flex; align-items:center; justify-content:center; }
+
+  /* CTA inside an expanded modal — cert → the certification process, requirements
+     → the framework. Hidden in the card; a filled navy pill pinned bottom-centre
+     when expanded. */
+  .sc-modal-cta{ display:none; }
+  .is-expanded .sc-modal-cta{
+    display:inline-flex; align-items:center; justify-content:center; gap:8px;
+    position:absolute; left:50%; bottom:26px; transform:translateX(-50%);
+    z-index:8;
+    background:#0C2242; color:#FAF9F5 !important;
+    height:40px; padding:0 26px; border-radius:8px;
+    font-family:var(--sans); font-size:14px; font-weight:600; letter-spacing:0.01em;
+    text-decoration:none; white-space:nowrap;
+    box-shadow:0 8px 24px rgba(10,20,38,0.28);
+    transition:background .2s ease, transform .2s ease;
+  }
+  .is-expanded .sc-modal-cta:hover{ background:#081A34; transform:translateX(-50%) translateY(-2px); }
+
+  /* Expand architecture — a floating modal of the SAME live component */
+  .sc-modal-backdrop{ position:fixed; inset:0; background:rgba(10,20,38,.62); -webkit-backdrop-filter:blur(3px); backdrop-filter:blur(3px); opacity:0; pointer-events:none; transition:opacity .3s ease; z-index:90; }
+  body.sc-modal-open .sc-modal-backdrop{ opacity:1; pointer-events:auto; }
+  body.sc-modal-open{ overflow:hidden; }
+  #sc-cert-stage.is-expanded, #fw-showcase.is-expanded{ position:fixed; top:50%; left:50%; transform:translate(-50%,-50%); width:min(92vw,900px); height:min(92vh,800px); max-width:none; margin:0; z-index:100; border-radius:18px; box-shadow:0 40px 120px rgba(10,20,38,.5); }
+  #fw-showcase.is-expanded{ aspect-ratio:auto; background:#FAF9F5; }
+  #sc-cert-stage.is-expanded{ background:#FAF9F5; }   /* was transparent → the panel showed the dimmed page ("blank") behind the cert */
+  /* Drop the card's hover-lift transform INSTANTLY on expand (no transition). A
+     lingering transform would make the card a containing block for the fixed
+     modal child, trapping the expanded cert/firework over the tile for the
+     0.32s transform transition before it snaps to viewport centre. */
+  body.sc-modal-open .sc-card{ transform:none!important; transition:none!important; }
+
+  /* Cert paper = WHITE, matching certificate-template.html. A hairline border +
+     lift shadow keep the white document distinct against the cream ground/modal. */
+  #sc-cert-stage .cert-face{ background:#ffffff!important; border:1px solid rgba(12,34,66,0.14)!important; box-shadow:0 4px 14px rgba(12,34,66,.10),0 24px 60px rgba(12,34,66,.16)!important; }
+  /* Front cert = the real certificate-template.html embedded (816×1056) and scaled
+     to the 300px card. pointer-events:none lets the 3D tilt/flip work through it. */
+  #sc-cert-stage .cert-front { padding: 0 !important; }
+  /* Card teaser fills the face with the original cert padding. */
+  #sc-cert-stage .cert-front-inner {
+    position: absolute; inset: 0;
+    display: flex; flex-direction: column;
+    padding: 26px 32px;
+  }
+  /* The pixel-exact template embed shows ONLY when expanded (an iframe won't paint
+     inside the card's 3D turntable); the styled teaser shows in the card. */
+  /* Keep the embed loaded+rendered (visibility, not display:none) so it paints the
+     instant the cert is expanded; hidden behind the styled teaser in the card. */
+  #sc-cert-stage .cert-front-inner { z-index: 1; }
+  #sc-cert-stage:not(.is-expanded) .cert-tpl-frame { visibility: hidden; }
+  #sc-cert-stage.is-expanded .cert-front-inner { display: none; }
+  #sc-cert-stage .cert-tpl-frame {
+    position: absolute; top: 0; left: 0;
+    width: 816px; height: 1056px;
+    transform: scale(0.36765);      /* 300 / 816 */
+    transform-origin: top left;
+    border: none; pointer-events: none; background: #fff;
+    z-index: 0;
+  }
+  /* SPECIMEN watermark on the (bespoke) back face — mirrors the front/template.
+     Sized for the 300px card design; colour is !important so the page-wide navy
+     ink rule can't turn the faint watermark solid. */
+  #sc-cert-stage .cert-specimen { position: absolute; inset: 0; z-index: 2; overflow: hidden; pointer-events: none; user-select: none; }
+  #sc-cert-stage .cert-specimen-inner {
+    position: absolute; top: 50%; left: 50%; width: 220%;
+    transform: translate(-50%, -50%) rotate(-30deg);
+    display: flex; flex-direction: column; gap: 38px; text-align: center;
+  }
+  #sc-cert-stage .cert-specimen-inner span {
+    font-family: var(--sans); font-weight: 700; font-size: 19px;
+    letter-spacing: 0.35em; word-spacing: 0.5em; text-transform: uppercase;
+    color: rgba(15, 35, 64, 0.07) !important; white-space: nowrap;
+  }
+  #sc-cert-stage .cert-sheen{ background:linear-gradient(var(--sheen-angle,110deg),transparent 43%,rgba(150,195,255,.12) 47%,rgba(255,255,255,.42) 50%,rgba(210,165,255,.12) 53%,transparent 57%)!important; }
+  #sc-cert-stage .cert-qr{ background:#ffffff!important; }
+  #sc-cert-stage .cert-doc-type,#sc-cert-stage .cert-head-wordmark,#sc-cert-stage .cert-system-name,#sc-cert-stage strong{ color:var(--ink)!important; }
+  #sc-cert-stage .cert-head-sub,#sc-cert-stage .cert-verb,#sc-cert-stage .cert-attribution,#sc-cert-stage .cert-standard-lead,#sc-cert-stage .cert-standard-tail,#sc-cert-stage .cert-admin-value,#sc-cert-stage .cert-area-label,#sc-cert-stage .cert-back-note{ color:var(--ink-2)!important; }
+  #sc-cert-stage .cert-standard-name,#sc-cert-stage .cert-claim-label,#sc-cert-stage .cert-admin-label,#sc-cert-stage .cert-area-id,#sc-cert-stage .cert-verify-text strong{ color:var(--ink)!important; }
+  #sc-cert-stage .cert-disclaimer,#sc-cert-stage .cert-back-doi,#sc-cert-stage .cert-accred,#sc-cert-stage .cert-sig-title{ color:var(--ink-3)!important; }
+
+  /* ── Card 3: Common questions — animated chat over a live search ── */
+  .sc-ask-stage{ flex-direction:column; justify-content:center; gap:16px; width:100%; padding:4px 2px; }
+  .sc-chat{ width:100%; display:flex; flex-direction:column; gap:10px; min-height:104px; justify-content:center; }
+  .sc-bubble{ max-width:82%; padding:10px 14px; border-radius:15px; font-size:13.5px; line-height:1.4; opacity:0; transform:translateY(7px); transition:opacity .5s ease, transform .5s ease; }
+  .sc-bubble.sc-show{ opacity:1; transform:none; }
+  .sc-q{ align-self:flex-end; background:#2E6DB4; color:#FAF9F5 !important; border-bottom-right-radius:5px; }
+  .sc-a{ align-self:flex-start; background:rgba(250,249,245,0.12); color:#E6ECF5 !important; border-bottom-left-radius:5px; }
+  .sc-ask-search{ display:flex; align-items:center; gap:10px; width:100%; padding:11px 14px; border-radius:12px; background:rgba(250,249,245,0.08); border:1px solid rgba(250,249,245,0.18); }
+  .sc-ask-search svg{ color:#9DB4D6; flex-shrink:0; }
+  .sc-ask-search input{ flex:1; background:none; border:none; outline:none; color:#FAF9F5 !important; font-family:var(--sans); font-size:14px; }
+  .sc-ask-search input::placeholder{ color:rgba(250,249,245,0.5); }
+
+  /* ── Card 4: Stay informed — scrolling regulatory feed (color from agency badges) ── */
+  .sc-feed-stage{ width:100%; align-items:stretch; }
+  .sc-feed-mask{ width:100%; height:196px; overflow:hidden; -webkit-mask-image:linear-gradient(180deg,transparent,#000 16%,#000 84%,transparent); mask-image:linear-gradient(180deg,transparent,#000 16%,#000 84%,transparent); }
+  .sc-feed-track{ display:flex; flex-direction:column; gap:12px; animation:sc-feed-scroll 19s linear infinite; }
+  @keyframes sc-feed-scroll{ 0%{transform:translateY(0)} 100%{transform:translateY(-50%)} }
+  .sc-feed-item{ display:flex; align-items:center; gap:11px; font-size:13px; color:#D6DEEC !important; padding:10px 12px; border-radius:10px; background:rgba(250,249,245,0.06); }
+  .sc-badge{ flex-shrink:0; font-family:var(--mono); font-size:10px; font-weight:600; letter-spacing:.03em; padding:3px 8px; border-radius:6px; color:#FAF9F5 !important; }
+  .sc-badge-eu{ background:#2E5BBF; } .sc-badge-nist{ background:#1E8A7A; } .sc-badge-fda{ background:#2E7D46; } .sc-badge-faa{ background:#B5642C; }
+  .sc-sub-link{ color:#9DB4D6 !important; text-decoration:none; font-weight:600; }
+  .sc-sub-link:hover{ color:#FAF9F5 !important; }
+
+  /* Common-questions tile → mirrors the /search "Ask SCL" page: starter question
+     chips that deep-link into a search, over the real search bar. */
+  .sc-chips{ display:flex; flex-wrap:wrap; gap:9px; width:100%; justify-content:center; }
+  .sc-chip{ font-family:var(--sans); font-size:12.5px; color:#D6DEEC !important; background:rgba(250,249,245,0.08); border:1px solid rgba(250,249,245,0.16); border-radius:999px; padding:8px 14px; text-decoration:none; white-space:nowrap; transition:background .2s ease, color .2s ease, border-color .2s ease; }
+  .sc-chip:hover{ background:rgba(250,249,245,0.18); border-color:rgba(250,249,245,0.32); color:#FAF9F5 !important; }
+
+  /* Stay-informed tile → mirrors the /subscribe page: what you'll receive + an
+     email signup (the tile links through to /subscribe to complete it). */
+  .sc-sub-list{ display:flex; flex-direction:column; gap:11px; width:100%; }
+  .sc-sub-item2{ display:flex; align-items:center; gap:11px; font-size:14px; color:#D6DEEC !important; }
+  .sc-sub-dot{ width:6px; height:6px; border-radius:50%; background:#6E9BD8; flex-shrink:0; }
+  .sc-sub-form{ display:flex; gap:8px; width:100%; }
+  .sc-sub-form input{ flex:1; min-width:0; background:rgba(250,249,245,0.08); border:1px solid rgba(250,249,245,0.18); border-radius:10px; padding:11px 14px; color:#FAF9F5 !important; font-family:var(--sans); font-size:14px; outline:none; }
+  .sc-sub-form input::placeholder{ color:rgba(250,249,245,0.5); }
+  .sc-sub-btn{ background:#2E6DB4; color:#FAF9F5 !important; border:none; border-radius:10px; padding:11px 18px; font-family:var(--sans); font-size:14px; font-weight:600; cursor:pointer; white-space:nowrap; transition:background .2s ease; }
+  .sc-sub-btn:hover{ background:#255d9e; }
+
+  /* ── Footer: Anthropic-style. A left brand column (small SCL mark up top,
+     copyright + social pinned to the bottom) with link columns on the right,
+     one of which stacks a Briefings sub-group. Navy. Fully defined here so it
+     stays index-only (styles.css untouched). ── */
+  .site-footer{ background:#0C2242 !important; border-top:none !important; padding-left:var(--page-gut) !important; padding-right:var(--page-gut) !important; margin-top:40px; }
+  .site-footer .footer-inner{ padding-top:156px !important; padding-bottom:116px !important; min-height:480px; }
+
+  .footer-top{ display:flex !important; gap:clamp(56px, 9vw, 150px); align-items:stretch; }
+  .footer-brand{ flex:0 0 auto; min-width:240px; display:flex; flex-direction:column; justify-content:space-between; gap:60px; }
+  .footer-logo{ font-family:var(--sans); font-weight:700; font-size:56px; letter-spacing:-0.02em; line-height:1; color:#FAF9F5 !important; }
+  .footer-brand-bottom{ display:flex; flex-direction:column; gap:16px; }
+  .footer-copyright{ margin:0 !important; font-size:13px; line-height:1.6; color:rgba(250,249,245,0.5) !important; }
+  .footer-social{ display:flex; gap:15px; }
+  .footer-social a{ color:rgba(250,249,245,0.58) !important; display:inline-flex; transition:color .2s ease; }
+  .footer-social a:hover{ color:#FAF9F5 !important; }
+  .footer-version{ font-family:var(--mono); font-size:12px; letter-spacing:0.03em; color:rgba(250,249,245,0.42) !important; }
+
+  .footer-cols{ flex:1; display:grid !important; grid-template-columns:repeat(4,1fr); gap:30px; margin-bottom:0 !important; }
+  .footer-col{ display:flex; flex-direction:column; gap:52px; border:none !important; }
+  .footer-col-group{ display:flex; flex-direction:column; }
+  .footer-col-label{ font-size:14px !important; font-weight:600 !important; color:#FAF9F5 !important; margin-bottom:18px !important; text-transform:none !important; letter-spacing:0 !important; padding:0 !important; }
+  .footer-col-group a{ display:block; font-size:14px; color:rgba(250,249,245,0.6) !important; text-decoration:none; padding:7px 0; transition:color .2s ease; letter-spacing:0.01em; }
+  .footer-col-group a:hover{ color:#FAF9F5 !important; }
+
+  @media (max-width:900px){
+    .site-footer .footer-inner{ padding-top:64px !important; padding-bottom:56px !important; }
+    .footer-top{ flex-direction:column; gap:48px; }
+    .footer-brand{ flex:none; gap:28px; }
+    .footer-cols{ grid-template-columns:repeat(2,1fr); gap:44px 30px; }
+    .footer-col{ gap:36px; }
+    .footer-col-label::after{ display:none !important; }   /* neutralize the shared accordion +/- */
+  }
+  @media (max-width:560px){
+    .footer-cols{ grid-template-columns:1fr; }
+  }
+
+  /* ── Regulatory feed → Anthropic-style card grid. The three sources (Federal
+     Register, EU, NIST) become three warm-tan cards: title → summary → a
+     DATE / SOURCE meta table with hairline rules → a filled navy "Read"
+     button. Replaces the full-width rows + constellation side-panels; the old
+     .news-row CSS above is now inert for this markup. ── */
+  .news-list {
+    display: grid !important;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 26px;
+  }
+  .na-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 348px;
+    padding: 30px 30px 26px;
+    border-radius: 16px;
+    background: #ECE5D5 !important;         /* warm tan panel, Anthropic-style */
+    text-decoration: none;
+    color: #0C2242 !important;
+    transition: transform 0.32s cubic-bezier(.16,1,.3,1), box-shadow 0.32s ease;
+  }
+  .na-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 16px 38px rgba(12, 34, 66,0.14);
+  }
+  .na-title {
+    font-family: var(--sans);
+    font-size: 21px;
+    font-weight: 600;
+    line-height: 1.24;
+    letter-spacing: -0.01em;
+    color: #0C2242 !important;
+    margin: 0 0 13px;
+  }
+  .na-desc {
+    font-family: var(--sans);
+    font-size: 14.5px;
+    line-height: 1.5;
+    color: rgba(12, 34, 66,0.72) !important;
+    margin: 0;
+  }
+  .na-card-foot { margin-top: 26px; }
+  .na-meta { margin-bottom: 20px; }
+  .na-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 14px;
+    padding: 11px 0;
+    border-top: 1px solid rgba(12, 34, 66,0.14);
+  }
+  .na-k {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+    color: rgba(12, 34, 66,0.5) !important;
+    white-space: nowrap;
+  }
+  .na-v {
+    font-family: var(--sans);
+    font-size: 13.5px;
+    font-weight: 500;
+    color: #0C2242 !important;
+    text-align: right;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .na-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    align-self: flex-start;
+    padding: 11px 20px;
+    border-radius: 8px;
+    background: #0C2242 !important;
+    color: #FAF9F5 !important;
+    font-family: var(--sans);
+    font-size: 14px;
+    font-weight: 500;
+    transition: background 0.2s ease;
+  }
+  .na-cta span { color: #FAF9F5 !important; }   /* beat body* color rule on the arrow */
+  .na-card:hover .na-cta { background: #081A34 !important; }
+  /* Skeleton cards while the feeds load */
+  .na-skel { pointer-events: none; }
+  .na-skel .skel-line { background: rgba(12, 34, 66,0.09); border-radius: 4px; height: 13px; margin: 0 0 11px; }
+  @media (max-width: 900px) {
+    .news-list { grid-template-columns: 1fr; }
+    .na-card { min-height: 0; }
+  }
+
+  /* News header trimmed to eyebrow + statement. The "Latest activity" title and
+     the "Get briefings" link were removed; the "Regulatory activity from…"
+     sentence is now the statement itself, set in the SAME DM Sans type the old
+     "Latest activity" title used (= the frontier statement). Strips the old
+     light-weight lead look + the blue accent bar. The header is now full-width
+     (display:block, not the old 2-col grid) so the one-sentence statement extends
+     across the section instead of wrapping in a narrow column. */
+  .news-header { display: block; }
+  .news-lead { font-size: clamp(24px, 2.5vw, 34px); font-weight: 600; line-height: 1.14; letter-spacing: -0.015em; color: #0C2242 !important; border-left: none; padding-left: 0; margin: 0; }
+
+  /* ── News ROWS block (Anthropic "Latest releases" list) — a bold statement on
+     the left + a list of notable news rows on the right, below the regulatory
+     cards. Each row = title (left) + source (right) with a hairline divider.
+     Like Anthropic's list, these are curated evergreen picks; "All news" points
+     at the live feed. ── */
+  .news-rows {
+    display: grid;
+    grid-template-columns: 0.85fr 1.5fr;
+    gap: clamp(48px, 7vw, 120px);
+    align-items: start;
+    margin-top: clamp(64px, 8vw, 120px);
+  }
+  .nr-eyebrow { font-family: var(--mono); font-size: 12px; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(46,109,180,0.6) !important; margin-bottom: 18px; }
+  .nr-headline { font-family: var(--sans); font-size: clamp(24px, 2.5vw, 34px); font-weight: 600; line-height: 1.14; letter-spacing: -0.015em; color: #0C2242 !important; margin: 0 0 26px; max-width: 16ch; }
+  .nr-all { display: inline-flex; align-items: center; gap: 8px; font-family: var(--sans); font-size: 15px; font-weight: 500; color: #0C2242 !important; text-decoration: none; }
+  .nr-all span { transition: transform 0.22s ease; }
+  .nr-all:hover span { transform: translateX(4px); }
+  .nr-list { display: flex; flex-direction: column; }
+  .nr-row {
+    display: flex; justify-content: space-between; align-items: baseline; gap: 24px;
+    padding: 20px 2px; border-top: 1px solid rgba(12, 34, 66,0.14); text-decoration: none;
+  }
+  .nr-row:last-child { border-bottom: 1px solid rgba(12, 34, 66,0.14); }
+  .nr-row-title {
+    flex: 1; font-family: var(--sans); font-size: clamp(16px, 1.4vw, 19px); font-weight: 600;
+    line-height: 1.3; letter-spacing: -0.005em; color: #0C2242 !important;
+    transition: transform 0.22s ease, color 0.2s ease;
+  }
+  .nr-row:hover .nr-row-title { transform: translateX(6px); color: #2E6DB4 !important; }
+  .nr-row-cat { flex-shrink: 0; font-family: var(--sans); font-size: 14px; font-weight: 400; color: rgba(12, 34, 66,0.5) !important; white-space: nowrap; text-align: right; }
+  @media (max-width: 860px) {
+    .news-rows { grid-template-columns: 1fr; gap: 30px; margin-top: 56px; }
+    .nr-headline { max-width: none; }
+    .nr-row { padding: 16px 2px; gap: 16px; }
+  }
+</style>
 </head>
 <body>
-
-<!-- NAV -->
-<nav class="global-nav">
-  <div class="global-nav-inner">
-    <a href="/" class="gn-wordmark" aria-label="Safety Critical Labs">
-      <span class="gn-text gn-text-full"><em>Safety Critical</em> Labs</span><span class="gn-text gn-text-abbr" aria-hidden="true">SCL</span>
-    </a>
-    <button class="gn-hamburger" aria-label="Menu" aria-expanded="false">
-      <span></span><span></span><span></span>
-    </button>
-    <ul class="gn-links">
-      <li><a href="/framework">Framework</a></li>
-      <li><a href="/process">Process</a></li>
-      <li><a href="/expertise">Expertise</a></li>
-      <li><a href="/markets">Markets</a></li>
-      <li><a href="/position">Position</a></li>
-      <li><a href="/news">News</a></li>
-      <li class="gn-mobile-link"><a href="/contact">Contact</a></li>
-    </ul>
-    <a href="/search" class="gn-search" aria-label="Search">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-        <circle cx="11" cy="11" r="7"/>
-        <line x1="21" y1="21" x2="16.65" y2="16.65"/>
-      </svg>
-    </a>
-    <a href="/contact" class="gn-cta">Get Certified</a>
-  </div>
-</nav>
-
-<!-- HERO -->
-<section class="home-hero" id="stamp-hero">
-  <!-- Constellation background — depth particles + cursor magnet, populated by JS -->
-  <svg class="hero-constellation" id="hero-constellation"
-       viewBox="0 0 1280 900"
-       preserveAspectRatio="xMidYMid slice"
-       aria-hidden="true"></svg>
-  <div class="hero-cursor-glow"></div>
-  <div class="home-hero-inner">
-
-    <h1 class="visually-hidden">Safety Critical Labs. AI certification for safety critical systems.</h1>
-
-    <!-- Shared SVG symbol — used by the 13-requirements firework's center logo -->
-    <svg width="0" height="0" style="position:absolute;overflow:hidden" aria-hidden="true">
+<!-- Shared SVG symbol — the SCL orb, used by the firework center logo -->
+<svg width="0" height="0" style="position:absolute;overflow:hidden" aria-hidden="true">
       <defs>
         <symbol id="orb-symbol" viewBox="0 0 220 220">
           <defs>
@@ -1571,237 +2070,323 @@
       </defs>
     </svg>
 
-    <div class="stamp-stage" id="stamp-stage">
 
-      <!-- Shockwave (visible only on impact) -->
-      <div class="stamp-shockwave"></div>
-
-      <!-- Certificate (fades up during the seal's flight; flips to a
-           verification "proof" face on click or a drag past 90°) -->
-      <div class="cert-doc">
-
-        <!-- FRONT — the certificate of conformance -->
-        <div class="cert-face cert-front">
-
-          <div class="cert-head">
-            <img src="img/SCL_Logo_3d_sm.png" alt="Safety Critical Labs" class="cert-head-logo">
-            <div class="cert-head-wordmark">Safety Critical Labs</div>
-            <div class="cert-head-sub">AI Certification Authority</div>
-          </div>
-
-          <div class="cert-top-rule"></div>
-
-          <div class="cert-body-region">
-            <img src="img/SCL_Logo_watermark.png" alt="" class="cert-watermark">
-            <div class="cert-body-content">
-
-              <div class="cert-doc-type">Certificate of Conformance</div>
-
-              <div class="cert-focal">
-                <div class="cert-verb">This is to certify that</div>
-                <div class="cert-system-name">System Name</div>
-                <div class="cert-attribution">Organization &middot; Version X.X &middot; Assessed Month YYYY</div>
-                <div class="cert-standard-lead">has been formally assessed against the</div>
-                <div class="cert-standard-name">SCL AI Requirements Framework</div>
-                <div class="cert-standard-tail">and certified at the <strong>Safety Critical</strong> level for the operational claim stated below.</div>
-              </div>
-
-              <div class="cert-claim">
-                <div class="cert-claim-label">Operational Claim</div>
-                <div class="cert-claim-body">One sentence operational claim describing the certified role and intended scope of the system.</div>
-              </div>
-
-              <div class="cert-mid-rule"></div>
-
-              <div class="cert-admin">
-                <div class="cert-admin-cell">
-                  <div class="cert-admin-label">Certificate No.</div>
-                  <div class="cert-admin-value">SCL-CERT-2025-001</div>
-                </div>
-                <div class="cert-admin-cell">
-                  <div class="cert-admin-label">Issued</div>
-                  <div class="cert-admin-value">DD Mon YYYY</div>
-                </div>
-                <div class="cert-admin-cell">
-                  <div class="cert-admin-label">Framework DOI</div>
-                  <div class="cert-admin-value">10.5281/zenodo.20692967</div>
-                </div>
-              </div>
-
-              <div class="cert-signature">
-                <div class="cert-sig-line"></div>
-                <div class="cert-sig-name">Principal</div>
-                <div class="cert-sig-title">Safety Critical Labs</div>
-              </div>
-
-            </div>
-
-            <div class="cert-body-footer">
-              <div class="cert-verify">
-                <div class="cert-verify-text">
-                  <strong>Verify Online</strong>
-                  safetycriticallabs.com/verify?id=SCL-CERT-2025-001
-                </div>
-                <div class="cert-qr" id="cert-mini-qr"></div>
-              </div>
-
-              <div class="cert-disclaimer">
-                This certificate records conformance to a defined standard at the time of assessment. It does not constitute a claim that the assessed system is safe, free from defect, or approved for any specific regulatory purpose.
-              </div>
-            </div>
-          </div>
-
-          <div class="cert-accred">Independent Certification &middot; Safety Critical Labs</div>
-
-          <!-- Light-catching sheen overlay (animated on tilt, see stamp JS) -->
-          <div class="cert-sheen" aria-hidden="true"></div>
-
-          <button class="cert-flip-hint" type="button" aria-label="Flip to verification details">Verification &#8635;</button>
-        </div>
-
-        <!-- BACK — the verification / proof face -->
-        <div class="cert-face cert-back">
-
-          <div class="cert-head">
-            <img src="img/SCL_Logo_3d_sm.png" alt="" class="cert-head-logo">
-            <div class="cert-head-wordmark">Safety Critical Labs</div>
-            <div class="cert-head-sub">Conformance Verification</div>
-          </div>
-
-          <div class="cert-top-rule"></div>
-
-          <div class="cert-body-region">
-            <img src="img/SCL_Logo_watermark.png" alt="" class="cert-watermark">
-            <div class="cert-body-content">
-
-              <div class="cert-doc-type">Assessed Requirement Areas</div>
-
-              <div class="cert-areas">
-                <div class="cert-area"><span class="cert-area-id">AI-1</span><span class="cert-area-label">Operational and data foundations</span></div>
-                <div class="cert-area"><span class="cert-area-id">AI-2</span><span class="cert-area-label">Addressing AI bias</span></div>
-                <div class="cert-area"><span class="cert-area-id">AI-3</span><span class="cert-area-label">ML test coverage</span></div>
-                <div class="cert-area"><span class="cert-area-id">AI-4</span><span class="cert-area-label">Continuous validation</span></div>
-                <div class="cert-area"><span class="cert-area-id">AI-5</span><span class="cert-area-label">Hallucination prevention</span></div>
-                <div class="cert-area"><span class="cert-area-id">AI-6</span><span class="cert-area-label">Out of distribution detection</span></div>
-                <div class="cert-area"><span class="cert-area-id">AI-7</span><span class="cert-area-label">Adversarial robustness</span></div>
-                <div class="cert-area"><span class="cert-area-id">AI-8</span><span class="cert-area-label">Explainability</span></div>
-                <div class="cert-area"><span class="cert-area-id">AI-9</span><span class="cert-area-label">Human and AI teaming</span></div>
-                <div class="cert-area"><span class="cert-area-id">AI-10</span><span class="cert-area-label">Privacy and data protection</span></div>
-                <div class="cert-area"><span class="cert-area-id">AI-11</span><span class="cert-area-label">Multi-model systems</span></div>
-                <div class="cert-area"><span class="cert-area-id">AI-12</span><span class="cert-area-label">Neural network requirements</span></div>
-                <div class="cert-area"><span class="cert-area-id">AI-13</span><span class="cert-area-label">Continuous learning and adaptation</span></div>
-              </div>
-
-              <div class="cert-mid-rule"></div>
-
-              <div class="cert-back-note">
-                Evaluated across all thirteen areas of the <strong>SCL AI Requirements Framework</strong>. Scan to confirm this record against the public register.
-              </div>
-
-            </div>
-
-            <div class="cert-body-footer">
-              <div class="cert-back-verify">
-                <div class="cert-qr cert-qr-lg" id="cert-back-qr"></div>
-                <div class="cert-verify-text">
-                  <strong>Verify Online</strong>
-                  safetycriticallabs.com/verify?id=SCL-CERT-2025-001
-                </div>
-                <div class="cert-back-doi">DOI 10.5281/zenodo.20692967</div>
-              </div>
-            </div>
-          </div>
-
-          <div class="cert-accred">Independent Certification &middot; Safety Critical Labs</div>
-
-          <div class="cert-sheen" aria-hidden="true"></div>
-
-          <button class="cert-flip-hint" type="button" aria-label="Flip to certificate">Certificate &#8635;</button>
-        </div>
-
-      </div>
-
-      <!-- The seal — SVG line-drawing version of the SCL orb (same as framework's
-           center logo) that flies in and stamps the certificate. -->
-      <svg class="stamp-seal" viewBox="0 0 220 220" aria-hidden="true">
-        <use href="#orb-symbol"/>
-        <!-- Transparent hit target — makes the whole emblem clickable while the
-             seal is idling, so a click triggers the flight (see stamp JS). -->
-        <circle class="stamp-hit" cx="110" cy="110" r="95" fill="none"/>
+<!-- NAV -->
+<nav class="global-nav">
+  <div class="global-nav-inner">
+    <a href="/" class="gn-wordmark" aria-label="Safety Critical Labs">
+      <span class="gn-text gn-text-full"><em>Safety Critical</em> Labs</span><span class="gn-text gn-text-abbr" aria-hidden="true">SCL</span>
+    </a>
+    <button class="gn-hamburger" aria-label="Menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+    <ul class="gn-links">
+      <li><a href="/framework">Framework</a></li>
+      <li><a href="/process">Process</a></li>
+      <li class="gn-dropdown">
+        <button class="gn-dropdown-toggle" type="button" aria-expanded="false" aria-haspopup="true">Company <span class="gn-dropdown-arrow" aria-hidden="true"></span></button>
+        <ul class="gn-dropdown-menu">
+          <li><a href="/position">Position</a></li>
+          <li><a href="/expertise">Expertise</a></li>
+          <li><a href="/markets">Markets</a></li>
+          <li><a href="/contact">Contact</a></li>
+        </ul>
+      </li>
+      <li class="gn-dropdown">
+        <button class="gn-dropdown-toggle" type="button" aria-expanded="false" aria-haspopup="true">Briefings <span class="gn-dropdown-arrow" aria-hidden="true"></span></button>
+        <ul class="gn-dropdown-menu">
+          <li><a href="/news">News</a></li>
+          <li><a href="/updates">Updates</a></li>
+          <li><a href="/subscribe">Subscribe</a></li>
+        </ul>
+      </li>
+    </ul>
+    <a href="/search" class="gn-search" aria-label="Search">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <circle cx="11" cy="11" r="7"/>
+        <line x1="21" y1="21" x2="16.65" y2="16.65"/>
       </svg>
-
-    </div>
+    </a>
+    <a href="/contact" class="gn-cta">Get Certified</a>
   </div>
-</section>
-<!-- /HERO -->
+</nav>
 
-<!-- FIREWORK SHOWCASE -->
-<section class="fw-showcase" id="fw-showcase">
-  <div class="fw-inner">
-    <div class="fw-eyebrow">[ The Standard ]</div>
-    <h2 class="fw-title">Thirteen <em>requirement areas.</em><br>One framework.</h2>
-    <p class="fw-body">
-      The SCL AI Requirements Framework covers the failure modes that matter in safety critical environments. Every assessed system is evaluated across all thirteen.
-    </p>
-    <div class="fw-canvas-container">
-      <svg class="fw-canvas" id="fw-canvas" viewBox="0 0 1080 800" xmlns="http://www.w3.org/2000/svg">
-        <!-- Generated by JS -->
-      </svg>
-      <!-- Requirement detail panel — populated when a node is clicked -->
-      <div class="fw-detail" id="fw-detail" role="dialog" aria-live="polite" aria-labelledby="fw-detail-id" hidden>
-        <button class="fw-detail-close" id="fw-detail-close" type="button" aria-label="Close">&times;</button>
-        <div class="fw-detail-id" id="fw-detail-id"></div>
-        <div class="fw-detail-title" id="fw-detail-title"></div>
-        <div class="fw-detail-prevents-label">The failure it prevents</div>
-        <p class="fw-detail-prevents" id="fw-detail-prevents"></p>
-        <a class="fw-detail-link" id="fw-detail-link" href="/framework">View in the framework &rarr;</a>
+
+
+<!-- SHOWCASE CARDS — the mark + the framework as dark-panel cards (xAI grid,
+     Anthropic color). Scoped styles + click handler live in the HOME-ONLY block
+     / the inline script near </body>. -->
+<section class="showcase-cards" id="showcase-cards">
+  <div class="sc-inner">
+    <div class="sc-hero">
+      <div class="sc-hero-main">
+        <div class="sc-eyebrow">[ The Standard ]</div>
+        <h1 class="sc-heading">AI certification for safety critical systems.</h1>
+      </div>
+      <div class="sc-hero-aside">
+        <p class="sc-hero-lead">Safety Critical Labs is an independent certification authority for AI in safety-critical systems. We assess it against the failures it must prevent, and hold it to the rigor of human-spaceflight software.</p>
       </div>
     </div>
-    <div class="fw-cta-bridge">
-      <p class="fw-cta-line">All thirteen are evaluated when you begin an assessment.</p>
-      <div class="fw-cta-row">
-        <a href="/framework" class="fw-cta">Read the framework</a>
+  </div><!-- /.sc-inner : hero stays in the centered column -->
+  <!-- Cards break out of the centered container to span the full page width. -->
+  <div class="sc-grid sc-grid-wide">
+      <div class="sc-card" id="sc-cert">
+        <button class="sc-expand" type="button" data-expands="sc-cert-stage">Expand <span class="sc-expand-arw" aria-hidden="true">&rarr;</span></button>
+        <div class="sc-stage cert-stage" id="sc-cert-stage">
+          <div class="cert-doc">
+
+                  <!-- FRONT — the certificate of conformance -->
+                  <div class="cert-face cert-front">
+
+                    <!-- Card teaser: the styled 3D face (renders inside the flip/turntable). -->
+                    <div class="cert-front-inner">
+                    <!-- SPECIMEN watermark — matches the certificate template / back face -->
+                    <div class="cert-specimen" aria-hidden="true">
+                      <div class="cert-specimen-inner">
+                        <span>Specimen&ensp;Specimen&ensp;Specimen&ensp;Specimen&ensp;Specimen</span>
+                        <span>Specimen&ensp;Specimen&ensp;Specimen&ensp;Specimen&ensp;Specimen</span>
+                        <span>Specimen&ensp;Specimen&ensp;Specimen&ensp;Specimen&ensp;Specimen</span>
+                        <span>Specimen&ensp;Specimen&ensp;Specimen&ensp;Specimen&ensp;Specimen</span>
+                        <span>Specimen&ensp;Specimen&ensp;Specimen&ensp;Specimen&ensp;Specimen</span>
+                        <span>Specimen&ensp;Specimen&ensp;Specimen&ensp;Specimen&ensp;Specimen</span>
+                        <span>Specimen&ensp;Specimen&ensp;Specimen&ensp;Specimen&ensp;Specimen</span>
+                        <span>Specimen&ensp;Specimen&ensp;Specimen&ensp;Specimen&ensp;Specimen</span>
+                        <span>Specimen&ensp;Specimen&ensp;Specimen&ensp;Specimen&ensp;Specimen</span>
+                      </div>
+                    </div>
+                    <div class="cert-head">
+                      <img src="img/SCL_Logo_3d_sm.png" alt="Safety Critical Labs" class="cert-head-logo">
+                      <div class="cert-head-wordmark">Safety Critical Labs</div>
+                      <div class="cert-head-sub">AI Certification Authority</div>
+                    </div>
+
+                    <div class="cert-top-rule"></div>
+
+                    <div class="cert-body-region">
+                      <img src="img/SCL_Logo_watermark.png" alt="" class="cert-watermark">
+                      <div class="cert-body-content">
+
+                        <div class="cert-doc-type">Certificate of Conformance</div>
+
+                        <div class="cert-focal">
+                          <div class="cert-verb">This is to certify that</div>
+                          <div class="cert-system-name">System Name</div>
+                          <div class="cert-attribution">Organization &middot; Version X.X &middot; Assessed Month YYYY</div>
+                          <div class="cert-standard-lead">has been formally assessed against the</div>
+                          <div class="cert-standard-name">SCL AI Requirements Framework</div>
+                          <div class="cert-standard-tail">and certified at the <strong>Safety Critical</strong> level for the operational claim stated below.</div>
+                        </div>
+
+                        <div class="cert-claim">
+                          <div class="cert-claim-label">Operational Claim</div>
+                          <div class="cert-claim-body">One sentence operational claim describing the certified role and intended scope of the system.</div>
+                        </div>
+
+                        <div class="cert-mid-rule"></div>
+
+                        <div class="cert-admin">
+                          <div class="cert-admin-cell">
+                            <div class="cert-admin-label">Certificate No.</div>
+                            <div class="cert-admin-value">SCL-CERT-2025-001</div>
+                          </div>
+                          <div class="cert-admin-cell">
+                            <div class="cert-admin-label">Issued</div>
+                            <div class="cert-admin-value">DD Mon YYYY</div>
+                          </div>
+                          <div class="cert-admin-cell">
+                            <div class="cert-admin-label">Framework DOI</div>
+                            <div class="cert-admin-value">10.5281/zenodo.20692967</div>
+                          </div>
+                        </div>
+
+                        <div class="cert-signature">
+                          <div class="cert-sig-line"></div>
+                          <div class="cert-sig-name">Principal</div>
+                          <div class="cert-sig-title">Safety Critical Labs</div>
+                        </div>
+
+                      </div>
+
+                      <div class="cert-body-footer">
+                        <div class="cert-verify">
+                          <div class="cert-verify-text">
+                            <strong>Verify Online</strong>
+                            safetycriticallabs.com/verify?id=SCL-CERT-2025-001
+                          </div>
+                          <div class="cert-qr" id="cert-mini-qr"></div>
+                        </div>
+
+                        <div class="cert-disclaimer">
+                          This certificate records conformance to a defined standard at the time of assessment. It does not constitute a claim that the assessed system is safe, free from defect, or approved for any specific regulatory purpose.
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="cert-accred">Independent Certification &middot; Safety Critical Labs</div>
+                    </div>
+
+                    <!-- Expanded only: a live, pixel-exact embed of the real certificate template.
+                         (An iframe can't paint inside the card's 3D turntable, so it is shown only
+                         when the cert is expanded flat — where you actually read it.) -->
+                    <iframe class="cert-tpl-frame" src="certificate-template.html?embed=1" scrolling="no" tabindex="-1" aria-hidden="true" title="Certificate of Conformance"></iframe>
+
+                    <!-- Light-catching sheen overlay (animated on tilt, see stamp JS) -->
+                    <div class="cert-sheen" aria-hidden="true"></div>
+
+                    <button class="cert-flip-hint" type="button" aria-label="Flip to verification details">Verification &#8635;</button>
+                  </div>
+
+                  <!-- BACK — the verification / proof face -->
+                  <div class="cert-face cert-back">
+
+                    <div class="cert-head">
+                      <img src="img/SCL_Logo_3d_sm.png" alt="" class="cert-head-logo">
+                      <div class="cert-head-wordmark">Safety Critical Labs</div>
+                      <div class="cert-head-sub">Conformance Verification</div>
+                    </div>
+
+                    <div class="cert-top-rule"></div>
+
+                    <!-- SPECIMEN watermark — matches the front / certificate template -->
+                    <div class="cert-specimen" aria-hidden="true">
+                      <div class="cert-specimen-inner">
+                        <span>Specimen&ensp;Specimen&ensp;Specimen&ensp;Specimen&ensp;Specimen</span>
+                        <span>Specimen&ensp;Specimen&ensp;Specimen&ensp;Specimen&ensp;Specimen</span>
+                        <span>Specimen&ensp;Specimen&ensp;Specimen&ensp;Specimen&ensp;Specimen</span>
+                        <span>Specimen&ensp;Specimen&ensp;Specimen&ensp;Specimen&ensp;Specimen</span>
+                        <span>Specimen&ensp;Specimen&ensp;Specimen&ensp;Specimen&ensp;Specimen</span>
+                        <span>Specimen&ensp;Specimen&ensp;Specimen&ensp;Specimen&ensp;Specimen</span>
+                        <span>Specimen&ensp;Specimen&ensp;Specimen&ensp;Specimen&ensp;Specimen</span>
+                        <span>Specimen&ensp;Specimen&ensp;Specimen&ensp;Specimen&ensp;Specimen</span>
+                        <span>Specimen&ensp;Specimen&ensp;Specimen&ensp;Specimen&ensp;Specimen</span>
+                      </div>
+                    </div>
+
+                    <div class="cert-body-region">
+                      <img src="img/SCL_Logo_watermark.png" alt="" class="cert-watermark">
+                      <div class="cert-body-content">
+
+                        <div class="cert-doc-type">Assessed Requirement Areas</div>
+
+                        <div class="cert-areas">
+                          <div class="cert-area"><span class="cert-area-id">AI-1</span><span class="cert-area-label">Operational and data foundations</span></div>
+                          <div class="cert-area"><span class="cert-area-id">AI-2</span><span class="cert-area-label">Addressing AI bias</span></div>
+                          <div class="cert-area"><span class="cert-area-id">AI-3</span><span class="cert-area-label">ML test coverage</span></div>
+                          <div class="cert-area"><span class="cert-area-id">AI-4</span><span class="cert-area-label">Continuous validation</span></div>
+                          <div class="cert-area"><span class="cert-area-id">AI-5</span><span class="cert-area-label">Hallucination prevention</span></div>
+                          <div class="cert-area"><span class="cert-area-id">AI-6</span><span class="cert-area-label">Out of distribution detection</span></div>
+                          <div class="cert-area"><span class="cert-area-id">AI-7</span><span class="cert-area-label">Adversarial robustness</span></div>
+                          <div class="cert-area"><span class="cert-area-id">AI-8</span><span class="cert-area-label">Explainability</span></div>
+                          <div class="cert-area"><span class="cert-area-id">AI-9</span><span class="cert-area-label">Human and AI teaming</span></div>
+                          <div class="cert-area"><span class="cert-area-id">AI-10</span><span class="cert-area-label">Privacy and data protection</span></div>
+                          <div class="cert-area"><span class="cert-area-id">AI-11</span><span class="cert-area-label">Multi-model systems</span></div>
+                          <div class="cert-area"><span class="cert-area-id">AI-12</span><span class="cert-area-label">Neural network requirements</span></div>
+                          <div class="cert-area"><span class="cert-area-id">AI-13</span><span class="cert-area-label">Continuous learning and adaptation</span></div>
+                        </div>
+
+                        <div class="cert-mid-rule"></div>
+
+                        <div class="cert-back-note">
+                          Evaluated across all thirteen areas of the <strong>SCL AI Requirements Framework</strong>. Scan to confirm this record against the public register.
+                        </div>
+
+                      </div>
+
+                      <div class="cert-body-footer">
+                        <div class="cert-back-verify">
+                          <div class="cert-qr cert-qr-lg" id="cert-back-qr"></div>
+                          <div class="cert-verify-text">
+                            <strong>Verify Online</strong>
+                            safetycriticallabs.com/verify?id=SCL-CERT-2025-001
+                          </div>
+                          <div class="cert-back-doi">DOI 10.5281/zenodo.20692967</div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="cert-accred">Independent Certification &middot; Safety Critical Labs</div>
+
+                    <div class="cert-sheen" aria-hidden="true"></div>
+
+                    <button class="cert-flip-hint" type="button" aria-label="Flip to certificate">Certificate &#8635;</button>
+                  </div>
+
+                </div>
+          <button class="sc-modal-close" type="button" aria-label="Close">&times;</button>
+          <a class="sc-modal-cta" href="/process">See the certification process &rarr;</a>
+        </div>
+        <div class="sc-label">Certificate of Conformance</div>
       </div>
-    </div>
-  </div>
-</section>
-
-<!-- COMMON QUESTIONS (searches run on /search.html) -->
-<section class="ask-scl" id="ask-scl">
-  <div class="ask-inner">
-    <div class="ask-eyebrow">[ Common Questions ]</div>
-    <h2 class="ask-title">Have a question about <em>certification?</em></h2>
-    <p class="ask-body">Search common questions about how AI systems get certified.</p>
-
-    <form class="ask-search-bar" action="/search.html" method="get">
-      <div class="ask-search-prompt">
-        <svg class="ask-search-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <circle cx="11" cy="11" r="7"/>
-          <line x1="21" y1="21" x2="16.65" y2="16.65"/>
-        </svg>
-        <input type="text" name="q" class="ask-search-input" placeholder="Search common questions" aria-label="Search common questions" autocomplete="off">
+      <div class="sc-card" id="sc-fw">
+        <button class="sc-expand" type="button" data-expands="fw-showcase">Expand <span class="sc-expand-arw" aria-hidden="true">&rarr;</span></button>
+        <div class="sc-stage">
+          <div class="fw-canvas-container" id="fw-showcase">
+                <div class="fw3d" aria-hidden="true"><div class="fw3d-scene" id="fw3d-scene"><span class="fw3d-core"></span></div></div>
+                <div class="fw3d-tip" id="fw3d-tip" aria-hidden="true"><span class="fw3d-tip-id" id="fw3d-tip-id"></span><span id="fw3d-tip-label"></span></div>
+                <div class="fw3d-labels" id="fw3d-labels" aria-hidden="true"></div>
+                <div class="fw3d-detail" id="fw3d-detail" role="dialog" aria-live="polite">
+                  <button class="fw3d-detail-close" id="fw3d-detail-close" type="button" aria-label="Close detail">&times;</button>
+                  <div class="fw3d-d-id" id="fw3d-d-id"></div>
+                  <div class="fw3d-d-title" id="fw3d-d-title"></div>
+                  <div class="fw3d-d-prevents-label">The failure it prevents</div>
+                  <p class="fw3d-d-prevents" id="fw3d-d-prevents"></p>
+                  <a class="fw3d-d-link" href="/framework">View in the framework &rarr;</a>
+                </div>
+                <svg class="fw-canvas" id="fw-canvas" viewBox="0 0 1080 800" xmlns="http://www.w3.org/2000/svg">
+                  <!-- Generated by JS -->
+                </svg>
+                <!-- Requirement detail panel — populated when a node is clicked -->
+                <div class="fw-detail" id="fw-detail" role="dialog" aria-live="polite" aria-labelledby="fw-detail-id" hidden>
+                  <button class="fw-detail-close" id="fw-detail-close" type="button" aria-label="Close">&times;</button>
+                  <div class="fw-detail-id" id="fw-detail-id"></div>
+                  <div class="fw-detail-title" id="fw-detail-title"></div>
+                  <div class="fw-detail-prevents-label">The failure it prevents</div>
+                  <p class="fw-detail-prevents" id="fw-detail-prevents"></p>
+                  <a class="fw-detail-link" id="fw-detail-link" href="/framework">View in the framework &rarr;</a>
+                </div>
+                <button class="sc-modal-close" type="button" aria-label="Close">&times;</button>
+                <a class="sc-modal-cta" href="/framework">Read the framework &rarr;</a>
+              </div>
+        </div>
+        <div class="sc-label">Thirteen requirement areas</div>
       </div>
-      <button type="submit" class="ask-search-arrow" aria-label="Search">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <line x1="12" y1="19" x2="12" y2="5"/>
-          <polyline points="5 12 12 5 19 12"/>
-        </svg>
-      </button>
-    </form>
-  </div>
+
+      <div class="sc-card" id="sc-ask">
+        <div class="sc-stage sc-ask-stage">
+          <div class="sc-chips">
+            <a href="/search.html?q=What%20is%20SCL%3F" class="sc-chip">What is SCL?</a>
+            <a href="/search.html?q=How%20do%20I%20get%20certified%3F" class="sc-chip">How do I get certified?</a>
+            <a href="/search.html?q=What%20does%20it%20cost%3F" class="sc-chip">What does it cost?</a>
+            <a href="/search.html?q=Is%20SCL%20accredited%3F" class="sc-chip">Is SCL accredited?</a>
+          </div>
+          <form class="sc-ask-search" action="/search.html" method="get">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <input type="text" name="q" placeholder="Search common questions" aria-label="Search common questions" autocomplete="off">
+          </form>
+        </div>
+        <div class="sc-label">Common questions</div>
+        <div class="sc-sub">Ask SCL about certification, the framework, and the process.</div>
+      </div>
+
+      <div class="sc-card" id="sc-feed">
+        <div class="sc-stage sc-ask-stage">
+          <div class="sc-sub-list">
+            <div class="sc-sub-item2"><span class="sc-sub-dot"></span>Regulatory developments</div>
+            <div class="sc-sub-item2"><span class="sc-sub-dot"></span>Framework releases</div>
+            <div class="sc-sub-item2"><span class="sc-sub-dot"></span>How we evaluate AI</div>
+          </div>
+          <form class="sc-sub-form" action="/subscribe" method="get">
+            <input type="email" placeholder="you@organization.com" aria-label="Email address" autocomplete="off">
+            <button type="submit" class="sc-sub-btn">Subscribe</button>
+          </form>
+        </div>
+        <div class="sc-label">Stay informed</div>
+        <div class="sc-sub"><a href="/subscribe" class="sc-sub-link">Subscribe &rarr;</a> occasional briefings, never on a schedule.</div>
+      </div>
+    </div><!-- /.sc-grid-wide -->
 </section>
 
-<!-- SUBSCRIBE CTA -->
-<section class="subscribe-cta">
-  <canvas id="subscribe-particles"></canvas>
-  <div class="subscribe-inner">
-    <h2 class="subscribe-title">Stay informed on <em>AI regulation.</em></h2>
-    <p class="subscribe-body">
-      Updates on how Safety Critical Labs evaluates AI systems. Briefings on the regulatory developments that shape the field. Delivered occasionally, never on a schedule.
-    </p>
-    <a href="/subscribe" class="subscribe-btn">Sign up</a>
-  </div>
-</section>
+
 
 <!-- LATEST NEWS -->
 <section class="news-section">
@@ -1809,42 +2394,74 @@
     <div class="news-header">
       <div class="news-header-left">
         <div class="news-eyebrow">[ Regulatory ]</div>
-        <h2 class="news-title">Latest activity</h2>
-      </div>
-      <div class="news-header-right">
-        <p class="news-lead">Regulatory activity from the Federal Register, EU Commission, and NIST. Refreshed throughout the week.</p>
-        <a href="/subscribe" class="news-explore">Get briefings</a>
+        <p class="news-lead">Regulatory activity from the Federal Register, EU Commission, and NIST, refreshed throughout the week.</p>
       </div>
     </div>
 
     <div class="news-list" id="news-list">
       <!-- Populated by JS from API feeds -->
-      <div class="news-row news-row-skeleton">
-        <div class="news-row-date"><div class="skel-line" style="width:80px"></div></div>
-        <div class="news-row-content">
-          <div class="skel-line" style="width:60%;height:16px"></div>
-          <div class="skel-line" style="width:90%"></div>
-          <div class="skel-line" style="width:40%"></div>
+      <div class="na-card na-skel">
+        <div>
+          <div class="skel-line" style="width:85%;height:17px"></div>
+          <div class="skel-line" style="width:70%;height:17px;margin-bottom:18px"></div>
+          <div class="skel-line" style="width:100%"></div>
+          <div class="skel-line" style="width:60%"></div>
         </div>
-        <div class="news-row-image news-row-image-skeleton"></div>
+        <div class="skel-line" style="width:120px;height:38px;border-radius:8px"></div>
       </div>
-      <div class="news-row news-row-skeleton">
-        <div class="news-row-date"><div class="skel-line" style="width:80px"></div></div>
-        <div class="news-row-content">
-          <div class="skel-line" style="width:60%;height:16px"></div>
-          <div class="skel-line" style="width:90%"></div>
-          <div class="skel-line" style="width:40%"></div>
+      <div class="na-card na-skel">
+        <div>
+          <div class="skel-line" style="width:85%;height:17px"></div>
+          <div class="skel-line" style="width:70%;height:17px;margin-bottom:18px"></div>
+          <div class="skel-line" style="width:100%"></div>
+          <div class="skel-line" style="width:60%"></div>
         </div>
-        <div class="news-row-image news-row-image-skeleton"></div>
+        <div class="skel-line" style="width:120px;height:38px;border-radius:8px"></div>
       </div>
-      <div class="news-row news-row-skeleton">
-        <div class="news-row-date"><div class="skel-line" style="width:80px"></div></div>
-        <div class="news-row-content">
-          <div class="skel-line" style="width:60%;height:16px"></div>
-          <div class="skel-line" style="width:90%"></div>
-          <div class="skel-line" style="width:40%"></div>
+      <div class="na-card na-skel">
+        <div>
+          <div class="skel-line" style="width:85%;height:17px"></div>
+          <div class="skel-line" style="width:70%;height:17px;margin-bottom:18px"></div>
+          <div class="skel-line" style="width:100%"></div>
+          <div class="skel-line" style="width:60%"></div>
         </div>
-        <div class="news-row-image news-row-image-skeleton"></div>
+        <div class="skel-line" style="width:120px;height:38px;border-radius:8px"></div>
+      </div>
+    </div>
+
+    <!-- Anthropic-style rows: curated notable reading on the right, statement on
+         the left. "All news" points at the live feed (/news). -->
+    <div class="news-rows">
+      <div class="nr-statement">
+        <div class="nr-eyebrow">[ The frontier ]</div>
+        <h3 class="nr-headline">We track the frontier so the standard keeps pace.</h3>
+        <a href="/news" class="nr-all">All news <span aria-hidden="true">&rarr;</span></a>
+      </div>
+      <div class="nr-list">
+        <a class="nr-row" href="https://www.anthropic.com/research/agentic-misalignment" target="_blank" rel="noopener">
+          <span class="nr-row-title">Agentic Misalignment: How LLMs could be insider threats</span>
+          <span class="nr-row-cat">Anthropic</span>
+        </a>
+        <a class="nr-row" href="https://deepmind.google/discover/blog/taking-a-responsible-path-to-agi/" target="_blank" rel="noopener">
+          <span class="nr-row-title">Taking a responsible path to AGI</span>
+          <span class="nr-row-cat">Google DeepMind</span>
+        </a>
+        <a class="nr-row" href="https://hai.stanford.edu/news/ai-index-2025-state-of-ai-in-10-charts" target="_blank" rel="noopener">
+          <span class="nr-row-title">AI Index 2025: State of AI in 10 Charts</span>
+          <span class="nr-row-cat">Stanford HAI</span>
+        </a>
+        <a class="nr-row" href="https://www.alignmentforum.org/posts/njAZwT8nkHnjipJku/alignment-faking-in-large-language-models" target="_blank" rel="noopener">
+          <span class="nr-row-title">Alignment Faking in Large Language Models</span>
+          <span class="nr-row-cat">Alignment Forum</span>
+        </a>
+        <a class="nr-row" href="https://news.mit.edu/2025/explained-generative-ai-environmental-impact-0117" target="_blank" rel="noopener">
+          <span class="nr-row-title">Explained: Generative AI's environmental impact</span>
+          <span class="nr-row-cat">MIT News</span>
+        </a>
+        <a class="nr-row" href="https://techcrunch.com/2024/08/14/mit-researchers-release-a-repository-of-ai-risks/" target="_blank" rel="noopener">
+          <span class="nr-row-title">MIT researchers release a repository of AI risks</span>
+          <span class="nr-row-cat">TechCrunch</span>
+        </a>
       </div>
     </div>
   </div>
@@ -1854,338 +2471,85 @@
 <footer class="site-footer">
   <div class="footer-inner">
 
-    <div class="footer-cols">
+    <div class="footer-top">
 
-      <div class="footer-col">
-        <div class="footer-col-label">Certification</div>
-        <a href="/framework">Framework</a>
-        <a href="/process">Process</a>
-        <a href="/assess">Assess</a>
-        <a href="/verify">Verify</a>
+      <div class="footer-brand">
+        <div class="footer-logo" aria-label="Safety Critical Labs">SCL</div>
+        <div class="footer-brand-bottom">
+          <span class="footer-copyright">&copy; 2026 Safety Critical Labs</span>
+        </div>
       </div>
 
-      <div class="footer-col">
-        <div class="footer-col-label">Resources</div>
-        <a href="/documents">Documents</a>
-        <a href="/search.html">FAQ</a>
+      <div class="footer-cols">
+
+        <div class="footer-col">
+          <div class="footer-col-group">
+            <div class="footer-col-label">Certification</div>
+            <a href="/framework">Framework</a>
+            <a href="/process">Process</a>
+            <a href="/assess">Assess</a>
+            <a href="/verify">Verify</a>
+            <a href="/evidence">Evidence</a>
+          </div>
+        </div>
+
+        <div class="footer-col">
+          <div class="footer-col-group">
+            <div class="footer-col-label">Resources</div>
+            <a href="/documents">Documents</a>
+            <a href="/presentation">Presentation</a>
+            <a href="/certificate-template">Certificate template</a>
+            <a href="/search.html">FAQ</a>
+          </div>
+        </div>
+
+        <div class="footer-col">
+          <div class="footer-col-group">
+            <div class="footer-col-label">Company</div>
+            <a href="/position">Position</a>
+            <a href="/expertise">Expertise</a>
+            <a href="/markets">Markets</a>
+            <a href="/contact">Contact</a>
+          </div>
+          <div class="footer-col-group">
+            <div class="footer-col-label">Briefings</div>
+            <a href="/news">News</a>
+            <a href="/updates">Updates</a>
+            <a href="/subscribe">Subscribe</a>
+          </div>
+        </div>
+
+        <div class="footer-col">
+          <div class="footer-col-group">
+            <div class="footer-col-label">Legal</div>
+            <a href="/terms">Terms</a>
+            <a href="/privacy">Privacy</a>
+            <a href="/disclaimer">Disclaimer</a>
+            <a href="/accreditation">Accreditation</a>
+          </div>
+        </div>
+
       </div>
 
-      <div class="footer-col">
-        <div class="footer-col-label">Company</div>
-        <a href="/position">Position</a>
-        <a href="/expertise">Expertise</a>
-        <a href="/markets">Markets</a>
-        <a href="/contact">Contact</a>
-      </div>
-
-      <div class="footer-col">
-        <div class="footer-col-label">Briefings</div>
-        <a href="/news">News</a>
-        <a href="/subscribe">Subscribe</a>
-        <a href="/updates">Updates</a>
-      </div>
-
-      <div class="footer-col">
-        <div class="footer-col-label">Legal</div>
-        <a href="/terms">Terms</a>
-        <a href="/privacy">Privacy</a>
-        <a href="/disclaimer">Disclaimer</a>
-        <a href="/accreditation">Accreditation</a>
-      </div>
-
-    </div>
-
-    <div class="footer-divider"></div>
-
-    <div class="footer-bottom">
-      <span class="footer-copyright">&copy; 2026 Safety Critical Labs. All rights reserved.</span>
-      <div class="footer-meta">
-        <a href="#" aria-label="Back to top">Back to top</a>
-        <span class="footer-version">Framework v3.4</span>
-      </div>
     </div>
 
   </div>
 </footer>
 
 <script>
-/* ─── HERO STARFIELD (drifting clusters + solos + cursor pull) ─────────── */
-/* Small connected clusters (3–5 stars, all wired into closed shapes like
-   triangles/quadrilaterals) float autonomously across the hero, mixed with
-   solo isolated stars. Each cluster has its own slow Lissajous-style drift
-   so the field never sits still. The cursor pulls whole clusters as units
-   and solos individually. */
+/* ─── INTERACTIVE CERTIFICATE ───────────────────────────────────────── */
+/* The cert lives immediately in its card stage (no seal flight). It is a
+   physical object you can play with: it tilts in 3D with a light-catching
+   sheen + layer parallax (desktop hover / mobile gyro), you can grab and spin
+   it with momentum, and a click — or a spin past 90° — flips it to the
+   verification face. The same live element is re-parented in-place when the
+   card is expanded to the modal. */
 (function () {
-  var svg = document.getElementById('hero-constellation');
-  if (!svg) return;
+  var stage = document.getElementById('sc-cert-stage');
+  if (!stage) return;
 
-  var SVG_NS = 'http://www.w3.org/2000/svg';
-  var W = 1280, H = 900;
-  var CENTER_X = W / 2, CENTER_Y = H / 2;
-  var CENTER_AVOID = 180;
-  var CLUSTER_COUNT = 12;
-  var SOLO_COUNT = 52;
-  var CLUSTER_REACH = 58;
-  /* Gravity-style attraction: a wide field of effect (cursor influences distant
-     clusters too), capped maximum displacement, and a small LERP factor so it
-     takes ~3 seconds of cursor hold to fully gather. */
-  var ATTRACT_RADIUS = 320;
-  var MAX_PULL = 95;
-  var LERP_FACTOR = 0.018;
-  var reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-  function randPos(minRadius) {
-    minRadius = minRadius || CENTER_AVOID;
-    for (var i = 0; i < 60; i++) {
-      var x = 50 + Math.random() * (W - 100);
-      var y = 50 + Math.random() * (H - 100);
-      var dx = x - CENTER_X, dy = y - CENTER_Y;
-      if (Math.sqrt(dx*dx + dy*dy) > minRadius) return { x: x, y: y };
-    }
-    return null;
-  }
-
-  /* ── CLUSTERS ───────────────────────────────────────────────────────── */
-  var clusters = [];
-  for (var ci = 0; ci < CLUSTER_COUNT; ci++) {
-    var center = randPos(CENTER_AVOID + 30);
-    if (!center) continue;
-    var starCount = 4 + Math.floor(Math.random() * 4);  /* 4–7 stars per cluster */
-
-    /* Place stars around the cluster center with jittered angles + radii.
-       Wider radius variance + extra positional noise gives a less perfect
-       polygon and more of an organic scatter. */
-    var stars = [];
-    for (var si = 0; si < starCount; si++) {
-      var angle = (si / starCount) * Math.PI * 2 + (Math.random() - 0.5) * 1.4;
-      var r = CLUSTER_REACH * (0.35 + Math.random() * 0.65);
-      /* One in five stars is notably bigger (the "prominent" stars in a cluster) */
-      var prominent = Math.random() < 0.2;
-      var baseR = prominent ? 1.6 + Math.random() * 1.0 : 0.5 + Math.random() * 0.8;
-      stars.push({
-        x: center.x + Math.cos(angle) * r + (Math.random() - 0.5) * 10,
-        y: center.y + Math.sin(angle) * r + (Math.random() - 0.5) * 10,
-        baseR: baseR,
-        depth: Math.random(),
-        prominent: prominent
-      });
-    }
-
-    /* Group element — drift + cursor pull applied here as a transform so all
-       child stars + lines move as a unit. */
-    var g = document.createElementNS(SVG_NS, 'g');
-    g.setAttribute('class', 'hero-cluster');
-
-    /* Nearest-neighbour spanning tree (Prim's): wire every star into one
-       connected, branching path — dots joined by lines, like a real
-       constellation — instead of triangulating into closed polygons. Then
-       ~40% of clusters get a single extra link so the field still has the
-       occasional closed shape and never feels uniform. */
-    var edges = new Set();
-    if (stars.length > 1) {
-      var inTree = [0];
-      var remaining = [];
-      for (var ri = 1; ri < stars.length; ri++) remaining.push(ri);
-      while (remaining.length) {
-        var best = { d: Infinity, from: 0, to: remaining[0], rj: 0 };
-        for (var ti = 0; ti < inTree.length; ti++) {
-          for (var rj = 0; rj < remaining.length; rj++) {
-            var a = stars[inTree[ti]], b = stars[remaining[rj]];
-            var dx = a.x - b.x, dy = a.y - b.y;
-            var dd = dx*dx + dy*dy;
-            if (dd < best.d) { best = { d: dd, from: inTree[ti], to: remaining[rj], rj: rj }; }
-          }
-        }
-        var key = best.from < best.to ? best.from + '-' + best.to : best.to + '-' + best.from;
-        edges.add(key);
-        inTree.push(best.to);
-        remaining.splice(best.rj, 1);
-      }
-      if (stars.length >= 3 && Math.random() < 0.4) {
-        var i1 = Math.floor(Math.random() * stars.length);
-        var second = stars
-          .map(function (s, idx) {
-            if (idx === i1) return null;
-            var ex = s.x - stars[i1].x, ey = s.y - stars[i1].y;
-            return { idx: idx, d: ex*ex + ey*ey };
-          })
-          .filter(Boolean)
-          .sort(function (a, b) { return a.d - b.d; })[1];
-        if (second) {
-          edges.add(i1 < second.idx ? i1 + '-' + second.idx : second.idx + '-' + i1);
-        }
-      }
-    }
-    edges.forEach(function (key) {
-      var parts = key.split('-');
-      var a = stars[+parts[0]], b = stars[+parts[1]];
-      var line = document.createElementNS(SVG_NS, 'line');
-      line.setAttribute('x1', a.x); line.setAttribute('y1', a.y);
-      line.setAttribute('x2', b.x); line.setAttribute('y2', b.y);
-      line.setAttribute('class', 'hero-cluster-line');
-      g.appendChild(line);
-    });
-
-    /* Stars on top of lines, per-star opacity blends them into the cream */
-    stars.forEach(function (s) {
-      var star = document.createElementNS(SVG_NS, 'circle');
-      star.setAttribute('cx', s.x); star.setAttribute('cy', s.y);
-      star.setAttribute('r', s.baseR);
-      star.setAttribute('class', 'hero-cluster-star');
-      star.style.opacity = (s.prominent ? 0.30 : 0.13) + s.depth * 0.18;
-      g.appendChild(star);
-    });
-
-    svg.appendChild(g);
-
-    clusters.push({
-      group: g,
-      cx: center.x, cy: center.y,
-      /* Two independent sine waves drive X / Y drift → Lissajous-style float */
-      driftAmpX: 4 + Math.random() * 7,
-      driftAmpY: 4 + Math.random() * 7,
-      driftSpeedX: 0.00022 + Math.random() * 0.00038,
-      driftSpeedY: 0.00022 + Math.random() * 0.00038,
-      driftPhaseX: Math.random() * Math.PI * 2,
-      driftPhaseY: Math.random() * Math.PI * 2,
-      driftX: 0, driftY: 0,
-      pullX: 0,  pullY: 0,
-      active: false
-    });
-  }
-
-  /* ── SOLO STARS ─────────────────────────────────────────────────────── */
-  var solos = [];
-  for (var i = 0; i < SOLO_COUNT; i++) {
-    var pos = randPos(CENTER_AVOID);
-    if (!pos) continue;
-    var depth = Math.random();
-    /* One in eight solos is bigger/brighter — gives the field a few standouts */
-    var prominent = Math.random() < 0.12;
-    var r = prominent ? 1.4 + Math.random() * 0.9 : 0.4 + Math.random() * 0.8;
-    var el = document.createElementNS(SVG_NS, 'circle');
-    el.setAttribute('cx', pos.x); el.setAttribute('cy', pos.y);
-    el.setAttribute('r', r);
-    el.setAttribute('class', 'hero-solo-star');
-    el.style.opacity = (prominent ? 0.30 : 0.10) + depth * 0.14;
-    svg.appendChild(el);
-    solos.push({
-      el: el,
-      x: pos.x, y: pos.y,
-      driftAmpX: 2 + Math.random() * 5,
-      driftAmpY: 2 + Math.random() * 5,
-      driftSpeedX: 0.00018 + Math.random() * 0.00032,
-      driftSpeedY: 0.00018 + Math.random() * 0.00032,
-      driftPhaseX: Math.random() * Math.PI * 2,
-      driftPhaseY: Math.random() * Math.PI * 2,
-      driftX: 0, driftY: 0,
-      pullX: 0,  pullY: 0,
-      active: false
-    });
-  }
-
-  /* ── CURSOR + ANIMATION LOOP ───────────────────────────────────────── */
-  var hero = document.querySelector('.home-hero');
-  var cursor = { x: null, y: null };
-
-  function clientToSvg(x, y) {
-    var pt = svg.createSVGPoint();
-    pt.x = x; pt.y = y;
-    var ctm = svg.getScreenCTM();
-    if (!ctm) return null;
-    return pt.matrixTransform(ctm.inverse());
-  }
-
-  if (hero) {
-    hero.addEventListener('mousemove', function (e) {
-      var p = clientToSvg(e.clientX, e.clientY);
-      if (!p) return;
-      cursor.x = p.x; cursor.y = p.y;
-    });
-    hero.addEventListener('mouseleave', function () {
-      cursor.x = null; cursor.y = null;
-    });
-  }
-
-  /* Compute the desired pull TARGET for an entity. The entity then smoothly
-     interpolates its current pull toward that target every frame, so when the
-     cursor is held still, distant clusters keep gradually closing in. */
-  function computeTarget(naturalX, naturalY) {
-    if (cursor.x === null) return { tx: 0, ty: 0, active: false };
-    var dx = cursor.x - naturalX, dy = cursor.y - naturalY;
-    var d = Math.sqrt(dx*dx + dy*dy);
-    if (d >= ATTRACT_RADIUS) return { tx: 0, ty: 0, active: false };
-    /* Target offset = direction toward cursor, capped at MAX_PULL.
-       If cursor is within MAX_PULL, the entity will eventually reach it.
-       If cursor is farther, the entity gets within MAX_PULL of base. */
-    var reach = Math.min(d, MAX_PULL);
-    return {
-      tx: (d > 0) ? (dx / d) * reach : 0,
-      ty: (d > 0) ? (dy / d) * reach : 0,
-      active: true
-    };
-  }
-
-  var constellationRunning = false;
-  function tick(time) {
-    if (!constellationRunning) return;
-    /* Clusters: drift + LERP-smoothed pull, applied as a single group transform */
-    for (var i = 0; i < clusters.length; i++) {
-      var c = clusters[i];
-      c.driftX = Math.sin(time * c.driftSpeedX + c.driftPhaseX) * c.driftAmpX;
-      c.driftY = Math.sin(time * c.driftSpeedY + c.driftPhaseY) * c.driftAmpY;
-      var target = computeTarget(c.cx + c.driftX, c.cy + c.driftY);
-      /* Interpolate current pull toward target — slow approach. */
-      c.pullX += (target.tx - c.pullX) * LERP_FACTOR;
-      c.pullY += (target.ty - c.pullY) * LERP_FACTOR;
-      var tx = c.driftX + c.pullX, ty = c.driftY + c.pullY;
-      c.group.style.transform = 'translate(' + tx.toFixed(2) + 'px,' + ty.toFixed(2) + 'px)';
-      c.group.classList.toggle('hero-cluster-active', target.active);
-    }
-    /* Solos: drift + LERP-smoothed pull on each circle individually */
-    for (var j = 0; j < solos.length; j++) {
-      var s = solos[j];
-      s.driftX = Math.sin(time * s.driftSpeedX + s.driftPhaseX) * s.driftAmpX;
-      s.driftY = Math.sin(time * s.driftSpeedY + s.driftPhaseY) * s.driftAmpY;
-      var target = computeTarget(s.x + s.driftX, s.y + s.driftY);
-      s.pullX += (target.tx - s.pullX) * LERP_FACTOR;
-      s.pullY += (target.ty - s.pullY) * LERP_FACTOR;
-      var sx = s.driftX + s.pullX, sy = s.driftY + s.pullY;
-      s.el.style.transform = 'translate(' + sx.toFixed(2) + 'px,' + sy.toFixed(2) + 'px)';
-      s.el.classList.toggle('hero-solo-active', target.active);
-    }
-    requestAnimationFrame(tick);
-  }
-
-  /* Run the loop only while the hero is on screen (mirrors the cert loop) */
-  if (!reducedMotion) {
-    if ('IntersectionObserver' in window && hero) {
-      new IntersectionObserver(function (entries) {
-        var vis = entries[0].isIntersecting;
-        if (vis && !constellationRunning) { constellationRunning = true; requestAnimationFrame(tick); }
-        else if (!vis) { constellationRunning = false; }
-      }, { threshold: 0 }).observe(hero);
-    } else {
-      constellationRunning = true;
-      requestAnimationFrame(tick);
-    }
-  }
-})();
-
-/* ─── STAMP HERO TRIGGER ───────────────────────────────────────────── */
-/* Two phases:
-   1. ENTRY plays on page load — logo punches in and settles at hover scale.
-   2. FLIGHT plays on the user's first scroll/wheel/touch — logo lifts off,
-      flies around (off-screen and back), taps the cert, spins, disappears.
-   If the user scrolls before entry finishes, flight is queued and starts
-   when entry's animationend event fires. */
-(function () {
-  var stage = document.getElementById('stamp-stage');
-  var seal = stage && stage.querySelector('.stamp-seal');
-  if (!stage || !seal) return;
-
-  /* Reduced motion — final state pinned via CSS @media; no flight, no tilt.
-     The flip buttons still work: they toggle the face swap directly. */
+  /* Reduced motion — cert shown at rest via CSS; no tilt. The flip buttons
+     still work: they toggle the face swap directly. */
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
     var rmCert = stage.querySelector('.cert-doc');
     if (rmCert) {
@@ -2198,43 +2562,9 @@
     return;
   }
 
-  var entryComplete = false;
-  var flightStarted = false;
-  var flightQueued  = false;
+  /* No flight phase — start the interactive resting state right away. */
+  initCertInteraction();
 
-  function startFlight() {
-    if (flightStarted) return;
-    flightStarted = true;
-    stage.classList.remove('stamp-entered');
-    stage.classList.remove('stamp-idle');
-    stage.classList.add('stamp-flying');
-  }
-
-  function tryFlight() {
-    if (flightStarted) return;
-    if (entryComplete) startFlight();
-    else flightQueued = true;
-  }
-
-  /* Detect entry completion via animationend on the seal */
-  seal.addEventListener('animationend', function (e) {
-    if (e.animationName === 'stamp-seal-entry') {
-      entryComplete = true;
-      if (flightQueued) startFlight();
-      else stage.classList.add('stamp-idle');
-    } else if (e.animationName === 'stamp-seal-flight') {
-      /* Flight done: the seal has vanished and the cert is resting. Hand the
-         cert over to the interactive tilt / grab-spin / flip state. */
-      stage.classList.add('stamp-done');
-      initCertInteraction();
-    }
-  });
-
-  /* ── Interactive resting state ──────────────────────────────────────────
-     After the stamp lands the cert becomes a physical object you can play
-     with: it tilts in 3D with a light-catching sheen + layer parallax
-     (desktop hover / mobile gyro), you can grab and spin it with momentum,
-     and a click — or a spin past 90° — flips it to the verification face. ── */
   var interactionInited = false;
   function initCertInteraction() {
     if (interactionInited) return;
@@ -2242,7 +2572,7 @@
 
     var cert = stage.querySelector('.cert-doc');
     if (!cert) return;
-    var hero = stage.closest('.home-hero') || stage;
+    var hero = stage;
 
     var MAX_TILT  = 9;     // hover tilt at the edges (deg)
     var GYRO_TILT = 14;    // gyro tilt range (deg)
@@ -2292,6 +2622,7 @@
     });
     window.addEventListener('pointermove', function(e){
       if (!dragging || (ptr != null && e.pointerId !== ptr)) return;
+      if (!stage.classList.contains('is-expanded')) return;  // tiled: not grab-rotatable; a click expands it (see endDrag)
       if (!moved){
         if (Math.hypot(e.clientX - sx, e.clientY - sy) <= 6) return;
         moved = true; mode = 'drag';
@@ -2313,7 +2644,14 @@
       try { cert.releasePointerCapture(ptr); } catch(_){}
       cert.classList.remove('is-grabbing');
       ptr = null;
-      if (!moved && !cancel) { flipCard(); mode = 'hover'; }   // a click flips it
+      if (!moved && !cancel) {                                 // a click:
+        if (stage.classList.contains('is-expanded')) { flipCard(); }  // expanded → flip
+        else {                                                        // tiled → open it (then it's grab-rotatable)
+          var xb = document.querySelector('.sc-expand[data-expands="sc-cert-stage"]');
+          if (xb) xb.click();
+        }
+        mode = 'hover';
+      }
       else if (moved)        { mode = 'fling'; }               // a drag throws it
       else                   { mode = 'hover'; }
     }
@@ -2354,6 +2692,14 @@
     var running = true;
     function frame(t){
       if (!running) return;
+
+      // Back in the card (not expanded): the cert is a front-facing preview.
+      // Clear any flip/fling left over from the modal so it never returns facing
+      // away (front hidden + back pointing away = an empty-looking tile).
+      if (!stage.classList.contains('is-expanded') && flipped) {
+        flipped = false; ry = 0; velY = 0; mode = 'hover';
+        cert.classList.remove('cert-show-back');
+      }
 
       if (mode === 'hover'){
         var tX, tY;
@@ -2421,28 +2767,6 @@
 
     requestAnimationFrame(frame);
   }
-
-  /* Kick off entry shortly after load so the constellation has settled first */
-  window.addEventListener('load', function () {
-    setTimeout(function () { stage.classList.add('stamp-entered'); }, 200);
-  });
-
-  /* First scroll/wheel/touch triggers the flight phase */
-  var scrollEvents = ['scroll', 'wheel', 'touchmove'];
-  scrollEvents.forEach(function (ev) {
-    window.addEventListener(ev, tryFlight, { passive: true });
-  });
-
-  /* Clicking the seal also triggers it — the idle bounce invites the tap.
-     (pointer-events on the seal are enabled by the .stamp-idle CSS.) */
-  seal.addEventListener('click', tryFlight);
-  window.addEventListener('keydown', function (e) {
-    var k = e.key;
-    if (k === 'ArrowDown' || k === 'ArrowUp' || k === 'PageDown' || k === 'PageUp' ||
-        k === ' ' || k === 'Home' || k === 'End') {
-      tryFlight();
-    }
-  });
 })();
 
 /* ─── FIREWORK SHOWCASE (13 areas, instrument-panel interaction) ──── */
@@ -3059,24 +3383,43 @@
   }
 })();
 
-/* ─── CURSOR GLOW ─────────────────────────────────────────── */
-(function() {
-  var glow = document.querySelector('.hero-cursor-glow');
-  var hero = document.querySelector('.home-hero');
-  if (!glow || !hero) return;
-  hero.addEventListener('mousemove', function(e) {
-    var rect = hero.getBoundingClientRect();
-    glow.style.setProperty('--glow-x', (e.clientX - rect.left) + 'px');
-    glow.style.setProperty('--glow-y', (e.clientY - rect.top) + 'px');
-  });
-})();
-
 // Mobile menu toggle
 document.querySelector('.gn-hamburger').addEventListener('click', function() {
   this.classList.toggle('open');
   document.querySelector('.gn-links').classList.toggle('open');
   this.setAttribute('aria-expanded', this.classList.contains('open'));
   document.body.style.overflow = this.classList.contains('open') ? 'hidden' : '';
+});
+
+// Nav dropdowns (Company / Briefings) — click to toggle, click-away/other-toggle closes
+document.querySelectorAll('.gn-dropdown-toggle').forEach(function (btn) {
+  btn.addEventListener('click', function (e) {
+    e.stopPropagation();
+    var dd = this.closest('.gn-dropdown');
+    var menu = dd.querySelector('.gn-dropdown-menu');
+    var isOpen = dd.classList.contains('open');
+    document.querySelectorAll('.gn-dropdown').forEach(function (d) {
+      d.classList.remove('open');
+      var m = d.querySelector('.gn-dropdown-menu');
+      if (m) m.style.display = 'none';
+      var t = d.querySelector('.gn-dropdown-toggle');
+      if (t) t.setAttribute('aria-expanded', 'false');
+    });
+    if (!isOpen) {
+      dd.classList.add('open');
+      menu.style.display = 'block';
+      this.setAttribute('aria-expanded', 'true');
+    }
+  });
+});
+document.addEventListener('click', function () {
+  document.querySelectorAll('.gn-dropdown').forEach(function (d) {
+    d.classList.remove('open');
+    var m = d.querySelector('.gn-dropdown-menu');
+    if (m) m.style.display = 'none';
+    var t = d.querySelector('.gn-dropdown-toggle');
+    if (t) t.setAttribute('aria-expanded', 'false');
+  });
 });
 
 </script>
@@ -3218,23 +3561,19 @@ document.querySelector('.gn-hamburger').addEventListener('click', function() {
       var safeUrl = encodeURI(item.url || '#');
       var safeDate = escapeHtml(item.date || '');
       var safeTitle = item.title || '';
-      var safeType = escapeHtml(item.type || meta.label);
+      var safeSource = escapeHtml(meta.sublabel);
 
-      html += '<a href="' + safeUrl + '" target="_blank" rel="noopener" class="news-row">'
-        +   '<div class="news-row-date">' + safeDate + '</div>'
-        +   '<div class="news-row-content">'
-        +     '<div class="news-row-text">'
-        +       '<div class="news-row-headline">' + safeTitle + '</div>'
-        +       '<div class="news-row-summary">' + meta.summary + '</div>'
-        +     '</div>'
-        +     '<div class="news-row-meta">'
-        +       '<span class="news-row-source">' + safeType + '</span>'
-        +       '<span class="news-row-read">Read</span>'
-        +     '</div>'
+      html += '<a href="' + safeUrl + '" target="_blank" rel="noopener" class="na-card">'
+        +   '<div class="na-card-top">'
+        +     '<div class="na-title">' + safeTitle + '</div>'
+        +     '<div class="na-desc">' + meta.summary + '</div>'
         +   '</div>'
-        +   '<div class="news-row-image ' + meta.imageClass + '">'
-        +     constellationSvg(SOURCE_SEED[key] || 7)
-        +     '<span class="news-row-image-label">' + escapeHtml(meta.sublabel) + '</span>'
+        +   '<div class="na-card-foot">'
+        +     '<div class="na-meta">'
+        +       '<div class="na-row"><span class="na-k">Date</span><span class="na-v">' + safeDate + '</span></div>'
+        +       '<div class="na-row"><span class="na-k">Source</span><span class="na-v">' + safeSource + '</span></div>'
+        +     '</div>'
+        +     '<span class="na-cta">Read <span aria-hidden="true">&rarr;</span></span>'
         +   '</div>'
         + '</a>';
     });
@@ -3474,5 +3813,284 @@ document.querySelector('.gn-hamburger').addEventListener('click', function() {
   });
 </script>
 <script src="/footer.js" defer></script>
+<script>
+/* Home-only nav wordmark collapse: full "SAFETY CRITICAL LABS" at the top,
+   "SCL" once scrolled past 40px. Toggles .gn-compact; CSS handles the fade. */
+(function () {
+  var nav = document.querySelector('.global-nav');
+  if (!nav) return;
+  var THRESHOLD = 40, compact = false;
+  function update() {
+    var should = window.scrollY > THRESHOLD;
+    if (should !== compact) { compact = should; nav.classList.toggle('gn-compact', compact); }
+  }
+  window.addEventListener('scroll', update, { passive: true });
+  update();
+})();
+</script>
+<script>
+/* Home-only showcase cards: the Expand button lifts the SAME live component
+   (cert stage or firework container) into a floating modal; backdrop / close
+   button / Escape restore it in place. No duplication of the interactive. */
+(function () {
+  var body = document.body,
+      backdrop = document.getElementById('sc-modal-backdrop'),
+      open = null;
+  function close() {
+    if (!open) return;
+    open.classList.remove('is-expanded');
+    body.classList.remove('sc-modal-open');
+    open = null;
+  }
+  function show(id) {
+    var el = document.getElementById(id);
+    if (!el) return;
+    close();
+    el.classList.add('is-expanded');
+    body.classList.add('sc-modal-open');
+    open = el;
+  }
+  document.querySelectorAll('.sc-expand').forEach(function (b) {
+    b.addEventListener('click', function (e) {
+      e.stopPropagation();
+      show(b.getAttribute('data-expands'));
+    });
+  });
+  document.querySelectorAll('.sc-modal-close').forEach(function (b) {
+    b.addEventListener('click', close);
+  });
+  if (backdrop) backdrop.addEventListener('click', close);
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') close(); });
+})();
+</script>
+<div class="sc-modal-backdrop" id="sc-modal-backdrop"></div>
+<script>
+/* Firework: a 3D particle burst of the 13 requirement areas. The CARD spins a
+   fibonacci sphere (teaser). The EXPANDED modal settles the same sparks into a
+   readable, labeled 3D burst (gentle wobble) with always-on requirement labels
+   that track each dot; click any spark or label for its explanation. */
+(function () {
+  var scene = document.getElementById('fw3d-scene');
+  if (!scene) return;
+  var showcase = document.getElementById('fw-showcase');
+  var fw3d = scene.parentNode;
+  var labelsHost = document.getElementById('fw3d-labels');
+  var detail = document.getElementById('fw3d-detail');
+  var dId = document.getElementById('fw3d-d-id');
+  var dTitle = document.getElementById('fw3d-d-title');
+  var dPrevents = document.getElementById('fw3d-d-prevents');
+  var dClose = document.getElementById('fw3d-detail-close');
+
+  var AREAS = [
+    { id: 'AI-1',  label: 'Operational and data foundations', prevents: 'A system evaluated on data it effectively trained on, reporting skill it does not have outside its declared operating domain.' },
+    { id: 'AI-2',  label: 'Addressing AI bias', prevents: 'Outcomes that are systematically worse for some users because the training data encoded a historical bias.' },
+    { id: 'AI-3',  label: 'ML test coverage', prevents: 'Strong average performance that hides untested edge cases, boundary conditions, and injected failure modes.' },
+    { id: 'AI-4',  label: 'Continuous validation', prevents: 'A model accurate at deployment quietly drifting wrong as the world changes around it.' },
+    { id: 'AI-5',  label: 'Hallucination prevention', prevents: 'An AI stating fabricated facts, policies, or values with the same confidence as correct ones.' },
+    { id: 'AI-6',  label: 'Out of distribution detection', prevents: 'The model meeting an input unlike anything it was trained on and responding as if it were routine.' },
+    { id: 'AI-7',  label: 'Adversarial robustness', prevents: 'Inputs, training data, or the model itself manipulated by an adversary to force a chosen failure.' },
+    { id: 'AI-8',  label: 'Explainability', prevents: 'A safety-critical decision that cannot be inspected, questioned, or justified after the fact.' },
+    { id: 'AI-9',  label: 'Human and AI teaming', prevents: 'Operators who over-trust, under-trust, or lose the authority to override the AI when it matters.' },
+    { id: 'AI-10', label: 'Privacy and data protection', prevents: 'Personal or protected data exposed, retained, or transferred without lawful basis or control.' },
+    { id: 'AI-11', label: 'Multi-model systems', prevents: 'One model’s error cascading through a chain of models into a system-level failure.' },
+    { id: 'AI-12', label: 'Neural network requirements', prevents: 'Network-specific failures: miscalibrated confidence, brittle features, and unverified deployment transforms.' },
+    { id: 'AI-13', label: 'Continuous learning and adaptation', prevents: 'A model that keeps learning after deployment teaching itself the wrong thing, unnoticed.' }
+  ];
+
+  var N = AREAS.length, GOLDEN = 137.50776;
+  var sparks = [];
+  for (var i = 0; i < N; i++) {
+    var t = (i + 0.5) / N;
+    var pitch = Math.asin(2 * t - 1) * 180 / Math.PI;   // elevation -90..90
+    var yaw = (i * GOLDEN) % 360;                        // azimuth
+    var r = 92 + (i % 4) * 22;                           // reach 92..158
+    var size = 6 + (i % 3) * 2;                          // dot 6/8/10
+    var hue = Math.round((205 + i * (300 / N)) % 360);   // spectrum across the 13
+    var ringA = i * (360 / N);                           // expanded: even ring angle
+    var depthTilt = Math.round(18 * Math.sin(ringA * Math.PI / 180)); // smooth depth wave (neighbors tilt alike)
+    var spark = document.createElement('div');
+    spark.className = 'fw3d-spark';
+    // Two layouts, switched by CSS via .is-expanded: card = fibonacci sphere,
+    // expanded = spread ring (labels never collide) with a little depth.
+    spark.style.setProperty('--tf-card', 'rotateY(' + yaw.toFixed(2) + 'deg) rotateZ(' + pitch.toFixed(2) + 'deg)');
+    spark.style.setProperty('--tf-exp', 'rotateY(' + depthTilt + 'deg) rotateZ(' + ringA.toFixed(2) + 'deg)');
+    var ray = document.createElement('div');
+    ray.className = 'fw3d-ray';
+    ray.style.width = r + 'px';
+    ray.style.background = 'linear-gradient(90deg, rgba(12,22,38,0.72), rgba(12,22,38,0.14) 82%, transparent)';   /* rays near-black; only the nodes keep colour */
+    var dot = document.createElement('div');
+    dot.className = 'fw3d-dot';
+    dot.style.left = r + 'px';
+    dot.style.width = size + 'px';
+    dot.style.height = size + 'px';
+    dot.style.background = 'hsl(' + hue + ',44%,52%)';   /* muted, standard palette (was neon 72%) */
+    dot.style.boxShadow = '0 0 5px hsla(' + hue + ',44%,52%,0.28)';
+    spark.appendChild(ray);
+    spark.appendChild(dot);
+    scene.appendChild(spark);
+    var lbl = document.createElement('div');
+    lbl.className = 'fw3d-lbl';
+    var lid = document.createElement('span'); lid.className = 'l-id'; lid.textContent = AREAS[i].id;
+    var lnm = document.createElement('span'); lnm.className = 'l-name'; lnm.textContent = AREAS[i].label;
+    lbl.appendChild(lid); lbl.appendChild(lnm);
+    labelsHost.appendChild(lbl);
+    sparks.push({ spark: spark, dot: dot, label: lbl, area: AREAS[i] });
+  }
+
+  /* ---- Interaction (only live in the expanded modal; pointer-events gated by CSS) ---- */
+  var hot = null, selected = null;
+  function updatePause() { scene.classList.toggle('is-paused', !!(hot || selected)); }
+
+  function setHot(rec, on) {
+    if (on) hot = rec; else if (hot === rec) hot = null;
+    rec.dot.classList.toggle('is-hot', on);
+    rec.label.classList.toggle('is-hot', on);
+    updatePause();
+  }
+  function openDetail(rec) {
+    selected = rec;
+    dId.textContent = rec.area.id;
+    dTitle.textContent = rec.area.label;
+    dPrevents.textContent = rec.area.prevents;
+    detail.classList.add('is-on');
+    showcase.classList.add('has-selection');
+    sparks.forEach(function (s) { var on = (s === rec); s.spark.classList.toggle('is-sel', on); s.label.classList.toggle('is-sel', on); });
+    updatePause();
+  }
+  function closeDetail() {
+    selected = null;
+    detail.classList.remove('is-on');
+    showcase.classList.remove('has-selection');
+    sparks.forEach(function (s) { s.spark.classList.remove('is-sel'); s.label.classList.remove('is-sel'); });
+    updatePause();
+  }
+
+  sparks.forEach(function (rec) {
+    [rec.dot, rec.label].forEach(function (el) {
+      el.addEventListener('mouseenter', function () { setHot(rec, true); });
+      el.addEventListener('mouseleave', function () { setHot(rec, false); });
+      el.addEventListener('click', function (e) { e.stopPropagation(); if (selected === rec) closeDetail(); else openDetail(rec); });
+    });
+  });
+  if (dClose) dClose.addEventListener('click', function (e) { e.stopPropagation(); closeDetail(); });
+  fw3d.addEventListener('click', function (e) { if (e.target === fw3d || e.target === scene) closeDetail(); });
+
+  /* ---- Labels track their dots each frame while the modal is open ---- */
+  var rafId = null;
+  function layoutLabels() {
+    var host = showcase.getBoundingClientRect();
+    var cx = host.width / 2, cy = host.height / 2, pos = [];
+    for (var k = 0; k < sparks.length; k++) {
+      var d = sparks[k].dot.getBoundingClientRect();
+      pos.push([d.left + d.width / 2 - host.left, d.top + d.height / 2 - host.top]);
+    }
+    for (var j = 0; j < sparks.length; j++) {
+      var x = pos[j][0], y = pos[j][1], dx = x - cx, dy = y - cy, len = Math.sqrt(dx * dx + dy * dy) || 1;
+      var s = sparks[j].label.style;
+      s.left = (x + dx / len * 26) + 'px';
+      s.top = (y + dy / len * 26) + 'px';
+    }
+  }
+  function tick() {
+    if (!showcase.classList.contains('is-expanded')) { rafId = null; return; }  // self-stop on collapse
+    layoutLabels(); rafId = requestAnimationFrame(tick);
+  }
+  function startTracking() { if (rafId == null) { layoutLabels(); rafId = requestAnimationFrame(tick); } }
+  function stopTracking() { if (rafId != null) { cancelAnimationFrame(rafId); rafId = null; } }
+
+  // React ONLY when is-expanded actually toggles — not to our own has-selection
+  // class changes (which would otherwise re-enter closeDetail and loop/hang).
+  var wasExp = showcase.classList.contains('is-expanded');
+  new MutationObserver(function () {
+    var isExp = showcase.classList.contains('is-expanded');
+    if (isExp === wasExp) return;
+    wasExp = isExp;
+    if (isExp) startTracking();
+    else { stopTracking(); closeDetail(); }
+  }).observe(showcase, { attributes: true, attributeFilter: ['class'] });
+})();
+</script>
+<script>
+/* Color the EXPANDED firework's requirement dots to match the card's spectrum. */
+(function () {
+  function paint() {
+    var groups = document.querySelectorAll('#fw-canvas .fw-req-group[data-fw-idx]');
+    if (!groups.length) return;
+    groups.forEach(function (g) {
+      var idx = parseInt(g.getAttribute('data-fw-idx'), 10) || 0;
+      var hue = Math.round((205 + idx * (300 / 13)) % 360);
+      var dot = g.querySelector('.fw-dot');
+      if (dot) dot.style.fill = 'hsl(' + hue + ',44%,52%)';
+    });
+  }
+  [250, 800, 1800].forEach(function (t) { setTimeout(paint, t); });
+})();
+</script>
+
+<!-- Cards: scroll-SCRUBBED widen. The grid width tracks scroll position via
+     --expand (0..1) so the cards visibly expand out as you scroll (and narrow on
+     scroll-up). Height is pinned once up front so nothing below shifts. Passive
+     rAF-throttled scroll listener — no IntersectionObserver, no library. -->
+<script>
+(function(){
+  var grid = document.querySelector('.sc-grid-wide');
+  if(!grid) return;
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+  var fw = grid.querySelector('#fw-showcase');
+  var MIN_W = 1360;                 // below this there's no room to grow -> no-op
+  var BEGIN = 0.12, FULL = 0.95;    // expansion runs from BEGIN..FULL of the scroll
+                                    // distance down to the cards: contained at the top
+                                    // of the page, fully wide as they scroll up to you.
+  var ticking = false, curr = -1, anchor = 1;
+
+  function expandable(){ return !reduce.matches && window.innerWidth >= MIN_W; }
+
+  // Freeze the grid's row height + the firework panel's height at the CONTAINED
+  // width, so widening can't change any card's height (news feed stays put). Also
+  // capture the cards' document offset as the scroll anchor for the progress math.
+  function pin(){
+    grid.classList.remove('sc-pinned');
+    grid.style.removeProperty('--sc-rowh');
+    grid.style.removeProperty('--sc-fwh');
+    if(!expandable()) return;
+    grid.style.setProperty('--expand', '0');                          // measure at contained width
+    anchor = Math.max(1, grid.getBoundingClientRect().top + window.scrollY); // cards' document top
+    var gh  = grid.getBoundingClientRect().height;
+    var gap = parseFloat(getComputedStyle(grid).rowGap) || 30;        // .sc-grid gap:30px
+    grid.style.setProperty('--sc-rowh', ((gh - gap) / 2) + 'px');     // 2 rows / 4 cards
+    if(fw) grid.style.setProperty('--sc-fwh', fw.getBoundingClientRect().height + 'px');
+    grid.classList.add('sc-pinned');
+  }
+
+  function smooth(p){ p = p < 0 ? 0 : p > 1 ? 1 : p; return p * p * (3 - 2 * p); }
+
+  function update(){
+    ticking = false;
+    if(!expandable()){ grid.style.setProperty('--expand', '0'); return; }
+    var s0 = anchor * BEGIN, s1 = anchor * FULL;                      // scroll positions for 0..1
+    var p = smooth((window.scrollY - s0) / (s1 - s0));
+    if(Math.abs(p - curr) < 0.004) return;                            // skip redundant writes
+    curr = p;
+    grid.style.setProperty('--expand', p.toFixed(3));
+  }
+  function onScroll(){ if(!ticking){ ticking = true; requestAnimationFrame(update); } }
+
+  function init(){
+    if(reduce.matches){ grid.style.setProperty('--expand', '0'); return; }
+    pin();
+    update();
+  }
+
+  window.addEventListener('scroll', onScroll, { passive: true });
+  var rz;
+  window.addEventListener('resize', function(){
+    clearTimeout(rz);
+    rz = setTimeout(function(){ curr = -1; init(); }, 160);           // re-pin + re-evaluate for new width
+  }, { passive: true });
+
+  if(document.readyState !== 'loading') init();
+  else document.addEventListener('DOMContentLoaded', init);
+})();
+</script>
 </body>
 </html>

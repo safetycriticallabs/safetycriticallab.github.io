@@ -19,7 +19,7 @@
 <link rel="shortcut icon" href="favicon.ico">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=IBM+Plex+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css">
 <style>
 /* ─── CLASSIFICATION KEY ──────────────────────────────────── */
@@ -89,14 +89,14 @@
 }
 .fw-full-grid.filtering .fw-card.highlight-tailored {
   opacity: 0.78;
-  border-color: rgba(200,39,45,0.55);
+  border-color: rgba(12,34,66,0.55);
   border-style: dashed;
   box-shadow: 0 6px 20px rgba(43,108,176,0.08);
   transform: translateY(-1px);
 }
 .fw-full-grid.filtering .fw-card.highlight-tailored .fw-scope {
   background: transparent;
-  color: var(--blue);
+  color: #0C2242;
   border-color: var(--blue);
   border-style: dashed;
 }
@@ -107,8 +107,8 @@
 }
 
 .fw-card {
-  background: #FAF6EC;
-  border: 1px solid rgba(46,109,180,0.10); border-radius: 4px;
+  background: #FAF9F5;
+  border: 1px solid rgba(46,109,180,0.10); border-radius: 14px;
   padding: 28px;
   transition: border-color 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease, opacity 0.2s ease;
   cursor: default; position: relative;
@@ -123,15 +123,15 @@
 .fw-card:hover {
   border-color: rgba(46,109,180,0.30);
   transform: translateY(-3px);
-  box-shadow: 0 12px 30px rgba(46,109,180,0.10);
+  box-shadow: 0 10px 28px rgba(15,35,64,0.10);
 }
 .fw-card:hover::before { height: 100%; }
-.fw-card:hover .fw-card-id { color: var(--blue-dk); }
+.fw-card:hover .fw-card-id { color: #0C2242; }
 .fw-card-id { transition: color 0.25s ease; }
 
 .fw-card-id {
   font-family: var(--mono); font-size: 13px;
-  color: var(--blue); letter-spacing: 0.1em;
+  color: #0C2242; letter-spacing: 0.1em;
   margin-bottom: 12px; font-weight: 500;
 }
 
@@ -161,9 +161,7 @@
 
 /* ─── STRUCTURE EXPLAINER ─────────────────────────────────── */
 .structure-section {
-  background:
-    radial-gradient(ellipse at 50% 0%, rgba(46,109,180,0.07) 0%, transparent 55%),
-    linear-gradient(180deg, #F4EFE5 0%, #ECE7DB 100%);
+  background: #FAF9F5;
   padding: 110px 40px 130px;
   border-top: 1px solid rgba(46,109,180,0.10);
   position: relative;
@@ -171,7 +169,7 @@
 .structure-section::after {
   content: ''; position: absolute; bottom: 0; left: 0; right: 0;
   height: 140px;
-  background: linear-gradient(to bottom, transparent, #F7F3EC);
+  background: linear-gradient(to bottom, transparent, #FAF9F5);
   pointer-events: none;
 }
 
@@ -183,23 +181,23 @@
 }
 
 .struct-col {
-  background: #FAF6EC;
+  background: #FAF9F5;
   border: 1px solid rgba(46,109,180,0.10);
   padding: 32px 28px;
-  border-radius: 4px;
+  border-radius: 14px;
   transition: border-color 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
   position: relative;
 }
 .struct-col:hover {
   border-color: rgba(46,109,180,0.28);
   transform: translateY(-3px);
-  box-shadow: 0 12px 30px rgba(46,109,180,0.10);
+  box-shadow: 0 10px 28px rgba(15,35,64,0.10);
 }
 
 .struct-col-title {
   font-family: var(--sans); font-size: 11px;
   font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase;
-  color: var(--blue); margin-bottom: 10px;
+  color: #0C2242; margin-bottom: 10px;
 }
 
 .struct-col-name {
@@ -228,22 +226,18 @@
   background: transparent;
   border-style: dashed;
   border-color: rgba(46,109,180,0.45);
-  color: var(--blue);
+  color: #0C2242;
 }
 
 /* ─── AI-1..AI-13 CARD SECTION ────────────────────────────── */
 .fw-card-section {
-  background:
-    radial-gradient(ellipse at 50% 0%, rgba(46,109,180,0.05) 0%, transparent 50%),
-    #F7F3EC;
+  background: #FAF9F5;
   position: relative;
 }
 
 /* ─── PUBLISHED STANDARD BAND ─────────────────────────────── */
 .pub-standard-band {
-  background:
-    radial-gradient(ellipse at 70% 50%, rgba(46,109,180,0.05) 0%, transparent 60%),
-    linear-gradient(180deg, #F4EFE5 0%, #ECE7DB 100%);
+  background: #FAF9F5;
   padding: 110px 40px 130px;
   border-top: 1px solid rgba(46,109,180,0.10);
   position: relative;
@@ -256,16 +250,16 @@
 }
 .pub-standard-rows { display: flex; flex-direction: column; gap: 12px; }
 .pub-standard-row {
-  background: #FAF6EC;
+  background: #FAF9F5;
   border: 1px solid rgba(46,109,180,0.12);
-  border-radius: 4px; padding: 20px 24px;
+  border-radius: 14px; padding: 20px 24px;
   display: grid; grid-template-columns: 72px 1fr; gap: 16px;
   align-items: center;
 }
 .pub-standard-row-label {
   font-family: var(--sans); font-size: 11px;
   font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase;
-  color: var(--blue);
+  color: #0C2242;
 }
 .pub-standard-row-value {
   font-size: 14px; color: var(--ink-2); line-height: 1.5;
@@ -274,9 +268,7 @@
 
 /* ─── OPEN STANDARD BAND ──────────────────────────────────── */
 .open-standard-band {
-  background:
-    radial-gradient(ellipse at 30% 50%, rgba(46,109,180,0.06) 0%, transparent 55%),
-    #F7F3EC;
+  background: #FAF9F5;
   border-top: 1px solid rgba(46,109,180,0.10);
   border-bottom: 1px solid rgba(46,109,180,0.10);
   padding: 110px 40px;
@@ -285,16 +277,16 @@
 .open-standard-band::after {
   content: ''; position: absolute; bottom: 0; left: 0; right: 0;
   height: 140px;
-  background: linear-gradient(to bottom, transparent, #F4EFE5);
+  background: linear-gradient(to bottom, transparent, #FAF9F5);
   pointer-events: none;
 }
 .open-standard-band .os-inner { position: relative; z-index: 1; }
 .os-left h2 em {
-  font-family: var(--serif);
-  font-style: italic;
-  font-weight: 400;
-  color: var(--blue-dk);
-  font-size: 1.05em;
+  font-family: inherit;
+  font-size: inherit !important;
+  font-weight: inherit !important;
+  font-style: normal !important;
+  color: inherit !important;
 }
 
 /* Transition bridge to /process */
@@ -328,18 +320,18 @@
 .os-right { display: flex; flex-direction: column; gap: 12px; }
 
 .os-item {
-  background: #FAF6EC; border: 1px solid rgba(46,109,180,0.12);
-  border-radius: 4px; padding: 18px 22px;
+  background: #FAF9F5; border: 1px solid rgba(46,109,180,0.12);
+  border-radius: 14px; padding: 18px 22px;
   display: grid; grid-template-columns: 80px 1fr; gap: 16px;
 }
 
 .os-item-label {
   font-family: var(--sans); font-size: 11px;
   font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase;
-  color: var(--blue); padding-top: 2px;
+  color: #0C2242; padding-top: 2px;
 }
 .os-item-val { font-size: 14px; color: var(--ink-2); line-height: 1.5; }
-.os-item-val a { color: var(--blue); text-decoration: none; }
+.os-item-val a { color: #0C2242; text-decoration: none; }
 .os-item-val a:hover { text-decoration: underline; }
 
 @media (max-width: 880px) {
@@ -362,7 +354,7 @@
   font-weight: 500;
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: rgba(46,109,180,0.6);
+  color: rgba(12,34,66,0.6);
   margin-bottom: 20px;
 }
 
@@ -373,15 +365,15 @@
   font-weight: 600;
   line-height: 1.08;
   letter-spacing: -0.025em;
-  color: var(--blue);
+  color: #0C2242;
   margin-bottom: 20px;
 }
 .fw-showcase-title em {
-  font-family: var(--serif);
-  font-style: italic;
-  font-weight: 400;
-  font-size: 1.05em;
-  color: var(--blue-dk);
+  font-family: inherit;
+  font-size: inherit !important;
+  font-weight: inherit !important;
+  font-style: normal !important;
+  color: inherit !important;
 }
 
 /* ─── HERO ENHANCEMENTS (cursor glow + constellation) ─────── */
@@ -444,7 +436,7 @@
 }
 .failmode-map a {
   font-family: var(--mono); font-size: 12px; font-weight: 500;
-  letter-spacing: 0.05em; color: var(--blue);
+  letter-spacing: 0.05em; color: #0C2242;
   background: var(--blue-lt); border-radius: 4px;
   padding: 4px 9px; text-decoration: none; white-space: nowrap;
   transition: background 0.2s ease;
@@ -477,11 +469,23 @@
     <ul class="gn-links">
       <li><a href="/framework" class="active">Framework</a></li>
       <li><a href="/process">Process</a></li>
-      <li><a href="/expertise">Expertise</a></li>
-      <li><a href="/markets">Markets</a></li>
-      <li><a href="/position">Position</a></li>
-      <li><a href="/news">News</a></li>
-      <li class="gn-mobile-link"><a href="/contact">Contact</a></li>
+      <li class="gn-dropdown">
+        <button class="gn-dropdown-toggle" type="button" aria-expanded="false" aria-haspopup="true">Company <span class="gn-dropdown-arrow" aria-hidden="true"></span></button>
+        <ul class="gn-dropdown-menu">
+          <li><a href="/position">Position</a></li>
+          <li><a href="/expertise">Expertise</a></li>
+          <li><a href="/markets">Markets</a></li>
+          <li><a href="/contact">Contact</a></li>
+        </ul>
+      </li>
+      <li class="gn-dropdown">
+        <button class="gn-dropdown-toggle" type="button" aria-expanded="false" aria-haspopup="true">Briefings <span class="gn-dropdown-arrow" aria-hidden="true"></span></button>
+        <ul class="gn-dropdown-menu">
+          <li><a href="/news">News</a></li>
+          <li><a href="/updates">Updates</a></li>
+          <li><a href="/subscribe">Subscribe</a></li>
+        </ul>
+      </li>
     </ul>
     <a href="/search" class="gn-search" aria-label="Search">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -504,7 +508,7 @@
         <a href="/">Safety Critical Labs</a>
         <span>/</span> The Framework
       </div>
-      <h1>Thirteen requirement<br>areas. Every <em>AI<br>failure mode</em> covered.</h1>
+      <h1>Thirteen requirement<br>areas. Every AI<br>failure mode covered.</h1>
     </div>
     <p class="inner-hero-lead">
       The SCL AI Requirements Framework establishes verifiable, pass/fail requirements for each AI specific failure mode not addressed by existing safety critical software standards. Requirements are defined by the failures they prevent, not the capabilities they enable. Algorithm agnostic. Domain applicable. Openly published under a citable DOI.
@@ -517,7 +521,7 @@
   <div class="section-inner">
     <div class="fw-eyebrow-mono">[ Framework v3.4 ]</div>
     <div style="display:flex; justify-content:space-between; align-items:flex-end; gap: 32px; margin-bottom: 48px; flex-wrap: wrap;">
-      <h2 class="section-title" style="margin-bottom:0;">AI-1 through <em>AI-13</em></h2>
+      <h2 class="section-title" style="margin-bottom:0;">AI-1 through AI-13</h2>
       <div class="class-key" role="group" aria-label="Filter requirements by classification tier">
         <div class="class-item" data-tier="safety" role="button" tabindex="0" aria-pressed="false"><span class="class-dot dot-safety-tier"></span>Safety Critical</div>
         <div class="class-item" data-tier="mission" role="button" tabindex="0" aria-pressed="false"><span class="class-dot dot-mission-tier"></span>Mission Critical</div>
@@ -603,7 +607,7 @@
 <section class="page-section failmode-section">
   <div class="section-inner">
     <div class="fw-eyebrow-mono">[ Requirements Defined by Failure ]</div>
-    <h2 class="section-title" style="margin-bottom: 16px;">The failures these<br>requirements <em>target.</em></h2>
+    <h2 class="section-title" style="margin-bottom: 16px;">The failures these<br>requirements target.</h2>
     <p style="font-size:16px;color:var(--ink-2);font-weight:300;line-height:1.75;max-width:640px;">
       Each requirement area exists because a class of AI failure has already happened in the field. These are documented public cases, each mapped to the area written to catch that failure mode. The mapping names the target. It does not claim any outcome would have changed.
     </p>
@@ -664,7 +668,7 @@
 <div class="structure-section">
   <div class="struct-inner">
     <div class="fw-eyebrow-mono">[ Classification Levels ]</div>
-    <h2 class="fw-showcase-title">Three tiers. Scaled to <em>consequence.</em></h2>
+    <h2 class="fw-showcase-title">Three tiers. Scaled to consequence.</h2>
     <p style="font-size:16px;color:var(--ink-2);font-weight:300;line-height:1.75;max-width:560px;margin-top:0;">
       The framework applies all thirteen requirement areas at different depths depending on the classification of your AI system. Core requirements (AI-1 through AI-10) apply based on classification tier. Architecture and paradigm requirements (AI-11 through AI-13) apply conditionally based on system design. Classification is determined during Phase 1 of the assessment.
     </p>
@@ -738,7 +742,7 @@
   <div class="os-inner">
     <div class="os-left">
       <div class="fw-eyebrow-mono">[ What Assessment Produces ]</div>
-      <h2>A binary determination.<br>A documented <em>risk score.</em></h2>
+      <h2>A binary determination.<br>A documented risk score.</h2>
       <p>
         Assessment against this framework produces one of two outcomes, accompanied by a quantified risk score. Each determination is documented against a specific version of the framework, at a defined classification level, with every finding on record. There is no maturity index and no subjective rating.
       </p>
@@ -749,7 +753,7 @@
         <span class="os-item-label" style="color: #2D7A3A;">Certified</span>
         <span class="os-item-val">All applicable requirements met. Certificate issued with a validity period and a scheduled surveillance audit.</span>
       </div>
-      <div class="os-item" style="border-left: 3px solid var(--blue);">
+      <div class="os-item" style="border-left: 3px solid #0C2242;">
         <span class="os-item-label">Not Certified</span>
         <span class="os-item-val">One or more requirements not met. Findings documented. Remediation and re-assessment required. A Determination Document is issued regardless of outcome.</span>
       </div>
@@ -769,7 +773,7 @@
     <div>
       <div class="fw-eyebrow-mono">[ Published Standard ]</div>
       <h2 class="fw-showcase-title" style="margin-bottom: 20px;">
-        Read every requirement<br>before you <em>engage.</em>
+        Read every requirement<br>before you engage.
       </h2>
       <p style="font-size: 15px; color: var(--ink-2); line-height: 1.8; font-weight: 300; margin-bottom: 16px;">
         The framework is openly published under a citable DOI. Every requirement, verification method, and evidence standard is available for review before any assessment begins. Verification is co-located: every requirement carries its verification, and every verification traces to a requirement.
@@ -812,58 +816,59 @@
 <!-- FOOTER -->
 <footer class="site-footer">
   <div class="footer-inner">
-
-    <div class="footer-cols">
-
-      <div class="footer-col">
-        <div class="footer-col-label">Certification</div>
-        <a href="/framework">Framework</a>
-        <a href="/process">Process</a>
-        <a href="/assess">Assess</a>
-        <a href="/verify">Verify</a>
+    <div class="footer-top">
+      <div class="footer-brand">
+        <div class="footer-logo" aria-label="Safety Critical Labs">SCL</div>
+        <div class="footer-brand-bottom">
+          <span class="footer-copyright">&copy; 2026 Safety Critical Labs</span>
+        </div>
       </div>
-
-      <div class="footer-col">
-        <div class="footer-col-label">Resources</div>
-        <a href="/documents">Documents</a>
-        <a href="/search.html">FAQ</a>
+      <div class="footer-cols">
+        <div class="footer-col">
+          <div class="footer-col-group">
+            <div class="footer-col-label">Certification</div>
+            <a href="/framework">Framework</a>
+            <a href="/process">Process</a>
+            <a href="/assess">Assess</a>
+            <a href="/verify">Verify</a>
+            <a href="/evidence">Evidence</a>
+          </div>
+        </div>
+        <div class="footer-col">
+          <div class="footer-col-group">
+            <div class="footer-col-label">Resources</div>
+            <a href="/documents">Documents</a>
+            <a href="/presentation">Presentation</a>
+            <a href="/certificate-template">Certificate template</a>
+            <a href="/search.html">FAQ</a>
+          </div>
+        </div>
+        <div class="footer-col">
+          <div class="footer-col-group">
+            <div class="footer-col-label">Company</div>
+            <a href="/position">Position</a>
+            <a href="/expertise">Expertise</a>
+            <a href="/markets">Markets</a>
+            <a href="/contact">Contact</a>
+          </div>
+          <div class="footer-col-group">
+            <div class="footer-col-label">Briefings</div>
+            <a href="/news">News</a>
+            <a href="/updates">Updates</a>
+            <a href="/subscribe">Subscribe</a>
+          </div>
+        </div>
+        <div class="footer-col">
+          <div class="footer-col-group">
+            <div class="footer-col-label">Legal</div>
+            <a href="/terms">Terms</a>
+            <a href="/privacy">Privacy</a>
+            <a href="/disclaimer">Disclaimer</a>
+            <a href="/accreditation">Accreditation</a>
+          </div>
+        </div>
       </div>
-
-      <div class="footer-col">
-        <div class="footer-col-label">Company</div>
-        <a href="/position">Position</a>
-        <a href="/expertise">Expertise</a>
-        <a href="/markets">Markets</a>
-        <a href="/contact">Contact</a>
-      </div>
-
-      <div class="footer-col">
-        <div class="footer-col-label">Briefings</div>
-        <a href="/news">News</a>
-        <a href="/subscribe">Subscribe</a>
-        <a href="/updates">Updates</a>
-      </div>
-
-      <div class="footer-col">
-        <div class="footer-col-label">Legal</div>
-        <a href="/terms">Terms</a>
-        <a href="/privacy">Privacy</a>
-        <a href="/disclaimer">Disclaimer</a>
-        <a href="/accreditation">Accreditation</a>
-      </div>
-
     </div>
-
-    <div class="footer-divider"></div>
-
-    <div class="footer-bottom">
-      <span class="footer-copyright">&copy; 2026 Safety Critical Labs. All rights reserved.</span>
-      <div class="footer-meta">
-        <a href="#" aria-label="Back to top">Back to top</a>
-        <span class="footer-version">Framework v3.4</span>
-      </div>
-    </div>
-
   </div>
 </footer>
 
@@ -951,40 +956,6 @@ gsap.utils.toArray('.slide-right').forEach(function(el) {
 });
 } /* end GSAP guard */
 
-// Mobile menu toggle
-document.querySelector('.gn-hamburger').addEventListener('click', function() {
-  this.classList.toggle('open');
-  document.querySelector('.gn-links').classList.toggle('open');
-  this.setAttribute('aria-expanded', this.classList.contains('open'));
-  document.body.style.overflow = this.classList.contains('open') ? 'hidden' : '';
-});
-
-/* Dropdown nav toggle */
-document.querySelectorAll(".gn-dropdown-toggle").forEach(function(btn) {
-  btn.addEventListener("click", function(e) {
-    e.stopPropagation();
-    var dd = this.closest(".gn-dropdown");
-    var menu = dd.querySelector(".gn-dropdown-menu");
-    var isOpen = dd.classList.contains("open");
-    document.querySelectorAll(".gn-dropdown").forEach(function(d) {
-      d.classList.remove("open");
-      var m = d.querySelector(".gn-dropdown-menu");
-      if (m) m.style.display = "none";
-    });
-    if (!isOpen) {
-      dd.classList.add("open");
-      menu.style.display = "block";
-    }
-  });
-});
-document.addEventListener("click", function() {
-  document.querySelectorAll(".gn-dropdown").forEach(function(d) {
-    d.classList.remove("open");
-    var m = d.querySelector(".gn-dropdown-menu");
-    if (m) m.style.display = "none";
-  });
-});
-
 /* ─── Hero cursor glow ───────────────────────── */
 (function() {
   var glow = document.querySelector('.fw-hero-glow');
@@ -1061,5 +1032,6 @@ document.addEventListener("click", function() {
 </script>
 <script src="ticker.js"></script>
 <script src="/footer.js" defer></script>
+<script src="/nav.js" defer></script>
 </body>
 </html>

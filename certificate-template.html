@@ -5,19 +5,26 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>SCL Certificate of Conformance</title>
 <meta name="robots" content="noindex">
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@300;400;500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<script>if(location.search.indexOf('embed')>-1)document.documentElement.classList.add('embed');</script>
 <style>
   :root {
-    --navy: #0F2340;
+    --navy: #0C2242;
     --navy-mid: #2a3a55;
     --navy-light: #6b7891;
-    --cream: #FAFAF8;
+    --cream: #FAF9F5;
     --rule: #E4E8EC;
     --rule-strong: #c8ccd4;
     --paper: #ffffff;
   }
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  /* Embed mode (?embed): drop the page chrome so the certificate itself fills
+     the frame — used when this template is iframed into the homepage cert card. */
+  html.embed, html.embed body { margin: 0 !important; padding: 0 !important; background: #fff !important; display: block !important; min-height: 0 !important; }
+  html.embed .certificate { border: none !important; box-shadow: none !important; }
+  html.embed .specimen-caption { display: none !important; }
 
   @page { size: letter portrait; margin: 0; }
 
@@ -181,8 +188,8 @@
   /* FOCAL */
   .focal { text-align: center; margin-bottom: 28px; }
   .verb {
-    font-family: 'Instrument Serif', serif;
-    font-style: italic;
+    font-family: 'DM Sans', sans-serif;
+    font-style: normal;
     font-size: 21px;
     color: var(--navy-mid);
     margin-bottom: 14px;
@@ -238,8 +245,8 @@
     margin-bottom: 8px;
   }
   .claim-body {
-    font-family: 'Instrument Serif', serif;
-    font-style: italic;
+    font-family: 'DM Sans', sans-serif;
+    font-style: normal;
     font-size: 15.5px; line-height: 1.5;
     color: var(--navy-mid);
     max-width: 5.4in;
@@ -367,7 +374,7 @@
     font-size: 8.5px; line-height: 1.5;
     color: var(--navy-light);
     text-align: center;
-    font-style: italic;
+    font-style: normal;
     margin-bottom: 10px;
     max-width: 6.5in;
     margin-left: auto;

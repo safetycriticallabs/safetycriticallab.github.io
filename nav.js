@@ -1,0 +1,56 @@
+/* ─────────────────────────────────────────────────────────────
+   Shared site-nav behavior — mobile menu, Company/Briefings
+   dropdowns, and the wordmark scroll-collapse (full "SAFETY
+   CRITICAL LABS" → "SCL" past 40px). Loaded on every page so the
+   header behaves identically to the homepage. Pair with the shared
+   shell CSS in styles.css. Pages must NOT also bind these inline
+   (that would double-fire the toggles).
+   ───────────────────────────────────────────────────────────── */
+(function () {
+  /* Mobile hamburger menu */
+  var ham = document.querySelector('.gn-hamburger');
+  var links = document.querySelector('.gn-links');
+  if (ham && links) {
+    ham.addEventListener('click', function () {
+      this.classList.toggle('open');
+      links.classList.toggle('open');
+      this.setAttribute('aria-expanded', this.classList.contains('open'));
+      document.body.style.overflow = this.classList.contains('open') ? 'hidden' : '';
+    });
+  }
+
+  /* Dropdown menus (Company / Briefings) */
+  document.querySelectorAll('.gn-dropdown-toggle').forEach(function (btn) {
+    btn.addEventListener('click', function (e) {
+      e.stopPropagation();
+      var dd = this.closest('.gn-dropdown');
+      var menu = dd.querySelector('.gn-dropdown-menu');
+      var isOpen = dd.classList.contains('open');
+      document.querySelectorAll('.gn-dropdown').forEach(function (d) {
+        d.classList.remove('open');
+        var m = d.querySelector('.gn-dropdown-menu');
+        if (m) m.style.display = 'none';
+      });
+      if (!isOpen) { dd.classList.add('open'); menu.style.display = 'block'; }
+    });
+  });
+  document.addEventListener('click', function () {
+    document.querySelectorAll('.gn-dropdown').forEach(function (d) {
+      d.classList.remove('open');
+      var m = d.querySelector('.gn-dropdown-menu');
+      if (m) m.style.display = 'none';
+    });
+  });
+
+  /* Wordmark scroll-collapse: full name at top, "SCL" past 40px */
+  var nav = document.querySelector('.global-nav');
+  if (nav) {
+    var THRESHOLD = 40, compact = false;
+    var update = function () {
+      var should = window.scrollY > THRESHOLD;
+      if (should !== compact) { compact = should; nav.classList.toggle('gn-compact', compact); }
+    };
+    window.addEventListener('scroll', update, { passive: true });
+    update();
+  }
+})();

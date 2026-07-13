@@ -19,7 +19,7 @@
 <link rel="shortcut icon" href="favicon.ico">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=IBM+Plex+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css">
 <style>
 /* ─── PROCESS PAGE STYLES ────────────────────────────────── */
@@ -50,25 +50,21 @@
 .fw-showcase-title {
   font-family: var(--sans);
   font-size: clamp(30px, 3.4vw, 46px);
-  font-weight: 600;
+  font-weight: 700;
   line-height: 1.08;
   letter-spacing: -0.025em;
-  color: var(--blue);
+  color: var(--ink);
   margin-bottom: 48px;
 }
-.fw-showcase-title em {
-  font-family: var(--serif);
-  font-style: italic;
-  font-weight: 400;
-  font-size: 1.05em;
-  color: var(--blue-dk);
+/* Headings stay uniform — no weight / size / slant / colour shift on any word. */
+.inner-hero h1 em, .fw-showcase-title em, h1 em, h2 em, h3 em {
+  font-family: inherit; font-size: inherit !important; font-weight: inherit !important;
+  font-style: normal !important; color: inherit !important;
 }
 
 /* ─── PHASES SECTION (cream + blue gradient) ──────────────── */
 .phases-section {
-  background:
-    radial-gradient(ellipse at 50% 0%, rgba(46,109,180,0.05) 0%, transparent 50%),
-    #F7F3EC;
+  background: #FAF9F5;
   position: relative;
 }
 
@@ -99,11 +95,11 @@
 .phase-header { display: flex; gap: 20px; align-items: flex-start; margin-bottom: 24px; }
 .phase-num-badge {
   width: 48px; height: 48px; border-radius: 50%;
-  background: var(--blue); color: #fff;
+  background: #0C2242; color: #fff;
   display: flex; align-items: center; justify-content: center;
   font-family: var(--sans); font-size: 14px; font-weight: 600;
   flex-shrink: 0;
-  box-shadow: 0 4px 14px rgba(46,109,180,0.25);
+  box-shadow: 0 4px 14px rgba(12,34,66,0.28);
 }
 .phase-title-block { flex: 1; }
 .phase-title { font-size: 22px; font-weight: 600; color: var(--ink); margin-bottom: 4px; line-height: 1.2; }
@@ -116,11 +112,11 @@
 .phase-note {
   margin-top: 20px;
   padding: 14px 18px;
-  background: #FAF6EC;
+  background: #FAF9F5;
   border: 1px solid rgba(46,109,180,0.10);
   border-left: 3px solid var(--blue);
   font-size: 13px; color: var(--ink-2); line-height: 1.65;
-  border-radius: 3px;
+  border-radius: 0 10px 10px 0;
 }
 .phase-note strong { color: var(--ink); }
 .phase-subsection { margin-top: 32px; }
@@ -131,18 +127,19 @@
 }
 .phase-subsection .ev-intro { font-size: 15px; color: var(--ink-2); line-height: 1.75; font-weight: 300; margin-bottom: 16px; }
 .phase-subsection .ev-list { margin-top: 16px; }
-.phase-subsection .ev-item { background: #FAF6EC; }
-.phase-subsection .ev-note { margin-top: 14px; background: #FAF6EC; }
+.phase-subsection .ev-item { background: #FAF9F5; }
+.phase-subsection .ev-note { margin-top: 14px; background: #FAF9F5; }
 .check-item {
   display: flex; gap: 12px; align-items: flex-start;
-  padding: 14px 18px;
-  background: #FAF6EC; border: 1px solid rgba(46,109,180,0.10);
-  border-radius: 4px;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  padding: 16px 20px;
+  background: #FAF9F5; border: 1px solid rgba(46,109,180,0.12);
+  border-radius: 12px;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
 }
 .check-item:hover {
-  border-color: rgba(46,109,180,0.25);
-  box-shadow: 0 4px 14px rgba(46,109,180,0.08);
+  border-color: rgba(46,109,180,0.30);
+  box-shadow: 0 10px 28px rgba(15,35,64,0.10);
+  transform: translateY(-3px);
 }
 .check-dot {
   width: 6px; height: 6px; border-radius: 50%;
@@ -151,13 +148,7 @@
 .check-text { font-size: 14px; color: var(--ink-2); line-height: 1.6; }
 .check-text strong { color: var(--ink); font-weight: 500; }
 
-/* risk score check item variant — emphasized cream with stronger blue tint */
-.check-item.check-item-score {
-  background: rgba(46,109,180,0.06);
-  border-color: rgba(46,109,180,0.20);
-}
-.check-item.check-item-score .check-dot { background: var(--blue); }
-.check-item.check-item-score .check-text strong { color: var(--ink); }
+/* risk score item renders as a normal card (no special emphasis). */
 
 /* CERTIFICATE REVEAL (inside Phase 4) */
 .cert-reveal {
@@ -167,7 +158,7 @@
 .cert-reveal-frame {
   overflow: hidden;
   border: 1px solid var(--rule);
-  background: #FAFAF8;
+  background: #FAF9F5;
   box-shadow: 0 8px 32px rgba(15,35,64,0.12);
 }
 .cert-reveal-frame iframe {
@@ -181,21 +172,22 @@
 .ev-intro { font-size: 16px; color: var(--ink-2); line-height: 1.8; font-weight: 300; margin-bottom: 24px; }
 .ev-note {
   padding: 16px 20px;
-  background: #FAF6EC; border-left: 3px solid var(--blue);
-  border-radius: 3px;
+  background: #FAF9F5; border-left: 3px solid var(--blue);
+  border-radius: 0 10px 10px 0;
   font-size: 13px; color: var(--ink-2); line-height: 1.65;
 }
 .ev-note strong { color: var(--ink); }
 .ev-list { display: flex; flex-direction: column; gap: 8px; }
 .ev-item {
-  background: #FAF6EC; border: 1px solid rgba(46,109,180,0.10);
-  border-radius: 4px; padding: 16px 20px;
+  background: #FAF9F5; border: 1px solid rgba(46,109,180,0.12);
+  border-radius: 12px; padding: 18px 20px;
   display: grid; grid-template-columns: 160px 1fr; gap: 16px;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
 }
 .ev-item:hover {
-  border-color: rgba(46,109,180,0.25);
-  box-shadow: 0 4px 14px rgba(46,109,180,0.08);
+  border-color: rgba(46,109,180,0.30);
+  box-shadow: 0 10px 28px rgba(15,35,64,0.10);
+  transform: translateY(-3px);
 }
 .ev-item-label {
   font-family: var(--sans); font-size: 11px;
@@ -204,22 +196,6 @@
 }
 .ev-item-desc { font-size: 13px; color: var(--ink-2); line-height: 1.55; }
 .ev-item-desc strong { color: var(--ink); }
-
-/* INLINE SURVEILLANCE */
-.surv-inline { display: flex; flex-direction: column; gap: 8px; margin-top: 16px; }
-.surv-inline-card {
-  background: rgba(255,255,255,0.06);
-  border: 1px solid rgba(255,255,255,0.08);
-  border-radius: 3px; padding: 14px 18px;
-  display: grid; grid-template-columns: 140px 1fr; gap: 14px;
-}
-.si-tier {
-  font-family: var(--sans); font-size: 11px;
-  font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; color: var(--blue);
-  padding-top: 2px;
-}
-.si-desc { font-size: 13px; color: rgba(255,255,255,0.45); line-height: 1.55; }
-.si-desc strong { color: rgba(255,255,255,0.75); font-weight: 500; }
 
 /* RESPONSIVE */
 @media (max-width: 880px) {
@@ -233,6 +209,95 @@
   .site-footer { grid-template-columns: 1fr; gap: 16px; }
   .footer-meta { text-align: left; }
 }
+
+/* ═══ MATCH HOMEPAGE SHELL ══════════════════════════════════════════
+   Page-scoped replica of index.html's shell treatment (navy ink, wordmark,
+   dropdown nav, solid-navy CTA, dark-navy footer). On rollout this whole
+   block moves into styles.css so every page shares one identical shell. */
+
+/* 1) One navy ink for ALL text — kills the blue-accent look, matches index. */
+body, body * { color: #0C2242 !important; }
+/* Carve-out: the phase number badge sits on a blue disc, keep it light. */
+.phase-num-badge { color: #FAF9F5 !important; }
+
+/* 2) Flat cream shell surfaces — no gradients, tan bands, frost, or hairline. */
+.global-nav { background: #FAF9F5; backdrop-filter: none; -webkit-backdrop-filter: none; border-bottom: none !important; }
+.reg-ticker { background: #FAF9F5; box-shadow: none; }
+.inner-hero { background: #FAF9F5; border-bottom: none; }
+
+/* 3) Nav — heavier/larger wordmark, links clustered right, dropdowns, solid-navy CTA. */
+.gn-text { font-weight: 700; letter-spacing: 0.02em; }
+.gn-text-full { font-size: 19px; }
+/* Wordmark scroll-collapse — full name wipes to "SCL" past 40px (matches index). */
+@media (min-width: 481px) {
+  .gn-wordmark { position: relative; overflow: hidden; display: inline-flex; align-items: center; height: 30px; }
+  .gn-text-full, .gn-text-abbr { display: block; height: 30px; line-height: 30px; white-space: nowrap; }
+  .gn-text-full { opacity: 1; clip-path: inset(0 0 0 0); transition: opacity 0.34s ease 0.30s, clip-path 0.44s cubic-bezier(0.5,0,0.2,1) 0.30s; }
+  .gn-text-abbr { position: absolute; left: 0; top: 0; font-size: 22px; opacity: 0; pointer-events: none; transition: opacity 0.3s ease 0s; background: none !important; -webkit-text-fill-color: #0C2242 !important; color: #0C2242 !important; filter: none !important; }
+  .global-nav.gn-compact .gn-text-full { opacity: 0; clip-path: inset(0 100% 0 0); transition: opacity 0.34s ease 0s, clip-path 0.44s cubic-bezier(0.5,0,0.2,1) 0s; }
+  .global-nav.gn-compact .gn-text-abbr { opacity: 1; transition: opacity 0.34s ease 0.34s; }
+}
+@media (min-width: 881px) {
+  .gn-links { margin-left: auto; gap: clamp(18px, 2vw, 28px); }
+  .gn-search { margin-left: 12px !important; }
+  .gn-dropdown-toggle {
+    font-family: var(--sans); font-size: 13px; font-weight: 500;
+    letter-spacing: 0.04em; text-transform: uppercase;
+    color: #0C2242 !important; padding: 8px 0;
+  }
+  .gn-dropdown-menu {
+    left: auto; right: 0;
+    background: #ECE5D5 !important;
+    border: 1px solid rgba(12,34,66,0.10) !important;
+    box-shadow: 0 14px 34px rgba(12,34,66,0.22) !important;
+    border-radius: 10px !important; padding: 8px !important;
+  }
+  .gn-dropdown-menu a { color: rgba(12,34,66,0.78) !important; padding: 9px 14px !important; border-radius: 6px; }
+  .gn-dropdown-menu a:hover { color: #0C2242 !important; background: rgba(12,34,66,0.06) !important; }
+}
+@media (max-width: 880px) {
+  .gn-dropdown-toggle { text-transform: uppercase; letter-spacing: -0.01em; }
+  .gn-dropdown-menu { position: static !important; background: none !important; border: none !important; box-shadow: none !important; border-radius: 0 !important; padding: 0 !important; min-width: 0 !important; }
+  .gn-dropdown-menu a { color: rgba(12,34,66,0.72) !important; }
+}
+.gn-cta {
+  background: #0C2242 !important; color: #FAF9F5 !important; border-color: #0C2242 !important;
+  border-radius: 8px !important; height: 40px !important; padding: 0 26px !important;
+  display: inline-flex !important; align-items: center; justify-content: center; font-size: 14px !important;
+}
+.gn-cta:hover { background: #081A34 !important; border-color: #081A34 !important; color: #FAF9F5 !important; }
+
+/* 4) In-page buttons → SOLID navy pill, consistent with the nav CTA. */
+.btn-solid { background: #0C2242 !important; border: 1px solid #0C2242; color: #FAF9F5 !important; border-radius: 8px; }
+.btn-solid:hover { background: #081A34 !important; border-color: #081A34; color: #FAF9F5 !important; }
+
+/* 5) Footer → dark-navy block: SCL mark + social, grouped link columns. */
+.site-footer { background: #0C2242 !important; border-top: none !important; margin-top: 40px; }
+.site-footer .footer-inner { padding-top: 156px !important; padding-bottom: 116px !important; min-height: 480px; }
+.footer-top { display: flex !important; gap: clamp(56px, 9vw, 150px); align-items: stretch; }
+.footer-brand { flex: 0 0 auto; min-width: 240px; display: flex; flex-direction: column; justify-content: space-between; gap: 60px; }
+.footer-logo { font-family: var(--sans); font-weight: 700; font-size: 56px; letter-spacing: -0.02em; line-height: 1; color: #FAF9F5 !important; }
+.footer-brand-bottom { display: flex; flex-direction: column; gap: 16px; }
+.footer-copyright { margin: 0 !important; font-size: 13px; line-height: 1.6; color: rgba(250,249,245,0.5) !important; }
+.footer-social { display: flex; gap: 15px; }
+.footer-social a, .footer-social a svg, .footer-social a path { color: rgba(250,249,245,0.58) !important; fill: currentColor; }
+.footer-social a { display: inline-flex; transition: color .2s ease; }
+.footer-social a:hover, .footer-social a:hover svg, .footer-social a:hover path { color: #FAF9F5 !important; }
+.footer-cols { flex: 1; display: grid !important; grid-template-columns: repeat(4,1fr); gap: 30px; margin-bottom: 0 !important; }
+.footer-col { display: flex; flex-direction: column; gap: 52px; border: none !important; }
+.footer-col-group { display: flex; flex-direction: column; }
+.footer-col-label { font-size: 14px !important; font-weight: 600 !important; color: #FAF9F5 !important; margin-bottom: 18px !important; text-transform: none !important; letter-spacing: 0 !important; padding: 0 !important; }
+.footer-col-group a { display: block; font-size: 14px; color: rgba(250,249,245,0.6) !important; text-decoration: none; padding: 7px 0; transition: color .2s ease; letter-spacing: 0.01em; }
+.footer-col-group a:hover { color: #FAF9F5 !important; }
+@media (max-width: 900px) {
+  .site-footer .footer-inner { padding-top: 64px !important; padding-bottom: 56px !important; }
+  .footer-top { flex-direction: column; gap: 48px; }
+  .footer-brand { flex: none; gap: 28px; }
+  .footer-cols { grid-template-columns: repeat(2,1fr); gap: 44px 30px; }
+  .footer-col { gap: 36px; }
+  .footer-col-label::after { display: none !important; }
+}
+@media (max-width: 560px) { .footer-cols { grid-template-columns: 1fr; } }
 </style>
 </head>
 <body>
@@ -249,11 +314,23 @@
     <ul class="gn-links">
       <li><a href="/framework">Framework</a></li>
       <li><a href="/process" class="active">Process</a></li>
-      <li><a href="/expertise">Expertise</a></li>
-      <li><a href="/markets">Markets</a></li>
-      <li><a href="/position">Position</a></li>
-      <li><a href="/news">News</a></li>
-      <li class="gn-mobile-link"><a href="/contact">Contact</a></li>
+      <li class="gn-dropdown">
+        <button class="gn-dropdown-toggle" type="button" aria-expanded="false" aria-haspopup="true">Company <span class="gn-dropdown-arrow" aria-hidden="true"></span></button>
+        <ul class="gn-dropdown-menu">
+          <li><a href="/position">Position</a></li>
+          <li><a href="/expertise">Expertise</a></li>
+          <li><a href="/markets">Markets</a></li>
+          <li><a href="/contact">Contact</a></li>
+        </ul>
+      </li>
+      <li class="gn-dropdown">
+        <button class="gn-dropdown-toggle" type="button" aria-expanded="false" aria-haspopup="true">Briefings <span class="gn-dropdown-arrow" aria-hidden="true"></span></button>
+        <ul class="gn-dropdown-menu">
+          <li><a href="/news">News</a></li>
+          <li><a href="/updates">Updates</a></li>
+          <li><a href="/subscribe">Subscribe</a></li>
+        </ul>
+      </li>
     </ul>
     <a href="/search" class="gn-search" aria-label="Search">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -276,7 +353,7 @@
         <a href="/">Safety Critical Labs</a>
         <span>/</span> Certification Process
       </div>
-      <h1>A formal determination.<br><em>And a quantified<br>risk score.</em></h1>
+      <h1>A formal determination.<br>And a quantified<br>risk score.</h1>
     </div>
     <p class="inner-hero-lead">
       Every SCL assessment produces both. A four phase, documented process for AI systems operating in safety critical environments. Aerospace, aviation, medical, automotive. Not a general impression. Not a vendor attestation.
@@ -288,7 +365,7 @@
 <section class="page-section phases-section">
   <div class="section-inner">
     <div class="fw-eyebrow-mono">[ Four Phases ]</div>
-    <h2 class="fw-showcase-title">From kickoff to <em>certificate.</em></h2>
+    <h2 class="fw-showcase-title">From kickoff to certificate.</h2>
     <div class="phases-layout">
       <div class="phases-detail">
 
@@ -478,55 +555,66 @@
 <footer class="site-footer">
   <div class="footer-inner">
 
-    <div class="footer-cols">
+    <div class="footer-top">
 
-      <div class="footer-col">
-        <div class="footer-col-label">Certification</div>
-        <a href="/framework">Framework</a>
-        <a href="/process">Process</a>
-        <a href="/assess">Assess</a>
-        <a href="/verify">Verify</a>
+      <div class="footer-brand">
+        <div class="footer-logo" aria-label="Safety Critical Labs">SCL</div>
+        <div class="footer-brand-bottom">
+          <span class="footer-copyright">&copy; 2026 Safety Critical Labs</span>
+        </div>
       </div>
 
-      <div class="footer-col">
-        <div class="footer-col-label">Resources</div>
-        <a href="/documents">Documents</a>
-        <a href="/search.html">FAQ</a>
+      <div class="footer-cols">
+
+        <div class="footer-col">
+          <div class="footer-col-group">
+            <div class="footer-col-label">Certification</div>
+            <a href="/framework">Framework</a>
+            <a href="/process">Process</a>
+            <a href="/assess">Assess</a>
+            <a href="/verify">Verify</a>
+            <a href="/evidence">Evidence</a>
+          </div>
+        </div>
+
+        <div class="footer-col">
+          <div class="footer-col-group">
+            <div class="footer-col-label">Resources</div>
+            <a href="/documents">Documents</a>
+            <a href="/presentation">Presentation</a>
+            <a href="/certificate-template">Certificate template</a>
+            <a href="/search.html">FAQ</a>
+          </div>
+        </div>
+
+        <div class="footer-col">
+          <div class="footer-col-group">
+            <div class="footer-col-label">Company</div>
+            <a href="/position">Position</a>
+            <a href="/expertise">Expertise</a>
+            <a href="/markets">Markets</a>
+            <a href="/contact">Contact</a>
+          </div>
+          <div class="footer-col-group">
+            <div class="footer-col-label">Briefings</div>
+            <a href="/news">News</a>
+            <a href="/updates">Updates</a>
+            <a href="/subscribe">Subscribe</a>
+          </div>
+        </div>
+
+        <div class="footer-col">
+          <div class="footer-col-group">
+            <div class="footer-col-label">Legal</div>
+            <a href="/terms">Terms</a>
+            <a href="/privacy">Privacy</a>
+            <a href="/disclaimer">Disclaimer</a>
+            <a href="/accreditation">Accreditation</a>
+          </div>
+        </div>
+
       </div>
 
-      <div class="footer-col">
-        <div class="footer-col-label">Company</div>
-        <a href="/position">Position</a>
-        <a href="/expertise">Expertise</a>
-        <a href="/markets">Markets</a>
-        <a href="/contact">Contact</a>
-      </div>
-
-      <div class="footer-col">
-        <div class="footer-col-label">Briefings</div>
-        <a href="/news">News</a>
-        <a href="/subscribe">Subscribe</a>
-        <a href="/updates">Updates</a>
-      </div>
-
-      <div class="footer-col">
-        <div class="footer-col-label">Legal</div>
-        <a href="/terms">Terms</a>
-        <a href="/privacy">Privacy</a>
-        <a href="/disclaimer">Disclaimer</a>
-        <a href="/accreditation">Accreditation</a>
-      </div>
-
-    </div>
-
-    <div class="footer-divider"></div>
-
-    <div class="footer-bottom">
-      <span class="footer-copyright">&copy; 2026 Safety Critical Labs. All rights reserved.</span>
-      <div class="footer-meta">
-        <a href="#" aria-label="Back to top">Back to top</a>
-        <span class="footer-version">Framework v3.4</span>
-      </div>
     </div>
 
   </div>
@@ -545,6 +633,19 @@ document.querySelector('.gn-hamburger').addEventListener('click', function() {
   this.setAttribute('aria-expanded', this.classList.contains('open'));
   document.body.style.overflow = this.classList.contains('open') ? 'hidden' : '';
 });
+
+/* Nav wordmark scroll-collapse: full name at top, "SCL" past 40px (matches index). */
+(function () {
+  var nav = document.querySelector('.global-nav');
+  if (!nav) return;
+  var THRESHOLD = 40, compact = false;
+  function update() {
+    var should = window.scrollY > THRESHOLD;
+    if (should !== compact) { compact = should; nav.classList.toggle('gn-compact', compact); }
+  }
+  window.addEventListener('scroll', update, { passive: true });
+  update();
+})();
 
 /* Dropdown nav toggle */
 document.querySelectorAll(".gn-dropdown-toggle").forEach(function(btn) {

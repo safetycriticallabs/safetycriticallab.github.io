@@ -16,7 +16,7 @@
 <link rel="apple-touch-icon" sizes="180x180" href="img/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=IBM+Plex+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css">
 <style>
 .inner-hero { z-index: 0; }
@@ -34,13 +34,11 @@
 .fw-eyebrow-mono {
   font-family: var(--mono); font-size: 12px; font-weight: 500;
   letter-spacing: 0.18em; text-transform: uppercase;
-  color: rgba(46,109,180,0.6); margin-bottom: 20px;
+  color: rgba(12,34,66,0.6); margin-bottom: 20px;
 }
 
 .legal-section {
-  background:
-    radial-gradient(ellipse at 50% 0%, rgba(46,109,180,0.05) 0%, transparent 50%),
-    #F7F3EC;
+  background: #FAF9F5;
   padding: 88px 40px 120px;
 }
 .legal-inner { max-width: 760px; margin: 0 auto; }
@@ -53,10 +51,10 @@
 .legal-meta-item {
   font-family: var(--mono); font-size: 11px;
   letter-spacing: 0.14em; text-transform: uppercase;
-  color: rgba(46,109,180,0.6);
+  color: rgba(12,34,66,0.6);
 }
 .legal-meta-item strong {
-  display: block; color: var(--blue); font-weight: 500;
+  display: block; color: #0C2242; font-weight: 500;
   margin-top: 4px; letter-spacing: 0.04em; text-transform: none;
   font-family: var(--sans); font-size: 13px;
 }
@@ -65,17 +63,17 @@
 .legal-block:last-child { margin-bottom: 0; }
 .legal-block-num {
   font-family: var(--mono); font-size: 11px;
-  letter-spacing: 0.18em; color: rgba(46,109,180,0.55);
+  letter-spacing: 0.18em; color: rgba(12,34,66,0.55);
   margin-bottom: 6px;
 }
 .legal-block-title {
   font-family: var(--sans); font-size: 22px;
-  font-weight: 600; color: var(--blue);
+  font-weight: 600; color: #0C2242;
   margin: 0 0 14px; line-height: 1.25; letter-spacing: -0.01em;
 }
 .legal-block-title em {
-  font-family: var(--serif); font-style: italic;
-  font-weight: 400; color: var(--blue-dk);
+  font-family: inherit; font-size: inherit !important; font-weight: inherit !important;
+  font-style: normal !important; color: inherit !important;
 }
 .legal-block p {
   font-size: 15px; color: var(--ink-2);
@@ -83,8 +81,8 @@
 }
 .legal-block p:last-child { margin-bottom: 0; }
 .legal-block p strong { color: var(--ink); font-weight: 500; }
-.legal-block a { color: var(--blue); text-decoration: none; border-bottom: 1px solid rgba(46,109,180,0.3); }
-.legal-block a:hover { color: var(--blue-dk); border-bottom-color: var(--blue-dk); }
+.legal-block a { color: #0C2242; text-decoration: none; border-bottom: 1px solid rgba(46,109,180,0.3); }
+.legal-block a:hover { color: #0C2242; border-bottom-color: var(--blue-dk); }
 
 /* Two-up "does say / does not say" card */
 .cert-says-grid {
@@ -94,9 +92,9 @@
   margin-top: 18px;
 }
 .cert-says-card {
-  background: #FAF6EC;
+  background: #FAF9F5;
   border: 1px solid rgba(46,109,180,0.12);
-  border-radius: 4px;
+  border-radius: 12px;
   padding: 22px;
 }
 .cert-says-card.is-yes { border-left: 3px solid #2D7A3A; }
@@ -107,7 +105,7 @@
   text-transform: uppercase; margin-bottom: 10px;
 }
 .cert-says-card.is-yes .cert-says-label { color: #2D7A3A; }
-.cert-says-card.is-no  .cert-says-label { color: var(--blue); }
+.cert-says-card.is-no  .cert-says-label { color: #0C2242; }
 .cert-says-list { list-style: none; padding: 0; margin: 0; }
 .cert-says-list li {
   font-size: 13px; color: var(--ink-2);
@@ -132,10 +130,10 @@
 .legal-review-note {
   margin-top: 56px;
   padding: 20px 24px;
-  background: #FAF6EC;
+  background: #FAF9F5;
   border: 1px solid rgba(46,109,180,0.12);
   border-left: 3px solid var(--blue);
-  border-radius: 4px;
+  border-radius: 12px;
   font-size: 13px; color: var(--ink-2);
   line-height: 1.65; font-weight: 300;
 }
@@ -155,11 +153,23 @@
     <ul class="gn-links">
       <li><a href="/framework">Framework</a></li>
       <li><a href="/process">Process</a></li>
-      <li><a href="/expertise">Expertise</a></li>
-      <li><a href="/markets">Markets</a></li>
-      <li><a href="/position">Position</a></li>
-      <li><a href="/news">News</a></li>
-      <li class="gn-mobile-link"><a href="/contact">Contact</a></li>
+      <li class="gn-dropdown">
+        <button class="gn-dropdown-toggle" type="button" aria-expanded="false" aria-haspopup="true">Company <span class="gn-dropdown-arrow" aria-hidden="true"></span></button>
+        <ul class="gn-dropdown-menu">
+          <li><a href="/position">Position</a></li>
+          <li><a href="/expertise">Expertise</a></li>
+          <li><a href="/markets">Markets</a></li>
+          <li><a href="/contact">Contact</a></li>
+        </ul>
+      </li>
+      <li class="gn-dropdown">
+        <button class="gn-dropdown-toggle" type="button" aria-expanded="false" aria-haspopup="true">Briefings <span class="gn-dropdown-arrow" aria-hidden="true"></span></button>
+        <ul class="gn-dropdown-menu">
+          <li><a href="/news">News</a></li>
+          <li><a href="/updates">Updates</a></li>
+          <li><a href="/subscribe">Subscribe</a></li>
+        </ul>
+      </li>
     </ul>
     <a href="/search" class="gn-search" aria-label="Search">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -178,7 +188,7 @@
   <div class="inner-hero-inner">
     <div>
       <div class="inner-hero-breadcrumb"><a href="/">Safety Critical Labs</a><span>/</span> Disclaimer</div>
-      <h1>What a certificate says.<br><em>And what it doesn't.</em></h1>
+      <h1>What a certificate says.<br>And what it doesn't.</h1>
     </div>
     <p class="inner-hero-lead">
       An SCL certificate is a formal determination against a published standard. It is not a safety claim, a regulatory approval, or a guarantee. This page is precise about the difference.
@@ -192,12 +202,12 @@
     <div class="legal-meta">
       <div class="legal-meta-item">Effective<strong>May 12, 2026</strong></div>
       <div class="legal-meta-item">Applies to<strong>Site content and certifications</strong></div>
-      <div class="legal-meta-item">Contact<strong><a href="/contact" style="color:var(--blue);text-decoration:none;">/contact</a></strong></div>
+      <div class="legal-meta-item">Contact<strong><a href="/contact" style="color:#0C2242;text-decoration:none;">/contact</a></strong></div>
     </div>
 
     <div class="legal-block">
       <div class="legal-block-num">01</div>
-      <h2 class="legal-block-title">What a Safety Critical Labs certificate <em>is</em></h2>
+      <h2 class="legal-block-title">What a Safety Critical Labs certificate is</h2>
       <p>An SCL certificate records that a defined AI system was assessed against a specific version of the SCL AI Requirements Framework, at a defined classification level, and that the applicable requirements were met at the time of assessment. Every certificate is issued alongside a Certification Determination Document that summarizes findings and the quantified risk score.</p>
 
       <div class="cert-says-grid">
@@ -267,7 +277,7 @@
     </div>
 
     <div class="legal-review-note">
-      <strong>Note.</strong> Final language is under legal review. The substance reflects how SCL describes its work today. For questions about a specific certificate, the certificate's own Determination Document governs in case of conflict with this page. Contact <a href="/contact" style="color:var(--blue);">SCL directly</a>.
+      <strong>Note.</strong> Final language is under legal review. The substance reflects how SCL describes its work today. For questions about a specific certificate, the certificate's own Determination Document governs in case of conflict with this page. Contact <a href="/contact" style="color:#0C2242;">SCL directly</a>.
     </div>
 
   </div>
@@ -277,17 +287,58 @@
 
 <footer class="site-footer">
   <div class="footer-inner">
-    <div class="footer-cols">
-      <div class="footer-col"><div class="footer-col-label">Certification</div><a href="/framework">Framework</a><a href="/process">Process</a><a href="/assess">Assess</a><a href="/verify">Verify</a></div>
-      <div class="footer-col"><div class="footer-col-label">Resources</div><a href="/documents">Documents</a><a href="#">FAQ</a></div>
-      <div class="footer-col"><div class="footer-col-label">Company</div><a href="#">About</a><a href="/position">Position</a><a href="/expertise">Expertise</a><a href="/markets">Markets</a><a href="/contact">Contact</a></div>
-      <div class="footer-col"><div class="footer-col-label">Briefings</div><a href="/news">News</a><a href="/subscribe">Subscribe</a><a href="/updates">Updates</a></div>
-      <div class="footer-col"><div class="footer-col-label">Legal</div><a href="/terms">Terms</a><a href="/privacy">Privacy</a><a href="/disclaimer">Disclaimer</a><a href="/accreditation">Accreditation</a></div>
-    </div>
-    <div class="footer-divider"></div>
-    <div class="footer-bottom">
-      <span class="footer-copyright">&copy; 2025 Safety Critical Labs. All rights reserved.</span>
-      <div class="footer-meta"><a href="#" aria-label="Back to top">Back to top</a><span class="footer-version">Framework v3.4</span></div>
+    <div class="footer-top">
+      <div class="footer-brand">
+        <div class="footer-logo" aria-label="Safety Critical Labs">SCL</div>
+        <div class="footer-brand-bottom">
+          <span class="footer-copyright">&copy; 2026 Safety Critical Labs</span>
+        </div>
+      </div>
+      <div class="footer-cols">
+        <div class="footer-col">
+          <div class="footer-col-group">
+            <div class="footer-col-label">Certification</div>
+            <a href="/framework">Framework</a>
+            <a href="/process">Process</a>
+            <a href="/assess">Assess</a>
+            <a href="/verify">Verify</a>
+            <a href="/evidence">Evidence</a>
+          </div>
+        </div>
+        <div class="footer-col">
+          <div class="footer-col-group">
+            <div class="footer-col-label">Resources</div>
+            <a href="/documents">Documents</a>
+            <a href="/presentation">Presentation</a>
+            <a href="/certificate-template">Certificate template</a>
+            <a href="/search.html">FAQ</a>
+          </div>
+        </div>
+        <div class="footer-col">
+          <div class="footer-col-group">
+            <div class="footer-col-label">Company</div>
+            <a href="/position">Position</a>
+            <a href="/expertise">Expertise</a>
+            <a href="/markets">Markets</a>
+            <a href="/contact">Contact</a>
+          </div>
+          <div class="footer-col-group">
+            <div class="footer-col-label">Briefings</div>
+            <a href="/news">News</a>
+            <a href="/updates">Updates</a>
+            <a href="/subscribe">Subscribe</a>
+          </div>
+        </div>
+        <div class="footer-col">
+          <div class="footer-col-group">
+            <div class="footer-col-label">Legal</div>
+            <a href="/terms">Terms</a>
+            <a href="/privacy">Privacy</a>
+            <a href="/disclaimer">Disclaimer</a>
+            <a href="/accreditation">Accreditation</a>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </footer>
@@ -303,14 +354,9 @@
     glow.style.setProperty('--glow-y', (e.clientY - rect.top) + 'px');
   });
 })();
-document.querySelector('.gn-hamburger').addEventListener('click', function() {
-  this.classList.toggle('open');
-  document.querySelector('.gn-links').classList.toggle('open');
-  this.setAttribute('aria-expanded', this.classList.contains('open'));
-  document.body.style.overflow = this.classList.contains('open') ? 'hidden' : '';
-});
 </script>
 <script src="ticker.js"></script>
 <script src="/footer.js" defer></script>
+<script src="/nav.js" defer></script>
 </body>
 </html>

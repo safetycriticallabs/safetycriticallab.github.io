@@ -9,7 +9,7 @@
 <meta property="og:description" content="Verify the authenticity of an SCL Certificate of Conformance.">
 <meta property="og:url" content="https://safetycriticallabs.com/verify.html">
 <meta property="og:type" content="website">
-<meta property="og:image" content="https://safetycriticallabs.com/img/SCL%20Logo%203d.png">
+<meta property="og:image" content="https://safetycriticallabs.com/img/og-square.png">
 <link rel="icon" type="image/x-icon" href="favicon.ico">
 <link rel="icon" type="image/png" sizes="16x16" href="img/favicon-16x16.png">
 <link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32x32.png">
@@ -23,7 +23,7 @@
 <link rel="stylesheet" href="styles.css">
 <style>
 .verify-page {
-  min-height: calc(100vh - 280px);
+  min-height: calc(100vh - 72px);
   display: flex; align-items: center; justify-content: center;
   padding: 80px 24px;
   position: relative;
@@ -41,12 +41,8 @@
 .verify-page:hover .verify-page-glow { opacity: 1; }
 .verify-card {
   width: 100%; max-width: 640px;
-  background: #FAF9F5;
-  border: 1px solid rgba(46,109,180,0.12);
-  border-radius: 14px;
-  padding: 56px 56px 48px;
+  padding: 24px 0;
   text-align: center;
-  box-shadow: 0 12px 40px rgba(15,35,64,0.08);
   position: relative;
   z-index: 1;
 }
@@ -206,7 +202,7 @@
   flex-wrap: wrap;
 }
 @media (max-width: 580px) {
-  .verify-card { padding: 40px 28px 32px; }
+  .verify-card { padding: 8px 0; }
 }
 </style>
 </head>
@@ -259,9 +255,9 @@
     <div class="verify-eyebrow">[ Certificate Verification ]</div>
     <h1 class="verify-title">Independent record<br>of conformance.</h1>
 
-    <div class="verify-id-block">
+    <div class="verify-id-block" id="verify-id-block" hidden>
       <div class="verify-id-label">Certificate Number</div>
-      <div class="verify-id-value" id="verify-id"><span class="verify-id-empty">No certificate number provided</span></div>
+      <div class="verify-id-value" id="verify-id"></div>
     </div>
 
     <div class="verify-status" id="verify-status">Checking register</div>
@@ -279,7 +275,7 @@
     <div class="verify-record" id="verify-record" hidden></div>
 
     <form class="verify-lookup" action="/verify" method="get">
-      <div class="verify-id-label" style="margin-bottom: 8px;">Look up a certificate number</div>
+      <div class="verify-eyebrow" style="margin-bottom: 10px;">[ Look up a certificate number ]</div>
       <div class="verify-lookup-row">
         <input type="text" name="id" placeholder="SCL-CERT-YYYY-NNN" aria-label="Certificate number" maxlength="64" autocomplete="off" spellcheck="false">
         <button type="submit" class="btn btn-solid">Check</button>
@@ -388,7 +384,10 @@
   var bodyEl = document.getElementById('verify-body');
   var recordEl = document.getElementById('verify-record');
 
-  if (id) idEl.textContent = id;
+  if (id) {
+    idEl.textContent = id;
+    document.getElementById('verify-id-block').hidden = false;
+  }
 
   function setStatus(text, cls) {
     statusEl.textContent = text;

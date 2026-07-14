@@ -1096,6 +1096,12 @@
   @media (min-width:900px) and (min-height:1000px) { #sc-cert-stage.is-expanded .cert-doc{ --cert-rest:1.52; } }
   /* Phones: the tiles are shorter, so shrink the card cert a touch to keep the
      full 360° turntable clear of the tile edges. */
+  /* The 0.68 teaser fits roomy desktop cards, but below ~1200px the equal-row
+     grid makes the cards shorter than the cert, which then bursts the card
+     edge and sits on the label (seen on a 13" MacBook Air window). Step the
+     resting scale down with the viewport so the sheet always clears the card. */
+  @media (max-width:1200px){ #sc-cert-stage:not(.is-expanded) .cert-doc { --cert-rest: 0.58; } }
+  @media (max-width:900px){ #sc-cert-stage:not(.is-expanded) .cert-doc { --cert-rest: 0.55; } }
   @media (max-width:640px){ #sc-cert-stage:not(.is-expanded) .cert-doc { --cert-rest: 0.52; } }
 
   /* ── Depth for the top two tiles — make the rotating cert and the 3D burst
@@ -1158,7 +1164,7 @@
   }
   #fw-showcase.is-expanded .fw3d-dot { pointer-events:auto; cursor:pointer; transition:transform .16s ease; }
   #fw-showcase.is-expanded .fw3d-dot.is-hot { transform:translate(-50%,-50%) scale(2.3); }
-  #fw-showcase.has-selection .fw3d-spark:not(.is-sel) { opacity:0.18; }
+  #fw-showcase.has-selection .fw3d-spark:not(.is-sel) { opacity:0.42; }   /* recessive but still browseable */
   /* Always-on requirement labels — 2D overlay chips tracked by rAF while expanded */
   .fw3d-labels { position:absolute; inset:0; z-index:6; pointer-events:none; }
   #fw-showcase:not(.is-expanded) .fw3d-labels { display:none; }
@@ -1166,7 +1172,7 @@
   .fw3d-lbl .l-id { color:#2E6DB4 !important; margin-right:6px; letter-spacing:.03em; }
   .fw3d-lbl .l-name { color:#0C2242 !important; font-weight:500; }
   .fw3d-lbl.is-hot, .fw3d-lbl.is-sel { box-shadow:0 4px 16px rgba(12, 34, 66,0.22); }
-  #fw-showcase.has-selection .fw3d-lbl:not(.is-sel) { opacity:0.2; }
+  #fw-showcase.has-selection .fw3d-lbl:not(.is-sel) { opacity:0.45; }   /* labels stay legible so the next click is obvious */
   /* Hover tooltip + click detail for the expanded burst */
   .fw3d-tip { position:absolute; z-index:7; transform:translate(-50%,-155%); background:#0C2242; color:#FAF9F5 !important; font-family:var(--mono); font-size:12px; padding:6px 11px; border-radius:8px; white-space:nowrap; opacity:0; pointer-events:none; transition:opacity .15s ease; box-shadow:0 6px 18px rgba(12,34,66,.28); }
   .fw3d-tip.is-on { opacity:1; }
@@ -3234,6 +3240,7 @@
   var dTitle = document.getElementById('fw3d-d-title');
   var dPrevents = document.getElementById('fw3d-d-prevents');
   var dClose = document.getElementById('fw3d-detail-close');
+  var dLink = detail ? detail.querySelector('.fw3d-d-link') : null;
 
   var AREAS = [
     { id: 'AI-1',  label: 'Operational and data foundations', prevents: 'A system evaluated on data it effectively trained on, reporting skill it does not have outside its declared operating domain.' },
@@ -3306,6 +3313,10 @@
     dId.textContent = rec.area.id;
     dTitle.textContent = rec.area.label;
     dPrevents.textContent = rec.area.prevents;
+    /* Deep-link to this requirement's card on the framework page (the cards
+       carry ids ai-1..ai-13), so this link lands somewhere more specific
+       than the modal's general "Read the framework" CTA. */
+    if (dLink) dLink.href = '/framework#' + rec.area.id.toLowerCase();
     detail.classList.add('is-on');
     showcase.classList.add('has-selection');
     sparks.forEach(function (s) { var on = (s === rec); s.spark.classList.toggle('is-sel', on); s.label.classList.toggle('is-sel', on); });

@@ -2044,6 +2044,20 @@
     if (!cert) return;
     var hero = stage;
 
+    /* Watermark inside the same-origin template embed (expanded front face).
+       Looked up lazily each frame until the iframe has rendered, then cached. */
+    var tplFrame = stage.querySelector('.cert-tpl-frame');
+    var tplWm = null;
+    function tplWatermark() {
+      if (!tplWm && tplFrame) {
+        try {
+          tplWm = tplFrame.contentDocument &&
+                  tplFrame.contentDocument.querySelector('.watermark');
+        } catch (e) { tplFrame = null; /* stop trying if inaccessible */ }
+      }
+      return tplWm;
+    }
+
     var MAX_TILT  = 9;     // hover tilt at the edges (deg)
     var GYRO_TILT = 14;    // gyro tilt range (deg)
     var IDLE_MS   = 2400;  // stillness before ambient drift
@@ -2222,6 +2236,13 @@
       st.setProperty('--sheen-angle', (110 + pDY * 1.6).toFixed(1) + 'deg');
       st.setProperty('--wm-x', ( pDY * 0.7).toFixed(1) + 'px');   // background watermark drifts for depth
       st.setProperty('--wm-y', (-pRX * 0.7).toFixed(1) + 'px');
+
+      /* The EXPANDED front face is the same-origin template iframe, whose
+         watermark can't see this page's CSS vars — drive it directly so the
+         front parallaxes exactly like the hand-built back face. */
+      var wm = tplWatermark();
+      if (wm) wm.style.transform = 'translate(-50%, -50%) translate(' +
+        (pDY * 0.7).toFixed(1) + 'px, ' + (-pRX * 0.7).toFixed(1) + 'px)';
 
       requestAnimationFrame(frame);
     }

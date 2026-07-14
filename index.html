@@ -3184,6 +3184,22 @@
       show(b.getAttribute('data-expands'));
     });
   });
+  /* Whole-tile click opens the same modal as the Expand button. Guards:
+     skip while expanded (the modal lives INSIDE the card, so its clicks
+     bubble here), skip the modal chrome (close/CTA — close runs first in
+     the bubble chain and would otherwise re-open), and skip elements that
+     manage their own click-to-expand (the grabbable certificate). */
+  [['sc-cert', 'sc-cert-stage', '.cert-doc'], ['sc-fw', 'fw-showcase', null]].forEach(function (cfg) {
+    var card = document.getElementById(cfg[0]);
+    var stage = document.getElementById(cfg[1]);
+    if (!card || !stage) return;
+    card.addEventListener('click', function (e) {
+      if (stage.classList.contains('is-expanded')) return;
+      if (e.target.closest('.sc-expand, .sc-modal-close, .sc-modal-cta')) return;
+      if (cfg[2] && e.target.closest(cfg[2])) return;
+      show(cfg[1]);
+    });
+  });
   document.querySelectorAll('.sc-modal-close').forEach(function (b) {
     b.addEventListener('click', close);
   });
@@ -3297,7 +3313,18 @@
     [rec.dot, rec.label].forEach(function (el) {
       el.addEventListener('mouseenter', function () { setHot(rec, true); });
       el.addEventListener('mouseleave', function () { setHot(rec, false); });
-      el.addEventListener('click', function (e) { e.stopPropagation(); if (selected === rec) closeDetail(); else openDetail(rec); });
+      el.addEventListener('click', function (e) {
+        e.stopPropagation();
+        /* In the collapsed tile a spark click should open the modal (the
+           detail panel is display:none outside it), matching the
+           click-anywhere behavior of the rest of the card. */
+        if (!showcase.classList.contains('is-expanded')) {
+          var xb = document.querySelector('.sc-expand[data-expands="fw-showcase"]');
+          if (xb) xb.click();
+          return;
+        }
+        if (selected === rec) closeDetail(); else openDetail(rec);
+      });
     });
   });
   if (dClose) dClose.addEventListener('click', function (e) { e.stopPropagation(); closeDetail(); });

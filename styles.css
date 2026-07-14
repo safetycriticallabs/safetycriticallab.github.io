@@ -647,12 +647,20 @@ h2.section-title em { font-style: italic; color: var(--ink); font-family: var(--
 
 /* ── Nav: flat cream, navy ink, no hairline/frost ── */
 .global-nav { background: #FAF9F5; backdrop-filter: none; -webkit-backdrop-filter: none; border-bottom: none; }
-.gn-text { color: #0C2242; font-weight: 700; letter-spacing: 0.02em; }
-.gn-text em { color: #0C2242; }
+.gn-text { color: #0C2242; font-weight: 700; letter-spacing: 0.02em; transition: color 0.25s; }
+.gn-text em { color: #0C2242; transition: color 0.25s; }
+/* The wordmark links home; give it the same quiet dim as the nav links. */
+.gn-wordmark:hover .gn-text,
+.gn-wordmark:hover .gn-text em { color: rgba(12,34,66,0.55); }
 .gn-text-full { font-size: 19px; }
 .gn-links a { color: #0C2242; }
-.gn-links a:hover { color: #0C2242; }
+/* Quiet hover: the ink dims so the pointer gets feedback without adding a
+   second accent color to the bar. The active page stays solid — you're there. */
+.gn-links a:hover { color: rgba(12,34,66,0.55); }
 .gn-links a.active { color: #0C2242; font-weight: 600; }
+.gn-links a.active:hover { color: #0C2242; }
+.gn-dropdown-toggle { transition: color 0.25s; }
+.gn-dropdown-toggle:hover { color: rgba(12,34,66,0.55); }
 .gn-search { color: #0C2242; }
 .gn-cta {
   background: #0C2242 !important; color: #FAF9F5 !important; border-color: #0C2242 !important;
@@ -666,7 +674,10 @@ h2.section-title em { font-style: italic; color: var(--ink); font-family: var(--
   .gn-wordmark { position: relative; overflow: hidden; display: inline-flex; align-items: center; height: 30px; }
   .gn-text-full, .gn-text-abbr { display: block; height: 30px; line-height: 30px; white-space: nowrap; }
   .gn-text-full { opacity: 1; clip-path: inset(0 0 0 0); transition: opacity 0.34s ease 0.30s, clip-path 0.44s cubic-bezier(0.5,0,0.2,1) 0.30s; }
-  .gn-text-abbr { position: absolute; left: 0; top: 0; font-size: 22px; opacity: 0; pointer-events: none; transition: opacity 0.3s ease 0s; background: none !important; -webkit-text-fill-color: #0C2242 !important; color: #0C2242 !important; filter: none !important; }
+  .gn-text-abbr { position: absolute; left: 0; top: 0; font-size: 22px; opacity: 0; pointer-events: none; transition: opacity 0.3s ease 0s, color 0.25s, -webkit-text-fill-color 0.25s; background: none !important; -webkit-text-fill-color: #0C2242 !important; color: #0C2242 !important; filter: none !important; }
+  /* Hover dim must out-!important the gradient-era guards above so the
+     collapsed "SCL" dims like the full wordmark. */
+  .gn-wordmark:hover .gn-text-abbr { color: rgba(12,34,66,0.55) !important; -webkit-text-fill-color: rgba(12,34,66,0.55) !important; }
   .global-nav.gn-compact .gn-text-full { opacity: 0; clip-path: inset(0 100% 0 0); transition: opacity 0.34s ease 0s, clip-path 0.44s cubic-bezier(0.5,0,0.2,1) 0s; }
   .global-nav.gn-compact .gn-text-abbr { opacity: 1; transition: opacity 0.34s ease 0.34s; }
 }

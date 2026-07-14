@@ -3141,21 +3141,10 @@
   });
 </script>
 <script src="/footer.js" defer></script>
-<script>
-/* Home-only nav wordmark collapse: full "SAFETY CRITICAL LABS" at the top,
-   "SCL" once scrolled past 40px. Toggles .gn-compact; CSS handles the fade. */
-(function () {
-  var nav = document.querySelector('.global-nav');
-  if (!nav) return;
-  var THRESHOLD = 40, compact = false;
-  function update() {
-    var should = window.scrollY > THRESHOLD;
-    if (should !== compact) { compact = should; nav.classList.toggle('gn-compact', compact); }
-  }
-  window.addEventListener('scroll', update, { passive: true });
-  update();
-})();
-</script>
+<!-- Shared nav behavior (hamburger, dropdowns, wordmark collapse, mobile menu
+     CTA). The home page used to carry its own inline copies; they were removed
+     so this stays the single source, like every other page. -->
+<script src="/nav.js" defer></script>
 <script>
 /* Home-only showcase cards: the Expand button lifts the SAME live component
    (cert stage or firework container) into a floating modal; backdrop / close

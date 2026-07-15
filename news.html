@@ -131,17 +131,14 @@
   pointer-events: none;
   opacity: 0.6;
 }
-.news-featured-image-label {
-  font-family: var(--mono);
-  font-size: 12px;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: #0C2242;
-  background: rgba(250,246,236,0.85);
-  backdrop-filter: blur(8px);
-  padding: 10px 18px;
-  border-radius: 6px;
-  z-index: 2;
+.news-featured-img,
+.news-card-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 1;
 }
 
 /* Source filter chips */
@@ -429,9 +426,7 @@
           </div>
         </div>
       </div>
-      <div class="news-featured-image" id="featured-image">
-        <span class="news-featured-image-label" id="featured-image-label">AI Research</span>
-      </div>
+      <div class="news-featured-image" id="featured-image"></div>
     </article>
 
     <!-- Filter chips -->
@@ -631,6 +626,14 @@
   var gridItems = [];
   var activeFilter = 'all';
 
+  /* Thumbnail URLs that failed to load; consulted at render time so
+     a dead image isn't re-requested on every filter click. */
+  var BAD_IMAGES = {};
+
+  /* Seed entries never og-fetch: on a healthy load they're replaced
+     by live items within seconds, so the lookup would be wasted. */
+  FALLBACK.forEach(function (it) { it.ogTried = true; });
+
   /* ── Format date as "MMM DD, YYYY" ──────────────────────── */
   function formatDate(d) {
     if (!d || isNaN(d.getTime())) return '';
@@ -639,10 +642,11 @@
   }
 
   /* ── Strip HTML tags + truncate ─────────────────────────── */
+  /* DOMParser documents are inert: <img> tags in feed HTML don't
+     trigger network loads the way innerHTML on a live div does. */
   function stripHtml(html) {
-    var div = document.createElement('div');
-    div.innerHTML = html || '';
-    return (div.textContent || div.innerText || '').replace(/\s+/g, ' ').trim();
+    var doc = new DOMParser().parseFromString(html || '', 'text/html');
+    return (doc.body.textContent || '').replace(/\s+/g, ' ').trim();
   }
   function truncate(text, n) {
     if (!text) return '';
@@ -661,6 +665,50 @@
       var u = new URL(url);
       if (u.protocol === 'http:' || u.protocol === 'https:') return u.href;
     } catch (e) {}
+    return '';
+  }
+
+  /* ── Thumbnail extraction ───────────────────────────────────
+     media:content / media:thumbnail / enclosure carry the article
+     image in MIT, Google Research, DeepMind, and Ars feeds; the
+     Alignment Forum embeds images in the post HTML instead. Feeds
+     with no image data (TechCrunch, OpenAI, HAI, Google News) fall
+     back to the tinted gradient. */
+  function extractImage(node) {
+    var candidates = [];
+    var all = node.getElementsByTagName('*');
+    for (var i = 0; i < all.length; i++) {
+      var el = all[i];
+      var ln = (el.localName || '').toLowerCase();
+      var url = el.getAttribute('url');
+      if (!url) continue;
+      var medium = el.getAttribute('medium') || '';
+      var type = el.getAttribute('type') || '';
+      if (ln === 'thumbnail') {
+        /* media:thumbnail is often a square crop; prefer media:content */
+        candidates.push({ url: url, rank: 1 });
+      } else if ((ln === 'content' || ln === 'enclosure') &&
+                 (medium === 'image' || type.indexOf('image/') === 0)) {
+        candidates.push({ url: url, rank: 0 });
+      }
+    }
+    candidates.sort(function (a, b) { return a.rank - b.rank; });
+    for (var j = 0; j < candidates.length; j++) {
+      var safe = safeUrl(candidates[j].url);
+      if (safe) return safe;
+    }
+    return '';
+  }
+  function firstImgFromHtml(html) {
+    if (!html || html.indexOf('<img') === -1) return '';
+    var doc = new DOMParser().parseFromString(html, 'text/html');
+    var imgs = doc.getElementsByTagName('img');
+    for (var i = 0; i < imgs.length; i++) {
+      var w = parseInt(imgs[i].getAttribute('width'), 10);
+      if (w && w < 100) continue; /* skip tracking pixels and icons */
+      var src = safeUrl(imgs[i].getAttribute('src'));
+      if (src) return src;
+    }
     return '';
   }
 
@@ -690,13 +738,90 @@
       link = safeUrl(link);
       var date = pubEl ? new Date(pubEl.textContent) : new Date();
       var summary = descEl ? truncate(stripHtml(descEl.textContent), 180) : '';
+      var image = extractImage(node) || firstImgFromHtml(descEl ? descEl.textContent : '');
 
       if (title && link) {
         if (applyFilter && !AI_KEYWORDS.test(title + ' ' + summary)) continue;
-        out.push({ key: sourceKey, title: title, url: link, date: date, summary: summary });
+        out.push({ key: sourceKey, title: title, url: link, date: date, summary: summary, image: image });
       }
     }
     return out;
+  }
+
+  /* ── og:image lookup for TechCrunch ─────────────────────────
+     TechCrunch's feed carries no image data; the thumbnail only
+     exists as an og:image meta tag on the article page. The page
+     is fetched through the CORS proxy (techcrunch.com is on its
+     allowlist) and the read is cancelled as soon as the tag turns
+     up, so only the head of the page transfers. OpenAI blocks the
+     proxy and the HAI feed is dead, so those keep the gradient. */
+  var OG_HOSTS = { 'techcrunch.com': 1 };
+
+  function ogImageFromHtml(html) {
+    var tag = html.match(/<meta[^>]+(?:property|name)=["']og:image["'][^>]*>/i);
+    if (!tag) return '';
+    var content = tag[0].match(/content=["']([^"']+)["']/i);
+    return content ? safeUrl(content[1].replace(/&amp;/g, '&')) : '';
+  }
+
+  function fetchOgImage(articleUrl) {
+    return fetch(CORS_PROXY + encodeURIComponent(articleUrl))
+      .then(function (r) {
+        if (!r.ok || !r.body) return '';
+        var reader = r.body.getReader();
+        var decoder = new TextDecoder();
+        var buf = '';
+        function step() {
+          return reader.read().then(function (res) {
+            if (res.value) buf += decoder.decode(res.value, { stream: true });
+            var img = ogImageFromHtml(buf);
+            if (img || res.done || buf.length > 262144) {
+              reader.cancel().catch(function () {});
+              return img;
+            }
+            return step();
+          });
+        }
+        return step();
+      })
+      .catch(function () { return ''; });
+  }
+
+  /* Fill in og:image thumbnails for rendered items that lack one. */
+  function hydrateOgImages(items) {
+    items.forEach(function (item) {
+      if (!item || item.image || item.ogTried) return;
+      var host = '';
+      try { host = new URL(item.url).hostname.replace(/^www\./, ''); } catch (e) { return; }
+      if (!OG_HOSTS[host]) return;
+      item.ogTried = true;
+      fetchOgImage(item.url).then(function (img) {
+        if (!img) return;
+        item.image = img;
+        applyLateImage(item);
+      });
+    });
+  }
+
+  /* Slot a late-arriving thumbnail into whatever is on screen. */
+  function applyLateImage(item) {
+    if (document.getElementById('featured-link').href === item.url) {
+      setFeaturedImage(item);
+    }
+    var cards = document.querySelectorAll('.news-card');
+    for (var i = 0; i < cards.length; i++) {
+      if (cards[i].href === item.url && !cards[i].querySelector('.news-card-img')) {
+        var img = document.createElement('img');
+        img.className = 'news-card-img';
+        img.alt = '';
+        img.loading = 'lazy';
+        img.referrerPolicy = 'no-referrer';
+        img.src = item.image;
+        var box = cards[i].querySelector('.news-card-image');
+        box.insertBefore(img, box.firstChild);
+        break;
+      }
+    }
   }
 
   /* ── Fetch all feeds (each with its own timeout/fallback) ─ */
@@ -785,6 +910,7 @@
     renderFeatured(hero);
     gridItems = items.filter(function (i) { return i !== hero; });
     renderGrid();
+    hydrateOgImages([hero]);
   }
 
   /* Render the curated seed IMMEDIATELY so the page is full on first paint,
@@ -824,11 +950,29 @@
     document.getElementById('featured-summary').textContent = item.summary || ('Latest research and announcements from ' + meta.label + '.');
     document.getElementById('featured-source').textContent = meta.label;
     document.getElementById('featured-link').href = item.url;
-    document.getElementById('featured-image-label').textContent = meta.pill;
 
-    /* Per-source background tint on the featured image */
+    /* Article thumbnail when the feed provides one; otherwise the
+       per-source background tint stands in. */
+    document.getElementById('featured-image').setAttribute('data-source', item.key);
+    setFeaturedImage(item);
+  }
+
+  function setFeaturedImage(item) {
     var featuredImage = document.getElementById('featured-image');
-    featuredImage.setAttribute('data-source', item.key);
+    var imgEl = featuredImage.querySelector('.news-featured-img');
+    if (item.image && !BAD_IMAGES[item.image]) {
+      if (!imgEl) {
+        imgEl = document.createElement('img');
+        imgEl.className = 'news-featured-img';
+        imgEl.alt = '';
+        imgEl.referrerPolicy = 'no-referrer';
+        imgEl.onerror = function () { BAD_IMAGES[this.src] = 1; this.remove(); };
+        featuredImage.appendChild(imgEl);
+      }
+      imgEl.src = item.image;
+    } else if (imgEl) {
+      imgEl.remove();
+    }
   }
 
   /* ── Render grid (remaining items, filtered) ─────────────── */
@@ -844,8 +988,12 @@
     var html = '';
     filtered.slice(0, 12).forEach(function (item) {
       var meta = SOURCE_META[item.key] || { label: 'AI', pill: 'AI' };
+      var imgHtml = (item.image && !BAD_IMAGES[item.image])
+        ? '<img class="news-card-img" src="' + escapeHtml(item.image) + '" alt="" loading="lazy" referrerpolicy="no-referrer">'
+        : '';
       html += '<a href="' + item.url + '" target="_blank" rel="noopener" class="news-card" data-source="' + item.key + '">'
         +   '<div class="news-card-image">'
+        +     imgHtml
         +     '<span class="news-card-source-pill">' + escapeHtml(meta.pill) + '</span>'
         +   '</div>'
         +   '<div class="news-card-content">'
@@ -856,7 +1004,18 @@
         + '</a>';
     });
     grid.innerHTML = html;
+    hydrateOgImages(filtered.slice(0, 12));
   }
+
+  /* Error events don't bubble but do capture: one listener on the
+     grid marks failed thumbnails and drops them from the layout. */
+  document.getElementById('news-grid').addEventListener('error', function (e) {
+    var t = e.target;
+    if (t && t.classList && t.classList.contains('news-card-img')) {
+      BAD_IMAGES[t.src] = 1;
+      t.remove();
+    }
+  }, true);
 
   /* ── Filter chip handlers ──────────────────────────────────── */
   document.querySelectorAll('.news-filter-chip').forEach(function (chip) {

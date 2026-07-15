@@ -262,25 +262,22 @@
 
     <!--
       ╔══════════════════════════════════════════════════════════════════╗
-      ║  BREVO INTEGRATION                                               ║
+      ║  KIT (formerly ConvertKit) INTEGRATION — LIVE                    ║
       ║                                                                  ║
-      ║  When Brevo is accessible:                                       ║
-      ║   1. Create a subscription form in Brevo dashboard               ║
-      ║   2. Link it to the SCL Briefings list                           ║
-      ║   3. Enable double opt-in                                        ║
-      ║   4. From the embed code, copy the form action URL               ║
-      ║      (format: https://sibforms.com/serve/MUIFA…)                 ║
-      ║   5. Paste it into BREVO_FORM_URL constant in the script below   ║
+      ║  Wired to the SCL Briefings form (Kit free "Newsletter" plan).   ║
+      ║  Addresses POST to the hosted form endpoint set in KIT_FORM_URL  ║
+      ║  below; Kit handles double opt-in and sends the confirmation      ║
+      ║  email. Kit requires the email field be named exactly            ║
+      ║  "email_address" — do not rename it.                             ║
       ║                                                                  ║
-      ║  No other changes needed. Validation, UI, success and error      ║
-      ║  states already work. While BREVO_FORM_URL is empty, the form    ║
-      ║  shows the standard confirmation, but cacheLocally writes only   ║
-      ║  to the visitor's own localStorage; SCL cannot read it, so       ║
-      ║  NOTHING IS DELIVERED until the Brevo URL is pasted here.        ║
+      ║  To point at a different Kit form: in Kit open the form,         ║
+      ║  Save & Publish → Embed → HTML, copy the action URL              ║
+      ║  (https://app.kit.com/forms/<ID>/subscriptions) and replace      ║
+      ║  KIT_FORM_URL in the script below. No other change needed.       ║
       ╚══════════════════════════════════════════════════════════════════╝
     -->
     <form class="sub-form" id="sub-form" novalidate>
-      <input type="email" class="sub-input" id="sub-input" name="EMAIL" placeholder="you@organization.com" autocomplete="email" required>
+      <input type="email" class="sub-input" id="sub-input" name="email_address" placeholder="you@organization.com" autocomplete="email" required>
       <!-- Honeypot. Bots fill this in, humans don't. Checked client-side in the submit handler below. -->
       <input type="text" name="email_address_check" value="" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px;opacity:0;height:0;width:0;" aria-hidden="true">
       <input type="hidden" name="locale" value="en">
@@ -382,12 +379,13 @@
 (function () {
 
   /* ┌─────────────────────────────────────────────────────────────┐
-     │  PASTE BREVO FORM URL HERE                                  │
-     │  Example: 'https://sibforms.com/serve/MUIFAFJyyy…'          │
-     │  While it is an empty string '' the form shows an interim   │
-     │  notice directing readers to subscribe by email.            │
+     │  KIT HOSTED FORM ENDPOINT (SCL Briefings)                   │
+     │  From Kit → form → Embed → HTML: the <form action="…">.    │
+     │  Submissions here trigger Kit's double opt-in confirmation. │
+     │  If empty (''), the form falls back to a local-only         │
+     │  confirmation and NOTHING is delivered.                     │
      └─────────────────────────────────────────────────────────────┘ */
-  var BREVO_FORM_URL = '';
+  var KIT_FORM_URL = 'https://app.kit.com/forms/9685542/subscriptions';
 
   var form = document.getElementById('sub-form');
   var input = document.getElementById('sub-input');
@@ -440,23 +438,24 @@
        convenience only; SCL cannot read it. */
     cacheLocally(email);
 
-    /* No provider configured yet: show the standard confirmation.
-       The address lands only in the visitor's localStorage — paste the
-       Brevo URL above to start real delivery. */
-    if (!BREVO_FORM_URL) {
+    /* No endpoint configured: show the standard confirmation.
+       The address lands only in the visitor's localStorage — set
+       KIT_FORM_URL above to start real delivery. */
+    if (!KIT_FORM_URL) {
       showConfirmation();
       return;
     }
 
-    /* Submit to Brevo via fetch with no-cors.
-       Brevo's hosted form endpoint accepts cross-origin POSTs but does
+    /* Submit to Kit via fetch with no-cors.
+       Kit's hosted form endpoint accepts cross-origin POSTs but does
        not return a CORS-readable response, so we treat the submission
-       as fire-and-forget. Brevo handles double opt-in confirmation. */
+       as fire-and-forget. Kit handles the double opt-in confirmation
+       email — that email, not this page, is the real acknowledgement. */
     submitBtn.disabled = true;
     submitBtn.textContent = 'Subscribing…';
 
     var data = new FormData(form);
-    fetch(BREVO_FORM_URL, {
+    fetch(KIT_FORM_URL, {
       method: 'POST',
       mode: 'no-cors',
       body: data

@@ -15,6 +15,8 @@
 <link rel="apple-touch-icon" sizes="180x180" href="img/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://scl-cors-proxy.kevwill94.workers.dev" crossorigin>
+<link rel="preconnect" href="https://techcrunch.com">
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css">
 <style>
@@ -533,9 +535,12 @@
     hf:         { label: 'Hugging Face',     pill: 'Trending' }
   };
 
-  /* filter:true → keep only AI-relevant items (broad press / aggregator feeds). */
+  /* filter:true → keep only AI-relevant items (broad press / aggregator feeds).
+     titleSuffix → trailing publisher tag Google News appends; stripped after parse.
+     HAI dropped RSS in their site migration (every feed path returns the HTML
+     shell), so their stories come via a Google News query scoped to their site. */
   var FEEDS = [
-    { key: 'hai',        url: 'https://hai.stanford.edu/news/rss.xml' },
+    { key: 'hai',        url: 'https://news.google.com/rss/search?q=site:hai.stanford.edu when:365d&hl=en-US&gl=US&ceid=US:en', titleSuffix: ' - Stanford HAI' },
     { key: 'mit',        url: 'https://news.mit.edu/topic/mitartificial-intelligence2-rss.xml' },
     { key: 'google',     url: 'https://research.google/blog/rss/' },
     { key: 'deepmind',   url: 'https://deepmind.google/blog/rss.xml' },
@@ -630,9 +635,6 @@
      a dead image isn't re-requested on every filter click. */
   var BAD_IMAGES = {};
 
-  /* Seed entries never og-fetch: on a healthy load they're replaced
-     by live items within seconds, so the lookup would be wasted. */
-  FALLBACK.forEach(function (it) { it.ogTried = true; });
 
   /* ── Format date as "MMM DD, YYYY" ──────────────────────── */
   function formatDate(d) {
@@ -738,6 +740,12 @@
       link = safeUrl(link);
       var date = pubEl ? new Date(pubEl.textContent) : new Date();
       var summary = descEl ? truncate(stripHtml(descEl.textContent), 180) : '';
+      /* Google News descriptions are just the title plus the publisher
+         name; drop them rather than echo the headline twice. Compared
+         with punctuation stripped, since the two differ only in it. */
+      var nt = title.toLowerCase().replace(/[^a-z0-9]+/g, '');
+      var ns = summary.toLowerCase().replace(/[^a-z0-9]+/g, '');
+      if (ns && nt && (nt.indexOf(ns) === 0 || (ns.indexOf(nt) === 0 && ns.length - nt.length < 30))) summary = '';
       var image = extractImage(node) || firstImgFromHtml(descEl ? descEl.textContent : '');
 
       if (title && link) {
@@ -790,15 +798,19 @@
   /* Fill in og:image thumbnails for rendered items that lack one. */
   function hydrateOgImages(items) {
     items.forEach(function (item) {
-      if (!item || item.image || item.ogTried) return;
+      if (!item || item.image) return;
+      if (imgByUrl[item.url]) { item.image = imgByUrl[item.url]; return; }
+      if (ogAttempted[item.url]) return;
       var host = '';
       try { host = new URL(item.url).hostname.replace(/^www\./, ''); } catch (e) { return; }
       if (!OG_HOSTS[host]) return;
-      item.ogTried = true;
+      ogAttempted[item.url] = 1;
       fetchOgImage(item.url).then(function (img) {
         if (!img) return;
+        imgByUrl[item.url] = img;
         item.image = img;
         applyLateImage(item);
+        queueCacheSave();
       });
     });
   }
@@ -829,6 +841,16 @@
     return fetch(CORS_PROXY + encodeURIComponent(feed.url))
       .then(function (r) { return r.ok ? r.text() : Promise.reject(new Error('HTTP ' + r.status)); })
       .then(function (txt) { return parseFeed(txt, feed.key, feed.filter); })
+      .then(function (items) {
+        if (feed.titleSuffix) {
+          items.forEach(function (it) {
+            if (it.title.slice(-feed.titleSuffix.length) === feed.titleSuffix) {
+              it.title = it.title.slice(0, -feed.titleSuffix.length).trim();
+            }
+          });
+        }
+        return items;
+      })
       .catch(function () { return []; });
   }
 
@@ -913,32 +935,104 @@
     hydrateOgImages([hero]);
   }
 
-  /* Render the curated seed IMMEDIATELY so the page is full on first paint,
-     then let live feeds float fresh items to the top (seed backfills the grid). */
-  sortAndRender(FALLBACK.slice());
+  /* ── Local cache of the assembled feed ──────────────────────
+     Repeat visits paint the last live result (thumbnail URLs
+     included, so no og:image round-trips) instantly, then the
+     background refresh floats anything newer to the top. */
+  var CACHE_KEY = 'sclNewsCache.v1';
+  var CACHE_MAX_AGE = 24 * 60 * 60 * 1000;
 
-  Promise.all([
-    Promise.all(FEEDS.map(fetchFeed)).then(function (results) {
-      var live = []; results.forEach(function (items) { live = live.concat(items); }); return live;
-    }),
-    fetchOpenRouter(),
-    fetchHuggingFace()
-  ]).then(function (parts) {
-    var feeds = parts[0], orouter = parts[1], hf = parts[2];
+  function cacheLoad() {
+    try {
+      var c = JSON.parse(localStorage.getItem(CACHE_KEY));
+      if (!c || !c.items || Date.now() - c.t > CACHE_MAX_AGE) return null;
+      var out = [];
+      c.items.forEach(function (it) {
+        var url = safeUrl(it.url);
+        if (!url || !it.title || !SOURCE_META[it.key]) return;
+        out.push({
+          key: it.key, title: String(it.title), url: url,
+          date: new Date(it.d), summary: String(it.summary || ''),
+          image: it.image ? safeUrl(it.image) : ''
+        });
+      });
+      return out.length ? out : null;
+    } catch (e) { return null; }
+  }
 
-    /* The same model can sit in both catalogs (e.g. GLM 5.2, Kimi K2.7).
-       Keep the OpenRouter card (cleaner name) and drop the Hugging Face copy. */
+  function cacheSave(items) {
+    try {
+      localStorage.setItem(CACHE_KEY, JSON.stringify({
+        t: Date.now(),
+        items: items.slice(0, 80).map(function (it) {
+          return { key: it.key, title: it.title, url: it.url, d: it.date.getTime(), summary: it.summary, image: it.image || '' };
+        })
+      }));
+    } catch (e) {}
+  }
+
+  /* ── Progressive loading ────────────────────────────────────
+     Each feed renders as it arrives (debounced) instead of the
+     whole grid gating on the slowest source; cached items from
+     the previous visit backfill until fresh copies land. */
+  var cachedItems = cacheLoad();
+  var liveItems = [];
+  var renderTimer = null;
+
+  /* URL-keyed image registry and og-attempt ledger, shared across the
+     cached and live copies of the same article: a thumbnail is
+     discovered once and never fetched twice. */
+  var imgByUrl = {};
+  var ogAttempted = {};
+  (cachedItems || []).forEach(function (it) { if (it.image) imgByUrl[it.url] = it.image; });
+
+  /* Seed entries never og-fetch: on a healthy load they're replaced
+     by live items within seconds, so the lookup would be wasted. */
+  FALLBACK.forEach(function (it) { ogAttempted[it.url] = 1; });
+
+  var cacheSaveTimer = null;
+  function queueCacheSave() {
+    if (cacheSaveTimer) return;
+    cacheSaveTimer = setTimeout(function () {
+      cacheSaveTimer = null;
+      cacheSave(dedupe(liveItems.concat(cachedItems || [])));
+    }, 800);
+  }
+
+  function addLive(items) {
+    if (!items || !items.length) return;
+    items.forEach(function (it) {
+      if (it.image) imgByUrl[it.url] = it.image;
+      else if (imgByUrl[it.url]) it.image = imgByUrl[it.url];
+    });
+    liveItems = liveItems.concat(items);
+    if (renderTimer) return;
+    renderTimer = setTimeout(function () {
+      renderTimer = null;
+      var merged = dedupe(liveItems.concat(cachedItems || []));
+      sortAndRender(merged.concat(FALLBACK));
+      cacheSave(merged);
+    }, 200);
+  }
+
+  /* First paint: cached live items if we have them, else the seed. */
+  sortAndRender((cachedItems || []).concat(FALLBACK));
+
+  FEEDS.forEach(function (feed) { fetchFeed(feed).then(addLive); });
+
+  /* The two model catalogs stay paired: the same model can sit in
+     both (e.g. GLM 5.2, Kimi K2.7) — keep the OpenRouter card
+     (cleaner name) and drop the Hugging Face copy. Both APIs are
+     fast, so the pairing costs no meaningful wall-clock. */
+  Promise.all([fetchOpenRouter(), fetchHuggingFace()]).then(function (parts) {
+    var orouter = parts[0], hf = parts[1];
     function modelKey(title) {
       return String(title).split(/[:/]/).pop().toLowerCase().replace(/[^a-z0-9]/g, '');
     }
     var orKeys = {};
     orouter.forEach(function (m) { orKeys[modelKey(m.title)] = 1; });
     hf = hf.filter(function (m) { return !orKeys[modelKey(m.title)]; });
-
-    var live = feeds.concat(orouter, hf);
-    if (live.length > 0) {
-      sortAndRender(live.concat(FALLBACK));
-    }
+    addLive(orouter.concat(hf));
   });
 
   /* ── Render featured article (top item) ──────────────────── */
@@ -958,6 +1052,7 @@
   }
 
   function setFeaturedImage(item) {
+    if (!item.image && imgByUrl[item.url]) item.image = imgByUrl[item.url];
     var featuredImage = document.getElementById('featured-image');
     var imgEl = featuredImage.querySelector('.news-featured-img');
     if (item.image && !BAD_IMAGES[item.image]) {
@@ -988,6 +1083,7 @@
     var html = '';
     filtered.slice(0, 12).forEach(function (item) {
       var meta = SOURCE_META[item.key] || { label: 'AI', pill: 'AI' };
+      if (!item.image && imgByUrl[item.url]) item.image = imgByUrl[item.url];
       var imgHtml = (item.image && !BAD_IMAGES[item.image])
         ? '<img class="news-card-img" src="' + escapeHtml(item.image) + '" alt="" loading="lazy" referrerpolicy="no-referrer">'
         : '';

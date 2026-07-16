@@ -9,7 +9,7 @@
  * Paste this whole file as the Worker code and click Deploy.
  * The deployed worker the site uses is:
  *   https://scl-cors-proxy.kevwill94.workers.dev
- * `CORS_PROXY` in ticker.js, index.html, and news.html points to:
+ * `CORS_PROXY` in index.html and news.html points to:
  *   const CORS_PROXY = 'https://scl-cors-proxy.kevwill94.workers.dev/?url=';
  * Edits to this file take effect only after a manual redeploy.
  *

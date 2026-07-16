@@ -20,6 +20,8 @@
 <link rel="shortcut icon" href="favicon.ico">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://scl-cors-proxy.kevwill94.workers.dev" crossorigin>
+<link rel="preconnect" href="https://www.federalregister.gov" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css">
 <style>
@@ -1983,7 +1985,6 @@
           <div class="footer-col-group">
             <div class="footer-col-label">Resources</div>
             <a href="/documents">Documents</a>
-            <a href="/presentation">Presentation</a>
             <a href="/certificate-template">Certificate template</a>
             <a href="/search.html">FAQ</a>
           </div>
@@ -2836,29 +2837,34 @@
 (function () {
   const CORS_PROXY = 'https://scl-cors-proxy.kevwill94.workers.dev/?url=';
 
-  /* ── Agency logos (inline SVG) ─────────────────────── */
-  var LOGOS = {
-    us: '<img src="img/federal-register.svg" alt="Federal Register" style="width:100%;height:100%;object-fit:contain;border-radius:50%;">',
-    eu: '<img src="img/eu-flag.svg" alt="EU" style="width:100%;height:100%;object-fit:cover;border-radius:2px;">',
-    nist: '<img src="img/nist.svg" alt="NIST" style="height:100%;object-fit:contain;">'
-  };
+  /* ── Cached regulatory cards ─────────────────────────
+     The three cards render instantly from the last visit's
+     data (localStorage), then the live fetches below refresh
+     them in place. */
+  var REG_CACHE_KEY = 'sclRegNews.v1';
+  var REG_CACHE_MAX_AGE = 24 * 60 * 60 * 1000;
 
-  /* ── Ticker cache (write only) — this page has no ticker; it just warms
-     scl_ticker_cache in sessionStorage for the pages that render one. ── */
-  var CACHE_KEY = 'scl_ticker_cache';
-
-  var tickerItems = [];
-  var tickerSources = { us: false, eu: false, nist: false };
-
-  function tryBuildTicker() {
-    if (!tickerSources.us || !tickerSources.eu || !tickerSources.nist) return;
-    /* Save to cache for other pages */
+  function regCacheSave() {
     try {
-      var cacheItems = tickerItems.map(function (item) {
-        return { title: item.title, url: item.url, date: item.date, source: item.source, sortDate: item.sortDate };
+      localStorage.setItem(REG_CACHE_KEY, JSON.stringify({ t: Date.now(), latest: newsLatest }));
+    } catch (e) { /* storage unavailable */ }
+  }
+
+  function regCacheLoad() {
+    try {
+      var c = JSON.parse(localStorage.getItem(REG_CACHE_KEY));
+      if (!c || !c.latest || Date.now() - c.t > REG_CACHE_MAX_AGE) return;
+      NEWS_ORDER.forEach(function (key) {
+        var it = c.latest[key];
+        if (!it || !it.title || !it.url) return;
+        try {
+          var u = new URL(it.url);
+          if (u.protocol !== 'https:' && u.protocol !== 'http:') return;
+        } catch (e) { return; }
+        newsLatest[key] = { title: String(it.title), url: it.url, date: String(it.date || ''), type: String(it.type || '') };
       });
-      sessionStorage.setItem(CACHE_KEY, JSON.stringify({ ts: Date.now(), items: cacheItems }));
-    } catch (e) { /* storage full */ }
+      renderNewsList();
+    } catch (e) { /* corrupt cache: ignore */ }
   }
 
   function formatDate(dateStr) {
@@ -2894,6 +2900,7 @@
   /* The order news rows appear in the section */
   var NEWS_ORDER = ['us', 'eu', 'nist'];
   var newsLatest = {};
+  regCacheLoad();
 
   /* ── Banner constellation (matches hero starfield aesthetic) ──────────
      Seeded PRNG so each source's banner gets a stable, distinct constellation
@@ -2911,6 +2918,7 @@
     if (!item) return;
     newsLatest[sourceKey] = item;
     renderNewsList();
+    regCacheSave();
   }
 
   function renderNewsList() {
@@ -2961,7 +2969,7 @@
     { title: 'National AI Initiative Office Request for Information', url: 'https://www.federalregister.gov/documents/2023/05/23/2023-10718/request-for-information-national-artificial-intelligence-research-resource', date: formatDate('2023-05-23'), type: 'Notice' }
   ];
 
-  fetch('https://www.federalregister.gov/api/v1/documents.json?conditions%5Bterm%5D=%22artificial+intelligence%22&order=newest&per_page=100&fields%5B%5D=title&fields%5B%5D=publication_date&fields%5B%5D=html_url&fields%5B%5D=type')
+  fetch('https://www.federalregister.gov/api/v1/documents.json?conditions%5Bterm%5D=%22artificial+intelligence%22&order=newest&per_page=25&fields%5B%5D=title&fields%5B%5D=publication_date&fields%5B%5D=html_url&fields%5B%5D=type')
     .then(function (r) { return r.json(); })
     .then(function (data) {
       var filtered = [];
@@ -2978,23 +2986,9 @@
       }
       var items = filtered.length > 0 ? filtered : frFallback;
       addNewsItem('us', items[0]);
-      /* Feed ticker */
-      items.slice(0, 3).forEach(function (item) {
-        tickerItems.push({
-          title: item.title, url: item.url,
-          date: item.date, source: 'Federal Register',
-          logo: LOGOS.us,
-          sortDate: new Date(item.date).getTime()
-        });
-      });
-      tickerSources.us = true; tryBuildTicker();
     })
     .catch(function () {
       addNewsItem('us', frFallback[0]);
-      frFallback.slice(0, 3).forEach(function (item) {
-        tickerItems.push({ title: item.title, url: item.url, date: item.date, source: 'Federal Register', logo: LOGOS.us, sortDate: new Date(item.date).getTime() });
-      });
-      tickerSources.us = true; tryBuildTicker();
     });
 
   /* ── EUR-Lex (EU AI Act) ────────────────────────────── */
@@ -3039,26 +3033,9 @@
       /* If RSS had AI matches, use them; otherwise show key AI Act documents */
       var euItems = filtered.length > 0 ? filtered : euAiFallback;
       addNewsItem('eu', euItems[0]);
-      /* Feed ticker */
-      euItems.slice(0, 3).forEach(function (item) {
-        tickerItems.push({
-          title: item.title, url: item.url, date: item.date,
-          source: 'EU', logo: LOGOS.eu,
-          sortDate: new Date(item.date).getTime()
-        });
-      });
-      tickerSources.eu = true; tryBuildTicker();
     })
     .catch(function () {
       addNewsItem('eu', euAiFallback[0]);
-      euAiFallback.slice(0, 3).forEach(function (item) {
-        tickerItems.push({
-          title: item.title, url: item.url, date: item.date,
-          source: 'EU', logo: LOGOS.eu,
-          sortDate: new Date(item.date).getTime()
-        });
-      });
-      tickerSources.eu = true; tryBuildTicker();
     });
 
   /* ── NIST (News + Drafts combined) ─────────────────── */
@@ -3137,21 +3114,8 @@
     items.forEach(function (item) { delete item.sortDate; });
 
     addNewsItem('nist', items[0]);
-    /* Feed ticker */
-    items.slice(0, 3).forEach(function (item) {
-      tickerItems.push({
-        title: item.title, url: item.url, date: item.date,
-        source: 'NIST', logo: LOGOS.nist,
-        sortDate: new Date(item.date).getTime()
-      });
-    });
-    tickerSources.nist = true; tryBuildTicker();
   }).catch(function () {
     addNewsItem('nist', nistFallback[0]);
-    nistFallback.slice(0, 3).forEach(function (item) {
-      tickerItems.push({ title: item.title, url: item.url, date: item.date, source: 'NIST', logo: LOGOS.nist, sortDate: new Date(item.date).getTime() });
-    });
-    tickerSources.nist = true; tryBuildTicker();
   });
 
 })();

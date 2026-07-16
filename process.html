@@ -155,14 +155,17 @@
   margin-top: 32px;
   display: flex; justify-content: center;
 }
+/* ?embed=1 strips the template's own page chrome, so the white sheet
+   fills the iframe exactly and this frame's border + shadow become the
+   sheet's paper edge — one surface, no backdrop behind it. */
 .cert-reveal-frame {
   overflow: hidden;
   border: 1px solid var(--rule);
-  background: #FAF9F5;
+  background: #fff;
   box-shadow: 0 8px 32px rgba(15,35,64,0.12);
 }
 .cert-reveal-frame iframe {
-  width: 856px; height: 1136px;
+  width: 816px; height: 1056px;
   border: none; display: block;
   transform-origin: top left;
   pointer-events: none;
@@ -530,7 +533,7 @@ body, body * { color: #0C2242 !important; }
             <div class="phase-subsection-label">[ Certificate of conformance ]</div>
             <div class="cert-reveal fade-up">
               <div class="cert-reveal-frame" id="certFrame">
-                <iframe src="certificate-template.html" id="certIframe" scrolling="no" title="SCL Certificate of Conformance preview"></iframe>
+                <iframe src="certificate-template.html?embed=1" id="certIframe" scrolling="no" title="SCL Certificate of Conformance preview"></iframe>
               </div>
             </div>
           </div>
@@ -691,7 +694,7 @@ function scaleCertReveal() {
   const frame = document.getElementById('certFrame');
   const iframe = document.getElementById('certIframe');
   if (!frame || !iframe) return;
-  const nativeW = 856, nativeH = 1136;
+  const nativeW = 816, nativeH = 1056;
   const maxWidth = Math.min(frame.parentElement.offsetWidth, nativeW);
   const scale = maxWidth / nativeW;
   iframe.style.transform = 'scale(' + scale + ')';

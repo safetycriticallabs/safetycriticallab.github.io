@@ -1568,8 +1568,8 @@
       left: calc(50% + (var(--nx) - 50%) * var(--bang, 1) * (0.86 + 0.14 * var(--expand, 1)));
       top: calc(46% + (var(--ny) - 46%) * var(--bang, 1) * (0.86 + 0.14 * var(--expand, 1)));
       transform: translate(-50%, -50%);
-      display: flex; flex-direction: column; align-items: center; gap: 6px;
-      width: 94px; padding: 10px 8px 9px;
+      display: flex; flex-direction: column; align-items: center; gap: 5px;
+      width: 82px; padding: 8px 7px;
       /* glass on the night sky — translucent fill + light edge so the labels
          sit IN the field instead of on top of it */
       background: rgba(250, 249, 245, 0.08);
@@ -1578,10 +1578,10 @@
       box-shadow: 0 10px 24px rgba(0, 0, 0, 0.22);
       text-decoration: none;
     }
-    .smc-glyph { display: block; width: 22px; height: 22px; }
+    .smc-glyph { display: block; width: 20px; height: 20px; }
     .smc-glyph svg { display: block; width: 100%; height: 100%; }
     .smc-lbl {
-      font-family: var(--mono); font-size: 9.5px; font-weight: 500; white-space: nowrap;
+      font-family: var(--mono); font-size: 8.7px; font-weight: 500; white-space: nowrap;
       letter-spacing: 0.08em; text-transform: uppercase;
       /* !important or the body-wide recolor rule paints it navy-on-navy */
       color: rgba(250, 249, 245, 0.92) !important;
@@ -1699,22 +1699,22 @@
       <div class="smc-card" id="smc-card">
         <svg class="smc-stars" id="smc-stars" viewBox="0 0 420 600" preserveAspectRatio="none" aria-hidden="true"></svg>
         <div class="smc-bloom" id="smc-bloom" aria-hidden="true"></div>
-        <a class="smc-node" style="--nx:26%; --ny:12%" href="/certificate-template">
+        <a class="smc-node" style="--nx:40.1%; --ny:55.9%" href="/certificate-template">
           <span class="smc-glyph" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#FAF9F5" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="9" r="5"/><circle cx="12" cy="9" r="1.6" fill="#FAF9F5" stroke="none"/><path d="M9.2 13.4 8.2 20l3.8-2.1 3.8 2.1-1-6.6"/></svg></span><span class="smc-lbl">Certificate</span>
         </a>
-        <a class="smc-node" style="--nx:72%; --ny:20%" href="/framework">
+        <a class="smc-node" style="--nx:50.8%; --ny:27%" href="/framework">
           <span class="smc-glyph" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#FAF9F5" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="7" height="7" rx="1.5"/><rect x="13" y="4" width="7" height="7" rx="1.5"/><rect x="4" y="13" width="7" height="7" rx="1.5"/><rect x="13" y="13" width="7" height="7" rx="1.5"/></svg></span><span class="smc-lbl">Framework</span>
         </a>
-        <a class="smc-node" style="--nx:66%; --ny:46%" href="/process">
+        <a class="smc-node" style="--nx:65.4%; --ny:64.4%" href="/process">
           <span class="smc-glyph" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#FAF9F5" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="4.6" cy="12" r="2.1"/><circle cx="12" cy="12" r="2.1"/><circle cx="19.4" cy="12" r="2.1"/><path d="M6.7 12h3.2M14.1 12h3.2"/></svg></span><span class="smc-lbl">Process</span>
         </a>
-        <a class="smc-node" style="--nx:20%; --ny:42%" href="/verify">
+        <a class="smc-node" style="--nx:21.2%; --ny:42.2%" href="/verify">
           <span class="smc-glyph" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#FAF9F5" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.6l6.8 2.7v5c0 4.4-2.9 7.3-6.8 8.7-3.9-1.4-6.8-4.3-6.8-8.7v-5z"/><path d="M9 12l2.2 2.2 3.9-4.4"/></svg></span><span class="smc-lbl">Verify</span>
         </a>
-        <a class="smc-node" style="--nx:32%; --ny:72%" href="/search">
+        <a class="smc-node" style="--nx:77.9%; --ny:26.5%" href="/search">
           <span class="smc-glyph" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#FAF9F5" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 7.2c0-1.5 1.2-2.7 2.7-2.7h9.6c1.5 0 2.7 1.2 2.7 2.7v5.6c0 1.5-1.2 2.7-2.7 2.7h-6.9l-4 3.3c-.6.5-1.4 0-1.4-.7z"/><path d="M10.5 8c.3-1 1.2-1.6 2.3-1.5 1 .2 1.7 1 1.6 2-.1 1.2-1.4 1.4-1.9 2.3"/><circle cx="12.3" cy="12.6" r="0.9" fill="#FAF9F5" stroke="none"/></svg></span><span class="smc-lbl">Questions</span>
         </a>
-        <a class="smc-node" style="--nx:74%; --ny:80%" href="/subscribe">
+        <a class="smc-node" style="--nx:41.5%; --ny:84.1%" href="/subscribe">
           <span class="smc-glyph" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#FAF9F5" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5.5" width="17" height="13" rx="2.2"/><path d="M4.6 7.2 12 12.6l7.4-5.4"/></svg></span><span class="smc-lbl">Subscribe</span>
         </a>
       </div>
@@ -3505,8 +3505,8 @@
   var clusters = [], solos = [], tiles = [], field = null;
   var bloom = document.getElementById('smc-bloom');
 
-  /* ── Big-bang timeline (fires when the tile scrolls into view; re-arms on
-     leave so it re-detonates each return). --bang runs 0..1 over BANG_MS; the
+  /* ── Big-bang timeline (fires ONCE, the first time the tile scrolls into
+     view; never re-detonates). --bang runs 0..1 over BANG_MS; the
      constellation starts collapsed on the centre point (CX/CY, matching the
      labels' 50%/46% and the bloom) and blows out to rest. STAGGER lags the
      outer labels behind the inner ones so it reads as an expanding front, and
@@ -3673,15 +3673,8 @@
 
   function armBang() {
     if (reduce.matches || !built) return;
-    if (bangArmed && !bangDone) return;   // already detonating — don't restart
+    if (bangArmed) return;                // one-shot — arms once, never restarts
     bangArmed = true; bangDone = false; bangStart = 0; bangVal = 0;
-  }
-  /* re-arm on leave so the next entry re-detonates; paint the collapsed state
-     now (off-screen) so nothing flashes at rest before the bang fires. */
-  function resetBang() {
-    if (reduce.matches) return;
-    bangArmed = false; bangDone = false; bangStart = 0; bangVal = 0;
-    applyBang(0, 0);
   }
 
   function tick(now) {
@@ -3722,16 +3715,18 @@
   /* display:none (desktop) reports not-intersecting, so this doubles as the
      desktop off-switch after a viewport resize back up. Two gates off one
      observer: ANY sliver on screen (ratio > 0) runs the drift loop, but the
-     big-bang only ARMS once the tile is genuinely in view (ratio ≥ ARM_RATIO)
-     — so it sits blank as you approach and detonates as you scroll onto it,
-     from the core outward, instead of firing off-screen at the bottom edge.
-     Leaving fully (ratio 0) re-arms it for the next scroll-in. */
+     big-bang ARMS ONCE — the first time the tile is genuinely in view
+     (ratio ≥ ARM_RATIO) — so it sits blank as you approach, detonates from the
+     core as you scroll onto it, then stays put. It never re-detonates. */
+  var bangFired = false;
   new IntersectionObserver(function (entries) {
     var e = entries[0];
     visible = e.isIntersecting;
     setRunning(visible);
-    if (!visible) resetBang();
-    else if (e.intersectionRatio >= ARM_RATIO) armBang();
+    if (!bangFired && visible && e.intersectionRatio >= ARM_RATIO) {
+      bangFired = true;
+      armBang();
+    }
   }, { threshold: [0, ARM_RATIO] }).observe(panel);
 
   function ensureBuilt() {

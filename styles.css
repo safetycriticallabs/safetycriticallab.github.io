@@ -748,54 +748,9 @@ h2.section-title em { font-style: italic; color: var(--ink); font-family: var(--
   .footer-col { gap: 36px; }
   .site-footer .footer-col-label::after { display: none; }
 }
-@media (max-width: 560px) { .footer-cols { grid-template-columns: 1fr; } }
-
-/* ── Footer accordion (phones only): each group label is a tappable row with a
-   +/− toggle; the link list collapses beneath it. footer.js toggles .is-open on
-   the .footer-col-group and mirrors it in aria-expanded. Selectors carry extra
-   specificity (+!important where needed) so they also beat the page-local shell
-   copies in index.html / process.html, whose label/::after rules use !important. */
-@media (max-width: 560px) {
-  .site-footer .footer-cols { gap: 0; }
-  .site-footer .footer-col { gap: 0 !important; }
-  .site-footer .footer-col-group { border-bottom: 1px solid rgba(250,249,245,0.16); }
-  .site-footer .footer-col:first-child .footer-col-group:first-child {
-    border-top: 1px solid rgba(250,249,245,0.16);
-  }
-  .site-footer .footer-col .footer-col-label {
-    display: flex !important;
-    align-items: center;
-    justify-content: space-between;
-    padding: 16px 0 !important;
-    margin-bottom: 0 !important;
-    cursor: pointer;
-    user-select: none;
-    -webkit-tap-highlight-color: transparent;
-  }
-  .site-footer .footer-col .footer-col-label::after {
-    content: '+';
-    display: block !important;
-    font-family: var(--sans);
-    font-size: 22px;
-    font-weight: 300;
-    line-height: 1;
-    color: rgba(250,249,245,0.65);
-  }
-  .site-footer .footer-col-group.is-open > .footer-col-label::after { content: '−'; }
-  .site-footer .footer-col-group a {
-    max-height: 0;
-    opacity: 0;
-    overflow: hidden;
-    padding: 0 !important;
-    transition: max-height 0.3s ease, opacity 0.2s ease, padding 0.25s ease;
-  }
-  .site-footer .footer-col-group.is-open a {
-    max-height: 60px;
-    opacity: 1;
-    padding: 9px 0 !important;
-  }
-  .site-footer .footer-col-group.is-open a:last-of-type { padding-bottom: 16px !important; }
-}
+/* Phones keep the ≤900px two-column grid, all groups open — the old +/−
+   accordion was removed 2026-07-17 (footer.js is now a stub for the same
+   reason). No ≤560px override: the 2-col layout carries down. */
 
 /* ── Mobile-menu CTA (cloned in by nav.js) ── The bar's "Get Certified" pill
    is hidden at ≤880px, so nav.js clones it in as the menu's last item. Menu

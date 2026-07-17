@@ -1539,15 +1539,34 @@
     .smc-stars { position: absolute; inset: 0; width: 100%; height: 100%; }
     .smc-line { stroke: rgba(250,249,245,0.22); stroke-width: 0.7; }
     .smc-star { fill: #FAF9F5; }
+    /* ignition bloom — a hot core at the constellation centre (50%/46%) that
+       flares as the big-bang fires, then fades as the field expands out. JS
+       drives its opacity + scale off the --bang timeline; screen-blended so it
+       reads as light, not a disc. Sits above the stars, below the labels. */
+    .smc-bloom {
+      position: absolute; left: 50%; top: 46%;
+      width: 260px; height: 260px; border-radius: 50%;
+      transform: translate(-50%, -50%) scale(0.4);
+      background: radial-gradient(circle,
+        rgba(255,255,255,0.90) 0%,
+        rgba(206,222,255,0.55) 26%,
+        rgba(120,160,255,0.16) 52%,
+        rgba(120,160,255,0) 72%);
+      opacity: 0; pointer-events: none; mix-blend-mode: screen;
+      will-change: opacity, transform;
+    }
     /* the six feature labels, floating at their --nx/--ny constellation spots;
        plain links — tap navigates. They sit inside the expanding card, so the
-       pattern breathes wider as the tile grows to full bleed */
+       pattern breathes wider as the tile grows to full bleed. The big-bang rides
+       a per-node --bang (0 collapsed onto centre → 1 at rest); at --bang 1 this
+       collapses to the original resting formula. */
     .smc-node {
       position: absolute;
       /* the pattern expands with the tile: 86% spread at rest, 100% at full
-         bleed, riding the same --expand the card scrub writes */
-      left: calc(50% + (var(--nx) - 50%) * (0.86 + 0.14 * var(--expand, 1)));
-      top: calc(46% + (var(--ny) - 46%) * (0.86 + 0.14 * var(--expand, 1)));
+         bleed, riding the same --expand the card scrub writes. --bang folds the
+         detonation in front of that: 0 puts every label on the centre point. */
+      left: calc(50% + (var(--nx) - 50%) * var(--bang, 1) * (0.86 + 0.14 * var(--expand, 1)));
+      top: calc(46% + (var(--ny) - 46%) * var(--bang, 1) * (0.86 + 0.14 * var(--expand, 1)));
       transform: translate(-50%, -50%);
       display: flex; flex-direction: column; align-items: center; gap: 6px;
       width: 94px; padding: 10px 8px 9px;
@@ -1679,6 +1698,7 @@
     <div class="smc" id="smc" role="group" aria-label="Explore Safety Critical Labs">
       <div class="smc-card" id="smc-card">
         <svg class="smc-stars" id="smc-stars" viewBox="0 0 420 600" preserveAspectRatio="none" aria-hidden="true"></svg>
+        <div class="smc-bloom" id="smc-bloom" aria-hidden="true"></div>
         <a class="smc-node" style="--nx:26%; --ny:12%" href="/certificate-template">
           <span class="smc-glyph" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#FAF9F5" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="9" r="5"/><circle cx="12" cy="9" r="1.6" fill="#FAF9F5" stroke="none"/><path d="M9.2 13.4 8.2 20l3.8-2.1 3.8 2.1-1-6.6"/></svg></span><span class="smc-lbl">Certificate</span>
         </a>
@@ -3482,7 +3502,20 @@
   var SVG_NS = 'http://www.w3.org/2000/svg';
   var W = 420, H = 600;
   var built = false, running = false, visible = false;
-  var clusters = [], solos = [], tiles = [];
+  var clusters = [], solos = [], tiles = [], field = null;
+  var bloom = document.getElementById('smc-bloom');
+
+  /* ── Big-bang timeline (fires when the tile scrolls into view; re-arms on
+     leave so it re-detonates each return). --bang runs 0..1 over BANG_MS; the
+     constellation starts collapsed on the centre point (CX/CY, matching the
+     labels' 50%/46% and the bloom) and blows out to rest. STAGGER lags the
+     outer labels behind the inner ones so it reads as an expanding front, and
+     backOut() gives a small overshoot + settle. Tile geometry is untouched. ── */
+  var CX = W * 0.5, CY = H * 0.46;
+  var BANG_MS = 1050, STAGGER = 0.28, ARM_RATIO = 0.5;
+  var bangArmed = false, bangDone = false, bangStart = 0, bangVal = 0;
+  function clamp01(v){ return v < 0 ? 0 : v > 1 ? 1 : v; }
+  function backOut(t){ if (t <= 0) return 0; var c1 = 1.32, c3 = c1 + 1, u = t - 1; return 1 + c3 * u * u * u + c1 * u * u; }
 
   /* ── Starfield: small triangulated clusters + solos, Lissajous drift only
      (no cursor pull — the panel is touch-first). ── */
@@ -3490,19 +3523,30 @@
     var CLUSTER_COUNT = 4, SOLO_COUNT = 22, REACH = 40;
     /* the labels drift free like the clusters — same Lissajous family,
        composed over the centering translate; no tethers, no figure */
-    var avoid = [];
-    Array.prototype.forEach.call(panel.querySelectorAll('.smc-node'), function (n) {
-      avoid.push({
-        x: parseFloat(n.style.getPropertyValue('--nx')) / 100 * W,
-        y: parseFloat(n.style.getPropertyValue('--ny')) / 100 * H
-      });
+    var avoid = [], nodeEls = panel.querySelectorAll('.smc-node'), maxD = 0.0001;
+    /* first pass: resting distance from centre (in --nx/--ny % space) so the
+       big-bang can lag outer labels behind inner ones (rNorm 0..1). */
+    Array.prototype.forEach.call(nodeEls, function (n) {
+      var nx = parseFloat(n.style.getPropertyValue('--nx'));
+      var ny = parseFloat(n.style.getPropertyValue('--ny'));
+      var d = Math.sqrt((nx - 50) * (nx - 50) + (ny - 46) * (ny - 46));
+      if (d > maxD) maxD = d;
+      n._smcD = d;
+      avoid.push({ x: nx / 100 * W, y: ny / 100 * H });
+    });
+    Array.prototype.forEach.call(nodeEls, function (n) {
       tiles.push({
-        el: n,
+        el: n, rNorm: n._smcD / maxD,
         ampX: 4 + Math.random() * 4, ampY: 4 + Math.random() * 4,
         spX: 0.0002 + Math.random() * 0.0003, spY: 0.0002 + Math.random() * 0.0003,
         phX: Math.random() * Math.PI * 2, phY: Math.random() * Math.PI * 2
       });
     });
+    /* one wrapper group holds every star so the whole field can be scaled from
+       the centre point (CX/CY) during the bang — the mesh rushes outward from
+       the core, then the per-cluster drift takes back over. */
+    field = document.createElementNS(SVG_NS, 'g');
+    field.setAttribute('id', 'smc-field');
     /* clusters spawn clear of the labels: tile footprint + cluster reach +
        drift, in viewBox units. Solo specks may still land behind the glass
        (that reads as sky), but a mesh figure crossing a tile reads as mess */
@@ -3563,7 +3607,7 @@
         c.style.opacity = (s.prominent ? 0.30 : 0.13) + s.depth * 0.18;
         g.appendChild(c);
       });
-      svg.appendChild(g);
+      field.appendChild(g);
       clusters.push({
         g: g,
         ampX: 3 + Math.random() * 5, ampY: 3 + Math.random() * 5,
@@ -3581,7 +3625,7 @@
       el.setAttribute('r', prom ? 1.4 + Math.random() * 0.8 : 0.4 + Math.random() * 0.7);
       el.setAttribute('class', 'smc-star');
       el.style.opacity = (prom ? 0.30 : 0.10) + depth * 0.14;
-      svg.appendChild(el);
+      field.appendChild(el);
       solos.push({
         el: el,
         ampX: 2 + Math.random() * 4, ampY: 2 + Math.random() * 4,
@@ -3589,29 +3633,82 @@
         phX: Math.random() * Math.PI * 2, phY: Math.random() * Math.PI * 2
       });
     }
+    svg.appendChild(field);
+  }
+
+  /* ── Big-bang helpers ─────────────────────────────────────────────────
+     applyBang(v): paint the whole constellation at timeline value v (0..1),
+     driftX/driftY optional pixel drift (0 when collapsed / off-screen). Every
+     frame routes through here so drift and detonation share one code path. */
+  function applyBang(v, now) {
+    var i, o, e, local, gate, dx, dy, sc;
+    /* labels: per-node lag + overshoot; --bang scales their offset from centre,
+       scale grows the box, opacity fades them in, drift gated by local. */
+    for (i = 0; i < tiles.length; i++) {
+      o = tiles[i];
+      local = clamp01((v - o.rNorm * STAGGER) / (1 - STAGGER));
+      gate = local;
+      e = backOut(local);
+      dx = now ? Math.sin(now * o.spX + o.phX) * o.ampX * gate : 0;
+      dy = now ? Math.sin(now * o.spY + o.phY) * o.ampY * gate : 0;
+      sc = 0.16 + 0.84 * e;
+      o.el.style.setProperty('--bang', e.toFixed(4));
+      o.el.style.opacity = Math.min(1, gate * 1.5).toFixed(3);
+      o.el.style.transform = 'translate(' + dx.toFixed(2) + 'px,' + dy.toFixed(2) + 'px) translate(-50%,-50%) scale(' + sc.toFixed(3) + ')';
+    }
+    /* starfield: one group scaled from the core (0.06 collapsed → 1 at rest,
+       small overshoot) and faded in as a whole. */
+    if (field) {
+      var fs = 0.06 + 0.94 * backOut(clamp01(v));
+      field.setAttribute('transform', 'translate(' + CX + ' ' + CY + ') scale(' + fs.toFixed(3) + ') translate(' + (-CX) + ' ' + (-CY) + ')');
+      field.style.opacity = Math.min(1, v * 1.4).toFixed(3);
+    }
+    /* ignition bloom: quick flash up front (peak near v≈0.12), fades by ~0.6. */
+    if (bloom) {
+      var bk = v < 0.12 ? v / 0.12 : Math.max(0, 1 - (v - 0.12) / 0.5);
+      bloom.style.opacity = (bk * 0.85).toFixed(3);
+      bloom.style.transform = 'translate(-50%,-50%) scale(' + (0.4 + v * 1.7).toFixed(3) + ')';
+    }
+  }
+
+  function armBang() {
+    if (reduce.matches || !built) return;
+    if (bangArmed && !bangDone) return;   // already detonating — don't restart
+    bangArmed = true; bangDone = false; bangStart = 0; bangVal = 0;
+  }
+  /* re-arm on leave so the next entry re-detonates; paint the collapsed state
+     now (off-screen) so nothing flashes at rest before the bang fires. */
+  function resetBang() {
+    if (reduce.matches) return;
+    bangArmed = false; bangDone = false; bangStart = 0; bangVal = 0;
+    applyBang(0, 0);
   }
 
   function tick(now) {
     if (!running) return;
     var i, o, dx, dy;
+    /* advance the big-bang timeline (once per arm) */
+    if (bangArmed && !bangDone) {
+      if (!bangStart) bangStart = now;
+      bangVal = (now - bangStart) / BANG_MS;
+      if (bangVal >= 1) { bangVal = 1; bangDone = true; }
+    }
+    /* star drift, gated so the mesh doesn't jitter while collapsed */
+    var sgate = clamp01(bangVal);
     for (i = 0; i < clusters.length; i++) {
       o = clusters[i];
-      dx = Math.sin(now * o.spX + o.phX) * o.ampX;
-      dy = Math.sin(now * o.spY + o.phY) * o.ampY;
+      dx = Math.sin(now * o.spX + o.phX) * o.ampX * sgate;
+      dy = Math.sin(now * o.spY + o.phY) * o.ampY * sgate;
       o.g.setAttribute('transform', 'translate(' + dx.toFixed(2) + ' ' + dy.toFixed(2) + ')');
     }
     for (i = 0; i < solos.length; i++) {
       o = solos[i];
-      dx = Math.sin(now * o.spX + o.phX) * o.ampX;
-      dy = Math.sin(now * o.spY + o.phY) * o.ampY;
+      dx = Math.sin(now * o.spX + o.phX) * o.ampX * sgate;
+      dy = Math.sin(now * o.spY + o.phY) * o.ampY * sgate;
       o.el.setAttribute('transform', 'translate(' + dx.toFixed(2) + ' ' + dy.toFixed(2) + ')');
     }
-    for (i = 0; i < tiles.length; i++) {
-      o = tiles[i];
-      dx = Math.sin(now * o.spX + o.phX) * o.ampX;
-      dy = Math.sin(now * o.spY + o.phY) * o.ampY;
-      o.el.style.transform = 'translate(-50%, -50%) translate(' + dx.toFixed(2) + 'px, ' + dy.toFixed(2) + 'px)';
-    }
+    /* labels + field wrapper + bloom, all off the current timeline value */
+    applyBang(bangVal, now);
     requestAnimationFrame(tick);
   }
 
@@ -3623,16 +3720,28 @@
   }
 
   /* display:none (desktop) reports not-intersecting, so this doubles as the
-     desktop off-switch after a viewport resize back up. */
+     desktop off-switch after a viewport resize back up. Two gates off one
+     observer: ANY sliver on screen (ratio > 0) runs the drift loop, but the
+     big-bang only ARMS once the tile is genuinely in view (ratio ≥ ARM_RATIO)
+     — so it sits blank as you approach and detonates as you scroll onto it,
+     from the core outward, instead of firing off-screen at the bottom edge.
+     Leaving fully (ratio 0) re-arms it for the next scroll-in. */
   new IntersectionObserver(function (entries) {
-    visible = entries[0].isIntersecting;
+    var e = entries[0];
+    visible = e.isIntersecting;
     setRunning(visible);
-  }, { threshold: 0 }).observe(panel);
+    if (!visible) resetBang();
+    else if (e.intersectionRatio >= ARM_RATIO) armBang();
+  }, { threshold: [0, ARM_RATIO] }).observe(panel);
 
   function ensureBuilt() {
     if (built || !mq.matches) return;
     built = true;
     buildField();
+    /* start collapsed/blank; the observer arms the detonation once the tile is
+       scrolled into view (skip under reduced motion — the field just renders at
+       rest). */
+    if (!reduce.matches) applyBang(0, 0);
     setRunning(visible);
   }
   if (mq.addEventListener) mq.addEventListener('change', ensureBuilt);

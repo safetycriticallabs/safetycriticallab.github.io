@@ -3,8 +3,18 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="robots" content="noindex">
-<title>SCL AI Requirements Framework</title>
+<title>AI Requirements Framework Presentation | Safety Critical Labs</title>
+<meta name="description" content="An interactive walkthrough of the SCL AI Requirements Framework, the published standard for certifying AI in safety-critical systems: applicability screening, three classification tiers, thirteen requirement sets each paired with a verification method, and a formal determination.">
+<link rel="canonical" href="https://safetycriticallabs.com/presentation">
+<meta property="og:title" content="AI Requirements Framework Presentation">
+<meta property="og:description" content="An interactive walkthrough of the published standard for certifying AI in safety-critical systems.">
+<meta property="og:url" content="https://safetycriticallabs.com/presentation">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://safetycriticallabs.com/img/og-square.png">
+<meta name="theme-color" content="#FAF6EC">
+<link rel="icon" type="image/x-icon" href="favicon.ico">
+<link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32x32.png">
+<link rel="apple-touch-icon" sizes="180x180" href="img/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -12,12 +22,12 @@
 :root {
   /* Layered cream palette — no pure white anywhere.
      surface (lightest, raised) → page (mid) → deep (insets/accents) */
-  --bg: #F1EADC;          /* page — mid cream */
-  --bg-cool: #FAF9F5;     /* original cool off-white, kept for reference */
-  --cream-deep: #E7DECC;  /* deeper tan — insets / strong accents */
-  --white: #FAF9F5;       /* surface cream — replaces pure white on cards/chrome */
+  --bg: #FAF9F5;          /* page — flat site cream (matches styles.css) */
+  --bg-cool: #FAF9F5;
+  --cream-deep: #ECE5D5;  /* deeper cream — insets / strong accents (matches site) */
+  --white: #FDFCF9;       /* raised surface — warm near-white for cards/chrome */
   --ink: #0C2242;
-  --ink2: #3D5068;
+  --ink2: #33475F;
   --ink3: #7A8FA6;
   --blue: #2E6DB4;
   --blue-dk: #1E5A9A;
@@ -43,8 +53,13 @@ body { background: var(--bg); color: var(--ink); font-family: var(--sans); }
 .c-glow { position: absolute; inset: 0; background:
   radial-gradient(900px circle at 76% 20%, rgba(46,109,180,0.07), transparent 60%),
   radial-gradient(760px circle at 16% 82%, rgba(180,130,42,0.05), transparent 62%); }
-.c-star { position: absolute; border-radius: 50%; background: var(--blue); }
-.c-spark { position: absolute; color: var(--gold); line-height: 1; transform: translate(-50%, -50%); }
+.c-star { position: absolute; border-radius: 50%; background: var(--blue); opacity: 0; display: none; }
+.c-spark { position: absolute; color: var(--gold); line-height: 1; transform: translate(-50%, -50%); opacity: 0; display: none; }
+/* Constellation lives on the cover only — content slides stay site-flat */
+body.is-cover .c-star { display: block; opacity: var(--op, 0.14); animation: cTwinkle 4.5s ease-in-out infinite; }
+body.is-cover .c-spark { display: block; opacity: var(--op, 0.14); animation: cTwinkle 5.5s ease-in-out infinite; }
+@keyframes cTwinkle { 0%, 100% { opacity: var(--op, 0.14); } 50% { opacity: calc(var(--op, 0.14) * 2.5); } }
+@media (prefers-reduced-motion: reduce) { body.is-cover .c-star, body.is-cover .c-spark { animation: none; opacity: var(--op, 0.14); } }
 ::-webkit-scrollbar { width: 5px; }
 ::-webkit-scrollbar-track { background: var(--bg); }
 ::-webkit-scrollbar-thumb { background: var(--rule); border-radius: 3px; }
@@ -53,28 +68,48 @@ button { font-family: inherit; cursor: pointer; }
 .app { display: flex; flex-direction: column; height: 100vh; position: relative; z-index: 1; }
 
 /* Header */
-.header { padding: 12px 20px; border-bottom: 1px solid var(--rule); display: flex; align-items: center; gap: 14px; background: var(--white); flex-shrink: 0; }
-.header-logo { width: 60px; height: 60px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-.header-logo img { width: 60px; height: 60px; object-fit: contain; }
-.header-text { display: flex; flex-direction: column; }
-.header-brand { font-size: 13px; font-weight: 600; color: var(--blue); letter-spacing: 0.08em; text-transform: uppercase; }
-.header-brand em { color: var(--blue-dk); font-style: normal; }
-.header-sub { font-size: 10px; color: var(--ink3); font-family: var(--mono); letter-spacing: 0.1em; text-transform: uppercase; margin-top: 2px; }
-.header-counter { margin-left: auto; color: var(--ink3); font-size: 11px; font-family: var(--mono); }
+.header { padding: 0 24px; height: 60px; border-bottom: 1px solid var(--rule); display: flex; align-items: center; gap: 16px; background: #FAF9F5; flex-shrink: 0; }
+.header-menu { display: inline-flex; align-items: center; gap: 9px; background: transparent; border: 1px solid var(--rule); border-radius: 8px; height: 36px; padding: 0 15px; font-family: var(--sans); font-size: 12px; font-weight: 500; color: var(--ink2); letter-spacing: 0.03em; transition: border-color 0.2s, color 0.2s; }
+.header-menu:hover { border-color: var(--ink); color: var(--ink); }
+.header-menu .bars { display: inline-flex; flex-direction: column; gap: 3px; }
+.header-menu .bars i { width: 15px; height: 1.6px; background: currentColor; display: block; border-radius: 1px; }
+.header-brand { font-family: var(--sans); font-size: 18px; font-weight: 700; color: var(--ink); letter-spacing: 0.02em; text-transform: uppercase; text-decoration: none; transition: color 0.25s; }
+.header-brand:hover { color: var(--blue-dk); }
+.header-right { margin-left: auto; display: flex; align-items: center; gap: 20px; }
+.header-counter { color: var(--ink3); font-size: 11px; font-family: var(--mono); letter-spacing: 0.06em; }
+.header-cta { background: var(--ink); color: #FAF9F5; text-decoration: none; height: 38px; padding: 0 22px; border-radius: 8px; display: inline-flex; align-items: center; font-size: 14px; font-weight: 500; letter-spacing: 0.01em; transition: background 0.25s; }
+.header-cta:hover { background: #081A34; color: #FAF9F5; }
 
 /* Main layout */
 .main { display: flex; flex: 1; min-height: 0; }
 
-/* Sidebar */
-.sidebar { width: 240px; border-right: 1px solid var(--rule); padding: 8px 0; overflow-y: auto; flex-shrink: 0; background: var(--white); }
-.nav-group { margin-bottom: 4px; }
-.nav-group-header { padding: 14px 16px 6px; font-family: var(--mono); font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink3); font-weight: 500; }
+/* Sidebar — slide-in "Slides" drawer (no longer a persistent column, so the
+   slide fills the full frame for presenting). Reuses all existing nav markup. */
+.sidebar { position: fixed; top: 0; left: 0; width: 300px; height: 100vh; border-right: 1px solid var(--rule); padding: 16px 0 8px; overflow-y: auto; background: var(--white); z-index: 60; transform: translateX(-100%); transition: transform 0.28s cubic-bezier(0.22,1,0.36,1); box-shadow: 12px 0 44px rgba(12,34,66,0.16); }
+.sidebar.open { transform: none; }
+.nav-backdrop { position: fixed; inset: 0; background: rgba(12,34,66,0.32); opacity: 0; pointer-events: none; transition: opacity 0.28s; z-index: 55; }
+.nav-backdrop.open { opacity: 1; pointer-events: auto; }
+.nav-group { margin-bottom: 2px; }
+.nav-group-header { display: flex; align-items: center; gap: 8px; width: 100%; background: transparent; border: none; cursor: pointer; padding: 12px 14px 12px 16px; font-family: var(--mono); font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink3); font-weight: 500; text-align: left; transition: color 0.15s; }
+.nav-group-header:hover { color: var(--ink2); }
+.nav-group-label { flex: 1; }
+.nav-group-count { font-size: 9px; color: var(--ink3); opacity: 0.75; background: var(--cream-deep); border-radius: 8px; padding: 1px 6px; }
+.nav-group.open .nav-group-count { display: none; }
+.nav-group-chevron { font-size: 11px; color: var(--ink3); transition: transform 0.2s; }
+.nav-group.open .nav-group-chevron { transform: rotate(90deg); }
+.nav-group-items { display: none; }
+.nav-group.open .nav-group-items { display: block; padding-bottom: 4px; }
 .nav-btn { display: flex; align-items: center; width: 100%; padding: 8px 16px 8px 24px; background: transparent; border: none; border-left: 2px solid transparent; text-align: left; transition: all 0.15s; font-size: 12px; color: var(--ink3); }
-.nav-btn:hover { background: var(--bg); color: var(--ink2); }
-.nav-btn.active { background: var(--bg); border-left-color: var(--blue); color: var(--ink); font-weight: 500; }
+.nav-btn:hover { background: var(--cream-deep); color: var(--ink2); }
+.nav-btn.active { background: var(--blue-lt); border-left-color: var(--blue); color: var(--ink); font-weight: 500; }
 
 /* Content */
-.content { flex: 1; padding: 28px 40px; overflow-y: auto; }
+.content { flex: 1; padding: 0; overflow-y: auto; scrollbar-gutter: stable; }
+/* Presentation canvas: content slides render at a fixed logical width and are
+   scaled up (zoom) to fill the frame, so 13–14px body text reads at ~22px on a
+   1080p screen-share. Title + firework slides opt out of the zoom (already large
+   / JS-positioned) — handled in fitDeck(). */
+.deck-canvas { margin: 0 auto; padding: 30px 46px 48px; }
 .content-header { margin-bottom: 20px; }
 .content-header h2 { font-size: 24px; font-weight: 600; line-height: 1.2; }
 .content-header .section-label { font-family: var(--mono); font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink3); margin-bottom: 6px; }
@@ -137,10 +172,11 @@ button { font-family: inherit; cursor: pointer; }
 
 /* Navigation footer */
 .nav-footer { display: flex; justify-content: space-between; margin-top: 36px; padding-top: 20px; border-top: 1px solid var(--rule); }
-.nav-footer button { padding: 10px 24px; background: var(--white); border: 1px solid var(--rule); border-radius: 4px; color: var(--ink3); font-size: 13px; transition: all 0.15s; }
+.nav-footer button { padding: 11px 26px; background: transparent; border: 1px solid var(--rule); border-radius: 8px; color: var(--ink2); font-size: 13px; font-weight: 500; letter-spacing: 0.02em; transition: all 0.2s; }
 .nav-footer button:hover:not(:disabled) { border-color: var(--ink); color: var(--ink); }
-.nav-footer button:disabled { color: var(--rule); cursor: default; }
-.nav-footer button.primary { background: var(--blue-lt); border-color: var(--blue); color: var(--blue); }
+.nav-footer button:disabled { color: var(--rule); border-color: var(--rule); cursor: default; }
+.nav-footer button.primary { background: var(--ink); border-color: var(--ink); color: #FAF9F5; }
+.nav-footer button.primary:hover:not(:disabled) { background: #081A34; border-color: #081A34; color: #FAF9F5; }
 
 /* ═══════════════════════════════════════════════════════════════
    ML WALKTHROUGH STYLES
@@ -683,6 +719,89 @@ td:first-child { color: var(--ink); font-weight: 500; }
 .ra-key-dot { width: 8px; height: 8px; border-radius: 2px; flex-shrink: 0; }
 .ra-link { display: inline-block; margin-top: 16px; font-family: var(--mono); font-size: 11px; letter-spacing: 0.06em; color: var(--blue); text-decoration: none; padding: 10px 20px; border: 1px solid var(--blue); border-radius: 980px; transition: all 0.2s; }
 .ra-link:hover { background: var(--blue); color: var(--white); }
+
+/* ═══════════════════════════════════════════════════════════════
+   REQUIREMENTS FIREWORK — 3D particle burst ported from the homepage.
+   Always-live (no card/modal): the deck slide is the stage. Auto-rotates,
+   pauses on hover/selection, click a node for the failure it prevents.
+   ═══════════════════════════════════════════════════════════════ */
+.fw-wrap { position: relative; margin-top: 10px; }
+.fw3d-stage { position: relative; height: clamp(400px, 58vh, 620px); perspective: 1150px; overflow: hidden; border: 1px solid var(--rule); border-radius: 14px;
+  background: radial-gradient(680px circle at 50% 46%, rgba(46,109,180,0.09), transparent 66%), var(--white); }
+.fw3d { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; pointer-events: none; }
+.fw3d-scene { position: relative; width: 0; height: 0; transform-style: preserve-3d; animation: fw3d-orbit 46s linear infinite; }
+@keyframes fw3d-orbit { from { transform: rotateX(-16deg) rotateY(0deg); } to { transform: rotateX(-16deg) rotateY(360deg); } }
+.fw3d-scene.is-paused { animation-play-state: paused; }
+.fw3d-core { position: absolute; left: -5px; top: -5px; width: 10px; height: 10px; border-radius: 50%; background: var(--ink); box-shadow: 0 0 14px rgba(12,34,66,0.5); }
+.fw3d-spark { position: absolute; left: 0; top: 0; width: 0; height: 0; transform-style: preserve-3d; transform: var(--tf); transition: opacity 0.28s ease; }
+.fw3d-ray { position: absolute; left: 0; top: -1px; height: 2px; transform-origin: 0 50%; border-radius: 2px; pointer-events: none; background: linear-gradient(90deg, rgba(12,22,38,0.72), rgba(12,22,38,0.14) 82%, transparent); }
+.fw3d-dot { position: absolute; top: 0; transform: translate(-50%, -50%); border-radius: 50%; pointer-events: auto; cursor: pointer; transition: transform 0.16s ease; }
+.fw3d-dot:hover, .fw3d-dot.is-hot { transform: translate(-50%, -50%) scale(2.3); }
+.fw3d.has-sel .fw3d-spark:not(.is-sel) { opacity: 0.36; }
+.fw3d-tip { position: absolute; z-index: 6; transform: translate(-50%, -165%); background: var(--ink); color: #FAF9F5; font-family: var(--mono); font-size: 12px; padding: 6px 11px; border-radius: 8px; white-space: nowrap; opacity: 0; pointer-events: none; transition: opacity 0.15s ease; box-shadow: 0 6px 18px rgba(12,34,66,0.28); }
+.fw3d-tip.is-on { opacity: 1; }
+.fw3d-tip .t-id { opacity: 0.6; margin-right: 8px; }
+.fw3d-detail { position: absolute; left: 26px; bottom: 24px; width: min(360px, 48%); z-index: 7; background: rgba(253,252,249,0.96); -webkit-backdrop-filter: blur(3px); backdrop-filter: blur(3px); border: 1px solid var(--rule); border-radius: 14px; padding: 20px 22px; box-shadow: 0 14px 34px rgba(12,34,66,0.14); opacity: 0; transform: translateY(10px); pointer-events: none; transition: opacity 0.28s ease, transform 0.28s ease; }
+.fw3d-detail.is-on { opacity: 1; transform: none; pointer-events: auto; }
+.fw3d-detail-close { position: absolute; top: 8px; right: 12px; border: none; background: transparent; color: var(--ink); font-size: 22px; line-height: 1; cursor: pointer; opacity: 0.45; }
+.fw3d-detail-close:hover { opacity: 1; }
+.fw3d-d-id { font-family: var(--mono); font-size: 12px; letter-spacing: 0.08em; color: var(--blue); }
+.fw3d-d-title { font-size: 21px; font-weight: 600; line-height: 1.2; margin: 4px 0 14px; color: var(--ink); }
+.fw3d-d-prevents-label { font-family: var(--mono); font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink3); }
+.fw3d-d-prevents { font-size: 14px; line-height: 1.55; margin: 6px 0 14px; color: var(--ink2); }
+.fw3d-d-link { font-family: var(--mono); font-size: 12.5px; color: var(--blue); text-decoration: none; }
+.fw3d-d-link:hover { text-decoration: underline; }
+.fw3d-hint { position: absolute; right: 20px; bottom: 18px; z-index: 5; font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.05em; text-transform: uppercase; color: var(--ink3); pointer-events: none; }
+@media (prefers-reduced-motion: reduce) { .fw3d-scene { animation: none; } }
+
+/* Per-slide reveal — the site's fade-up feel, applied on each navigation */
+@keyframes slideReveal { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+.content.reveal { animation: slideReveal 0.36s cubic-bezier(0.22, 1, 0.36, 1); }
+@media (prefers-reduced-motion: reduce) { .content.reveal { animation: none; } }
+
+/* ── Animated cover medallion: SCL logo at the core of a rotating requirements burst ── */
+.cover-medallion { position: relative; width: 240px; height: 240px; margin-bottom: 34px; }
+.cover-fw { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; perspective: 720px; pointer-events: none; }
+.cover-fw-scene { position: relative; width: 0; height: 0; transform-style: preserve-3d; animation: fw3d-orbit 40s linear infinite; }
+.cover-logo { position: absolute; left: 50%; top: 50%; width: 98px; height: 98px; object-fit: contain; transform: translate(-50%, -50%); z-index: 3; filter: drop-shadow(0 10px 26px rgba(15,35,64,0.20)); animation: coverLogoFloat 6.5s ease-in-out infinite; }
+@keyframes coverLogoFloat { 0%, 100% { transform: translate(-50%, -50%) scale(1); } 50% { transform: translate(-50%, -54%) scale(1.025); } }
+@media (prefers-reduced-motion: reduce) { .cover-fw-scene, .cover-logo { animation: none; } }
+
+/* ── Globe cover: text + rotating dot-globe split hero ── */
+.title-slide.cover-split { max-width: 1320px; display: grid; grid-template-columns: 0.88fr 1.12fr; gap: 52px; align-items: center; }
+.cover-copy { display: flex; flex-direction: column; min-width: 0; }
+.cover-split .title-heading { font-size: clamp(38px, 4.4vw, 58px); }
+.cover-visual { position: relative; height: min(78vh, 700px); min-width: 0; }
+/* The globe canvas is a fixed full-screen overlay: it assembles full-bleed,
+   auto-tours the requirement dots, then the drawn globe shrinks/slides into the
+   cover-visual column as the title reveals. pointer-events:none so it never
+   blocks the UI underneath (no drag/hover — the tour runs itself). */
+.cover-globe { position: fixed; inset: 0; width: 100%; height: 100%; display: block; pointer-events: none; z-index: 50; }
+.cover-globe-tip { position: fixed; z-index: 51; pointer-events: none; transform: translate(-50%, calc(-100% - 16px)); background: var(--white); border: 1px solid var(--rule); border-radius: 9px; padding: 7px 12px; box-shadow: 0 10px 26px rgba(12,34,66,0.16); white-space: nowrap; opacity: 0; transition: opacity 0.2s ease; }
+.cover-globe-tip.on { opacity: 1; }
+.cover-globe-tip .tid { font-family: var(--mono); font-size: 10px; letter-spacing: 0.08em; color: var(--blue); font-weight: 600; margin-right: 9px; }
+.cover-globe-tip .tlabel { font-size: 12.5px; color: var(--ink); font-weight: 500; }
+/* Big centred caption used while the globe is full-screen and touring. */
+.cover-tour-name { position: fixed; left: 50%; bottom: 8%; transform: translateX(-50%); z-index: 51; text-align: center; pointer-events: none; opacity: 0; transition: opacity 0.4s ease; }
+.cover-tour-name.on { opacity: 1; }
+.cover-tour-name .tn-id { display: block; font-family: var(--mono); font-size: 13px; letter-spacing: 0.2em; color: var(--blue); font-weight: 600; margin-bottom: 10px; }
+.cover-tour-name .tn-label { display: block; font-family: var(--sans); font-size: clamp(24px, 2.6vw, 38px); font-weight: 600; color: var(--ink); letter-spacing: -0.015em; }
+.cover-globe-cap { position: absolute; left: 50%; bottom: 2px; transform: translateX(-50%); font-family: var(--mono); font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink3); white-space: nowrap; opacity: 0; transition: opacity 0.7s ease; }
+
+/* Intro reveal — title + caption fade/slide in once the globe has assembled.
+   JS adds .revealed to .title-slide (see initCoverGlobe), so the text can never
+   get stuck hidden: if the script runs, the class is added. */
+.cover-copy > * { opacity: 0; transform: translateY(16px); transition: opacity 0.7s cubic-bezier(0.22,1,0.36,1), transform 0.7s cubic-bezier(0.22,1,0.36,1); }
+.title-slide.revealed .cover-copy > * { opacity: 1; transform: none; }
+.title-slide.revealed .cover-copy .title-heading { transition-delay: 0.12s; }
+.title-slide.revealed .cover-copy .title-subheading { transition-delay: 0.26s; }
+.title-slide.revealed .cover-copy .title-meta { transition-delay: 0.40s; }
+.title-slide.revealed .cover-globe-cap { opacity: 1; }
+@media (prefers-reduced-motion: reduce) {
+  .cover-copy > * { opacity: 1; transform: none; transition: none; }
+  .cover-globe-cap { opacity: 1; transition: none; }
+}
+@media (max-width: 900px) { .title-slide.cover-split { grid-template-columns: 1fr; gap: 22px; } .cover-visual { height: 40vh; order: -1; } .cover-split .title-heading { font-size: clamp(30px, 8vw, 40px); } }
 </style>
 </head>
 <body>
@@ -690,20 +809,19 @@ td:first-child { color: var(--ink); font-weight: 500; }
 
 <div class="app">
   <div class="header">
-    <div class="header-logo">
-      <img src="img/SCL_Logo_transparent.png" alt="Safety Critical Labs">
+    <button class="header-menu" onclick="toggleNav()" aria-label="Open slide menu"><span class="bars"><i></i><i></i><i></i></span>Slides</button>
+    <a class="header-brand" href="https://safetycriticallabs.com" aria-label="Safety Critical Labs">Safety Critical Labs</a>
+    <div class="header-right">
+      <span class="header-counter" id="counter">1/22</span>
+      <a class="header-cta" href="https://safetycriticallabs.com/contact">Get Certified</a>
     </div>
-    <div class="header-text">
-      <div class="header-brand"><em>Safety Critical</em> Labs</div>
-      <div class="header-sub">AI Certification Authority</div>
-    </div>
-    <span class="header-counter" id="counter">1/17</span>
   </div>
-  
+
   <div class="main">
     <div class="sidebar" id="sidebar"></div>
     <div class="content" id="content"></div>
   </div>
+  <div class="nav-backdrop" id="navBackdrop" onclick="closeNav()"></div>
 </div>
 
 <script>
@@ -712,18 +830,18 @@ const groups = [
     { id: "title", title: "Cover" },
     { id: "agenda", title: "Contents" }
   ]},
-  { label: "Foundation", items: [
+  { label: "Foundation · Recap", items: [
     { id: "why-different", title: "Where Intent Goes" },
     { id: "two-paths", title: "Two Paths, Same Problem" },
     { id: "operating-envelope", title: "The Operating Envelope" }
   ]},
   { label: "The Framework", items: [
     { id: "framework-overview", title: "Framework Overview" },
-    { id: "ai-presence", title: "AI Presence Screening" },
-    { id: "classification", title: "Classification Tiers" },
-    { id: "just-test-it", title: "Why Testing Alone Falls Short" },
-    { id: "requirements-overview", title: "Thirteen Requirements" },
-    { id: "implementation-guidance", title: "Implementation Guidance" }
+    { id: "just-test-it", title: "Why Testing Falls Short" },
+    { id: "ai-presence", title: "1 · Applicability" },
+    { id: "classification", title: "2 · Classification" },
+    { id: "requirements-overview", title: "3 · Rigor: Requirements & Verification" },
+    { id: "implementation-guidance", title: "4 · Close: Implementation" }
   ]},
   { label: "The Process", items: [
     { id: "framework-principles", title: "What Certification Requires" },
@@ -763,7 +881,13 @@ const sections = {
   "agenda": {
     group: "Introduction", title: "Contents", type: "agenda",
     data: {
-      intro: "The full arc of the deck, from first principles to the published standard and how to engage. Jump to any section, or step through start to finish."
+      intro: "Foundation is a brief recap from last session. It traces where AI breaks the traditional chain from intent to verified behavior. The focus today is the Framework, in four parts: <strong>(1) Applicability</strong>, a behavioral test for whether AI is actually present, not a debate about what the system &lsquo;is&rsquo;; <strong>(2) Classification</strong> by consequence of failure; <strong>(3) Rigor</strong>, the thirteen requirement sets and their paired verification; and <strong>(4) the Close</strong>, how the framework is implemented and what it determines. Everything after is supporting material you can jump to."
+    }
+  },
+  "requirements-orbit": {
+    group: "The Framework", title: "The Thirteen, in Orbit", type: "firework",
+    data: {
+      intro: "The whole framework as one object: all thirteen requirement areas forming the envelope around the model. It turns on its own. Hover any node to name it, click for the failure it prevents."
     }
   },
   "why-different": {
@@ -816,7 +940,13 @@ const sections = {
   "framework-overview": {
     group: "The Framework", title: "Framework Overview", type: "overview",
     data: {
-      body: "<p>The SCL AI Requirements Framework is a published standard for assessing AI systems in safety critical environments. Version 3.4 covers the complete lifecycle from operational scope and data governance through operational monitoring, privacy, and human oversight.</p><p>The document defines <strong>thirteen requirement sets</strong> (AI-1 through AI-13), each paired with a corresponding verification method. Every requirement has a verification. Every verification traces to a requirement. Nothing is assessed without a defined method for assessing it.</p><p>The framework's vocabulary is anchored in ISO/IEC and NIST terminology, supplemented with framework specific terms introduced where existing standards did not cover the gap.</p>",
+      roadmap: [
+        { n: "1", title: "Applicability", sub: "Is AI actually present? A test of behavior, not a definition." },
+        { n: "2", title: "Classification", sub: "How consequential is failure? Three tiers." },
+        { n: "3", title: "Rigor", sub: "Thirteen requirements, each paired with a verification." },
+        { n: "4", title: "Close", sub: "Implementation, and the determination it produces." }
+      ],
+      body: "<p><strong>Read the framework as four moves:</strong> establish <strong>applicability</strong>, <strong>classify</strong> by consequence, apply <strong>rigor</strong>, and <strong>close</strong> with a determination. Everything below sits under one of those four.</p><p>The SCL AI Requirements Framework is a published standard for assessing AI systems in safety critical environments. Version 3.4 covers the complete lifecycle from operational scope and data governance through operational monitoring, privacy, and human oversight.</p><p>The document defines <strong>thirteen requirement sets</strong> (AI-1 through AI-13), each paired with a corresponding verification method. Every requirement has a verification. Every verification traces to a requirement. Nothing is assessed without a defined method for assessing it.</p><p>The framework's vocabulary is anchored in ISO/IEC and NIST terminology, supplemented with framework specific terms introduced where existing standards did not cover the gap.</p>",
       stats: [
         { num: "13", unit: "", label: "Requirement Sets" },
         { num: "3", unit: "", label: "Classification Tiers" },
@@ -901,22 +1031,22 @@ const sections = {
     }
   },
   "ai-presence": {
-    group: "The Framework", title: "AI Presence Screening", type: "features",
+    group: "The Framework", title: "Applicability", aspect: "Part 1 of 4", type: "features",
     data: {
-      intro: "Before classification, determine whether the framework applies at all. Four questions screen for AI presence. If any answer is yes, proceed to classification. If all are no, standard software assurance applies and this framework is not required.",
+      intro: "The first question is whether the framework applies at all, and this is <strong>not</strong> a metaphysical debate about whether the system &lsquo;is AI.&rsquo; It is a <strong>behavioral test</strong>. You are not classifying a technology; you are detecting a behavior: does this system act on patterns <em>learned from data</em> rather than on rules a developer wrote? Four observable signals answer it. If any one is present, learned behavior exists here, the framework applies, and you proceed to classification. If none is present, this is ordinary deterministic software and standard software assurance is enough.",
       features: [
-        { title: "Learned Behavior", desc: "Does the system use behavior derived from training data rather than explicitly programmed logic? If the system's decisions come from patterns learned during training rather than rules written by a developer, AI is present." },
-        { title: "Probabilistic Outputs", desc: "Are system outputs probabilistic or non deterministic? If the same input can produce different outputs, or if outputs carry confidence scores rather than definitive answers, AI is present." },
-        { title: "Silent Degradation", desc: "Can system behavior change or degrade over time without code modifications? If the system can become less accurate because the world changed around it while no code was touched, AI is present." },
-        { title: "Decision Impact", desc: "Does the system make or inform decisions affecting human safety or operational success? If the system's outputs influence actions where errors have real consequences, AI is present." }
+        { title: "Learned Behavior", desc: "Does the system act on behavior derived from training data rather than explicitly programmed logic? If its decisions come from patterns learned during training rather than rules a developer wrote, learned behavior is present." },
+        { title: "Probabilistic Outputs", desc: "Are outputs probabilistic or non-deterministic? If the same input can produce different outputs, or if outputs carry confidence scores rather than definitive answers, learned behavior is present." },
+        { title: "Silent Degradation", desc: "Can behavior change or degrade over time without any code modification? If the system can become less accurate because the world shifted around it while no code was touched, learned behavior is present." },
+        { title: "Decision Impact", desc: "Do those outputs make or inform decisions affecting human safety or operational success? Presence plus consequence is what pulls a component into scope; where errors have real stakes, the behavior must be governed." }
       ],
-      callout: "Most real systems are not purely AI. They are traditional software with AI components embedded in the pipeline. The screening identifies where AI is present within a larger system. The boundary between AI and traditional components determines where this framework applies and where your existing V&V processes continue unchanged. Both verification approaches coexist. The framework covers the AI portion. Your existing processes cover the rest."
+      callout: "This is a test of behavior, not a claim about what the system fundamentally is. A component either exhibits learned behavior or it does not, and you can observe which. And most real systems are not purely AI: they are traditional software with AI components embedded in the pipeline. The screen identifies <em>where</em> that behavior lives inside a larger system. That boundary determines where this framework applies and where your existing V&amp;V processes continue unchanged. Both approaches coexist. The framework covers the AI portion. Your existing processes cover the rest."
     }
   },
   "classification": {
-    group: "The Framework", title: "Classification Tiers", type: "tiers",
+    group: "The Framework", title: "Classification Tiers", aspect: "Part 2 of 4", type: "tiers",
     data: {
-      intro: "Classification determines which requirements apply and the level of tailoring authority available. Classification is driven by consequence, not probability.",
+      intro: "Once a component is in scope, classification sets how hard the framework pushes on it. It determines which requirements apply and how much tailoring authority is available, and it is driven by consequence of failure, not probability.",
       tiers: [
         { name: "Safety Critical AI", color: "red", desc: "AI outputs directly affect human safety or system survivability.", checklistQs: "Could AI malfunction result in loss of life or critical equipment? Is the AI in the control path for safety-critical functions?", examples: "Surgical guidance systems, autonomous vehicle collision avoidance, medical diagnostic AI that determines treatment, flight control systems", reqs: "AI-1 through AI-10 (all core requirements, no tailoring without PSRB approval), plus AI-11 through AI-13 as the architecture requires." },
         { name: "Mission Critical AI", color: "gold", desc: "AI outputs affect operational success but not human safety.", checklistQs: "Could AI malfunction result in loss of operational objectives? Is the AI in the decision path for mission-critical functions?", examples: "Predictive maintenance for aircraft engines, medical triage prioritization, financial fraud detection, spam filter for flight operations communications", reqs: "AI-1 through AI-6, AI-8, AI-9, AI-10; AI-7 tailored (CE approval). AI-11, AI-12, AI-13 conditionally per system design" },
@@ -940,9 +1070,9 @@ const sections = {
     }
   },
   "requirements-overview": {
-    group: "The Framework", title: "Thirteen Requirements", type: "requirements-tabs",
+    group: "The Framework", title: "Rigor: Requirements & Verification", aspect: "Part 3 of 4", type: "requirements-tabs",
     data: {
-      intro: "Each requirement set addresses a specific verification gap that traditional software assurance does not cover. Select a requirement to explore what it means for our spam filter.",
+      intro: "Rigor is where the framework does its work. There are thirteen requirement sets, and the discipline is in the pairing: <strong>every requirement carries a defined verification method</strong> (Inspection, Analysis, Demonstration, or Test), and every verification traces back to a requirement. This is not a testing checklist; it is a requirement-and-evidence structure. Each set closes a specific gap that traditional software assurance leaves open. Select a requirement to see what it demands, and how it is verified, for our spam filter.",
       reqs: [
         {
           id: "AI-1",
@@ -1028,9 +1158,9 @@ const sections = {
     }
   },
   "implementation-guidance": {
-    group: "The Framework", title: "Implementation Guidance", type: "comparison",
+    group: "The Framework", title: "Closing the Framework", aspect: "Part 4 of 4", type: "comparison",
     data: {
-      intro: "The thirteen requirements define what to verify. This section addresses how to calibrate verification for your system: what thresholds to set, what happens when you transform a model for deployment, and what controls apply when the model keeps learning.",
+      intro: "The close is where the framework stops being a document and starts being a system. Applicability, classification, and rigor tell you what must hold; this last step is how you make it hold in production: calibrating thresholds, validating what happens when a model is transformed for deployment, controlling a model that keeps learning, and wiring all of it into tooling you already run. This is what carries the requirements to the point where a formal determination can be made.",
       tabs: ["Threshold Selection", "Deployment Validation", "Continuous Learning", "Tooling Integration"],
       content: [
         { title: "Threshold Selection", items: [
@@ -1273,15 +1403,23 @@ const wordData = [
 
 function render() { renderSidebar(); renderContent(); updateCounter(); }
 
+var groupOpen = {};
+function toggleGroup(label) { groupOpen[label] = !groupOpen[label]; renderSidebar(); }
 function renderSidebar() {
   let html = '';
-  groups.forEach(group => {
-    html += '<div class="nav-group"><div class="nav-group-header">' + group.label + '</div>';
-    group.items.forEach(item => {
-      const idx = flatSections.indexOf(item.id);
+  var activeId = flatSections[currentIndex];
+  groups.forEach(function (group) {
+    var hasActive = group.items.some(function (it) { return it.id === activeId; });
+    var open = hasActive || !!groupOpen[group.label];
+    var safe = group.label.replace(/'/g, "\\'");
+    html += '<div class="nav-group' + (open ? ' open' : '') + '">';
+    html += '<button class="nav-group-header" onclick="toggleGroup(\'' + safe + '\')"><span class="nav-group-label">' + group.label + '</span><span class="nav-group-count">' + group.items.length + '</span><span class="nav-group-chevron">&#9656;</span></button>';
+    html += '<div class="nav-group-items">';
+    group.items.forEach(function (item) {
+      var idx = flatSections.indexOf(item.id);
       html += '<button class="nav-btn ' + (idx === currentIndex ? 'active' : '') + '" onclick="goTo(' + idx + ')">' + item.title + '</button>';
     });
-    html += '</div>';
+    html += '</div></div>';
   });
   document.getElementById('sidebar').innerHTML = html;
 }
@@ -1289,14 +1427,27 @@ function renderSidebar() {
 function renderContent() {
   const sectionId = flatSections[currentIndex];
   const section = sections[sectionId];
-  let html = section.type === 'title' ? '' : '<div class="content-header"><div class="section-label">' + section.group + '</div><h2>' + section.title + '</h2></div>';
+  if (coverGlobeRAF) { cancelAnimationFrame(coverGlobeRAF); coverGlobeRAF = null; }
+  let html = section.type === 'title' ? '' : '<div class="content-header"><div class="section-label">' + section.group + (section.aspect ? ' <span style="color:var(--blue);font-weight:600;">&middot; ' + section.aspect + '</span>' : '') + '</div><h2>' + section.title + '</h2></div>';
   html += renderSection(section);
   html += '<div class="nav-footer"><button ' + (currentIndex === 0 ? 'disabled' : '') + ' onclick="prev()">Previous</button><button class="' + (currentIndex === flatSections.length - 1 ? '' : 'primary') + '" ' + (currentIndex === flatSections.length - 1 ? 'disabled' : '') + ' onclick="next()">Next</button></div>';
-  document.getElementById('content').innerHTML = html;
-  
+  var contentEl = document.getElementById('content');
+  contentEl.innerHTML = '<div class="deck-canvas">' + html + '</div>';
+  fitDeck();
+  contentEl.classList.remove('reveal'); void contentEl.offsetWidth; contentEl.classList.add('reveal');
+
   // Initialize training canvas if on that step
   if (sectionId === 'why-different' && wtStep === 6) {
     initTrainCanvas();
+  }
+  // Build the 3D requirements firework when its slide renders
+  if (section.type === 'firework') {
+    initFirework();
+  }
+  // Cover: revive the constellation + start the animated globe
+  document.body.classList.toggle('is-cover', section.type === 'title');
+  if (section.type === 'title') {
+    initCoverGlobe();
   }
 }
 
@@ -1325,8 +1476,112 @@ function renderSection(section) {
     case 'ct-dashboard': return renderCTEnvelopeBuilt(section.data);
     case 'vv-compare': return renderVVCompare(section.data);
     case 'readiness': return renderReadiness(section.data);
+    case 'firework': return renderFirework(section.data);
     default: return '';
   }
+}
+
+/* ── Requirements firework: data + render + init ── */
+var FW_AREAS = [
+  { id: 'AI-1',  label: 'Operational and data foundations', prevents: 'A system evaluated on data it effectively trained on, reporting skill it does not have outside its declared operating domain.' },
+  { id: 'AI-2',  label: 'Addressing AI bias', prevents: 'Outcomes that are systematically worse for some users because the training data encoded a historical bias.' },
+  { id: 'AI-3',  label: 'ML test coverage', prevents: 'Strong average performance that hides untested edge cases, boundary conditions, and injected failure modes.' },
+  { id: 'AI-4',  label: 'Continuous validation', prevents: 'A model accurate at deployment quietly drifting wrong as the world changes around it.' },
+  { id: 'AI-5',  label: 'Hallucination prevention', prevents: 'An AI stating fabricated facts, policies, or values with the same confidence as correct ones.' },
+  { id: 'AI-6',  label: 'Out of distribution detection', prevents: 'The model meeting an input unlike anything it was trained on and responding as if it were routine.' },
+  { id: 'AI-7',  label: 'Adversarial robustness', prevents: 'Inputs, training data, or the model itself manipulated by an adversary to force a chosen failure.' },
+  { id: 'AI-8',  label: 'Explainability', prevents: 'A safety-critical decision that cannot be inspected, questioned, or justified after the fact.' },
+  { id: 'AI-9',  label: 'Human and AI teaming', prevents: 'Operators who over-trust, under-trust, or lose the authority to override the AI when it matters.' },
+  { id: 'AI-10', label: 'Privacy and data protection', prevents: 'Personal or protected data exposed, retained, or transferred without lawful basis or control.' },
+  { id: 'AI-11', label: 'Multi-model systems', prevents: 'One model’s error cascading through a chain of models into a system-level failure.' },
+  { id: 'AI-12', label: 'Neural network requirements', prevents: 'Network-specific failures: miscalibrated confidence, brittle features, and unverified deployment transforms.' },
+  { id: 'AI-13', label: 'Continuous learning and adaptation', prevents: 'A model that keeps learning after deployment teaching itself the wrong thing, unnoticed.' }
+];
+
+function renderFirework(data) {
+  var html = '<p class="intro">' + (data && data.intro ? data.intro : '') + '</p>';
+  html += '<div class="fw-wrap"><div class="fw3d-stage" id="fw3d-stage">';
+  html += '<div class="fw3d"><div class="fw3d-scene" id="fw3d-scene"><span class="fw3d-core"></span></div></div>';
+  html += '<div class="fw3d-tip" id="fw3d-tip"><span class="t-id" id="fw3d-tip-id"></span><span id="fw3d-tip-label"></span></div>';
+  html += '<div class="fw3d-detail" id="fw3d-detail">';
+  html += '<button class="fw3d-detail-close" id="fw3d-detail-close" aria-label="Close">&times;</button>';
+  html += '<div class="fw3d-d-id" id="fw3d-d-id"></div><div class="fw3d-d-title" id="fw3d-d-title"></div>';
+  html += '<div class="fw3d-d-prevents-label">The failure it prevents</div><div class="fw3d-d-prevents" id="fw3d-d-prevents"></div>';
+  html += '<a class="fw3d-d-link" id="fw3d-d-link" href="#" target="_blank" rel="noopener">Read the requirement &rarr;</a></div>';
+  html += '<div class="fw3d-hint">Hover a node to name it &middot; click for the failure it prevents</div>';
+  html += '</div></div>';
+  return html;
+}
+
+function initFirework() {
+  var stage = document.getElementById('fw3d-stage');
+  if (!stage) return;
+  var scene = document.getElementById('fw3d-scene');
+  var fw3d = scene.parentNode;
+  var tip = document.getElementById('fw3d-tip');
+  var tipId = document.getElementById('fw3d-tip-id');
+  var tipLabel = document.getElementById('fw3d-tip-label');
+  var detail = document.getElementById('fw3d-detail');
+  var dId = document.getElementById('fw3d-d-id');
+  var dTitle = document.getElementById('fw3d-d-title');
+  var dPrev = document.getElementById('fw3d-d-prevents');
+  var dLink = document.getElementById('fw3d-d-link');
+  var dClose = document.getElementById('fw3d-detail-close');
+  var N = FW_AREAS.length, GOLDEN = 137.50776, sparks = [];
+  for (var i = 0; i < N; i++) {
+    var t = (i + 0.5) / N;
+    var pitch = Math.asin(2 * t - 1) * 180 / Math.PI;
+    var yaw = (i * GOLDEN) % 360;
+    var r = 120 + (i % 4) * 26;
+    var size = 8 + (i % 3) * 2;
+    var hue = Math.round((205 + i * (300 / N)) % 360);
+    var spark = document.createElement('div');
+    spark.className = 'fw3d-spark';
+    spark.style.setProperty('--tf', 'rotateY(' + yaw.toFixed(2) + 'deg) rotateZ(' + pitch.toFixed(2) + 'deg)');
+    var ray = document.createElement('div');
+    ray.className = 'fw3d-ray';
+    ray.style.width = r + 'px';
+    var dot = document.createElement('div');
+    dot.className = 'fw3d-dot';
+    dot.style.left = r + 'px';
+    dot.style.width = size + 'px';
+    dot.style.height = size + 'px';
+    dot.style.background = 'hsl(' + hue + ',44%,52%)';
+    dot.style.boxShadow = '0 0 6px hsla(' + hue + ',44%,52%,0.35)';
+    spark.appendChild(ray);
+    spark.appendChild(dot);
+    scene.appendChild(spark);
+    sparks.push({ spark: spark, dot: dot, area: FW_AREAS[i] });
+  }
+  var hovered = null, selected = null;
+  function apply() { scene.classList.toggle('is-paused', !!(hovered || selected)); }
+  function showTip(rec) {
+    var sb = stage.getBoundingClientRect(), db = rec.dot.getBoundingClientRect();
+    tip.style.left = (db.left + db.width / 2 - sb.left) + 'px';
+    tip.style.top = (db.top + db.height / 2 - sb.top) + 'px';
+    tipId.textContent = rec.area.id; tipLabel.textContent = rec.area.label;
+    tip.classList.add('is-on');
+  }
+  function openDetail(rec) {
+    selected = rec;
+    dId.textContent = rec.area.id; dTitle.textContent = rec.area.label; dPrev.textContent = rec.area.prevents;
+    dLink.href = 'https://safetycriticallabs.com/framework#' + rec.area.id.toLowerCase();
+    detail.classList.add('is-on'); fw3d.classList.add('has-sel');
+    sparks.forEach(function (s) { s.spark.classList.toggle('is-sel', s === rec); });
+    apply();
+  }
+  function closeDetail() {
+    selected = null; detail.classList.remove('is-on'); fw3d.classList.remove('has-sel');
+    sparks.forEach(function (s) { s.spark.classList.remove('is-sel'); });
+    tip.classList.remove('is-on'); apply();
+  }
+  sparks.forEach(function (rec) {
+    rec.dot.addEventListener('mouseenter', function () { hovered = rec; rec.dot.classList.add('is-hot'); apply(); requestAnimationFrame(function () { if (hovered === rec) showTip(rec); }); });
+    rec.dot.addEventListener('mouseleave', function () { if (hovered === rec) hovered = null; rec.dot.classList.remove('is-hot'); if (!selected) tip.classList.remove('is-on'); apply(); });
+    rec.dot.addEventListener('click', function (e) { e.stopPropagation(); tip.classList.remove('is-on'); if (selected === rec) closeDetail(); else openDetail(rec); });
+  });
+  stage.addEventListener('click', function (e) { if (e.target === stage || e.target === fw3d) closeDetail(); });
+  if (dClose) dClose.addEventListener('click', function (e) { e.stopPropagation(); closeDetail(); });
 }
 
 function renderVVCompare(data) {
@@ -1372,7 +1627,18 @@ function renderVVCompare(data) {
 }
 
 function renderOverview(data) {
-  let html = '<div class="overview-grid">';
+  let html = '';
+  if (data.roadmap && data.roadmap.length) {
+    html += '<div class="fw-roadmap" style="display:grid;grid-template-columns:repeat(' + data.roadmap.length + ',minmax(0,1fr));gap:10px;margin-bottom:22px;">';
+    data.roadmap.forEach(function(r) {
+      html += '<div style="background:var(--white);border:1px solid var(--rule);border-top:3px solid var(--blue);border-radius:6px;padding:12px 14px;">';
+      html += '<div style="font-family:var(--mono);font-size:10px;letter-spacing:0.08em;text-transform:uppercase;color:var(--blue);font-weight:600;margin-bottom:5px;">' + r.n + ' &middot; ' + r.title + '</div>';
+      html += '<div style="font-size:11.5px;color:var(--ink2);line-height:1.5;">' + r.sub + '</div>';
+      html += '</div>';
+    });
+    html += '</div>';
+  }
+  html += '<div class="overview-grid">';
   html += '<div class="overview-body">' + data.body + '</div>';
   html += '<div>';
   html += '<div class="overview-stats">';
@@ -3172,9 +3438,188 @@ function renderOutcomes(data) {
   return html;
 }
 
+var coverGlobeRAF = null;
+function initCoverGlobe() {
+  var canvas = document.getElementById('cover-globe');
+  if (!canvas) return;
+  var ctx = canvas.getContext('2d');
+  var tip = document.getElementById('cover-globe-tip');
+  var tourName = document.getElementById('cover-tour-name');
+  var slide = canvas.closest ? canvas.closest('.title-slide') : null;
+  var visual = slide ? slide.querySelector('.cover-visual') : null;
+  var reduce = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+  var DPR = Math.min(window.devicePixelRatio || 1, 2);
+  var target = null;
+  function resize() { canvas.width = Math.max(1, Math.round((window.innerWidth || 1) * DPR)); canvas.height = Math.max(1, Math.round((window.innerHeight || 1) * DPR)); target = null; }
+  resize();
+  function onResize() { if (!document.body.contains(canvas)) { window.removeEventListener('resize', onResize); return; } resize(); }
+  window.addEventListener('resize', onResize);
+
+  var GA = Math.PI * (3 - Math.sqrt(5));
+  var SN = 950, surf = [];
+  for (var i = 0; i < SN; i++) { var yy = 1 - (i + 0.5) / SN * 2; var rr = Math.sqrt(1 - yy * yy); var th = GA * i; surf.push([Math.cos(th) * rr, yy, Math.sin(th) * rr]); }
+  var nodes = [];
+  for (var j = 0; j < FW_AREAS.length; j++) { var tt = (j + 0.5) / FW_AREAS.length; var ny = 1 - tt * 2; var nr = Math.sqrt(1 - ny * ny); var nth = GA * j * 2.3 + 0.7; var hue = Math.round((205 + j * (300 / FW_AREAS.length)) % 360); nodes.push({ v: [Math.cos(nth) * nr, ny, Math.sin(nth) * nr], hue: hue, ph: (j * 0.41) % 1, area: FW_AREAS[j], sx: 0, sy: 0, sz: -1 }); }
+  var pairs = [[0,6],[6,11],[11,3],[3,9],[9,1],[1,7],[7,12],[12,4],[4,10],[2,8],[8,5]];
+  var arcs = pairs.map(function (pr, idx) { return { a: nodes[pr[0]].v, b: nodes[pr[1]].v, ph: (idx * 0.13) % 1, speed: 0.0035 + (idx % 3) * 0.0012 }; });
+
+  var DEFAULT_TILT = -0.42;
+  var rot = 0, tiltA = DEFAULT_TILT, tick = 0;
+
+  // ── Timeline (ms): assemble full-screen → auto-tour the dots → resolve
+  //    (globe slides into the column, title reveals) → settled tour loop. ──
+  var t0 = (window.performance && performance.now) ? performance.now() : 0;
+  var ASSEMBLE = reduce ? 0 : 1300;
+  var RESOLVE_AT = reduce ? 0 : 3700;   // begin settling after ~2.4s of full-screen touring
+  var RESOLVE_MS = reduce ? 0 : 950;
+  var revealed = false;
+
+  // Auto-tour state: rotate each requirement node to the front in turn.
+  var tourI = 0, tourYaw = 0, tourMoving = true, dwellAt = 0, tourInit = false, lastLabel = -1;
+  function yawFor(nd) { return Math.atan2(-nd.v[0], nd.v[2]); }
+  function angNorm(a) { a = a % (2 * Math.PI); if (a > Math.PI) a -= 2 * Math.PI; else if (a < -Math.PI) a += 2 * Math.PI; return a; }
+  function targetRect() {
+    if (target) return target;
+    var t = { cx: canvas.width * 0.5, cy: canvas.height * 0.5, R: Math.min(canvas.width, canvas.height) * 0.30 };
+    if (visual) { var r = visual.getBoundingClientRect(); if (r.width > 4 && r.height > 4) t = { cx: (r.left + r.width / 2) * DPR, cy: (r.top + r.height / 2) * DPR, R: Math.min(r.width, r.height) * 0.46 * DPR }; }
+    target = t; return t;
+  }
+
+  function proj(v, R, cx, cy) {
+    var a = rot;
+    var x = v[0] * Math.cos(a) + v[2] * Math.sin(a);
+    var z = -v[0] * Math.sin(a) + v[2] * Math.cos(a);
+    var y = v[1];
+    var y2 = y * Math.cos(tiltA) - z * Math.sin(tiltA);
+    var z2 = y * Math.sin(tiltA) + z * Math.cos(tiltA);
+    return { x: cx + x * R, y: cy - y2 * R, z: z2 };
+  }
+  function slerp(a, b, t) {
+    var d = a[0]*b[0] + a[1]*b[1] + a[2]*b[2]; d = d < -1 ? -1 : d > 1 ? 1 : d;
+    var om = Math.acos(d); if (om < 1e-4) return [a[0], a[1], a[2]];
+    var s = Math.sin(om), w1 = Math.sin((1 - t) * om) / s, w2 = Math.sin(t * om) / s;
+    return [a[0]*w1 + b[0]*w2, a[1]*w1 + b[1]*w2, a[2]*w1 + b[2]*w2];
+  }
+  function frame() {
+    var W = canvas.width, H = canvas.height;
+    var now = (window.performance && performance.now) ? performance.now() : t0 + RESOLVE_AT + RESOLVE_MS + 1;
+    var el = now - t0;
+    // Assemble progress (dots zoom in, structure + nodes fade up).
+    var ip = ASSEMBLE > 0 ? Math.min(1, el / ASSEMBLE) : 1;
+    var e = 1 - Math.pow(1 - ip, 3);
+    var expF = 1 + (1 - e) * 2.4;
+    var dotsA = Math.min(1, 0.32 + ip / 0.28 * 0.68);
+    var structA = ip <= 0.45 ? 0 : Math.min(1, (ip - 0.45) / 0.5); structA = structA * structA * (3 - 2 * structA);
+    // Resolve progress (full-screen → cover column).
+    var rp = RESOLVE_MS > 0 ? Math.max(0, Math.min(1, (el - RESOLVE_AT) / RESOLVE_MS)) : (el >= RESOLVE_AT ? 1 : 0);
+    var rpe = rp < 0.5 ? 2 * rp * rp : 1 - Math.pow(-2 * rp + 2, 2) / 2;
+    if (!revealed && rp > 0.02) { revealed = true; if (slide) slide.classList.add('revealed'); }
+
+    var fsCx = W / 2, fsCy = H / 2, fsR = Math.min(W, H) * 0.36;
+    var tgt = targetRect();
+    var cx = fsCx + (tgt.cx - fsCx) * rpe;
+    var cy = fsCy + (tgt.cy - fsCy) * rpe;
+    var R = (fsR + (tgt.R - fsR) * rpe) * (0.86 + 0.14 * e);
+    var bgAlpha = 1 - rpe;
+
+    // Rotation: fast decel during assemble; auto-tour afterward.
+    if (ip < 1) {
+      rot += 0.085 * (1 - e) + 0.002;
+      tiltA = DEFAULT_TILT + (1 - e) * 0.30;
+    } else {
+      if (!tourInit) { tourInit = true; tourI = 0; tourYaw = yawFor(nodes[0]); tourMoving = true; }
+      tiltA += (DEFAULT_TILT - tiltA) * 0.05;
+      if (!reduce) {
+        if (tourMoving) {
+          var dd = angNorm(tourYaw - rot);
+          rot += dd * 0.075;
+          if (Math.abs(dd) < 0.05) { tourMoving = false; dwellAt = now; }
+        } else {
+          rot += 0.0016;
+          if (now - dwellAt > (rp >= 1 ? 1500 : 800)) { tourI = (tourI + 1) % nodes.length; tourYaw = yawFor(nodes[tourI]); tourMoving = true; }
+        }
+      }
+    }
+
+    ctx.clearRect(0, 0, W, H);
+    if (bgAlpha > 0.001) { ctx.globalAlpha = bgAlpha; ctx.fillStyle = '#FAF9F5'; ctx.fillRect(0, 0, W, H); ctx.globalAlpha = 1; }
+    ctx.globalAlpha = structA;
+    var g = ctx.createRadialGradient(cx, cy, R * 0.55, cx, cy, R * 1.6);
+    g.addColorStop(0, 'rgba(46,109,180,0.22)'); g.addColorStop(0.58, 'rgba(46,109,180,0.07)'); g.addColorStop(1, 'rgba(46,109,180,0)');
+    ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+    ctx.globalAlpha = structA;
+    ctx.beginPath(); ctx.arc(cx, cy, R, 0, 6.283); ctx.strokeStyle = 'rgba(46,109,180,0.20)'; ctx.lineWidth = 1.2 * DPR; ctx.stroke();
+    ctx.globalAlpha = dotsA;
+    for (i = 0; i < surf.length; i++) {
+      var sv = surf[i];
+      var p = proj(expF === 1 ? sv : [sv[0] * expF, sv[1] * expF, sv[2] * expF], R, cx, cy);
+      if (p.z > 0) { ctx.fillStyle = 'rgba(12,34,66,' + (0.30 + 0.36 * p.z).toFixed(3) + ')'; ctx.beginPath(); ctx.arc(p.x, p.y, 1.55 * DPR, 0, 6.283); ctx.fill(); }
+      else { ctx.fillStyle = 'rgba(12,34,66,0.07)'; ctx.beginPath(); ctx.arc(p.x, p.y, 1.15 * DPR, 0, 6.283); ctx.fill(); }
+    }
+    ctx.globalAlpha = 1;
+    if (structA > 0.001) {
+      ctx.globalAlpha = structA;
+      for (var k = 0; k < arcs.length; k++) {
+        var arc = arcs[k], SEG = 44, started = false;
+        ctx.beginPath();
+        for (var m = 0; m <= SEG; m++) { var st = m / SEG; var mid = slerp(arc.a, arc.b, st); var lift = 1 + 0.13 * Math.sin(Math.PI * st); var pv = [mid[0]*lift, mid[1]*lift, mid[2]*lift]; var pp = proj(pv, R, cx, cy); if (pp.z <= 0) { started = false; continue; } if (!started) { ctx.moveTo(pp.x, pp.y); started = true; } else ctx.lineTo(pp.x, pp.y); }
+        ctx.strokeStyle = 'rgba(46,109,180,0.38)'; ctx.lineWidth = 1.5 * DPR; ctx.stroke();
+        if (!reduce) arc.ph = (arc.ph + arc.speed) % 1;
+        var mm = slerp(arc.a, arc.b, arc.ph); var lift2 = 1 + 0.13 * Math.sin(Math.PI * arc.ph); var pl = proj([mm[0]*lift2, mm[1]*lift2, mm[2]*lift2], R, cx, cy);
+        if (pl.z > 0) { ctx.beginPath(); ctx.arc(pl.x, pl.y, 2.9 * DPR, 0, 6.283); ctx.fillStyle = 'rgba(70,140,210,0.98)'; ctx.shadowColor = 'rgba(46,109,180,0.9)'; ctx.shadowBlur = 12 * DPR; ctx.fill(); ctx.shadowBlur = 0; }
+      }
+      ctx.globalAlpha = 1;
+    }
+    // Project nodes; the tour's current node is the active (highlighted) one.
+    var activeNd = (ip >= 1 && tourInit && !reduce) ? nodes[tourI] : null;
+    for (var n = 0; n < nodes.length; n++) {
+      var nd = nodes[n], npj = proj(nd.v, R, cx, cy);
+      nd.sx = npj.x; nd.sy = npj.y; nd.sz = npj.z;
+    }
+    for (var n2 = 0; n2 < nodes.length; n2++) {
+      var e2 = nodes[n2]; if (e2.sz < -0.05) continue;
+      var na = ip >= 1 ? 1 : Math.min(1, Math.max(0, (ip - (0.5 + n2 * 0.017)) / 0.16)); // ignite in a ripple
+      if (na <= 0) continue;
+      var isA = (e2 === activeNd);
+      var pulse = 0.5 + (reduce ? 0 : 0.5 * Math.sin(tick * 0.045 + e2.ph * 6.283));
+      var light = Math.round(50 + 10 * e2.sz);
+      var rad = (3.3 + 1.8 * pulse + (isA ? 2.8 : 0)) * DPR;
+      ctx.globalAlpha = na * (activeNd && !isA ? 0.82 : 1);
+      ctx.beginPath(); ctx.arc(e2.sx, e2.sy, rad, 0, 6.283);
+      ctx.fillStyle = 'hsl(' + e2.hue + ',60%,' + light + '%)';
+      ctx.shadowColor = 'hsla(' + e2.hue + ',65%,55%,0.9)'; ctx.shadowBlur = ((isA ? 20 : 9) + 8 * pulse) * DPR; ctx.fill(); ctx.shadowBlur = 0;
+      if (isA) { ctx.beginPath(); ctx.arc(e2.sx, e2.sy, rad + 6 * DPR, 0, 6.283); ctx.strokeStyle = 'rgba(12,34,66,0.55)'; ctx.lineWidth = 1.8 * DPR; ctx.stroke(); }
+      ctx.globalAlpha = 1;
+    }
+    // Label the active node: big centred caption while full-screen, small
+    // tooltip beside the node once resolved into the cover.
+    if (activeNd && activeNd.sz > -0.1) {
+      if (tourI !== lastLabel) {
+        lastLabel = tourI;
+        var idH = '<span class="tid">' + activeNd.area.id + '</span><span class="tlabel">' + activeNd.area.label + '</span>';
+        if (tip) tip.innerHTML = idH;
+        if (tourName) tourName.innerHTML = '<span class="tn-id">' + activeNd.area.id + '</span><span class="tn-label">' + activeNd.area.label + '</span>';
+      }
+      if (rp < 0.25) {
+        if (tourName) tourName.classList.add('on');
+        if (tip) tip.classList.remove('on');
+      } else {
+        if (tourName) tourName.classList.remove('on');
+        if (tip) { tip.style.left = (activeNd.sx / DPR) + 'px'; tip.style.top = (activeNd.sy / DPR) + 'px'; tip.classList.add('on'); }
+      }
+    } else {
+      if (tourName) tourName.classList.remove('on');
+      if (tip) tip.classList.remove('on');
+    }
+    if (!reduce) tick++;
+    coverGlobeRAF = requestAnimationFrame(frame);
+  }
+  frame();
+}
+
 function renderTitle(data) {
-  let html = '<div class="title-slide">';
-  html += '<img class="title-logo" src="img/SCL_Logo_transparent.png" alt="Safety Critical Labs">';
+  let html = '<div class="title-slide cover-split">';
+  html += '<div class="cover-copy">';
   if (data.eyebrow) html += '<div class="title-eyebrow">' + data.eyebrow + '</div>';
   html += '<h1 class="title-heading">' + data.heading + '</h1>';
   if (data.subheading) html += '<p class="title-subheading">' + data.subheading + '</p>';
@@ -3185,6 +3630,11 @@ function renderTitle(data) {
     });
     html += '</div>';
   }
+  html += '</div>';
+  html += '<div class="cover-visual"><div class="cover-globe-cap">A global standard &middot; systems that cannot fail</div></div>';
+  html += '<canvas id="cover-globe" class="cover-globe" aria-hidden="true"></canvas>';
+  html += '<div class="cover-globe-tip" id="cover-globe-tip"></div>';
+  html += '<div class="cover-tour-name" id="cover-tour-name"></div>';
   html += '</div>';
   return html;
 }
@@ -3683,6 +4133,7 @@ function goTo(i) {
   if (trainInterval) { clearInterval(trainInterval); trainInterval = null; }
   if (searchInterval) { clearInterval(searchInterval); searchInterval = null; }
   if (driftInterval) { clearInterval(driftInterval); driftInterval = null; }
+  closeNav();
   render();
 }
 
@@ -3757,9 +4208,48 @@ function toggleOutline(i) { var el = document.getElementById('outline-' + i); if
 function toggleSubSummary(el) { el.classList.toggle('active'); }
 function toggleStep(i) { expandedStep = expandedStep === i ? null : i; renderContent(); }
 
+/* ─── Presentation fit + slide drawer ─────────────────
+   Content slides render on a fixed logical width and are scaled up with `zoom`
+   so text is legible when screen-shared on Teams. Title + firework slides opt
+   out (already large / positioned by their own JS from element size). */
+var DECK_CANVAS_W = 1160;
+function fitDeck() {
+  var content = document.getElementById('content');
+  if (!content) return;
+  var canvas = content.querySelector('.deck-canvas');
+  if (!canvas) return;
+  var type = sections[flatSections[currentIndex]].type;
+  if (type === 'title' || type === 'firework') {
+    canvas.style.width = '100%';
+    canvas.style.zoom = '1';
+    return;
+  }
+  canvas.style.width = DECK_CANVAS_W + 'px';
+  var z = content.clientWidth / DECK_CANVAS_W;
+  z = Math.max(0.85, Math.min(z, 1.9));
+  canvas.style.zoom = z;
+}
+
+function toggleNav() {
+  var s = document.getElementById('sidebar');
+  var b = document.getElementById('navBackdrop');
+  var open = !s.classList.contains('open');
+  s.classList.toggle('open', open);
+  if (b) b.classList.toggle('open', open);
+}
+function closeNav() {
+  var s = document.getElementById('sidebar');
+  var b = document.getElementById('navBackdrop');
+  if (s) s.classList.remove('open');
+  if (b) b.classList.remove('open');
+}
+
+window.addEventListener('resize', fitDeck);
+
 document.addEventListener('keydown', e => {
   if (e.key === 'ArrowRight') { e.preventDefault(); next(); }
   else if (e.key === 'ArrowLeft') { e.preventDefault(); prev(); }
+  else if (e.key === 'Escape') { closeNav(); }
 });
 
 render();
@@ -3782,7 +4272,8 @@ render();
     s.style.height = sz + 'px';
     s.style.left = rnd(1.5, 98.5) + '%';
     s.style.top = rnd(2.5, 97.5) + '%';
-    s.style.opacity = rnd(0.06, 0.22).toFixed(2);
+    s.style.setProperty('--op', rnd(0.06, 0.20).toFixed(2));
+    s.style.animationDelay = rnd(0, 5).toFixed(2) + 's';
     c.appendChild(s);
   }
   for (var j = 0; j < 5; j++) {
@@ -3792,7 +4283,8 @@ render();
     sp.style.left = rnd(7, 93) + '%';
     sp.style.top = rnd(9, 91) + '%';
     sp.style.fontSize = rnd(7, 12).toFixed(0) + 'px';
-    sp.style.opacity = rnd(0.10, 0.22).toFixed(2);
+    sp.style.setProperty('--op', rnd(0.10, 0.22).toFixed(2));
+    sp.style.animationDelay = rnd(0, 5).toFixed(2) + 's';
     c.appendChild(sp);
   }
 })();

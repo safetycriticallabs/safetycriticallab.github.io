@@ -1568,23 +1568,30 @@
       left: calc(50% + (var(--nx) - 50%) * var(--bang, 1) * (0.86 + 0.14 * var(--expand, 1)));
       top: calc(46% + (var(--ny) - 46%) * var(--bang, 1) * (0.86 + 0.14 * var(--expand, 1)));
       transform: translate(-50%, -50%);
-      display: flex; flex-direction: column; align-items: center; gap: 5px;
-      width: 82px; padding: 8px 7px;
-      /* glass on the night sky — translucent fill + light edge so the labels
-         sit IN the field instead of on top of it */
-      background: rgba(250, 249, 245, 0.08);
-      border: 1px solid rgba(250, 249, 245, 0.24);
-      border-radius: 10px;
-      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.22);
+      display: flex; flex-direction: column; align-items: center; gap: 7px;
+      padding: 10px 8px;
+      /* named stars — no box: the glyph glows like a bright point in the
+         field with the label floating beneath, so the links read as part of
+         the constellation instead of cards laid over it */
       text-decoration: none;
     }
-    .smc-glyph { display: block; width: 20px; height: 20px; }
+    .smc-glyph { position: relative; display: block; width: 22px; height: 22px; }
+    /* soft halo behind the glyph — the "bright star" the label names */
+    .smc-glyph::before {
+      content: ""; position: absolute; left: 50%; top: 50%;
+      width: 54px; height: 54px; transform: translate(-50%, -50%);
+      border-radius: 50%;
+      background: radial-gradient(circle,
+        rgba(250, 249, 245, 0.20) 0%,
+        rgba(250, 249, 245, 0.06) 45%,
+        rgba(250, 249, 245, 0) 70%);
+    }
     .smc-glyph svg { display: block; width: 100%; height: 100%; }
     .smc-lbl {
-      font-family: var(--mono); font-size: 8.7px; font-weight: 500; white-space: nowrap;
-      letter-spacing: 0.08em; text-transform: uppercase;
+      font-family: var(--mono); font-size: 9px; font-weight: 500; white-space: nowrap;
+      letter-spacing: 0.1em; text-transform: uppercase;
       /* !important or the body-wide recolor rule paints it navy-on-navy */
-      color: rgba(250, 249, 245, 0.92) !important;
+      color: rgba(250, 249, 245, 0.95) !important;
     }
   }
   @media (max-width: 640px) and (prefers-reduced-motion: reduce) {
@@ -3548,9 +3555,9 @@
        the core, then the per-cluster drift takes back over. */
     field = document.createElementNS(SVG_NS, 'g');
     field.setAttribute('id', 'smc-field');
-    /* clusters spawn clear of the labels: tile footprint + cluster reach +
-       drift, in viewBox units. Solo specks may still land behind the glass
-       (that reads as sky), but a mesh figure crossing a tile reads as mess */
+    /* clusters spawn clear of the labels: label footprint + cluster reach +
+       drift, in viewBox units. Solo specks may still land behind a label
+       (that reads as sky), but a mesh figure crossing one reads as mess */
     function clearOfLabels(x, y) {
       for (var i = 0; i < avoid.length; i++) {
         if (Math.abs(x - avoid[i].x) < 105 && Math.abs(y - avoid[i].y) < 90) return false;

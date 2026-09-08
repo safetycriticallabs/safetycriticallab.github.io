@@ -389,6 +389,27 @@
   text-decoration: none;
 }
 .ask-cite:hover { background: rgba(46,109,180,0.18); }
+/* Grounding line under each answer: the corpus entries the worker served for
+   that turn, in served order, so a reader can see what the answer stood on.
+   Same muted weight and color as .ask-disclosure. It lives inside the answer
+   bubble so a copied answer carries its sources with it. */
+.ask-grounding {
+  display: block;
+  margin: 10px 0 0;
+  padding-top: 8px;
+  border-top: 1px solid rgba(12,34,66,0.08);
+  font-size: 12px;
+  line-height: 1.6;
+  color: rgba(12,34,66,0.6);
+  white-space: normal;
+}
+.ask-grounding-plain {
+  display: inline-block; font-family: var(--mono); font-size: 12.5px; font-weight: 500;
+  color: rgba(12,34,66,0.7);
+  background: rgba(12,34,66,0.04);
+  border: 1px solid rgba(12,34,66,0.16); border-radius: 5px;
+  padding: 0 6px; margin: 0 1px;
+}
 .ask-thread-footer { margin: 10px 0 26px; }
 .ask-new {
   font-family: var(--sans); font-size: 12px; font-weight: 500;
@@ -1190,12 +1211,76 @@
     threadFooter = null;
   }
 
-  /* Requirement mentions become framework deep-link chips. Escape first;
-     sub-requirements land on their area anchor (ai-4.1 -> #ai-4). */
+  /* Requirement ids resolve to the framework page. /framework carries one
+     card per area (#ai-1 to #ai-13) and no per-sub-requirement markup, so a
+     sub-requirement lands on its area card (AI-4.1 -> #ai-4). If the page
+     ever gains #ai-4-1 style anchors, this is the one place to route them. */
+  function frameworkHref(area, sub) {
+    return '/framework#ai-' + area;
+  }
+
+  /* Requirement mentions in the answer text become framework deep-link
+     chips. Escape first; the regex runs over the escaped string. */
   function citeChips(text) {
-    return escapeHtml(text).replace(/\bAI-(\d{1,2})(\.\d{1,2})?\b/g, function (m, area) {
-      return '<a class="ask-cite" href="/framework#ai-' + area + '">' + m + '</a>';
+    return escapeHtml(text).replace(/\bAI-(\d{1,2})(?:\.(\d{1,2}))?\b/g, function (m, area, sub) {
+      return '<a class="ask-cite" href="' + frameworkHref(area, sub) + '">' + m + '</a>';
     });
+  }
+
+  /* ── Grounding line. The worker reports which corpus entries it served for
+     the turn in X-Ask-Retrieved (comma-separated ids in served order, empty
+     when it answered from the FAQ alone) and how it chose them in
+     X-SCL-Retrieval (rerank, keyword, none). Ids are server data: every node
+     is built with createElement and textContent, never innerHTML. A missing
+     header (older worker, or a response that did not expose it) renders
+     nothing rather than a claim the worker never made. ── */
+  var GROUNDED_EMPTY = 'Answered from SCL\'s published FAQ; no framework excerpts were served.';
+  function parseServedIds(header) {
+    var out = [];
+    var parts = String(header).split(',');
+    for (var i = 0; i < parts.length; i++) {
+      var id = parts[i].trim();
+      if (id) out.push(id);
+    }
+    return out;
+  }
+  function groundingChip(id) {
+    /* AI-n and AI-n.m (and continuation ids such as AI-1.0-cont) link to the
+       framework; sec-, app-, std- and note- ids have no anchor on /framework
+       and stay plain, the id in the title for anyone who wants it */
+    var m = /^AI-(\d{1,2})(?:\.(\d{1,2}))?(?:-|$)/i.exec(id);
+    var chip;
+    if (m) {
+      chip = document.createElement('a');
+      chip.className = 'ask-cite';
+      chip.href = frameworkHref(m[1], m[2]);
+    } else {
+      chip = document.createElement('span');
+      chip.className = 'ask-grounding-plain';
+    }
+    chip.title = id;
+    chip.textContent = id;
+    return chip;
+  }
+  function renderGrounding(ai, retrieved, retrieval) {
+    if (retrieved === null || retrieved === undefined) return;   /* header absent: nothing to report */
+    var line = document.createElement('span');   /* a span so it is valid inside the <p> bubble */
+    line.className = 'ask-grounding';
+    if (retrieval) line.setAttribute('data-retrieval', retrieval);
+    var ids = parseServedIds(retrieved);
+    if (ids.length === 0) {
+      line.textContent = GROUNDED_EMPTY;
+    } else {
+      var label = document.createElement('span');
+      label.className = 'ask-grounding-label';
+      label.textContent = 'Grounded in: ';
+      line.appendChild(label);
+      for (var i = 0; i < ids.length; i++) {
+        if (i > 0) line.appendChild(document.createTextNode(' '));
+        line.appendChild(groundingChip(ids[i]));
+      }
+    }
+    ai.body.appendChild(line);   /* inside the bubble: copies with the answer */
   }
 
   /* doc is the attachment that travelled with THIS turn, or null. Its name is
@@ -1319,9 +1404,11 @@
     });
   }
 
-  function finishAnswer(ai, text, q, firstTurn) {
+  function finishAnswer(ai, text, q, firstTurn, grounding) {
     ai.body.innerHTML = citeChips(text);
     ai.textNode = null; ai.caret = null; ai.dots = null;   /* replaced by the linkified render */
+    grounding = grounding || {};
+    renderGrounding(ai, grounding.retrieved, grounding.retrieval);
     setActivity(ai, 'done');   /* the arc closes the circle and lets go */
     settleActivity(ai, 900);
     convo.push({ role: 'assistant', content: text });
@@ -1875,6 +1962,12 @@
     })
       .then(function (r) {
         var ct = r.headers.get('Content-Type') || '';
+        /* the grounding headers ride on both the streamed and the JSON
+           response; read them before the body is consumed */
+        var grounding = {
+          retrieved: r.headers.get('X-Ask-Retrieved'),
+          retrieval: r.headers.get('X-SCL-Retrieval')
+        };
         if (r.ok && ct.indexOf('text/plain') === 0 && r.body && typeof r.body.getReader === 'function') {
           var reader = r.body.getReader();
           var dec = new TextDecoder();
@@ -1885,7 +1978,7 @@
               if (res.done) {
                 if (!acc.trim()) { fail('error'); return; }
                 askBusy = false;
-                finishAnswer(ai, acc.trim(), q, firstTurn);
+                finishAnswer(ai, acc.trim(), q, firstTurn, grounding);
                 return;
               }
               var chunk = dec.decode(res.value, { stream: true });
@@ -1908,7 +2001,7 @@
           if (r.ok && data && data.answer) {
             if (gen !== askGen) return;
             askBusy = false;
-            finishAnswer(ai, data.answer, q, firstTurn);
+            finishAnswer(ai, data.answer, q, firstTurn, grounding);
             return;
           }
           if (r.status === 400 || r.status === 413) { fail('invalid', data && data.error); return; }

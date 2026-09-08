@@ -445,6 +445,148 @@
       "link": "/disclaimer"
     },
     {
+      "q": "How do you certify a system that is not deterministic?",
+      "a": "SCL does not score a nondeterministic system against a single correct output. The certification claim is bounded by the Operational Design Domain the system declares up front (AI-1.0). Inside that envelope the framework asks for evidence that behavior stays within defined bounds: testing across representative operational inputs against pass/fail criteria (AI-3.3), calibrated confidence on probabilistic outputs (AI-8.3), and drift monitoring with performance threshold maintenance in operation (AI-4.1, AI-4.2). The result is a determination against the applicable requirements at the time of assessment; it is not a score.",
+      "keywords": [
+        "deterministic",
+        "nondeterministic",
+        "non-deterministic",
+        "probabilistic",
+        "stochastic",
+        "random",
+        "different",
+        "answers",
+        "outputs",
+        "certify",
+        "bounded",
+        "envelope",
+        "variance",
+        "llm"
+      ],
+      "link": "/framework"
+    },
+    {
+      "q": "Where does the developer's intent go in an AI system?",
+      "a": "In traditional software the intent goes into the code: a developer who decides a word means spam writes a rule that says so, and a reviewer can read the rule and trace it to a requirement. In an AI system the intent goes into the loss function. The developer labels examples and defines one number that says how wrong the last guess was, and training adjusts the parameters until it gets smaller: warmer or colder, played by a machine. The decision logic is left to training, so behavior is learned from data rather than written down, and the traceability from requirements to code breaks (AI-1).",
+      "keywords": [
+        "intent",
+        "developer intent",
+        "loss function",
+        "where does intent go",
+        "training",
+        "labels",
+        "warmer or colder",
+        "rules versus examples",
+        "traceability",
+        "requirements to code",
+        "what is training",
+        "how ai learns"
+      ],
+      "link": "/framework"
+    },
+    {
+      "q": "Why can't a reviewer read an AI model the way they read code?",
+      "a": "Training produces a set of weights, coordinates in a space nobody drew. In code the word the developer had in mind is still a string a reviewer can search for. After training it has dissolved into numbers, so you cannot grep for intent. The weights hold the same knowledge the rule would have, in a form that cannot be read back. The framework agrees: there is no code to cover in a neural network's weights (AI-3), and decisions come from learned patterns in weights that are not directly interpretable (AI-8). Whether a system has crossed that line is a behavioral test (Section 1.2.1).",
+      "keywords": [
+        "read the model",
+        "read the weights",
+        "weights",
+        "black box",
+        "grep for intent",
+        "cannot be read",
+        "interpretable",
+        "code review",
+        "inspect the model",
+        "embedding",
+        "coordinates",
+        "opaque",
+        "explainability"
+      ],
+      "link": "/framework"
+    },
+    {
+      "q": "If you cannot read the model, what do you verify?",
+      "a": "You verify the envelope around it. First, the conditions it was trained under: data provenance (AI-1.3), a characterized training distribution (AI-6.1), and testing across operational inputs (AI-3.3). Second, the conditions it operates under: a declared Operational Design Domain (AI-1.0), drift and performance monitoring (AI-4), and out of distribution detection (AI-6). Third, the mechanisms that catch it when it fails: hallucination response (AI-5) and human oversight with final decision authority (AI-9). The model stays opaque and probabilistic, or nondeterministic. The envelope does not.",
+      "keywords": [
+        "verify the envelope",
+        "envelope",
+        "what do you verify",
+        "operating envelope",
+        "trained under",
+        "operates under",
+        "catch it when it fails",
+        "operational design domain",
+        "odd",
+        "drift monitoring",
+        "fallback",
+        "human oversight",
+        "what certification checks"
+      ],
+      "link": "/framework"
+    },
+    {
+      "q": "Why is testing alone not enough for AI?",
+      "a": "A test result is a moment in time: how the model did on the inputs you chose, the day you ran it. Because its behavior was learned from data, the model holds patterns nobody designed or thought to test, and it can change in operation without any code change as the data around it drifts. The framework pairs every requirement with a verification method, of which test is one of four (Section 4.1), and requires some verification to continue in operation, including drift monitoring and performance threshold maintenance (Section 4.4). SCL surveillance then checks that this monitoring is working.",
+      "keywords": [
+        "testing",
+        "test suite",
+        "just test it",
+        "testing is not enough",
+        "snapshot",
+        "moment in time",
+        "changes without code changes",
+        "verification method",
+        "inspection analysis demonstration",
+        "continuous verification",
+        "surveillance",
+        "monitoring",
+        "drift"
+      ],
+      "link": "/framework"
+    },
+    {
+      "q": "How does an AI system that is getting better still fail?",
+      "a": "A spam filter retrained weekly learns new spam terms; detection goes up. Then the finance team mails a crypto policy update, the model learns that too, and starts blocking internal finance mail. The loss function improved, detection is up, and the system blocks legitimate business. A regression test misses it: aggregate accuracy went up. That is drift under an improving loss. The framework monitors behavior: drift from the training baseline (AI-4.1) and performance thresholds with a defined response on breach (AI-4.2). AI-13.1 sets permission criteria for learning that continues in the field.",
+      "keywords": [
+        "spam filter",
+        "getting better",
+        "improving but failing",
+        "accuracy went up",
+        "blocking legitimate email",
+        "false positives",
+        "retrained weekly",
+        "continuous learning",
+        "regression tests",
+        "change control",
+        "drift",
+        "unintended learning",
+        "silent failure",
+        "metrics improved"
+      ],
+      "link": "/framework"
+    },
+    {
+      "q": "What does a certification determination say and not say?",
+      "a": "Every assessment produces a determination document regardless of outcome. It records the system assessed, framework version, classification level, requirement sets, findings, quantified risk score, and the formal determination: Certified or Not Certified. A certificate, issued only when the applicable requirements are met, records that the system met them at the time of assessment. It does not claim the system is safe, that it will not fail, or that it has regulatory approval, and the operator stays responsible. The determination itself is a finding against requirements, not a score.",
+      "keywords": [
+        "determination",
+        "determination document",
+        "certified",
+        "not certified",
+        "outcome",
+        "what does the certificate say",
+        "does not claim safe",
+        "safe",
+        "guarantee",
+        "pass fail",
+        "risk score",
+        "at the time of assessment",
+        "regulatory approval",
+        "result"
+      ],
+      "link": "/disclaimer"
+    },
+    {
       "q": "How does DO-178C decide how much rigor software needs?",
       "a": "DO-178C does not run the safety assessment that sets its rigor. The aircraft level assessment does, through the methods of ARP4761/A and the assurance level assignment of ARP4754A/B, and the resulting software level reaches the software life cycle as an input. That level then selects which Annex A objectives apply. SCL's gate answers a narrower question, whether behavior rests on a learned artifact, so criticality still comes from your own domain's process.",
       "keywords": [

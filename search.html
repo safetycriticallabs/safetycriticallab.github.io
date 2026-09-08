@@ -413,6 +413,11 @@
   color: rgba(12,34,66,0.6);
   margin: 12px 0 0;
 }
+/* Hero-state copy of the disclosure, so the Built with Llama notice is on the
+   page before any question is sent. Centred under the starter chips; hidden
+   once the thread footer carries the same text. */
+.ask-disclosure-hero { max-width: 540px; margin: 28px auto 0; }
+.search-page.chat-active .ask-disclosure-hero { display: none; }
 /* Opt-in retention control. Sits with the disclosure, same muted weight: it is
    a standing choice, not a call to action, and it must not compete with the
    composer. align-items:flex-start keeps the box on the first line of wrapped
@@ -761,6 +766,7 @@
       <button class="search-starter" type="button">What does it cost?</button>
       <button class="search-starter" type="button">Is SCL accredited?</button>
     </div>
+    <p class="ask-disclosure ask-disclosure-hero" id="ask-hero-disclosure" hidden></p>
 
     <div class="search-results" id="search-results" hidden>
       <div class="search-results-label" id="search-results-label" role="status">Matching answers</div>
@@ -1144,7 +1150,13 @@
      completion handler no-ops when its captured generation is stale. */
   var askGen = 0;
 
-  var ASK_DISCLOSURE = 'Generated on SCL\'s own hardware by a self-hosted open-weight language model, from SCL\'s published documentation. Verify anything load-bearing against the standard.';
+  var ASK_DISCLOSURE = 'Built with Llama. Answers come from an open-weight Llama 3.1 model SCL fine-tuned and runs on its own hardware, grounded in SCL\'s published documentation. Verify anything load-bearing against the standard. '
+    + '<a href="https://www.llama.com/llama3_1/license/" target="_blank" rel="noopener">Llama 3.1 Community License</a>';
+  /* The thread footer only exists after the first send; the hero copy shows
+     the same notice before that. Ask mode only: a plain library search has
+     no model to disclose. */
+  var heroDisclosure = document.getElementById('ask-hero-disclosure');
+  if (askMode && heroDisclosure) { heroDisclosure.innerHTML = ASK_DISCLOSURE; heroDisclosure.hidden = false; }
 
   /* Opt-in question retention. Default OFF and it stays off unless the visitor
      ticks the box, which is the consent the worker requires before it stores
@@ -1335,8 +1347,8 @@
   var DOC_MAX_PASSAGES = 3000;   /* covers the full char cap at ~700 chars/passage */
   var DOC_EXCERPT_BUDGET = 6500;   /* worker caps at 8000; headroom for joins */
   var DOC_PICK_MAX = 8;
-  var PDFJS_SRC = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js';
-  var PDFJS_WORKER = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+  var PDFJS_SRC = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.10.38/pdf.min.mjs';
+  var PDFJS_WORKER = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.10.38/pdf.worker.min.mjs';
 
   var attachBtn = document.getElementById('ask-attach-btn');
   var fileInput = document.getElementById('ask-file-input');
@@ -1344,27 +1356,31 @@
   var attachedDoc = null;   /* {name, passages:[{text,lower}], wordCount, truncated} */
   var attachBusy = false;
 
+  /* pdf.js 4.x ships as an ES module only (no window.pdfjsLib global), so it is
+     loaded with a dynamic import; the module namespace is the pdfjsLib object.
+     Cached once resolved, single-flight while loading. */
+  var pdfjsLib = null;
   var pdfjsPromise = null;
   function loadPdfJs() {
-    if (window.pdfjsLib) return Promise.resolve(window.pdfjsLib);
+    if (pdfjsLib) return Promise.resolve(pdfjsLib);
     if (pdfjsPromise) return pdfjsPromise;
-    pdfjsPromise = new Promise(function (resolve, reject) {
-      var s = document.createElement('script');
-      s.src = PDFJS_SRC;
-      s.onload = function () {
-        if (!window.pdfjsLib) {
-          pdfjsPromise = null;
-          reject(new Error('The PDF reader failed to start. Reload and try again.'));
-          return;
-        }
-        window.pdfjsLib.GlobalWorkerOptions.workerSrc = PDFJS_WORKER;
-        resolve(window.pdfjsLib);
-      };
-      s.onerror = function () {
+    var loading;
+    try {
+      loading = import(PDFJS_SRC);
+    } catch (e) {
+      loading = Promise.reject(e);
+    }
+    pdfjsPromise = loading.then(function (mod) {
+      if (!mod || typeof mod.getDocument !== 'function' || !mod.GlobalWorkerOptions) {
         pdfjsPromise = null;
-        reject(new Error('Could not load the PDF reader. Check your connection and try again, or use a TXT export.'));
-      };
-      document.head.appendChild(s);
+        throw new Error('The PDF reader failed to start. Reload and try again.');
+      }
+      mod.GlobalWorkerOptions.workerSrc = PDFJS_WORKER;
+      pdfjsLib = mod;
+      return mod;
+    }, function () {
+      pdfjsPromise = null;
+      throw new Error('Could not load the PDF reader. Check your connection and try again, or use a TXT export.');
     });
     return pdfjsPromise;
   }
@@ -1372,7 +1388,7 @@
   function extractPdf(file) {
     return loadPdfJs().then(function (pdfjs) {
       return file.arrayBuffer().then(function (buf) {
-        return pdfjs.getDocument({ data: buf }).promise;
+        return pdfjs.getDocument({ data: buf, isEvalSupported: false }).promise;
       }).then(function (doc) {
         var pages = Math.min(doc.numPages, MAX_PDF_PAGES);
         var out = [];

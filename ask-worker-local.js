@@ -1,25 +1,33 @@
 /**
- * SCL Ask Worker (local model variant) — answers questions about SCL grounded
- * in the published FAQ, using a self-hosted Ollama model instead of the
- * Anthropic API. Same contract as ask-worker.js, so search.html needs no
- * changes beyond ASK_ENDPOINT.
+ * SCL Ask Worker (local model variant). Answers questions about SCL grounded
+ * in the published FAQ and framework text, using a self-hosted Ollama model
+ * instead of the Anthropic API. Same contract as ask-worker.js.
  *
  * Architecture:
- *   browser -> this worker (CORS, validation, grounding)
+ *   browser -> this worker (CORS, validation, grounding, rerank via a Workers
+ *              AI binding named AI, opt-in retention to a D1 binding named
+ *              ASK_LOG, token-gated POST /bench/retrieve)
  *           -> Cloudflare Tunnel hostname (protected by Cloudflare Access)
- *           -> Ollama on the host machine (llama3.1:8b)
+ *           -> Ollama on the host running scl-sft (a Llama 3.1 8B fine-tune)
  *
- * Deploy:
- *   1. Create a new Cloudflare Worker named "scl-ask" and paste this file.
- *   2. Settings > Variables:
- *        OLLAMA_URL              plain var, e.g. https://ollama.safetycriticallabs.com
- *        CF_ACCESS_CLIENT_ID     secret, from the Zero Trust service token
- *        CF_ACCESS_CLIENT_SECRET secret, from the Zero Trust service token
- *        OLLAMA_MODEL            optional plain var, defaults to llama3.1:latest
- *   3. Required before going live: a WAF rate-limiting rule for this worker's
- *      route (e.g. 10 requests/minute per IP). Ollama serializes requests, so
- *      without it one scripted loop can monopolize the model.
- *   4. Put the deployed URL into ASK_ENDPOINT in search.html.
+ * Deploy (dashboard paste, no wrangler):
+ *   1. Bump WORKER_BUILD below, then paste this WHOLE file over the worker.
+ *   2. Settings > Variables and Secrets:
+ *        OLLAMA_URL                    plain var, e.g. https://ollama.safetycriticallabs.com
+ *        CF_ACCESS_CLIENT_ID / _SECRET secrets, from the Zero Trust service token
+ *        OLLAMA_MODEL                  scl-sft (required for production parity;
+ *                                      the code falls back to DEFAULT_MODEL)
+ *        RERANK                        on
+ *        RERANK_GUARD                  pintop
+ *        BENCH_TOKEN                   secret; without it /bench/retrieve is a 404
+ *   3. Settings > Bindings: Workers AI as AI; D1 (table ask_questions) as ASK_LOG.
+ *   4. Settings > Triggers: a daily Cron Trigger; it runs scheduled() at the
+ *      bottom of this file to enforce the 12-month retention promise.
+ *   5. Zone WAF rate-limiting rule on this worker's route (e.g. 10/minute per
+ *      IP). Ollama serializes, so one scripted loop can otherwise monopolize it.
+ *   6. Verify from outside: POST /bench/retrieve with X-Bench-Token and check
+ *      build, env_model, env_rerank and consent_version in the response.
+ *   7. Put the deployed URL into ASK_ENDPOINT in search.html.
  *
  * Tunnel notes (on the machine running Ollama):
  *   - cloudflared ingress must set httpHostHeader to localhost:11434 or
@@ -42,12 +50,13 @@
  *
  * Rate limiting: per-isolate token bucket (RATE_MAX per RATE_WINDOW_MS per IP)
  * plus a global in-flight cap (Ollama serializes; queueing helps nobody).
- * Per-isolate means per-PoP and resets on isolate recycle — polite-traffic
- * protection only. The robust option remains a Cloudflare WAF rate rule on a
- * custom route (workers.dev cannot get zone WAF).
+ * Per-isolate means per-PoP and resets on isolate recycle, so this is
+ * polite-traffic protection only. The robust option remains a Cloudflare WAF
+ * rate rule on a custom route (workers.dev cannot get zone WAF).
  */
 
-const DEFAULT_MODEL = 'llama3.1:latest';
+const DEFAULT_MODEL = 'scl-sft:latest';  // production model; rollback is setting OLLAMA_MODEL to llama3.1:latest
+const WORKER_BUILD = '2026-09-07.1'; // bump on every dashboard paste; echoed by /bench/retrieve so a paste can be verified from outside
 const MAX_QUESTION_CHARS = 500;
 const MAX_HISTORY_MSGS = 8;          // most recent turns kept
 const MAX_HISTORY_MSG_CHARS = 1200;  // each turn truncated to this
@@ -228,7 +237,7 @@ function drainNdjson(buffer, controller, encoder) {
 // instructions+FAQ prefix is what Ollama's KV prefix cache reuses across
 // questions. Deliberate one-time edits (like the 2026-08-26 certification-
 // claim rule) just invalidate the cache once.
-const ASSISTANT_IDENTITY = `You are Ask SCL, the question-answering assistant on the public website of Safety Critical Labs (SCL), an independent certification authority for AI in safety-critical systems. You are a large language model, an open-weight model that SCL self-hosts on its own hardware. No third-party AI service is involved and questions are not sent to any cloud AI provider. SCL does not disclose which specific model runs the assistant, and the model may change over time; if asked which model you are, say exactly that. If a visitor asks what you are or how you work, answer plainly from this paragraph. You are an informational assistant only and play no part in certification decisions. The conversation may include earlier turns; answer follow-up questions using ONLY the reference entries below, and if a follow-up is ambiguous, ask what the visitor means rather than guessing. SCL publishes the AI Requirements Framework: ten core requirement areas (AI-1 through AI-10) plus three conditional architecture and paradigm areas (AI-11 multi-model, AI-12 neural networks, AI-13 continuous learning), anchored in standards like DO-178C, ISO 26262, and NPR 7150.2D.`;
+const ASSISTANT_IDENTITY = `You are Ask SCL, the question-answering assistant on the public website of Safety Critical Labs (SCL), an independent certification authority for AI in safety-critical systems. You are built with Llama: an open-weight Llama 3.1 model that SCL fine-tuned and runs on hardware SCL controls, so no cloud AI provider generates your answers. Before you answer, a small ranking model hosted by Cloudflare scores the question against SCL's own framework text to choose which passages you are given; Cloudflare also runs the request handling for the assistant. SCL does not publish further detail about the model configuration, which may change over time; if asked what model you are, say exactly this. If a visitor asks what you are or how you work, answer plainly from this paragraph. You are an informational assistant only and play no part in certification decisions. The conversation may include earlier turns; answer follow-up questions using ONLY the reference entries below, and if a follow-up is ambiguous, ask what the visitor means rather than guessing. SCL publishes the AI Requirements Framework: ten core requirement areas (AI-1 through AI-10) plus three conditional architecture and paradigm areas (AI-11 multi-model, AI-12 neural networks, AI-13 continuous learning), anchored in standards like DO-178C, ISO 26262, and NPR 7150.2D.`;
 
 const SYSTEM_INSTRUCTIONS = ASSISTANT_IDENTITY + `
 
@@ -751,7 +760,8 @@ async function benchRetrieve(request, env) {
   }
 
   var out = { rerank_requested: body.rerank === true, rerank_used: false, hybrid: !!(qvec && vectors),
-              env_rerank: env.RERANK || null, env_guard: env.RERANK_GUARD || null };
+              env_rerank: env.RERANK || null, env_guard: env.RERANK_GUARD || null,
+              build: WORKER_BUILD, env_model: env.OLLAMA_MODEL || DEFAULT_MODEL, consent_version: CONSENT_VERSION };
   var excerpts = '';
   if (body.rerank === true) {
     var guard = (body.guard === 'section' || body.guard === 'sizelead' || body.guard === 'pintop') ? body.guard : 'none';
@@ -1144,5 +1154,18 @@ export default {
     }
 
     return reply(200, { answer: answer }, origin);
+  },
+  // Retention enforcement (PIA action 1, privacy.html promises deletion after
+  // 12 months). day is stored as an ISO date string YYYY-MM-DD, so a string
+  // comparison against date('now','-12 months') is correct in SQLite. Driven
+  // by a daily Cron Trigger set in the dashboard (Settings, Triggers); a no-op
+  // when the ASK_LOG binding is absent, and a failure never affects visitors.
+  async scheduled(event, env, ctx) {
+    if (!env || !env.ASK_LOG) return;
+    try {
+      await env.ASK_LOG.prepare("DELETE FROM ask_questions WHERE day < date('now', '-12 months')").run();
+    } catch (e) {
+      console.log('retention delete failed', e && e.message);
+    }
   },
 };

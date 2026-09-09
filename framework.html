@@ -296,6 +296,11 @@
   font-size: 14px; color: var(--ink-2); line-height: 1.5;
 }
 .pub-standard-row-value.is-mono { font-family: var(--mono); }
+.pub-standard-row-value a {
+  color: var(--ink); text-decoration: underline;
+  text-decoration-color: rgba(46,109,180,0.35); text-underline-offset: 3px;
+}
+.pub-standard-row-value a:hover { text-decoration-color: #0C2242; }
 
 /* ─── OPEN STANDARD BAND ──────────────────────────────────── */
 .open-standard-band {
@@ -818,11 +823,11 @@
       </div>
       <div class="pub-standard-row">
         <span class="pub-standard-row-label">DOI</span>
-        <span class="pub-standard-row-value is-mono">10.5281/zenodo.21924937</span>
+        <span class="pub-standard-row-value is-mono"><a href="https://doi.org/10.5281/zenodo.21924937" target="_blank" rel="noopener">10.5281/zenodo.21924937</a> (this version, v3.6)</span>
       </div>
       <div class="pub-standard-row">
         <span class="pub-standard-row-label">All versions</span>
-        <span class="pub-standard-row-value is-mono">10.5281/zenodo.19024420 (cite this)</span>
+        <span class="pub-standard-row-value is-mono"><a href="https://doi.org/10.5281/zenodo.19024420" target="_blank" rel="noopener">10.5281/zenodo.19024420</a> (cite this)</span>
       </div>
       <div class="pub-standard-row">
         <span class="pub-standard-row-label">Version history</span>
@@ -832,21 +837,14 @@
         <span class="pub-standard-row-label">License</span>
         <span class="pub-standard-row-value">CC BY-SA 4.0. Free to read, cite, and reproduce with attribution</span>
       </div>
+      <div class="pub-standard-row">
+        <span class="pub-standard-row-label">Local copies</span>
+        <span class="pub-standard-row-value"><a href="/docs/AI_Requirements_Framework_v3_6.pdf" rel="noopener">Framework v3.6 (PDF, 1.5 MB)</a> and <a href="/docs/AI_Requirements_Framework_White_Paper_v3_6.pdf" rel="noopener">white paper v3.6 (PDF, 1.0 MB)</a>, copies of the deposited record. Cite the framework at the concept DOI above, not at these files.</span>
+      </div>
       <a href="https://doi.org/10.5281/zenodo.19024420" target="_blank" rel="noopener"
          class="btn btn-solid" style="margin-top: 4px;">
         Download the framework
       </a>
-      <a href="https://doi.org/10.5281/zenodo.21924937" target="_blank" rel="noopener"
-         class="pub-standard-subtle-link">
-        this version (v3.6)
-      </a>
-      <a href="/docs/AI_Requirements_Framework_v3_6.pdf" rel="noopener">
-        Framework v3.6 (PDF, 1.5 MB)
-      </a>
-      <a href="/docs/AI_Requirements_Framework_White_Paper_v3_6.pdf" rel="noopener">
-        White paper v3.6 (PDF, 1.0 MB)
-      </a>
-      <p class="pub-standard-note">These are local copies of the deposited record. Cite the framework at the concept DOI <a href="https://doi.org/10.5281/zenodo.19024420" rel="noopener">10.5281/zenodo.19024420</a>, not at these URLs.</p>
       <a href="https://ssrn.com/abstract=6875639" target="_blank" rel="noopener"
          class="btn btn-outline" style="margin-top: 4px;">
         Read the white paper on SSRN

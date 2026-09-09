@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build questions.html — the crawlable copy of the Ask SCL question library.
+"""Build questions.html, the crawlable copy of the Ask SCL question library.
 
 faq.json holds 40 written answers. search.html only ever renders them after a
 visitor types into the composer, so a crawler that fetches /search sees the

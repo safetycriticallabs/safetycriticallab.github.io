@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Ask SCL | Safety Critical Labs</title>
+<title>Ask SCL: Answers on AI Certification for Safety-Critical Systems | Safety Critical Labs</title>
 <meta name="description" content="Ask SCL, the AI assistant for Safety Critical Labs. Answers about AI certification, the framework, the process, and accreditation, grounded in SCL's published documentation.">
 <meta property="og:title" content="Ask SCL | Safety Critical Labs">
 <meta property="og:description" content="Ask SCL, the AI assistant for Safety Critical Labs. Answers grounded in SCL's published documentation.">
@@ -746,7 +746,7 @@
     <div class="hero-seal" id="hero-seal" aria-hidden="true"></div>
     <div class="search-eyebrow">[ Ask SCL ]</div>
     <h1 class="search-title">What do you want to know?</h1>
-    <p class="search-lead" id="search-lead">Search common questions about AI certification, the framework, the process, and accreditation.</p>
+    <p class="search-lead" id="search-lead">Search common questions about AI certification, the framework, the process, and accreditation. <a href="/questions">Read all 40 answers</a>.</p>
 
     <div class="chat-header">
       <span class="chat-avatar" id="chat-avatar-slot" aria-hidden="true"></span>
@@ -832,6 +832,7 @@
             <a href="/presentation">Presentation</a>
             <a href="/certificate-template">Certificate template</a>
             <a href="/search">Ask SCL</a>
+            <a href="/questions">All questions answered</a>
           </div>
         </div>
         <div class="footer-col">
@@ -1246,14 +1247,22 @@
   }
   function groundingChip(id) {
     /* AI-n and AI-n.m (and continuation ids such as AI-1.0-cont) link to the
-       framework; sec-, app-, std- and note- ids have no anchor on /framework
-       and stay plain, the id in the title for anyone who wants it */
+       framework; faq-N links to its anchor on /questions, which generate_faq.py
+       emits from the same faq.json the Worker grounds on, so every FAQ citation
+       the model emits resolves to the exact answer it used; sec-, app-, std- and
+       note- ids still have no anchor and stay plain, the id in the title for
+       anyone who wants it */
     var m = /^AI-(\d{1,2})(?:\.(\d{1,2}))?(?:-|$)/i.exec(id);
+    var faq = /^faq-\d+$/i.exec(id);
     var chip;
     if (m) {
       chip = document.createElement('a');
       chip.className = 'ask-cite';
       chip.href = frameworkHref(m[1], m[2]);
+    } else if (faq) {
+      chip = document.createElement('a');
+      chip.className = 'ask-cite';
+      chip.href = '/questions#' + id.toLowerCase();
     } else {
       chip = document.createElement('span');
       chip.className = 'ask-grounding-plain';

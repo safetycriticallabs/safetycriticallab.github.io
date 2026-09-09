@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>The Framework | Safety Critical Labs</title>
+<title>AI Requirements Framework: Thirteen Requirement Areas for Safety-Critical AI | Safety Critical Labs</title>
 <meta name="description" content="The SCL AI Requirements Framework: thirteen requirement areas for AI specific failure modes. Algorithm agnostic and openly published under a citable DOI.">
 <meta property="og:title" content="The Framework | Safety Critical Labs">
 <meta property="og:description" content="Thirteen requirement areas covering every AI specific failure mode. Openly published under a citable DOI.">
@@ -22,6 +22,35 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&display=swap" rel="stylesheet">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "TechArticle",
+  "name": "Requirements and Verification Standards for Artificial Intelligence in Safety-Critical Applications",
+  "headline": "AI Requirements Framework",
+  "description": "A published requirements and verification standard for artificial intelligence and machine learning in safety-critical systems. Thirteen requirement sets in two tiers, domain-agnostic, supplementing DO-178C, ISO 26262 and NASA NPR 7150.2D rather than replacing them.",
+  "url": "https://safetycriticallabs.com/framework",
+  "identifier": "https://doi.org/10.5281/zenodo.19024420",
+  "sameAs": "https://doi.org/10.5281/zenodo.21924937",
+  "version": "3.6",
+  "datePublished": "2026-03-14",
+  "dateModified": "2026-08-13",
+  "inLanguage": "en",
+  "license": "https://creativecommons.org/licenses/by-sa/4.0/",
+  "author": {
+    "@type": "Person",
+    "name": "Kevin Williams",
+    "affiliation": { "@type": "Organization", "name": "Safety Critical Labs" }
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Safety Critical Labs",
+    "alternateName": "SCL",
+    "url": "https://safetycriticallabs.com/",
+    "logo": "https://safetycriticallabs.com/img/favicon-512x512.png"
+  }
+}
+</script>
 <link rel="stylesheet" href="styles.css">
 <style>
 /* ─── CLASSIFICATION KEY ──────────────────────────────────── */
@@ -490,7 +519,7 @@
         </ul>
       </li>
     </ul>
-    <a href="/search" class="gn-search" aria-label="Search">
+    <a href="/search" class="gn-search" aria-label="Ask SCL" title="Ask SCL">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
         <circle cx="11" cy="11" r="7"/>
         <line x1="21" y1="21" x2="16.65" y2="16.65"/>
@@ -512,7 +541,7 @@
         <a href="/">Safety Critical Labs</a>
         <span>/</span> The Framework
       </div>
-      <h1>Thirteen requirement<br>areas. Every AI<br>failure mode covered.</h1>
+      <h1>Thirteen requirement <br>areas. Every AI <br>failure mode covered.</h1>
     </div>
     <p class="inner-hero-lead">
       The SCL AI Requirements Framework establishes verifiable, pass/fail requirements for each AI specific failure mode not addressed by existing safety critical software standards. Requirements are defined by the failures they prevent, not the capabilities they enable. Algorithm agnostic. Domain applicable. Openly published under a citable DOI.
@@ -611,7 +640,7 @@
 <section class="page-section failmode-section">
   <div class="section-inner">
     <div class="fw-eyebrow-mono">[ Requirements Defined by Failure ]</div>
-    <h2 class="section-title" style="margin-bottom: 16px;">The failures these<br>requirements target.</h2>
+    <h2 class="section-title" style="margin-bottom: 16px;">The failures these <br>requirements target.</h2>
     <p style="font-size:16px;color:var(--ink-2);font-weight:300;line-height:1.75;max-width:640px;">
       Each requirement area exists because a class of AI failure has already happened in the field. These are documented public cases, each mapped to the area written to catch that failure mode. The mapping names the target. It does not claim any outcome would have changed.
     </p>
@@ -746,7 +775,7 @@
   <div class="os-inner">
     <div class="os-left">
       <div class="fw-eyebrow-mono">[ What Assessment Produces ]</div>
-      <h2>A binary determination.<br>A documented risk score.</h2>
+      <h2>A binary determination. <br>A documented risk score.</h2>
       <p>
         Assessment against this framework produces one of two outcomes, accompanied by a quantified risk score. Each determination is documented against a specific version of the framework, at a defined classification level, with every finding on record. There is no maturity index and no subjective rating.
       </p>
@@ -773,7 +802,7 @@
     <div>
       <div class="fw-eyebrow-mono">[ Published Standard ]</div>
       <h2 class="fw-showcase-title" style="margin-bottom: 20px;">
-        Read every requirement<br>before you engage.
+        Read every requirement <br>before you engage.
       </h2>
       <p style="font-size: 15px; color: var(--ink-2); line-height: 1.8; font-weight: 300; margin-bottom: 16px;">
         The framework is openly published under a citable DOI. Every requirement, verification method, and evidence standard is available for review before any assessment begins. Verification is co-located: every requirement carries its verification, and every verification traces to a requirement.
@@ -796,13 +825,28 @@
         <span class="pub-standard-row-value is-mono">10.5281/zenodo.19024420 (cite this)</span>
       </div>
       <div class="pub-standard-row">
+        <span class="pub-standard-row-label">Version history</span>
+        <span class="pub-standard-row-value">Twelve versions published on Zenodo since 14 March 2026: v1.0 (March 2026), v2.0 (April 2026), v3.0 (May 2026, thirteen requirement sets established), v3.6 (13 August 2026, current). Development began February 2025. <a href="/updates">See the full release history</a>.</span>
+      </div>
+      <div class="pub-standard-row">
         <span class="pub-standard-row-label">License</span>
         <span class="pub-standard-row-value">CC BY-SA 4.0. Free to read, cite, and reproduce with attribution</span>
       </div>
-      <a href="https://doi.org/10.5281/zenodo.21924937" target="_blank" rel="noopener"
+      <a href="https://doi.org/10.5281/zenodo.19024420" target="_blank" rel="noopener"
          class="btn btn-solid" style="margin-top: 4px;">
         Download the framework
       </a>
+      <a href="https://doi.org/10.5281/zenodo.21924937" target="_blank" rel="noopener"
+         class="pub-standard-subtle-link">
+        this version (v3.6)
+      </a>
+      <a href="/docs/AI_Requirements_Framework_v3_6.pdf" rel="noopener">
+        Framework v3.6 (PDF, 1.5 MB)
+      </a>
+      <a href="/docs/AI_Requirements_Framework_White_Paper_v3_6.pdf" rel="noopener">
+        White paper v3.6 (PDF, 1.0 MB)
+      </a>
+      <p class="pub-standard-note">These are local copies of the deposited record. Cite the framework at the concept DOI <a href="https://doi.org/10.5281/zenodo.19024420" rel="noopener">10.5281/zenodo.19024420</a>, not at these URLs.</p>
       <a href="https://ssrn.com/abstract=6875639" target="_blank" rel="noopener"
          class="btn btn-outline" style="margin-top: 4px;">
         Read the white paper on SSRN
@@ -852,6 +896,7 @@
             <a href="/presentation">Presentation</a>
             <a href="/certificate-template">Certificate template</a>
             <a href="/search">Ask SCL</a>
+            <a href="/questions">All questions answered</a>
           </div>
         </div>
         <div class="footer-col">

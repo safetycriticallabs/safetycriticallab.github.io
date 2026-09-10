@@ -454,6 +454,18 @@
   border-top: 1px solid rgba(12,34,66,0.08);
   font-size: 12px; line-height: 1.6; color: #8A4B1F;
 }
+/* Where the assistant stops seeing. */
+.ask-histmark {
+  position: relative; margin: 18px 0 14px; padding: 0 0 0 0;
+  font-size: 11.5px; line-height: 1.5; color: rgba(12,34,66,0.5);
+  text-align: center;
+}
+.ask-histmark::before,
+.ask-histmark::after {
+  content: ""; position: absolute; top: -8px; height: 1px;
+  background: rgba(12,34,66,0.12); width: 100%; left: 0;
+}
+.ask-histmark::after { display: none; }
 .ask-restored {
   margin: 0 0 14px; padding: 8px 12px;
   font-size: 12.5px; line-height: 1.55; color: rgba(12,34,66,0.65);
@@ -1296,6 +1308,39 @@
      browser and held in memory only, and nothing about the file is written
      here. A restored turn therefore shows its document chip struck through and
      the thread says so, rather than implying the file is still in play. ── */
+  /* ── History budget. The worker keeps at most the last 8 turns, truncates each
+     to 1200 characters, and then walks backwards adding turns until 2800
+     characters, dropping everything older. The whole thread stayed on screen
+     regardless, so a visitor watching turn six had visible proof of turn one and
+     reasonably assumed the assistant still had it. It did not. Someone who
+     established a qualifier early ("this is decision support, not flight
+     critical") could have it silently dropped and then get a confident, well
+     cited answer scoped to the wrong thing.
+
+     These constants mirror ask-worker-local.js lines 66, 67 and 79. The client
+     now applies the same cut before sending, so what it shows and what the
+     worker receives cannot disagree: anything the client sends already fits, so
+     the worker's own cap becomes a no-op rather than a second, invisible one. ── */
+  var HIST_MAX_MSGS = 8;
+  var HIST_MAX_MSG_CHARS = 1200;
+  var HIST_MAX_TOTAL_CHARS = 2800;
+  function capHistoryLikeWorker(raw) {
+    var clean = [];
+    for (var i = 0; i < raw.length; i++) {
+      var c = String(raw[i].content || '').trim().slice(0, HIST_MAX_MSG_CHARS);
+      if (c) clean.push({ role: raw[i].role, content: c, srcIndex: i });
+    }
+    var kept = clean.slice(-HIST_MAX_MSGS);
+    var total = 0;
+    var out = [];
+    for (var k = kept.length - 1; k >= 0; k--) {
+      total += kept[k].content.length;
+      if (total > HIST_MAX_TOTAL_CHARS) break;
+      out.unshift(kept[k]);
+    }
+    return out;
+  }
+
   var CLIENT_TIMEOUT_MS = 150000;   /* the worker's own budget is 90s per read; this is the outer bound */
   var ASK_THREAD_KEY = 'scl-ask-thread';
   var THREAD_MAX_TURNS = 24;      /* a long session stays under the storage quota */
@@ -1326,8 +1371,11 @@
       return d.turns;
     } catch (e) { return null; }
   }
-  /* turns are the render record; convo is what the worker is sent */
+  /* turns are the render record; convo is what the worker is sent; convoEls
+     are the thread nodes those convo entries were drawn as, kept in step so the
+     history marker can be put exactly where the assistant stops seeing. */
   var turns = [];
+  var convoEls = [];
   function recordUser(q, docName) { turns.push({ r: 'u', c: q, d: docName || null }); saveThread(turns); }
   /* An answer to a document question quotes the document back, so storing it
      would put the visitor's file text into storage. The privacy notice says
@@ -1542,6 +1590,7 @@
     }
     thread.appendChild(el);
     scrollThreadBottom();
+    return el;
   }
 
   function addAiMsg() {
@@ -1686,7 +1735,7 @@
       askGen++;   /* orphan any in-flight stream: its handlers check this */
       askBusy = false;
       setInst(headerInst, null);
-      convo = []; turns = []; clearThread(); thread = null;
+      convo = []; convoEls = []; turns = []; clearThread(); thread = null; histMark = null;
       clearAttachment();   /* the document belongs to the conversation */
       composerHome();
       setQuery('');
@@ -1816,6 +1865,7 @@
     setActivity(ai, 'done');   /* the arc closes the circle and lets go */
     settleActivity(ai, 900);
     convo.push({ role: 'assistant', content: text });
+    convoEls.push(ai.art);
     recordAnswer(text, grounding, !!docSel);
     resultsLabel.textContent = 'Conversation';
     input.placeholder = 'Ask a follow-up';
@@ -2330,7 +2380,7 @@
     var gen = askGen;
     var firstTurn = convo.length === 0;
     ensureThread();
-    addUserMsg(q, chipForThisTurn());
+    var userEl = addUserMsg(q, chipForThisTurn());
     stowAttachment();
     var ai = addAiMsg();
     startWait(ai);
@@ -2345,18 +2395,23 @@
        yet. Idempotent, so the finishAnswer call below is now a no-op. */
     ensureThreadFooter(q);
     setQuery('');
-    var sentHistory = convo.slice(-8);
+    /* The same cut the worker would make, made here so the thread can show it */
+    var sentCapped = capHistoryLikeWorker(convo);
+    updateHistoryMarker(sentCapped);
+    var sentHistory = sentCapped.map(function (m) { return { role: m.role, content: m.content }; });
     /* only question-relevant passages travel, selected fresh each turn */
     var docSel = attachedDoc ? selectDocExcerpts(q, sentHistory) : null;
     if (docSel) docSel.name = attachedDoc.name;
     var docPayload = docSel ? { name: attachedDoc.name, excerpts: docSel.text } : null;
     convo.push({ role: 'user', content: q });
+    convoEls.push(userEl);
     recordUser(q, attachedDoc && attachedDoc.name);
 
     function fail(kind, msg) {
       if (gen !== askGen) return;   /* conversation was reset while in flight */
       askBusy = false;
       convo.pop();
+      convoEls.pop();
       turns.pop();
       saveThread(turns);
       /* The backend is a Mac behind a tunnel, so a generic failure is the
@@ -2370,7 +2425,7 @@
       if (kind === 'rate') { setQuery(q); aiNote(ai, 'That is a lot of questions in quick succession. Give it a minute and ask again.', again); return; }
       if (kind === 'invalid') { setQuery(q); aiNote(ai, (msg || 'That question could not be accepted.') + ' Adjust it and try again.'); return; }
       setQuery(q);
-      if (firstTurn) { convo = []; turns = []; clearThread(); thread = null; renderAskFallback(q); return; }
+      if (firstTurn) { convo = []; convoEls = []; turns = []; clearThread(); thread = null; renderAskFallback(q); return; }
       aiNote(ai, 'The assistant is unavailable right now. Your conversation is still here; try again in a moment.', again);
     }
 
@@ -2395,6 +2450,7 @@
       if (ctrl) ctrl.abort();
       var partial = (ai.textNode && ai.textNode.data ? ai.textNode.data : '').trim();
       convo.pop();          /* the question is not answered, so it is not history */
+      convoEls.pop();
       turns.pop();
       saveThread(turns);
       setQuery(q);          /* the visitor gets their question back, ready to resend */
@@ -2546,6 +2602,28 @@
     renderGrounding(ai, g.retrieved, g.retrieval);
     addAnswerActions(ai, text, g);
     setActivity(ai, null);   /* addAiMsg opens in the thinking state */
+    return ai.art;
+  }
+
+  /* Sits immediately above the oldest turn the assistant can still see. Moves
+     down as the conversation grows past the budget. */
+  var histMark = null;
+  function updateHistoryMarker(sent) {
+    if (histMark && histMark.parentNode) histMark.parentNode.removeChild(histMark);
+    histMark = null;
+    if (!thread) return;
+    var firstKept = sent.length ? sent[0].srcIndex : convo.length;
+    if (firstKept <= 0) return;                       /* nothing dropped */
+    var anchorEl = convoEls[firstKept];
+    if (!anchorEl || !anchorEl.parentNode) return;
+    histMark = document.createElement('div');
+    histMark.className = 'ask-histmark';
+    histMark.setAttribute('role', 'note');
+    var n = firstKept;
+    histMark.textContent = 'The assistant no longer sees the '
+      + (n === 1 ? 'turn' : n + ' turns') + ' above this line. '
+      + 'They are still here for you to read. If something above still matters, say it again.';
+    anchorEl.parentNode.insertBefore(histMark, anchorEl);
   }
 
   function renderExcludedAnswer() {
@@ -2562,14 +2640,8 @@
     if (!saved) return false;
     restoring = true;
     turns = saved.slice();
-    /* An excluded exchange is rendered but never sent back as history: its
-       answer was not kept, so a stand-in would misrepresent what was said. */
     convo = [];
-    for (var c = 0; c < saved.length; c++) {
-      var cur = saved[c];
-      if (cur.r === 'a' && cur.x) { convo.pop(); continue; }   /* drop its question too */
-      convo.push({ role: cur.r === 'u' ? 'user' : 'assistant', content: cur.c });
-    }
+    convoEls = [];
     showResults();
     ensureThread();
     var hadDoc = saved.some(function (x) { return x.r === 'u' && x.d; });
@@ -2579,13 +2651,25 @@
       ? 'This conversation was restored after a reload. It is kept in this browser tab only and never sent anywhere. The document you attached was not restored, because its text is only ever held in memory; attach it again to ask about it.'
       : 'This conversation was restored after a reload. It is kept in this browser tab only and never sent anywhere.';
     thread.appendChild(note);
+    /* Render and history are built in one pass so their order cannot drift.
+       An excluded exchange is drawn but never sent back as history: its answer
+       was not kept, so a stand-in would misrepresent what was said. */
     var lastQ = '';
     for (var i = 0; i < saved.length; i++) {
       var x = saved[i];
-      if (x.r === 'u') { addUserMsg(x.c, x.d ? { name: x.d } : null, true); lastQ = x.c; }
-      else if (x.x) renderExcludedAnswer();
-      else renderRestoredAnswer(x.c, x.g);
+      if (x.r === 'u') {
+        convoEls.push(addUserMsg(x.c, x.d ? { name: x.d } : null, true));
+        convo.push({ role: 'user', content: x.c });
+        lastQ = x.c;
+      } else if (x.x) {
+        renderExcludedAnswer();
+        convo.pop(); convoEls.pop();   /* drop its question from history too */
+      } else {
+        convoEls.push(renderRestoredAnswer(x.c, x.g));
+        convo.push({ role: 'assistant', content: x.c });
+      }
     }
+    updateHistoryMarker(capHistoryLikeWorker(convo));
     resultsLabel.textContent = 'Conversation';
     input.placeholder = 'Ask a follow-up';
     composerDown();

@@ -61,7 +61,7 @@
  */
 
 const DEFAULT_MODEL = 'scl-sft:latest';  // production model; rollback is setting OLLAMA_MODEL to llama3.1:latest
-const WORKER_BUILD = '2026-09-08.2'; // bump on every dashboard paste; echoed by /bench/retrieve so a paste can be verified from outside
+const WORKER_BUILD = '2026-09-10.1'; // bump on every dashboard paste; echoed by /bench/retrieve so a paste can be verified from outside
 const MAX_QUESTION_CHARS = 500;
 const MAX_HISTORY_MSGS = 8;          // most recent turns kept
 const MAX_HISTORY_MSG_CHARS = 1200;  // each turn truncated to this
@@ -837,12 +837,135 @@ async function benchRetrieve(request, env) {
   return new Response(JSON.stringify(out), { headers: { 'Content-Type': 'application/json' } });
 }
 
+/* ── Health, GET /health ──────────────────────────────────────────────────
+   There was no way to learn that Ask SCL was unwell except by asking it a
+   question and not liking the answer. Two failures had already happened
+   silently: the Workers AI daily allocation ran out and production served
+   keyword-only retrieval for the rest of a UTC day, discovered by a bench run
+   rather than a monitor; and stale vectors can serve plausible similarities
+   with no error at all.
+
+   Public and safe by construction. It returns no secret, no origin, and NOT
+   the model name: the published identity paragraph says SCL does not publish
+   further detail about the model configuration, and a monitoring endpoint is
+   not an exception to that. Detail is available only to a caller holding the
+   bench token.
+
+   It costs no Workers AI Neurons. The reranker is the thing most likely to be
+   exhausted, and probing it on every poll would spend the very budget being
+   watched, so a live rerank probe runs only on ?deep=1 with the token. The
+   result is memoised briefly so a public endpoint cannot be used to hammer the
+   tunnel to Kevin's Mac. ── */
+const HEALTH_TTL_MS = 30000;
+let healthMemo = { at: 0, body: null };
+
+async function healthCheck(request, env) {
+  const url = new URL(request.url);
+  const tokenOk = !!(env.BENCH_TOKEN && timingSafeEq(request.headers.get('X-Bench-Token') || '', env.BENCH_TOKEN));
+  const deep = tokenOk && url.searchParams.get('deep') === '1';
+
+  if (!deep && healthMemo.body && (Date.now() - healthMemo.at) < HEALTH_TTL_MS) {
+    return healthResponse(healthMemo.body, tokenOk, null);
+  }
+
+  const upstreamHeaders = {};
+  if (env.CF_ACCESS_CLIENT_ID && env.CF_ACCESS_CLIENT_SECRET) {
+    upstreamHeaders['CF-Access-Client-Id'] = env.CF_ACCESS_CLIENT_ID;
+    upstreamHeaders['CF-Access-Client-Secret'] = env.CF_ACCESS_CLIENT_SECRET;
+  }
+  const checks = { upstream: 'unknown', corpus: 'unknown', vectors: 'unknown' };
+  let fw = null, vecs = null;
+
+  const [upRes, fwRes, vecRes] = await Promise.all([
+    env.OLLAMA_URL
+      ? fetch(env.OLLAMA_URL.replace(/\/+$/, '') + '/api/tags',
+              { headers: upstreamHeaders, signal: AbortSignal.timeout(6000) })
+          .then(r => r.ok).catch(() => false)
+      : Promise.resolve(null),
+    fetch(FRAMEWORK_URL, { cf: { cacheTtl: 300, cacheEverything: true } })
+      .then(r => r.ok ? r.json() : null).catch(() => null),
+    fetch(VECTORS_URL, { cf: { cacheTtl: 300, cacheEverything: true }, signal: AbortSignal.timeout(6000) })
+      .then(r => r.ok ? r.json() : null).catch(() => null),
+  ]);
+
+  checks.upstream = upRes === null ? 'unconfigured' : (upRes ? 'ok' : 'unreachable');
+  fw = fwRes; vecs = vecRes;
+  checks.corpus = fw && Array.isArray(fw.entries) && fw.entries.length ? 'ok' : 'unavailable';
+  if (!vecs) checks.vectors = 'unavailable';
+  else if (!fw || !Array.isArray(fw.entries)) checks.vectors = 'unknown';
+  else checks.vectors = vectorsValid(vecs, fw) ? 'ok' : 'stale';
+
+  // Down means a visitor cannot get an answer at all. Degraded means they get
+  // one from a weaker path than the model was tuned on.
+  const status = checks.upstream === 'unreachable' ? 'down'
+               : (checks.corpus !== 'ok' || checks.vectors !== 'ok') ? 'degraded'
+               : 'ok';
+  const body = {
+    status,
+    build: WORKER_BUILD,
+    checks,
+    corpus_entries: fw && Array.isArray(fw.entries) ? fw.entries.length : null,
+    corpus_version: fw && fw.version ? String(fw.version) : null,
+    consent_version: CONSENT_VERSION,
+    generated: new Date().toISOString(),
+  };
+  if (!deep) healthMemo = { at: Date.now(), body };
+
+  let detail = null;
+  if (tokenOk) {
+    detail = {
+      model: env.OLLAMA_MODEL || DEFAULT_MODEL,
+      env_rerank: env.RERANK || null,
+      env_guard: env.RERANK_GUARD || null,
+      bindings: { ai: !!env.AI, ask_log: !!env.ASK_LOG, bench_token: !!env.BENCH_TOKEN,
+                  access: !!(env.CF_ACCESS_CLIENT_ID && env.CF_ACCESS_CLIENT_SECRET) },
+    };
+    if (deep) {
+      // One real reranker call, about 7 Neurons. Only on request, because the
+      // allocation this detects is the one it would otherwise consume.
+      let rr = 'skipped';
+      if (env.AI) {
+        try {
+          const probe = await Promise.race([
+            env.AI.run(RERANK_MODEL, { query: 'health probe', contexts: [{ text: 'health probe context' }] }),
+            new Promise((unused, rej) => setTimeout(() => rej(new Error('timeout')), RERANK_TIMEOUT_MS)),
+          ]);
+          rr = probe ? 'ok' : 'empty';
+        } catch (e) {
+          rr = 'unavailable: ' + (e && e.message ? String(e.message).slice(0, 120) : 'error');
+        }
+      } else {
+        rr = 'no AI binding';
+      }
+      detail.rerank_probe = rr;
+      if (rr !== 'ok' && body.status === 'ok') body.status = 'degraded';
+    }
+  }
+  return healthResponse(body, tokenOk, detail);
+}
+
+function healthResponse(body, tokenOk, detail) {
+  const out = detail ? Object.assign({}, body, { detail }) : body;
+  return new Response(JSON.stringify(out, null, 1), {
+    status: body.status === 'down' ? 503 : 200,
+    headers: {
+      'Content-Type': 'application/json',
+      'Cache-Control': 'no-store',
+      'Access-Control-Allow-Origin': '*',
+      'X-SCL-Health': body.status,
+    },
+  });
+}
+
 export default {
   async fetch(request, env, ctx) {
     const origin = request.headers.get('Origin') || '';
 
     if (request.method === 'OPTIONS') {
       return new Response(null, { status: 204, headers: corsHeaders(origin) });
+    }
+    if (request.method === 'GET' && new URL(request.url).pathname === '/health') {
+      return healthCheck(request, env);
     }
     if (request.method !== 'POST') {
       return reply(405, { error: 'POST only' }, origin);

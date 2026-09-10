@@ -335,21 +335,34 @@
 /* ── Ask SCL conversation thread (streamed, multi-turn) ──
    No bubbles on either side: the question is set as the turn's heading and the
    answer follows beside the seal. FAQ cards keep their card look below. */
-.ask-thread { display: flex; flex-direction: column; gap: 16px; }
+/* The seal column is declared once. The question is padded by exactly the same
+   amount, so the question, the answer and every control under it sit on one
+   text column and only the seal hangs out to the left. */
+.ask-thread { display: flex; flex-direction: column; gap: 16px; --seal-size: 36px; --seal-gap: 14px; }
 .ask-thread > .ask-msg-ai { margin: 6px 0 14px; }
-/* The visitor's question is not a chat bubble either. It reads as the heading of
-   the turn: full ink, flush against the thread's left edge, with the answer set
-   below it beside the seal. The two speakers are told apart by position and
-   weight instead of by two coloured bubbles pointing at each other. */
+/* The visitor's question is not a chat bubble either, but it is still a turn in
+   a conversation rather than a section heading. It carries its own speaker label
+   the way the answer does, and it is padded by exactly the seal column so both
+   speakers write on the same text column. */
 .ask-msg-user {
   align-self: stretch; max-width: 100%;
+  padding-left: calc(var(--seal-size) + var(--seal-gap));
   background: transparent; color: var(--ink);
   border: 0; border-radius: 0;
-  padding: 0;
-  font-size: 17px; font-weight: 500; line-height: 1.5;
-  letter-spacing: -0.005em;
+  font-size: 16.5px; font-weight: 500; line-height: 1.55;
   overflow-wrap: anywhere;
-  white-space: pre-wrap;   /* the composer can hold newlines now (shift+enter) */
+}
+/* pre-wrap lives on the text alone. On the container it would render the gaps
+   between the label, the attachment chip and the question itself. */
+.ask-msg-user-text { display: block; white-space: pre-wrap; }
+.ask-msg-user-tag {
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 400;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(12,34,66,0.45);
+  margin: 0 0 5px 2px;
 }
 /* An answer belongs to the question above it, so it sits tight under it. The
    space between turns is opened above the next question instead. */
@@ -414,9 +427,10 @@
    its passages only ever lived in memory, so the chip must not imply it is
    still attached. */
 .ask-msg-user-doc.is-detached { opacity: 0.75; text-decoration: line-through; }
-/* Per answer actions. Quiet until the answer is hovered or focused, so the
-   thread stays a conversation rather than a control panel, but always reachable
-   by keyboard. */
+/* Per answer actions. They used to be fully transparent until hover, which still
+   reserved their row: with no bubble to anchor it that read as an unexplained
+   band of empty page between turns. They are quiet instead of invisible now, so
+   the space they take is space they earn. */
 .ask-actions { display: flex; gap: 6px; margin-top: 10px; }
 .ask-action {
   display: inline-block; text-decoration: none;
@@ -424,7 +438,7 @@
   color: rgba(12,34,66,0.55); background: transparent;
   border: 1px solid rgba(12,34,66,0.14); border-radius: 6px;
   padding: 3px 9px; cursor: pointer;
-  opacity: 0; transition: opacity 0.18s ease, color 0.18s ease, border-color 0.18s ease;
+  opacity: 0.45; transition: opacity 0.18s ease, color 0.18s ease, border-color 0.18s ease;
 }
 .ask-msg-ai:hover .ask-action,
 .ask-msg-ai:focus-within .ask-action { opacity: 1; }
@@ -699,12 +713,12 @@
 .search-page.chat-active .ask-related { display: none; }
 
 /* AI messages carry the certification-mark avatar beside the bubble */
-.ask-msg-ai { display: flex; gap: 14px; }
+.ask-msg-ai { display: flex; gap: var(--seal-gap); }
 /* Larger, because it is now the thing doing the answering rather than a
    decoration next to a bubble. */
 .ask-msg-avatar {
   display: block;
-  width: 36px; height: 36px; border-radius: 50%;
+  width: var(--seal-size); height: var(--seal-size); border-radius: 50%;
   border: 1px solid rgba(46,109,180,0.28);
   background: #fff;
   flex: none;
@@ -715,10 +729,7 @@
    and read as a column pushed against the left edge with the page empty beside
    it; the panel is already the measure. */
 .ask-msg-content { min-width: 0; flex: 1; max-width: 100%; }
-@media (max-width: 560px) {
-  .ask-msg-ai { gap: 10px; }
-  .ask-msg-avatar { width: 30px; height: 30px; }
-}
+
 
 /* Messages enter with a small rise instead of popping in */
 .ask-msg-user, .ask-msg-ai { animation: ask-in 0.28s ease both; }
@@ -859,7 +870,7 @@
   .search-page.chat-active { padding: 10px 14px 14px; }
   .search-page.chat-active .search-inner { height: calc(100dvh - 72px - 24px); }
   .chat-avatar { width: 36px; height: 36px; }
-  .ask-msg-avatar { width: 24px; height: 24px; }
+  .ask-thread { --seal-size: 26px; --seal-gap: 10px; }
   .search-form { padding: 20px 22px; min-height: 160px; }
   .search-form.is-composer { padding: 8px 10px 8px 16px; min-height: 0; }
   .ask-msg-user { font-size: 16px; }
@@ -1663,6 +1674,10 @@
   function addUserMsg(q, doc, detached) {
     var el = document.createElement('div');
     el.className = 'ask-msg-user';
+    var tag = document.createElement('div');
+    tag.className = 'ask-msg-user-tag';
+    tag.textContent = 'You';
+    el.appendChild(tag);
     if (doc) {
       var chip = document.createElement('span');
       chip.className = 'ask-msg-user-doc' + (detached ? ' is-detached' : '');
@@ -1673,12 +1688,11 @@
       chipName.textContent = doc.name;
       chip.appendChild(chipName);
       el.appendChild(chip);
-      var textEl = document.createElement('span');
-      textEl.textContent = q;
-      el.appendChild(textEl);
-    } else {
-      el.textContent = q;
     }
+    var textEl = document.createElement('span');
+    textEl.className = 'ask-msg-user-text';
+    textEl.textContent = q;
+    el.appendChild(textEl);
     thread.appendChild(el);
     scrollThreadBottom();
     return el;

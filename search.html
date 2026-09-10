@@ -407,7 +407,11 @@
 }
 .ask-msg-ai:hover .ask-action,
 .ask-msg-ai:focus-within .ask-action { opacity: 1; }
-.ask-action:focus-visible { opacity: 1; outline: 2px solid #2E6DB4; outline-offset: 2px; }
+/* :focus as well as :focus-visible, and no transition on the focused state, so
+   a keyboard user never lands on a control that is still fading in. A control
+   that has focus must be visible immediately, not 180ms later. */
+.ask-action:focus { opacity: 1; transition: none; }
+.ask-action:focus-visible { opacity: 1; transition: none; outline: 2px solid #2E6DB4; outline-offset: 2px; }
 .ask-action:hover { color: #0C2242; border-color: rgba(12,34,66,0.3); }
 .ask-action.is-done { color: #1E5A9A; border-color: rgba(46,109,180,0.35); opacity: 1; }
 @media (hover: none) { .ask-action { opacity: 1; } }
@@ -449,12 +453,16 @@
 }
 .ask-stop:hover { color: #0C2242; border-color: rgba(12,34,66,0.34); }
 .ask-stop:focus-visible { outline: 2px solid #2E6DB4; outline-offset: 2px; }
+.ask-retry:focus-visible { outline: 2px solid #2E6DB4; outline-offset: 2px; }
 .ask-stopped {
   display: block; margin-top: 10px; padding-top: 8px;
   border-top: 1px solid rgba(12,34,66,0.08);
   font-size: 12px; line-height: 1.6; color: #8A4B1F;
 }
 /* Where the assistant stops seeing. */
+#search-results-list:focus-visible {
+  outline: 2px solid #2E6DB4; outline-offset: 2px; border-radius: 8px;
+}
 .ask-histmark {
   position: relative; margin: 18px 0 14px; padding: 0 0 0 0;
   font-size: 11.5px; line-height: 1.5; color: rgba(12,34,66,0.5);
@@ -899,7 +907,10 @@
 
     <div class="search-results" id="search-results" hidden>
       <div class="search-results-label" id="search-results-label" role="status">Matching answers</div>
-      <div id="search-results-list"></div>
+      <!-- In chat mode this becomes the scrolling transcript. A scrollable region
+           that cannot be focused is unreachable by keyboard, so it takes tabindex
+           and a name. -->
+      <div id="search-results-list" tabindex="0" aria-label="Conversation transcript"></div>
     </div>
 
   </div>
@@ -1259,7 +1270,16 @@
   /* ── Ask mode (Mode 2) — POST the question to the worker and render the
      AI answer with the top keyword matches as related questions. Worker
      errors fall back to keyword results with a brief notice. ── */
+  /* aria-busy tells a screen reader the region is mid-update, so it can hold off
+     rather than reading a half-built answer. Paired with the per-message
+     aria-live rule below: the thread is a role=log, which announces additions,
+     and a streamed answer arrives as hundreds of them. Left alone, a screen
+     reader user hears the answer a few characters at a time and then, because
+     finishAnswer replaces the body wholesale, hears the whole thing again. */
   var askBusy = false;
+  function setThreadBusy(on) {
+    if (thread) thread.setAttribute('aria-busy', on ? 'true' : 'false');
+  }
 
   function relatedHtml(q) {
     var related = faqLoaded ? topMatches(q, 3) : [];
@@ -1622,6 +1642,7 @@
     art.appendChild(content);
     thread.appendChild(art);
     scrollThreadBottom();
+    art.setAttribute('aria-live', 'off');   /* released in finishAnswer, so the finished answer is announced once */
     var handle = { art: art, body: body, textNode: textNode, caret: caret, dots: dots,
                    inst: avatar.querySelector('svg') };
     setActivity(handle, 'thinking');
@@ -1663,6 +1684,11 @@
   function startWait(ai) {
     var line = document.createElement('span');
     line.className = 'ask-wait';
+    /* The bubble around this is aria-live="off" while the answer streams, so
+       token-by-token announcement does not happen. role=status gives this line
+       its own polite live region inside that silence, so a screen reader user
+       still hears what the assistant is doing during a twenty second wait. */
+    line.setAttribute('role', 'status');
     ai.body.appendChild(line);
     ai.wait = { line: line, timers: [] };
     WAIT_STAGES.forEach(function (s) {
@@ -1700,6 +1726,8 @@
   function aiNote(ai, text, retry) {
     stopWait(ai);
     clearStopControl(ai);
+    setThreadBusy(false);
+    if (ai && ai.art) ai.art.removeAttribute('aria-live');
     ai.art.classList.add('ask-msg-note');
     ai.body.textContent = text;   /* wholesale overwrite: typing dots included */
     ai.dots = null;
@@ -1856,6 +1884,8 @@
   function finishAnswer(ai, text, q, firstTurn, grounding, docSel) {
     stopWait(ai);
     clearStopControl(ai);
+    setThreadBusy(false);
+    ai.art.removeAttribute('aria-live');   /* live again BEFORE the write, so the complete answer is the one announcement */
     ai.body.innerHTML = citeChips(text);
     ai.textNode = null; ai.caret = null; ai.dots = null;   /* replaced by the linkified render */
     grounding = grounding || {};
@@ -2384,6 +2414,7 @@
     stowAttachment();
     var ai = addAiMsg();
     startWait(ai);
+    setThreadBusy(true);
     resultsLabel.textContent = 'Ask SCL';
     showResults();
     composerDown();   /* adopt chat layout at send time, not answer time — the
@@ -2459,6 +2490,8 @@
         return;
       }
       stopWait(ai);
+      setThreadBusy(false);
+      ai.art.removeAttribute('aria-live');   /* the partial plus its marker is announced once */
       ai.body.innerHTML = citeChips(partial);
       ai.textNode = null; ai.caret = null; ai.dots = null;
       var mark = document.createElement('span');

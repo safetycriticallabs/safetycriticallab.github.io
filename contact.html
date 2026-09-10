@@ -480,13 +480,30 @@
 
 <script>
 /* Prefill from ?question= — the Ask SCL no-match CTA ("Send to SCL")
-   links here with the visitor's query so their question isn't lost. */
+   links here with the visitor's query so their question isn't lost.
+
+   Also ?askref=, used by the "Report an issue" control under an Ask SCL
+   answer. It carries only the entry ids the answer was grounded in, the date,
+   and the Worker build: enough for SCL to find which published material is
+   implicated, and nothing the visitor did not choose to write. The question
+   and the answer are deliberately not in it. The visitor writes what was
+   wrong, above the reference, and sends the message themselves. */
 (function () {
   const message = document.getElementById('message');
   if (!message) return;
   try {
-    const q = new URLSearchParams(location.search).get('question');
+    const params = new URLSearchParams(location.search);
+    const q = params.get('question');
     if (q && !message.value) message.value = q;
+    const ref = params.get('askref');
+    if (ref && !message.value) {
+      const clean = ref.replace(/[^A-Za-z0-9 ,.:|_-]/g, '').slice(0, 200);
+      message.value = 'Reporting an Ask SCL answer that looks wrong.\n\n'
+        + 'What was wrong (please describe):\n\n\n'
+        + 'Reference for SCL: ' + clean;
+      message.setSelectionRange(message.value.indexOf('describe):') + 12, message.value.indexOf('describe):') + 12);
+      message.focus();
+    }
   } catch (err) { /* ignore */ }
 })();
 

@@ -412,6 +412,48 @@
 .ask-action.is-done { color: #1E5A9A; border-color: rgba(46,109,180,0.35); opacity: 1; }
 @media (hover: none) { .ask-action { opacity: 1; } }
 @media (prefers-reduced-motion: reduce) { .ask-action { transition: none; } }
+/* What travelled from the visitor's own document on this turn. Collapsed by
+   default: it is their text, they wrote it, and the point is that it is
+   auditable rather than that it is prominent. */
+.ask-docsent { margin: 8px 0 0 44px; font-size: 12px; }
+.ask-docsent > summary {
+  cursor: pointer; color: rgba(12,34,66,0.6); list-style: none;
+  padding: 3px 0; user-select: none;
+}
+.ask-docsent > summary::-webkit-details-marker { display: none; }
+.ask-docsent > summary::before { content: "\25B8 "; }
+.ask-docsent[open] > summary::before { content: "\25BE "; }
+.ask-docsent > summary:hover { color: #0C2242; }
+.ask-docsent > summary:focus-visible { outline: 2px solid #2E6DB4; outline-offset: 2px; border-radius: 4px; }
+.ask-docsent-body {
+  margin-top: 6px; padding: 10px 12px;
+  background: rgba(12,34,66,0.035); border-radius: 8px;
+  max-height: 320px; overflow-y: auto;
+}
+.ask-docsent-p {
+  margin: 0 0 10px; white-space: pre-wrap; line-height: 1.55;
+  color: var(--ink-2); font-size: 12.5px;
+}
+.ask-docsent-p:last-child { margin-bottom: 0; }
+.ask-docsent-none { margin: 0; color: rgba(12,34,66,0.6); }
+@media (max-width: 640px) { .ask-docsent { margin-left: 0; } }
+/* Stop, offered while an answer is in flight. Until now the only escape from a
+   long or stalled answer was "New conversation", which throws away every good
+   exchange above it. */
+.ask-stop {
+  display: inline-block; margin-top: 8px;
+  font: inherit; font-size: 12px; line-height: 1.4;
+  color: rgba(12,34,66,0.6); background: transparent;
+  border: 1px solid rgba(12,34,66,0.18); border-radius: 6px;
+  padding: 3px 10px; cursor: pointer;
+}
+.ask-stop:hover { color: #0C2242; border-color: rgba(12,34,66,0.34); }
+.ask-stop:focus-visible { outline: 2px solid #2E6DB4; outline-offset: 2px; }
+.ask-stopped {
+  display: block; margin-top: 10px; padding-top: 8px;
+  border-top: 1px solid rgba(12,34,66,0.08);
+  font-size: 12px; line-height: 1.6; color: #8A4B1F;
+}
 .ask-restored {
   margin: 0 0 14px; padding: 8px 12px;
   font-size: 12.5px; line-height: 1.55; color: rgba(12,34,66,0.65);
@@ -1254,6 +1296,7 @@
      browser and held in memory only, and nothing about the file is written
      here. A restored turn therefore shows its document chip struck through and
      the thread says so, rather than implying the file is still in play. ── */
+  var CLIENT_TIMEOUT_MS = 150000;   /* the worker's own budget is 90s per read; this is the outer bound */
   var ASK_THREAD_KEY = 'scl-ask-thread';
   var THREAD_MAX_TURNS = 24;      /* a long session stays under the storage quota */
   var THREAD_MAX_CHARS = 120000;
@@ -1286,8 +1329,15 @@
   /* turns are the render record; convo is what the worker is sent */
   var turns = [];
   function recordUser(q, docName) { turns.push({ r: 'u', c: q, d: docName || null }); saveThread(turns); }
-  function recordAnswer(text, grounding) {
-    turns.push({ r: 'a', c: text, g: grounding || null });
+  /* An answer to a document question quotes the document back, so storing it
+     would put the visitor's file text into storage. The privacy notice says
+     that text is held in memory only, so the answer to a document turn is
+     recorded as an excluded marker instead: the exchange still appears in a
+     restored thread, with a line saying why the answer is not there. */
+  function recordAnswer(text, grounding, hadDoc) {
+    turns.push(hadDoc
+      ? { r: 'a', c: '', g: grounding || null, x: 1 }
+      : { r: 'a', c: text, g: grounding || null });
     saveThread(turns);
   }
   /* Chat ergonomics: after the first answer the form moves below the thread
@@ -1405,6 +1455,7 @@
      header (older worker, or a response that did not expose it) renders
      nothing rather than a claim the worker never made. ── */
   var GROUNDED_EMPTY = 'Answered from SCL\'s published FAQ; no framework excerpts were served.';
+  var GROUNDED_EMPTY_DOC = 'Answered from your attached document and SCL\'s published FAQ; no framework excerpts were served.';
   function parseServedIds(header) {
     var out = [];
     var parts = String(header).split(',');
@@ -1442,14 +1493,17 @@
     chip.textContent = id;
     return chip;
   }
-  function renderGrounding(ai, retrieved, retrieval) {
+  function renderGrounding(ai, retrieved, retrieval, hadDoc) {
     if (retrieved === null || retrieved === undefined) return;   /* header absent: nothing to report */
     var line = document.createElement('span');   /* a span so it is valid inside the <p> bubble */
     line.className = 'ask-grounding';
     if (retrieval) line.setAttribute('data-retrieval', retrieval);
     var ids = parseServedIds(retrieved);
     if (ids.length === 0) {
-      line.textContent = GROUNDED_EMPTY;
+      /* GROUNDED_EMPTY names the FAQ as the sole source, which is untrue on a
+         turn that carried the visitor's document: the answer may rest largely
+         on their own text. */
+      line.textContent = hadDoc ? GROUNDED_EMPTY_DOC : GROUNDED_EMPTY;
     } else {
       var label = document.createElement('span');
       label.className = 'ask-grounding-label';
@@ -1568,6 +1622,25 @@
       }, s[0]));
     });
   }
+  /* Abort the request, keep whatever arrived, and say plainly that it is
+     unfinished. A partial answer from a certification authority must never be
+     mistaken for a complete one, so it is marked, it is not recorded as
+     history, and the visitor is offered the question again. */
+  function addStopControl(ai, onStop) {
+    var btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'ask-stop';
+    btn.textContent = 'Stop';
+    btn.setAttribute('aria-label', 'Stop this answer');
+    btn.addEventListener('click', function () { btn.disabled = true; onStop(); });
+    ai.stopBtn = btn;
+    if (ai.body.parentNode) ai.body.parentNode.appendChild(btn);
+  }
+  function clearStopControl(ai) {
+    if (ai && ai.stopBtn && ai.stopBtn.parentNode) ai.stopBtn.parentNode.removeChild(ai.stopBtn);
+    if (ai) ai.stopBtn = null;
+  }
+
   function stopWait(ai) {
     if (!ai || !ai.wait) return;
     ai.wait.timers.forEach(clearTimeout);
@@ -1577,6 +1650,7 @@
 
   function aiNote(ai, text, retry) {
     stopWait(ai);
+    clearStopControl(ai);
     ai.art.classList.add('ask-msg-note');
     ai.body.textContent = text;   /* wholesale overwrite: typing dots included */
     ai.dots = null;
@@ -1690,17 +1764,59 @@
     ai.body.appendChild(row);
   }
 
-  function finishAnswer(ai, text, q, firstTurn, grounding) {
+  /* Renders under the answer, outside the <p> bubble so a <details> is valid
+     markup. Never recorded to the thread store: the privacy notice says an
+     attached document's text is held in memory only, so it must not be written
+     anywhere, and a restored turn shows its file chip struck through instead. */
+  function renderDocSent(ai, docSel) {
+    if (!docSel) return;
+    var d = document.createElement('details');
+    d.className = 'ask-docsent';
+    var s = document.createElement('summary');
+    var n = docSel.picks.length;
+    if (!n) {
+      s.textContent = 'No passage of ' + docSel.total + ' from ' + docSel.name + ' matched this question';
+    } else if (docSel.total === 1) {
+      s.textContent = docSel.name + ' is short enough to be one passage, and it was sent whole with this question';
+    } else if (n === 1) {
+      s.textContent = '1 passage of ' + docSel.total + ' from ' + docSel.name + ' was sent with this question';
+    } else {
+      s.textContent = n + ' passages of ' + docSel.total + ' from ' + docSel.name + ' were sent with this question';
+    }
+    d.appendChild(s);
+    var body = document.createElement('div');
+    body.className = 'ask-docsent-body';
+    if (!n) {
+      var none = document.createElement('p');
+      none.className = 'ask-docsent-none';
+      none.textContent = 'Nothing from your document was sent, so this answer does not take it into account. '
+        + 'Passages are matched on whole words, so try wording the question with terms your document uses.';
+      body.appendChild(none);
+    } else {
+      for (var i = 0; i < docSel.picks.length; i++) {
+        var para = document.createElement('p');
+        para.className = 'ask-docsent-p';
+        para.textContent = docSel.picks[i];   /* the visitor's own text, never innerHTML */
+        body.appendChild(para);
+      }
+    }
+    d.appendChild(body);
+    if (ai.body.parentNode) ai.body.parentNode.appendChild(d);
+  }
+
+  function finishAnswer(ai, text, q, firstTurn, grounding, docSel) {
     stopWait(ai);
+    clearStopControl(ai);
     ai.body.innerHTML = citeChips(text);
     ai.textNode = null; ai.caret = null; ai.dots = null;   /* replaced by the linkified render */
     grounding = grounding || {};
-    renderGrounding(ai, grounding.retrieved, grounding.retrieval);
+    renderGrounding(ai, grounding.retrieved, grounding.retrieval, !!docSel);
     addAnswerActions(ai, text, grounding);
+    renderDocSent(ai, docSel);
     setActivity(ai, 'done');   /* the arc closes the circle and lets go */
     settleActivity(ai, 900);
     convo.push({ role: 'assistant', content: text });
-    recordAnswer(text, grounding);
+    recordAnswer(text, grounding, !!docSel);
     resultsLabel.textContent = 'Conversation';
     input.placeholder = 'Ask a follow-up';
     composerDown();
@@ -1997,7 +2113,14 @@
       }
     }
     pick.sort(function (a, b) { return a - b; });   /* document order for the model */
-    return pick.map(function (idx) { return attachedDoc.passages[idx].text; }).join('\n[...]\n');
+    var texts = pick.map(function (idx) { return attachedDoc.passages[idx].text; });
+    /* The visitor is told which passages travelled, so the selection is
+       reported rather than assumed. Selection is whole-word lexical overlap
+       with no stemming, over a document that can run to thousands of passages,
+       so "the attached excerpts do not show it" can mean the evidence is
+       missing OR that this selector did not find it. Only showing the passages
+       lets a reader tell those apart. */
+    return { text: texts.join('\n[...]\n'), picks: texts, total: attachedDoc.passages.length };
   }
 
   /* Attachment chip UI. File names are untrusted: textContent only.
@@ -2053,7 +2176,7 @@
         attachWrap.appendChild(chip);
         var note = document.createElement('p');
         note.className = 'ask-attach-note';
-        note.textContent = 'Passages relevant to each question are sent to the assistant. The full document stays in your browser.'
+        note.textContent = 'Passages relevant to each question are sent to the assistant, and each answer shows you which ones. The full document stays in your browser.'
           + (state.doc.truncated ? ' Only the first part of this very large document is available.' : '');
         attachWrap.appendChild(note);
       }
@@ -2224,9 +2347,9 @@
     setQuery('');
     var sentHistory = convo.slice(-8);
     /* only question-relevant passages travel, selected fresh each turn */
-    var docPayload = attachedDoc
-      ? { name: attachedDoc.name, excerpts: selectDocExcerpts(q, sentHistory) }
-      : null;
+    var docSel = attachedDoc ? selectDocExcerpts(q, sentHistory) : null;
+    if (docSel) docSel.name = attachedDoc.name;
+    var docPayload = docSel ? { name: attachedDoc.name, excerpts: docSel.text } : null;
     convo.push({ role: 'user', content: q });
     recordUser(q, attachedDoc && attachedDoc.name);
 
@@ -2251,8 +2374,49 @@
       aiNote(ai, 'The assistant is unavailable right now. Your conversation is still here; try again in a moment.', again);
     }
 
+    /* The worker has its own upstream watchdogs, but the browser had none: a
+       connection that opened and then went quiet left the visitor watching an
+       animation with no way out except reloading. This gives the client its own
+       deadline and, more importantly, gives the visitor a Stop. */
+    var ctrl = (typeof AbortController === 'function') ? new AbortController() : null;
+    var stopped = false;
+    var deadline = setTimeout(function () {
+      if (gen !== askGen || !askBusy) return;
+      if (ctrl) ctrl.abort();
+      fail('error');
+    }, CLIENT_TIMEOUT_MS);
+    function settle() { clearTimeout(deadline); clearStopControl(ai); }
+
+    function stopNow() {
+      if (gen !== askGen || !askBusy) return;
+      stopped = true;
+      askBusy = false;
+      settle();
+      if (ctrl) ctrl.abort();
+      var partial = (ai.textNode && ai.textNode.data ? ai.textNode.data : '').trim();
+      convo.pop();          /* the question is not answered, so it is not history */
+      turns.pop();
+      saveThread(turns);
+      setQuery(q);          /* the visitor gets their question back, ready to resend */
+      if (!partial) {
+        aiNote(ai, 'Stopped before the answer began. Your conversation is still here.', function () { run(q); });
+        return;
+      }
+      stopWait(ai);
+      ai.body.innerHTML = citeChips(partial);
+      ai.textNode = null; ai.caret = null; ai.dots = null;
+      var mark = document.createElement('span');
+      mark.className = 'ask-stopped';
+      mark.textContent = 'You stopped this answer, so it is incomplete and was not kept in the conversation. Ask again to get a full one.';
+      ai.body.appendChild(mark);
+      addAnswerActions(ai, partial, null);
+      setActivity(ai, null);
+    }
+    addStopControl(ai, stopNow);
+
     fetch(ASK_ENDPOINT, {
       method: 'POST',
+      signal: ctrl ? ctrl.signal : undefined,
       headers: { 'Content-Type': 'application/json' },
       /* consent is sent per request and only when the visitor has ticked the
          box; the worker treats anything but an explicit true as no. Never sent
@@ -2275,11 +2439,13 @@
           var acc = '';
           function pump() {
             return reader.read().then(function (res) {
-              if (gen !== askGen) { reader.cancel().catch(function () {}); return; }
+              if (gen !== askGen || stopped) { reader.cancel().catch(function () {}); return; }
               if (res.done) {
+                if (stopped) return;
+                settle();
                 if (!acc.trim()) { fail('error'); return; }
                 askBusy = false;
-                finishAnswer(ai, acc.trim(), q, firstTurn, grounding);
+                finishAnswer(ai, acc.trim(), q, firstTurn, grounding, docSel);
                 return;
               }
               var chunk = dec.decode(res.value, { stream: true });
@@ -2301,16 +2467,18 @@
         }
         return r.json().then(function (data) {
           if (r.ok && data && data.answer) {
-            if (gen !== askGen) return;
+            if (gen !== askGen || stopped) return;
+            settle();
             askBusy = false;
-            finishAnswer(ai, data.answer, q, firstTurn, grounding);
+            finishAnswer(ai, data.answer, q, firstTurn, grounding, docSel);
             return;
           }
+          settle();
           if (r.status === 400 || r.status === 413) { fail('invalid', data && data.error); return; }
           fail(data && data.error === 'busy' ? 'busy' : (data && data.error === 'rate' ? 'rate' : 'error'));
         });
       })
-      .catch(function () { fail('error'); });
+      .catch(function () { if (stopped) return; settle(); fail('error'); });
   }
 
   function run(query) {
@@ -2380,15 +2548,28 @@
     setActivity(ai, null);   /* addAiMsg opens in the thinking state */
   }
 
+  function renderExcludedAnswer() {
+    var el = document.createElement('div');
+    el.className = 'ask-restored';
+    el.textContent = 'The answer to this question is not shown. It discussed your attached document, '
+      + 'and answers about an attached document are never saved. Attach the document again to ask about it.';
+    thread.appendChild(el);
+  }
+
   function restoreThread() {
     if (!askMode) return false;
     var saved = loadThread();
     if (!saved) return false;
     restoring = true;
     turns = saved.slice();
-    convo = saved.map(function (x) {
-      return { role: x.r === 'u' ? 'user' : 'assistant', content: x.c };
-    });
+    /* An excluded exchange is rendered but never sent back as history: its
+       answer was not kept, so a stand-in would misrepresent what was said. */
+    convo = [];
+    for (var c = 0; c < saved.length; c++) {
+      var cur = saved[c];
+      if (cur.r === 'a' && cur.x) { convo.pop(); continue; }   /* drop its question too */
+      convo.push({ role: cur.r === 'u' ? 'user' : 'assistant', content: cur.c });
+    }
     showResults();
     ensureThread();
     var hadDoc = saved.some(function (x) { return x.r === 'u' && x.d; });
@@ -2402,6 +2583,7 @@
     for (var i = 0; i < saved.length; i++) {
       var x = saved[i];
       if (x.r === 'u') { addUserMsg(x.c, x.d ? { name: x.d } : null, true); lastQ = x.c; }
+      else if (x.x) renderExcludedAnswer();
       else renderRestoredAnswer(x.c, x.g);
     }
     resultsLabel.textContent = 'Conversation';

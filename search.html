@@ -336,6 +336,7 @@
    Chat chain: user bubbles right in navy, AI bubbles left on white,
    mirrored corner tails. FAQ cards keep their card look below the thread. */
 .ask-thread { display: flex; flex-direction: column; gap: 16px; }
+.ask-thread > .ask-msg-ai { margin: 6px 0 14px; }
 .ask-msg-user {
   align-self: flex-end; max-width: 78%;
   background: #0C2242; color: #FAF9F5;
@@ -361,19 +362,29 @@
 }
 .ask-msg-user-doc svg { flex-shrink: 0; opacity: 0.8; }
 .ask-msg-user-doc-name { overflow: hidden; text-overflow: ellipsis; }
-.ask-msg-ai { align-self: flex-start; max-width: 85%; }
+/* SCL's answer is not a chat message. A bubble is the visual language of two
+   people messaging, and it makes a certification authority's answer look like
+   something a bot said. The seal is the responder: the answer sits beside it as
+   plain text on the page, the way a statement reads, and the visitor's own
+   question keeps its bubble so the asymmetry is obvious. */
+.ask-msg-ai { align-self: stretch; max-width: 100%; }
 .ask-msg-body {
   margin: 0;
-  background: #fff;
-  border: 1px solid rgba(46,109,180,0.22);
-  border-radius: 14px 14px 14px 4px;
-  box-shadow: 0 1px 4px rgba(15,35,64,0.05);
-  padding: 12px 16px;
-  font-size: 15px; line-height: 1.65;
-  color: rgba(12,34,66,0.92);
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  padding: 1px 0 0;
+  font-size: 15.5px; line-height: 1.72;
+  color: var(--ink);
   white-space: pre-wrap; overflow-wrap: anywhere;
 }
-.ask-msg-note .ask-msg-body { color: rgba(12,34,66,0.78); }   /* --ink-3 is 3.2:1, under AA */
+/* A note is not a statement: give it a quiet rule rather than the full weight */
+.ask-msg-note .ask-msg-body {
+  color: rgba(12,34,66,0.78);
+  border-left: 2px solid rgba(12,34,66,0.12);
+  padding-left: 12px;
+}
 .ask-caret {
   display: inline-block; width: 7px; height: 15px;
   background: #0C2242; margin-left: 3px; vertical-align: text-bottom;
@@ -684,17 +695,29 @@
 .search-page.chat-active .ask-related { display: none; }
 
 /* AI messages carry the certification-mark avatar beside the bubble */
-.ask-msg-ai { display: flex; gap: 10px; }
+.ask-msg-ai { display: flex; gap: 14px; }
+/* Larger, because it is now the thing doing the answering rather than a
+   decoration next to a bubble. */
 .ask-msg-avatar {
   display: block;
-  width: 28px; height: 28px; border-radius: 50%;
+  width: 36px; height: 36px; border-radius: 50%;
   border: 1px solid rgba(46,109,180,0.28);
   background: #fff;
   flex: none;
   overflow: hidden;
-  margin-top: 1px;
+  margin-top: 0;
 }
-.ask-msg-content { min-width: 0; }
+/* Without a bubble the answer would run the full width of the panel, about a
+   hundred characters a line. Prose is read in a measure, so cap it: the answer,
+   its grounding line and its controls all align to the same column. */
+/* 580px is about 74 characters at 15.5px in DM Sans, which is a reading
+   measure. The ch unit is unreliable here: DM Sans's zero is narrow, so 68ch
+   measured out at 96 characters a line. */
+.ask-msg-content { min-width: 0; flex: 1; max-width: min(580px, 100%); }
+@media (max-width: 560px) {
+  .ask-msg-ai { gap: 10px; }
+  .ask-msg-avatar { width: 30px; height: 30px; }
+}
 
 /* Messages enter with a small rise instead of popping in */
 .ask-msg-user, .ask-msg-ai { animation: ask-in 0.28s ease both; }

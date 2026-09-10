@@ -333,19 +333,29 @@
 }
 
 /* ── Ask SCL conversation thread (streamed, multi-turn) ──
-   Chat chain: user bubbles right in navy, AI bubbles left on white,
-   mirrored corner tails. FAQ cards keep their card look below the thread. */
+   No bubbles on either side: the question is set as the turn's heading and the
+   answer follows beside the seal. FAQ cards keep their card look below. */
 .ask-thread { display: flex; flex-direction: column; gap: 16px; }
 .ask-thread > .ask-msg-ai { margin: 6px 0 14px; }
+/* The visitor's question is not a chat bubble either. It reads as the heading of
+   the turn: full ink, flush against the thread's left edge, with the answer set
+   below it beside the seal. The two speakers are told apart by position and
+   weight instead of by two coloured bubbles pointing at each other. */
 .ask-msg-user {
-  align-self: flex-end; max-width: 78%;
-  background: #0C2242; color: #FAF9F5;
-  border-radius: 14px 14px 4px 14px;
-  padding: 10px 16px;
-  font-size: 14.5px; line-height: 1.55;
+  align-self: stretch; max-width: 100%;
+  background: transparent; color: var(--ink);
+  border: 0; border-radius: 0;
+  padding: 0;
+  font-size: 17px; font-weight: 500; line-height: 1.5;
+  letter-spacing: -0.005em;
   overflow-wrap: anywhere;
   white-space: pre-wrap;   /* the composer can hold newlines now (shift+enter) */
 }
+/* An answer belongs to the question above it, so it sits tight under it. The
+   space between turns is opened above the next question instead. */
+.ask-thread > .ask-msg-user { margin: 14px 0 0; }
+.ask-thread > .ask-msg-user:first-child { margin-top: 0; }
+.ask-thread > .ask-msg-user + .ask-msg-ai { margin-top: 0; }
 /* The attachment travels WITH the message it was sent on, the way it reads in
    any chat client: flex forces its own line, and fit-content keeps the bubble
    from stretching to the chip's max width. */
@@ -353,10 +363,11 @@
   display: flex; align-items: center; gap: 6px;
   width: fit-content; max-width: 100%;
   margin: 0 0 8px;
-  font-family: var(--mono); font-size: 11.5px; line-height: 1.4;
-  color: rgba(250,249,245,0.92);
-  background: rgba(250,249,245,0.12);
-  border: 1px solid rgba(250,249,245,0.24); border-radius: 6px;
+  font-family: var(--mono); font-size: 11.5px; font-weight: 400; line-height: 1.4;
+  letter-spacing: 0;
+  color: rgba(12,34,66,0.70);
+  background: rgba(12,34,66,0.045);
+  border: 1px solid rgba(12,34,66,0.14); border-radius: 6px;
   padding: 4px 9px;
   white-space: nowrap;
 }
@@ -365,8 +376,7 @@
 /* SCL's answer is not a chat message. A bubble is the visual language of two
    people messaging, and it makes a certification authority's answer look like
    something a bot said. The seal is the responder: the answer sits beside it as
-   plain text on the page, the way a statement reads, and the visitor's own
-   question keeps its bubble so the asymmetry is obvious. */
+   plain text on the page, the way a statement reads. */
 .ask-msg-ai { align-self: stretch; max-width: 100%; }
 .ask-msg-body {
   margin: 0;
@@ -403,7 +413,7 @@
 /* A document chip on a restored turn: the file itself cannot come back, since
    its passages only ever lived in memory, so the chip must not imply it is
    still attached. */
-.ask-msg-user-doc.is-detached { opacity: 0.55; text-decoration: line-through; }
+.ask-msg-user-doc.is-detached { opacity: 0.75; text-decoration: line-through; }
 /* Per answer actions. Quiet until the answer is hovered or focused, so the
    thread stays a conversation rather than a control panel, but always reachable
    by keyboard. */
@@ -643,17 +653,11 @@
   color: #0C2242; line-height: 1.2;
 }
 .chat-header-status {
-  display: flex; align-items: center; gap: 7px;
+  display: flex; align-items: center;
   font-family: var(--mono);
   font-size: 10.5px; letter-spacing: 0.1em; text-transform: uppercase;
   color: rgba(12,34,66,0.55);
   margin-top: 4px;
-}
-.chat-status-dot {
-  width: 7px; height: 7px; border-radius: 50%;
-  background: #2E8B57;
-  box-shadow: 0 0 0 3px rgba(46,139,87,0.14);
-  flex: none;
 }
 .search-page.chat-active .search-results {
   flex: 1 1 auto;
@@ -707,13 +711,10 @@
   overflow: hidden;
   margin-top: 0;
 }
-/* Without a bubble the answer would run the full width of the panel, about a
-   hundred characters a line. Prose is read in a measure, so cap it: the answer,
-   its grounding line and its controls all align to the same column. */
-/* 580px is about 74 characters at 15.5px in DM Sans, which is a reading
-   measure. The ch unit is unreliable here: DM Sans's zero is narrow, so 68ch
-   measured out at 96 characters a line. */
-.ask-msg-content { min-width: 0; flex: 1; max-width: min(580px, 100%); }
+/* The answer takes the panel's full width. A narrower reading measure was tried
+   and read as a column pushed against the left edge with the page empty beside
+   it; the panel is already the measure. */
+.ask-msg-content { min-width: 0; flex: 1; max-width: 100%; }
 @media (max-width: 560px) {
   .ask-msg-ai { gap: 10px; }
   .ask-msg-avatar { width: 30px; height: 30px; }
@@ -780,6 +781,30 @@
   0%, 100% { opacity: 0.55; transform: scale(1); }
   45%      { opacity: 1;    transform: scale(1.07); }
 }
+/* Waiting: the seal pings. Two rings open out of the lens and fade at the rim,
+   one behind the other, so the wait is legible from across the page instead of
+   only in the lens. Held to the thinking state: once tokens arrive the sweep
+   and the lens carry it. */
+.scl-inst .in-ping { fill: none; stroke: #D4A02F; stroke-width: 3.2; opacity: 0; }
+/* The beat itself. At avatar size a change inside the lens is invisible, which
+   is why the first attempt at this could not be seen: the seal has to be the
+   signal, not the lens. */
+.chat-avatar.is-waiting,
+.ask-msg-avatar.is-waiting {
+  animation: inst-pulse 1.6s cubic-bezier(0.4, 0, 0.5, 1) infinite;
+}
+@keyframes inst-pulse {
+  0%, 100% { transform: scale(1);    }
+  36%      { transform: scale(1.12); }
+  62%      { transform: scale(0.98); }
+}
+.scl-inst.is-thinking .in-ping-a { animation: inst-ping 2.2s ease-out infinite; }
+.scl-inst.is-thinking .in-ping-b { animation: inst-ping 2.2s ease-out 1.1s infinite; }
+@keyframes inst-ping {
+  0%   { opacity: 0;    transform: scale(0.38); }
+  14%  { opacity: 0.78; }
+  100% { opacity: 0;    transform: scale(1.5); }
+}
 .scl-inst.is-streaming .in-sweep { opacity: 1; animation: inst-rot 1.1s linear infinite; }
 .scl-inst.is-streaming .in-core { animation: inst-breathe 1.1s ease-in-out infinite; }
 @keyframes inst-rot { to { transform: rotate(360deg); } }
@@ -796,6 +821,7 @@
 @media (prefers-reduced-motion: reduce) {
   .scl-inst.is-thinking .in-core,
   .scl-inst.is-thinking .in-lens-rim,
+  .scl-inst.is-thinking .in-ping,
   .scl-inst.is-thinking .in-sweep,
   .scl-inst.is-streaming .in-sweep,
   .scl-inst.is-streaming .in-core { animation: none; }
@@ -825,6 +851,7 @@
 @keyframes inst-fade { from { opacity: 0; } }
 @media (prefers-reduced-motion: reduce) {
   .scl-inst circle, .scl-inst rect, .scl-inst { animation: none !important; }
+  .chat-avatar.is-waiting, .ask-msg-avatar.is-waiting { animation: none !important; }
 }
 
 @media (max-width: 640px) {
@@ -835,8 +862,7 @@
   .ask-msg-avatar { width: 24px; height: 24px; }
   .search-form { padding: 20px 22px; min-height: 160px; }
   .search-form.is-composer { padding: 8px 10px 8px 16px; min-height: 0; }
-  .ask-msg-user { max-width: 92%; }
-  .ask-msg-ai { max-width: 92%; }
+  .ask-msg-user { font-size: 16px; }
   /* A phone line holds far fewer words, so the same question needs more rows:
      let the box take a share of the screen rather than a desktop pixel count.
      dvh so iOS Safari's toolbar counts against it; the vh line is the fallback. */
@@ -903,7 +929,7 @@
       <span class="chat-avatar" id="chat-avatar-slot" aria-hidden="true"></span>
       <div>
         <div class="chat-header-name">Ask SCL</div>
-        <div class="chat-header-status"><span class="chat-status-dot" aria-hidden="true"></span>AI assistant &middot; grounded in SCL documentation</div>
+        <div class="chat-header-status">AI assistant &middot; grounded in SCL documentation</div>
       </div>
     </div>
 
@@ -1080,6 +1106,8 @@
       + '<rect class="in-bar" x="39" y="48.5" width="22" height="3" rx="1.5"/>'
       + '<circle class="in-core" cx="50" cy="50" r="4.6"/>'
       + '<circle class="in-sweep" cx="50" cy="50" r="42.5" pathLength="100"/>'
+      + '<circle class="in-ping in-ping-a" cx="50" cy="50" r="30"/>'
+      + '<circle class="in-ping in-ping-b" cx="50" cy="50" r="30"/>'
       + '</svg>';
   }
   var INST_STATES = ['is-thinking', 'is-streaming', 'is-done', 'is-error'];
@@ -1087,6 +1115,14 @@
     if (!svg) return;
     for (var i = 0; i < INST_STATES.length; i++) svg.classList.remove(INST_STATES[i]);
     if (state) svg.classList.add('is-' + state);
+    /* The whole seal beats while the visitor waits, and the wrapper carries it:
+       scaling the svg inside its own clipping circle would shave the outer
+       ring off. */
+    var host = svg.parentNode;
+    if (host && host.classList) {
+      if (state === 'thinking') host.classList.add('is-waiting');
+      else host.classList.remove('is-waiting');
+    }
   }
   /* Header instrument mirrors whichever message is in flight */
   var headerInst = null;

@@ -389,6 +389,32 @@
   text-decoration: none;
 }
 .ask-cite:hover { background: rgba(46,109,180,0.18); }
+/* A pointer to a page rather than a citation: same affordance, sentence face,
+   because "the contact page" reads as prose and a mono chip would not. */
+.ask-cite-page { font-family: var(--sans); font-size: inherit; font-weight: 500; }
+/* Question length. Silent until it is nearly relevant, then a count, then an
+   explicit line when the browser has already dropped the end of a paste. */
+.ask-count {
+  font-size: 12px; line-height: 1.5; color: rgba(12,34,66,0.55);
+  margin: 6px 2px 0; min-height: 0; text-align: right;
+}
+.ask-count.is-at-cap { color: #8A4B1F; text-align: left; }
+/* Wait state: what the assistant is doing, so 25 seconds of silence does not
+   read as a broken page. Measured median is 19s, p90 25s, worst 37s. */
+.ask-wait {
+  display: block; margin-top: 6px;
+  font-size: 12px; line-height: 1.5; color: rgba(12,34,66,0.55);
+}
+/* Retry, offered on the error path so a failed question is one click from
+   being asked again rather than retyped. */
+.ask-retry {
+  display: inline-block; margin-top: 8px;
+  font: inherit; font-size: 13px; font-weight: 500;
+  color: #1E5A9A; background: rgba(46,109,180,0.10);
+  border: 1px solid rgba(46,109,180,0.25); border-radius: 6px;
+  padding: 4px 10px; cursor: pointer;
+}
+.ask-retry:hover { background: rgba(46,109,180,0.18); }
 /* Grounding line under each answer: the corpus entries the worker served for
    that turn, in served order, so a reader can see what the answer stood on.
    Same muted weight and color as .ask-disclosure. It lives inside the answer
@@ -975,8 +1001,45 @@
     input.style.height = Math.min(need, max) + 'px';
     input.style.overflowY = need > max ? 'auto' : 'hidden';
   }
-  function setQuery(v) { input.value = v; autogrow(); }
-  input.addEventListener('input', autogrow);
+  /* The cap was silent: the browser truncates a long paste to maxLength with no
+     message, so a visitor who drafted a careful 800 character question elsewhere
+     lost its second half, and the assistant answered the fragment fluently and
+     with citations. The counter appears only when it starts to matter, and a
+     paste that hits the cap says so out loud. */
+  var MAX_Q = 500;
+  var countEl = null;
+  function updateCount() {
+    if (!askMode) return;
+    var n = input.value.length;
+    if (!countEl) {
+      countEl = document.createElement('div');
+      countEl.className = 'ask-count';
+      countEl.id = 'ask-count';
+      countEl.setAttribute('role', 'status');
+      var row = input.closest('.search-input-row') || input.parentNode;
+      if (row && row.parentNode) row.parentNode.insertBefore(countEl, row.nextSibling);
+    }
+    if (n >= MAX_Q) {
+      countEl.textContent = 'Questions are capped at ' + MAX_Q + ' characters. Anything past that was not kept, so trim it or send the key part.';
+      countEl.className = 'ask-count is-at-cap';
+    } else if (n > MAX_Q - 100) {
+      countEl.textContent = n + ' / ' + MAX_Q;
+      countEl.className = 'ask-count';
+    } else {
+      countEl.textContent = '';
+      countEl.className = 'ask-count';
+    }
+  }
+
+  /* Every programmatic write goes through the same clamp the browser applies to
+     typing, so a ?q= deep link longer than the cap can no longer be dispatched
+     in full and rejected by the worker with a 400. */
+  function setQuery(v) {
+    var s = String(v == null ? '' : v);
+    input.value = askMode && s.length > MAX_Q ? s.slice(0, MAX_Q) : s;
+    autogrow(); updateCount();
+  }
+  input.addEventListener('input', function () { autogrow(); updateCount(); });
   window.addEventListener('resize', autogrow);   /* a narrower box rewraps to more lines */
   autogrow();
   /* line-height moves when the real face swaps in, so re-measure once */
@@ -995,7 +1058,8 @@
   var askMode = !!ASK_ENDPOINT;
   if (askMode) {
     input.placeholder = 'Ask a question';
-    input.maxLength = 500;   /* the worker rejects longer; enforce before dispatch */
+    input.maxLength = MAX_Q;   /* the worker rejects longer; enforce before dispatch */
+    input.setAttribute('aria-describedby', 'ask-count');
     if (lead) lead.textContent = 'Ask anything about AI certification, the framework, the process, or accreditation. Answers are generated from SCL\'s published documentation.';
   }
 
@@ -1155,7 +1219,13 @@
     window.scrollTo(0, 0);   /* the panel is viewport-sized; a scrolled body hides its header */
     if (form.classList.contains('is-composer')) return;
     form.classList.add('is-composer');
+    var hadFocus = document.activeElement === input;
     resultsWrap.insertBefore(form, resultsList.nextSibling);
+    /* Moving a focused element in the DOM drops focus to the document, which
+       left keyboard and screen reader users at the top of the page the instant
+       they asked their first question, with the whole nav to tab past before
+       they could ask a follow-up. */
+    if (hadFocus) input.focus();
     autogrow();   /* composer type is smaller than hero type */
   }
   function composerHome() {
@@ -1216,15 +1286,38 @@
      card per area (#ai-1 to #ai-13) and no per-sub-requirement markup, so a
      sub-requirement lands on its area card (AI-4.1 -> #ai-4). If the page
      ever gains #ai-4-1 style anchors, this is the one place to route them. */
+  /* Citations resolve to the requirement they name. /framework carries a two
+     sentence summary card per area and no sub-requirement text at all, so a
+     chip reading AI-4.1 used to land a reader on a page that did not contain
+     AI-4.1, which reads as an invented citation. /requirements is generated
+     from the same framework.json the worker retrieves from, so every id the
+     assistant emits has a target holding the exact requirement, its rationale,
+     its verification method and its success criteria. */
   function frameworkHref(area, sub) {
-    return '/framework#ai-' + area;
+    return '/requirements#ai-' + area + (sub ? '-' + sub : '');
   }
 
-  /* Requirement mentions in the answer text become framework deep-link
-     chips. Escape first; the regex runs over the escaped string. */
+  /* Citations in the answer body become links. Three patterns, one pass so a
+     replacement can never be rescanned: requirement ids to the framework, faq-N
+     to its anchor on /questions (the model cites FAQ entries by id and the page
+     exists, so leaving them inert made a third of answers cite an unreachable
+     source), and the contact page, which the system prompt tells the model to
+     offer in five separate situations and which read as dead text until now.
+     Every citation opens in a new tab: the thread lives in memory only, so a
+     same-tab citation click was the dominant way a visitor lost their
+     conversation. Escape first; the regex runs over the escaped string. */
+  var CITE_RE = /\bAI-(\d{1,2})(?:\.(\d{1,2}))?\b|\bfaq-(\d{1,3})\b|\/contact\.html\b/g;
+  function citeLink(href, label, cls) {
+    return '<a class="' + (cls || 'ask-cite') + '" href="' + href + '" target="_blank" rel="noopener">' + label + '</a>';
+  }
   function citeChips(text) {
-    return escapeHtml(text).replace(/\bAI-(\d{1,2})(?:\.(\d{1,2}))?\b/g, function (m, area, sub) {
-      return '<a class="ask-cite" href="' + frameworkHref(area, sub) + '">' + m + '</a>';
+    return escapeHtml(text).replace(CITE_RE, function (m, area, sub, faqn) {
+      if (area) return citeLink(frameworkHref(area, sub), m);
+      if (faqn) return citeLink('/questions#faq-' + faqn, m);
+      /* the path itself is the label: the model's own sentences already read
+         "the contact page at /contact.html", so substituting prose here
+         produced "the contact page at the contact page" */
+      return citeLink('/contact.html', m, 'ask-cite ask-cite-page');
     });
   }
 
@@ -1259,10 +1352,12 @@
       chip = document.createElement('a');
       chip.className = 'ask-cite';
       chip.href = frameworkHref(m[1], m[2]);
+      chip.target = '_blank'; chip.rel = 'noopener';
     } else if (faq) {
       chip = document.createElement('a');
       chip.className = 'ask-cite';
       chip.href = '/questions#' + id.toLowerCase();
+      chip.target = '_blank'; chip.rel = 'noopener';
     } else {
       chip = document.createElement('span');
       chip.className = 'ask-grounding-plain';
@@ -1376,10 +1471,47 @@
     if (r.bottom < window.innerHeight + 220) el.scrollIntoView({ block: 'nearest' });
   }
 
-  function aiNote(ai, text) {
+  /* The answer takes 19 seconds at the median and can reach 37, and until now
+     the entire wait state was three animated dots. A first-time visitor cannot
+     tell thinking from broken, and on a certification body's own site the
+     honest read of a silent half minute is broken. Say what is happening. */
+  var WAIT_STAGES = [
+    [0,     'Retrieving from the framework'],
+    [5000,  'Composing the answer'],
+    [18000, 'Still working. The model runs on SCL hardware, so answers take a little longer.'],
+  ];
+  function startWait(ai) {
+    var line = document.createElement('span');
+    line.className = 'ask-wait';
+    ai.body.appendChild(line);
+    ai.wait = { line: line, timers: [] };
+    WAIT_STAGES.forEach(function (s) {
+      ai.wait.timers.push(setTimeout(function () {
+        if (ai.wait && ai.wait.line.isConnected) ai.wait.line.textContent = s[1];
+      }, s[0]));
+    });
+  }
+  function stopWait(ai) {
+    if (!ai || !ai.wait) return;
+    ai.wait.timers.forEach(clearTimeout);
+    if (ai.wait.line.parentNode) ai.wait.line.parentNode.removeChild(ai.wait.line);
+    ai.wait = null;
+  }
+
+  function aiNote(ai, text, retry) {
+    stopWait(ai);
     ai.art.classList.add('ask-msg-note');
     ai.body.textContent = text;   /* wholesale overwrite: typing dots included */
     ai.dots = null;
+    if (typeof retry === 'function') {
+      var btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'ask-retry';
+      btn.textContent = 'Try again';
+      btn.addEventListener('click', function () { btn.disabled = true; retry(); });
+      ai.body.appendChild(document.createElement('br'));
+      ai.body.appendChild(btn);
+    }
     setActivity(ai, 'error');   /* dim, recover; no alarm */
     settleActivity(ai, 1100);
     resultsLabel.textContent = 'Ask SCL';
@@ -1414,6 +1546,7 @@
   }
 
   function finishAnswer(ai, text, q, firstTurn, grounding) {
+    stopWait(ai);
     ai.body.innerHTML = citeChips(text);
     ai.textNode = null; ai.caret = null; ai.dots = null;   /* replaced by the linkified render */
     grounding = grounding || {};
@@ -1930,6 +2063,7 @@
     addUserMsg(q, chipForThisTurn());
     stowAttachment();
     var ai = addAiMsg();
+    startWait(ai);
     resultsLabel.textContent = 'Ask SCL';
     showResults();
     composerDown();   /* adopt chat layout at send time, not answer time — the
@@ -1952,11 +2086,19 @@
       if (gen !== askGen) return;   /* conversation was reset while in flight */
       askBusy = false;
       convo.pop();
-      if (kind === 'busy') { setQuery(q); aiNote(ai, 'Ask SCL is answering another visitor right now. Give it a few seconds and ask again.'); return; }
-      if (kind === 'rate') { setQuery(q); aiNote(ai, 'That is a lot of questions in quick succession. Give it a minute and ask again.'); return; }
+      /* The backend is a Mac behind a tunnel, so a generic failure is the
+         expected case rather than the exotic one. Two of these paths used to
+         drop the visitor's question entirely: setQuery('') had already run at
+         send time, and on a first turn the user's own bubble was destroyed too,
+         so a carefully typed question was recoverable nowhere. Every path now
+         puts the text back, and every path offers one click to send it again. */
+      var again = function () { run(q); };
+      if (kind === 'busy') { setQuery(q); aiNote(ai, 'Ask SCL is answering another visitor right now. Give it a few seconds and ask again.', again); return; }
+      if (kind === 'rate') { setQuery(q); aiNote(ai, 'That is a lot of questions in quick succession. Give it a minute and ask again.', again); return; }
       if (kind === 'invalid') { setQuery(q); aiNote(ai, (msg || 'That question could not be accepted.') + ' Adjust it and try again.'); return; }
+      setQuery(q);
       if (firstTurn) { convo = []; thread = null; renderAskFallback(q); return; }
-      aiNote(ai, 'The assistant is unavailable right now. Your conversation is still here; try again in a moment.');
+      aiNote(ai, 'The assistant is unavailable right now. Your conversation is still here; try again in a moment.', again);
     }
 
     fetch(ASK_ENDPOINT, {
@@ -1993,6 +2135,7 @@
               var chunk = dec.decode(res.value, { stream: true });
               acc += chunk;
               if (ai.dots) {   /* first token: typing indicator gives way to the stream */
+                stopWait(ai);
                 ai.body.removeChild(ai.dots);
                 ai.dots = null;
                 ai.body.appendChild(ai.textNode);

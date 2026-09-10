@@ -340,30 +340,23 @@
    text column and only the seal hangs out to the left. */
 .ask-thread { display: flex; flex-direction: column; gap: 16px; --seal-size: 36px; --seal-gap: 14px; }
 .ask-thread > .ask-msg-ai { margin: 6px 0 14px; }
-/* The visitor's question is not a chat bubble either, but it is still a turn in
-   a conversation rather than a section heading. It carries its own speaker label
-   the way the answer does, and it is padded by exactly the seal column so both
-   speakers write on the same text column. */
+/* The visitor's question is a bubble again, in SCL blue. Evenly rounded rather
+   than tailed, sized to its own text and set against the right edge, so it reads
+   as the thing the visitor said and needs no label to say so. The seal answers
+   below it in plain type: only one side of the exchange is a chat message, which
+   is the asymmetry a certification authority wants. */
 .ask-msg-user {
-  align-self: stretch; max-width: 100%;
-  padding-left: calc(var(--seal-size) + var(--seal-gap));
-  background: transparent; color: var(--ink);
-  border: 0; border-radius: 0;
-  font-size: 16.5px; font-weight: 500; line-height: 1.55;
+  align-self: flex-end;
+  max-width: min(78%, 560px);
+  background: #0C2242; color: #FAF9F5;
+  border: 0; border-radius: 16px;
+  padding: 11px 17px;
+  font-size: 15px; font-weight: 400; line-height: 1.55;
   overflow-wrap: anywhere;
 }
 /* pre-wrap lives on the text alone. On the container it would render the gaps
-   between the label, the attachment chip and the question itself. */
+   between the attachment chip and the question itself. */
 .ask-msg-user-text { display: block; white-space: pre-wrap; }
-.ask-msg-user-tag {
-  font-family: var(--mono);
-  font-size: 10px;
-  font-weight: 400;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: rgba(12,34,66,0.45);
-  margin: 0 0 5px 2px;
-}
 /* An answer belongs to the question above it, so it sits tight under it. The
    space between turns is opened above the next question instead. */
 .ask-thread > .ask-msg-user { margin: 14px 0 0; }
@@ -378,9 +371,9 @@
   margin: 0 0 8px;
   font-family: var(--mono); font-size: 11.5px; font-weight: 400; line-height: 1.4;
   letter-spacing: 0;
-  color: rgba(12,34,66,0.70);
-  background: rgba(12,34,66,0.045);
-  border: 1px solid rgba(12,34,66,0.14); border-radius: 6px;
+  color: rgba(250,249,245,0.92);
+  background: rgba(250,249,245,0.12);
+  border: 1px solid rgba(250,249,245,0.24); border-radius: 6px;
   padding: 4px 9px;
   white-space: nowrap;
 }
@@ -426,7 +419,7 @@
 /* A document chip on a restored turn: the file itself cannot come back, since
    its passages only ever lived in memory, so the chip must not imply it is
    still attached. */
-.ask-msg-user-doc.is-detached { opacity: 0.75; text-decoration: line-through; }
+.ask-msg-user-doc.is-detached { opacity: 0.6; text-decoration: line-through; }
 /* Per answer actions. They used to be fully transparent until hover, which still
    reserved their row: with no bubble to anchor it that read as an unexplained
    band of empty page between turns. They are quiet instead of invisible now, so
@@ -873,7 +866,7 @@
   .ask-thread { --seal-size: 26px; --seal-gap: 10px; }
   .search-form { padding: 20px 22px; min-height: 160px; }
   .search-form.is-composer { padding: 8px 10px 8px 16px; min-height: 0; }
-  .ask-msg-user { font-size: 16px; }
+  .ask-msg-user { max-width: 88%; font-size: 14.5px; }
   /* A phone line holds far fewer words, so the same question needs more rows:
      let the box take a share of the screen rather than a desktop pixel count.
      dvh so iOS Safari's toolbar counts against it; the vh line is the fallback. */
@@ -1674,10 +1667,6 @@
   function addUserMsg(q, doc, detached) {
     var el = document.createElement('div');
     el.className = 'ask-msg-user';
-    var tag = document.createElement('div');
-    tag.className = 'ask-msg-user-tag';
-    tag.textContent = 'You';
-    el.appendChild(tag);
     if (doc) {
       var chip = document.createElement('span');
       chip.className = 'ask-msg-user-doc' + (detached ? ' is-detached' : '');

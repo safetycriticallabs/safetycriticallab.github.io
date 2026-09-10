@@ -389,6 +389,15 @@
   text-decoration: none;
 }
 .ask-cite:hover { background: rgba(46,109,180,0.18); }
+/* A document chip on a restored turn: the file itself cannot come back, since
+   its passages only ever lived in memory, so the chip must not imply it is
+   still attached. */
+.ask-msg-user-doc.is-detached { opacity: 0.55; text-decoration: line-through; }
+.ask-restored {
+  margin: 0 0 14px; padding: 8px 12px;
+  font-size: 12.5px; line-height: 1.55; color: rgba(12,34,66,0.65);
+  background: rgba(12,34,66,0.035); border-radius: 8px;
+}
 /* A pointer to a page rather than a citation: same affordance, sentence face,
    because "the contact page" reads as prose and a mono chip would not. */
 .ask-cite-page { font-family: var(--sans); font-size: inherit; font-weight: 500; }
@@ -1210,6 +1219,58 @@
   var convo = [];
   var thread = null;
   var threadFooter = null;
+
+  /* ── Thread persistence. The transcript lived only in `convo`, so a reload
+     lost it, and every citation chip used to be a same-tab link, which made
+     losing it the likely outcome rather than the rare one. Chips now open in a
+     new tab, and the thread survives a reload as well.
+
+     sessionStorage, deliberately: it is scoped to this browser tab, never
+     leaves the device, is not sent with any request, and is gone when the tab
+     closes. It is the narrowest store that solves the problem. Privacy section
+     02 states this, alongside the readiness assessment and the consent flag,
+     which already work the same way. "New conversation" clears it.
+
+     An attached document cannot be restored: its passages are parsed in the
+     browser and held in memory only, and nothing about the file is written
+     here. A restored turn therefore shows its document chip struck through and
+     the thread says so, rather than implying the file is still in play. ── */
+  var ASK_THREAD_KEY = 'scl-ask-thread';
+  var THREAD_MAX_TURNS = 24;      /* a long session stays under the storage quota */
+  var THREAD_MAX_CHARS = 120000;
+  var restoring = false;
+
+  function saveThread(turns) {
+    if (!askMode || restoring) return;
+    try {
+      var trimmed = turns.slice(-THREAD_MAX_TURNS);
+      var payload = JSON.stringify({ v: 1, turns: trimmed });
+      while (payload.length > THREAD_MAX_CHARS && trimmed.length > 2) {
+        trimmed = trimmed.slice(2);   /* drop whole exchanges, oldest first */
+        payload = JSON.stringify({ v: 1, turns: trimmed });
+      }
+      sessionStorage.setItem(ASK_THREAD_KEY, payload);
+    } catch (e) {}   /* private mode, or quota: the feature is a convenience */
+  }
+  function clearThread() {
+    try { sessionStorage.removeItem(ASK_THREAD_KEY); } catch (e) {}
+  }
+  function loadThread() {
+    try {
+      var raw = sessionStorage.getItem(ASK_THREAD_KEY);
+      if (!raw) return null;
+      var d = JSON.parse(raw);
+      if (!d || d.v !== 1 || !Array.isArray(d.turns) || !d.turns.length) return null;
+      return d.turns;
+    } catch (e) { return null; }
+  }
+  /* turns are the render record; convo is what the worker is sent */
+  var turns = [];
+  function recordUser(q, docName) { turns.push({ r: 'u', c: q, d: docName || null }); saveThread(turns); }
+  function recordAnswer(text, grounding) {
+    turns.push({ r: 'a', c: text, g: grounding || null });
+    saveThread(turns);
+  }
   /* Chat ergonomics: after the first answer the form moves below the thread
      (read at the bottom, type at the bottom); it returns to the hero on
      "New conversation" and on any fall back to library mode. */
@@ -1282,10 +1343,6 @@
     threadFooter = null;
   }
 
-  /* Requirement ids resolve to the framework page. /framework carries one
-     card per area (#ai-1 to #ai-13) and no per-sub-requirement markup, so a
-     sub-requirement lands on its area card (AI-4.1 -> #ai-4). If the page
-     ever gains #ai-4-1 style anchors, this is the one place to route them. */
   /* Citations resolve to the requirement they name. /framework carries a two
      sentence summary card per area and no sub-requirement text at all, so a
      chip reading AI-4.1 used to land a reader on a page that did not contain
@@ -1391,12 +1448,13 @@
      untrusted: textContent only. No child text nodes are created between the
      chip and the question, because the bubble is white-space: pre-wrap and
      would render the gap. */
-  function addUserMsg(q, doc) {
+  function addUserMsg(q, doc, detached) {
     var el = document.createElement('div');
     el.className = 'ask-msg-user';
     if (doc) {
       var chip = document.createElement('span');
-      chip.className = 'ask-msg-user-doc';
+      chip.className = 'ask-msg-user-doc' + (detached ? ' is-detached' : '');
+      if (detached) chip.title = 'This document is not attached any more. Attach it again to ask about it.';
       chip.innerHTML = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>';
       var chipName = document.createElement('span');
       chipName.className = 'ask-msg-user-doc-name';
@@ -1535,7 +1593,7 @@
       askGen++;   /* orphan any in-flight stream: its handlers check this */
       askBusy = false;
       setInst(headerInst, null);
-      convo = []; thread = null;
+      convo = []; turns = []; clearThread(); thread = null;
       clearAttachment();   /* the document belongs to the conversation */
       composerHome();
       setQuery('');
@@ -1554,6 +1612,7 @@
     setActivity(ai, 'done');   /* the arc closes the circle and lets go */
     settleActivity(ai, 900);
     convo.push({ role: 'assistant', content: text });
+    recordAnswer(text, grounding);
     resultsLabel.textContent = 'Conversation';
     input.placeholder = 'Ask a follow-up';
     composerDown();
@@ -2081,11 +2140,14 @@
       ? { name: attachedDoc.name, excerpts: selectDocExcerpts(q, sentHistory) }
       : null;
     convo.push({ role: 'user', content: q });
+    recordUser(q, attachedDoc && attachedDoc.name);
 
     function fail(kind, msg) {
       if (gen !== askGen) return;   /* conversation was reset while in flight */
       askBusy = false;
       convo.pop();
+      turns.pop();
+      saveThread(turns);
       /* The backend is a Mac behind a tunnel, so a generic failure is the
          expected case rather than the exotic one. Two of these paths used to
          drop the visitor's question entirely: setQuery('') had already run at
@@ -2097,7 +2159,7 @@
       if (kind === 'rate') { setQuery(q); aiNote(ai, 'That is a lot of questions in quick succession. Give it a minute and ask again.', again); return; }
       if (kind === 'invalid') { setQuery(q); aiNote(ai, (msg || 'That question could not be accepted.') + ' Adjust it and try again.'); return; }
       setQuery(q);
-      if (firstTurn) { convo = []; thread = null; renderAskFallback(q); return; }
+      if (firstTurn) { convo = []; turns = []; clearThread(); thread = null; renderAskFallback(q); return; }
       aiNote(ai, 'The assistant is unavailable right now. Your conversation is still here; try again in a moment.', again);
     }
 
@@ -2218,9 +2280,56 @@
     run(input.value);
   });
 
-  /* ?q= deep link — prefill and run automatically */
+  /* Redraw one completed answer from the stored record. Same render path a
+     live turn ends on, minus the parts that only make sense in flight. */
+  function renderRestoredAnswer(text, g) {
+    var ai = addAiMsg();
+    ai.body.innerHTML = citeChips(text);
+    ai.textNode = null; ai.caret = null; ai.dots = null;
+    g = g || {};
+    renderGrounding(ai, g.retrieved, g.retrieval);
+    setActivity(ai, null);   /* addAiMsg opens in the thinking state */
+  }
+
+  function restoreThread() {
+    if (!askMode) return false;
+    var saved = loadThread();
+    if (!saved) return false;
+    restoring = true;
+    turns = saved.slice();
+    convo = saved.map(function (x) {
+      return { role: x.r === 'u' ? 'user' : 'assistant', content: x.c };
+    });
+    showResults();
+    ensureThread();
+    var hadDoc = saved.some(function (x) { return x.r === 'u' && x.d; });
+    var note = document.createElement('div');
+    note.className = 'ask-restored';
+    note.textContent = hadDoc
+      ? 'This conversation was restored after a reload. It is kept in this browser tab only and never sent anywhere. The document you attached was not restored, because its text is only ever held in memory; attach it again to ask about it.'
+      : 'This conversation was restored after a reload. It is kept in this browser tab only and never sent anywhere.';
+    thread.appendChild(note);
+    var lastQ = '';
+    for (var i = 0; i < saved.length; i++) {
+      var x = saved[i];
+      if (x.r === 'u') { addUserMsg(x.c, x.d ? { name: x.d } : null, true); lastQ = x.c; }
+      else renderRestoredAnswer(x.c, x.g);
+    }
+    resultsLabel.textContent = 'Conversation';
+    input.placeholder = 'Ask a follow-up';
+    composerDown();
+    ensureThreadFooter(lastQ);
+    scrollThreadBottom();
+    restoring = false;
+    return true;
+  }
+
+  /* ?q= deep link: prefill and run automatically. A restored thread is put back
+     first, so a link followed into an existing conversation continues it rather
+     than replacing it. */
   var params = new URLSearchParams(window.location.search);
   var q = params.get('q');
+  restoreThread();
   if (q) { setQuery(q); run(q); }
 
 })();

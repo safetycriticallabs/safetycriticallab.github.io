@@ -2035,7 +2035,7 @@
     <div class="news-header">
       <div class="news-header-left">
         <div class="news-eyebrow">[ Regulatory ]</div>
-        <p class="news-lead">Regulatory activity from the Federal Register, EU Commission, and NIST, refreshed throughout the week.</p>
+        <p class="news-lead">The rules in force and the drafts open for comment, from the Federal Register, the EU Commission, and NIST. Instruments move in years, so the date on each one is part of what it tells you.</p>
       </div>
     </div>
 
@@ -2079,7 +2079,7 @@
     <div class="news-rows">
       <div class="nr-statement">
         <div class="nr-eyebrow">[ The record ]</div>
-        <h2 class="nr-headline">Every change to the standard, published as it happens.</h2>
+        <h2 class="nr-headline">What SCL has published, and when.</h2>
         <a href="/updates" class="nr-all">All updates <span aria-hidden="true">&rarr;</span></a>
       </div>
       <div class="nr-list" id="nr-list"></div>
@@ -3101,8 +3101,29 @@
   }
 
   /* ── The record ─────────────────────────────────────────────
-     Six newest SCL publications, read from /news.json (same origin, no proxy).
-     Falls back to leaving the container empty rather than inventing rows. */
+     Six SCL publications, read from /news.json (same origin, no proxy).
+     Falls back to leaving the container empty rather than inventing rows.
+
+     Capped at two per type, for the same reason /news caps per source. Nine of
+     the nineteen entries in news.json are framework releases, so the six newest
+     were five rows reading "Framework vX released" and one publication. That is
+     an accurate list and a useless one: it tells a reader SCL renumbers a
+     document rather than that it publishes a standard, runs demonstrations,
+     writes papers and pursues accreditation. Taking two per type and then
+     backfilling by date keeps the newest work at the top while showing the
+     range of it. */
+  var RECORD_TYPE_CAP = 2;
+
+  function diversifyByType(items, limit) {
+    var counts = {}, kept = [], spill = [];
+    items.forEach(function (it) {
+      var t = it.type || 'Update';
+      counts[t] = (counts[t] || 0) + 1;
+      (counts[t] <= RECORD_TYPE_CAP ? kept : spill).push(it);
+    });
+    return kept.concat(spill).slice(0, limit);
+  }
+
   function renderRecordRows() {
     var container = document.getElementById('nr-list');
     if (!container) return;
@@ -3110,7 +3131,7 @@
       .then(function (r) { return r.ok ? r.json() : Promise.reject(); })
       .then(function (items) {
         var html = '';
-        items.slice(0, 6).forEach(function (it) {
+        diversifyByType(items, 6).forEach(function (it) {
           html += '<a class="nr-row" href="' + encodeURI(it.url || '/updates') + '"'
             + (/^https?:/.test(it.url || '') ? ' target="_blank" rel="noopener"' : '') + '>'
             +   '<span class="nr-row-title">' + escapeHtml(it.title || '') + '</span>'

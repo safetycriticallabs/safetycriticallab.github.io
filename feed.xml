@@ -46,7 +46,7 @@
       <description>Point revision published under a new citable DOI. The thirteen requirement areas (AI-1 through AI-13) and the three tier classification structure carry forward unchanged.</description>
     </item>
     <item>
-      <title>Framework v3.1 released — refinements and clarifications</title>
+      <title>Framework v3.1 released: refinements and clarifications</title>
       <link>https://doi.org/10.5281/zenodo.20648508</link>
       <guid isPermaLink="false">scl-framework-v3-1-released-refinements-and-clarifications</guid>
       <pubDate>Mon, 01 Jun 2026 00:00:00 +0000</pubDate>
@@ -70,7 +70,7 @@
       <description>safetycriticallabs.com refreshed across every page in the cream and blue palette. A new Documents library publishes the full set of standards, regulations, and reference documents that inform the framework, with direct links to each official publisher.</description>
     </item>
     <item>
-      <title>Framework v3.0 released — Architecture and Paradigm Requirements</title>
+      <title>Framework v3.0 released: Architecture and Paradigm Requirements</title>
       <link>https://doi.org/10.5281/zenodo.20060591</link>
       <guid isPermaLink="false">scl-framework-v3-0-released-architecture-and-paradigm-requirements</guid>
       <pubDate>Fri, 01 May 2026 00:00:00 +0000</pubDate>
@@ -78,7 +78,7 @@
       <description>Major structural revision. New Section 3 adds three architecture and paradigm requirement sets: AI-11 Multi-Model Systems, AI-12 Neural Networks, and AI-13 Continuous Learning and Adaptation. These apply conditionally based on system design and resolve prior lexicon contradictions by separating normative architecture requirements from informative implementation patterns.</description>
     </item>
     <item>
-      <title>Framework v2.1.3 — Deployment Format Validation</title>
+      <title>Framework v2.1.3: Deployment Format Validation</title>
       <link>https://safetycriticallabs.com/updates#framework-v2-1-3-deployment-format-validation</link>
       <guid isPermaLink="false">scl-framework-v2-1-3-deployment-format-validation</guid>
       <pubDate>Fri, 01 May 2026 00:00:00 +0000</pubDate>
@@ -102,7 +102,7 @@
       <description>Intake response submitted to the ANSI National Accreditation Board, opening the formal conversation toward eventual ISO/IEC 17065 accreditation for certification bodies. ANAB accreditation is the path that transforms the SCL mark from a credible third-party determination into a regulatory instrument.</description>
     </item>
     <item>
-      <title>Framework v2.1.1 — Human factors expansion</title>
+      <title>Framework v2.1.1: Human factors expansion</title>
       <link>https://safetycriticallabs.com/updates#framework-v2-1-1-human-factors-expansion</link>
       <guid isPermaLink="false">scl-framework-v2-1-1-human-factors-expansion</guid>
       <pubDate>Wed, 01 Apr 2026 00:00:00 +0000</pubDate>
@@ -110,7 +110,7 @@
       <description>AI-9 Human and AI Teaming expanded with three new sub-requirements: AI-9.7 Operator Qualification, AI-9.8 Workload Management, and AI-9.9 Training Program Requirements. New AI-8.5 Public Disclosure Support covering external model cards, EU AI Act Article 13 user information, EO 14110 and OMB M-24-10 federal AI inventory, and EU AI Act Article 71 public database registration.</description>
     </item>
     <item>
-      <title>Three USPTO trademark filings — the mark on record</title>
+      <title>Three USPTO trademark filings: the mark on record</title>
       <link>https://safetycriticallabs.com/updates#three-uspto-trademark-filings-the-mark-on-record</link>
       <guid isPermaLink="false">scl-three-uspto-trademark-filings-the-mark-on-record</guid>
       <pubDate>Wed, 01 Apr 2026 00:00:00 +0000</pubDate>
@@ -147,7 +147,7 @@
       <guid isPermaLink="false">scl-framework-v2-0-risk-score-methodology</guid>
       <pubDate>Wed, 01 Oct 2025 00:00:00 +0000</pubDate>
       <category>Document Revision</category>
-      <description>Added AI-4.6 Operational Validation Without Ground Truth and AI-9.6 Operational Role Verification. Introduced Appendix D Risk Score Methodology — the structured, reproducible scoring system that issues a quantified risk score alongside every certification determination. Document revision date. This revision was deposited to Zenodo on 10 April 2026.</description>
+      <description>Added AI-4.6 Operational Validation Without Ground Truth and AI-9.6 Operational Role Verification. Introduced Appendix D Risk Score Methodology, the structured and reproducible scoring system that issues a quantified risk score alongside every certification determination. Document revision date. This revision was deposited to Zenodo on 10 April 2026.</description>
     </item>
     <item>
       <title>Framework v1.0, initial development</title>

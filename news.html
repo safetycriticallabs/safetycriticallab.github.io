@@ -656,10 +656,10 @@
   function d(s) { return new Date(s + 'T12:00:00Z'); }
   var FALLBACK = [
     /* Safety Critical Labs */
-    { key: 'scl', title: 'Framework v3.6 released',
+    { key: 'scl', type: 'Framework Release', title: 'Framework v3.6 released',
       summary: 'The current published revision, now the standard SCL assesses against, under a new citable DOI. This release makes the applicability determination verifiable.',
       url: 'https://doi.org/10.5281/zenodo.21924937', date: d('2026-08-01') },
-    { key: 'scl', title: 'Open verification demonstration on NASA turbofan data',
+    { key: 'scl', type: 'Publication', title: 'Open verification demonstration on NASA turbofan data',
       summary: 'A public, reproducible demonstration applies the framework verification methods to NASA C-MAPSS turbofan degradation data, with the full pipeline and measured results published as an open repository.',
       url: 'https://github.com/safetycriticallabs/cmapss-verification-demo', date: d('2026-07-01') },
 
@@ -923,7 +923,7 @@
 
     if (sourceKey === 'scl' && Object.prototype.toString.call(data) === '[object Array]') {
       raw = data.map(function (it) {
-        return { title: it.title, url: it.url, date: it.date, summary: it.summary || '' };
+        return { title: it.title, url: it.url, date: it.date, summary: it.summary || '', type: it.type || '' };
       });
     } else if (data.results) {
       raw = data.results.map(function (doc) {
@@ -952,7 +952,7 @@
          seeds. */
       var raw_date = it.date || '';
       if (/^\d{4}-\d{2}-\d{2}$/.test(raw_date)) raw_date += 'T12:00:00Z';
-      out.push({ key: sourceKey, title: title, url: url, date: raw_date ? new Date(raw_date) : new Date(), summary: summary, image: '' });
+      out.push({ key: sourceKey, title: title, url: url, date: raw_date ? new Date(raw_date) : new Date(), summary: summary, image: '', type: it.type || '' });
     }
     return out;
   }
@@ -1011,7 +1011,7 @@
         var url = safeUrl(it.url);
         if (!url || !it.title || !SOURCE_META[it.key]) return;
         out.push({
-          key: it.key, title: String(it.title), url: url,
+          key: it.key, title: String(it.title), url: url, type: String(it.type || ''),
           date: new Date(it.d), summary: String(it.summary || ''),
           image: it.image ? safeUrl(it.image) : ''
         });
@@ -1025,7 +1025,7 @@
       localStorage.setItem(CACHE_KEY, JSON.stringify({
         t: Date.now(),
         items: items.slice(0, 80).map(function (it) {
-          return { key: it.key, title: it.title, url: it.url, d: it.date.getTime(), summary: it.summary, image: it.image || '' };
+          return { key: it.key, title: it.title, url: it.url, d: it.date.getTime(), summary: it.summary, image: it.image || '', type: it.type || '' };
         })
       }));
     } catch (e) {}
@@ -1129,6 +1129,25 @@
      sharing twenty four slots. */
   var PER_SOURCE_CAP = 4;
 
+  /* Within SCL's own items, the two per type rule the homepage record uses.
+     news.json is nine framework releases out of nineteen, so a plain date sort
+     put four consecutive rows reading "Framework vX released" in the grid. Only
+     SCL items carry a type, so every other source passes through untouched.
+     Applied only to the unfiltered view, like the cap above: clicking the
+     Safety Critical Labs chip shows the full dated record in order, which is
+     what a register is for. */
+  var SCL_TYPE_CAP = 2;
+
+  function diversifySclByType(items) {
+    var counts = {}, kept = [], spill = [];
+    items.forEach(function (it) {
+      if (it.key !== 'scl' || !it.type) { kept.push(it); return; }
+      counts[it.type] = (counts[it.type] || 0) + 1;
+      (counts[it.type] <= SCL_TYPE_CAP ? kept : spill).push(it);
+    });
+    return kept.concat(spill);
+  }
+
   function capPerSource(items) {
     var counts = {}, kept = [], spill = [];
     items.forEach(function (it) {
@@ -1141,7 +1160,7 @@
   function renderGrid() {
     var grid = document.getElementById('news-grid');
     var filtered = gridItems.filter(function (i) { return matchesFilter(i, activeFilter); });
-    if (activeFilter === 'all') filtered = capPerSource(filtered);
+    if (activeFilter === 'all') filtered = capPerSource(diversifySclByType(filtered));
 
     if (filtered.length === 0) {
       grid.innerHTML = '<div style="grid-column:1/-1; text-align:center; color:rgba(46,109,180,0.55); font-family:var(--sans); padding:40px 0;">Nothing from this source yet.</div>';

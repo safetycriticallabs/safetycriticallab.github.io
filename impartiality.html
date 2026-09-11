@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Impartiality | Safety Critical Labs</title>
+<meta name="description" content="What keeps an SCL determination independent: financial, professional and intellectual independence requirements, conflict screening, and the limitations SCL currently operates under.">
+<meta property="og:title" content="Impartiality | Safety Critical Labs">
+<meta property="og:description" content="A certification body is paid by the people it judges. This is what SCL does about that.">
+<link rel="canonical" href="https://safetycriticallabs.com/impartiality">
+<meta name="twitter:card" content="summary">
+<meta property="og:url" content="https://safetycriticallabs.com/impartiality">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://safetycriticallabs.com/img/og-tile.png">
+<link rel="icon" type="image/x-icon" href="favicon.ico">
+<link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="192x192" href="img/favicon-192x192.png">
+<link rel="apple-touch-icon" sizes="180x180" href="img/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<style>
+/* Shared legal page styles */
+/* Hero cursor glow styles live in styles.css (promoted 2026-08-24) */
+
+.fw-eyebrow-mono {
+  font-family: var(--mono);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(12,34,66,0.6);
+  margin-bottom: 20px;
+}
+
+.legal-section {
+  background: #FAF9F5;
+  padding: 88px 40px 120px;
+}
+.legal-inner {
+  max-width: 760px;
+  margin: 0 auto;
+}
+
+.legal-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+  padding-bottom: 24px;
+  margin-bottom: 48px;
+  border-bottom: 1px solid rgba(46,109,180,0.12);
+}
+.legal-meta-item {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(12,34,66,0.6);
+}
+.legal-meta-item strong {
+  display: block;
+  color: #0C2242;
+  font-weight: 500;
+  margin-top: 4px;
+  letter-spacing: 0.04em;
+  text-transform: none;
+  font-family: var(--sans);
+  font-size: 13px;
+}
+
+.legal-block {
+  margin-bottom: 40px;
+}
+.legal-block:last-child { margin-bottom: 0; }
+.legal-block-num {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  color: rgba(12,34,66,0.55);
+  margin-bottom: 6px;
+}
+.legal-block-title {
+  font-family: var(--sans);
+  font-size: 22px;
+  font-weight: 600;
+  color: #0C2242;
+  margin: 0 0 14px;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+}
+.legal-block-title em {
+  font-family: inherit;
+  font-size: inherit !important;
+  font-weight: inherit !important;
+  font-style: normal !important;
+  color: inherit !important;
+}
+.legal-block p {
+  font-size: 15px;
+  color: var(--ink-2);
+  line-height: 1.75;
+  font-weight: 300;
+  margin: 0 0 14px;
+}
+.legal-block p:last-child { margin-bottom: 0; }
+.legal-block p strong { color: var(--ink); font-weight: 500; }
+.legal-block a { color: var(--blue); text-decoration: none; border-bottom: 1px solid rgba(46,109,180,0.3); }
+.legal-block a:hover { color: var(--blue-dk); border-bottom-color: var(--blue-dk); }
+.legal-block ul {
+  list-style: none;
+  padding: 0;
+  margin: 8px 0 0 0;
+}
+.legal-block ul li {
+  font-size: 15px;
+  color: var(--ink-2);
+  line-height: 1.7;
+  font-weight: 300;
+  padding-left: 22px;
+  position: relative;
+  margin-bottom: 8px;
+}
+.legal-block ul li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 11px;
+  width: 6px;
+  height: 6px;
+  background: var(--blue);
+  border-radius: 50%;
+}
+.legal-block ul li strong { color: var(--ink); font-weight: 500; }
+
+.legal-review-note {
+  margin-top: 56px;
+  padding: 20px 24px;
+  background: #FAF9F5;
+  border: 1px solid rgba(46,109,180,0.12);
+  border-left: 3px solid var(--blue);
+  border-radius: 14px;
+  font-size: 13px;
+  color: var(--ink-2);
+  line-height: 1.65;
+  font-weight: 300;
+}
+.legal-review-note strong { color: var(--ink); font-weight: 500; }
+.legal-review-note.is-standing { margin-top: 0; margin-bottom: 56px; }
+.limit-note {
+  margin: 18px 0 0 0; padding: 18px 22px;
+  background: #FAF9F5; border: 1px solid rgba(46,109,180,0.12);
+  border-left: 3px solid #C8A24A; border-radius: 14px;
+  font-size: 14px; color: var(--ink-2); line-height: 1.7; font-weight: 300;
+}
+.limit-note strong { color: var(--ink); font-weight: 500; }
+</style>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<nav class="global-nav">
+  <div class="global-nav-inner">
+    <a href="/" class="gn-wordmark" aria-label="Safety Critical Labs"><span class="gn-text gn-text-full"><em>Safety Critical</em> Labs</span><span class="gn-text gn-text-abbr" aria-hidden="true">SCL</span></a>
+    <button class="gn-hamburger" aria-label="Menu" aria-expanded="false"><span></span><span></span><span></span></button>
+    <ul class="gn-links">
+      <li><a href="/framework">Framework</a></li>
+      <li><a href="/process">Process</a></li>
+      <li class="gn-dropdown">
+        <button class="gn-dropdown-toggle" type="button" aria-expanded="false" aria-haspopup="true">Company <span class="gn-dropdown-arrow" aria-hidden="true"></span></button>
+        <ul class="gn-dropdown-menu">
+          <li><a href="/position">Position</a></li>
+          <li><a href="/expertise">Expertise</a></li>
+          <li><a href="/markets">Markets</a></li>
+          <li><a href="/contact">Contact</a></li>
+        </ul>
+      </li>
+      <li class="gn-dropdown">
+        <button class="gn-dropdown-toggle" type="button" aria-expanded="false" aria-haspopup="true">Briefings <span class="gn-dropdown-arrow" aria-hidden="true"></span></button>
+        <ul class="gn-dropdown-menu">
+          <li><a href="/news">News</a></li>
+          <li><a href="/updates">Updates</a></li>
+          <li><a href="/subscribe">Subscribe</a></li>
+        </ul>
+      </li>
+    </ul>
+    <a href="/search" class="gn-search" aria-label="Ask SCL" title="Ask SCL">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <circle cx="11" cy="11" r="7"/>
+        <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+      </svg>
+    </a>
+    <a href="/contact" class="gn-cta">Get Certified</a>
+  </div>
+</nav>
+
+<main id="main" tabindex="-1">
+
+<div class="page-shell">
+
+<div class="inner-hero">
+  <div class="fw-hero-glow"></div>
+  <div class="inner-hero-inner">
+    <div>
+      <div class="inner-hero-breadcrumb"><a href="/">Safety Critical Labs</a><span>/</span> Impartiality</div>
+      <h1>A determination that can be bought is worth nothing.</h1>
+    </div>
+    <p class="inner-hero-lead">
+      Every certification body is paid by the organizations it judges. That is the structural problem at the centre of this industry, and no amount of good intention resolves it. This page sets out the rules SCL operates under, the conflicts it has not yet resolved, and how to report one you think it has missed.
+    </p>
+  </div>
+</div>
+
+<section class="legal-section">
+  <div class="legal-inner">
+
+    <div class="legal-meta">
+      <div class="legal-meta-item">Effective<strong>September 11, 2026</strong></div>
+      <div class="legal-meta-item">Derived from<strong>ISO/IEC 17065 Clause 4.2</strong></div>
+      <div class="legal-meta-item">Contact<strong><a href="/contact" style="color:#0C2242;text-decoration:none;">/contact</a></strong></div>
+    </div>
+
+    <div class="legal-review-note is-standing">
+      <strong>Where this stands today.</strong> Safety Critical Labs has issued no certificates and currently operates with one qualified assessor. Sections 08 and 09 state plainly what that means and what SCL has not yet resolved. They are on this page because an impartiality statement that lists only the controls a body has, and none of the exposures it carries, is marketing rather than disclosure.
+    </div>
+
+    <div class="legal-block">
+      <div class="legal-block-num">01</div>
+      <h2 class="legal-block-title">The problem, stated plainly</h2>
+      <p>The client pays for the assessment, and the client wants to pass. The body that decides whether they passed is the same body that would like to be paid again next year. Everyone in conformity assessment operates inside this, and a body that pretends otherwise is the one to be careful of.</p>
+      <p>It is managed structurally or not at all. The controls below exist so that the answer to "would SCL have reached a different conclusion if more money were on the table" does not depend on anyone's character.</p>
+    </div>
+
+    <div class="legal-block">
+      <div class="legal-block-num">02</div>
+      <h2 class="legal-block-title">What SCL does not do</h2>
+      <p>SCL is a certification authority. It is not a consultancy, and this is a structural commitment rather than a positioning statement.</p>
+      <ul>
+        <li><strong>SCL does not consult on how to remediate a finding.</strong> A finding states what the requirement demands, what is missing, and what a compliant state would look like in concrete terms. It stops there. It does not prescribe an implementation, recommend a design, or express a preference for a vendor, tool or approach. The line is acceptance criteria for closure, never how to build it.</li>
+        <li><strong>SCL does not design, build, train, tune or operate</strong> the systems it assesses.</li>
+        <li><strong>SCL does not sell a route to a pass.</strong> There is no service that improves the odds of certification, and there is no fee that shortens an assessment.</li>
+      </ul>
+      <p style="margin-top:20px;">SCL does offer a Readiness Assessment, which identifies gaps against the framework before a certification assessment is attempted. It produces no certificate and no determination. Its fee is not credited toward a certification fee, so there is no bundle and no incentive to route clients through it. Remediating what it finds is the client's own responsibility.</p>
+    </div>
+
+    <div class="legal-block">
+      <div class="legal-block-num">03</div>
+      <h2 class="legal-block-title">Financial independence</h2>
+      <ul>
+        <li>No assessor may hold equity, options, or any ownership interest in a client being assessed</li>
+        <li>No assessor may receive compensation from a client other than through the SCL engagement</li>
+        <li>No assessor may have received compensation from the client in the 24 months before the assessment, except through a prior SCL engagement</li>
+        <li><strong>Fees are paid to SCL, not to individual assessors, and assessor compensation does not vary with the certification outcome.</strong> Nobody involved in reaching a determination is paid more for reaching one answer than the other.</li>
+      </ul>
+    </div>
+
+    <div class="legal-block">
+      <div class="legal-block-num">04</div>
+      <h2 class="legal-block-title">Professional and personal independence</h2>
+      <ul>
+        <li>No assessor may have been employed by the client in the 24 months before the assessment</li>
+        <li>No assessor may have provided consulting services to the client on the system being assessed</li>
+        <li>No assessor may have a personal relationship with client personnel that could create the appearance of bias, including family, close friends, and former business partners</li>
+        <li>No assessor may sit on the advisory board of a client while conducting assessments of that client</li>
+      </ul>
+      <p style="margin-top:20px;">Where SCL has conducted a Readiness Assessment for a client, a different Lead Assessor must be assigned to the subsequent certification assessment, and the readiness engagement must have been completed and closed first. See section 08 for what this constraint means at SCL's current size.</p>
+    </div>
+
+    <div class="legal-block">
+      <div class="legal-block-num">05</div>
+      <h2 class="legal-block-title">Intellectual independence</h2>
+      <p>The two requirements here are less common to publish, and they matter more than the financial ones in practice.</p>
+      <p><strong>No predetermined opinion.</strong> An assessor who has publicly stated views about a specific client's system that could create the appearance of prejudgment must recuse themselves. This cuts both ways: an assessor who has publicly praised a system is as disqualified as one who has publicly criticized it.</p>
+      <p><strong>Willingness to issue adverse findings.</strong> An assessor must be willing to issue findings the client will not like. An assessor who communicates reluctance to issue adverse findings is not qualified to conduct the assessment. Not reprimanded, not retrained: not qualified.</p>
+    </div>
+
+    <div class="legal-block">
+      <div class="legal-block-num">06</div>
+      <h2 class="legal-block-title">The check before every engagement</h2>
+      <p>Before every assessment, every member of the team completes a conflict of interest disclosure covering any financial, employment, consulting, advisory or personal relationship with the client, and any other circumstance that could create the appearance of bias. The disclosures are reviewed before the assessment begins.</p>
+      <p>If a conflict or potential conflict is found, the assessor is replaced.</p>
+      <p><strong>If no conflict-free team can be assembled, the engagement is declined.</strong> That is the operative sentence on this page. A rule that never costs anything is not a control, and this one is written to cost revenue when it has to.</p>
+    </div>
+
+    <div class="legal-block">
+      <div class="legal-block-num">07</div>
+      <h2 class="legal-block-title">Assessment decisions and commercial decisions</h2>
+      <p>A determination is issued for every completed assessment, including Not Certified. The Certification Determination Document is the deliverable, and the client receives it whatever it says. A client who does not certify has received what they paid for.</p>
+      <p>Fees are set by classification tier and scope, agreed before the assessment begins, and do not change based on the outcome. There is no success fee, no contingent element, and no discount for a favourable result.</p>
+      <p>Any client may challenge a determination through the appeals process at <a href="/complaints">/complaints</a>, at no cost, within 60 days. Anyone at all may complain about SCL's conduct or about a certificate SCL has issued, through the same route.</p>
+    </div>
+
+    <div class="legal-block">
+      <div class="legal-block-num">08</div>
+      <h2 class="legal-block-title">What SCL has not resolved: one assessor</h2>
+      <p>SCL currently operates with one qualified assessor, who is also the SCL Principal. This is a real limitation on independence and it is stated here rather than left to be discovered.</p>
+      <div class="limit-note">
+        <strong>What is not operating.</strong> SCL's quality programme specifies dual independent review, in which a Lead Assessor and a Review Assessor examine the evidence package separately and do not confer until both are finished. That control requires two assessors and is therefore not in effect. Where the Principal authors an assessment report, the review of it is a structured self-review against a checklist. A self-review is not an independent review, and this page does not describe it as one.
+      </div>
+      <p style="margin-top:20px;"><strong>What does operate, and compensates in part:</strong></p>
+      <ul>
+        <li>Every independence requirement in sections 03 to 06 applies in full, including declining engagements that cannot be staffed conflict-free</li>
+        <li><strong>An appeal against an assessment the Principal conducted requires the concurrence of an external member.</strong> The Principal may take part in deliberation but cannot decide such an appeal alone</li>
+        <li><strong>A complaint concerning the Principal is investigated by an external advisor</strong>, not by SCL</li>
+        <li>Determinations are issued regardless of outcome, and no fee varies with the result</li>
+        <li>Because a different Lead Assessor is required for a certification following a Readiness Assessment, <strong>SCL will not certify a system it conducted a readiness assessment on until a second qualified assessor is engaged</strong>. This forecloses revenue rather than bending the rule</li>
+      </ul>
+      <p style="margin-top:20px;"><strong>What changes this.</strong> Dual independent review begins when a second qualified assessor is engaged. It is a precondition for accreditation, not an optional maturity step, and SCL treats it that way.</p>
+    </div>
+
+    <div class="legal-block">
+      <div class="legal-block-num">09</div>
+      <h2 class="legal-block-title">What SCL has not resolved: it wrote the standard</h2>
+      <p>SCL publishes the AI Requirements Framework and certifies against it. Most conformity assessment separates these: a standards body writes the standard, and independent certification bodies assess against it. ISO, for instance, does not certify against its own standards at all. SCL does both.</p>
+      <p>The objection is legitimate and worth stating in its strongest form: <strong>a body that writes the rules and also grades the exam can move either one to suit itself.</strong> It could soften a requirement that a paying client cannot meet, or sharpen one to create demand for an assessment.</p>
+      <p><strong>What constrains this:</strong></p>
+      <ul>
+        <li><strong>The standard is published openly and free.</strong> It is released under Creative Commons Attribution ShareAlike 4.0 and deposited at a permanent DOI. It is not paywalled, not licensed per seat, and not withheld from anyone, including SCL's competitors.</li>
+        <li><strong>Every requirement is public.</strong> All of them are readable at <a href="/requirements">/requirements</a> without contacting SCL. A requirement cannot be quietly softened in a document nobody can see.</li>
+        <li><strong>Anyone may assess against it.</strong> The licence permits any party to apply the framework, teach it, build on it, or conduct their own assessments against it. SCL does not hold exclusive rights to use its own standard.</li>
+        <li><strong>Every version is permanent and citable.</strong> Versions are deposited separately and do not overwrite each other. A certificate names the specific framework version it was issued against, so the basis of an issued certificate cannot be moved afterwards.</li>
+        <li><strong>Changes are published with their rationale</strong> at <a href="/updates">/updates</a>, so a requirement that changes does so in public and on the record.</li>
+      </ul>
+      <p style="margin-top:20px;"><strong>What this does not do.</strong> None of it eliminates the conflict. It makes the conflict observable, which is a weaker claim and the honest one. A reader who distrusts the arrangement can read every requirement, compare versions, and reach their own conclusion without SCL's cooperation.</p>
+      <p><strong>What would resolve it</strong> is external accreditation, under which an independent body assesses SCL itself against ISO/IEC 17065, including its impartiality controls. SCL is not accredited and says so at <a href="/accreditation">/accreditation</a>.</p>
+    </div>
+
+    <div class="legal-block">
+      <div class="legal-block-num">10</div>
+      <h2 class="legal-block-title">Reporting a conflict</h2>
+      <p>If you believe SCL has a conflict it has not disclosed, or that an assessment was influenced by one, report it through <a href="/complaints">/complaints</a>. You do not need to be a client, and you do not need a relationship with SCL of any kind.</p>
+      <p>Complaints about SCL's compliance with its own procedures, and about assessor conduct, are explicitly in scope. A complaint concerning the Principal is investigated externally. SCL acknowledges every report within five business days.</p>
+      <p><strong>Related pages.</strong> <a href="/complaints">Complaints and appeals</a>. <a href="/accreditation">Accreditation status</a>. <a href="/process">The certification process</a>. <a href="/mark">The SCL name and mark</a>. <a href="/disclaimer">What a certificate says, and what it does not</a>.</p>
+    </div>
+  </div>
+</section>
+
+</div>
+
+</main>
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <div class="footer-logo" aria-label="Safety Critical Labs">SCL</div>
+        <div class="footer-brand-bottom">
+          <span class="footer-copyright">&copy; 2026 Safety Critical Labs</span>
+          <div class="footer-social">
+            <a href="https://www.linkedin.com/company/safety-critical-labs/" target="_blank" rel="noopener" aria-label="Safety Critical Labs on LinkedIn">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.03-3.04-1.85-3.04-1.86 0-2.14 1.45-2.14 2.94v5.67H9.36V9h3.41v1.56h.05c.47-.9 1.63-1.85 3.36-1.85 3.6 0 4.27 2.37 4.27 5.45v6.29zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM7.12 20.45H3.55V9h3.57v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.72v20.55C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.72C24 .77 23.2 0 22.22 0z"/></svg>
+            </a>
+          </div>
+        </div>
+      </div>
+      <div class="footer-cols">
+        <div class="footer-col">
+          <div class="footer-col-group">
+            <div class="footer-col-label">Certification</div>
+            <a href="/framework">Framework</a>
+            <a href="/process">Process</a>
+            <a href="/assess">Assess</a>
+            <a href="/verify">Verify</a>
+            <a href="/deliverables">What SCL issues</a>
+            <a href="/evidence">Evidence</a>
+          </div>
+        </div>
+        <div class="footer-col">
+          <div class="footer-col-group">
+            <div class="footer-col-label">Resources</div>
+            <a href="/documents">Documents</a>
+            <a href="/presentation">Presentation</a>
+            <a href="/certificate-template">Certificate template</a>
+            <a href="/search">Ask SCL</a>
+            <a href="/questions">All questions answered</a>
+            <a href="/glossary">Glossary</a>
+          </div>
+        </div>
+        <div class="footer-col">
+          <div class="footer-col-group">
+            <div class="footer-col-label">Company</div>
+            <a href="/position">Position</a>
+            <a href="/expertise">Expertise</a>
+            <a href="/markets">Markets</a>
+            <a href="/contact">Contact</a>
+          </div>
+          <div class="footer-col-group">
+            <div class="footer-col-label">Briefings</div>
+            <a href="/news">News</a>
+            <a href="/updates">Updates</a>
+            <a href="/subscribe">Subscribe</a>
+          </div>
+        </div>
+        <div class="footer-col">
+          <div class="footer-col-group">
+            <div class="footer-col-label">Legal</div>
+            <a href="/terms">Terms</a>
+            <a href="/mark">The SCL mark</a>
+            <a href="/privacy">Privacy</a>
+            <a href="/disclaimer">Disclaimer</a>
+            <a href="/complaints">Complaints and appeals</a>
+            <a href="/impartiality">Impartiality</a>
+            <a href="/accreditation">Accreditation</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* Hero cursor glow driver lives in footer.js (promoted 2026-08-24) */
+</script>
+<script src="/footer.js" defer></script>
+<script src="/nav.js" defer></script>
+</body>
+</html>

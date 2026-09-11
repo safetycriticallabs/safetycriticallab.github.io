@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Glossary of the AI Requirements Framework | Safety Critical Labs</title>
+<meta name="description" content="The complete glossary of the SCL AI Requirements Framework: every term SCL uses when assessing AI in safety-critical systems, with its definition and its source standard.">
+<link rel="canonical" href="https://safetycriticallabs.com/glossary">
+<meta property="og:title" content="Every term, defined">
+<meta property="og:description" content="The complete glossary of the SCL AI Requirements Framework: every term SCL uses when assessing AI in safety-critical systems, with its definition and its source standard.">
+<meta property="og:url" content="https://safetycriticallabs.com/glossary">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://safetycriticallabs.com/img/og-tile.png">
+<meta name="twitter:card" content="summary">
+<link rel="icon" type="image/x-icon" href="favicon.ico">
+<link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="192x192" href="img/favicon-192x192.png">
+<link rel="apple-touch-icon" sizes="180x180" href="img/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<style>
+/* The site stylesheet sets scroll-behavior: smooth, which is right for a short
+   page and wrong for a long index: a jump from the category list to a term near
+   the bottom becomes a multi-second scroll past 80 other terms. Same override
+   requirements.html carries, for the same reason. */
+html { scroll-behavior: auto; }
+.gl-wrap { max-width: 820px; margin: 0 auto; padding: 0 40px 120px; }
+.gl-lede { font-size: 17px; color: var(--ink-2); font-weight: 300; line-height: 1.8; margin-bottom: 32px; }
+.gl-lede a { color: var(--blue); text-decoration: none; border-bottom: 1px solid rgba(46,109,180,0.3); }
+
+.gl-tools { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; margin-bottom: 28px; }
+.gl-search {
+  flex: 1 1 260px; font-family: var(--sans); font-size: 15px; font-weight: 300;
+  padding: 11px 14px; border: 1px solid var(--rule); border-radius: 10px;
+  background: #FFF; color: var(--ink);
+}
+.gl-search:focus { outline: none; border-color: var(--blue); }
+.gl-count { font-family: var(--mono); font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-2); }
+
+.gl-toc { list-style: none; padding: 0; margin: 0 0 56px 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(215px, 1fr)); gap: 6px 18px; }
+.gl-toc li { font-size: 14px; }
+.gl-toc a { color: var(--ink); text-decoration: none; border-bottom: 1px solid transparent; font-weight: 400; }
+.gl-toc a:hover { color: var(--blue); border-bottom-color: rgba(46,109,180,0.3); }
+.gl-toc-n { font-family: var(--mono); font-size: 10px; color: var(--ink-2); }
+
+.gl-cat + .gl-cat { border-top: 1px solid var(--rule); padding-top: 48px; }
+.gl-cat { margin-bottom: 48px; }
+.gl-cat-title {
+  font-family: var(--mono); font-size: 11px; font-weight: 500; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--blue); margin: 0 0 24px 0;
+}
+.gl-cat-n { color: var(--ink-2); margin-left: 6px; }
+
+.gl-chunk { display: block; height: 0; scroll-margin-top: 96px; }
+.gl-term { margin-bottom: 26px; scroll-margin-top: 96px; }
+.gl-term:target .gl-name { color: var(--blue); }
+.gl-name { font-size: 17px; font-weight: 600; color: var(--ink); margin: 0 0 6px 0; letter-spacing: -0.01em; }
+.gl-anchor {
+  margin-left: 8px; font-family: var(--mono); font-size: 12px; font-weight: 400;
+  color: var(--rule); text-decoration: none; opacity: 0; transition: opacity .15s;
+}
+.gl-term:hover .gl-anchor, .gl-anchor:focus { opacity: 1; color: var(--blue); }
+.gl-def { font-size: 15px; color: var(--ink-2); line-height: 1.75; font-weight: 300; margin: 0; }
+.gl-def a { color: var(--blue); text-decoration: none; border-bottom: 1px solid rgba(46,109,180,0.3); }
+.gl-src { font-family: var(--mono); font-size: 11px; color: var(--ink-2); margin: 6px 0 0 0; font-weight: 400; }
+.gl-empty { font-size: 15px; color: var(--ink-2); font-weight: 300; padding: 24px 0; }
+
+@media (max-width: 880px) {
+  .gl-wrap { padding: 0 24px 80px; }
+  .gl-toc { grid-template-columns: 1fr 1fr; }
+}
+</style>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<nav class="global-nav">
+  <div class="global-nav-inner">
+    <a href="/" class="gn-wordmark" aria-label="Safety Critical Labs"><span class="gn-text gn-text-full"><em>Safety Critical</em> Labs</span><span class="gn-text gn-text-abbr" aria-hidden="true">SCL</span></a>
+    <button class="gn-hamburger" aria-label="Menu" aria-expanded="false"><span></span><span></span><span></span></button>
+    <ul class="gn-links">
+      <li><a href="/framework">Framework</a></li>
+      <li><a href="/process">Process</a></li>
+      <li class="gn-dropdown">
+        <button class="gn-dropdown-toggle" type="button" aria-expanded="false" aria-haspopup="true">Company <span class="gn-dropdown-arrow" aria-hidden="true"></span></button>
+        <ul class="gn-dropdown-menu">
+          <li><a href="/position" class="active">Position</a></li>
+          <li><a href="/expertise">Expertise</a></li>
+          <li><a href="/markets">Markets</a></li>
+          <li><a href="/contact">Contact</a></li>
+        </ul>
+      </li>
+      <li class="gn-dropdown">
+        <button class="gn-dropdown-toggle" type="button" aria-expanded="false" aria-haspopup="true">Briefings <span class="gn-dropdown-arrow" aria-hidden="true"></span></button>
+        <ul class="gn-dropdown-menu">
+          <li><a href="/news">News</a></li>
+          <li><a href="/updates">Updates</a></li>
+          <li><a href="/subscribe">Subscribe</a></li>
+        </ul>
+      </li>
+    </ul>
+    <a href="/search" class="gn-search" aria-label="Ask SCL" title="Ask SCL">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <circle cx="11" cy="11" r="7"/>
+        <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+      </svg>
+    </a>
+    <a href="/contact" class="gn-cta">Get Certified</a>
+  </div>
+</nav>
+
+<main id="main" tabindex="-1">
+
+<div class="page-shell">
+
+<div class="inner-hero">
+  <div class="fw-hero-glow"></div>
+  <div class="inner-hero-inner">
+    <div>
+      <div class="inner-hero-breadcrumb"><a href="/">Safety Critical Labs</a><span>/</span> Glossary</div>
+      <h1>Every term, defined</h1>
+    </div>
+    <p class="inner-hero-lead">
+      Appendix A of the AI Requirements Framework. 88 terms in 10 categories, each one
+      either defined by the framework or mapped to the international standard it comes from.
+    </p>
+  </div>
+</div>
+
+<div class="gl-wrap">
+  <p class="gl-lede">These are the definitions an SCL assessment runs on. Where a term is taken from an
+    existing standard, the source is named under the definition rather than paraphrased, so a reader can
+    check it. Where the framework defines a term itself, it says so. Framework text last updated
+    2026-09-08. Cite the framework at the concept DOI
+    <a href="https://doi.org/10.5281/zenodo.19024420" rel="noopener">10.5281/zenodo.19024420</a>, not at this URL.
+    <a href="/requirements">Every requirement in full</a> and
+    <a href="/search">Ask SCL</a> answers questions grounded in this text.</p>
+
+  <div class="gl-tools">
+    <input class="gl-search" id="gl-search" type="search" placeholder="Filter 88 terms" aria-label="Filter glossary terms" autocomplete="off">
+    <span class="gl-count" id="gl-count">88 terms</span>
+  </div>
+
+  <ul class="gl-toc">
+      <li><a href="#core-ai-ml">Core AI/ML</a> <span class="gl-toc-n">20</span></li>
+      <li><a href="#system-classification">System Classification</a> <span class="gl-toc-n">3</span></li>
+      <li><a href="#operational-design-domain">Operational Design Domain</a> <span class="gl-toc-n">6</span></li>
+      <li><a href="#data">Data</a> <span class="gl-toc-n">7</span></li>
+      <li><a href="#risk-and-failure-mode">Risk And Failure Mode</a> <span class="gl-toc-n">8</span></li>
+      <li><a href="#verification-and-validation">Verification And Validation</a> <span class="gl-toc-n">8</span></li>
+      <li><a href="#operational">Operational</a> <span class="gl-toc-n">7</span></li>
+      <li><a href="#security">Security</a> <span class="gl-toc-n">7</span></li>
+      <li><a href="#explainability-and-trust">Explainability And Trust</a> <span class="gl-toc-n">6</span></li>
+      <li><a href="#privacy-and-data-protection">Privacy And Data Protection</a> <span class="gl-toc-n">16</span></li>
+  </ul>
+
+  <p class="gl-empty" id="gl-empty" hidden>No term matches that.</p>
+
+    <section class="gl-cat" id="core-ai-ml" data-cat="core-ai-ml">
+      <h2 class="gl-cat-title">Core AI/ML <span class="gl-cat-n">20</span></h2>
+      <span class="gl-chunk" id="app-a" aria-hidden="true"></span>
+      <div class="gl-term" id="ai-system" data-term="ai system">
+        <h3 class="gl-name">AI System<a class="gl-anchor" href="#ai-system" aria-label="Link to AI System">#</a></h3>
+        <p class="gl-def">Engineered system that generates outputs such as content, forecasts, recommendations or decisions for a given set of human-defined objectives.</p>
+        <p class="gl-src">(ISO/IEC 22989:2022 3.1.4)</p>
+      </div>
+      <div class="gl-term" id="artificial-intelligence-ai" data-term="artificial intelligence (ai)">
+        <h3 class="gl-name">Artificial Intelligence (AI)<a class="gl-anchor" href="#artificial-intelligence-ai" aria-label="Link to Artificial Intelligence (AI)">#</a></h3>
+        <p class="gl-def">A system that, for a given set of human-defined objectives, generates outputs such as predictions, recommendations, classifications, or decisions, and that exhibits the capacity to perform tasks commonly associated with human cognition (e.g., perception, reasoning, learning, decision-making) under varying conditions.</p>
+        <p class="gl-src">(Adapted from ISO/IEC 22989:2022 3.1.4; modified to add capacities associated with human cognition. ISO/IEC 22989 3.1.3 defines artificial intelligence as the discipline.)</p>
+      </div>
+      <div class="gl-term" id="continuous-learning" data-term="continuous learning">
+        <h3 class="gl-name">Continuous Learning<a class="gl-anchor" href="#continuous-learning" aria-label="Link to Continuous Learning">#</a></h3>
+        <p class="gl-def">Incremental training of an AI system that takes place on an ongoing basis during the operation phase of the AI system life cycle.</p>
+        <p class="gl-src">(ISO/IEC 22989:2022 3.1.9)</p>
+      </div>
+      <div class="gl-term" id="determination-boundary" data-term="determination boundary">
+        <h3 class="gl-name">Determination Boundary<a class="gl-anchor" href="#determination-boundary" aria-label="Link to Determination Boundary">#</a></h3>
+        <p class="gl-def">A defined and bounded collection of hardware and software items, together with its declared interfaces, on which the AI applicability determination of Section 1.2.1 is performed. Framework requirements attach to learned components within the boundary and to artifacts whose correctness criterion is fidelity to a learned component; obligations on the integrating system attach where the respective requirements specify. Adapted from the AI/ML constituent concept of the EASA Artificial Intelligence Concept Paper Issue 2; modified to a domain-agnostic determination unit for framework applicability.</p>
+      </div>
+      <div class="gl-term" id="format-conversion" data-term="format conversion">
+        <h3 class="gl-name">Format Conversion<a class="gl-anchor" href="#format-conversion" aria-label="Link to Format Conversion">#</a></h3>
+        <p class="gl-def">A model transformation that translates a model between framework representations (e.g., PyTorch to ONNX to TensorRT) to enable execution on target runtimes. Subject to revalidation per AI-4.7.</p>
+      </div>
+      <div class="gl-term" id="human-machine-teaming" data-term="human-machine teaming">
+        <h3 class="gl-name">Human-Machine Teaming<a class="gl-anchor" href="#human-machine-teaming" aria-label="Link to Human-Machine Teaming">#</a></h3>
+        <p class="gl-def">Integration of human interaction with machine intelligence capabilities.</p>
+        <p class="gl-src">(ISO/IEC 22989:2022 3.3.3)</p>
+      </div>
+      <div class="gl-term" id="hyperparameter" data-term="hyperparameter">
+        <h3 class="gl-name">Hyperparameter<a class="gl-anchor" href="#hyperparameter" aria-label="Link to Hyperparameter">#</a></h3>
+        <p class="gl-def">Characteristic of a machine learning algorithm that affects its learning process and is selected prior to training.</p>
+        <p class="gl-src">(ISO/IEC 22989:2022 3.3.4)</p>
+      </div>
+      <div class="gl-term" id="inference" data-term="inference">
+        <h3 class="gl-name">Inference<a class="gl-anchor" href="#inference" aria-label="Link to Inference">#</a></h3>
+        <p class="gl-def">Reasoning by which conclusions are derived from known premises.</p>
+        <p class="gl-src">(ISO/IEC 22989:2022 3.1.17)</p>
+      </div>
+      <div class="gl-term" id="knowledge-distillation" data-term="knowledge distillation">
+        <h3 class="gl-name">Knowledge Distillation<a class="gl-anchor" href="#knowledge-distillation" aria-label="Link to Knowledge Distillation">#</a></h3>
+        <p class="gl-def">A model transformation that trains a smaller “student” model to approximate the behavior of a larger “teacher” model, producing a compact model with comparable functional behavior. Subject to revalidation per AI-4.7.</p>
+      </div>
+      <div class="gl-term" id="learned-artifact" data-term="learned artifact">
+        <h3 class="gl-name">Learned Artifact<a class="gl-anchor" href="#learned-artifact" aria-label="Link to Learned Artifact">#</a></h3>
+        <p class="gl-def">An artifact whose values are determined or improved from data by machine learning (ISO/IEC 22989:2022 3.3.5), whether before deployment, through retraining (3.3.10), or through continuous learning during operation (3.1.9), and that serves as the specification of system behavior without a documented derivation constituting a correctness argument for that behavior. A trained model (3.3.14) is the paradigm case. A model designed for continuous learning is a learned artifact at every point in the operation phase, including prior to its first operational update. Data-fitted parameters within explicitly written model structures whose derivation constitutes a correctness argument are not learned artifacts (Table 12b). Framework-defined to make the Section 1.2.1 determination decidable, drawing on ISO/IEC 22989 process terminology.</p>
+      </div>
+      <div class="gl-term" id="learned-component" data-term="learned component">
+        <h3 class="gl-name">Learned Component<a class="gl-anchor" href="#learned-component" aria-label="Link to Learned Component">#</a></h3>
+        <p class="gl-def">A component whose behavior is specified by one or more learned artifacts. Framework requirements attach to learned components within the determination boundary and to artifacts whose correctness criterion is fidelity to a learned component (Section 1.2.1). Framework-defined.</p>
+      </div>
+      <div class="gl-term" id="machine-learning" data-term="machine learning">
+        <h3 class="gl-name">Machine Learning<a class="gl-anchor" href="#machine-learning" aria-label="Link to Machine Learning">#</a></h3>
+        <p class="gl-def">Process of optimizing model parameters through computational techniques, such that the model’s behavior reflects the data or experience.</p>
+        <p class="gl-src">(ISO/IEC 22989:2022 3.3.5)</p>
+      </div>
+      <div class="gl-term" id="machine-learning-model" data-term="machine learning model">
+        <h3 class="gl-name">Machine Learning Model<a class="gl-anchor" href="#machine-learning-model" aria-label="Link to Machine Learning Model">#</a></h3>
+        <p class="gl-def">Mathematical construct that generates an inference or prediction based on input data.</p>
+        <p class="gl-src">(ISO/IEC 22989:2022 3.3.7)</p>
+      </div>
+      <div class="gl-term" id="model" data-term="model">
+        <h3 class="gl-name">Model<a class="gl-anchor" href="#model" aria-label="Link to Model">#</a></h3>
+        <p class="gl-def">Physical, mathematical or otherwise logical representation of a system, entity, phenomenon, process or data.</p>
+        <p class="gl-src">(ISO/IEC 22989:2022 3.1.23)</p>
+      </div>
+      <div class="gl-term" id="parameter-model-parameter" data-term="parameter (model parameter)">
+        <h3 class="gl-name">Parameter (Model Parameter)<a class="gl-anchor" href="#parameter-model-parameter" aria-label="Link to Parameter (Model Parameter)">#</a></h3>
+        <p class="gl-def">Internal variable of a model that affects how it computes its outputs (weights in a neural network).</p>
+        <p class="gl-src">(ISO/IEC 22989:2022 3.3.8)</p>
+      </div>
+      <div class="gl-term" id="pruning" data-term="pruning">
+        <h3 class="gl-name">Pruning<a class="gl-anchor" href="#pruning" aria-label="Link to Pruning">#</a></h3>
+        <p class="gl-def">A model transformation that removes model weights, neurons, or layers determined to contribute minimally to model output, reducing model size and computational cost. Subject to revalidation per AI-4.7.</p>
+      </div>
+      <div class="gl-term" id="quantization" data-term="quantization">
+        <h3 class="gl-name">Quantization<a class="gl-anchor" href="#quantization" aria-label="Link to Quantization">#</a></h3>
+        <p class="gl-def">A model transformation that reduces the numerical precision of model weights and/or activations (e.g., FP32 to INT8) to reduce memory footprint and computational cost, typically for execution on resource-constrained hardware. Subject to revalidation per AI-4.7.</p>
+      </div>
+      <div class="gl-term" id="retraining" data-term="retraining">
+        <h3 class="gl-name">Retraining<a class="gl-anchor" href="#retraining" aria-label="Link to Retraining">#</a></h3>
+        <p class="gl-def">Updating a trained model by training with different training data.</p>
+        <p class="gl-src">(ISO/IEC 22989:2022 3.3.10)</p>
+      </div>
+      <div class="gl-term" id="trained-model" data-term="trained model">
+        <h3 class="gl-name">Trained Model<a class="gl-anchor" href="#trained-model" aria-label="Link to Trained Model">#</a></h3>
+        <p class="gl-def">Result of model training.</p>
+        <p class="gl-src">(ISO/IEC 22989:2022 3.3.14)</p>
+      </div>
+      <div class="gl-term" id="training-model-training" data-term="training / model training">
+        <h3 class="gl-name">Training / Model Training<a class="gl-anchor" href="#training-model-training" aria-label="Link to Training / Model Training">#</a></h3>
+        <p class="gl-def">Process to determine or to improve the parameters of a machine learning model, based on a machine learning algorithm, by using training data.</p>
+        <p class="gl-src">(ISO/IEC 22989:2022 3.3.15)</p>
+      </div>
+    </section>
+    <section class="gl-cat" id="system-classification" data-cat="system-classification">
+      <h2 class="gl-cat-title">System Classification <span class="gl-cat-n">3</span></h2>
+      <div class="gl-term" id="mission-critical-ai" data-term="mission-critical ai">
+        <h3 class="gl-name">Mission-Critical AI<a class="gl-anchor" href="#mission-critical-ai" aria-label="Link to Mission-Critical AI">#</a></h3>
+        <p class="gl-def">AI outputs affect operational success but not human safety.</p>
+        <p class="gl-src">(Framework-defined, Section 1.2.2)</p>
+      </div>
+      <div class="gl-term" id="operational-support-ai" data-term="operational support ai">
+        <h3 class="gl-name">Operational Support AI<a class="gl-anchor" href="#operational-support-ai" aria-label="Link to Operational Support AI">#</a></h3>
+        <p class="gl-def">AI supports operations but does not drive critical decisions.</p>
+        <p class="gl-src">(Framework-defined, Section 1.2.2)</p>
+      </div>
+      <span class="gl-chunk" id="app-a-cont" aria-hidden="true"></span>
+      <div class="gl-term" id="safety-critical-ai" data-term="safety-critical ai">
+        <h3 class="gl-name">Safety-Critical AI<a class="gl-anchor" href="#safety-critical-ai" aria-label="Link to Safety-Critical AI">#</a></h3>
+        <p class="gl-def">AI outputs directly affect human safety or system survivability.</p>
+        <p class="gl-src">(Framework-defined, Section 1.2.2)</p>
+      </div>
+    </section>
+    <section class="gl-cat" id="operational-design-domain" data-cat="operational-design-domain">
+      <h2 class="gl-cat-title">Operational Design Domain <span class="gl-cat-n">6</span></h2>
+      <div class="gl-term" id="odd-declaration" data-term="odd declaration">
+        <h3 class="gl-name">ODD Declaration<a class="gl-anchor" href="#odd-declaration" aria-label="Link to ODD Declaration">#</a></h3>
+        <p class="gl-def">The formal documentation of an AI system’s Operational Design Domain, including environmental conditions, input characteristics, operational scenarios, and constraints under which the system is designed to function as validated. Per AI-1.0.</p>
+        <p class="gl-src">(Framework-defined; aligned with SAE J3016 ODD concept.)</p>
+      </div>
+      <div class="gl-term" id="odd-evolvability" data-term="odd evolvability">
+        <h3 class="gl-name">ODD Evolvability<a class="gl-anchor" href="#odd-evolvability" aria-label="Link to ODD Evolvability">#</a></h3>
+        <p class="gl-def">The declared property of an Operational Design Domain that specifies whether and how the ODD may change over the system’s operational life through continuous learning, retraining, or reconfiguration. Systems with non-evolvable ODD declarations operate within a frozen specification; evolvable ODDs require additional controls per AI-13.</p>
+        <p class="gl-src">(Framework-defined.)</p>
+      </div>
+      <div class="gl-term" id="operational-claim" data-term="operational claim">
+        <h3 class="gl-name">Operational Claim<a class="gl-anchor" href="#operational-claim" aria-label="Link to Operational Claim">#</a></h3>
+        <p class="gl-def">Single-sentence summary statement that opens an ODD declaration, summarizing the function, subject population, operational conditions, user role, and regulatory regime of the certified system.</p>
+        <p class="gl-src">(Framework-defined, <a href="/requirements#ai-1-0">AI-1.0</a>)</p>
+      </div>
+      <div class="gl-term" id="operational-design-domain-odd" data-term="operational design domain (odd)">
+        <h3 class="gl-name">Operational Design Domain (ODD)<a class="gl-anchor" href="#operational-design-domain-odd" aria-label="Link to Operational Design Domain (ODD)">#</a></h3>
+        <p class="gl-def">The operational conditions, inputs, users, subjects, regulatory context, and constraints under which an AI system is designed and validated to operate. The ODD defines the scope of the certification claim and the envelope within which reliable behavior is expected. See also <a href="#odd-declaration">ODD Declaration</a>; <a href="#odd-evolvability">ODD Evolvability</a>; <a href="#operational-claim">Operational Claim</a>.</p>
+        <p class="gl-src">(Framework-defined, Section 1.2.3 and <a href="/requirements#ai-1-0">AI-1.0</a>; concept aligned with ISO 34503 and SAE J3016)</p>
+      </div>
+      <div class="gl-term" id="subject-population" data-term="subject population">
+        <h3 class="gl-name">Subject Population<a class="gl-anchor" href="#subject-population" aria-label="Link to Subject Population">#</a></h3>
+        <p class="gl-def">The population of persons or entities that an AI system’s decisions act upon, distinct from the user population that operates the system. Examples include patients in a medical decision support system, pedestrians and cyclists in a vehicle perception system, or obstacle classes in an autonomous platform. See also <a href="#user-population">User Population</a>.</p>
+        <p class="gl-src">(Framework-defined, <a href="/requirements#ai-1-0">AI-1.0</a>)</p>
+      </div>
+      <div class="gl-term" id="user-population" data-term="user population">
+        <h3 class="gl-name">User Population<a class="gl-anchor" href="#user-population" aria-label="Link to User Population">#</a></h3>
+        <p class="gl-def">The set of human operators, controllers, supervisors, or other authorized personnel who interact with the AI system to direct, monitor, or oversee its operation. Distinct from Subject Population, which refers to entities the AI system acts upon.</p>
+        <p class="gl-src">(Framework-defined; see Subject Population.)</p>
+      </div>
+    </section>
+    <section class="gl-cat" id="data" data-cat="data">
+      <h2 class="gl-cat-title">Data <span class="gl-cat-n">7</span></h2>
+      <div class="gl-term" id="ground-truth" data-term="ground truth">
+        <h3 class="gl-name">Ground Truth<a class="gl-anchor" href="#ground-truth" aria-label="Link to Ground Truth">#</a></h3>
+        <p class="gl-def">Value of the target variable for a particular item of labelled input data.</p>
+        <p class="gl-src">(ISO/IEC 22989:2022 3.2.7)</p>
+      </div>
+      <div class="gl-term" id="input-data" data-term="input data">
+        <h3 class="gl-name">Input Data<a class="gl-anchor" href="#input-data" aria-label="Link to Input Data">#</a></h3>
+        <p class="gl-def">Data for which an AI system calculates a predicted output or inference.</p>
+        <p class="gl-src">(ISO/IEC 22989:2022 3.2.9)</p>
+      </div>
+      <div class="gl-term" id="label" data-term="label">
+        <h3 class="gl-name">Label<a class="gl-anchor" href="#label" aria-label="Link to Label">#</a></h3>
+        <p class="gl-def">Target variable assigned to a sample.</p>
+        <p class="gl-src">(ISO/IEC 22989:2022 3.2.10)</p>
+      </div>
+      <div class="gl-term" id="production-data" data-term="production data">
+        <h3 class="gl-name">Production Data<a class="gl-anchor" href="#production-data" aria-label="Link to Production Data">#</a></h3>
+        <p class="gl-def">Data acquired during the operation phase of a deployed AI system for which a deployed system calculates a predicted output or inference.</p>
+        <p class="gl-src">(ISO/IEC 22989:2022 3.2.12)</p>
+      </div>
+      <div class="gl-term" id="test-data" data-term="test data">
+        <h3 class="gl-name">Test Data<a class="gl-anchor" href="#test-data" aria-label="Link to Test Data">#</a></h3>
+        <p class="gl-def">Data used to assess the performance of a final model.</p>
+        <p class="gl-src">(ISO/IEC 22989:2022 3.2.14)</p>
+      </div>
+      <div class="gl-term" id="training-data" data-term="training data">
+        <h3 class="gl-name">Training Data<a class="gl-anchor" href="#training-data" aria-label="Link to Training Data">#</a></h3>
+        <p class="gl-def">Data used to train a machine learning model.</p>
+        <p class="gl-src">(ISO/IEC 22989:2022 3.3.16)</p>
+      </div>
+      <div class="gl-term" id="validation-data" data-term="validation data">
+        <h3 class="gl-name">Validation Data<a class="gl-anchor" href="#validation-data" aria-label="Link to Validation Data">#</a></h3>
+        <p class="gl-def">Data used to compare the performance of different candidate models.</p>
+        <p class="gl-src">(ISO/IEC 22989:2022 3.2.15)</p>
+      </div>
+    </section>
+    <section class="gl-cat" id="risk-and-failure-mode" data-cat="risk-and-failure-mode">
+      <h2 class="gl-cat-title">Risk And Failure Mode <span class="gl-cat-n">8</span></h2>
+      <div class="gl-term" id="bias" data-term="bias">
+        <h3 class="gl-name">Bias<a class="gl-anchor" href="#bias" aria-label="Link to Bias">#</a></h3>
+        <p class="gl-def">Systematic difference in treatment of certain objects, people, or groups in comparison to others.</p>
+        <p class="gl-src">(ISO/IEC 22989:2022 3.5.4)</p>
+      </div>
+      <div class="gl-term" id="concept-drift" data-term="concept drift">
+        <h3 class="gl-name">Concept Drift<a class="gl-anchor" href="#concept-drift" aria-label="Link to Concept Drift">#</a></h3>
+        <p class="gl-def">Change in the relationship between input data and the target variable over time (i.e., the decision boundary moves), requiring relabeling of training data and model retraining. See also <a href="#continuous-validation">Continuous Validation</a>.</p>
+        <p class="gl-src">(ISO/IEC 5338:2023 6.4.14 / ISO/IEC 22989:2022 5.11.9, tailored)</p>
+      </div>
+      <div class="gl-term" id="data-drift" data-term="data drift">
+        <h3 class="gl-name">Data Drift<a class="gl-anchor" href="#data-drift" aria-label="Link to Data Drift">#</a></h3>
+        <p class="gl-def">Change in the statistical characteristics of production data over time compared to the training data distribution, which can degrade model prediction accuracy. See also <a href="#continuous-validation">Continuous Validation</a>.</p>
+        <p class="gl-src">(ISO/IEC 5338:2023 6.4.14 / ISO/IEC 22989:2022 5.11.9, tailored)</p>
+      </div>
+      <div class="gl-term" id="hallucination" data-term="hallucination">
+        <h3 class="gl-name">Hallucination<a class="gl-anchor" href="#hallucination" aria-label="Link to Hallucination">#</a></h3>
+        <p class="gl-def">The production of confidently stated but erroneous or false content. (NIST AI 600-1 §2.2 (Confabulation))</p>
+      </div>
+      <div class="gl-term" id="model-drift" data-term="model drift">
+        <h3 class="gl-name">Model Drift<a class="gl-anchor" href="#model-drift" aria-label="Link to Model Drift">#</a></h3>
+        <p class="gl-def">Degradation in model performance over time due to data drift, concept drift, or other factors affecting the relationship between inputs and outputs.</p>
+        <p class="gl-src">(Tailored)</p>
+      </div>
+      <div class="gl-term" id="out-of-distribution" data-term="out-of-distribution">
+        <h3 class="gl-name">Out-of-Distribution<a class="gl-anchor" href="#out-of-distribution" aria-label="Link to Out-of-Distribution">#</a></h3>
+        <p class="gl-def">Input data that falls outside the statistical distribution of the training data, for which model predictions may be unreliable or undefined. (Tailored from ISO/IEC 23053:2022) See ISO/IEC 23053:2022 §8.7 (Operation), which discusses data drift, concept drift, and generalization affecting model performance.</p>
+      </div>
+      <div class="gl-term" id="overfitting" data-term="overfitting">
+        <h3 class="gl-name">Overfitting<a class="gl-anchor" href="#overfitting" aria-label="Link to Overfitting">#</a></h3>
+        <p class="gl-def">Creating a model which fits the training data too precisely and fails to generalize.</p>
+        <p class="gl-src">(ISO/IEC 23053:2022 3.2)</p>
+      </div>
+      <div class="gl-term" id="performance-drift" data-term="performance drift">
+        <h3 class="gl-name">Performance Drift<a class="gl-anchor" href="#performance-drift" aria-label="Link to Performance Drift">#</a></h3>
+        <p class="gl-def">Degradation of AI model performance metrics over operational time, typically arising from data drift or concept drift. Continuous monitoring per <a href="/requirements#ai-4-4">AI-4.4</a> and <a href="/requirements#ai-4-6">AI-4.6</a> detects performance drift; periodic revalidation per <a href="/requirements#ai-4-5">AI-4.5</a> quantifies it. See also <a href="#continuous-validation">Continuous Validation</a>.</p>
+        <p class="gl-src">(Framework-defined; complements Data Drift and Concept Drift.)</p>
+      </div>
+    </section>
+    <section class="gl-cat" id="verification-and-validation" data-cat="verification-and-validation">
+      <h2 class="gl-cat-title">Verification And Validation <span class="gl-cat-n">8</span></h2>
+      <div class="gl-term" id="continuous-validation" data-term="continuous validation">
+        <h3 class="gl-name">Continuous Validation<a class="gl-anchor" href="#continuous-validation" aria-label="Link to Continuous Validation">#</a></h3>
+        <p class="gl-def">Ongoing monitoring process to verify that AI models continue performing satisfactorily during operation, including detection of data drift, concept drift, and performance degradation. See also <a href="#data-drift">Data Drift</a>; <a href="#concept-drift">Concept Drift</a>; <a href="#performance-drift">Performance Drift</a>.</p>
+        <p class="gl-src">(ISO/IEC 5338:2023 6.4.14, tailored)</p>
+      </div>
+      <div class="gl-term" id="control-point" data-term="control point">
+        <h3 class="gl-name">Control Point<a class="gl-anchor" href="#control-point" aria-label="Link to Control Point">#</a></h3>
+        <p class="gl-def">A defined verification or authorization gate in the AI system lifecycle through which an artifact, decision, or change must pass before proceeding to the next stage. Used in cross-references between <a href="/requirements#ai-4-3">AI-4.3</a> (Model Maintenance Criteria), <a href="/requirements#ai-4-7">AI-4.7</a> (Deployment Format Validation), and <a href="/requirements#ai-7-4">AI-7.4</a> (Model Integrity).</p>
+        <p class="gl-src">(Framework-defined.)</p>
+      </div>
+      <div class="gl-term" id="deployment-format-model" data-term="deployment-format model">
+        <h3 class="gl-name">Deployment-Format Model<a class="gl-anchor" href="#deployment-format-model" aria-label="Link to Deployment-Format Model">#</a></h3>
+        <p class="gl-def">An AI model that has been transformed from its trained form for execution on operational hardware through processes such as quantization, pruning, knowledge distillation, or framework conversion. Subject to revalidation per AI-4.7.</p>
+        <p class="gl-src">(Framework-defined.)</p>
+      </div>
+      <span class="gl-chunk" id="app-a-cont2" aria-hidden="true"></span>
+      <div class="gl-term" id="fairness-metrics" data-term="fairness metrics">
+        <h3 class="gl-name">Fairness Metrics<a class="gl-anchor" href="#fairness-metrics" aria-label="Link to Fairness Metrics">#</a></h3>
+        <p class="gl-def">Quantitative measures used to assess whether an AI system produces equitable outputs across different groups, operational contexts, and mission scenarios. Includes metrics for disparate impact, equal opportunity, demographic parity, and performance consistency across operational conditions.</p>
+        <p class="gl-src">(Tailored from ISO/IEC TR 24027)</p>
+      </div>
+      <div class="gl-term" id="system-safety-process" data-term="system safety process">
+        <h3 class="gl-name">System Safety Process<a class="gl-anchor" href="#system-safety-process" aria-label="Link to System Safety Process">#</a></h3>
+        <p class="gl-def">The system-level safety analysis and assessment activity through which a project identifies hazards and produces the hazard analyses that software-level standards consume, conducted per applicable domain practice (e.g., SAE ARP4754/ARP4761 safety assessment in civil aviation; ISO 26262-3 hazard analysis and risk assessment in automotive; ISO 14971 risk management for medical devices; MIL-STD-882E system safety in defense; the NASA safety program hazard analysis process, from which NASA-STD-8739.8 derives software safety criticality). Distinct from the software standard this framework supplements (e.g., DO-178C, NPR 7150.2D, ISO 26262-6), which consumes system safety outputs to determine software criticality but does not itself conduct the system-level hazard analysis.</p>
+        <p class="gl-src">(Framework-defined, <a href="/requirements#ai-1-9">AI-1.9</a> and Section 1.2.5)</p>
+      </div>
+      <div class="gl-term" id="test" data-term="test">
+        <h3 class="gl-name">Test<a class="gl-anchor" href="#test" aria-label="Link to Test">#</a></h3>
+        <p class="gl-def">Execution of the system or component under controlled conditions with defined inputs, producing quantitative measurements evaluated against pass/fail criteria.</p>
+      </div>
+      <div class="gl-term" id="validation" data-term="validation">
+        <h3 class="gl-name">Validation<a class="gl-anchor" href="#validation" aria-label="Link to Validation">#</a></h3>
+        <p class="gl-def">Confirmation, through the provision of objective evidence, that the requirements for a specific intended use or application have been fulfilled.</p>
+        <p class="gl-src">(ISO/IEC 22989:2022 3.5.18)</p>
+      </div>
+      <div class="gl-term" id="verification" data-term="verification">
+        <h3 class="gl-name">Verification<a class="gl-anchor" href="#verification" aria-label="Link to Verification">#</a></h3>
+        <p class="gl-def">Confirmation, through the provision of objective evidence, that specified requirements have been fulfilled.</p>
+        <p class="gl-src">(ISO/IEC 22989:2022 3.5.17)</p>
+      </div>
+    </section>
+    <section class="gl-cat" id="operational" data-cat="operational">
+      <h2 class="gl-cat-title">Operational <span class="gl-cat-n">7</span></h2>
+      <div class="gl-term" id="autonomous-action" data-term="autonomous action">
+        <h3 class="gl-name">Autonomous Action<a class="gl-anchor" href="#autonomous-action" aria-label="Link to Autonomous Action">#</a></h3>
+        <p class="gl-def">System action taken without requiring human approval or intervention at the time of execution.</p>
+        <p class="gl-src">(Tailored)</p>
+      </div>
+      <div class="gl-term" id="controllability" data-term="controllability">
+        <h3 class="gl-name">Controllability<a class="gl-anchor" href="#controllability" aria-label="Link to Controllability">#</a></h3>
+        <p class="gl-def">Property of an AI system that allows a human or another external agent to intervene in the system’s functioning.</p>
+        <p class="gl-src">(ISO/IEC 22989:2022 3.5.6)</p>
+      </div>
+      <div class="gl-term" id="fallback-behavior" data-term="fallback behavior">
+        <h3 class="gl-name">Fallback Behavior<a class="gl-anchor" href="#fallback-behavior" aria-label="Link to Fallback Behavior">#</a></h3>
+        <p class="gl-def">Predefined safe system response invoked when AI outputs are unreliable, unavailable, or flagged as out-of-distribution.</p>
+        <p class="gl-src">(Tailored)</p>
+      </div>
+      <div class="gl-term" id="human-override" data-term="human override">
+        <h3 class="gl-name">Human Override<a class="gl-anchor" href="#human-override" aria-label="Link to Human Override">#</a></h3>
+        <p class="gl-def">Capability for human operators to supersede or reject AI recommendations or autonomous actions, with documented rationale.</p>
+        <p class="gl-src">(Tailored)</p>
+      </div>
+      <div class="gl-term" id="reliability" data-term="reliability">
+        <h3 class="gl-name">Reliability<a class="gl-anchor" href="#reliability" aria-label="Link to Reliability">#</a></h3>
+        <p class="gl-def">Property of consistent intended behavior and results.</p>
+        <p class="gl-src">(ISO/IEC 22989:2022 3.5.9)</p>
+      </div>
+      <div class="gl-term" id="resilience" data-term="resilience">
+        <h3 class="gl-name">Resilience<a class="gl-anchor" href="#resilience" aria-label="Link to Resilience">#</a></h3>
+        <p class="gl-def">Ability of a system to recover operational condition quickly following an incident.</p>
+        <p class="gl-src">(ISO/IEC 22989:2022 3.5.10)</p>
+      </div>
+      <div class="gl-term" id="robustness" data-term="robustness">
+        <h3 class="gl-name">Robustness<a class="gl-anchor" href="#robustness" aria-label="Link to Robustness">#</a></h3>
+        <p class="gl-def">Ability of a system to maintain its level of performance under any circumstances.</p>
+        <p class="gl-src">(ISO/IEC 22989:2022 3.5.12)</p>
+      </div>
+    </section>
+    <section class="gl-cat" id="security" data-cat="security">
+      <h2 class="gl-cat-title">Security <span class="gl-cat-n">7</span></h2>
+      <div class="gl-term" id="adversarial-attack" data-term="adversarial attack">
+        <h3 class="gl-name">Adversarial Attack<a class="gl-anchor" href="#adversarial-attack" aria-label="Link to Adversarial Attack">#</a></h3>
+        <p class="gl-def">Deliberate manipulation of AI system inputs, training data, or model parameters intended to cause incorrect or harmful outputs.</p>
+        <p class="gl-src">(ISO/IEC 5338:2023 6.4.3)</p>
+      </div>
+      <div class="gl-term" id="adversarial-example" data-term="adversarial example">
+        <h3 class="gl-name">Adversarial Example<a class="gl-anchor" href="#adversarial-example" aria-label="Link to Adversarial Example">#</a></h3>
+        <p class="gl-def">An input crafted by perturbing a legitimate input with imperceptible or low-magnitude modifications designed to cause AI model misclassification or incorrect output. Distinct from Adversarial Attack, which refers to the broader class of attack techniques. Per <a href="/requirements#ai-7">AI-7</a> and AI-12.6.</p>
+      </div>
+      <div class="gl-term" id="adversarial-robustness" data-term="adversarial robustness">
+        <h3 class="gl-name">Adversarial Robustness<a class="gl-anchor" href="#adversarial-robustness" aria-label="Link to Adversarial Robustness">#</a></h3>
+        <p class="gl-def">Ability of an AI system to maintain correct and safe operation despite adversarial inputs or attacks.</p>
+        <p class="gl-src">(ISO/IEC 22989:2022 3.5.12, tailored)</p>
+      </div>
+      <div class="gl-term" id="data-poisoning" data-term="data poisoning">
+        <h3 class="gl-name">Data Poisoning<a class="gl-anchor" href="#data-poisoning" aria-label="Link to Data Poisoning">#</a></h3>
+        <p class="gl-def">Injection of malicious data into training datasets to influence model behavior in attacker-controlled ways.</p>
+        <p class="gl-src">(ISO/IEC 5338:2023 6.4.3)</p>
+      </div>
+      <div class="gl-term" id="input-manipulation" data-term="input manipulation">
+        <h3 class="gl-name">Input Manipulation<a class="gl-anchor" href="#input-manipulation" aria-label="Link to Input Manipulation">#</a></h3>
+        <p class="gl-def">Crafting of inputs designed to cause model misclassification or incorrect outputs while appearing valid to human observers.</p>
+        <p class="gl-src">(ISO/IEC 5338:2023 6.4.3)</p>
+      </div>
+      <div class="gl-term" id="model-inversion" data-term="model inversion">
+        <h3 class="gl-name">Model Inversion<a class="gl-anchor" href="#model-inversion" aria-label="Link to Model Inversion">#</a></h3>
+        <p class="gl-def">Attack technique that reconstructs sensitive training data by analyzing model outputs.</p>
+        <p class="gl-src">(ISO/IEC 5338:2023 6.4.3)</p>
+      </div>
+      <div class="gl-term" id="model-theft" data-term="model theft">
+        <h3 class="gl-name">Model Theft<a class="gl-anchor" href="#model-theft" aria-label="Link to Model Theft">#</a></h3>
+        <p class="gl-def">Extraction of model parameters or behavior through systematic querying to replicate proprietary AI capabilities.</p>
+        <p class="gl-src">(ISO/IEC 5338:2023 6.4.3)</p>
+      </div>
+    </section>
+    <section class="gl-cat" id="explainability-and-trust" data-cat="explainability-and-trust">
+      <h2 class="gl-cat-title">Explainability And Trust <span class="gl-cat-n">6</span></h2>
+      <div class="gl-term" id="confidence" data-term="confidence">
+        <h3 class="gl-name">Confidence<a class="gl-anchor" href="#confidence" aria-label="Link to Confidence">#</a></h3>
+        <p class="gl-def">Quantified measure of certainty or probability associated with an AI output or prediction.</p>
+        <p class="gl-src">(Tailored)</p>
+      </div>
+      <div class="gl-term" id="explainability" data-term="explainability">
+        <h3 class="gl-name">Explainability<a class="gl-anchor" href="#explainability" aria-label="Link to Explainability">#</a></h3>
+        <p class="gl-def">Property of an AI system to express important factors influencing the AI system results in a way that humans can understand.</p>
+        <p class="gl-src">(ISO/IEC 22989:2022 3.5.7)</p>
+      </div>
+      <div class="gl-term" id="graceful-degradation" data-term="graceful degradation">
+        <h3 class="gl-name">Graceful Degradation<a class="gl-anchor" href="#graceful-degradation" aria-label="Link to Graceful Degradation">#</a></h3>
+        <p class="gl-def">System capability to maintain reduced functionality when AI is impaired.</p>
+        <p class="gl-src">(Tailored)</p>
+      </div>
+      <div class="gl-term" id="predictability" data-term="predictability">
+        <h3 class="gl-name">Predictability<a class="gl-anchor" href="#predictability" aria-label="Link to Predictability">#</a></h3>
+        <p class="gl-def">Property of an AI system that enables reliable assumptions by stakeholders about the output.</p>
+        <p class="gl-src">(ISO/IEC 22989:2022 3.5.8)</p>
+      </div>
+      <div class="gl-term" id="transparency" data-term="transparency">
+        <h3 class="gl-name">Transparency<a class="gl-anchor" href="#transparency" aria-label="Link to Transparency">#</a></h3>
+        <p class="gl-def">Property of a system that appropriate information about the system is made available to relevant stakeholders.</p>
+        <p class="gl-src">(ISO/IEC 22989:2022 3.5.15)</p>
+      </div>
+      <div class="gl-term" id="trust-calibration" data-term="trust calibration">
+        <h3 class="gl-name">Trust Calibration<a class="gl-anchor" href="#trust-calibration" aria-label="Link to Trust Calibration">#</a></h3>
+        <p class="gl-def">Alignment between operator trust in AI and actual AI reliability.</p>
+        <p class="gl-src">(Human factors)</p>
+      </div>
+    </section>
+    <section class="gl-cat" id="privacy-and-data-protection" data-cat="privacy-and-data-protection">
+      <h2 class="gl-cat-title">Privacy And Data Protection <span class="gl-cat-n">16</span></h2>
+      <div class="gl-term" id="anonymization" data-term="anonymization">
+        <h3 class="gl-name">Anonymization<a class="gl-anchor" href="#anonymization" aria-label="Link to Anonymization">#</a></h3>
+        <p class="gl-def">The process of rendering personal data such that the data subject is no longer identifiable, by any means reasonably likely to be used. Regulatory standards for anonymization vary across jurisdictions, including GDPR Recital 26, HIPAA Safe Harbor at 45 CFR 164.514(b)(2), and HIPAA Expert Determination at 45 CFR 164.514(b)(1). See also <a href="#de-identification">De-identification</a>.</p>
+        <p class="gl-src">(Framework-defined; aligned with GDPR Recital 26.)</p>
+      </div>
+      <div class="gl-term" id="data-controller" data-term="data controller">
+        <h3 class="gl-name">Data Controller<a class="gl-anchor" href="#data-controller" aria-label="Link to Data Controller">#</a></h3>
+        <p class="gl-def">The natural or legal person, public authority, agency, or other body which, alone or jointly with others, determines the purposes and means of the processing of personal data. (GDPR Article 4(7))</p>
+      </div>
+      <span class="gl-chunk" id="app-a-cont3" aria-hidden="true"></span>
+      <div class="gl-term" id="data-minimization" data-term="data minimization">
+        <h3 class="gl-name">Data Minimization<a class="gl-anchor" href="#data-minimization" aria-label="Link to Data Minimization">#</a></h3>
+        <p class="gl-def">The principle and practice of collecting, processing, and retaining only the personal data strictly required for the AI system’s operational task, with the minimum sufficient subset kept and the remainder discarded or replaced with derived features. Per <a href="/requirements#ai-10">AI-10</a> and Section 5.4.1. (Aligned with GDPR Article 5(1)(c) and ISO/IEC 27559.)</p>
+      </div>
+      <div class="gl-term" id="data-processor" data-term="data processor">
+        <h3 class="gl-name">Data Processor<a class="gl-anchor" href="#data-processor" aria-label="Link to Data Processor">#</a></h3>
+        <p class="gl-def">A natural or legal person, public authority, agency, or other body which processes personal data on behalf of the controller. (GDPR Article 4(8))</p>
+      </div>
+      <div class="gl-term" id="data-subject" data-term="data subject">
+        <h3 class="gl-name">Data Subject<a class="gl-anchor" href="#data-subject" aria-label="Link to Data Subject">#</a></h3>
+        <p class="gl-def">The identified or identifiable natural person to whom personal data relates. (GDPR Article 4(1))</p>
+      </div>
+      <div class="gl-term" id="de-identification" data-term="de-identification">
+        <h3 class="gl-name">De-identification<a class="gl-anchor" href="#de-identification" aria-label="Link to De-identification">#</a></h3>
+        <p class="gl-def">The process of modifying personal data to reduce the likelihood of associating it with specific individuals, encompassing techniques such as masking, generalization, perturbation, and aggregation. Distinct from Anonymization in regulatory frameworks (HIPAA, CCPA) where de-identification implies a quantified risk threshold. Per <a href="/requirements#ai-10">AI-10</a> and Section 5.4.2. See also <a href="#anonymization">Anonymization</a>; <a href="#re-identification-risk">Re-identification Risk</a>.</p>
+      </div>
+      <div class="gl-term" id="differential-privacy" data-term="differential privacy">
+        <h3 class="gl-name">Differential Privacy<a class="gl-anchor" href="#differential-privacy" aria-label="Link to Differential Privacy">#</a></h3>
+        <p class="gl-def">A mathematical framework for quantifying the privacy risk of a computation over a dataset, characterized by a privacy budget parameter (epsilon) that bounds the contribution of any individual record to the output. (Framework-defined; see Dwork et al. 2006 foundational literature) Full citation: Dwork, C., McSherry, F., Nissim, K., &amp; Smith, A. (2006). “Calibrating Noise to Sensitivity in Private Data Analysis,” in Theory of Cryptography Conference (TCC 2006), Lecture Notes in Computer Science, vol. 3876, Springer, pp. 265-284.</p>
+      </div>
+      <div class="gl-term" id="dpia-data-protection-impact-assessment" data-term="dpia (data protection impact assessment)">
+        <h3 class="gl-name">DPIA (Data Protection Impact Assessment)<a class="gl-anchor" href="#dpia-data-protection-impact-assessment" aria-label="Link to DPIA (Data Protection Impact Assessment)">#</a></h3>
+        <p class="gl-def">A structured assessment of the privacy risks of a data processing activity, required under GDPR Article 35 and analogous regulations for high-risk processing. For AI systems processing personal data, DPIA is typically performed at design time and updated when the data processing materially changes. See also <a href="#privacy-impact-assessment-pia">Privacy Impact Assessment (PIA)</a>.</p>
+      </div>
+      <div class="gl-term" id="lawful-basis" data-term="lawful basis">
+        <h3 class="gl-name">Lawful Basis<a class="gl-anchor" href="#lawful-basis" aria-label="Link to Lawful Basis">#</a></h3>
+        <p class="gl-def">The legal justification for processing personal data under an applicable privacy framework. Examples include the six bases enumerated in GDPR Article 6, HIPAA permitted uses and disclosures under 45 CFR 164.502, and CCPA business purposes.</p>
+        <p class="gl-src">(Aligned with GDPR Article 6.)</p>
+      </div>
+      <div class="gl-term" id="membership-inference" data-term="membership inference">
+        <h3 class="gl-name">Membership Inference<a class="gl-anchor" href="#membership-inference" aria-label="Link to Membership Inference">#</a></h3>
+        <p class="gl-def">An attack class in which an adversary determines whether a specific data record was included in the training set of an AI model, typically by exploiting model confidence patterns or output behavior. Per <a href="/requirements#ai-10">AI-10</a> and Section 5.4.5.</p>
+      </div>
+      <div class="gl-term" id="personal-data" data-term="personal data">
+        <h3 class="gl-name">Personal Data<a class="gl-anchor" href="#personal-data" aria-label="Link to Personal Data">#</a></h3>
+        <p class="gl-def">Any information relating to an identified or identifiable natural person. The precise scope varies by regulatory framework. Examples include GDPR Article 4(1), HIPAA Protected Health Information under 45 CFR 160.103, and CCPA “personal information” under Cal. Civ. Code 1798.140. (Aligned with GDPR Article 4(1).)</p>
+      </div>
+      <div class="gl-term" id="privacy-impact-assessment-pia" data-term="privacy impact assessment (pia)">
+        <h3 class="gl-name">Privacy Impact Assessment (PIA)<a class="gl-anchor" href="#privacy-impact-assessment-pia" aria-label="Link to Privacy Impact Assessment (PIA)">#</a></h3>
+        <p class="gl-def">Systematic assessment of the privacy risks associated with a processing activity and the mitigation measures applied. Under GDPR Article 35 and for high-risk processing, referred to as a Data Protection Impact Assessment (DPIA).</p>
+        <p class="gl-src">(Framework-defined, <a href="/requirements#ai-10-6">AI-10.6</a>; GDPR Article 35)</p>
+      </div>
+      <div class="gl-term" id="privacy-enhancing-technique-pet" data-term="privacy-enhancing technique (pet)">
+        <h3 class="gl-name">Privacy-Enhancing Technique (PET)<a class="gl-anchor" href="#privacy-enhancing-technique-pet" aria-label="Link to Privacy-Enhancing Technique (PET)">#</a></h3>
+        <p class="gl-def">Technical method designed to reduce privacy risk through data or computation transformation, including anonymization, pseudonymization, differential privacy, federated learning, secure multi-party computation, and homomorphic encryption. (Framework-defined, <a href="/requirements#ai-10-4">AI-10.4</a>) See ISO/IEC 27559:2022, “Information security, cybersecurity and privacy protection Privacy enhancing data de-identification framework.”</p>
+      </div>
+      <div class="gl-term" id="pseudonymization" data-term="pseudonymization">
+        <h3 class="gl-name">Pseudonymization<a class="gl-anchor" href="#pseudonymization" aria-label="Link to Pseudonymization">#</a></h3>
+        <p class="gl-def">The processing of personal data in such a manner that the data can no longer be attributed to a specific data subject without the use of additional information, where that additional information is kept separately and subject to technical and organizational measures. (GDPR Article 4(5))</p>
+      </div>
+      <div class="gl-term" id="re-identification-risk" data-term="re-identification risk">
+        <h3 class="gl-name">Re-identification Risk<a class="gl-anchor" href="#re-identification-risk" aria-label="Link to Re-identification Risk">#</a></h3>
+        <p class="gl-def">The likelihood that personal data which has been deidentified or anonymized can be associated back to specific individuals through techniques such as auxiliary data linkage, attribute inference, or longitudinal tracking. Per <a href="/requirements#ai-10">AI-10</a> and Section 5.4.2.</p>
+      </div>
+      <div class="gl-term" id="special-categories-of-personal-data" data-term="special categories of personal data">
+        <h3 class="gl-name">Special Categories of Personal Data<a class="gl-anchor" href="#special-categories-of-personal-data" aria-label="Link to Special Categories of Personal Data">#</a></h3>
+        <p class="gl-def">Categories of personal data subject to additional protection under GDPR Article 9 (racial or ethnic origin, political opinions, religious or philosophical beliefs, trade union membership, genetic data, biometric data for identification, health data, sex life or sexual orientation) or analogous categories under other frameworks. Examples include HIPAA PHI and CCPA “sensitive personal information.”</p>
+        <p class="gl-src">(Aligned with GDPR Article 9.)</p>
+      </div>
+    </section>
+
+</div>
+
+</div>
+
+</main>
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <div class="footer-logo" aria-label="Safety Critical Labs">SCL</div>
+        <div class="footer-brand-bottom">
+          <span class="footer-copyright">&copy; 2026 Safety Critical Labs</span>
+          <div class="footer-social">
+            <a href="https://www.linkedin.com/company/safety-critical-labs/" target="_blank" rel="noopener" aria-label="Safety Critical Labs on LinkedIn">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.03-3.04-1.85-3.04-1.86 0-2.14 1.45-2.14 2.94v5.67H9.36V9h3.41v1.56h.05c.47-.9 1.63-1.85 3.36-1.85 3.6 0 4.27 2.37 4.27 5.45v6.29zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM7.12 20.45H3.55V9h3.57v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.72v20.55C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.72C24 .77 23.2 0 22.22 0z"/></svg>
+            </a>
+          </div>
+        </div>
+      </div>
+      <div class="footer-cols">
+        <div class="footer-col">
+          <div class="footer-col-group">
+            <div class="footer-col-label">Certification</div>
+            <a href="/framework">Framework</a>
+            <a href="/process">Process</a>
+            <a href="/assess">Assess</a>
+            <a href="/verify">Verify</a>
+            <a href="/deliverables">What SCL issues</a>
+            <a href="/evidence">Evidence</a>
+          </div>
+        </div>
+        <div class="footer-col">
+          <div class="footer-col-group">
+            <div class="footer-col-label">Resources</div>
+            <a href="/documents">Documents</a>
+            <a href="/presentation">Presentation</a>
+            <a href="/certificate-template">Certificate template</a>
+            <a href="/search">Ask SCL</a>
+            <a href="/questions">All questions answered</a>
+            <a href="/glossary">Glossary</a>
+          </div>
+        </div>
+        <div class="footer-col">
+          <div class="footer-col-group">
+            <div class="footer-col-label">Company</div>
+            <a href="/position">Position</a>
+            <a href="/expertise">Expertise</a>
+            <a href="/markets">Markets</a>
+            <a href="/contact">Contact</a>
+          </div>
+          <div class="footer-col-group">
+            <div class="footer-col-label">Briefings</div>
+            <a href="/news">News</a>
+            <a href="/updates">Updates</a>
+            <a href="/subscribe">Subscribe</a>
+          </div>
+        </div>
+        <div class="footer-col">
+          <div class="footer-col-group">
+            <div class="footer-col-label">Legal</div>
+            <a href="/terms">Terms</a>
+            <a href="/mark">The SCL mark</a>
+            <a href="/privacy">Privacy</a>
+            <a href="/disclaimer">Disclaimer</a>
+            <a href="/complaints">Complaints and appeals</a>
+            <a href="/impartiality">Impartiality</a>
+            <a href="/accreditation">Accreditation</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function () {
+  var box = document.getElementById('gl-search');
+  var count = document.getElementById('gl-count');
+  var empty = document.getElementById('gl-empty');
+  var toc = document.querySelector('.gl-toc');
+  var terms = [].slice.call(document.querySelectorAll('.gl-term'));
+  var cats = [].slice.call(document.querySelectorAll('.gl-cat'));
+  var total = terms.length;
+  if (!box) return;
+  function apply() {
+    var q = box.value.trim().toLowerCase();
+    var shown = 0;
+    terms.forEach(function (t) {
+      var hit = !q || t.getAttribute('data-term').indexOf(q) !== -1 ||
+                t.textContent.toLowerCase().indexOf(q) !== -1;
+      t.hidden = !hit;
+      if (hit) shown++;
+    });
+    cats.forEach(function (c) {
+      c.hidden = !c.querySelector('.gl-term:not([hidden])');
+    });
+    if (toc) toc.hidden = !!q;
+    empty.hidden = shown !== 0;
+    count.textContent = q ? shown + ' of ' + total + ' terms' : total + ' terms';
+  }
+  box.addEventListener('input', apply);
+})();
+</script>
+<script src="/footer.js" defer></script>
+<script src="/nav.js" defer></script>
+</body>
+</html>

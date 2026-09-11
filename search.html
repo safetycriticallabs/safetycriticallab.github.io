@@ -1015,6 +1015,7 @@
             <a href="/process">Process</a>
             <a href="/assess">Assess</a>
             <a href="/verify">Verify</a>
+            <a href="/deliverables">What SCL issues</a>
             <a href="/evidence">Evidence</a>
           </div>
         </div>
@@ -1026,6 +1027,7 @@
             <a href="/certificate-template">Certificate template</a>
             <a href="/search">Ask SCL</a>
             <a href="/questions">All questions answered</a>
+            <a href="/glossary">Glossary</a>
           </div>
         </div>
         <div class="footer-col">
@@ -1047,8 +1049,11 @@
           <div class="footer-col-group">
             <div class="footer-col-label">Legal</div>
             <a href="/terms">Terms</a>
+            <a href="/mark">The SCL mark</a>
             <a href="/privacy">Privacy</a>
             <a href="/disclaimer">Disclaimer</a>
+            <a href="/complaints">Complaints and appeals</a>
+            <a href="/impartiality">Impartiality</a>
             <a href="/accreditation">Accreditation</a>
           </div>
         </div>
@@ -1629,11 +1634,16 @@
     /* AI-n and AI-n.m (and continuation ids such as AI-1.0-cont) link to the
        framework; faq-N links to its anchor on /questions, which generate_faq.py
        emits from the same faq.json the Worker grounds on, so every FAQ citation
-       the model emits resolves to the exact answer it used; sec-, app-, std- and
-       note- ids still have no anchor and stay plain, the id in the title for
-       anyone who wants it */
+       the model emits resolves to the exact answer it used; app-a and its
+       continuations link to /glossary, which generate_glossary.py emits from
+       the same four corpus entries, each carrying its own chunk id as an anchor
+       so the citation lands in the part of the glossary the answer came from.
+       Only app-a matches: app-b, app-c and app-d are other appendices with no
+       page yet. sec-, std- and note- ids still have no anchor and stay plain,
+       the id in the title for anyone who wants it */
     var m = /^AI-(\d{1,2})(?:\.(\d{1,2}))?(?:-|$)/i.exec(id);
     var faq = /^faq-\d+$/i.exec(id);
+    var gloss = /^app-a(?:-cont\d*)?$/i.exec(id);
     var chip;
     if (m) {
       chip = document.createElement('a');
@@ -1644,6 +1654,11 @@
       chip = document.createElement('a');
       chip.className = 'ask-cite';
       chip.href = '/questions#' + id.toLowerCase();
+      chip.target = '_blank'; chip.rel = 'noopener';
+    } else if (gloss) {
+      chip = document.createElement('a');
+      chip.className = 'ask-cite';
+      chip.href = '/glossary#' + id.toLowerCase();
       chip.target = '_blank'; chip.rel = 'noopener';
     } else {
       chip = document.createElement('span');

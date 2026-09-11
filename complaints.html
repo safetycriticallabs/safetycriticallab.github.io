@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Complaints and Appeals | Safety Critical Labs</title>
+<meta name="description" content="How to challenge an SCL certification determination, and how anyone can raise a complaint about SCL's assessment process or a certificate it has issued.">
+<meta property="og:title" content="Complaints and Appeals | Safety Critical Labs">
+<meta property="og:description" content="How to challenge a determination, and how anyone can raise a complaint.">
+<link rel="canonical" href="https://safetycriticallabs.com/complaints">
+<meta name="twitter:card" content="summary">
+<meta property="og:url" content="https://safetycriticallabs.com/complaints">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://safetycriticallabs.com/img/og-tile.png">
+<link rel="icon" type="image/x-icon" href="favicon.ico">
+<link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="192x192" href="img/favicon-192x192.png">
+<link rel="apple-touch-icon" sizes="180x180" href="img/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<style>
+/* Shared legal page styles */
+/* Hero cursor glow styles live in styles.css (promoted 2026-08-24) */
+
+.fw-eyebrow-mono {
+  font-family: var(--mono);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(12,34,66,0.6);
+  margin-bottom: 20px;
+}
+
+.legal-section {
+  background: #FAF9F5;
+  padding: 88px 40px 120px;
+}
+.legal-inner {
+  max-width: 760px;
+  margin: 0 auto;
+}
+
+.legal-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+  padding-bottom: 24px;
+  margin-bottom: 48px;
+  border-bottom: 1px solid rgba(46,109,180,0.12);
+}
+.legal-meta-item {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(12,34,66,0.6);
+}
+.legal-meta-item strong {
+  display: block;
+  color: #0C2242;
+  font-weight: 500;
+  margin-top: 4px;
+  letter-spacing: 0.04em;
+  text-transform: none;
+  font-family: var(--sans);
+  font-size: 13px;
+}
+
+.legal-block {
+  margin-bottom: 40px;
+}
+.legal-block:last-child { margin-bottom: 0; }
+.legal-block-num {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  color: rgba(12,34,66,0.55);
+  margin-bottom: 6px;
+}
+.legal-block-title {
+  font-family: var(--sans);
+  font-size: 22px;
+  font-weight: 600;
+  color: #0C2242;
+  margin: 0 0 14px;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+}
+.legal-block-title em {
+  font-family: inherit;
+  font-size: inherit !important;
+  font-weight: inherit !important;
+  font-style: normal !important;
+  color: inherit !important;
+}
+.legal-block p {
+  font-size: 15px;
+  color: var(--ink-2);
+  line-height: 1.75;
+  font-weight: 300;
+  margin: 0 0 14px;
+}
+.legal-block p:last-child { margin-bottom: 0; }
+.legal-block p strong { color: var(--ink); font-weight: 500; }
+.legal-block a { color: var(--blue); text-decoration: none; border-bottom: 1px solid rgba(46,109,180,0.3); }
+.legal-block a:hover { color: var(--blue-dk); border-bottom-color: var(--blue-dk); }
+.legal-block ul {
+  list-style: none;
+  padding: 0;
+  margin: 8px 0 0 0;
+}
+.legal-block ul li {
+  font-size: 15px;
+  color: var(--ink-2);
+  line-height: 1.7;
+  font-weight: 300;
+  padding-left: 22px;
+  position: relative;
+  margin-bottom: 8px;
+}
+.legal-block ul li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 11px;
+  width: 6px;
+  height: 6px;
+  background: var(--blue);
+  border-radius: 50%;
+}
+.legal-block ul li strong { color: var(--ink); font-weight: 500; }
+
+.legal-review-note {
+  margin-top: 56px;
+  padding: 20px 24px;
+  background: #FAF9F5;
+  border: 1px solid rgba(46,109,180,0.12);
+  border-left: 3px solid var(--blue);
+  border-radius: 14px;
+  font-size: 13px;
+  color: var(--ink-2);
+  line-height: 1.65;
+  font-weight: 300;
+}
+.legal-review-note strong { color: var(--ink); font-weight: 500; }
+.legal-review-note.is-standing { margin-top: 0; margin-bottom: 56px; }
+.route-table { width: 100%; border-collapse: collapse; margin: 18px 0 0 0; font-size: 14px; }
+.route-table th, .route-table td {
+  text-align: left; padding: 12px 14px; vertical-align: top;
+  border-bottom: 1px solid var(--rule); color: var(--ink-2); font-weight: 300; line-height: 1.6;
+}
+.route-table th {
+  font-family: var(--mono); font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase;
+  color: var(--ink); font-weight: 500; border-bottom: 1px solid rgba(46,109,180,0.25);
+}
+.route-table td strong { color: var(--ink); font-weight: 500; }
+.route-table tr:last-child td { border-bottom: none; }
+.wrap-scroll { overflow-x: auto; }
+</style>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<nav class="global-nav">
+  <div class="global-nav-inner">
+    <a href="/" class="gn-wordmark" aria-label="Safety Critical Labs"><span class="gn-text gn-text-full"><em>Safety Critical</em> Labs</span><span class="gn-text gn-text-abbr" aria-hidden="true">SCL</span></a>
+    <button class="gn-hamburger" aria-label="Menu" aria-expanded="false"><span></span><span></span><span></span></button>
+    <ul class="gn-links">
+      <li><a href="/framework">Framework</a></li>
+      <li><a href="/process">Process</a></li>
+      <li class="gn-dropdown">
+        <button class="gn-dropdown-toggle" type="button" aria-expanded="false" aria-haspopup="true">Company <span class="gn-dropdown-arrow" aria-hidden="true"></span></button>
+        <ul class="gn-dropdown-menu">
+          <li><a href="/position">Position</a></li>
+          <li><a href="/expertise">Expertise</a></li>
+          <li><a href="/markets">Markets</a></li>
+          <li><a href="/contact">Contact</a></li>
+        </ul>
+      </li>
+      <li class="gn-dropdown">
+        <button class="gn-dropdown-toggle" type="button" aria-expanded="false" aria-haspopup="true">Briefings <span class="gn-dropdown-arrow" aria-hidden="true"></span></button>
+        <ul class="gn-dropdown-menu">
+          <li><a href="/news">News</a></li>
+          <li><a href="/updates">Updates</a></li>
+          <li><a href="/subscribe">Subscribe</a></li>
+        </ul>
+      </li>
+    </ul>
+    <a href="/search" class="gn-search" aria-label="Ask SCL" title="Ask SCL">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <circle cx="11" cy="11" r="7"/>
+        <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+      </svg>
+    </a>
+    <a href="/contact" class="gn-cta">Get Certified</a>
+  </div>
+</nav>
+
+<main id="main" tabindex="-1">
+
+<div class="page-shell">
+
+<div class="inner-hero">
+  <div class="fw-hero-glow"></div>
+  <div class="inner-hero-inner">
+    <div>
+      <div class="inner-hero-breadcrumb"><a href="/">Safety Critical Labs</a><span>/</span> Complaints and appeals</div>
+      <h1>If we got it wrong, there is a way to fix it.</h1>
+    </div>
+    <p class="inner-hero-lead">
+      A certification body with no appeals process is asking you to trust that it never makes mistakes. That is not a credible position. This page sets out how a client challenges a determination, how anyone at all raises a complaint about SCL's process or a certificate it has issued, and what SCL commits to in response.
+    </p>
+  </div>
+</div>
+
+<section class="legal-section">
+  <div class="legal-inner">
+
+    <div class="legal-meta">
+      <div class="legal-meta-item">Effective<strong>September 11, 2026</strong></div>
+      <div class="legal-meta-item">Applies to<strong>Disagreements, appeals, and complaints</strong></div>
+      <div class="legal-meta-item">Contact<strong><a href="/contact" style="color:#0C2242;text-decoration:none;">/contact</a></strong></div>
+    </div>
+
+    <div class="legal-review-note is-standing">
+      <strong>Where this stands today.</strong> Safety Critical Labs has issued no certificates, so no appeal has been filed and no complaint about a certificate has been received. This page states the process SCL operates, not a history of using it. The timelines below are commitments SCL makes now, and they apply to the first report as much as the hundredth.
+    </div>
+
+    <div class="legal-block">
+      <div class="legal-block-num">01</div>
+      <h2 class="legal-block-title">Three routes, and which one you need</h2>
+      <p>SCL separates these deliberately, because they involve different levels of formality, different reviewers, and different possible outcomes. Choosing the wrong one does not cost you anything; SCL will route it correctly and tell you it has done so.</p>
+      <div class="wrap-scroll">
+      <table class="route-table">
+        <tr><th>Route</th><th>Who</th><th>When</th><th>What it challenges</th></tr>
+        <tr>
+          <td><strong>Disagreement</strong></td>
+          <td>The client</td>
+          <td>During the assessment, or before the Certification Determination Document is issued</td>
+          <td>A specific finding, while the assessment is still open</td>
+        </tr>
+        <tr>
+          <td><strong>Appeal</strong></td>
+          <td>The client</td>
+          <td>Within 60 calendar days of the determination date</td>
+          <td>The determination itself, on one or more defined grounds</td>
+        </tr>
+        <tr>
+          <td><strong>Complaint</strong></td>
+          <td>Anyone</td>
+          <td>Any time</td>
+          <td>SCL's conduct, process integrity, an assessor, or the validity of a certificate</td>
+        </tr>
+      </table>
+      </div>
+      <p style="margin-top:20px;">An appeal challenges a determination through an evidentiary process. A complaint raises a concern that may or may not relate to a determination at all. You do not need to be an SCL client to file a complaint, and you do not need a relationship with SCL of any kind.</p>
+    </div>
+
+    <div class="legal-block">
+      <div class="legal-block-num">02</div>
+      <h2 class="legal-block-title">Disagreements, while the assessment is open</h2>
+      <p>If you are a client and you disagree with a finding during the assessment, raise it with the Lead Assessor at the time. This is the cheapest and fastest route, and it exists so that factual errors are corrected before they reach a determination rather than after.</p>
+      <p>The Lead Assessor reviews the disagreement first. If it is not resolved there, it escalates to the SCL Principal. A disagreement that remains unresolved when the Certification Determination Document is issued becomes eligible for appeal under section 03.</p>
+    </div>
+
+    <div class="legal-block">
+      <div class="legal-block-num">03</div>
+      <h2 class="legal-block-title">Who may appeal, and by when</h2>
+      <p>Any client that has received a Certification Determination Document may appeal it. This includes a determination of Not Certified, and it includes a determination you were certified under but disagree with in part.</p>
+      <p><strong>The deadline is 60 calendar days from the date on the Certification Determination Document.</strong> Appeals filed after 60 days are not accepted, unless you can show that the grounds could not reasonably have been identified within that period.</p>
+      <p>The appeal must be filed by an authorized representative of the client organization: the person who signed the Applicability Determination Record, or a documented delegate.</p>
+    </div>
+
+    <div class="legal-block">
+      <div class="legal-block-num">04</div>
+      <h2 class="legal-block-title">Grounds for appeal</h2>
+      <p>An appeal must rest on at least one of the following. An appeal filed without a stated ground is returned without review, with an explanation of what is missing and an opportunity to refile.</p>
+      <ul>
+        <li><strong>Factual error.</strong> The determination rests on a factual mistake. The assessor misidentified evidence, attributed evidence to the wrong requirement, or worked from incorrect information about the system.</li>
+        <li><strong>Procedural failure.</strong> The assessment was not conducted in accordance with the SCL Assessment Methodology. A required step was skipped, a required review was not conducted, or a required notification was not given.</li>
+        <li><strong>Misapplication of the framework or rubric.</strong> The wrong requirement set was applied, the wrong classification was applied, a finding was graded inconsistently with the grading rubric, or the Safety Critical absolute rule was applied where it should not have been, or not applied where it should.</li>
+        <li><strong>Conflict of interest.</strong> A member of the assessment team had an undisclosed conflict that could have influenced the outcome.</li>
+        <li><strong>New evidence.</strong> Material evidence that existed at the time of assessment but was genuinely unavailable to the assessor, through no fault of yours. This ground is narrow. Evidence you chose not to submit, or failed to locate, is not unavailable. Evidence you did submit but the assessor overlooked is a factual error, not new evidence.</li>
+      </ul>
+    </div>
+
+    <div class="legal-block">
+      <div class="legal-block-num">05</div>
+      <h2 class="legal-block-title">How to file an appeal</h2>
+      <p>Submit the appeal in writing to the SCL Principal, at the address on your Certification Determination Document. Include:</p>
+      <ul>
+        <li>Your organization name and contact information</li>
+        <li>The assessment reference number and date</li>
+        <li>The specific findings or determination you are challenging</li>
+        <li>The ground or grounds you are relying on, from section 04</li>
+        <li>A statement of why the determination is incorrect under those grounds</li>
+        <li>All supporting evidence you want the panel to consider</li>
+        <li>The name and authority of the person filing</li>
+      </ul>
+      <p style="margin-top:20px;"><strong>There is no fee to appeal.</strong> SCL absorbs the cost of the review. This is deliberate. A fee barrier to appeals would undermine the credibility of the process, and a process only the well funded can use is not a process.</p>
+      <p>If your submission is incomplete, SCL identifies the specific deficiencies and gives you 10 business days to cure them. An incomplete filing does not forfeit your appeal.</p>
+    </div>
+
+    <div class="legal-block">
+      <div class="legal-block-num">06</div>
+      <h2 class="legal-block-title">Who reviews an appeal</h2>
+      <p><strong>Not the people who made the decision.</strong> Appeals are reviewed by a panel independent of the original assessment. That independence is the point of the process, and it is absolute: nobody who participated in the assessment decision being challenged reviews the appeal.</p>
+      <p>At SCL's current scale, the panel is chaired by the SCL Principal and includes at least one qualified reviewer who was not involved in the original assessment.</p>
+      <p><strong>Where the Principal led the assessment under appeal</strong>, the panel must include an external member who reviews the appeal independently, and that member's concurrence is required for the decision. The Principal may take part in deliberation but cannot decide an appeal against their own assessment alone.</p>
+      <p>Every panel member completes a conflict of interest disclosure specific to the appeal. Any member with a conflict is replaced.</p>
+    </div>
+
+    <div class="legal-block">
+      <div class="legal-block-num">07</div>
+      <h2 class="legal-block-title">What happens, and when</h2>
+      <p>These are the timelines SCL commits to on an appeal.</p>
+      <div class="wrap-scroll">
+      <table class="route-table">
+        <tr><th>Step</th><th>Timeline</th></tr>
+        <tr><td>Filing deadline</td><td>60 calendar days from the determination date</td></tr>
+        <tr><td>Acknowledgment in writing</td><td>5 business days from receipt</td></tr>
+        <tr><td>Scope of review determined</td><td>5 business days from acknowledgment</td></tr>
+        <tr><td>Record review</td><td>15 business days</td></tr>
+        <tr><td>Additional information, if needed</td><td>10 business days</td></tr>
+        <tr><td>Deliberation and decision</td><td>10 business days after record review</td></tr>
+        <tr><td>Decision communicated</td><td>5 business days after deliberation</td></tr>
+        <tr><td><strong>Total, straightforward appeal</strong></td><td><strong>About 40 business days from receipt</strong></td></tr>
+        <tr><td><strong>Total, where more information is needed</strong></td><td><strong>About 50 business days from receipt</strong></td></tr>
+      </table>
+      </div>
+      <p style="margin-top:20px;">The review is limited to the findings and grounds you raised. The panel does not re-assess the whole system or re-review the entire evidence package, only the contested elements.</p>
+    </div>
+
+    <div class="legal-block">
+      <div class="legal-block-num">08</div>
+      <h2 class="legal-block-title">What an appeal can result in</h2>
+      <p>For each contested finding, the panel either upholds it, revises it, or remands it for re-assessment. You receive the decision in writing, with the rationale, referencing the specific grounds you raised and the evidence reviewed.</p>
+      <p>If the determination is revised, you receive a new Certification Determination Document. If re-assessment is ordered, you receive its scope, timeline, and team assignment.</p>
+      <p><strong>The appeal decision is final.</strong> There is no further internal appeal. Section 12 sets out the recourse that remains open to you outside SCL, and SCL does not discourage you from using it.</p>
+    </div>
+
+    <div class="legal-block">
+      <div class="legal-block-num">09</div>
+      <h2 class="legal-block-title">Complaints: who may file, and about what</h2>
+      <p><strong>Anyone.</strong> A client, a third party, a competitor, a customer of a certified system, a regulator, a member of the public, or an SCL employee. You do not need to have been involved in an assessment, and you do not need SCL's permission.</p>
+      <p>A complaint is a formal expression of concern about:</p>
+      <ul>
+        <li>The conduct or competence of an SCL assessor</li>
+        <li>The integrity of a specific assessment, whether or not you were the client</li>
+        <li>Whether SCL followed its own methodology and quality procedures</li>
+        <li>The validity of a certificate SCL has issued</li>
+        <li>Any other matter affecting the credibility of the SCL mark</li>
+      </ul>
+      <p style="margin-top:20px;"><strong>Anonymous complaints are accepted.</strong> They may limit SCL's ability to investigate or to tell you what happened, but they are logged and assessed like any other.</p>
+    </div>
+
+    <div class="legal-block">
+      <div class="legal-block-num">10</div>
+      <h2 class="legal-block-title">How to file a complaint, and what SCL does with it</h2>
+      <p>Write to SCL through <a href="/contact">/contact</a>. Include your contact information unless you are filing anonymously, a description of the concern with as much specificity as you can give, any supporting evidence, and the outcome you are looking for if you have one in mind.</p>
+      <ul>
+        <li><strong>Acknowledgment, 5 business days.</strong> SCL confirms receipt and that the complaint has been logged.</li>
+        <li><strong>Initial assessment, 10 business days.</strong> SCL determines whether the concern is substantive, whether it relates to a specific assessment, assessor or certificate, whether it needs investigation or can be resolved by clarification, and whether it requires immediate action such as suspending a certificate while the matter is examined.</li>
+        <li><strong>Investigation, up to 30 business days.</strong> Where warranted. This may include review of assessment records, interviews with the assessment team and with the client, review of assessor qualification and conflict of interest records, and consultation with external advisors.</li>
+        <li><strong>Outcome, communicated within 5 business days of resolution.</strong> You are told the conclusion and any corrective action taken, to the extent client confidentiality allows.</li>
+      </ul>
+      <p style="margin-top:20px;"><strong>Where the complaint concerns the Principal directly</strong>, it is investigated by an external advisor rather than by SCL itself.</p>
+      <p>Every complaint is logged and retained, whatever its outcome, including those that are not substantiated. Patterns across complaints are reviewed periodically, because a pattern of unsubstantiated complaints can still indicate a systemic problem.</p>
+    </div>
+
+    <div class="legal-block">
+      <div class="legal-block-num">11</div>
+      <h2 class="legal-block-title">Reporting a false certification claim</h2>
+      <p>If you have seen the SCL mark displayed by a party that does not hold a valid certificate, or displayed for a system, version or scope outside what a certificate covers, that is a complaint and this page is the route for it.</p>
+      <p>Check the public register at <a href="/verify">/verify</a> first. Enter the certificate number shown with the claim. If no certificate number is shown at all, that is itself a breach of the rules at <a href="/mark">/mark</a>, and worth reporting on its own.</p>
+      <p>Where a report concerns a certificate in the register, the outcome is reflected in the register itself. Suspension and withdrawal are recorded publicly, so the correction is visible to anyone who checks.</p>
+    </div>
+
+    <div class="legal-block">
+      <div class="legal-block-num">12</div>
+      <h2 class="legal-block-title">Protections</h2>
+      <p><strong>No retaliation.</strong> Filing a disagreement, an appeal, or a complaint does not affect your eligibility for future assessments, the treatment of an ongoing assessment, or the validity of any existing certificate not under direct appeal. A client who appeals and loses is treated identically to a client who never appealed. This is not negotiable. If clients believe that challenging a finding invites harsher treatment, the process has already failed.</p>
+      <p><strong>Confidentiality.</strong> The identity of the parties, the substance of the proceedings and the outcome are not disclosed to third parties, except as required by law or regulation, as required by an accreditation body during an accreditation assessment, with the written consent of all parties, or in anonymized aggregate form for internal quality review.</p>
+      <p><strong>Separation of roles.</strong> Whoever reviews a challenge must not have been involved in the decision being challenged. This is absolute for appeals.</p>
+      <p><strong>Records.</strong> Records of disagreements, appeals and complaints are retained for at least 10 years, or the retention period of the associated assessment file if that is longer, under the same access controls and confidentiality protections as assessment files.</p>
+    </div>
+
+    <div class="legal-block">
+      <div class="legal-block-num">13</div>
+      <h2 class="legal-block-title">Recourse outside SCL</h2>
+      <p>If you have exhausted the internal process and remain dissatisfied, you keep every right you had before you started. You may raise the matter with applicable regulatory authorities, and you may pursue legal proceedings.</p>
+      <p>SCL is not currently accredited, and says so plainly at <a href="/accreditation">/accreditation</a>. Once it is, an accreditation body accepts complaints about the certified activities of the bodies it accredits, and that route opens to you as well.</p>
+      <p><strong>SCL does not restrict or discourage anyone from pursuing recourse outside it.</strong> Having an internal process waives none of your legal rights, and nothing on this page should be read as asking you to give any of them up.</p>
+      <p><strong>Related pages.</strong> <a href="/mark">The SCL name and mark</a>. <a href="/verify">Verify a certificate</a>. <a href="/process">The certification process</a>. <a href="/accreditation">Accreditation status</a>. <a href="/disclaimer">What a certificate says, and what it does not</a>.</p>
+    </div>
+  </div>
+</section>
+
+</div>
+
+</main>
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <div class="footer-logo" aria-label="Safety Critical Labs">SCL</div>
+        <div class="footer-brand-bottom">
+          <span class="footer-copyright">&copy; 2026 Safety Critical Labs</span>
+          <div class="footer-social">
+            <a href="https://www.linkedin.com/company/safety-critical-labs/" target="_blank" rel="noopener" aria-label="Safety Critical Labs on LinkedIn">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.03-3.04-1.85-3.04-1.86 0-2.14 1.45-2.14 2.94v5.67H9.36V9h3.41v1.56h.05c.47-.9 1.63-1.85 3.36-1.85 3.6 0 4.27 2.37 4.27 5.45v6.29zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM7.12 20.45H3.55V9h3.57v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.72v20.55C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.72C24 .77 23.2 0 22.22 0z"/></svg>
+            </a>
+          </div>
+        </div>
+      </div>
+      <div class="footer-cols">
+        <div class="footer-col">
+          <div class="footer-col-group">
+            <div class="footer-col-label">Certification</div>
+            <a href="/framework">Framework</a>
+            <a href="/process">Process</a>
+            <a href="/assess">Assess</a>
+            <a href="/verify">Verify</a>
+            <a href="/deliverables">What SCL issues</a>
+            <a href="/evidence">Evidence</a>
+          </div>
+        </div>
+        <div class="footer-col">
+          <div class="footer-col-group">
+            <div class="footer-col-label">Resources</div>
+            <a href="/documents">Documents</a>
+            <a href="/presentation">Presentation</a>
+            <a href="/certificate-template">Certificate template</a>
+            <a href="/search">Ask SCL</a>
+            <a href="/questions">All questions answered</a>
+            <a href="/glossary">Glossary</a>
+          </div>
+        </div>
+        <div class="footer-col">
+          <div class="footer-col-group">
+            <div class="footer-col-label">Company</div>
+            <a href="/position">Position</a>
+            <a href="/expertise">Expertise</a>
+            <a href="/markets">Markets</a>
+            <a href="/contact">Contact</a>
+          </div>
+          <div class="footer-col-group">
+            <div class="footer-col-label">Briefings</div>
+            <a href="/news">News</a>
+            <a href="/updates">Updates</a>
+            <a href="/subscribe">Subscribe</a>
+          </div>
+        </div>
+        <div class="footer-col">
+          <div class="footer-col-group">
+            <div class="footer-col-label">Legal</div>
+            <a href="/terms">Terms</a>
+            <a href="/mark">The SCL mark</a>
+            <a href="/privacy">Privacy</a>
+            <a href="/disclaimer">Disclaimer</a>
+            <a href="/complaints">Complaints and appeals</a>
+            <a href="/impartiality">Impartiality</a>
+            <a href="/accreditation">Accreditation</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* Hero cursor glow driver lives in footer.js (promoted 2026-08-24) */
+</script>
+<script src="/footer.js" defer></script>
+<script src="/nav.js" defer></script>
+</body>
+</html>

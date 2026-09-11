@@ -357,7 +357,7 @@
     {
       "id": "faq-21",
       "q": "What industries or markets does SCL serve?",
-      "a": "SCL focuses on domains where an AI failure can hurt people or cause serious loss, such as aerospace, spaceflight, automotive, medical, and other safety-critical fields. Because the framework layers onto the safety standard already used in each domain, it adapts across industries. The markets page describes the sectors in scope.",
+      "a": "SCL focuses on domains where an AI failure can hurt people or cause serious loss, such as aerospace, spaceflight, automotive, medical, and other safety-critical fields. That is where SCL concentrates, not a limit on what can be assessed: the applicability determination classifies every system that contains a learned component as Safety-Critical, Mission-Critical or Operational Support AI, and the classification decides which requirements apply rather than whether the system can be certified. Because the framework layers onto the safety standard already used in each domain, it adapts across industries. The markets page describes the sectors in scope.",
       "keywords": [
         "industries",
         "markets",
@@ -762,6 +762,47 @@
         "trademark"
       ],
       "link": "/documents"
+    },
+    {
+      "id": "faq-41",
+      "q": "Can SCL certify an AI system that is not safety-critical?",
+      "a": "Yes. The applicability determination has one exit only: if no AI or ML is present, standard software assurance practices apply. If a learned component is present, the system is classified as Safety-Critical AI, Mission-Critical AI, or Operational Support AI, and that classification determines which requirements apply and at what stringency. Mission-Critical AI is AI whose outputs affect operational success but not human safety. Operational Support AI is AI that supports operations but does not drive critical decisions, and all remaining AI systems are Operational Support. The classification checklist in Appendix B works down those three in order at B.1, B.2 and B.3, and has no outcome meaning the system cannot be assessed. For Operational Support AI the requirement set is AI-1 through AI-6 and AI-10 as a minimum, with AI-7, AI-8 and AI-9 applied as tailored, approved by the Software Assurance authority. SCL concentrates on domains where a failure can hurt people, but that is a statement of focus, not a scope exclusion.",
+      "keywords": [
+        "certify",
+        "not safety-critical",
+        "non-critical",
+        "operational support",
+        "mission-critical",
+        "classification",
+        "tier",
+        "eligible",
+        "scope",
+        "llm",
+        "chatbot",
+        "internal tool",
+        "any ai",
+        "in scope"
+      ],
+      "link": "/framework"
+    },
+    {
+      "id": "faq-42",
+      "q": "The framework uses the word operational in two different ways. Which is which?",
+      "a": "Two different things, and they are easy to confuse. The Operational Design Domain, defined in AI-1.0, is the declared conditions a system is intended to operate in: operational environment, system inputs, user population, subject population, operational phases, performance envelope, regulatory and operational authorization, and exclusions. Operational Support AI is one of the three system classifications in Section 1.2.2, defined as AI that supports operations but does not drive critical decisions. AI-1.0 states the relationship directly: classification establishes what the system is, and the Operational Design Domain establishes where, for whom, and how it is intended to operate. Every classified system declares an ODD, whichever of the three tiers it falls into, so the word carries no implication that a system is merely in use somewhere.",
+      "keywords": [
+        "operational",
+        "operational support",
+        "operational design domain",
+        "odd",
+        "classification",
+        "ai-1.0",
+        "1.2.2",
+        "tier",
+        "meaning",
+        "difference",
+        "two ways"
+      ],
+      "link": "/requirements#ai-1-0"
     }
   ]
 }

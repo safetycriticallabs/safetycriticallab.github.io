@@ -8,14 +8,14 @@
  *              AI binding named AI, opt-in retention to a D1 binding named
  *              ASK_LOG, token-gated POST /bench/retrieve)
  *           -> Cloudflare Tunnel hostname (protected by Cloudflare Access)
- *           -> Ollama on the host running scl-sft (a Llama 3.1 8B fine-tune)
+ *           -> Ollama on the host running scl-sft-v2 (a Llama 3.1 8B fine-tune)
  *
  * Deploy (dashboard paste, no wrangler):
  *   1. Bump WORKER_BUILD below, then paste this WHOLE file over the worker.
  *   2. Settings > Variables and Secrets:
  *        OLLAMA_URL                    plain var, e.g. https://ollama.safetycriticallabs.com
  *        CF_ACCESS_CLIENT_ID / _SECRET secrets, from the Zero Trust service token
- *        OLLAMA_MODEL                  scl-sft (required for production parity;
+ *        OLLAMA_MODEL                  scl-sft-v2 (required for production parity;
  *                                      the code falls back to DEFAULT_MODEL)
  *        RERANK                        on
  *        RERANK_GUARD                  pintop
@@ -67,8 +67,12 @@
  * rate rule on a custom route (workers.dev cannot get zone WAF).
  */
 
-const DEFAULT_MODEL = 'scl-sft:latest';  // production model; rollback is setting OLLAMA_MODEL to llama3.1:latest
-const WORKER_BUILD = '2026-09-10.3'; // bump on every dashboard paste; echoed by /bench/retrieve so a paste can be verified from outside
+const DEFAULT_MODEL = 'scl-sft-v2:latest';  // production since 2026-09-10; rollback is OLLAMA_MODEL=scl-sft,
+                                            // the previous fine-tune, still installed on the host. NOT llama3.1,
+                                            // which is the un-tuned base and has not been production since 09-02.
+                                            // This constant is the floor if OLLAMA_MODEL is ever lost, so it must
+                                            // track whatever production actually serves.
+const WORKER_BUILD = '2026-09-11.1'; // bump on every dashboard paste; echoed by /bench/retrieve so a paste can be verified from outside
 const MAX_QUESTION_CHARS = 500;
 const MAX_HISTORY_MSGS = 8;          // most recent turns kept
 const MAX_HISTORY_MSG_CHARS = 1200;  // each turn truncated to this
@@ -953,6 +957,10 @@ async function healthCheck(request, env) {
 
 function healthResponse(body, tokenOk, detail) {
   const out = detail ? Object.assign({}, body, { detail }) : body;
+  // The indent argument is load-bearing outside this file. The production
+  // uptime monitor matches the literal string `"status": "ok"`, and the
+  // space after the colon exists only because of the 1 here. Minify this to
+  // JSON.stringify(out) and the monitor emails a permanent false outage.
   return new Response(JSON.stringify(out, null, 1), {
     status: body.status === 'down' ? 503 : 200,
     headers: {
@@ -971,7 +979,12 @@ export default {
     if (request.method === 'OPTIONS') {
       return new Response(null, { status: 204, headers: corsHeaders(origin) });
     }
-    if (request.method === 'GET' && new URL(request.url).pathname === '/health') {
+    // HEAD as well as GET: a health endpoint that 405s on HEAD breaks any
+    // monitor that reasonably prefers it, and UptimeRobot's plain HTTP
+    // monitor sends HEAD by default. Found 2026-09-11 while wiring the
+    // uptime check, which had to be built as a keyword monitor instead.
+    if ((request.method === 'GET' || request.method === 'HEAD')
+        && new URL(request.url).pathname === '/health') {
       return healthCheck(request, env);
     }
     if (request.method !== 'POST') {

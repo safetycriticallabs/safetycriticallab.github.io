@@ -7,6 +7,7 @@
 <meta name="description" content="Safety Critical Labs is an AI certification authority for safety critical systems. Formal determinations issued against a published, citable standard.">
 <meta property="og:title" content="Safety Critical Labs">
 <meta property="og:description" content="AI certification for safety critical systems. Formal determinations issued against a published, citable standard.">
+<link rel="alternate" type="application/rss+xml" title="Safety Critical Labs" href="/feed.xml">
 <link rel="canonical" href="https://safetycriticallabs.com/">
 <meta name="twitter:card" content="summary">
 <meta property="og:url" content="https://safetycriticallabs.com/">
@@ -1557,11 +1558,12 @@
   .news-header { display: block; }
   .news-lead { font-size: clamp(24px, 2.5vw, 34px); font-weight: 600; line-height: 1.14; letter-spacing: -0.015em; color: #0C2242 !important; border-left: none; padding-left: 0; margin: 0; }
 
-  /* ── News ROWS block (Anthropic "Latest releases" list) — a bold statement on
-     the left + a list of notable news rows on the right, below the regulatory
-     cards. Each row = title (left) + source (right) with a hairline divider.
-     Like Anthropic's list, these are curated evergreen picks; "All news" points
-     at the live feed. ── */
+  /* ── The record block: a bold statement on the left + SCL's own recent
+     publications on the right, below the regulatory cards. Each row is title
+     (left) + type (right) with a hairline divider. The rows are written by
+     renderRecordRows() from /news.json, not chosen by hand. They were curated
+     picks until September 2026; see /impartiality section 10 for why that
+     stopped. ── */
   .news-rows {
     display: grid;
     grid-template-columns: 0.85fr 1.5fr;
@@ -2068,40 +2070,19 @@
       </div>
     </div>
 
-    <!-- Anthropic-style rows: curated notable reading on the right, statement on
-         the left. "All news" points at the live feed (/news). -->
+    <!-- The record. The rows below are written by renderRecordRows() from
+         /news.json, which generate_news.py builds from /updates. There is no
+         hand curated list here any more: until September 2026 this block held
+         six links chosen by hand, with a commercial AI lab in the top row, and
+         nothing on the homepage should be able to put a named vendor in front
+         of a reader by editorial choice. See /impartiality section 10. -->
     <div class="news-rows">
       <div class="nr-statement">
-        <div class="nr-eyebrow">[ The frontier ]</div>
-        <h2 class="nr-headline">We track the frontier so the standard keeps pace.</h2>
-        <a href="/news" class="nr-all">All news <span aria-hidden="true">&rarr;</span></a>
+        <div class="nr-eyebrow">[ The record ]</div>
+        <h2 class="nr-headline">Every change to the standard, published as it happens.</h2>
+        <a href="/updates" class="nr-all">All updates <span aria-hidden="true">&rarr;</span></a>
       </div>
-      <div class="nr-list">
-        <a class="nr-row" href="https://www.anthropic.com/research/agentic-misalignment" target="_blank" rel="noopener">
-          <span class="nr-row-title">Agentic Misalignment: How LLMs could be insider threats</span>
-          <span class="nr-row-cat">Anthropic</span>
-        </a>
-        <a class="nr-row" href="https://deepmind.google/discover/blog/taking-a-responsible-path-to-agi/" target="_blank" rel="noopener">
-          <span class="nr-row-title">Taking a responsible path to AGI</span>
-          <span class="nr-row-cat">Google DeepMind</span>
-        </a>
-        <a class="nr-row" href="https://hai.stanford.edu/news/ai-index-2025-state-of-ai-in-10-charts" target="_blank" rel="noopener">
-          <span class="nr-row-title">AI Index 2025: State of AI in 10 Charts</span>
-          <span class="nr-row-cat">Stanford HAI</span>
-        </a>
-        <a class="nr-row" href="https://www.alignmentforum.org/posts/njAZwT8nkHnjipJku/alignment-faking-in-large-language-models" target="_blank" rel="noopener">
-          <span class="nr-row-title">Alignment Faking in Large Language Models</span>
-          <span class="nr-row-cat">Alignment Forum</span>
-        </a>
-        <a class="nr-row" href="https://news.mit.edu/2025/explained-generative-ai-environmental-impact-0117" target="_blank" rel="noopener">
-          <span class="nr-row-title">Explained: Generative AI's environmental impact</span>
-          <span class="nr-row-cat">MIT News</span>
-        </a>
-        <a class="nr-row" href="https://techcrunch.com/2024/08/14/mit-researchers-release-a-repository-of-ai-risks/" target="_blank" rel="noopener">
-          <span class="nr-row-title">MIT researchers release a repository of AI risks</span>
-          <span class="nr-row-cat">TechCrunch</span>
-        </a>
-      </div>
+      <div class="nr-list" id="nr-list"></div>
     </div>
   </div>
 </section>
@@ -3118,6 +3099,29 @@
 
     if (html) container.innerHTML = html;
   }
+
+  /* ── The record ─────────────────────────────────────────────
+     Six newest SCL publications, read from /news.json (same origin, no proxy).
+     Falls back to leaving the container empty rather than inventing rows. */
+  function renderRecordRows() {
+    var container = document.getElementById('nr-list');
+    if (!container) return;
+    fetch('/news.json')
+      .then(function (r) { return r.ok ? r.json() : Promise.reject(); })
+      .then(function (items) {
+        var html = '';
+        items.slice(0, 6).forEach(function (it) {
+          html += '<a class="nr-row" href="' + encodeURI(it.url || '/updates') + '"'
+            + (/^https?:/.test(it.url || '') ? ' target="_blank" rel="noopener"' : '') + '>'
+            +   '<span class="nr-row-title">' + escapeHtml(it.title || '') + '</span>'
+            +   '<span class="nr-row-cat">' + escapeHtml(it.type || '') + '</span>'
+            + '</a>';
+        });
+        if (html) container.innerHTML = html;
+      })
+      .catch(function () {});
+  }
+  renderRecordRows();
 
   function escapeHtml(str) {
     var div = document.createElement('div');

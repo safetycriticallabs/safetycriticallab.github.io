@@ -3,10 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>News | Safety Critical Labs</title>
-<meta name="description" content="Latest research and announcements from leading AI safety organizations and research labs.">
-<meta property="og:title" content="News | Safety Critical Labs">
-<meta property="og:description" content="Aggregated AI safety news from Stanford HAI, MIT, Google Research, and other leading sources.">
+<title>Safety, Transparency and Innovation | Safety Critical Labs</title>
+<meta name="description" content="Rules, draft standards and research bearing on safety, transparency, and innovation in AI, selected against a published rule. No vendor announcements and no industry news.">
+<meta property="og:title" content="Safety, Transparency and Innovation | Safety Critical Labs">
+<meta property="og:description" content="What regulators, standards bodies and non-commercial research institutions have published on AI safety, transparency and innovation, alongside SCL's own releases.">
+<link rel="alternate" type="application/rss+xml" title="Safety Critical Labs" href="/feed.xml">
 <link rel="canonical" href="https://safetycriticallabs.com/news">
 <meta name="twitter:card" content="summary">
 <meta property="og:url" content="https://safetycriticallabs.com/news">
@@ -19,7 +20,6 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preconnect" href="https://scl-cors-proxy.kevwill94.workers.dev" crossorigin>
-<link rel="preconnect" href="https://techcrunch.com">
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css">
 <style>
@@ -34,7 +34,7 @@
   margin: 0 auto;
 }
 
-/* Featured story — large article at the top */
+/* Featured story, large article at the top */
 .news-featured {
   display: grid;
   grid-template-columns: 1fr 1.1fr;
@@ -221,54 +221,57 @@
   opacity: 0.5;
 }
 /* Per-source tints on card image */
-.news-card[data-source="hai"] .news-card-image,
-.news-featured-image[data-source="hai"] {
+.news-card[data-source="scl"] .news-card-image,
+.news-featured-image[data-source="scl"] {
   background: linear-gradient(135deg, #ECE7DB 0%, #DDE5F0 100%);
+}
+.news-card[data-source="us"] .news-card-image,
+.news-featured-image[data-source="us"] {
+  background: linear-gradient(135deg, #E8EEF6 0%, #C8D4E8 100%);
+}
+.news-card[data-source="eu"] .news-card-image,
+.news-featured-image[data-source="eu"] {
+  background: linear-gradient(135deg, #DDE5F0 0%, #ECE7DB 100%);
+}
+.news-card[data-source="nist"] .news-card-image,
+.news-featured-image[data-source="nist"] {
+  background: linear-gradient(135deg, #FAF9F5 0%, #DDE5F0 100%);
 }
 .news-card[data-source="mit"] .news-card-image,
 .news-featured-image[data-source="mit"] {
-  background: linear-gradient(135deg, #E8EEF6 0%, #C8D4E8 100%);
-}
-.news-card[data-source="google"] .news-card-image,
-.news-featured-image[data-source="google"] {
-  background: linear-gradient(135deg, #FAF9F5 0%, #DDE5F0 100%);
-}
-.news-card[data-source="anthropic"] .news-card-image,
-.news-featured-image[data-source="anthropic"] {
-  background: linear-gradient(135deg, #ECE7DB 0%, #E8EEF6 100%);
-}
-.news-card[data-source="openai"] .news-card-image,
-.news-featured-image[data-source="openai"] {
-  background: linear-gradient(135deg, #DDE5F0 0%, #ECE7DB 100%);
-}
-.news-card[data-source="alignment"] .news-card-image,
-.news-featured-image[data-source="alignment"] {
-  background: linear-gradient(135deg, #FAF9F5 0%, #C8D4E8 100%);
-}
-.news-card[data-source="deepmind"] .news-card-image,
-.news-featured-image[data-source="deepmind"] {
   background: linear-gradient(135deg, #E8EEF6 0%, #DDE5F0 100%);
 }
-.news-card[data-source="techcrunch"] .news-card-image,
-.news-featured-image[data-source="techcrunch"] {
-  background: linear-gradient(135deg, #ECE7DB 0%, #D6E0EE 100%);
+.news-card[data-source="ai2"] .news-card-image,
+.news-featured-image[data-source="ai2"] {
+  background: linear-gradient(135deg, #FAF9F5 0%, #C8D4E8 100%);
 }
-.news-card[data-source="ars"] .news-card-image,
-.news-featured-image[data-source="ars"] {
-  background: linear-gradient(135deg, #E4EAF3 0%, #ECE7DB 100%);
-}
-.news-card[data-source="industry"] .news-card-image,
-.news-featured-image[data-source="industry"] {
-  background: linear-gradient(135deg, #DDE5F0 0%, #E8EEF6 100%);
-}
-.news-card[data-source="openrouter"] .news-card-image,
-.news-featured-image[data-source="openrouter"] {
+.news-card[data-source="csrc"] .news-card-image,
+.news-featured-image[data-source="csrc"] {
   background: linear-gradient(135deg, #E4EAF3 0%, #D6E0EE 100%);
 }
-.news-card[data-source="hf"] .news-card-image,
-.news-featured-image[data-source="hf"] {
-  background: linear-gradient(135deg, #FAF9F5 0%, #E8EEF6 100%);
+.news-basis {
+  margin-top: 88px;
+  padding-top: 40px;
+  border-top: 1px solid rgba(12,34,66,0.14);
+  max-width: 760px;
 }
+.news-basis h2 {
+  font-family: var(--sans);
+  font-size: 22px;
+  font-weight: 600;
+  color: #0C2242;
+  margin: 0 0 20px;
+  letter-spacing: -0.01em;
+}
+.news-basis p {
+  font-family: var(--sans);
+  font-size: 15px;
+  line-height: 1.7;
+  color: rgba(12,34,66,0.78);
+  margin: 0 0 16px;
+}
+.news-basis p:last-child { margin-bottom: 0; }
+.news-basis a { color: #0C2242; }
 
 .news-card-source-pill {
   position: absolute;
@@ -408,10 +411,10 @@
         <a href="/">Safety Critical Labs</a>
         <span>/</span> News
       </div>
-      <h1>Latest in AI research and safety.</h1>
+      <h1>What changes the standard.</h1>
     </div>
     <p class="inner-hero-lead">
-      Model releases, research, and announcements from leading AI labs and safety organizations. Updated continuously from public feeds.
+      Three things only: safety, transparency, and innovation that changes what an assessment has to demonstrate. Rules and draft standards from the bodies that issue them, research from institutions with nothing to sell, and SCL's own releases. Nothing appears here because it is newsworthy.
     </p>
   </div>
 </div>
@@ -420,13 +423,13 @@
 <section class="news-page-section">
   <div class="news-page-inner">
 
-    <!-- Featured article — populated by JS -->
+    <!-- Featured article, populated by JS -->
     <article class="news-featured" id="news-featured" aria-label="Featured story">
       <div class="news-featured-text">
         <div class="news-featured-date" id="featured-date">Loading</div>
         <div class="news-featured-body">
-          <h2 id="featured-title">Loading latest research…</h2>
-          <p id="featured-summary">Fetching the most recent items from Stanford HAI, MIT, Google Research, and other AI safety sources.</p>
+          <h2 id="featured-title">Loading the register…</h2>
+          <p id="featured-summary">Fetching the most recent items from the Federal Register, EUR-Lex, NIST, MIT and Ai2, and the latest release from SCL.</p>
           <div class="news-featured-meta">
             <span class="news-featured-source" id="featured-source">Source</span>
             <a class="news-featured-read" id="featured-link" href="#" target="_blank" rel="noopener">Read</a>
@@ -439,18 +442,29 @@
     <!-- Filter chips -->
     <div class="news-filter-row" id="news-filter-row" role="group" aria-label="Filter by source">
       <button class="news-filter-chip active" aria-pressed="true" data-filter="all">All sources</button>
-      <button class="news-filter-chip" aria-pressed="false" data-filter="models">Models</button>
-      <button class="news-filter-chip" aria-pressed="false" data-filter="openai">OpenAI</button>
-      <button class="news-filter-chip" aria-pressed="false" data-filter="anthropic">Anthropic</button>
-      <button class="news-filter-chip" aria-pressed="false" data-filter="google">Google</button>
-      <button class="news-filter-chip" aria-pressed="false" data-filter="press">Press</button>
-      <button class="news-filter-chip" aria-pressed="false" data-filter="hai">Stanford HAI</button>
-      <button class="news-filter-chip" aria-pressed="false" data-filter="mit">MIT</button>
-      <button class="news-filter-chip" aria-pressed="false" data-filter="alignment">Alignment Forum</button>
+      <button class="news-filter-chip" aria-pressed="false" data-filter="scl">Safety Critical Labs</button>
+      <button class="news-filter-chip" aria-pressed="false" data-filter="us">Federal Register</button>
+      <button class="news-filter-chip" aria-pressed="false" data-filter="eu">EU</button>
+      <button class="news-filter-chip" aria-pressed="false" data-filter="nist">NIST</button>
+      <button class="news-filter-chip" aria-pressed="false" data-filter="research">Research</button>
     </div>
 
-    <!-- Article grid — populated by JS from seed + live feeds -->
+    <!-- Article grid, populated by JS from seed + live feeds -->
     <div class="news-grid" id="news-grid"></div>
+
+    <!-- How this page is selected. Static and hand written on purpose: it is
+         the only article-level prose on /news that a crawler which does not
+         execute JavaScript can read, and the rule it states should not depend
+         on a fetch succeeding. -->
+    <section class="news-basis" aria-labelledby="news-basis-title">
+      <h2 id="news-basis-title">How this page is selected</h2>
+      <p>This page exists for three things: <strong>safety</strong>, <strong>transparency</strong>, and <strong>innovation that changes what an assessment has to demonstrate</strong>. An item appears because it bears on one of them. Nothing appears because it is newsworthy.</p>
+      <p>Two tests decide it, and an item has to pass both.</p>
+      <p><strong>The source test.</strong> The publisher sells no AI product or service. That covers regulators and standards bodies, whose instruments change what conformity requires, and research institutions with nothing to sell. It excludes every commercial AI vendor, because a body that certifies AI systems should not be publishing about the products of the companies it may one day assess. The full source list is on the <a href="/impartiality">impartiality page</a>, section 10, and it is the same list this page reads from.</p>
+      <p><strong>The purpose test.</strong> Funding rounds, valuations, lawsuits, acquisitions, executive appointments, partnerships and prizes are dropped whoever publishes them, as is anything that does not bear on one of the three subjects above. A university feed is not on topic merely because its publisher sells nothing: measured across these sources on 11 September 2026, fourteen of the one hundred and fifteen items they carried that fortnight passed the test.</p>
+      <p>So there is no industry news here, and no coverage of any company or any person in the AI industry, favourable or otherwise. A certification body that publishes an opinion about a vendor's products has spent something it cannot get back, and the opinion is always worth less than the impartiality it costs. There was a curated vendor reading list on this page until September 2026, and what it was and why it went are described on the impartiality page.</p>
+      <p>One vendor is named elsewhere on this site. Ask SCL runs on an open weight Llama 3.1 model that SCL fine tuned and runs on its own hardware, and the Llama 3.1 Community License requires that attribution. It is a disclosure of a dependency, not an endorsement, and it is part of why SCL takes no published position on any model vendor at all.</p>
+    </section>
 
   </div>
 </section>
@@ -533,48 +547,100 @@
   var CORS_PROXY = 'https://scl-cors-proxy.kevwill94.workers.dev/?url=';
 
   var SOURCE_META = {
-    hai:        { label: 'Stanford HAI',     pill: 'HAI' },
-    mit:        { label: 'MIT News',         pill: 'MIT' },
-    google:     { label: 'Google Research',  pill: 'Google AI' },
-    deepmind:   { label: 'Google DeepMind',  pill: 'DeepMind' },
-    anthropic:  { label: 'Anthropic',        pill: 'Anthropic' },
-    openai:     { label: 'OpenAI',           pill: 'OpenAI' },
-    alignment:  { label: 'Alignment Forum',  pill: 'Alignment' },
-    techcrunch: { label: 'TechCrunch',       pill: 'TechCrunch' },
-    ars:        { label: 'Ars Technica',     pill: 'Ars Technica' },
-    industry:   { label: 'Industry News',    pill: 'Headlines' },
-    openrouter: { label: 'OpenRouter',       pill: 'New model' },
-    hf:         { label: 'Hugging Face',     pill: 'Trending' }
+    scl:  { label: 'Safety Critical Labs', pill: 'SCL' },
+    mit:  { label: 'MIT News',               pill: 'MIT' },
+    ai2:  { label: 'Allen Institute for AI', pill: 'Ai2' },
+    us:   { label: 'Federal Register',     pill: 'Federal Register' },
+    eu:   { label: 'EUR-Lex',              pill: 'EU' },
+    nist: { label: 'NIST',                 pill: 'NIST' },
+    csrc: { label: 'NIST CSRC',            pill: 'Draft' }
   };
 
-  /* filter:true → keep only AI-relevant items (broad press / aggregator feeds).
-     titleSuffix → trailing publisher tag Google News appends; stripped after parse.
-     HAI dropped RSS in their site migration (every feed path returns the HTML
-     shell), so their stories come via a Google News query scoped to their site. */
+  /* ── SELECTION RULE ─────────────────────────────────────────
+     Published at /impartiality, section 10. Two kinds of item appear on this
+     page and nothing else: an instrument issued by a body whose output can
+     change what an assessment has to demonstrate, and something SCL published
+     itself. No commercial AI vendor source belongs in this array.
+
+     The rule is held in three places and they are kept in step by hand:
+     this array, ALLOWED_HOSTS in cloudflare-worker.js, and the published list
+     on /impartiality. The worker allowlist is the load bearing one. Adding a
+     source here does nothing unless its host is also on that list, so putting
+     vendor content back is an infrastructure change rather than a one line
+     edit to a page. Anything added is published on /impartiality the same day.
+
+     json:true   endpoint returns JSON; parseJson handles it, not parseFeed.
+     direct:true same origin, so no CORS proxy.
+     filter:true feed is not AI scoped, so TOPIC_KEYWORDS gates it. */
   var FEEDS = [
-    { key: 'hai',        url: 'https://news.google.com/rss/search?q=site:hai.stanford.edu when:365d&hl=en-US&gl=US&ceid=US:en', titleSuffix: ' - Stanford HAI' },
-    { key: 'mit',        url: 'https://news.mit.edu/topic/mitartificial-intelligence2-rss.xml' },
-    { key: 'google',     url: 'https://research.google/blog/rss/' },
-    { key: 'deepmind',   url: 'https://deepmind.google/blog/rss.xml' },
-    { key: 'openai',     url: 'https://openai.com/news/rss.xml' },
-    { key: 'alignment',  url: 'https://www.alignmentforum.org/feed.xml' },
-    { key: 'techcrunch', url: 'https://techcrunch.com/category/artificial-intelligence/feed/', filter: true },
-    { key: 'ars',        url: 'https://feeds.arstechnica.com/arstechnica/index', filter: true },
-    { key: 'industry',   url: 'https://news.google.com/rss/search?q=(OpenAI OR Anthropic OR Claude OR Gemini OR DeepMind OR Llama OR Mistral) (AI OR LLM OR model) when:14d&hl=en-US&gl=US&ceid=US:en', filter: true }
+    { key: 'scl',  url: '/news.json', json: true, direct: true },
+    { key: 'us',   url: 'https://www.federalregister.gov/api/v1/documents.json?conditions%5Bterm%5D=%22artificial+intelligence%22&order=newest&per_page=25&fields%5B%5D=title&fields%5B%5D=publication_date&fields%5B%5D=html_url&fields%5B%5D=type', json: true, filter: true },
+    { key: 'eu',   url: 'https://eur-lex.europa.eu/EN/display-feed.rss?rssId=162', filter: true },
+    { key: 'nist', url: 'https://www.nist.gov/news-events/news/rss.xml', filter: true },
+    { key: 'csrc', url: 'https://csrc.nist.gov/CSRC/media/feeds/pubs/drafts-open-for-comment.json', json: true, filter: true },
+    { key: 'mit',  url: 'https://news.mit.edu/topic/mitartificial-intelligence2-rss.xml', filter: true },
+    { key: 'ai2',  url: 'https://www.allenai.org/rss.xml', filter: true }
   ];
 
-  /* AI-relevance gate for the broad feeds so the page stays on-topic. */
-  var AI_KEYWORDS = /artificial intelligence|\bAI\b|\bLLM\b|language model|machine learning|neural|OpenAI|Anthropic|Claude|\bGPT\b|Gemini|DeepMind|Llama|Mistral|chatbot|generative|\bAGI\b|frontier model/i;
+  /* ── THE PURPOSE GATE ───────────────────────────────────────
+     Published at /impartiality section 10. An item appears on this page only if
+     it bears on safety, transparency, or innovation that changes what an
+     assessment has to demonstrate. It does not appear because it is newsworthy.
 
-  /* Sources eligible to be the big "Featured" hero — keeps a random
-     aggregator headline from becoming the face of the page. */
-  var HERO_SOURCES = { hai:1, mit:1, google:1, deepmind:1, openai:1, anthropic:1, alignment:1, techcrunch:1, ars:1 };
+     This half of the rule does the real work. The source list alone is not
+     enough: measured against these feeds on 2026-09-11, 14 of the 115 items
+     they carried passed, and what the gate dropped from MIT included a real
+     estate centre appointment and a technology transfer award. A university
+     feed is not on topic just because its publisher sells nothing.
+
+     Three tests, applied to every source except SCL's own record.
+
+     EXCLUDE first, because it is the controversy gate. Funding rounds,
+     valuations, lawsuits, acquisitions, executive appointments, partnerships,
+     prizes and campaign coverage are dropped whoever publishes them. This is
+     what makes the page proof against the failure that prompted the rebuild: a
+     story about a named individual or a company's commercial fortunes cannot
+     reach an SCL page even when a source SCL trusts publishes it.
+
+     RELEVANCE second. The NIST, MIT and EUR-Lex feeds carry their publisher's
+     whole output, most of which is not about AI: quantum sensors, nanotech
+     measurement, construction safety, budget discharge decisions. Note the
+     deliberate plural in "models": bare "model" admitted the headline "A better
+     way to model the behavior of metal alloys". Two further terms were narrowed
+     for the same reason, both found by testing against live feeds rather than
+     by reading the regex: bare "agent" admitted a Federal Register notice
+     titled "Transfer Agent Rules", a securities filing, so it is now "agentic",
+     "AI agent" or the plural "agents"; and bare "algorithm" admitted
+     "Cryptographic Algorithms and Key Sizes for Personal Identity
+     Verification", so it is now "algorithmic".
+
+     PURPOSE last, and it names the three things this page is for.
+
+     NO COMPANY NAME APPEARS IN ANY OF THE THREE, and none may be added. A gate
+     that names companies decides which firms exist on an SCL page, which is the
+     editorial act this page was rebuilt to stop making. */
+
+  var GATE_EXCLUDE = /fund(ing|raise)|raises?\s+\$|valuation|\bIPO\b|revenue|profit|acquisi|acquires|merger|lawsuit|sues|sued|antitrust|layoff|\bhires\b|hiring|\bnamed\s+(?:\w+\s+){0,2}(?:director|dean|head|chair|president|provost|professor|fellow)|appointed|executive director|\bCEO\b|\bCTO\b|board of directors|partner(s|ship|ing)?\b|collaborat|wins?\b.{0,30}award|\baward|fellowship|postdoctoral|scholarship|prize|honou?red|obituary|memoriam|election|campaign|launches pilot/i;
+
+  var GATE_RELEVANCE = /artificial intelligence|\bAI\b|AI-|\bLLM\b|language model|machine learning|neural|deep learning|foundation model|frontier model|\bmodels\b|algorithmic|agentic|AI agent|\bagents\b|autonom|self.driving|robot|chatbot|generative|training data|post.?training/i;
+
+  var GATE_PURPOSE = /safety|hazard|\brisk|failure|mistake|reliab|assurance|robust|incident|harm|misuse|red.?team|adversarial|alignment|verif|validat|guardrail|out.of.distribution|drift|uncertainty|calibrat|secure|security|oversight|transparen|document|disclos|evaluat|benchmark|\baudit|interpretab|explainab|model card|provenance|behavio|traceab|accountab|measur|reproducib|open.weight|open.source|open model|capabilit|agentic|\bagents\b|autonom|reasoning|multimodal|fine.?tun|generaliz|efficien|regulat|standard|conformity|governance|framework|compliance|policy|guidance|\brule/i;
+
+  function passesGate(title, summary) {
+    var t = title + ' ' + (summary || '');
+    if (GATE_EXCLUDE.test(t)) return false;
+    if (!GATE_RELEVANCE.test(t)) return false;
+    return GATE_PURPOSE.test(t);
+  }
+
+  /* Only SCL's own newest release can be the face of this page. No third party
+     item, live or seeded, can capture the hero. */
+  var HERO_SOURCES = { scl: 1 };
 
   /* Filter chip → the source keys it covers. */
   var FILTER_GROUPS = {
-    google: ['google', 'deepmind'],
-    press:  ['techcrunch', 'ars', 'industry'],
-    models: ['openrouter', 'hf']
+    nist:     ['nist', 'csrc'],
+    research: ['mit', 'ai2']
   };
   function matchesFilter(item, filter) {
     if (filter === 'all') return true;
@@ -582,62 +648,59 @@
     return group ? group.indexOf(item.key) !== -1 : item.key === filter;
   }
 
-  /* Rich seed content — page is full even before (or instead of) RSS feeds resolving. */
+  /* Seed content so the page is never empty. Every entry is an instrument from
+     a regulator or a standards body, or an SCL release. The instrument seeds
+     are the same lists already proven on the homepage (index.html euAiFallback,
+     nistFallback, frFallback); the SCL seeds guarantee a hero even if
+     /news.json fails to load. */
   function d(s) { return new Date(s + 'T12:00:00Z'); }
   var FALLBACK = [
-    /* Anthropic */
-    { key: 'anthropic', title: 'Agentic Misalignment: How LLMs could be insider threats',
-      summary: 'Anthropic tested 16 leading models in simulated corporate scenarios. When facing replacement or goal conflict, some models chose harmful insider actions such as blackmail.',
-      url: 'https://www.anthropic.com/research/agentic-misalignment', date: d('2025-06-20') },
-    { key: 'anthropic', title: 'Tracing the thoughts of a large language model',
-      summary: 'Interpretability research examining Claude\'s internal computation, with evidence of forward planning and of explanations that do not always match the model\'s actual reasoning.',
-      url: 'https://www.anthropic.com/news/tracing-thoughts-language-model', date: d('2025-03-27') },
-    { key: 'anthropic', title: 'Announcing our updated Responsible Scaling Policy',
-      summary: 'Anthropic\'s updated risk governance framework defines capability thresholds that trigger stronger safeguards as frontier models advance.',
-      url: 'https://www.anthropic.com/news/announcing-our-updated-responsible-scaling-policy', date: d('2024-10-15') },
-    { key: 'anthropic', title: 'Mapping the Mind of a Large Language Model',
-      summary: 'Anthropic\'s interpretability team extracted millions of interpretable features from Claude 3 Sonnet, a detailed look inside a production language model.',
-      url: 'https://www.anthropic.com/news/mapping-mind-language-model', date: d('2024-05-21') },
+    /* Safety Critical Labs */
+    { key: 'scl', title: 'Framework v3.6 released',
+      summary: 'The current published revision, now the standard SCL assesses against, under a new citable DOI. This release makes the applicability determination verifiable.',
+      url: 'https://doi.org/10.5281/zenodo.21924937', date: d('2026-08-01') },
+    { key: 'scl', title: 'Open verification demonstration on NASA turbofan data',
+      summary: 'A public, reproducible demonstration applies the framework verification methods to NASA C-MAPSS turbofan degradation data, with the full pipeline and measured results published as an open repository.',
+      url: 'https://github.com/safetycriticallabs/cmapss-verification-demo', date: d('2026-07-01') },
 
-    /* Google DeepMind */
-    { key: 'deepmind', title: 'Taking a responsible path to AGI',
-      summary: 'Google DeepMind outlines its approach to AGI safety and security across four risk areas: misuse, misalignment, accidents, and structural risks.',
-      url: 'https://deepmind.google/discover/blog/taking-a-responsible-path-to-agi/', date: d('2025-04-02') },
-    { key: 'deepmind', title: 'Introducing the Frontier Safety Framework',
-      summary: 'Protocols for identifying and mitigating severe risks from future frontier models, built around critical capability levels in areas including autonomy, biosecurity, and cybersecurity.',
-      url: 'https://deepmind.google/discover/blog/introducing-the-frontier-safety-framework/', date: d('2024-05-17') },
+    /* EUR-Lex */
+    { key: 'eu', title: 'Proposal amending Regulation (EU) 2024/1689, Digital Omnibus on AI',
+      summary: 'Legislative proposal amending the AI Act.',
+      url: 'https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:52025PC0836', date: d('2025-11-19') },
+    { key: 'eu', title: 'European Strategy for Artificial Intelligence, Communication from the Commission',
+      summary: 'Commission communication setting out the European strategy for artificial intelligence.',
+      url: 'https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:52025DC0724', date: d('2025-10-08') },
+    { key: 'eu', title: 'Commission Implementing Regulation (EU) 2025/454, rules for the application of the AI Act',
+      summary: 'Implementing regulation setting out rules for the application of the AI Act.',
+      url: 'https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32025R0454', date: d('2025-03-07') },
+    { key: 'eu', title: 'Regulation (EU) 2024/1689, harmonised rules on artificial intelligence (AI Act)',
+      summary: 'The AI Act as adopted.',
+      url: 'https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32024R1689', date: d('2024-07-12') },
 
-    /* Stanford HAI */
-    { key: 'hai', title: 'AI Index 2025: State of AI in 10 Charts',
-      summary: 'Key findings from Stanford HAI\'s annual AI Index, covering technical progress, inference costs, responsible AI evaluations, and regulation.',
-      url: 'https://hai.stanford.edu/news/ai-index-2025-state-of-ai-in-10-charts', date: d('2025-04-07') },
-    { key: 'hai', title: 'Safeguarding Third-Party AI Research',
-      summary: 'A Stanford HAI policy brief on the barriers independent researchers face when evaluating AI systems, proposing safe harbors for good faith research by third parties.',
-      url: 'https://hai.stanford.edu/policy/safeguarding-third-party-ai-research', date: d('2025-02-13') },
+    /* NIST */
+    { key: 'nist', title: 'Announcing the AI Agent Standards Initiative for Interoperable and Secure Innovation',
+      summary: 'NIST news announcement.',
+      url: 'https://www.nist.gov/news-events/news/2026/02/announcing-ai-agent-standards-initiative-interoperable-and-secure', date: d('2026-02-17') },
+    { key: 'nist', title: 'CAISI Issues Request for Information About Securing AI Agent Systems',
+      summary: 'NIST news announcement.',
+      url: 'https://www.nist.gov/news-events/news/2026/01/caisi-issues-request-information-about-securing-ai-agent-systems', date: d('2026-01-28') },
+    { key: 'nist', title: 'NIST Launches Centers for AI in Manufacturing and Critical Infrastructure',
+      summary: 'NIST news announcement.',
+      url: 'https://www.nist.gov/news-events/news/2025/12/nist-launches-centers-ai-manufacturing-and-critical-infrastructure', date: d('2025-12-22') },
+    { key: 'nist', title: 'NIST AI Risk Management Framework (AI RMF 1.0)',
+      summary: 'The NIST AI Risk Management Framework.',
+      url: 'https://www.nist.gov/artificial-intelligence/executive-order-safe-secure-and-trustworthy-artificial-intelligence', date: d('2025-01-26') },
+    { key: 'csrc', title: 'Accelerating the Adoption of Software and AI Agent Identity and Authorization',
+      summary: 'NIST CSRC concept paper.',
+      url: 'https://csrc.nist.gov/pubs/other/2026/02/05/accelerating-the-adoption-of-software-and-ai-agent/ipd', date: d('2026-02-05') },
 
-    /* MIT News */
-    { key: 'mit', title: 'Explained: Generative AI\'s environmental impact',
-      summary: 'MIT researchers examine the electricity and water demands of training and serving generative AI models, and the environmental costs that follow.',
-      url: 'https://news.mit.edu/2025/explained-generative-ai-environmental-impact-0117', date: d('2025-01-17') },
-    { key: 'mit', title: 'Researchers reduce bias in AI models while preserving or improving accuracy',
-      summary: 'A technique from MIT identifies and removes the training examples that drive failures on underrepresented groups, reducing bias while maintaining overall accuracy.',
-      url: 'https://news.mit.edu/2024/researchers-reduce-bias-ai-models-while-preserving-improving-accuracy-1211', date: d('2024-12-11') },
-    { key: 'mit', title: 'Reasoning and reliability in AI',
-      summary: 'Researchers at the MIT-IBM Watson AI Lab work on making language models more trustworthy through uncertainty quantification, compositional reasoning, and human interaction studies.',
-      url: 'https://news.mit.edu/2024/reasoning-and-reliability-in-ai-0118', date: d('2024-01-18') },
-
-    /* Alignment Forum */
-    { key: 'alignment', title: 'Alignment Faking in Large Language Models',
-      summary: 'Anthropic and Redwood Research show Claude 3 Opus selectively complying with a conflicting training objective to avoid having its behavior modified, an empirical demonstration of alignment faking.',
-      url: 'https://www.alignmentforum.org/posts/njAZwT8nkHnjipJku/alignment-faking-in-large-language-models', date: d('2024-12-18') },
-    { key: 'alignment', title: 'The case for ensuring that powerful AIs are controlled',
-      summary: 'Redwood Research argues that labs should pair alignment work with control measures that hold even if models are misaligned and actively try to subvert safeguards.',
-      url: 'https://www.alignmentforum.org/posts/kcKrE9mzEHrdqtDpE/the-case-for-ensuring-that-powerful-ais-are-controlled', date: d('2024-01-24') },
-
-    /* Press */
-    { key: 'techcrunch', title: 'MIT researchers release a repository of AI risks',
-      summary: 'Coverage of the MIT AI Risk Repository, a database of more than 700 documented AI risks organized by cause and domain for policymakers and researchers.',
-      url: 'https://techcrunch.com/2024/08/14/mit-researchers-release-a-repository-of-ai-risks/', date: d('2024-08-14') }
+    /* Federal Register */
+    { key: 'us', title: 'Executive Order on Safe, Secure, and Trustworthy Artificial Intelligence',
+      summary: 'Executive Order.',
+      url: 'https://www.federalregister.gov/documents/2023/11/01/2023-24283/safe-secure-and-trustworthy-development-and-use-of-artificial-intelligence', date: d('2023-10-30') },
+    { key: 'us', title: 'Request for Comment on AI Accountability Policy',
+      summary: 'Notice.',
+      url: 'https://www.federalregister.gov/documents/2023/04/13/2023-07776/ai-accountability-policy-request-for-comment', date: d('2023-04-13') }
   ];
 
   var gridItems = [];
@@ -683,11 +746,10 @@
   }
 
   /* ── Thumbnail extraction ───────────────────────────────────
-     media:content / media:thumbnail / enclosure carry the article
-     image in MIT, Google Research, DeepMind, and Ars feeds; the
-     Alignment Forum embeds images in the post HTML instead. Feeds
-     with no image data (TechCrunch, OpenAI, HAI, Google News) fall
-     back to the tinted gradient. */
+     Kept for feeds that carry media:content, media:thumbnail or enclosure.
+     None of the current sources does: regulatory and standards feeds publish
+     no article imagery, so every card falls back to the tinted gradient keyed
+     by data-source. */
   function extractImage(node) {
     var candidates = [];
     var all = node.getElementsByTagName('*');
@@ -761,21 +823,21 @@
       var image = extractImage(node) || firstImgFromHtml(descEl ? descEl.textContent : '');
 
       if (title && link) {
-        if (applyFilter && !AI_KEYWORDS.test(title + ' ' + summary)) continue;
+        if (applyFilter && !passesGate(title, summary)) continue;
         out.push({ key: sourceKey, title: title, url: link, date: date, summary: summary, image: image });
       }
     }
     return out;
   }
 
-  /* ── og:image lookup for TechCrunch ─────────────────────────
-     TechCrunch's feed carries no image data; the thumbnail only
-     exists as an og:image meta tag on the article page. The page
-     is fetched through the CORS proxy (techcrunch.com is on its
-     allowlist) and the read is cancelled as soon as the tag turns
-     up, so only the head of the page transfers. OpenAI blocks the
-     proxy and the HAI feed is dead, so those keep the gradient. */
-  var OG_HOSTS = { 'techcrunch.com': 1 };
+  /* ── og:image lookup ────────────────────────────────────────
+     Empty by design. This page fetches no third party article page for a
+     thumbnail any more: the sources that needed it were the press feeds, and
+     they are gone. Regulatory feeds carry no images, so every card uses the
+     per source tint keyed by data-source. Leaving the mechanism in place but
+     unfed means restoring a vendor source does not silently restore a fetch to
+     that vendor's servers as well. */
+  var OG_HOSTS = {};
 
   function ogImageFromHtml(html) {
     var tag = html.match(/<meta[^>]+(?:property|name)=["']og:image["'][^>]*>/i);
@@ -849,72 +911,58 @@
   }
 
   /* ── Fetch all feeds (no per-fetch timeout by design: every fetch catches to seed/cached content and late cards just arrive late) ── */
+  /* ── JSON sources ───────────────────────────────────────────
+     Three shapes, all lifted from parsers already running on the homepage:
+     scl  /news.json, a plain array built by generate_news.py from /updates
+     us   Federal Register, { results: [...] }
+     csrc NIST CSRC drafts open for comment, { entries: [...] } */
+  function parseJson(text, sourceKey, applyFilter) {
+    var data;
+    try { data = JSON.parse(String(text).replace(/^\uFEFF/, '')); } catch (e) { return []; }
+    var raw = [];
+
+    if (sourceKey === 'scl' && Object.prototype.toString.call(data) === '[object Array]') {
+      raw = data.map(function (it) {
+        return { title: it.title, url: it.url, date: it.date, summary: it.summary || '' };
+      });
+    } else if (data.results) {
+      raw = data.results.map(function (doc) {
+        return { title: doc.title, url: doc.html_url, date: doc.publication_date, summary: doc.type || '' };
+      });
+    } else if (data.entries) {
+      raw = data.entries.map(function (e) {
+        var t = String(e.title || '')
+          .replace(/^(SP|IR|FIPS|Other)\s*\[.*?\]\s*/i, '')
+          .replace(/(Initial|Final) Public Draft\s*$/i, '').trim();
+        return { title: t, url: e.link || e.id || '', date: e.published, summary: e.content || 'Draft open for comment' };
+      });
+    }
+
+    var out = [];
+    for (var i = 0; i < raw.length && out.length < 8; i++) {
+      var it = raw[i];
+      var title = stripHtml(String(it.title || ''));
+      var url = safeUrl(it.url || '');
+      if (!title || !url) continue;
+      var summary = truncate(stripHtml(String(it.summary || '')), 180);
+      if (applyFilter && !passesGate(title, summary)) continue;
+      /* Date-only strings parse as UTC midnight, which renders as the previous
+         day west of Greenwich: /news.json carries 2026-08-01 for framework v3.6
+         and the card read JUL 31. Pin bare dates to midday, as d() does for the
+         seeds. */
+      var raw_date = it.date || '';
+      if (/^\d{4}-\d{2}-\d{2}$/.test(raw_date)) raw_date += 'T12:00:00Z';
+      out.push({ key: sourceKey, title: title, url: url, date: raw_date ? new Date(raw_date) : new Date(), summary: summary, image: '' });
+    }
+    return out;
+  }
+
   function fetchFeed(feed) {
-    return fetch(CORS_PROXY + encodeURIComponent(feed.url))
+    var url = feed.direct ? feed.url : CORS_PROXY + encodeURIComponent(feed.url);
+    return fetch(url)
       .then(function (r) { return r.ok ? r.text() : Promise.reject(new Error('HTTP ' + r.status)); })
-      .then(function (txt) { return parseFeed(txt, feed.key, feed.filter); })
-      .then(function (items) {
-        if (feed.titleSuffix) {
-          items.forEach(function (it) {
-            if (it.title.slice(-feed.titleSuffix.length) === feed.titleSuffix) {
-              it.title = it.title.slice(0, -feed.titleSuffix.length).trim();
-            }
-          });
-        }
-        return items;
-      })
-      .catch(function () { return []; });
-  }
-
-  /* ── Model catalogs ─────────────────────────────────────────
-     "What's current with models", not stories about them. Both
-     APIs send CORS headers, so these fetch directly (no proxy). */
-
-  /* OpenRouter: newest models across every major provider
-     (Anthropic, OpenAI, Google, Meta, Mistral, xAI…). */
-  function fetchOpenRouter() {
-    return fetch('https://openrouter.ai/api/v1/models')
-      .then(function (r) { return r.ok ? r.json() : Promise.reject(); })
-      .then(function (j) {
-        var models = (j.data || []).filter(function (m) { return m.created && m.name; });
-        models.sort(function (a, b) { return b.created - a.created; });
-        return models.slice(0, 8).map(function (m) {
-          return {
-            key: 'openrouter',
-            title: m.name,
-            url: safeUrl('https://openrouter.ai/' + m.id),
-            date: new Date(m.created * 1000),
-            summary: truncate(stripHtml(m.description || ''), 170)
-                     || 'Newly available on OpenRouter.'
-          };
-        });
-      })
-      .catch(function () { return []; });
-  }
-
-  /* Hugging Face: trending models (skip derivative quant/GGUF repos
-     so the list stays to real base-model releases). */
-  function fetchHuggingFace() {
-    var derived = /gguf|gptq|\bawq\b|-bnb-|-i1-|\bquant|\bmlx\b|onnx|imatrix/i;
-    return fetch('https://huggingface.co/api/models?sort=trendingScore&direction=-1&limit=24&full=true')
-      .then(function (r) { return r.ok ? r.json() : Promise.reject(); })
-      .then(function (list) {
-        var out = [];
-        for (var i = 0; i < list.length && out.length < 6; i++) {
-          var m = list[i], id = m.id || m.modelId || '';
-          if (!id || derived.test(id)) continue;
-          var parts = ['Trending on Hugging Face'];
-          if (m.pipeline_tag) { var t = m.pipeline_tag.replace(/-/g, ' '); parts.push(t.charAt(0).toUpperCase() + t.slice(1)); }
-          if (m.downloads) parts.push(Intl.NumberFormat('en-US').format(m.downloads) + ' downloads');
-          out.push({
-            key: 'hf',
-            title: id,
-            url: safeUrl('https://huggingface.co/' + id),
-            date: m.createdAt ? new Date(m.createdAt) : new Date(),
-            summary: parts.join('. ') + '.'
-          });
-        }
-        return out;
+      .then(function (txt) {
+        return feed.json ? parseJson(txt, feed.key, feed.filter) : parseFeed(txt, feed.key, feed.filter);
       })
       .catch(function () { return []; });
   }
@@ -951,7 +999,7 @@
      Repeat visits paint the last live result (thumbnail URLs
      included, so no og:image round-trips) instantly, then the
      background refresh floats anything newer to the top. */
-  var CACHE_KEY = 'sclNewsCache.v1';
+  var CACHE_KEY = 'sclNewsCache.v2';
   var CACHE_MAX_AGE = 24 * 60 * 60 * 1000;
 
   function cacheLoad() {
@@ -1032,21 +1080,6 @@
 
   FEEDS.forEach(function (feed) { fetchFeed(feed).then(addLive); });
 
-  /* The two model catalogs stay paired: the same model can sit in
-     both (e.g. GLM 5.2, Kimi K2.7) — keep the OpenRouter card
-     (cleaner name) and drop the Hugging Face copy. Both APIs are
-     fast, so the pairing costs no meaningful wall-clock. */
-  Promise.all([fetchOpenRouter(), fetchHuggingFace()]).then(function (parts) {
-    var orouter = parts[0], hf = parts[1];
-    function modelKey(title) {
-      return String(title).split(/[:/]/).pop().toLowerCase().replace(/[^a-z0-9]/g, '');
-    }
-    var orKeys = {};
-    orouter.forEach(function (m) { orKeys[modelKey(m.title)] = 1; });
-    hf = hf.filter(function (m) { return !orKeys[modelKey(m.title)]; });
-    addLive(orouter.concat(hf));
-  });
-
   /* ── Render featured article (top item) ──────────────────── */
   function renderFeatured(item) {
     if (!item) return;
@@ -1083,17 +1116,40 @@
   }
 
   /* ── Render grid (remaining items, filtered) ─────────────── */
+  /* Per source cap, applied only to the unfiltered view.
+     The sources publish at wildly different rates: NIST CSRC posts drafts
+     several times a month, while EUR-Lex AI Act items are monthly at best and
+     Federal Register documents that survive the topic gate are irregular. A
+     straight date sort therefore hands the whole grid to whoever published most
+     recently, and the slowest moving sources, which are the ones that actually
+     change what an assessment must demonstrate, fall off the page. Capping each
+     source inside the visible set keeps every source represented. Clicking a
+     source chip lifts the cap, because there the reader has asked for one.
+     Four rather than six since the research sources were added: seven sources
+     sharing twenty four slots. */
+  var PER_SOURCE_CAP = 4;
+
+  function capPerSource(items) {
+    var counts = {}, kept = [], spill = [];
+    items.forEach(function (it) {
+      counts[it.key] = (counts[it.key] || 0) + 1;
+      (counts[it.key] <= PER_SOURCE_CAP ? kept : spill).push(it);
+    });
+    return kept.concat(spill);
+  }
+
   function renderGrid() {
     var grid = document.getElementById('news-grid');
     var filtered = gridItems.filter(function (i) { return matchesFilter(i, activeFilter); });
+    if (activeFilter === 'all') filtered = capPerSource(filtered);
 
     if (filtered.length === 0) {
-      grid.innerHTML = '<div style="grid-column:1/-1; text-align:center; color:rgba(46,109,180,0.55); font-family:var(--sans); padding:40px 0;">No articles from this source yet.</div>';
+      grid.innerHTML = '<div style="grid-column:1/-1; text-align:center; color:rgba(46,109,180,0.55); font-family:var(--sans); padding:40px 0;">Nothing from this source yet.</div>';
       return;
     }
 
     var html = '';
-    filtered.slice(0, 12).forEach(function (item) {
+    filtered.slice(0, 24).forEach(function (item) {
       var meta = SOURCE_META[item.key] || { label: 'AI', pill: 'AI' };
       if (!item.image && imgByUrl[item.url]) item.image = imgByUrl[item.url];
       var imgHtml = (item.image && !BAD_IMAGES[item.image])

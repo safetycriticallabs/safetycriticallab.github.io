@@ -18,23 +18,43 @@
 
 // Domains this proxy will fetch from. Anything else is rejected so
 // the worker can't be abused as a general open proxy.
+//
+// SELECTION RULE, published at /impartiality section 10. Two tests, and a host
+// must pass both to belong here. SOURCE: the publisher sells no AI product or
+// service, which keeps SCL out of its own prospect universe. PURPOSE: what it
+// publishes bears on safety, transparency, or innovation that changes what an
+// assessment has to demonstrate. No commercial AI vendor host belongs on this
+// list, and no general AI press host either.
+//
+// This list is the control behind the rule, not a restatement of it. Adding a
+// source to FEEDS in news.html does nothing unless its host is added here and
+// the worker is redeployed, so restoring vendor content is a deliberate
+// infrastructure change rather than a one line edit inside a page. Anything
+// added here is added to the published list on /impartiality the same day.
+//
+// REMOVED 2026-09-11, when /news became a regulatory and standards register:
+// hai.stanford.edu, news.mit.edu, research.google, www.alignmentforum.org,
+// openai.com, deepmind.google, techcrunch.com, feeds.arstechnica.com and
+// news.google.com. The last of those carried a hand written seven company
+// search query, which is the specific thing that made SCL the editor of which
+// AI firms appeared on its own site.
+//
+// news.mit.edu and www.allenai.org were restored on the same day under the
+// widened source test. Neither sells an AI product, so neither can become an
+// SCL client, and the purpose gate in news.html drops the institutional notices
+// their feeds also carry. hai.stanford.edu was NOT restored: it serves no RSS
+// and is reachable only through news.google.com, and readmitting that host
+// would restore the capability to run an arbitrary company search, which is the
+// capability that caused the problem. Revisit only as a deliberate trade.
 const ALLOWED_HOSTS = [
-  // Regulatory feeds (homepage ticker)
+  // Regulators and standards bodies
   'eur-lex.europa.eu',
   'www.federalregister.gov',
   'www.nist.gov',
   'csrc.nist.gov',
-  // Research-lab feeds (News page)
-  'hai.stanford.edu',
+  // Research institutions that sell no AI product or service
   'news.mit.edu',
-  'research.google',
-  'www.alignmentforum.org',
-  // LLM labs + AI press (News page)
-  'openai.com',
-  'deepmind.google',
-  'techcrunch.com',
-  'feeds.arstechnica.com',
-  'news.google.com',
+  'www.allenai.org',
 ];
 
 // CHANGED (requires manual redeploy): origin allowlist replaces the single

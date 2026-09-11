@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0">
+  <channel>
+    <title>Safety Critical Labs</title>
+    <link>https://safetycriticallabs.com/updates</link>
+    <description>Framework releases, publications and operational updates from Safety Critical Labs.</description>
+    <language>en</language>
+    <item>
+      <title>Framework v3.6 released</title>
+      <link>https://doi.org/10.5281/zenodo.21924937</link>
+      <guid isPermaLink="false">scl-framework-v3-6-released</guid>
+      <pubDate>Sat, 01 Aug 2026 00:00:00 +0000</pubDate>
+      <category>Framework Release</category>
+      <description>The current published revision, now the standard SCL assesses against, under a new citable DOI. This release makes the applicability determination verifiable. Whether the framework applies now turns on a single anchor criterion, whether a component&#x27;s correctness can be fully verified against explicitly written specification by established methods, with the list of mechanisms treated as illustrativ</description>
+    </item>
+    <item>
+      <title>Framework v3.5 released</title>
+      <link>https://doi.org/10.5281/zenodo.21716902</link>
+      <guid isPermaLink="false">scl-framework-v3-5-released</guid>
+      <pubDate>Wed, 01 Jul 2026 00:00:00 +0000</pubDate>
+      <category>Framework Release</category>
+      <description>Point revision published under a new citable DOI. The thirteen requirement areas (AI-1 through AI-13) and the three tier classification structure carry forward unchanged.</description>
+    </item>
+    <item>
+      <title>Framework v3.4 released</title>
+      <link>https://doi.org/10.5281/zenodo.20692967</link>
+      <guid isPermaLink="false">scl-framework-v3-4-released</guid>
+      <pubDate>Wed, 01 Jul 2026 00:00:00 +0000</pubDate>
+      <category>Framework Release</category>
+      <description>Point revision published under a new citable DOI. The thirteen requirement areas (AI-1 through AI-13) and the three tier classification structure carry forward unchanged.</description>
+    </item>
+    <item>
+      <title>Open verification demonstration on NASA turbofan data</title>
+      <link>https://github.com/safetycriticallabs/cmapss-verification-demo</link>
+      <guid isPermaLink="false">scl-open-verification-demonstration-on-nasa-turbofan-data</guid>
+      <pubDate>Wed, 01 Jul 2026 00:00:00 +0000</pubDate>
+      <category>Publication</category>
+      <description>A public, reproducible demonstration applies the framework&#x27;s verification methods to NASA&#x27;s C-MAPSS turbofan degradation dataset. A series of experiments exercises data partitioning, drift monitoring, out-of-distribution detection, and calibration, with the full pipeline, measured results, and figures published as an open repository under an MIT license. It accompanies a methodology manuscript now</description>
+    </item>
+    <item>
+      <title>Framework v3.3 released</title>
+      <link>https://doi.org/10.5281/zenodo.20692966</link>
+      <guid isPermaLink="false">scl-framework-v3-3-released</guid>
+      <pubDate>Mon, 01 Jun 2026 00:00:00 +0000</pubDate>
+      <category>Framework Release</category>
+      <description>Point revision published under a new citable DOI. The thirteen requirement areas (AI-1 through AI-13) and the three tier classification structure carry forward unchanged.</description>
+    </item>
+    <item>
+      <title>Framework v3.1 released — refinements and clarifications</title>
+      <link>https://doi.org/10.5281/zenodo.20648508</link>
+      <guid isPermaLink="false">scl-framework-v3-1-released-refinements-and-clarifications</guid>
+      <pubDate>Mon, 01 Jun 2026 00:00:00 +0000</pubDate>
+      <category>Framework Release</category>
+      <description>Point revision published under a new citable DOI. The thirteen requirement areas (AI-1 through AI-13) and the three tier classification structure carry forward unchanged from v3.0, with refinements to requirement wording, verification guidance, and cross references throughout.</description>
+    </item>
+    <item>
+      <title>White paper posted on SSRN</title>
+      <link>https://ssrn.com/abstract=6875639</link>
+      <guid isPermaLink="false">scl-white-paper-posted-on-ssrn</guid>
+      <pubDate>Mon, 01 Jun 2026 00:00:00 +0000</pubDate>
+      <category>Publication</category>
+      <description>The AI Requirements Framework white paper is publicly posted on SSRN as a citable preprint. It presents the failure-defined principle, the two-tier requirement structure, and the co-located verification approach in a single reference for practitioners and reviewers.</description>
+    </item>
+    <item>
+      <title>Website refresh and source document library launched</title>
+      <link>/documents</link>
+      <guid isPermaLink="false">scl-website-refresh-and-source-document-library-launched</guid>
+      <pubDate>Fri, 01 May 2026 00:00:00 +0000</pubDate>
+      <category>Operations</category>
+      <description>safetycriticallabs.com refreshed across every page in the cream and blue palette. A new Documents library publishes the full set of standards, regulations, and reference documents that inform the framework, with direct links to each official publisher.</description>
+    </item>
+    <item>
+      <title>Framework v3.0 released — Architecture and Paradigm Requirements</title>
+      <link>https://doi.org/10.5281/zenodo.20060591</link>
+      <guid isPermaLink="false">scl-framework-v3-0-released-architecture-and-paradigm-requirements</guid>
+      <pubDate>Fri, 01 May 2026 00:00:00 +0000</pubDate>
+      <category>Framework Release</category>
+      <description>Major structural revision. New Section 3 adds three architecture and paradigm requirement sets: AI-11 Multi-Model Systems, AI-12 Neural Networks, and AI-13 Continuous Learning and Adaptation. These apply conditionally based on system design and resolve prior lexicon contradictions by separating normative architecture requirements from informative implementation patterns.</description>
+    </item>
+    <item>
+      <title>Framework v2.1.3 — Deployment Format Validation</title>
+      <link>https://safetycriticallabs.com/updates#framework-v2-1-3-deployment-format-validation</link>
+      <guid isPermaLink="false">scl-framework-v2-1-3-deployment-format-validation</guid>
+      <pubDate>Fri, 01 May 2026 00:00:00 +0000</pubDate>
+      <category>Framework Release</category>
+      <description>Added AI-4.7 Deployment Format Validation covering model transformations (quantization, pruning, knowledge distillation, framework conversion). Added Section 4.4 Continuous and Periodic Verification and a Cadence column to the Verification Matrix. Editorial pass on Sections 1 through 3 for terminology and lexicon consistency.</description>
+    </item>
+    <item>
+      <title>Abstract submitted to AIAA SciTech Forum 2027</title>
+      <link>https://safetycriticallabs.com/updates#abstract-submitted-to-aiaa-scitech-forum-2027</link>
+      <guid isPermaLink="false">scl-abstract-submitted-to-aiaa-scitech-forum-2027</guid>
+      <pubDate>Fri, 01 May 2026 00:00:00 +0000</pubDate>
+      <category>Publication</category>
+      <description>Framework abstract submitted to the Intelligent Systems: Space Trusted Autonomy track at the AIAA SciTech Forum 2027. Decision notification expected on or about August 24, 2026. First of a multi-venue formal publication push that also targets JAIS, SAFECOMP, and a NIST companion piece.</description>
+    </item>
+    <item>
+      <title>ANAB accreditation conversation opened</title>
+      <link>https://safetycriticallabs.com/updates#anab-accreditation-conversation-opened</link>
+      <guid isPermaLink="false">scl-anab-accreditation-conversation-opened</guid>
+      <pubDate>Wed, 01 Apr 2026 00:00:00 +0000</pubDate>
+      <category>Accreditation</category>
+      <description>Intake response submitted to the ANSI National Accreditation Board, opening the formal conversation toward eventual ISO/IEC 17065 accreditation for certification bodies. ANAB accreditation is the path that transforms the SCL mark from a credible third-party determination into a regulatory instrument.</description>
+    </item>
+    <item>
+      <title>Framework v2.1.1 — Human factors expansion</title>
+      <link>https://safetycriticallabs.com/updates#framework-v2-1-1-human-factors-expansion</link>
+      <guid isPermaLink="false">scl-framework-v2-1-1-human-factors-expansion</guid>
+      <pubDate>Wed, 01 Apr 2026 00:00:00 +0000</pubDate>
+      <category>Framework Release</category>
+      <description>AI-9 Human and AI Teaming expanded with three new sub-requirements: AI-9.7 Operator Qualification, AI-9.8 Workload Management, and AI-9.9 Training Program Requirements. New AI-8.5 Public Disclosure Support covering external model cards, EU AI Act Article 13 user information, EO 14110 and OMB M-24-10 federal AI inventory, and EU AI Act Article 71 public database registration.</description>
+    </item>
+    <item>
+      <title>Three USPTO trademark filings — the mark on record</title>
+      <link>https://safetycriticallabs.com/updates#three-uspto-trademark-filings-the-mark-on-record</link>
+      <guid isPermaLink="false">scl-three-uspto-trademark-filings-the-mark-on-record</guid>
+      <pubDate>Wed, 01 Apr 2026 00:00:00 +0000</pubDate>
+      <category>Trademark</category>
+      <description>Three applications filed with the United States Patent and Trademark Office under Class 42 (scientific and technological services): the Safety Critical Labs name, the SCL design mark covering the logo and seal, and the SCL Certified certification mark. All three now in formal review.</description>
+    </item>
+    <item>
+      <title>Logo and seal design finalized</title>
+      <link>https://safetycriticallabs.com/updates#logo-and-seal-design-finalized</link>
+      <guid isPermaLink="false">scl-logo-and-seal-design-finalized</guid>
+      <pubDate>Wed, 01 Apr 2026 00:00:00 +0000</pubDate>
+      <category>Operations</category>
+      <description>Final mark design completed. The SCL seal is the visible identifier on certificates, the digital badge, and the verification page. Prerequisite for the design mark trademark filing that followed in the same month.</description>
+    </item>
+    <item>
+      <title>First Zenodo deposit, citable DOI registered</title>
+      <link>https://safetycriticallabs.com/updates#first-zenodo-deposit-citable-doi-registered</link>
+      <guid isPermaLink="false">scl-first-zenodo-deposit-citable-doi-registered</guid>
+      <pubDate>Sun, 01 Mar 2026 00:00:00 +0000</pubDate>
+      <category>Framework Release</category>
+      <description>The AI Requirements Framework was deposited to Zenodo on 14 March 2026 and assigned a citable DOI. Cite the framework at the concept DOI 10.5281/zenodo.19024420, which always resolves to the most recent version. Twelve versions have been deposited to date, from 14 March 2026 to 13 August 2026. Dates shown above this entry are document revision dates from the framework&#x27;s own revision history; dates</description>
+    </item>
+    <item>
+      <title>Framework v2.1, ODD and Privacy</title>
+      <link>https://safetycriticallabs.com/updates#framework-v2-1-odd-and-privacy</link>
+      <guid isPermaLink="false">scl-framework-v2-1-odd-and-privacy</guid>
+      <pubDate>Thu, 01 Jan 2026 00:00:00 +0000</pubDate>
+      <category>Document Revision</category>
+      <description>Added AI-1.0 Operational Design Domain with Operational Claim and eight attribute categories, formalizing the certification scope envelope. Added AI-10 Privacy and Data Protection with seven sub-requirements. Section 1.3 introduced the Domain Standards Citation Convention. Mission Support tier renamed to Operational Support throughout. Document revision date. Version 2.1 was not deposited to Zenod</description>
+    </item>
+    <item>
+      <title>Framework v2.0, Risk Score Methodology</title>
+      <link>https://safetycriticallabs.com/updates#framework-v2-0-risk-score-methodology</link>
+      <guid isPermaLink="false">scl-framework-v2-0-risk-score-methodology</guid>
+      <pubDate>Wed, 01 Oct 2025 00:00:00 +0000</pubDate>
+      <category>Document Revision</category>
+      <description>Added AI-4.6 Operational Validation Without Ground Truth and AI-9.6 Operational Role Verification. Introduced Appendix D Risk Score Methodology — the structured, reproducible scoring system that issues a quantified risk score alongside every certification determination. Document revision date. This revision was deposited to Zenodo on 10 April 2026.</description>
+    </item>
+    <item>
+      <title>Framework v1.0, initial development</title>
+      <link>https://safetycriticallabs.com/updates#framework-v1-0-initial-development</link>
+      <guid isPermaLink="false">scl-framework-v1-0-initial-development</guid>
+      <pubDate>Sat, 01 Feb 2025 00:00:00 +0000</pubDate>
+      <category>Document Revision</category>
+      <description>Initial framework development. First draft of the SCL AI Requirements Framework, establishing the requirement areas that address AI-specific failure modes not covered by traditional software assurance practices. This is a development milestone from the document revision history, not a publication date. The framework was first deposited to Zenodo, and first received a citable DOI, in March 2026.</description>
+    </item>
+  </channel>
+</rss>

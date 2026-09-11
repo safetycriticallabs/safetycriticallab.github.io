@@ -1,0 +1,135 @@
+[
+  {
+    "title": "Framework v3.6 released",
+    "url": "https://doi.org/10.5281/zenodo.21924937",
+    "date": "2026-08-01",
+    "type": "Framework Release",
+    "summary": "The current published revision, now the standard SCL assesses against, under a new citable DOI. This release makes the applicability determination verifiable. Whether the framework applies now turns on a single anchor criterion, whether a component's correctness can be fully verified against explicitly written specification by established methods, with the list of mechanisms treated as illustrativ"
+  },
+  {
+    "title": "Framework v3.5 released",
+    "url": "https://doi.org/10.5281/zenodo.21716902",
+    "date": "2026-07-01",
+    "type": "Framework Release",
+    "summary": "Point revision published under a new citable DOI. The thirteen requirement areas (AI-1 through AI-13) and the three tier classification structure carry forward unchanged."
+  },
+  {
+    "title": "Framework v3.4 released",
+    "url": "https://doi.org/10.5281/zenodo.20692967",
+    "date": "2026-07-01",
+    "type": "Framework Release",
+    "summary": "Point revision published under a new citable DOI. The thirteen requirement areas (AI-1 through AI-13) and the three tier classification structure carry forward unchanged."
+  },
+  {
+    "title": "Open verification demonstration on NASA turbofan data",
+    "url": "https://github.com/safetycriticallabs/cmapss-verification-demo",
+    "date": "2026-07-01",
+    "type": "Publication",
+    "summary": "A public, reproducible demonstration applies the framework's verification methods to NASA's C-MAPSS turbofan degradation dataset. A series of experiments exercises data partitioning, drift monitoring, out-of-distribution detection, and calibration, with the full pipeline, measured results, and figures published as an open repository under an MIT license. It accompanies a methodology manuscript now"
+  },
+  {
+    "title": "Framework v3.3 released",
+    "url": "https://doi.org/10.5281/zenodo.20692966",
+    "date": "2026-06-01",
+    "type": "Framework Release",
+    "summary": "Point revision published under a new citable DOI. The thirteen requirement areas (AI-1 through AI-13) and the three tier classification structure carry forward unchanged."
+  },
+  {
+    "title": "Framework v3.1 released \u2014 refinements and clarifications",
+    "url": "https://doi.org/10.5281/zenodo.20648508",
+    "date": "2026-06-01",
+    "type": "Framework Release",
+    "summary": "Point revision published under a new citable DOI. The thirteen requirement areas (AI-1 through AI-13) and the three tier classification structure carry forward unchanged from v3.0, with refinements to requirement wording, verification guidance, and cross references throughout."
+  },
+  {
+    "title": "White paper posted on SSRN",
+    "url": "https://ssrn.com/abstract=6875639",
+    "date": "2026-06-01",
+    "type": "Publication",
+    "summary": "The AI Requirements Framework white paper is publicly posted on SSRN as a citable preprint. It presents the failure-defined principle, the two-tier requirement structure, and the co-located verification approach in a single reference for practitioners and reviewers."
+  },
+  {
+    "title": "Website refresh and source document library launched",
+    "url": "/documents",
+    "date": "2026-05-01",
+    "type": "Operations",
+    "summary": "safetycriticallabs.com refreshed across every page in the cream and blue palette. A new Documents library publishes the full set of standards, regulations, and reference documents that inform the framework, with direct links to each official publisher."
+  },
+  {
+    "title": "Framework v3.0 released \u2014 Architecture and Paradigm Requirements",
+    "url": "https://doi.org/10.5281/zenodo.20060591",
+    "date": "2026-05-01",
+    "type": "Framework Release",
+    "summary": "Major structural revision. New Section 3 adds three architecture and paradigm requirement sets: AI-11 Multi-Model Systems, AI-12 Neural Networks, and AI-13 Continuous Learning and Adaptation. These apply conditionally based on system design and resolve prior lexicon contradictions by separating normative architecture requirements from informative implementation patterns."
+  },
+  {
+    "title": "Framework v2.1.3 \u2014 Deployment Format Validation",
+    "url": "https://safetycriticallabs.com/updates#framework-v2-1-3-deployment-format-validation",
+    "date": "2026-05-01",
+    "type": "Framework Release",
+    "summary": "Added AI-4.7 Deployment Format Validation covering model transformations (quantization, pruning, knowledge distillation, framework conversion). Added Section 4.4 Continuous and Periodic Verification and a Cadence column to the Verification Matrix. Editorial pass on Sections 1 through 3 for terminology and lexicon consistency."
+  },
+  {
+    "title": "Abstract submitted to AIAA SciTech Forum 2027",
+    "url": "https://safetycriticallabs.com/updates#abstract-submitted-to-aiaa-scitech-forum-2027",
+    "date": "2026-05-01",
+    "type": "Publication",
+    "summary": "Framework abstract submitted to the Intelligent Systems: Space Trusted Autonomy track at the AIAA SciTech Forum 2027. Decision notification expected on or about August 24, 2026. First of a multi-venue formal publication push that also targets JAIS, SAFECOMP, and a NIST companion piece."
+  },
+  {
+    "title": "ANAB accreditation conversation opened",
+    "url": "https://safetycriticallabs.com/updates#anab-accreditation-conversation-opened",
+    "date": "2026-04-01",
+    "type": "Accreditation",
+    "summary": "Intake response submitted to the ANSI National Accreditation Board, opening the formal conversation toward eventual ISO/IEC 17065 accreditation for certification bodies. ANAB accreditation is the path that transforms the SCL mark from a credible third-party determination into a regulatory instrument."
+  },
+  {
+    "title": "Framework v2.1.1 \u2014 Human factors expansion",
+    "url": "https://safetycriticallabs.com/updates#framework-v2-1-1-human-factors-expansion",
+    "date": "2026-04-01",
+    "type": "Framework Release",
+    "summary": "AI-9 Human and AI Teaming expanded with three new sub-requirements: AI-9.7 Operator Qualification, AI-9.8 Workload Management, and AI-9.9 Training Program Requirements. New AI-8.5 Public Disclosure Support covering external model cards, EU AI Act Article 13 user information, EO 14110 and OMB M-24-10 federal AI inventory, and EU AI Act Article 71 public database registration."
+  },
+  {
+    "title": "Three USPTO trademark filings \u2014 the mark on record",
+    "url": "https://safetycriticallabs.com/updates#three-uspto-trademark-filings-the-mark-on-record",
+    "date": "2026-04-01",
+    "type": "Trademark",
+    "summary": "Three applications filed with the United States Patent and Trademark Office under Class 42 (scientific and technological services): the Safety Critical Labs name, the SCL design mark covering the logo and seal, and the SCL Certified certification mark. All three now in formal review."
+  },
+  {
+    "title": "Logo and seal design finalized",
+    "url": "https://safetycriticallabs.com/updates#logo-and-seal-design-finalized",
+    "date": "2026-04-01",
+    "type": "Operations",
+    "summary": "Final mark design completed. The SCL seal is the visible identifier on certificates, the digital badge, and the verification page. Prerequisite for the design mark trademark filing that followed in the same month."
+  },
+  {
+    "title": "First Zenodo deposit, citable DOI registered",
+    "url": "https://safetycriticallabs.com/updates#first-zenodo-deposit-citable-doi-registered",
+    "date": "2026-03-01",
+    "type": "Framework Release",
+    "summary": "The AI Requirements Framework was deposited to Zenodo on 14 March 2026 and assigned a citable DOI. Cite the framework at the concept DOI 10.5281/zenodo.19024420, which always resolves to the most recent version. Twelve versions have been deposited to date, from 14 March 2026 to 13 August 2026. Dates shown above this entry are document revision dates from the framework's own revision history; dates"
+  },
+  {
+    "title": "Framework v2.1, ODD and Privacy",
+    "url": "https://safetycriticallabs.com/updates#framework-v2-1-odd-and-privacy",
+    "date": "2026-01-01",
+    "type": "Document Revision",
+    "summary": "Added AI-1.0 Operational Design Domain with Operational Claim and eight attribute categories, formalizing the certification scope envelope. Added AI-10 Privacy and Data Protection with seven sub-requirements. Section 1.3 introduced the Domain Standards Citation Convention. Mission Support tier renamed to Operational Support throughout. Document revision date. Version 2.1 was not deposited to Zenod"
+  },
+  {
+    "title": "Framework v2.0, Risk Score Methodology",
+    "url": "https://safetycriticallabs.com/updates#framework-v2-0-risk-score-methodology",
+    "date": "2025-10-01",
+    "type": "Document Revision",
+    "summary": "Added AI-4.6 Operational Validation Without Ground Truth and AI-9.6 Operational Role Verification. Introduced Appendix D Risk Score Methodology \u2014 the structured, reproducible scoring system that issues a quantified risk score alongside every certification determination. Document revision date. This revision was deposited to Zenodo on 10 April 2026."
+  },
+  {
+    "title": "Framework v1.0, initial development",
+    "url": "https://safetycriticallabs.com/updates#framework-v1-0-initial-development",
+    "date": "2025-02-01",
+    "type": "Document Revision",
+    "summary": "Initial framework development. First draft of the SCL AI Requirements Framework, establishing the requirement areas that address AI-specific failure modes not covered by traditional software assurance practices. This is a development milestone from the document revision history, not a publication date. The framework was first deposited to Zenodo, and first received a citable DOI, in March 2026."
+  }
+]

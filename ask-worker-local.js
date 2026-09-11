@@ -23,6 +23,13 @@
  *   3. Settings > Bindings: Workers AI as AI; D1 (table ask_questions) as ASK_LOG.
  *   4. Settings > Triggers: a daily Cron Trigger; it runs scheduled() at the
  *      bottom of this file to enforce the 12-month retention promise.
+ *   4a. Settings > Observability: Logs ON, with "Persist logs to the Workers
+ *      dashboard". scheduled() writes one JSON line per run tagged
+ *      {"event":"retention_delete"}; that line is the ONLY evidence the
+ *      published 12-month deletion promise is being kept, and Workers Logs
+ *      retains three days on the free plan, seven on paid. A failed run also
+ *      rejects, so it appears in Triggers > Cron Past Events: check that table,
+ *      not just the log, and treat any failed run as a compliance incident.
  *   5. Zone WAF rate-limiting rule on this worker's route (e.g. 10/minute per
  *      IP). Ollama serializes, so one scripted loop can otherwise monopolize it.
  *   6. Verify from outside: POST /bench/retrieve with X-Bench-Token and check
@@ -61,7 +68,7 @@
  */
 
 const DEFAULT_MODEL = 'scl-sft:latest';  // production model; rollback is setting OLLAMA_MODEL to llama3.1:latest
-const WORKER_BUILD = '2026-09-10.2'; // bump on every dashboard paste; echoed by /bench/retrieve so a paste can be verified from outside
+const WORKER_BUILD = '2026-09-10.3'; // bump on every dashboard paste; echoed by /bench/retrieve so a paste can be verified from outside
 const MAX_QUESTION_CHARS = 500;
 const MAX_HISTORY_MSGS = 8;          // most recent turns kept
 const MAX_HISTORY_MSG_CHARS = 1200;  // each turn truncated to this
@@ -1347,11 +1354,66 @@ export default {
   // by a daily Cron Trigger set in the dashboard (Settings, Triggers); a no-op
   // when the ASK_LOG binding is absent, and a failure never affects visitors.
   async scheduled(event, env, ctx) {
-    if (!env || !env.ASK_LOG) return;
-    try {
-      await env.ASK_LOG.prepare("DELETE FROM ask_questions WHERE day < date('now', '-12 months')").run();
-    } catch (e) {
-      console.log('retention delete failed', e && e.message);
+    // Every path through this handler writes exactly one structured line, so a
+    // run that did nothing is distinguishable from a run that did not happen.
+    // Before this, success was silent, which left the published 12-month
+    // deletion promise verifiable only by inferring it from an invocation
+    // record that says the isolate woke up.
+    const line = (o) => {
+      o.event = 'retention_delete';
+      o.build = WORKER_BUILD;
+      o.cron = (event && event.cron) || null;
+      o.scheduled_at = new Date((event && event.scheduledTime) || Date.now()).toISOString();
+      console.log(JSON.stringify(o));
+    };
+    // A broken retention job must FAIL the invocation, not merely mention it.
+    // Every path here used to return normally, so Cloudflare recorded a clean
+    // success in Cron Past Events even when the DELETE had thrown every night
+    // for months: error-rate alerts never matched, and the log line was the
+    // only trace, in a store that keeps three days on the free plan. Rethrowing
+    // costs nothing (scheduled() is isolated from the visitor path, and
+    // Cloudflare does not retry scheduled invocations) and turns a silent
+    // permanent breach of the published deletion promise into a failed run
+    // anyone can see.
+    if (!env || !env.ASK_LOG) {
+      line({ ok: false, skipped: 'no ASK_LOG binding' });
+      throw new Error('retention halted: no ASK_LOG binding');
     }
+    let failure = null;
+    try {
+      // The cut-off is resolved once and then bound, rather than evaluating
+      // date('now') a second time inside the DELETE. That way the boundary in
+      // the log is provably the boundary the delete used, not one computed
+      // near it.
+      const cut = await env.ASK_LOG.prepare("SELECT date('now', '-12 months') AS cutoff").first();
+      const cutoff = cut && cut.cutoff;
+      if (typeof cutoff !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(cutoff)) {
+        // Never issue the DELETE with a boundary we could not read. An
+        // unbounded or malformed comparison here deletes retained rows that
+        // are not due, and there is no undo.
+        // Recorded, not thrown from inside the try: throwing here would be
+        // caught below and write a second line, and the one-line-per-run
+        // guarantee is what makes the log auditable.
+        line({ ok: false, error: 'cutoff unreadable', cutoff: cutoff === undefined ? null : cutoff });
+        failure = new Error('retention halted: cutoff unreadable');
+      } else {
+        const res = await env.ASK_LOG.prepare('DELETE FROM ask_questions WHERE day < ?').bind(cutoff).run();
+        const meta = (res && res.meta) || {};
+        let remaining = null;
+        try {
+          const c = await env.ASK_LOG.prepare('SELECT COUNT(*) AS n FROM ask_questions').first();
+          if (c && typeof c.n === 'number') remaining = c.n;
+        } catch (e2) { /* the count is a courtesy; never let it mask a good delete */ }
+        line({ ok: true, cutoff: cutoff,
+               deleted: typeof meta.changes === 'number' ? meta.changes : null,
+               remaining: remaining,
+               db_ms: typeof meta.duration === 'number' ? meta.duration : null });
+      }
+    } catch (e) {
+      line({ ok: false, error: (e && e.message) || String(e) });
+      failure = e;
+    }
+    // One log line per run, written above; one rejection per failed run, here.
+    if (failure) throw failure;
   },
 };

@@ -1770,9 +1770,26 @@
      the entire wait state was three animated dots. A first-time visitor cannot
      tell thinking from broken, and on a certification body's own site the
      honest read of a silent half minute is broken. Say what is happening. */
+  /* The first line used to read "Retrieving from the framework" on every
+     question, including every question that never touches the framework: a
+     greeting, or anything the published FAQ already answers. It was a guess
+     worded as a fact, on the assistant of a body whose whole product is not
+     asserting things it cannot show.
+
+     Reporting what was actually retrieved was tried and removed, because it
+     cannot work from here. The Worker withholds its response headers until the
+     upstream model has begun producing, so the grounding headers and the first
+     token arrive together: measured 2026-09-11 at 17.7 s to headers and 0 ms
+     from headers to first token. A line set at that moment is destroyed in the
+     same tick. Showing it for real needs the Worker to open the stream before
+     it calls the model, and that trade is not free: today a model failure
+     returns a clean JSON error the client can offer a retry on, and once
+     headers are out it can only appear as a truncated answer.
+
+     So these stay time-based, and each one is true of every question. */
   var WAIT_STAGES = [
-    [0,     'Retrieving from the framework'],
-    [5000,  'Composing the answer'],
+    [0,     'Working on your question.'],
+    [5000,  'Composing the answer.'],
     [18000, 'Still working. The model runs on SCL hardware, so answers take a little longer.'],
   ];
   function startWait(ai) {

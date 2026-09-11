@@ -547,6 +547,15 @@
   color: rgba(12,34,66,0.6);
   white-space: normal;
 }
+/* The retrieval path, shown only when it was not the ranking model. The notice
+   now tells visitors a keyword fallback exists; this is where they find out it
+   was used on their own answer, rather than having to take it on trust. */
+.ask-grounding-note {
+  display: block;
+  margin-top: 5px;
+  color: rgba(12,34,66,0.5);
+  font-style: italic;
+}
 .ask-grounding-plain {
   display: inline-block; font-family: var(--mono); font-size: 12.5px; font-weight: 500;
   color: rgba(12,34,66,0.7);
@@ -1599,6 +1608,14 @@
      nothing rather than a claim the worker never made. ── */
   var GROUNDED_EMPTY = 'Answered from SCL\'s published FAQ; no framework excerpts were served.';
   var GROUNDED_EMPTY_DOC = 'Answered from your attached document and SCL\'s published FAQ; no framework excerpts were served.';
+  /* Shown only on the 'keyword' mode, which the Worker reports when excerpts
+     were served and the reranker did not produce them. It states what happened
+     and not why: the same mode is reported whether the ranking service failed,
+     timed out, ran out of its daily allowance, or was switched off, and the
+     client cannot tell those apart. 'none' is left alone because it means no
+     excerpts at all, which GROUNDED_EMPTY already says, and because the rerank
+     path can return before it ever calls out. */
+  var GROUNDED_KEYWORD = 'Passages for this answer were chosen by SCL\'s keyword matching, not by the Cloudflare ranking model.';
   function parseServedIds(header) {
     var out = [];
     var parts = String(header).split(',');
@@ -1656,6 +1673,12 @@
         if (i > 0) line.appendChild(document.createTextNode(' '));
         line.appendChild(groundingChip(ids[i]));
       }
+    }
+    if (retrieval === 'keyword') {
+      var note = document.createElement('span');
+      note.className = 'ask-grounding-note';
+      note.textContent = GROUNDED_KEYWORD;
+      line.appendChild(note);
     }
     ai.body.appendChild(line);   /* inside the bubble: copies with the answer */
   }

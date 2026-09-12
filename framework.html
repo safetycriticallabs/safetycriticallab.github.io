@@ -276,7 +276,10 @@
 .pub-standard-grid {
   max-width: 1140px; margin: 0 auto;
   display: grid; grid-template-columns: 1fr 1fr; gap: 80px;
-  align-items: center;
+  /* start, not center. The prose column is 393px against a 976px rows column,
+     and centring it dropped the heading 291px down the band, opening a void
+     above it. Top-aligned, the heading sits level with the Document row. */
+  align-items: start;
   position: relative; z-index: 1;
 }
 .pub-standard-rows { display: flex; flex-direction: column; gap: 12px; }
@@ -301,6 +304,17 @@
   text-decoration-color: rgba(46,109,180,0.35); text-underline-offset: 3px;
 }
 .pub-standard-row-value a:hover { text-decoration-color: #0C2242; }
+/* Prose links in the left column. Without this they inherit nothing and fall
+   through to the browser default, #0000EE unvisited and #551A8B visited, which
+   is where the purple came from. Same treatment as the row links above so the
+   two columns read as one band. Both states are named explicitly: an anchor
+   with no author colour is the only way the purple can come back. */
+.pub-standard-grid p a,
+.pub-standard-grid p a:visited {
+  color: var(--ink); text-decoration: underline;
+  text-decoration-color: rgba(46,109,180,0.35); text-underline-offset: 3px;
+}
+.pub-standard-grid p a:hover { text-decoration-color: #0C2242; }
 
 /* ─── OPEN STANDARD BAND ──────────────────────────────────── */
 .open-standard-band {

@@ -13,7 +13,7 @@
 <meta property="og:url" content="https://safetycriticallabs.com/">
 <meta property="og:type" content="website">
 <meta property="og:image" content="https://safetycriticallabs.com/img/og-tile.png">
-<meta name="theme-color" content="#FAF6EC">
+<meta name="theme-color" content="#EBF1F8">
 <!-- Structured data: ties the SCL brand entity to this domain for search
      engines (sitelinks/knowledge panel eligibility). Homepage only. -->
 <script type="application/ld+json">
@@ -747,9 +747,9 @@
   color: #FAF9F5;
 }
 
-/* ─── NEWS SECTION (cream + blue) ────────────────────────── */
+/* ─── NEWS SECTION (pale blue band) ─────────────────────── */
 .news-section {
-  background: #ECE7DB;
+  background: #DDE5F0;
   padding: 100px 40px 140px;
   position: relative;
 }
@@ -957,7 +957,8 @@
   /* ── Nav dropdowns (Company / Briefings) — reuse the shared .gn-dropdown
      component (styles.css). Desktop only: match the toggle to the other nav
      links and recolor the flyout panel to this page's palette (dark navy panel
-     + cream items; the body* navy rule would otherwise hide cream text). Mobile
+     + cream items; the body* navy rule would otherwise hide cream text). Restored
+     to navy 2026-09-11 after a spell as a beige panel. Mobile
      uses the shared hamburger-accordion styling untouched. ── */
   @media (min-width: 881px) {
     .gn-dropdown-toggle {
@@ -967,20 +968,20 @@
     }
     .gn-dropdown-menu {
       left: 0; right: auto;                 /* open left-aligned directly under the trigger */
-      background: #ECE5D5 !important;        /* darker beige panel (the news-card tan) */
-      border: 1px solid rgba(12,34,66,0.10) !important;
-      box-shadow: 0 14px 34px rgba(12, 34, 66,0.22) !important;
+      background: rgba(12,34,66,0.97) !important;   /* navy panel, matching the shared base rule */
+      border: 1px solid rgba(250,249,245,0.14) !important;
+      box-shadow: 0 14px 34px rgba(12, 34, 66,0.30) !important;
       border-radius: 10px !important;
       padding: 8px !important;
     }
     .gn-dropdown-menu a {
-      color: rgba(12,34,66,0.78) !important;   /* navy items, readable on beige */
+      color: rgba(250,249,245,0.72) !important;   /* cream items on the navy panel */
       padding: 9px 14px !important;
       border-radius: 6px;
     }
     .gn-dropdown-menu a:hover {
-      color: #0C2242 !important;
-      background: rgba(12,34,66,0.06) !important;
+      color: #FAF9F5 !important;
+      background: rgba(250,249,245,0.10) !important;
     }
   }
   /* Mobile: keep the shared hamburger-accordion look (inline items, no floating
@@ -1403,7 +1404,7 @@
   @media (max-width:960px){ .sc-assess-rows{ display:none; } }   /* narrow fine-pointer windows: the ring alone */
   @media (prefers-reduced-motion: reduce){ .sc-ring-fill{ transition:none; } .sc-assess-dot{ transition:none; } }
   .sc-assess-cta{ display:flex; align-items:center; justify-content:center; gap:8px; width:100%; background:#FAF9F5; color:#0C2242 !important; border-radius:10px; padding:11px 18px; font-size:14px; font-weight:600; text-decoration:none; transition:background .2s ease; }
-  .sc-assess-cta:hover{ background:#ECE7DB; }
+  .sc-assess-cta:hover{ background:#DDE5F0; }
 
   /* Common-questions tile → mirrors the /search "Ask SCL" page: starter question
      chips that deep-link into a search, over the real search bar. */
@@ -1469,14 +1470,14 @@
     min-height: 348px;
     padding: 30px 30px 26px;
     border-radius: 16px;
-    background: #ECE5D5 !important;         /* warm tan panel, Anthropic-style */
+    background: #0C2242 !important;         /* navy panel, cream type */
     text-decoration: none;
-    color: #0C2242 !important;
+    color: #FAF9F5 !important;
     transition: transform 0.32s cubic-bezier(.16,1,.3,1), box-shadow 0.32s ease;
   }
   .na-card:hover {
     transform: translateY(-4px);
-    box-shadow: 0 16px 38px rgba(12, 34, 66,0.14);
+    box-shadow: 0 16px 38px rgba(12, 34, 66,0.28);
   }
   .na-title {
     font-family: var(--sans);
@@ -1484,14 +1485,14 @@
     font-weight: 600;
     line-height: 1.24;
     letter-spacing: -0.01em;
-    color: #0C2242 !important;
+    color: #FAF9F5 !important;
     margin: 0 0 13px;
   }
   .na-desc {
     font-family: var(--sans);
     font-size: 14.5px;
     line-height: 1.5;
-    color: rgba(12, 34, 66,0.72) !important;
+    color: rgba(250, 249, 245,0.74) !important;
     margin: 0;
   }
   .na-card-foot { margin-top: 26px; }
@@ -1502,21 +1503,21 @@
     align-items: baseline;
     gap: 14px;
     padding: 11px 0;
-    border-top: 1px solid rgba(12, 34, 66,0.14);
+    border-top: 1px solid rgba(250, 249, 245,0.18);
   }
   .na-k {
     font-family: var(--mono);
     font-size: 11px;
     letter-spacing: 0.13em;
     text-transform: uppercase;
-    color: rgba(12, 34, 66,0.5) !important;
+    color: rgba(250, 249, 245,0.58) !important;
     white-space: nowrap;
   }
   .na-v {
     font-family: var(--sans);
     font-size: 13.5px;
     font-weight: 500;
-    color: #0C2242 !important;
+    color: #FAF9F5 !important;
     text-align: right;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -1529,20 +1530,20 @@
     align-self: flex-start;
     padding: 10px 22px;
     border-radius: 6px;
-    border: 1px solid #0C2242;
+    border: 1px solid rgba(250,249,245,0.45);
     background: transparent !important;
-    color: #0C2242 !important;
+    color: #FAF9F5 !important;
     font-family: var(--sans);
     font-size: 14px;
     font-weight: 500;
     transition: background 0.2s ease, color 0.2s ease;
   }
-  .na-cta span { color: #0C2242 !important; }   /* beat body* color rule on the arrow */
-  .na-card:hover .na-cta { background: #0C2242 !important; color: #FAF9F5 !important; }
-  .na-card:hover .na-cta span { color: #FAF9F5 !important; }
+  .na-cta span { color: #FAF9F5 !important; }   /* beat body* color rule on the arrow */
+  .na-card:hover .na-cta { background: #FAF9F5 !important; color: #0C2242 !important; }
+  .na-card:hover .na-cta span { color: #0C2242 !important; }
   /* Skeleton cards while the feeds load */
   .na-skel { pointer-events: none; }
-  .na-skel .skel-line { background: rgba(12, 34, 66,0.09); border-radius: 4px; height: 13px; margin: 0 0 11px; }
+  .na-skel .skel-line { background: rgba(250, 249, 245,0.14); border-radius: 4px; height: 13px; margin: 0 0 11px; }
   @media (max-width: 900px) {
     .news-list { grid-template-columns: 1fr; }
     .na-card { min-height: 0; }

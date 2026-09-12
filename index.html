@@ -1455,8 +1455,8 @@
 
   /* ── Regulatory feed → Anthropic-style card grid. The three sources (Federal
      Register, EU, NIST) become three warm-tan cards: title → summary → a
-     DATE / SOURCE meta table with hairline rules → a filled navy "Read"
-     button. Replaces the full-width rows + constellation side-panels; the old
+     DATE / SOURCE meta table with hairline rules → an outlined "Read"
+     control. Replaces the full-width rows + constellation side-panels; the old
      ── */
   .news-list {
     display: grid !important;
@@ -1469,20 +1469,33 @@
     justify-content: space-between;
     min-height: 348px;
     padding: 30px 30px 26px;
-    /* Navy card with a gold hairline. The gold is #DCB34B, read off the flat
-       emblem artwork (SCL_Logo_watermark.png), not picked: the 3D render's
-       lit pixels give #DCAD60, which is deltaE 12.3 away from the authored
-       colour. Hairline rather than a top rule so the gold reads as an edge
-       around the whole card, the way the ring sits in the seal.
+    /* Warm 4 card: #E0D0AB. This IS the emblem gold, not a colour beside it.
+       Measured in OKLCH the gold #DCB34B sits at hue 87.3; #E0D0AB sits at
+       87.4, a tenth of a degree away, with chroma dropped from 0.129 to 0.052
+       and lightness raised from 78.4 to 86.1. Same hue, less saturation. It is
+       step 4 of a ladder held on that hue: #F5F0E3 / #F0E7D2 / #EADDBF /
+       #E0D0AB / #D5C296, cream #FAF9F5 at the top and the gold ring at the
+       bottom. Derived from the flat emblem artwork (SCL_Logo_watermark.png);
+       the 3D render is lit, its pixels give #DCAD60 and are not authored
+       colour.
 
-       The gold stays a 1px edge and the two small labels on purpose. #C8861A
-       is the Partial state in the /assess results key, and a broad gold fill
-       on a certification body's page reads as a conformity signal. */
+       WHY A BROAD WARM FILL IS SAFE HERE, which the previous navy treatment
+       was written to avoid. Every warm SIGNAL on this site is saturated:
+       .sc-assess-dot.is-partial #D9982F (chroma 0.138, on this same page),
+       /assess Partial #C8861A (0.136), evidence warn #B5751A (0.126), verify
+       warn #C98A1B (0.137). The ladder tops out at 0.062. The rule that keeps
+       surface and status apart is chroma, not hue: saturated warm is a claim,
+       desaturated warm is paper. Do not raise this card's chroma past ~0.07
+       without re-checking it against the /assess results key.
+
+       No gold accent on the card: the surface is the gold, so a second gold
+       on top would say the same thing twice. Labels take the emblem ring blue
+       #15466C instead. */
     border-radius: 16px;
-    background: #0C2242 !important;
-    border: 1px solid rgba(220,179,75,0.55);
+    background: #E0D0AB !important;
+    border: 1px solid rgba(12,34,66,0.13);
     text-decoration: none;
-    color: #FAF9F5 !important;
+    color: #0C2242 !important;
     transition: transform 0.32s cubic-bezier(.16,1,.3,1), box-shadow 0.32s ease;
   }
   .na-card:hover {
@@ -1495,14 +1508,14 @@
     font-weight: 600;
     line-height: 1.24;
     letter-spacing: -0.01em;
-    color: #FAF9F5 !important;
+    color: #0C2242 !important;          /* 10.41:1 on #E0D0AB */
     margin: 0 0 13px;
   }
   .na-desc {
     font-family: var(--sans);
     font-size: 14.5px;
     line-height: 1.5;
-    color: rgba(250, 249, 245,0.74) !important;
+    color: #47535F !important;          /* 5.16:1 on #E0D0AB */
     margin: 0;
   }
   .na-card-foot { margin-top: 26px; }
@@ -1513,21 +1526,21 @@
     align-items: baseline;
     gap: 14px;
     padding: 11px 0;
-    border-top: 1px solid rgba(250, 249, 245,0.18);
+    border-top: 1px solid rgba(12,34,66,0.16);
   }
   .na-k {
     font-family: var(--mono);
     font-size: 11px;
     letter-spacing: 0.13em;
     text-transform: uppercase;
-    color: #DCB34B !important;          /* the gold ring carries the labels */
+    color: #15466C !important;          /* the emblem ring blue, 6.49:1 */
     white-space: nowrap;
   }
   .na-v {
     font-family: var(--sans);
     font-size: 13.5px;
     font-weight: 500;
-    color: #FAF9F5 !important;
+    color: #0C2242 !important;
     text-align: right;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -1540,20 +1553,20 @@
     align-self: flex-start;
     padding: 10px 22px;
     border-radius: 6px;
-    border: 1px solid rgba(220,179,75,0.55);
+    border: 1px solid rgba(12,34,66,0.30);
     background: transparent !important;
-    color: #DCB34B !important;
+    color: #0C2242 !important;
     font-family: var(--sans);
     font-size: 14px;
     font-weight: 500;
     transition: background 0.2s ease, color 0.2s ease;
   }
-  .na-cta span { color: #DCB34B !important; }
-  .na-card:hover .na-cta { background: #DCB34B !important; color: #0C2242 !important; }
-  .na-card:hover .na-cta span { color: #0C2242 !important; }
+  .na-cta span { color: #0C2242 !important; }
+  .na-card:hover .na-cta { background: #0C2242 !important; color: #FAF9F5 !important; }
+  .na-card:hover .na-cta span { color: #FAF9F5 !important; }
   /* Skeleton cards while the feeds load */
   .na-skel { pointer-events: none; }
-  .na-skel .skel-line { background: rgba(250, 249, 245,0.14); border-radius: 4px; height: 13px; margin: 0 0 11px; }
+  .na-skel .skel-line { background: rgba(12,34,66,0.10); border-radius: 4px; height: 13px; margin: 0 0 11px; }
   @media (max-width: 900px) {
     .news-list { grid-template-columns: 1fr; }
     .na-card { min-height: 0; }

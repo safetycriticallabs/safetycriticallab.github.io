@@ -54,7 +54,10 @@ const ALLOWED_HOSTS = [
   'csrc.nist.gov',
   // Research institutions that sell no AI product or service
   'news.mit.edu',
-  'www.allenai.org',
+  // Apex domain, NOT www. www.allenai.org 301s to http://allenai.org, and the
+  // redirect check below requires https, so the www form is rejected as a
+  // disallowed redirect target even when it is on this list. Use the apex.
+  'allenai.org',
 ];
 
 // CHANGED (requires manual redeploy): origin allowlist replaces the single

@@ -25,6 +25,21 @@
   --section-space: clamp(90px, 11vw, 168px);
 }
 
+/* Base link colour. An anchor that no author rule colours falls through to the
+   browser's own defaults, #0000EE unvisited and #551A8B visited, which is where
+   the purple links came from. Author origin beats the user-agent sheet, so this
+   one rule closes that hole everywhere.
+
+   Deliberately the bare `a` selector, specificity 0,0,1, the lowest there is.
+   Every existing rule on the site is at least 0,1,1 and keeps its colour; this
+   only reaches anchors that had no colour at all. Do not raise it to
+   `a:link, a:visited`, which is 0,1,1 and would start winning ties against
+   rules like `.gn-links a` on source order.
+
+   text-decoration-color tints the underline where one already exists and is
+   inert where a more specific rule sets `text-decoration` shorthand. */
+a { color: var(--ink); text-decoration-color: rgba(46,109,180,0.35); }
+
 html { font-size: 16px; scroll-behavior: smooth; overflow-x: hidden; background: #FAF9F5; }
 body {
   background: #FAF9F5;

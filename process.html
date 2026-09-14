@@ -460,7 +460,7 @@ body, body * { color: #0C2242 !important; }
             </div>
             <div class="check-item fade-up">
               <span class="check-dot"></span>
-              <span class="check-text"><strong>Finding grading:</strong> Each finding is graded Pass, Conditional Pass (with defined remediation), or Fail. Grading rationale is documented against specific requirement criteria, not assessor judgment.</span>
+              <span class="check-text"><strong>Finding grading:</strong> Each finding is graded Major or Observation. A Major finding means a requirement is not met for the Operational Design Domain in force at determination. An Observation means the requirement is met and the assessor has recorded a recommendation that does not affect the determination. There is no intermediate grade: a requirement is met or it is not. Grading rationale is documented against specific requirement criteria, not assessor judgment.</span>
             </div>
             <div class="check-item check-item-score fade-up">
               <span class="check-dot"></span>
@@ -468,7 +468,7 @@ body, body * { color: #0C2242 !important; }
             </div>
             <div class="check-item fade-up">
               <span class="check-dot"></span>
-              <span class="check-text"><strong>Remediation paths:</strong> For Conditional Pass findings, a defined remediation path with specific acceptance criteria is provided. Remediation is verified before certificate issuance.</span>
+              <span class="check-text"><strong>Remediation paths:</strong> Every Major finding carries a defined remediation path with specific acceptance criteria, stating what would need to be true for the finding to be resolved. Any Major finding means Not Certified, and remediation is verified through re-assessment before a certificate can be issued. Where assessment evidence shows the declared Operational Design Domain was broader than the system can support, the ODD may instead be reconciled during the assessment so the certificate reflects the envelope the evidence supports.</span>
             </div>
           </div>
         </div>
@@ -516,6 +516,10 @@ body, body * { color: #0C2242 !important; }
               <div class="ev-item fade-up">
                 <span class="ev-item-label">Mission Critical</span>
                 <span class="ev-item-desc"><strong>Biennial surveillance audit.</strong> Focused reassessment of continuous validation records and any model updates made since the original certification.</span>
+              </div>
+              <div class="ev-item fade-up">
+                <span class="ev-item-label">Operational Support</span>
+                <span class="ev-item-desc"><strong>Triennial surveillance audit.</strong> Confirmation that the system remains in its declared advisory role, with continuous validation records and any model updates reviewed since the original certification.</span>
               </div>
               <div class="ev-item fade-up">
                 <span class="ev-item-label">Triggered reassessment</span>

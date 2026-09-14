@@ -184,11 +184,11 @@
     letter-spacing: 0.26em; text-transform: uppercase;
     color: var(--navy);
     text-align: center;
-    margin-bottom: 26px;
+    margin-bottom: 16px;
   }
 
   /* FOCAL */
-  .focal { text-align: center; margin-bottom: 28px; }
+  .focal { text-align: center; margin-bottom: 18px; }
   .verb {
     font-family: 'DM Sans', sans-serif;
     font-style: normal;
@@ -238,7 +238,7 @@
   }
 
   /* OPERATIONAL CLAIM */
-  .claim { text-align: center; margin-bottom: 28px; }
+  .claim { text-align: center; margin-bottom: 18px; }
   .claim-label {
     font-family: 'IBM Plex Mono', monospace;
     font-size: 9px; font-weight: 500;
@@ -256,11 +256,65 @@
     text-wrap: balance;
   }
 
+  /* RISK SCORE. Step 4.3 puts a quantified score on the face; it is set large
+     rather than as a mono admin cell because it is meant to be read at a glance. */
+  .pair {
+    display: grid; grid-template-columns: 2.1fr 1fr;
+    gap: 26px; align-items: center;
+    margin-bottom: 14px;
+  }
+  .pair > .score { border-left: 1px solid var(--rule); padding-left: 26px; }
+  .score { text-align: center; margin-bottom: 0; }
+  .score-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px; font-weight: 500;
+    letter-spacing: 0.22em; text-transform: uppercase;
+    color: var(--navy-light);
+    margin-bottom: 5px;
+  }
+  .score-value {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 25px; font-weight: 600; letter-spacing: -0.01em;
+    color: var(--navy);
+    line-height: 1;
+  }
+  .score-scale {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px; letter-spacing: 0.12em;
+    color: var(--navy-light);
+    margin-left: 4px;
+  }
+
+  /* NOTABLE EXCLUSIONS. Mirrors .claim: what is certified, and what is carved
+     out of it. Keep the body to two lines; the page has 12px of slack. */
+  .excl { text-align: center; margin-bottom: 0; }
+  .excl-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px; font-weight: 500;
+    letter-spacing: 0.22em; text-transform: uppercase;
+    color: var(--navy-light);
+    margin-bottom: 8px;
+  }
+  .excl-body {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13.5px; line-height: 1.5;
+    color: var(--navy-mid);
+    max-width: 5.4in;
+    margin: 0 auto;
+    text-wrap: balance;
+  }
+
+  /* SIGNATURES: two, per Step 4.3 (Lead Assessor name + Principal signature). */
+  .sigs {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 40px; margin-bottom: 16px;
+  }
+
   /* DIVIDER */
   .mid-rule {
     width: 100%; height: 1px;
     background: var(--rule);
-    margin-bottom: 20px;
+    margin-bottom: 14px;
   }
 
   /* ADMIN */
@@ -268,7 +322,7 @@
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
     gap: 20px;
-    margin-bottom: 26px;
+    margin-bottom: 18px;
   }
   .admin-cell {
     text-align: center;
@@ -627,6 +681,18 @@
       <div class="claim-body" data-field="operationalClaim">One sentence operational claim describing the certified role and intended scope of the system.</div>
     </div>
 
+    <!-- NOTABLE EXCLUSIONS + QUANTIFIED RISK SCORE, paired on one row -->
+    <div class="pair">
+      <div class="excl">
+        <div class="excl-label">Notable Exclusions</div>
+        <div class="excl-body" data-field="notableExclusions">Material exclusions from the certified scope, summarised so a third party can spot a mismatch with their own intended use.</div>
+      </div>
+      <div class="score">
+        <div class="score-label">Assessed Risk Score</div>
+        <div class="score-value"><span data-field="riskScore">2.4</span><span class="score-scale" data-field="riskScale">/ 5.0</span></div>
+      </div>
+    </div>
+
     <div class="mid-rule"></div>
 
     <!-- ADMIN: three columns -->
@@ -650,20 +716,35 @@
           <div class="admin-label">Valid Through</div>
           <div class="admin-value" data-field="validThrough">DD Mon YYYY</div>
         </div>
+        <div class="admin-row">
+          <div class="admin-label">Surveillance Due</div>
+          <div class="admin-value" data-field="surveillanceDue">DD Mon YYYY</div>
+        </div>
       </div>
       <div class="admin-cell">
         <div class="admin-row">
           <div class="admin-label">Framework DOI</div>
           <div class="admin-value" data-field="frameworkDOI">10.5281/zenodo.21924937</div>
         </div>
+        <div class="admin-row">
+          <div class="admin-label">Requirement Sets</div>
+          <div class="admin-value" data-field="requirementSets">AI-1 to AI-10, AI-12</div>
+        </div>
       </div>
     </div>
 
     <!-- SIGNATURE -->
-    <div class="signature">
-      <div class="sig-line"></div>
-      <div class="sig-name" data-field="signatoryRole">Principal</div>
-      <div class="sig-title">Safety Critical Labs</div>
+    <div class="sigs">
+      <div class="signature">
+        <div class="sig-line"></div>
+        <div class="sig-name" data-field="leadAssessor">Lead Assessor Name</div>
+        <div class="sig-title">Lead Assessor</div>
+      </div>
+      <div class="signature">
+        <div class="sig-line"></div>
+        <div class="sig-name" data-field="signatoryName">Principal Name</div>
+        <div class="sig-title" data-field="signatoryRole">Principal</div>
+      </div>
     </div>
 
       </div><!-- /.body-content -->
@@ -808,6 +889,13 @@
     frameworkVersion:  'v3.6',
     frameworkDOI:      '10.5281/zenodo.21924937',
     verifyUrl:         'https://safetycriticallabs.com/verify?id=SCL-CERT-2025-001',
+    riskScore:         '2.4',
+    riskScale:         '/ 5.0',
+    notableExclusions: 'Material exclusions from the certified scope, summarised so a third party can spot a mismatch with their own intended use.',
+    surveillanceDue:   'DD Mon YYYY',
+    requirementSets:   'AI-1 to AI-10, AI-12',
+    leadAssessor:      'Lead Assessor Name',
+    signatoryName:     'Principal Name',
     signatoryRole:     'Principal',
   };
 

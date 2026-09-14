@@ -1034,7 +1034,21 @@
   .sc-hero-aside { padding-top:clamp(8px,3.2vw,42px); }
   .sc-hero-lead { font-size:clamp(16px,1.35vw,19px); line-height:1.55; color:rgba(12, 34, 66,0.74) !important; max-width:44ch; }
   @media (max-width:860px){ .sc-hero { grid-template-columns:1fr; gap:22px; margin-bottom:44px; } .sc-hero-aside { padding-top:0; } }
-  .sc-grid { display: grid; grid-template-columns: 1fr 1fr; grid-auto-rows: 1fr; gap: 30px; }
+  /* Six columns so the rows run two-over-three: the two artefacts on top at
+     half width each, then the three things a visitor can actually DO. Subscribe
+     came back 2026-09-13 after being retired 2026-08-26, which is what made a
+     third column worth having. */
+  .sc-grid { display: grid; grid-template-columns: repeat(6, 1fr); grid-auto-rows: 1fr; gap: 30px; }
+  #sc-cert, #sc-fw { grid-column: span 3; }
+  #sc-ask, #sc-assess, #sc-subscribe { grid-column: span 2; }
+  /* Between the one-column stack (640px) and full width, three across is too
+     cramped, so everything drops to two across. That would strand the fifth
+     tile alone, so subscribe takes the whole row: it is a form, and a form is
+     the one thing here that is better wide than square. */
+  @media (max-width: 1100px) {
+    #sc-cert, #sc-fw, #sc-ask, #sc-assess { grid-column: span 3; }
+    #sc-subscribe { grid-column: span 6; }
+  }
   .sc-card { position: relative; background: #0C2242 !important; border: none; border-radius: 16px; padding: 22px; min-height: 300px; cursor: pointer; text-align: left; overflow: hidden; display: flex; flex-direction: column; font-family: var(--sans); transition: transform 0.32s cubic-bezier(.16,1,.3,1), box-shadow 0.32s ease; }
   .sc-card:hover { transform: translateY(-5px); box-shadow: 0 18px 42px rgba(12,34,66,0.22); }
   .sc-label { font-size: 16px; font-weight: 600; color: #FAF9F5 !important; }
@@ -1088,6 +1102,11 @@
   /* Cert card-scale sizing (small in card, larger when expanded) */
   #sc-cert-stage .cert-doc { width: 300px; --cert-rest: 0.68; }
   /* Cert card sits on cream (a white cert floating on paper, not on navy). */
+  /* Only the framework tile takes the dark ground. The certificate went dark
+     briefly on 2026-09-13 and came straight back: a white document on cream
+     reads as paper, and the SPECIMEN watermark and the ruled lines depend on
+     that. The burst is the opposite case, a constellation that wants a night
+     sky, so it keeps the dark and its expanded modal now matches it. */
   #sc-cert { background:
       radial-gradient(ellipse 54% 46% at 50% 40%, rgba(255,255,255,0.82), rgba(255,255,255,0) 56%),
       radial-gradient(ellipse 98% 94% at 50% 44%, transparent 42%, rgba(12, 34, 66,0.15) 100%),
@@ -1170,17 +1189,23 @@
      radiating burst slowly tilts/rotates in 3D. Card is a visual preview
      (pointer-events off); expand for the interactive labeled map. */
   #sc-fw { background:
-      radial-gradient(ellipse 54% 46% at 50% 40%, rgba(255,255,255,0.82), rgba(255,255,255,0) 56%),
-      radial-gradient(ellipse 98% 94% at 50% 44%, transparent 42%, rgba(12, 34, 66,0.15) 100%),
-      #FAF9F5 !important; border:1px solid rgba(12, 34, 66,0.12); box-shadow:0 2px 26px rgba(12, 34, 66,0.06); }
-  #sc-fw .sc-label { color:#0C2242 !important; }
-  /* Bottom two tiles: the same lit display-box treatment, navy version (keeps
-     their light-on-dark content readable) — a cool spotlight glow at the centre
-     over a navy radial that darkens toward the corners. */
-  #sc-ask, #sc-assess { background:
       radial-gradient(ellipse 58% 52% at 50% 40%, rgba(120,160,220,0.16), rgba(120,160,220,0) 58%),
       radial-gradient(ellipse 100% 96% at 50% 44%, #173A64 0%, #0B1D37 100%)
       !important; border:1px solid rgba(250,249,245,0.06); }
+  #sc-fw .sc-label { color:#FAF9F5 !important; }
+  /* Bottom two tiles → cream, the SAME display-box as #sc-cert and #sc-fw.
+     These were navy until 2026-09-13. The reason they are not any more: each
+     tile is a view of the page it opens, and both of those pages are cream
+     #FAF9F5 on navy #0C2242 ink (measured on /search and /assess, not guessed).
+     A navy tile advertising a cream page is a preview of something else. All
+     four cards now carry one treatment and each one's contents carry its own
+     page's real values. */
+  #sc-ask, #sc-assess, #sc-subscribe { background:
+      radial-gradient(ellipse 54% 46% at 50% 40%, rgba(255,255,255,0.82), rgba(255,255,255,0) 56%),
+      radial-gradient(ellipse 98% 94% at 50% 44%, transparent 42%, rgba(12, 34, 66,0.15) 100%),
+      #FAF9F5 !important; border:1px solid rgba(12, 34, 66,0.12); box-shadow:0 2px 26px rgba(12, 34, 66,0.06); }
+  #sc-ask .sc-label, #sc-assess .sc-label, #sc-subscribe .sc-label { color:#0C2242 !important; }
+  #sc-ask .sc-sub, #sc-assess .sc-sub, #sc-subscribe .sc-sub { color:rgba(12, 34, 66,0.66) !important; }
   #sc-fw #fw-showcase:not(.is-expanded) { background:transparent !important; perspective:780px; aspect-ratio:2.1/1; }  /* wider ratio = shorter card; tighter perspective = more depth */
   #fw-showcase .fw-center-orb { display:none !important; }
   /* Card view = a real 3D particle burst (.fw3d, generated by JS); the flat SVG
@@ -1217,16 +1242,18 @@
   /* Always-on requirement labels — 2D overlay chips tracked by rAF while expanded */
   .fw3d-labels { position:absolute; inset:0; z-index:6; pointer-events:none; }
   #fw-showcase:not(.is-expanded) .fw3d-labels { display:none; }
-  .fw3d-lbl { position:absolute; transform:translate(-50%,-50%); pointer-events:auto; cursor:pointer; font-family:var(--mono); font-size:11px; line-height:1.2; white-space:nowrap; padding:4px 9px; border-radius:9px; background:rgba(250,249,245,0.82); -webkit-backdrop-filter:blur(2px); backdrop-filter:blur(2px); box-shadow:0 2px 10px rgba(12, 34, 66,0.1); transition:opacity .2s ease, box-shadow .2s ease; will-change:left,top; }
+  /* Labels, intro and tip exist ONLY in the expanded state, so they follow that
+     modal's ground rather than the page's. */
+  .fw3d-lbl { position:absolute; transform:translate(-50%,-50%); pointer-events:auto; cursor:pointer; font-family:var(--mono); font-size:11px; line-height:1.2; white-space:nowrap; padding:4px 9px; border-radius:9px; background:rgba(11,29,55,0.78); border:1px solid rgba(250,249,245,0.14); -webkit-backdrop-filter:blur(2px); backdrop-filter:blur(2px); box-shadow:0 2px 10px rgba(0,0,0,0.28); transition:opacity .2s ease, box-shadow .2s ease; will-change:left,top; }
   .fw3d-lbl:focus-visible { outline:2px solid #2E6DB4; outline-offset:2px; }
-  .fw3d-lbl .l-id { color:#2E6DB4 !important; margin-right:6px; letter-spacing:.03em; }
-  .fw3d-lbl .l-name { color:#0C2242 !important; font-weight:500; }
-  .fw3d-lbl.is-hot, .fw3d-lbl.is-sel { box-shadow:0 4px 16px rgba(12, 34, 66,0.22); }
+  .fw3d-lbl .l-id { color:#79A8D5 !important; margin-right:6px; letter-spacing:.03em; }
+  .fw3d-lbl .l-name { color:#FAF9F5 !important; font-weight:500; }
+  .fw3d-lbl.is-hot, .fw3d-lbl.is-sel { box-shadow:0 4px 16px rgba(0,0,0,0.42); border-color:rgba(250,249,245,0.34); }
   #fw-showcase.has-selection .fw3d-lbl:not(.is-sel) { opacity:0.45; }   /* labels stay legible so the next click is obvious */
   /* Hover tooltip + click detail for the expanded burst */
-  .fw3d-tip { position:absolute; z-index:7; transform:translate(-50%,-155%); background:#0C2242; color:#FAF9F5 !important; font-family:var(--mono); font-size:12px; padding:6px 11px; border-radius:8px; white-space:nowrap; opacity:0; pointer-events:none; transition:opacity .15s ease; box-shadow:0 6px 18px rgba(12,34,66,.28); }
+  .fw3d-tip { position:absolute; z-index:7; transform:translate(-50%,-155%); background:#FAF9F5; color:#0C2242 !important; font-family:var(--mono); font-size:12px; padding:6px 11px; border-radius:8px; white-space:nowrap; opacity:0; pointer-events:none; transition:opacity .15s ease; box-shadow:0 6px 18px rgba(12,34,66,.28); }
   .fw3d-tip.is-on { opacity:1; }
-  .fw3d-tip span { color:#FAF9F5 !important; }
+  .fw3d-tip span { color:#0C2242 !important; }
   .fw3d-tip .fw3d-tip-id { opacity:.55; margin-right:8px; }
   #fw-showcase:not(.is-expanded) .fw3d-tip { display:none; }
   .fw3d-detail { position:absolute; left:38px; bottom:34px; width:min(360px,44%); z-index:7; background:rgba(250,249,245,0.94); backdrop-filter:blur(3px); -webkit-backdrop-filter:blur(3px); border:1px solid rgba(12, 34, 66,0.1); border-radius:16px; padding:20px 22px; box-shadow:0 12px 32px rgba(12,34,66,0.12); opacity:0; visibility:hidden; transform:translateY(10px); pointer-events:none; transition:opacity .28s ease, transform .28s ease, visibility .28s; }   /* visibility keeps the closed panel's controls out of the tab order */
@@ -1244,11 +1271,11 @@
   /* Orientation line — top-center headline for the map (bottom-left collided
      with the modal CTA). Rises in after the burst settles; the "Select one."
      cue pulses gently as the call to action; gone once an area is selected. */
-  .fw3d-intro { position:absolute; top:26px; left:50%; transform:translate(-50%, 10px); max-width:72%; text-align:center; z-index:6; font-family:var(--mono); font-size:12.5px; line-height:1.6; letter-spacing:.02em; color:rgba(12,34,66,0.78) !important; opacity:0; transition:opacity .45s ease .4s, transform .45s ease .4s; pointer-events:none; }
+  .fw3d-intro { position:absolute; top:26px; left:50%; transform:translate(-50%, 10px); max-width:72%; text-align:center; z-index:6; font-family:var(--mono); font-size:12.5px; line-height:1.6; letter-spacing:.02em; color:rgba(250,249,245,0.80) !important; opacity:0; transition:opacity .45s ease .4s, transform .45s ease .4s; pointer-events:none; }
   #fw-showcase.is-expanded .fw3d-intro { opacity:1; transform:translate(-50%, 0); }
   #fw-showcase.has-selection .fw3d-intro { opacity:0; transition-delay:0s; }
   #fw-showcase:not(.is-expanded) .fw3d-intro { display:none; }
-  .fw3d-intro-cue { color:#1E5A9A !important; animation:fw3d-cue 2.2s ease-in-out infinite; }
+  .fw3d-intro-cue { color:#79A8D5 !important; animation:fw3d-cue 2.2s ease-in-out infinite; }
   @keyframes fw3d-cue { 0%,100%{opacity:1} 50%{opacity:0.4} }
   @media (prefers-reduced-motion: reduce) {
     .fw3d-intro { transition:none; transform:translate(-50%, 0); }
@@ -1265,7 +1292,8 @@
   .sc-intro-sub{ text-align:center; max-width:640px; margin:0 auto 30px; font-size:clamp(15px,1.6vw,18px); line-height:1.5; color:rgba(12, 34, 66,0.72)!important; }
   .sc-intro-cta{ display:flex; justify-content:center; gap:14px; flex-wrap:wrap; margin:0 0 72px; }
   .sc-intro-cta .fw-cta{ border-radius:8px !important; height:40px !important; padding:0 26px !important; display:inline-flex !important; align-items:center; justify-content:center; font-size:14px !important; }
-  #sc-cert .sc-expand, #sc-fw .sc-expand{ color:#0C2242 !important; }
+  #sc-cert .sc-expand{ color:#0C2242 !important; }
+  #sc-fw .sc-expand{ color:#FAF9F5 !important; }
   .sc-modal-close{ position:absolute; top:16px; right:16px; z-index:8; display:none; border:none; background:#0C2242; color:#FAF9F5 !important; border-radius:50%; width:42px; height:42px; font-size:0; line-height:1; cursor:pointer; box-shadow:0 4px 16px rgba(12,34,66,.32); transition:background .2s ease, transform .2s ease; }
   /* The × glyph doesn't sit at its own box centre (font metrics offset it), so
      hide it (font-size:0) and draw the X from two bars pinned to the exact
@@ -1305,11 +1333,27 @@
   /* Backdrop + modal stack ABOVE the fixed nav (z 200) and skip link (z 400):
      at phone heights the 92vh modal's close button lands in the nav's band,
      where a lower z-index left it tap-proof (nav intercepted the pointer). */
+  /* Both modal controls are navy pills, which is right on the cream cert modal
+     and invisible on the dark burst one: measured 1.13:1 against that ground,
+     so only their cream contents were reading, not the shapes. Inverted for the
+     dark modal only. */
+  #fw-showcase.is-expanded .sc-modal-close{ background:#FAF9F5; box-shadow:0 4px 16px rgba(0,0,0,.42); }
+  #fw-showcase.is-expanded .sc-modal-close::before,
+  #fw-showcase.is-expanded .sc-modal-close::after{ background:#0C2242; }
+  #fw-showcase.is-expanded .sc-modal-close:hover{ background:#DDE5F0; }
+  #fw-showcase.is-expanded .sc-modal-cta{ background:#FAF9F5; color:#0C2242 !important; }
+  #fw-showcase.is-expanded .sc-modal-cta:hover{ background:#DDE5F0; }
+
   .sc-modal-backdrop{ position:fixed; inset:0; background:rgba(12,34,66,.62); -webkit-backdrop-filter:blur(3px); backdrop-filter:blur(3px); opacity:0; pointer-events:none; transition:opacity .3s ease; z-index:500; }
   body.sc-modal-open .sc-modal-backdrop{ opacity:1; pointer-events:auto; }
   body.sc-modal-open{ overflow:hidden; }
   #sc-cert-stage.is-expanded, #fw-showcase.is-expanded{ position:fixed; top:50%; left:50%; transform:translate(-50%,-50%); width:min(92vw,900px); height:min(92vh,800px); height:min(92dvh,800px); max-width:none; margin:0; z-index:510; border-radius:18px; box-shadow:0 40px 120px rgba(12,34,66,.5); }   /* dvh: iOS Safari's toolbar shrinks the visible viewport; vh line = fallback */
-  #fw-showcase.is-expanded{ aspect-ratio:auto; background:#FAF9F5; }
+  /* The expanded burst is the SAME surface as the card, enlarged, so it carries
+     the card's ground. It was cream until 2026-09-13, which left the rays (now
+     light, for the dark card) almost invisible the moment you expanded it. */
+  #fw-showcase.is-expanded{ aspect-ratio:auto; background:
+      radial-gradient(ellipse 58% 52% at 50% 40%, rgba(120,160,220,0.16), rgba(120,160,220,0) 58%),
+      radial-gradient(ellipse 100% 96% at 50% 44%, #173A64 0%, #0B1D37 100%); }
   #sc-cert-stage.is-expanded{ background:#FAF9F5; }   /* was transparent → the panel showed the dimmed page ("blank") behind the cert */
   /* Drop the card's hover-lift transform INSTANTLY on expand (no transition). A
      lingering transform would make the card a containing block for the fixed
@@ -1367,21 +1411,25 @@
 
   /* ── Card 3: Common questions — animated chat over a live search ── */
   .sc-ask-stage{ flex-direction:column; justify-content:center; gap:16px; width:100%; padding:4px 2px; }
-  .sc-chat{ width:100%; display:flex; flex-direction:column; gap:10px; min-height:104px; justify-content:center; }
-  .sc-bubble{ max-width:82%; padding:10px 14px; border-radius:15px; font-size:13.5px; line-height:1.4; opacity:0; transform:translateY(7px); transition:opacity .5s ease, transform .5s ease; }
-  .sc-bubble.sc-show{ opacity:1; transform:none; }
-  .sc-q{ align-self:flex-end; background:#2E6DB4; color:#FAF9F5 !important; border-bottom-right-radius:5px; }
-  .sc-a{ align-self:flex-start; background:rgba(250,249,245,0.12); color:#E6ECF5 !important; border-bottom-left-radius:5px; }
-  /* demo-loop extras: streaming caret + requirement-citation chip (mirrors the
-     real /search chat). Colors carry !important past the body-wide recolor. */
-  .sc-a .sc-demo-cite{ display:inline-block; font-family:var(--mono); font-size:11px; background:rgba(250,249,245,0.12); border:1px solid rgba(250,249,245,0.34); border-radius:4px; padding:0 5px; margin:0 1px; color:#CFE0F5 !important; }
-  .sc-demo-caret{ display:inline-block; width:6px; height:12px; background:#CFE0F5; margin-left:3px; vertical-align:text-bottom; animation:sc-demo-blink .8s steps(2) infinite; }
-  @keyframes sc-demo-blink{ 0%{opacity:1} 50%{opacity:0} }
-  @media (prefers-reduced-motion: reduce){ .sc-demo-caret{ animation:none; } }
-  .sc-ask-search{ display:flex; align-items:center; gap:10px; width:100%; padding:11px 14px; border-radius:12px; background:rgba(250,249,245,0.08); border:1px solid rgba(250,249,245,0.18); }
-  .sc-ask-search svg{ color:#9DB4D6; flex-shrink:0; }
-  .sc-ask-search input{ flex:1; background:none; border:none; outline:none; color:#FAF9F5 !important; font-family:var(--sans); font-size:14px; }
-  .sc-ask-search input::placeholder{ color:rgba(250,249,245,0.5); }
+  /* The tile is the /search LANDING STATE, not a conversation: the seal, the
+     eyebrow, the starter questions, the ask bar. Geometry is lifted from
+     search.html:230-244 (.search-starter) and inverted for the navy ground,
+     since those chips are navy-on-cream and this card is navy. */
+  .sc-ask-seal{ display:flex; align-items:center; justify-content:center; gap:9px; }
+  .sc-ask-seal svg{ width:30px; height:30px; flex-shrink:0; }
+  /* Eyebrow, chips and ask bar all carry /search's own measured values.
+     Eyebrow: rgba(12,34,66,0.6) at 12px / 0.18em. Chips: search.html:230-244
+     verbatim. Bar: .search-form, cream fill on a #2E6DB4 hairline at 16px. */
+  .sc-ask-eyebrow{ font-family:var(--mono); font-size:10px; letter-spacing:0.18em; text-transform:uppercase; color:rgba(12, 34, 66,0.66) !important; }   /* 5.14:1 on #FAF9F5 */
+  .sc-starters{ display:flex; flex-wrap:wrap; justify-content:center; gap:9px; min-height:74px; align-content:center; }
+  .sc-starter{ display:inline-flex; align-items:center; padding:8px 15px; border:1px solid rgba(12, 34, 66,0.30); border-radius:6px; background:transparent; color:#0C2242 !important; font-family:var(--sans); font-size:12.5px; font-weight:500; white-space:nowrap;
+               opacity:0; transform:translateY(6px) scale(0.97); transition:opacity .45s ease, transform .45s cubic-bezier(.16,1,.3,1); }
+  .sc-starter.sc-show{ opacity:1; transform:none; }
+  @media (prefers-reduced-motion: reduce){ .sc-starter{ transition:none; } }
+  .sc-ask-search{ display:flex; align-items:center; gap:10px; width:100%; padding:11px 14px; border-radius:16px; background:#FAF9F5; border:1px solid #2E6DB4; }
+  .sc-ask-search svg{ color:rgba(12, 34, 66,0.45); flex-shrink:0; }
+  .sc-ask-search input{ flex:1; background:none; border:none; outline:none; color:#0C2242 !important; font-family:var(--sans); font-size:14px; }
+  .sc-ask-search input::placeholder{ color:rgba(12, 34, 66,0.45); }
 
   /* ── Card 4: Readiness assessment — the /assess score ring, ambient ──
      The ring and three area rows cycle through specimen readiness profiles
@@ -1390,30 +1438,56 @@
   .sc-assess-demo{ display:flex; align-items:center; justify-content:center; gap:26px; min-height:176px; }
   .sc-ring{ position:relative; width:150px; height:150px; flex-shrink:0; }
   .sc-ring svg{ width:100%; height:100%; transform:rotate(-90deg); }
-  .sc-ring-bg{ fill:none; stroke:rgba(250,249,245,0.14); stroke-width:9; }
-  .sc-ring-fill{ fill:none; stroke:#FAF9F5; stroke-width:9; stroke-linecap:round; stroke-dasharray:389.6; stroke-dashoffset:389.6; transition:stroke-dashoffset 1.1s cubic-bezier(.4,0,.2,1); }
-  .sc-ring-num{ position:absolute; inset:0; display:flex; align-items:center; justify-content:center; font-size:33px; font-weight:600; color:#FAF9F5 !important; }
-  .sc-ring-num span{ font-size:16px; font-weight:400; color:rgba(250,249,245,0.6) !important; margin-left:2px; }
+  .sc-ring-bg{ fill:none; stroke:rgba(12, 34, 66,0.12); stroke-width:9; }
+  .sc-ring-fill{ fill:none; stroke:#0C2242; stroke-width:9; stroke-linecap:round; stroke-dasharray:389.6; stroke-dashoffset:389.6; transition:stroke-dashoffset 1.1s cubic-bezier(.4,0,.2,1); }
+  .sc-ring-num{ position:absolute; inset:0; display:flex; align-items:center; justify-content:center; font-size:33px; font-weight:600; color:#0C2242 !important; }
+  .sc-ring-num span{ font-size:16px; font-weight:400; color:rgba(12, 34, 66,0.66) !important; margin-left:2px; }   /* 5.14:1 */
   .sc-assess-rows{ display:flex; flex-direction:column; gap:10px; min-width:0; }
-  .sc-assess-row{ display:flex; align-items:center; gap:10px; font-size:13px; color:#D6DEEC !important; padding:9px 12px; border-radius:10px; background:rgba(250,249,245,0.06); white-space:nowrap; }
-  .sc-assess-id{ font-family:var(--mono); font-size:10.5px; font-weight:600; letter-spacing:.03em; color:#9DB4D6 !important; }
-  /* readiness dots mirror the /assess results key (Strong / Partial / Gap),
-     brightened a step for the navy ground */
+  .sc-assess-row{ display:flex; align-items:center; gap:10px; font-size:13px; color:#0C2242 !important; padding:9px 12px; border-radius:10px; background:rgba(12, 34, 66,0.045); white-space:nowrap; }
+  .sc-assess-id{ font-family:var(--mono); font-size:10.5px; font-weight:600; letter-spacing:.03em; color:rgba(12, 34, 66,0.66) !important; }   /* 5.14:1 */
+  /* Readiness dots ARE the /assess results key, not an approximation of it.
+     They were brightened a step (#3E9E5C / #D9982F / #CE4B50) while this card
+     was navy; the card went cream 2026-09-13 and the reason for the lift went
+     with it, so they are back to the exact published values. If /assess ever
+     restates its key, restate it here, and nowhere in between. */
   .sc-assess-dot{ width:9px; height:9px; border-radius:50%; margin-left:auto; flex-shrink:0; background:#5B6B84; transition:background .5s ease; }
-  .sc-assess-dot.is-strong{ background:#3E9E5C; } .sc-assess-dot.is-partial{ background:#D9982F; } .sc-assess-dot.is-gap{ background:#CE4B50; }
+  .sc-assess-dot.is-strong{ background:#2D7A3A; } .sc-assess-dot.is-partial{ background:#C8861A; } .sc-assess-dot.is-gap{ background:#C8272D; }
   @media (max-width:960px){ .sc-assess-rows{ display:none; } }   /* narrow fine-pointer windows: the ring alone */
   @media (prefers-reduced-motion: reduce){ .sc-ring-fill{ transition:none; } .sc-assess-dot{ transition:none; } }
-  .sc-assess-cta{ display:flex; align-items:center; justify-content:center; gap:8px; width:100%; background:#FAF9F5; color:#0C2242 !important; border-radius:10px; padding:11px 18px; font-size:14px; font-weight:600; text-decoration:none; transition:background .2s ease; }
-  .sc-assess-cta:hover{ background:#DDE5F0; }
+  /* Inverted with the card: a cream pill on a cream ground is invisible. Now it
+     matches the nav's own Get Certified pill, navy on cream. */
+  .sc-assess-cta{ display:flex; align-items:center; justify-content:center; gap:8px; width:100%; background:#0C2242; color:#FAF9F5 !important; border-radius:10px; padding:11px 18px; font-size:14px; font-weight:600; text-decoration:none; transition:background .2s ease; }
+  .sc-assess-cta:hover{ background:#173A64; }
 
-  /* Common-questions tile → mirrors the /search "Ask SCL" page: starter question
-     chips that deep-link into a search, over the real search bar. */
-  /* (.sc-chips question pills retired 2026-08-24: the card now demos the live
-     assistant with the .sc-chat loop; the search form remains the real path) */
+  /* Common-questions tile → mirrors the /search "Ask SCL" page: the seal, the
+     eyebrow, the starter questions, over the real search bar.
+     History, because this has now gone round once. The question pills were
+     retired 2026-08-24 in favour of a .sc-chat loop that typed a question and
+     streamed an answer behind a caret. That loop came out 2026-09-13: it was
+     the one element on the page that read as an AI lab rather than a
+     certification body, and it advertised the two-sided chat that search.html
+     itself had already rejected (see the rule at search.html:370-379). The
+     chips are back, now cycling and decorative rather than deep-linking, since
+     a chip that fades out mid-click is a worse affordance than no chip. */
 
-  /* (Stay-informed tile retired 2026-08-26: the fourth card is now the
-     readiness assessment; subscribe still lives in the nav, the footer and
-     /subscribe. Its ticker + email-form CSS went with it.) */
+  /* ── Card 5: Stay informed → a view of /subscribe ────────────────────────
+     Retired 2026-08-26 when the fourth card became the readiness assessment,
+     restored 2026-09-13 as the third column of the bottom row. The old version
+     was a scrolling ticker of SCL milestones; this one shows what /subscribe
+     itself promises, the four things a briefing contains, over the real form.
+     Form values are that page's own: input #FAF9F5 on a #0C2242 hairline at 6px,
+     button #0C2242 at 8px, placeholder you@organization.com. ── */
+  .sc-sub-stage{ flex-direction:column; justify-content:center; gap:14px; width:100%; }
+  .sc-sub-eyebrow{ font-family:var(--mono); font-size:10px; letter-spacing:0.18em; text-transform:uppercase; color:rgba(12, 34, 66,0.66) !important; text-align:center; }
+  .sc-receive{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; }
+  .sc-receive li{ font-size:13px; line-height:1.35; color:#0C2242 !important; padding:9px 2px; border-top:1px solid rgba(12, 34, 66,0.10); display:flex; align-items:baseline; gap:9px; }
+  .sc-receive li:last-child{ border-bottom:1px solid rgba(12, 34, 66,0.10); }
+  .sc-receive b{ font-family:var(--mono); font-size:10px; font-weight:400; color:rgba(12, 34, 66,0.5) !important; flex-shrink:0; }
+  .sc-sub-form{ display:flex; gap:8px; width:100%; }
+  .sc-sub-form input{ flex:1; min-width:0; background:#FAF9F5; border:1px solid #0C2242; border-radius:6px; padding:10px 12px; outline:none; color:#0C2242 !important; font-family:var(--sans); font-size:13px; }
+  .sc-sub-form input::placeholder{ color:rgba(12, 34, 66,0.45); }
+  .sc-sub-btn{ flex-shrink:0; background:#0C2242; color:#FAF9F5 !important; border:none; border-radius:8px; padding:10px 16px; font-family:var(--sans); font-size:13px; font-weight:600; cursor:pointer; transition:background .2s ease; }
+  .sc-sub-btn:hover{ background:#173A64; }
 
   /* ── Footer: Anthropic-style. A left brand column (small SCL mark up top,
      copyright + social pinned to the bottom) with link columns on the right,
@@ -1469,19 +1543,25 @@
     justify-content: space-between;
     min-height: 348px;
     padding: 30px 30px 26px;
-    /* Warm 4 card: #E0D0AB. This IS the emblem gold, not a colour beside it.
-       Measured in OKLCH the gold #DCB34B sits at hue 87.3; #E0D0AB sits at
-       87.4, a tenth of a degree away, with chroma dropped from 0.129 to 0.052
-       and lightness raised from 78.4 to 86.1. Same hue, less saturation. It is
-       step 4 of a ladder held on that hue: #F5F0E3 / #F0E7D2 / #EADDBF /
-       #E0D0AB / #D5C296, cream #FAF9F5 at the top and the gold ring at the
-       bottom. Derived from the flat emblem artwork (SCL_Logo_watermark.png);
-       the 3D render is lit, its pixels give #DCAD60 and are not authored
-       colour.
+    /* Warm 2 card: #F0E7D2. This IS the emblem gold, not a colour beside it.
+       Measured in OKLCH the gold #DCB34B sits at hue 87.3; #F0E7D2 sits at
+       87.5, two tenths of a degree away, with chroma dropped from 0.129 to
+       0.030 and lightness raised from 78.4 to 92.9. Same hue, far less
+       saturation. It is step 2 of a ladder held on that hue: #F5F0E3 /
+       #F0E7D2 / #EADDBF / #E0D0AB / #D5C296, cream #FAF9F5 at the top and the
+       gold ring at the bottom. Derived from the flat emblem artwork
+       (SCL_Logo_watermark.png); the 3D render is lit, its pixels give #DCAD60
+       and are not authored colour.
+
+       Moved 2026-09-13 from step 4 (#E0D0AB, chroma 0.052) because it read as
+       gold rather than as paper. Step 2 is as far up as this can go: step 1
+       (#F5F0E3) separates from the page ground at only 1.08:1 and the card
+       dissolves into it. At step 2 the separation is 1.17:1, which is carried
+       as much by the 1px border as by the fill, so do not remove that border.
 
        WHY A BROAD WARM FILL IS SAFE HERE, which the previous navy treatment
        was written to avoid. Every warm SIGNAL on this site is saturated:
-       .sc-assess-dot.is-partial #D9982F (chroma 0.138, on this same page),
+       .sc-assess-dot.is-partial #C8861A (chroma 0.136, on this same page),
        /assess Partial #C8861A (0.136), evidence warn #B5751A (0.126), verify
        warn #C98A1B (0.137). The ladder tops out at 0.062. The rule that keeps
        surface and status apart is chroma, not hue: saturated warm is a claim,
@@ -1492,7 +1572,7 @@
        on top would say the same thing twice. Labels take the emblem ring blue
        #15466C instead. */
     border-radius: 16px;
-    background: #E0D0AB !important;
+    background: #F0E7D2 !important;
     border: 1px solid rgba(12,34,66,0.13);
     text-decoration: none;
     color: #0C2242 !important;
@@ -1508,14 +1588,14 @@
     font-weight: 600;
     line-height: 1.24;
     letter-spacing: -0.01em;
-    color: #0C2242 !important;          /* 10.41:1 on #E0D0AB */
+    color: #0C2242 !important;          /* 12.90:1 on #F0E7D2 */
     margin: 0 0 13px;
   }
   .na-desc {
     font-family: var(--sans);
     font-size: 14.5px;
     line-height: 1.5;
-    color: #47535F !important;          /* 5.16:1 on #E0D0AB */
+    color: #47535F !important;          /* 6.39:1 on #F0E7D2 */
     margin: 0;
   }
   .na-card-foot { margin-top: 26px; }
@@ -1627,6 +1707,7 @@
      git history is the archive. ── */
   @media (max-width: 640px) {
     .sc-grid { grid-template-columns: 1fr; grid-auto-rows: auto; gap: 22px; }
+    #sc-cert, #sc-fw, #sc-ask, #sc-assess, #sc-subscribe { grid-column: auto; }
     /* Per-tile scroll-scrubbed SPREAD, the phone counterpart of the desktop
        .sc-grid-wide --expand effect (which line 1083 caps out below 1360px).
        Stacked tiles carry the same orientation as the desktop grid, so each
@@ -2007,13 +2088,29 @@
 
       <div class="sc-card" id="sc-ask">
         <div class="sc-stage sc-ask-stage">
-          <!-- Ambient demo of the assistant: a CANNED conversation loop (typed
-               question, streamed answer, citation chip). Deliberately not live:
-               homepage visits must not spend real model inference on decoration,
-               and the demo plays even when the model host is asleep. The real
-               assistant is one submit away in the form below. Decorative:
-               aria-hidden; the form + label carry the accessible meaning. -->
-          <div class="sc-chat" id="sc-ask-demo" aria-hidden="true"></div>
+          <!-- This tile is a VIEW OF /search's landing state, not a conversation:
+               the seal, the eyebrow, the starter questions, the ask bar, in that
+               order, the same order the page itself uses. The questions cycle so
+               the tile shows more of them than fit at once. Nothing here is a
+               chat message and nothing simulates a model generating: the page
+               this represents has not been asked anything yet.
+               Decorative: aria-hidden; the form + label carry the meaning. -->
+          <div class="sc-ask-seal" aria-hidden="true">
+            <svg viewBox="0 0 100 100">
+              <!-- Emblem values, measured off SCL_Logo_watermark.png per the
+                   2026-09-12 note: navy #0F2A4E, ring blue #15466C, gold
+                   #DCB34B, centre eye #79A8D5. The gold stays a ring, never a
+                   fill, which keeps it inside the hairline rule. -->
+              <circle cx="50" cy="50" r="46.5" fill="none" stroke="#0F2A4E" stroke-width="3"/>
+              <circle cx="50" cy="50" r="30.5" fill="none" stroke="#DCB34B" stroke-width="4"/>
+              <circle cx="50" cy="50" r="18.5" fill="none" stroke="#15466C" stroke-width="2"/>
+              <circle cx="50" cy="50" r="12.5" fill="#0F2A4E" stroke="#15466C" stroke-width="2"/>
+              <rect x="39" y="48.5" width="22" height="3" rx="1.5" fill="#79A8D5"/>
+              <circle cx="50" cy="50" r="4.6" fill="#79A8D5"/>
+            </svg>
+            <span class="sc-ask-eyebrow">[ Ask SCL ]</span>
+          </div>
+          <div class="sc-starters" id="sc-ask-demo" aria-hidden="true"></div>
           <form class="sc-ask-search" action="/search" method="get">
             <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
             <input type="text" name="q" placeholder="Search common questions" aria-label="Search common questions" autocomplete="off">
@@ -2049,6 +2146,31 @@
         <div class="sc-label">Readiness assessment</div>
         <div class="sc-sub">How ready is your AI system to certify? A free self assessment across the thirteen requirement areas.</div>
       </div>
+
+      <div class="sc-card" id="sc-subscribe">
+        <div class="sc-stage sc-sub-stage">
+          <!-- The four things /subscribe promises a briefing contains, in that
+               page's own order and wording (subscribe.html:305-318), over that
+               page's own form. Not a ticker of milestones: the old version of
+               this tile carried claims that had to be kept true in two places,
+               and one of them ("three trademark filings") was wrong for a while.
+               A list of what you will receive cannot go stale that way. -->
+          <div class="sc-sub-eyebrow">[ Briefings ]</div>
+          <ul class="sc-receive">
+            <li><b>01</b>Regulatory developments</li>
+            <li><b>02</b>Framework releases</li>
+            <li><b>03</b>Methodology notes</li>
+            <li><b>04</b>Accreditation status</li>
+          </ul>
+          <form class="sc-sub-form" action="/subscribe" method="get">
+            <input type="email" name="email" placeholder="you@organization.com" aria-label="Email address" autocomplete="off">
+            <button type="submit" class="sc-sub-btn">Subscribe</button>
+          </form>
+        </div>
+        <div class="sc-label">Stay informed</div>
+        <div class="sc-sub">Occasional briefings on AI regulation. Never on a schedule.</div>
+      </div>
+
     </div><!-- /.sc-grid-wide -->
 </section>
 
@@ -3456,41 +3578,39 @@
   if (!host) return;
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
 
-  /* strings stream as words; {cite} renders the chip the real /search chat uses */
-  var PAIRS = [
-    { q: 'Does drift monitoring apply to my model?',
-      a: ['Yes. ', { cite: 'AI-4.1' }, ' requires drift to be monitored against baseline distributions, verified by test.'] },
-    { q: 'Are you an LLM?',
-      a: ['Yes. An open-weight Llama model SCL runs on its own hardware. No cloud AI provider generates the answers.'] },
-    { q: 'What about hallucinations?',
-      a: [{ cite: 'AI-5' }, ' exists for exactly that failure. Every requirement is defined by what it prevents.'] },
+  /* The six starter questions are the SAME six the real page offers at
+     search.html:967-972. Kept in that order and that wording so the tile is a
+     view of the page, not a paraphrase of it. If those change, change these. */
+  var STARTERS = [
+    'What is SCL?',
+    'How do I get certified?',
+    'What is the SCL framework?',
+    'How long does certification take?',
+    'What does it cost?',
+    'Is SCL accredited?'
   ];
+  var PER_VIEW = 3;
 
-  function bubble(cls) {
-    var el = document.createElement('div');
-    el.className = 'sc-bubble ' + cls;
-    host.appendChild(el);
-    requestAnimationFrame(function () { el.classList.add('sc-show'); });
-    return el;
-  }
-  function citeEl(id) {
-    var c = document.createElement('span');
-    c.className = 'sc-demo-cite';
-    c.textContent = id;
-    return c;
-  }
-  function renderStatic(pair) {
+  /* Decorative, not interactive. A chip that fades out mid-click is a worse
+     affordance than no chip, so these are plain elements and the real search
+     form directly below carries the action. Host is aria-hidden already. */
+  function paint(from) {
     host.innerHTML = '';
-    var q = bubble('sc-q'); q.textContent = pair.q; q.classList.add('sc-show');
-    var a = bubble('sc-a');
-    pair.a.forEach(function (seg) {
-      if (typeof seg === 'string') a.appendChild(document.createTextNode(seg));
-      else a.appendChild(citeEl(seg.cite));
+    var els = [];
+    for (var i = 0; i < PER_VIEW; i++) {
+      var el = document.createElement('span');
+      el.className = 'sc-starter';
+      el.textContent = STARTERS[(from + i) % STARTERS.length];
+      host.appendChild(el);
+      els.push(el);
+    }
+    els.forEach(function (el, i) {                    /* stagger the pop-in */
+      setTimeout(function () { el.classList.add('sc-show'); }, 90 * i);
     });
-    a.classList.add('sc-show');
+    return els;
   }
 
-  if (reduce.matches) { renderStatic(PAIRS[0]); return; }
+  if (reduce.matches) { paint(0); return; }
 
   var visible = false, idx = 0, resume = null;
 
@@ -3504,44 +3624,14 @@
   }
 
   function cycle() {
-    var pair = PAIRS[idx % PAIRS.length];
-    idx++;
-    host.innerHTML = '';
-    var q = bubble('sc-q');
-    var qi = 0;
-    function typeQ() {
-      if (qi < pair.q.length) { q.textContent = pair.q.slice(0, ++qi); schedule(typeQ, 30); return; }
-      schedule(startA, 550);
-    }
-    function startA() {
-      var a = bubble('sc-a');
-      var caret = document.createElement('span');
-      caret.className = 'sc-demo-caret';
-      a.appendChild(caret);
-      var tokens = [];
-      pair.a.forEach(function (seg) {
-        if (typeof seg === 'string') seg.split(/(\s+)/).forEach(function (w) { if (w) tokens.push(w); });
-        else tokens.push(seg);
+    var els = paint(idx);
+    idx = (idx + PER_VIEW) % STARTERS.length;
+    schedule(function () {
+      els.forEach(function (el, i) {                  /* and stagger the pop-out */
+        setTimeout(function () { el.classList.remove('sc-show'); }, 80 * i);
       });
-      var ti = 0;
-      function stream() {
-        if (ti < tokens.length) {
-          var t = tokens[ti++];
-          if (typeof t === 'string') a.insertBefore(document.createTextNode(t), caret);
-          else a.insertBefore(citeEl(t.cite), caret);
-          schedule(stream, 60);
-          return;
-        }
-        caret.remove();
-        schedule(fadeOut, 3400);
-      }
-      function fadeOut() {
-        Array.prototype.forEach.call(host.querySelectorAll('.sc-bubble'), function (b) { b.classList.remove('sc-show'); });
-        schedule(cycle, 600);
-      }
-      schedule(stream, 350);
-    }
-    schedule(typeQ, 400);
+      schedule(cycle, 700);
+    }, 3600);
   }
 
   if ('IntersectionObserver' in window) {
@@ -3679,7 +3769,7 @@
     var ray = document.createElement('div');
     ray.className = 'fw3d-ray';
     ray.style.width = r + 'px';
-    ray.style.background = 'linear-gradient(90deg, rgba(12,22,38,0.72), rgba(12,22,38,0.14) 82%, transparent)';   /* rays near-black; only the nodes keep colour */
+    ray.style.background = 'linear-gradient(90deg, rgba(214,226,242,0.70), rgba(214,226,242,0.12) 82%, transparent)';   /* rays light: the card went dark 2026-09-13 and near-black rays vanished into it. Only the nodes keep colour. */
     var dot = document.createElement('div');
     dot.className = 'fw3d-dot';
     dot.style.left = r + 'px';

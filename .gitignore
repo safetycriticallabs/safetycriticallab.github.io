@@ -1,1 +1,6 @@
 .DS_Store
+
+# Claude Code's local settings carry machine-specific tool pre-approvals and must
+# never reach this PUBLIC repo. Kept out by a global ignore until 2026-09-13; that
+# lived at ~/.config/git/ignore and so protected this machine only, not the repo.
+.claude/settings.local.json

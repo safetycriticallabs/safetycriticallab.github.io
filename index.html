@@ -2305,6 +2305,7 @@
             <a href="/complaints">Complaints and appeals</a>
             <a href="/impartiality">Impartiality</a>
             <a href="/accreditation">Accreditation</a>
+            <a href="https://github.com/safetycriticallab/safetycriticallab.github.io" target="_blank" rel="noopener">Site source</a>
           </div>
         </div>
 
@@ -3225,7 +3226,7 @@
 
       var safeUrl = encodeURI(item.url || '#');
       var safeDate = escapeHtml(item.date || '');
-      var safeTitle = item.title || '';
+      var safeTitle = normalizeDashes(item.title || '');
       var safeSource = escapeHtml(meta.sublabel);
 
       html += '<a href="' + safeUrl + '" target="_blank" rel="noopener" class="na-card">'
@@ -3290,6 +3291,15 @@
   }
   renderRecordRows();
 
+  /* House rule: no em dashes or en dashes in anything SCL publishes. These card
+     titles arrive from the Federal Register, EUR-Lex and NIST at runtime, and
+     from the hardcoded fallbacks below, so the only place that catches every
+     source is here at render. An en dash in "SP 800-38E" is a hyphen anyway,
+     and an em dash between clauses reads correctly as one. */
+  function normalizeDashes(str) {
+    return String(str).replace(/[\u2014\u2013]/g, '-');
+  }
+
   function escapeHtml(str) {
     var div = document.createElement('div');
     div.textContent = str;
@@ -3332,11 +3342,11 @@
 
   /* Key EU AI Act documents — always-available fallback */
   var euAiFallback = [
-    { title: 'Proposal amending Regulation (EU) 2024/1689 — Digital Omnibus on AI', url: 'https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:52025PC0836', date: formatDate('2025-11-19'), type: 'Legislative Proposal' },
-    { title: 'European Strategy for Artificial Intelligence — Communication from the Commission', url: 'https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:52025DC0724', date: formatDate('2025-10-08'), type: 'Commission Communication' },
-    { title: 'Commission Implementing Regulation (EU) 2025/454 — Rules for the application of the AI Act', url: 'https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32025R0454', date: formatDate('2025-03-07'), type: 'Implementing Regulation' },
-    { title: 'Regulation (EU) 2024/1689 — Harmonised rules on artificial intelligence (AI Act)', url: 'https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32024R1689', date: formatDate('2024-07-12'), type: 'EU AI Act' },
-    { title: 'Corrigendum to the AI Act — Regulation (EU) 2024/1689', url: 'https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32024R1689R(01)', date: formatDate('2024-10-29'), type: 'Corrigendum' }
+    { title: 'Proposal amending Regulation (EU) 2024/1689 - Digital Omnibus on AI', url: 'https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:52025PC0836', date: formatDate('2025-11-19'), type: 'Legislative Proposal' },
+    { title: 'European Strategy for Artificial Intelligence - Communication from the Commission', url: 'https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:52025DC0724', date: formatDate('2025-10-08'), type: 'Commission Communication' },
+    { title: 'Commission Implementing Regulation (EU) 2025/454 - Rules for the application of the AI Act', url: 'https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32025R0454', date: formatDate('2025-03-07'), type: 'Implementing Regulation' },
+    { title: 'Regulation (EU) 2024/1689 - Harmonised rules on artificial intelligence (AI Act)', url: 'https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32024R1689', date: formatDate('2024-07-12'), type: 'EU AI Act' },
+    { title: 'Corrigendum to the AI Act - Regulation (EU) 2024/1689', url: 'https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32024R1689R(01)', date: formatDate('2024-10-29'), type: 'Corrigendum' }
   ];
 
   var eurLexUrl = 'https://eur-lex.europa.eu/EN/display-feed.rss?rssId=162';
@@ -3756,8 +3766,16 @@
     var pitch = Math.asin(2 * t - 1) * 180 / Math.PI;   // elevation -90..90
     var yaw = (i * GOLDEN) % 360;                        // azimuth
     var r = 92 + (i % 4) * 22;                           // reach 92..158
-    var size = 6 + (i % 3) * 2;                          // dot 6/8/10
-    var hue = Math.round((205 + i * (300 / N)) % 360);   // spectrum across the 13
+    /* Core (AI-1 to AI-10) against conditional (AI-11 to AI-13), read from the
+       AREAS data's own `tier` field rather than an index, so adding an area
+       cannot desync it. Size and strength carry that one real distinction.
+       This replaces a 300 degree hue sweep that was pure decoration and that
+       put AI-8 at #BA5B4F and AI-9 at #BA854F, a hair from the published
+       Partial swatch #C8861A, in the same 2x2 as the tile that teaches that
+       key. Colour on this page means conformity state or it means nothing. */
+    var conditional = !!AREAS[i].tier;
+    var size = conditional ? 7 : 9;
+    var dotCol = conditional ? 'rgba(121,168,213,0.55)' : '#79A8D5';
     var ringA = i * (360 / N);                           // expanded: even ring angle
     var depthTilt = Math.round(18 * Math.sin(ringA * Math.PI / 180)); // smooth depth wave (neighbors tilt alike)
     var spark = document.createElement('div');
@@ -3775,8 +3793,8 @@
     dot.style.left = r + 'px';
     dot.style.width = size + 'px';
     dot.style.height = size + 'px';
-    dot.style.background = 'hsl(' + hue + ',44%,52%)';   /* muted, standard palette (was neon 72%) */
-    dot.style.boxShadow = '0 0 5px hsla(' + hue + ',44%,52%,0.28)';
+    dot.style.background = dotCol;
+    dot.style.boxShadow = conditional ? 'none' : '0 0 6px rgba(121,168,213,0.38)';
     spark.appendChild(ray);
     spark.appendChild(dot);
     scene.appendChild(spark);
@@ -4001,9 +4019,8 @@
     if (!groups.length) return;
     groups.forEach(function (g) {
       var idx = parseInt(g.getAttribute('data-fw-idx'), 10) || 0;
-      var hue = Math.round((205 + idx * (300 / 13)) % 360);
-      var dot = g.querySelector('.fw-dot');
-      if (dot) dot.style.fill = 'hsl(' + hue + ',44%,52%)';
+      var dot = g.querySelector('.fw-dot');   /* same core/conditional rule as the 3D burst */
+      if (dot) dot.style.fill = idx >= 10 ? 'rgba(121,168,213,0.55)' : '#79A8D5';
     });
   }
   [250, 800, 1800].forEach(function (t) { setTimeout(paint, t); });

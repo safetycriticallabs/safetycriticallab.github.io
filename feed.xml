@@ -6,12 +6,20 @@
     <description>Framework releases, publications and operational updates from Safety Critical Labs.</description>
     <language>en</language>
     <item>
+      <title>Framework v3.7 released</title>
+      <link>https://doi.org/10.5281/zenodo.22775993</link>
+      <guid isPermaLink="false">scl-framework-v3-7-released</guid>
+      <pubDate>Tue, 01 Sep 2026 00:00:00 +0000</pubDate>
+      <category>Framework Release</category>
+      <description>The current published revision, now the standard SCL assesses against, under a new citable DOI. A new Section 1.6 Conformity Basis states what the certification determination rests on, and defines the certified configuration: boundary and classification, the operational design domain, the declared thresholds, the declared attack pattern sets, and the security baseline. The normative reference list</description>
+    </item>
+    <item>
       <title>Framework v3.6 released</title>
       <link>https://doi.org/10.5281/zenodo.21924937</link>
       <guid isPermaLink="false">scl-framework-v3-6-released</guid>
       <pubDate>Sat, 01 Aug 2026 00:00:00 +0000</pubDate>
       <category>Framework Release</category>
-      <description>The current published revision, now the standard SCL assesses against, under a new citable DOI. This release makes the applicability determination verifiable. Whether the framework applies now turns on a single anchor criterion, whether a component&#x27;s correctness can be fully verified against explicitly written specification by established methods, with the list of mechanisms treated as illustrativ</description>
+      <description>Point revision published under a new citable DOI. This release makes the applicability determination verifiable. Whether the framework applies now turns on a single anchor criterion, whether a component&#x27;s correctness can be fully verified against explicitly written specification by established methods, with the list of mechanisms treated as illustrative rather than load bearing. Each determination</description>
     </item>
     <item>
       <title>Framework v3.5 released</title>
@@ -131,7 +139,7 @@
       <guid isPermaLink="false">scl-first-zenodo-deposit-citable-doi-registered</guid>
       <pubDate>Sun, 01 Mar 2026 00:00:00 +0000</pubDate>
       <category>Framework Release</category>
-      <description>The AI Requirements Framework was deposited to Zenodo on 14 March 2026 and assigned a citable DOI. Cite the framework at the concept DOI 10.5281/zenodo.19024420, which always resolves to the most recent version. Twelve versions have been deposited to date, from 14 March 2026 to 13 August 2026. Dates shown above this entry are document revision dates from the framework&#x27;s own revision history; dates</description>
+      <description>The AI Requirements Framework was deposited to Zenodo on 14 March 2026 and assigned a citable DOI. Cite the framework at the concept DOI 10.5281/zenodo.19024420, which always resolves to the most recent version. Thirteen versions have been deposited to date, from 14 March 2026 to 15 September 2026. Dates shown above this entry are document revision dates from the framework&#x27;s own revision history; </description>
     </item>
     <item>
       <title>Framework v2.1, ODD and Privacy</title>

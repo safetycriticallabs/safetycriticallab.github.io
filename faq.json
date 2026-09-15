@@ -1,5 +1,5 @@
 {
-  "updated": "2026-08-29",
+  "updated": "2026-09-15",
   "note": "Question library for the Ask SCL page (search.html) and the ask worker grounding corpus (ask-worker.js). Single source of truth. Keep answers factual and do not overstate SCL's status. Each entry carries a stable id (faq-N) that the Worker renders in the prompt so the model can cite FAQ content; never renumber, append new ids.",
   "entries": [
     {
@@ -270,7 +270,7 @@
     {
       "id": "faq-16",
       "q": "What version of the framework is current?",
-      "a": "The current published version is v3.6. The concept DOI at 10.5281/zenodo.19024420 always resolves to the latest version, so citing it keeps a reference current across updates. The framework page links the exact current release.",
+      "a": "The current published version is v3.7. The concept DOI at 10.5281/zenodo.19024420 always resolves to the latest version, so citing it keeps a reference current across updates. The framework page links the exact current release.",
       "keywords": [
         "version",
         "current",

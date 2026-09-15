@@ -1,32 +1,37 @@
 # VERSION-BUMP.md
 
 Run this in order on every AI Requirements Framework version change. Counts were measured
-on disk 2026-09-08 and are recorded so a later run can tell drift from a real change.
+on disk 2026-09-15, before any v3.7 propagation, and are recorded so a later run can tell drift from a real change.
 
-Surface as of 2026-09-08:
+Surface as of 2026-09-15, measured before any v3.7 propagation:
 
-- **15 literal `v3.6` strings** across five files: `certificate-template` 2, `assess` 5,
-  `framework` 1, `updates` 3, `presentation` 3.
-- **34 occurrences of "thirteen"** across six files: `assess` 4, `certificate-template` 1,
-  `framework` 4, `index` 7, `presentation` 13, `updates` 5.
-- **AI-13** in 7 HTML files, 5 `faq.json` entries, and once in `ask-worker-local.js` inside
-  `ASSISTANT_IDENTITY` (line 252).
-- **Version DOI `10.5281/zenodo.21924937`** in 7 files including `registry.json`.
+- **25 literal `v3.6` strings** across eight files: `assess` 5, `certificate-template` 2,
+  `framework` 5, `mark` 3, `news` 2, `presentation` 4, `questions` 1, `updates` 3.
+- **42 occurrences of "thirteen"** across eight files: `assess` 4, `certificate-template` 1,
+  `framework` 8, `index` 7, `presentation` 13, `questions` 1, `requirements` 3, `updates` 5.
+  v3.7 does NOT change this word: the requirement areas stay thirteen, AI-1 through AI-13.
+- **AI-13** in 10 HTML files, 4 `faq.json` entries, and once in `ask-worker-local.js` inside
+  `ASSISTANT_IDENTITY` (line 263).
+- **Version DOI `10.5281/zenodo.21924937`** (v3.6) in 10 files: `assess`, `certificate-template`,
+  `framework`, `index`, `news`, `presentation`, `updates`, `feed.xml`, `news.json`, `registry.json`.
+  v3.7 was deposited 2026-09-15 as `10.5281/zenodo.22775993`, which becomes the standing identifier
+  under step (d) everywhere except `certificate-template.html` and `registry.json`.
 - **Concept DOI `10.5281/zenodo.19024420`** in `evidence`, `framework`, `index` JSON-LD
   `sameAs`, `framework.html` TechArticle, and `faq.json` twice.
-  `index.html` line 2620 is `mulberry32(19024420)`, a PRNG seed, NOT a DOI. Do not "fix" it.
+  `index.html` line 2838 is `mulberry32(19024420)`, a PRNG seed, NOT a DOI. Do not "fix" it.
 - The forbidden DOI `10.5281/zenodo.19501092` appears **zero times**. Keep it that way.
 
 ## Steps
 
 ```
-(a) Regenerate framework.json. Run: python3 embed_corpus.py
+(a) Regenerate framework.json BY HAND from the new framework PDF. No script does this.
+    Then run: python3 embed_corpus.py to rebuild framework_vectors.json.
     Confirm the Worker accepts the vectors with one retrieval-only bench pass.
     vectorsValid refuses a stale file and retrieval silently degrades to keyword-only.
 
-(b) grep -rn "v3\.6" *.html          and update each of the 15.
+(b) grep -rn "v3\.6" *.html          and update each of the 25.
 
-(c) grep -rn -i "thirteen" *.html    and re-verify each of the 34 against the new count.
+(c) grep -rn -i "thirteen" *.html    and re-verify each of the 42 against the new count.
 
 (d) grep -rn "zenodo\.21924937" *.html *.json
     Update the standing identifier everywhere EXCEPT certificate-template.html and

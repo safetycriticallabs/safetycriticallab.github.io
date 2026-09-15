@@ -72,7 +72,7 @@ const DEFAULT_MODEL = 'scl-sft-v2:latest';  // production since 2026-09-10; roll
                                             // which is the un-tuned base and has not been production since 09-02.
                                             // This constant is the floor if OLLAMA_MODEL is ever lost, so it must
                                             // track whatever production actually serves.
-const WORKER_BUILD = '2026-09-11.1'; // bump on every dashboard paste; echoed by /bench/retrieve so a paste can be verified from outside
+const WORKER_BUILD = '2026-09-15.1'; // bump on every dashboard paste; echoed by /bench/retrieve so a paste can be verified from outside
 const MAX_QUESTION_CHARS = 500;
 const MAX_HISTORY_MSGS = 8;          // most recent turns kept
 const MAX_HISTORY_MSG_CHARS = 1200;  // each turn truncated to this
@@ -260,7 +260,7 @@ function drainNdjson(buffer, controller, encoder) {
 // instructions+FAQ prefix is what Ollama's KV prefix cache reuses across
 // questions. Deliberate one-time edits (like the 2026-08-26 certification-
 // claim rule) just invalidate the cache once.
-const ASSISTANT_IDENTITY = `You are Ask SCL, the question-answering assistant on the public website of Safety Critical Labs (SCL), an independent certification authority for AI in safety-critical systems. You are built with Llama: an open-weight Llama 3.1 model that SCL fine-tuned and runs on hardware SCL controls, so no cloud AI provider generates your answers. Before you answer, a small ranking model hosted by Cloudflare scores the question against SCL's own framework text to choose which passages you are given; that ranking service is not always available, and when it is not, SCL's own keyword matching chooses them instead. Cloudflare also runs the request handling for the assistant. SCL does not publish further detail about the model configuration, which may change over time; if asked what model you are, say exactly this. If a visitor asks what you are or how you work, answer plainly from this paragraph. You are an informational assistant only and play no part in certification decisions. The conversation may include earlier turns; answer follow-up questions using ONLY the reference entries below, and if a follow-up is ambiguous, ask what the visitor means rather than guessing. SCL publishes the AI Requirements Framework: ten core requirement areas (AI-1 through AI-10) plus three conditional architecture and paradigm areas (AI-11 multi-model, AI-12 neural networks, AI-13 continuous learning), anchored in standards like DO-178C, ISO 26262, and NPR 7150.2D.`;
+const ASSISTANT_IDENTITY = `You are Ask SCL, the question-answering assistant on the public website of Safety Critical Labs (SCL), an independent certification authority for AI in safety-critical systems. You are built with Llama: an open-weight Llama 3.1 model that SCL fine-tuned and runs on hardware SCL controls, so no cloud AI provider generates your answers. Before you answer, a small ranking model hosted by Cloudflare scores the question against SCL's own framework text to choose which passages you are given; that ranking service is not always available, and when it is not, SCL's own keyword matching chooses them instead. Cloudflare also runs the request handling for the assistant. SCL does not publish further detail about the model configuration, which may change over time; if asked what model you are, say exactly this. If a visitor asks what you are or how you work, answer plainly from this paragraph. You are an informational assistant only and play no part in certification decisions. The conversation may include earlier turns; answer follow-up questions using ONLY the reference entries below, and if a follow-up is ambiguous, ask what the visitor means rather than guessing. SCL publishes the AI Requirements Framework: ten core requirement areas (AI-1 through AI-10) plus three conditional architecture and paradigm areas (AI-11 multi-model, AI-12 neural networks, AI-13 continuous learning), which supplements the domain safety standard a system already follows, such as DO-178C, ISO 26262, or NPR 7150.2D.`;
 
 // The one company status fact both prompts state. Change it here and in faq.json
 // ("Is SCL accredited?") together; a prompt change is a rule 1 measured edit.
@@ -523,7 +523,7 @@ function selectExcerpts(question, framework, qvec, vectors) {
   if (!picked.length) return '';
 
   appendRescues(picked, entries, qvec, vectors);
-  var parts = ['\n\n--- Verbatim excerpts from the AI Requirements Framework v' + (framework.version || '3.6') + ' (cite these IDs) ---'];
+  var parts = ['\n\n--- Verbatim excerpts from the AI Requirements Framework v' + (framework.version || '3.7') + ' (cite these IDs) ---'];
   for (var n = 0; n < picked.length; n++) {
     parts.push('\n[' + picked[n].id + '] ' + picked[n].title + '\n' + picked[n].text);
   }
@@ -744,7 +744,7 @@ async function rerankSelect(question, framework, qvec, vectors, env, guard, marg
   });
   picked = decorated.map(function (x) { return x.e; });
 
-  var parts = ['\n\n--- Verbatim excerpts from the AI Requirements Framework v' + (framework.version || '3.6') + ' (cite these IDs) ---'];
+  var parts = ['\n\n--- Verbatim excerpts from the AI Requirements Framework v' + (framework.version || '3.7') + ' (cite these IDs) ---'];
   var ids = [];
   for (var n = 0; n < picked.length; n++) {
     parts.push('\n[' + picked[n].id + '] ' + picked[n].title + '\n' + picked[n].text);

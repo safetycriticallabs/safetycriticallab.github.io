@@ -123,7 +123,7 @@ html { scroll-behavior: auto; }
       <h1>Every term, defined</h1>
     </div>
     <p class="inner-hero-lead">
-      Appendix A of the AI Requirements Framework. 88 terms in 10 categories, each one
+      Appendix A of the AI Requirements Framework. 90 terms in 10 categories, each one
       either defined by the framework or mapped to the international standard it comes from.
     </p>
   </div>
@@ -133,14 +133,14 @@ html { scroll-behavior: auto; }
   <p class="gl-lede">These are the definitions an SCL assessment runs on. Where a term is taken from an
     existing standard, the source is named under the definition rather than paraphrased, so a reader can
     check it. Where the framework defines a term itself, it says so. Framework text last updated
-    2026-09-08. Cite the framework at the concept DOI
+    2026-09-15. Cite the framework at the concept DOI
     <a href="https://doi.org/10.5281/zenodo.19024420" rel="noopener">10.5281/zenodo.19024420</a>, not at this URL.
     <a href="/requirements">Every requirement in full</a> and
     <a href="/search">Ask SCL</a> answers questions grounded in this text.</p>
 
   <div class="gl-tools">
-    <input class="gl-search" id="gl-search" type="search" placeholder="Filter 88 terms" aria-label="Filter glossary terms" autocomplete="off">
-    <span class="gl-count" id="gl-count">88 terms</span>
+    <input class="gl-search" id="gl-search" type="search" placeholder="Filter 90 terms" aria-label="Filter glossary terms" autocomplete="off">
+    <span class="gl-count" id="gl-count">90 terms</span>
   </div>
 
   <ul class="gl-toc">
@@ -149,7 +149,7 @@ html { scroll-behavior: auto; }
       <li><a href="#operational-design-domain">Operational Design Domain</a> <span class="gl-toc-n">6</span></li>
       <li><a href="#data">Data</a> <span class="gl-toc-n">7</span></li>
       <li><a href="#risk-and-failure-mode">Risk And Failure Mode</a> <span class="gl-toc-n">8</span></li>
-      <li><a href="#verification-and-validation">Verification And Validation</a> <span class="gl-toc-n">8</span></li>
+      <li><a href="#verification-and-validation">Verification And Validation</a> <span class="gl-toc-n">10</span></li>
       <li><a href="#operational">Operational</a> <span class="gl-toc-n">7</span></li>
       <li><a href="#security">Security</a> <span class="gl-toc-n">7</span></li>
       <li><a href="#explainability-and-trust">Explainability And Trust</a> <span class="gl-toc-n">6</span></li>
@@ -387,7 +387,17 @@ html { scroll-behavior: auto; }
       </div>
     </section>
     <section class="gl-cat" id="verification-and-validation" data-cat="verification-and-validation">
-      <h2 class="gl-cat-title">Verification And Validation <span class="gl-cat-n">8</span></h2>
+      <h2 class="gl-cat-title">Verification And Validation <span class="gl-cat-n">10</span></h2>
+      <div class="gl-term" id="certified-configuration" data-term="certified configuration">
+        <h3 class="gl-name">Certified Configuration<a class="gl-anchor" href="#certified-configuration" aria-label="Link to Certified Configuration">#</a></h3>
+        <p class="gl-def">The set of elements declared by the applicant and recorded by Safety Critical Labs on the certificate, to which certification attaches: the determination boundary and classification, the Operational Design Domain, the threshold values, the attack pattern sets declared under <a href="/requirements#ai-7-1">AI-7.1</a> and <a href="/requirements#ai-7-2">AI-7.2</a>, and the foundational cybersecurity baseline. A change to any element is a change to the certified configuration. See also <a href="#conformity-basis">Conformity Basis</a>; Operational Design Domain.</p>
+        <p class="gl-src">(Framework-defined, Section 1.6)</p>
+      </div>
+      <div class="gl-term" id="conformity-basis" data-term="conformity basis">
+        <h3 class="gl-name">Conformity Basis<a class="gl-anchor" href="#conformity-basis" aria-label="Link to Conformity Basis">#</a></h3>
+        <p class="gl-def">The requirement statements of this framework on which the certification determination rests: each [R.AI-x.y] requirement statement verified per its paired [V.AI-x.y] verification statement, together with the procedural requirements of Sections 1 and 4. No document outside the framework forms part of the conformity basis unless a requirement statement names it and states the extent of the invocation. See also <a href="#certified-configuration">Certified Configuration</a>.</p>
+        <p class="gl-src">(Framework-defined, Section 1.6)</p>
+      </div>
       <div class="gl-term" id="continuous-validation" data-term="continuous validation">
         <h3 class="gl-name">Continuous Validation<a class="gl-anchor" href="#continuous-validation" aria-label="Link to Continuous Validation">#</a></h3>
         <p class="gl-def">Ongoing monitoring process to verify that AI models continue performing satisfactorily during operation, including detection of data drift, concept drift, and performance degradation. See also <a href="#data-drift">Data Drift</a>; <a href="#concept-drift">Concept Drift</a>; <a href="#performance-drift">Performance Drift</a>.</p>

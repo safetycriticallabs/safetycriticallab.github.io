@@ -1,5 +1,5 @@
 {
-  "updated": "2026-09-15",
+  "updated": "2026-09-17",
   "note": "Question library for the Ask SCL page (search.html) and the ask worker grounding corpus (ask-worker.js). Single source of truth. Keep answers factual and do not overstate SCL's status. Each entry carries a stable id (faq-N) that the Worker renders in the prompt so the model can cite FAQ content; never renumber, append new ids.",
   "entries": [
     {
@@ -252,7 +252,7 @@
     {
       "id": "faq-15",
       "q": "Can I read the framework?",
-      "a": "Yes. The framework is open and freely available. You can read the current version through the documents page, which links the Zenodo record and the white paper. The Standard itself is open on purpose; the proprietary part is SCL's assessment and audit methodology.",
+      "a": "Yes. The framework is open and freely available. The framework page links the current release, its DOI, and the companion white paper on SSRN. The Standard itself is open on purpose; the proprietary part is SCL's assessment and audit methodology.",
       "keywords": [
         "read",
         "copy",
@@ -265,7 +265,7 @@
         "free",
         "obtain"
       ],
-      "link": "/documents"
+      "link": "/framework"
     },
     {
       "id": "faq-16",

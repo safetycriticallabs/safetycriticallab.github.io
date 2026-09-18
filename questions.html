@@ -77,7 +77,7 @@
     <h1>Questions about certifying AI systems</h1>
     <p class="faq-intro">The full Ask SCL question library, in plain text. These are the
     same answers the assistant on <a href="/search">Ask SCL</a> draws from. Last updated
-    2026-09-17.</p>
+    2026-09-18.</p>
 
     <article class="faq-entry">
       <h2 id="faq-1">What is SCL?</h2>
@@ -288,6 +288,31 @@
       <h2 id="faq-42">The framework uses the word operational in two different ways. Which is which?</h2>
       <p>Two different things, and they are easy to confuse. The Operational Design Domain, defined in AI-1.0, is the declared conditions a system is intended to operate in: operational environment, system inputs, user population, subject population, operational phases, performance envelope, regulatory and operational authorization, and exclusions. Operational Support AI is one of the three system classifications in Section 1.2.2, defined as AI that supports operations but does not drive critical decisions. AI-1.0 states the relationship directly: classification establishes what the system is, and the Operational Design Domain establishes where, for whom, and how it is intended to operate. Every classified system declares an ODD, whichever of the three tiers it falls into, so the word carries no implication that a system is merely in use somewhere.</p>
       <p class="faq-more"><a href="/requirements#ai-1-0">Read more</a></p>
+    </article>
+    <article class="faq-entry">
+      <h2 id="faq-43">Can I attach a document to Ask SCL, and what happens to it?</h2>
+      <p>Yes. The paperclip on the Ask page accepts a PDF, DOCX, TXT, or MD file up to 25 MB. It is parsed in your own browser and the full document never leaves the page: each question sends only a few passages selected for that question. The assistant discusses what those excerpts do and do not address relative to the framework and never gives a verdict on your document or system. Nothing from an attached document is stored, whatever your retention setting, and it is not restored after a reload; attach it again to keep asking about it.</p>
+      <p class="faq-more"><a href="/search">Read more</a></p>
+    </article>
+    <article class="faq-entry">
+      <h2 id="faq-44">How is the framework versioned, and how should I cite it?</h2>
+      <p>The framework is identified as SCL-ARF-001 regardless of version. Version increments follow conformity impact, not the size of the edit: major when the meaning of an existing requirement or verification changes or identifiers renumber, minor when normative content is added with every existing identifier stable, patch for editorial changes. Cite the framework at its concept DOI, 10.5281/zenodo.19024420, which resolves to the latest version. Certificates are the one exception: they cite the version assessed against and that version&#x27;s own DOI, so a new release does not change the conformity basis of an issued certificate.</p>
+      <p class="faq-more"><a href="/framework">Read more</a></p>
+    </article>
+    <article class="faq-entry">
+      <h2 id="faq-45">What is a deterministic system, and does the framework apply to it?</h2>
+      <p>In the framework&#x27;s terms a deterministic system is one whose behavior is specified in writing, as programmed equations or hand-authored rules: the same inputs give the same outputs, and correctness can be verified against that specification. Such a system is not AI for the framework&#x27;s purposes and standard software assurance applies; Table 1-2b lists PID controllers, fixed rule-based systems, and lookup tables as examples. The line is learned behavior, not probabilistic output: a Kalman filter stays outside because its dynamics and noise models are explicitly specified. Deterministic AI is not a framework category.</p>
+      <p class="faq-more"><a href="/framework">Read more</a></p>
+    </article>
+    <article class="faq-entry">
+      <h2 id="faq-46">What is the difference between a learned system and a learning system, and does the framework apply to both?</h2>
+      <p>A learned system is one whose behavior rests on an artifact induced from data and whose parameters stay as trained once in operation; the framework calls this statically trained. A learning system keeps updating that artifact while it operates, which the framework calls continuous learning. Both are AI under the framework: Table 1-2 names continuous learning alongside training and fine-tuning as one way learned behavior arises, so applicability includes learning. The core areas AI-1 through AI-10 apply to both, and AI-13 adds conditional requirements for the learning kind, because updating parameters in operation introduces failure modes a statically trained system does not exhibit.</p>
+      <p class="faq-more"><a href="/requirements#ai-13">Read more</a></p>
+    </article>
+    <article class="faq-entry">
+      <h2 id="faq-47">Does the framework cover a model at inference time, or only its training?</h2>
+      <p>Both. The ODD under AI-1.0 states a performance envelope at the inference level, and the runtime requirements watch the deployed model: AI-4.1 monitors data drift against the training baseline, AI-4.2 holds performance above defined thresholds, AI-5.2 detects hallucinated outputs at inference time, AI-6.2 detects out-of-distribution inputs at runtime, AI-8.3 presents calibrated confidence with each output, and AI-13 controls learning that continues in operation. AI-4.7 revalidates a deployment-format model before operational use. The development side covers data provenance (AI-1.3), training data bias (AI-2.2), test coverage (AI-3), and the training distribution that runtime detection compares against (AI-6.1).</p>
+      <p class="faq-more"><a href="/requirements#ai-4">Read more</a></p>
     </article>
 
   </div>

@@ -1064,6 +1064,27 @@
   .sc-card:hover { transform: translateY(-5px); box-shadow: 0 18px 42px rgba(12,34,66,0.22); }
   .sc-label { font-size: 16px; font-weight: 600; color: #FAF9F5 !important; }
   .sc-sub { font-size: 13px; line-height: 1.5; color: rgba(250,249,245,0.62) !important; margin-top: 4px; }
+
+  /* RESERVE TWO LINES OF SUB-LINE ON THE TWO TILES THAT HOLD A TEXT FIELD.
+     Both scroll-scrubbed effects on this page resize the cards continuously as
+     you scroll: --expand moves the grid from 1280px to 1360px on desktop, and
+     --tile-x bleeds each card out to the screen edge on phones. A card's height
+     is pinned by the JS, so when this sub-line rewraps from one line to two at
+     the narrow end it cannot make the card taller. Instead .sc-stage above it
+     gives up the 19.5px, and because the stage centres its contents everything
+     inside shifts vertically by half of that, the ask field included.
+     Measured: #sc-ask-q sits at viewport top 521.1 at --expand 1 and 511.3 at
+     --expand 0. Nine point eight pixels does not sound like much, but if the
+     caret is in that field the browser is obliged to keep it in view, so it
+     scrolls back every frame the width changes and the page stops responding.
+     It shows up going UP because the scrub sits clamped at its wide end while
+     you scroll down, and only starts moving again when you reverse.
+     Reserving the second line makes the sub-line the same height at every
+     width, so the stage never resizes and the caret never moves. It costs no
+     layout: the JS pins each card at its NARROWEST and therefore tallest state,
+     which is the two-line state, so this is space the card already had.
+     Scoped to the two tiles that can hold a caret, so no other tile changes. */
+  #sc-ask .sc-sub, #sc-subscribe .sc-sub { min-height: 3em; }   /* 2 lines at line-height 1.5 */
   .sc-foot { text-align: center; font-size: 13px; color: rgba(12, 34, 66,0.6) !important; margin-top: 18px; }
   .sc-stage { flex: 1; display: flex; align-items: center; justify-content: center; margin: 6px 0 10px; }
   .sc-expand { position: absolute; top: 20px; right: 22px; z-index: 5; cursor: pointer; font-family: var(--mono); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: #FAF9F5 !important; background: none; border: none; padding: 0; display: inline-flex; align-items: center; gap: 7px; opacity: 0.55; transition: opacity 0.25s ease; }

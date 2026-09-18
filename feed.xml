@@ -6,6 +6,14 @@
     <description>Framework releases, publications and operational updates from Safety Critical Labs.</description>
     <language>en</language>
     <item>
+      <title>White paper revised to v3.7</title>
+      <link>https://ssrn.com/abstract=6875639</link>
+      <guid isPermaLink="false">scl-white-paper-revised-to-v3-7</guid>
+      <pubDate>Tue, 01 Sep 2026 00:00:00 +0000</pubDate>
+      <category>Publication</category>
+      <description>The white paper on SSRN is replaced with a v3.7 revision, 68 pages, bringing the preprint level with the current standard. The version it replaced described the framework at v3.0. The revision carries the failure-defined principle, the two-tier requirement structure, and the co-located verification approach as they now stand. SSRN retains no prior version, so the superseded paper is gone.</description>
+    </item>
+    <item>
       <title>Framework v3.7 released</title>
       <link>https://doi.org/10.5281/zenodo.22775993</link>
       <guid isPermaLink="false">scl-framework-v3-7-released</guid>

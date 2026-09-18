@@ -1,5 +1,12 @@
 [
   {
+    "title": "White paper revised to v3.7",
+    "url": "https://ssrn.com/abstract=6875639",
+    "date": "2026-09-01",
+    "type": "Publication",
+    "summary": "The white paper on SSRN is replaced with a v3.7 revision, 68 pages, bringing the preprint level with the current standard. The version it replaced described the framework at v3.0. The revision carries the failure-defined principle, the two-tier requirement structure, and the co-located verification approach as they now stand. SSRN retains no prior version, so the superseded paper is gone."
+  },
+  {
     "title": "Framework v3.7 released",
     "url": "https://doi.org/10.5281/zenodo.22775993",
     "date": "2026-09-01",

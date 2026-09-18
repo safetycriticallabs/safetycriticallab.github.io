@@ -14,6 +14,14 @@
       <description>The current published revision, now the standard SCL assesses against, under a new citable DOI. A new Section 1.6 Conformity Basis states what the certification determination rests on, and defines the certified configuration: boundary and classification, the operational design domain, the declared thresholds, the declared attack pattern sets, and the security baseline. The normative reference list</description>
     </item>
     <item>
+      <title>Paper accepted to AIAA SciTech Forum 2027</title>
+      <link>https://safetycriticallabs.com/updates#paper-accepted-to-aiaa-scitech-forum-2027</link>
+      <guid isPermaLink="false">scl-paper-accepted-to-aiaa-scitech-forum-2027</guid>
+      <pubDate>Sat, 01 Aug 2026 00:00:00 +0000</pubDate>
+      <category>Publication</category>
+      <description>The abstract submitted in May was accepted on August 24, 2026 into session IS-05 of the Intelligent Systems: Space Trusted Autonomy track. The final manuscript is due December 1, 2026, with presentation scheduled for January 11, 2027 at the forum in Orlando, Florida.</description>
+    </item>
+    <item>
       <title>Framework v3.6 released</title>
       <link>https://doi.org/10.5281/zenodo.21924937</link>
       <guid isPermaLink="false">scl-framework-v3-6-released</guid>

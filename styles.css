@@ -686,16 +686,21 @@ h2.section-title em { font-style: italic; color: var(--ink); font-family: var(--
 /* Hover: shift to the site's hover blue (same move as the search icon and the
    mobile menu) plus an underline, so the feedback is unmissable. The active
    page stays solid ink — you're already there. */
-.gn-links a:hover {
-  color: var(--blue-dk) !important;
-  text-decoration: underline;
-  text-underline-offset: 6px;
-  text-decoration-thickness: 1.5px;
-}
 .gn-links a.active { color: #0C2242; font-weight: 600; }
-.gn-links a.active:hover { color: #0C2242 !important; text-decoration: none; }
 .gn-dropdown-toggle { transition: color 0.25s; }
-.gn-dropdown-toggle:hover { color: var(--blue-dk) !important; }
+/* Hover feedback only on devices that can hover. On a touch screen the browser
+   leaves :hover applied to whatever was last tapped, so an opened dropdown
+   toggle sat blue until the next tap (seen on the phone, 2026-09-18). */
+@media (hover: hover) {
+  .gn-links a:hover {
+    color: var(--blue-dk) !important;
+    text-decoration: underline;
+    text-underline-offset: 6px;
+    text-decoration-thickness: 1.5px;
+  }
+  .gn-links a.active:hover { color: #0C2242 !important; text-decoration: none; }
+  .gn-dropdown-toggle:hover { color: var(--blue-dk) !important; }
+}
 .gn-search { color: #0C2242; }
 .gn-cta {
   background: #0C2242 !important; color: #FAF9F5 !important; border-color: #0C2242 !important;
@@ -774,9 +779,24 @@ h2.section-title em { font-style: italic; color: var(--ink); font-family: var(--
   .gn-dropdown-menu a:hover { color: #FAF9F5; background: rgba(250,249,245,0.10); }
   .gn-dropdown-menu a.active { color: #FAF9F5; }
 }
-@media (max-width: 880px) {
+@media (max-width: 880.98px) {   /* same bound as the phone accordion block above, so no band is left uncovered */
   .gn-dropdown-toggle { text-transform: uppercase; letter-spacing: -0.01em; color: #0C2242; }
-  .gn-dropdown-menu a { color: rgba(12,34,66,0.72); }
+  .gn-dropdown-toggle.has-active { color: #0C2242 !important; }
+  /* Pin the phone accordion here, once. The shared NAV DROPDOWN panel rules
+     above are not scoped to a width and sit later in the file than the phone
+     block at 456, so without these they float the desktop's navy panel over
+     the phone menu; and the phone block's item colour is blue !important, so
+     the navy below needs !important to win. Until 2026-09-18 index.html and
+     process.html each carried this same patch inline and the other 24 pages
+     with the nav did not, which is why the menu looked right on two pages only. */
+  .gn-dropdown-menu {
+    position: static !important; background: none !important;
+    backdrop-filter: none !important; -webkit-backdrop-filter: none !important;
+    border: none !important; box-shadow: none !important;
+    border-radius: 0 !important; padding: 0 !important; min-width: 0 !important;
+  }
+  .gn-dropdown-menu a { color: rgba(12,34,66,0.72) !important; }
+  .gn-dropdown-menu a.active { color: #0C2242 !important; }
   /* Match the plain menu links to the ink-navy dropdown toggles (the earlier
      mobile block sets them blue, which reads as a highlight it isn't). The
      active page keeps its 600 weight from the shell rule above. */

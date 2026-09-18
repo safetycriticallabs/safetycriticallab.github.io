@@ -984,18 +984,7 @@
       background: rgba(250,249,245,0.10) !important;
     }
   }
-  /* Mobile: keep the shared hamburger-accordion look (inline items, no floating
-     panel) with readable navy items. The base desktop .gn-dropdown-menu rule in
-     styles.css otherwise leaks its dark panel + low-contrast text onto mobile. */
-  @media (max-width: 880.98px) {
-    .gn-dropdown-toggle { text-transform: uppercase; letter-spacing: -0.01em; }  /* match FRAMEWORK/PROCESS casing */
-    .gn-dropdown-menu {
-      position: static !important; background: none !important;
-      border: none !important; box-shadow: none !important;
-      border-radius: 0 !important; padding: 0 !important; min-width: 0 !important;
-    }
-    .gn-dropdown-menu a { color: rgba(12, 34, 66,0.72) !important; }
-  }
+  /* Mobile accordion styling moved into styles.css (2026-09-18) so every page shares it. */
 
   /* ── One consistent font style: no italics anywhere on the home page. ── */
   body, body * { font-style: normal !important; }

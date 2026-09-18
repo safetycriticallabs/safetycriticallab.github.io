@@ -40,7 +40,19 @@
    inert where a more specific rule sets `text-decoration` shorthand. */
 a { color: var(--ink); text-decoration-color: rgba(46,109,180,0.35); }
 
-html { font-size: 16px; scroll-behavior: smooth; overflow-x: hidden; background: #FAF9F5; }
+/* overflow-x is CLIP here, and body no longer carries it at all. `hidden`
+   makes a box a scroll container, so the old html + body pair left two boxes
+   on every page that could be scrolled but had nothing in them to scroll.
+   Safari latches a trackpad gesture onto the innermost such box under the
+   pointer and never hands the gesture back up to the page, so clicking a tile
+   that keeps the pointer over itself (Ask SCL, Briefings) and then swiping
+   did nothing at all. Chromium skips boxes that cannot actually scroll, which
+   is why it never showed the bug. `clip` does the same clipping without ever
+   creating a scroll container, and it leaves overflow-y alone instead of
+   forcing it to auto. Plain `hidden` stays in front as the fallback for
+   anything older than Safari 16, and html on its own is enough to clip the
+   viewport, so body does not need to repeat it. */
+html { font-size: 16px; scroll-behavior: smooth; overflow-x: hidden; overflow-x: clip; background: #FAF9F5; }
 body {
   background: #FAF9F5;
   color: var(--ink);
@@ -48,7 +60,6 @@ body {
   font-weight: 400;
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
-  overflow-x: hidden;
 }
 
 /* One consistent style site-wide: DM Sans, no italics anywhere (matches the

@@ -230,12 +230,16 @@ body, body * { font-style: normal !important; }
 .inner-hero-breadcrumb {
   font-family: var(--sans); font-size: 11px;
   font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase;
-  color: rgba(46,109,180,0.55); margin-bottom: 16px;
+  color: #0C2242; margin-bottom: 16px;
   display: flex; align-items: center; gap: 8px;
 }
-.inner-hero-breadcrumb a { color: rgba(46,109,180,0.55); text-decoration: none; transition: color 0.2s; }
-.inner-hero-breadcrumb a:hover { color: var(--blue); }
-.inner-hero-breadcrumb span { color: rgba(46,109,180,0.25); }
+/* One colour, set here only (2026-09-18). The earlier blend of navy at 78
+   percent, applied by a later rule over a brand-blue one here, read as slate
+   blue on a phone and was solid navy on process.html, whose body-wide
+   !important flattens it; solid ink now matches on every page. */
+.inner-hero-breadcrumb a { color: #0C2242; text-decoration: none; transition: color 0.2s; }
+.inner-hero-breadcrumb a:hover { color: var(--blue-dk); }
+.inner-hero-breadcrumb span { color: rgba(12,34,66,0.35); }
 
 .inner-hero h1 {
   font-family: var(--sans);
@@ -275,34 +279,20 @@ h2.section-title em { font-style: italic; color: var(--ink); font-family: var(--
 .btn {
   font-family: var(--sans); font-size: 13px;
   font-weight: 500; letter-spacing: 0.04em;
-  padding: 14px 32px; border-radius: 4px;
+  padding: 14px 32px; border-radius: 8px;
   text-decoration: none; transition: all 0.25s ease;
   display: inline-block; cursor: pointer;
   border: none;
 }
-.btn-solid {
-  background: transparent;
-  color: var(--blue);
-  border: 1px solid var(--blue);
+/* Solid navy pill, consistent with the nav CTA; .btn-red is a legacy alias.
+   Merged here from a later override block on 2026-09-18. */
+.btn-solid, .btn-red {
+  background: #0C2242; border: 1px solid #0C2242; color: #FAF9F5;
 }
-.btn-solid:hover {
-  background: var(--blue);
-  color: #fff;
-}
-.btn-red {
-  background: transparent;
-  color: var(--blue);
-  border: 1px solid var(--blue);
-}
-.btn-red:hover {
-  background: var(--blue);
-  color: #fff;
-}
-.btn-outline {
-  border: 1px solid var(--rule); color: var(--ink-2);
-  background: transparent;
-}
-.btn-outline:hover { border-color: var(--ink); color: var(--ink); }
+.btn-solid:hover, .btn-red:hover { background: #081A34; border-color: #081A34; color: #FAF9F5; }
+/* Secondary: navy outline, fills navy on hover */
+.btn-outline { border: 1px solid #0C2242; color: #0C2242; background: transparent; }
+.btn-outline:hover { background: #0C2242; border-color: #0C2242; color: #FAF9F5; }
 /* ─── SCROLL ANIMATIONS (GSAP) ───────────────────────────── */
 .fade-up {
   opacity: 0;
@@ -807,19 +797,29 @@ h2.section-title em { font-style: italic; color: var(--ink); font-family: var(--
 .inner-hero { background: #FAF9F5; border-bottom: none; }
 .inner-hero h1 { color: #0C2242; }
 .inner-hero-lead { color: #0C2242; }
-.inner-hero-breadcrumb { color: rgba(12,34,66,0.78); }   /* 0.55 was 3.67:1, under AA */
-.inner-hero-breadcrumb a { color: rgba(12,34,66,0.78); }
-.inner-hero-breadcrumb a:hover { color: #0C2242; }
-.inner-hero-breadcrumb span { color: rgba(12,34,66,0.28); }
 
-/* ── In-page buttons → solid-navy pill (consistent with the nav CTA) ── */
-.btn-solid, .btn-red {
-  background: #0C2242; border: 1px solid #0C2242; color: #FAF9F5; border-radius: 8px;
+/* ── Long-form prose: one measure, size and weight for every reading page ──
+   Used by the legal pages, position, glossary, markets and the generated
+   questions and requirements pages, so paragraphs read the same everywhere. */
+.prose { max-width: 760px; margin: 0 auto; }
+.prose p { font-size: 15px; font-weight: 300; line-height: 1.75; }
+
+/* ── Small uppercase label (eyebrows, category titles, meta lines): one style ──
+   Pages used to carry seventeen private copies of .fw-eyebrow-mono and eight
+   sibling classes in other tones and weights; each page rule now keeps only
+   its spacing and the type comes from here (2026-09-18). */
+.fw-eyebrow-mono, .search-eyebrow, .sub-eyebrow, .sc-eyebrow, .verify-eyebrow,
+.news-eyebrow, .docs-section-heading, .dl-meta, .gl-cat-title {
+  font-family: var(--mono); font-size: 12px; font-weight: 500; letter-spacing: 0.18em;
+  text-transform: uppercase; color: rgba(12,34,66,0.66);   /* 0.66 is 5.1:1 on cream; 0.6 was 4.26:1, under AA for 12px text */
 }
-.btn-solid:hover, .btn-red:hover { background: #081A34; border-color: #081A34; color: #FAF9F5; }
-/* Secondary buttons → navy outline (fills navy on hover) */
-.btn-outline { border: 1px solid #0C2242; color: #0C2242; background: transparent; border-radius: 8px; }
-.btn-outline:hover { background: #0C2242; border-color: #0C2242; color: #FAF9F5; }
+/* 404.html loads no styles.css and keeps its own copy of this label rule. */
+
+/* Legal-page meta strip (Effective, Scope, Contact): the link stays quiet like
+   .gl-toc a and .ci-value a; underline on hover only. */
+.legal-meta-item a { text-decoration: none; }
+.legal-meta-item a:hover { text-decoration: underline; }
+
 
 /* ── Footer: dark-navy block (SCL mark + grouped columns, no socials) ── */
 .site-footer { background: #0C2242; border-top: none; margin-top: 40px; }

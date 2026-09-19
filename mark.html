@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#FAF9F5">
 <title>The SCL Name and Mark | Safety Critical Labs</title>
 <meta name="description" content="Who owns the Safety Critical Labs name, seal, and certification mark, and the rules that govern their use.">
 <meta property="og:title" content="The SCL Name and Mark | Safety Critical Labs">
@@ -24,15 +25,7 @@
 /* Shared legal page styles */
 /* Hero cursor glow styles live in styles.css (promoted 2026-08-24) */
 
-.fw-eyebrow-mono {
-  font-family: var(--mono);
-  font-size: 12px;
-  font-weight: 500;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: rgba(12,34,66,0.6);
-  margin-bottom: 20px;
-}
+.fw-eyebrow-mono { margin-bottom: 20px; }
 
 .legal-section {
   background: #FAF9F5;
@@ -105,8 +98,6 @@
 }
 .legal-block p:last-child { margin-bottom: 0; }
 .legal-block p strong { color: var(--ink); font-weight: 500; }
-.legal-block a { color: var(--blue); text-decoration: none; border-bottom: 1px solid rgba(46,109,180,0.3); }
-.legal-block a:hover { color: var(--blue-dk); border-bottom-color: var(--blue-dk); }
 .legal-block ul {
   list-style: none;
   padding: 0;
@@ -228,11 +219,11 @@
     <div class="legal-meta">
       <div class="legal-meta-item">Effective<strong>September 11, 2026</strong></div>
       <div class="legal-meta-item">Applies to<strong>The SCL name, seal, and certification mark</strong></div>
-      <div class="legal-meta-item">Contact<strong><a href="/contact" style="color:#0C2242;text-decoration:none;">/contact</a></strong></div>
+      <div class="legal-meta-item">Contact<strong><a href="/contact">/contact</a></strong></div>
     </div>
 
     <div class="legal-review-note is-standing">
-      <strong>Where this stands today.</strong> Safety Critical Labs has issued no certificates. The public register at <a href="/verify" style="color:#0C2242;">/verify</a> records an issued count of zero, and its only entry is a specimen used to demonstrate the certificate format. This page therefore states the rules that will govern the SCL certification mark, not the conduct of an existing body of certificate holders. Nobody is currently authorized to display it. Anyone who does is making a false claim, and section 12 explains how to report that.
+      <strong>Where this stands today.</strong> Safety Critical Labs has issued no certificates. The public register at <a href="/verify">/verify</a> records an issued count of zero, and its only entry is a specimen used to demonstrate the certificate format. This page therefore states the rules that will govern the SCL certification mark, not the conduct of an existing body of certificate holders. Nobody is currently authorized to display it. Anyone who does is making a false claim, and section 12 explains how to report that.
     </div>
 
     <div class="legal-block">
@@ -280,18 +271,18 @@
       <ul>
         <li><strong>1. The system, by name and version.</strong> Certification attaches to a system, never to an organization, a team, a product line, or a model family. Name the system as it is named on the certificate, including the version or configuration identifier recorded there.</li>
         <li><strong>2. The framework version.</strong> The AI Requirements Framework is versioned, and its requirement sets change between versions. A claim that does not name the version is not checkable. Write the version as it appears on the certificate, for example v3.7.</li>
-        <li><strong>3. The classification tier.</strong> The tier decides which requirement sets applied to the assessment. The three tiers are Safety Critical, Mission Critical and Operational Support, and they are not interchangeable. Naming a higher tier than the one assessed is a false claim, not a rounding error.</li>
+        <li><strong>3. The classification tier.</strong> The tier decides which requirement sets applied to the assessment. The three tiers are Safety-Critical, Mission-Critical and Operational Support, and they are not interchangeable. Naming a higher tier than the one assessed is a false claim, not a rounding error.</li>
         <li><strong>4. The certificate number.</strong> Every certificate carries a number in the form SCL-CERT-YYYY-NNN. Display it with the claim.</li>
         <li><strong>5. A working link to verification.</strong> The claim must link to the SCL register at safetycriticallabs.com/verify so that any reader can check it in one click. A claim without a live verification link is not an authorized use of the mark, however accurate the rest of it is.</li>
       </ul>
       <p style="margin-top:20px;"><strong>A correct claim reads like this:</strong></p>
-      <div class="mark-example">Atlas Perception Stack v4.2 is SCL Certified against the SCL AI Requirements Framework v3.7 at the Mission Critical classification. Certificate SCL-CERT-2027-014. Verify at safetycriticallabs.com/verify.</div>
+      <div class="mark-example">Atlas Perception Stack v4.2 is SCL Certified against the SCL AI Requirements Framework v3.7 at the Mission-Critical classification. Certificate SCL-CERT-2027-014. Verify at safetycriticallabs.com/verify.</div>
       <p style="margin-top:20px;"><strong>These are not correct claims:</strong></p>
       <ul>
         <li>"SCL Certified." Nothing is pinned. This says nothing and is not permitted.</li>
         <li>"Acme Robotics is SCL Certified." Certification attaches to a system, not a company. SCL does not certify organizations.</li>
         <li>"Our models are SCL Certified." Plural and unversioned. One system was assessed; the others were not.</li>
-        <li>"SCL Certified, Safety Critical." Where the certificate says Mission Critical, this overstates the tier and is a false claim.</li>
+        <li>"SCL Certified, Safety-Critical." Where the certificate says Mission-Critical, this overstates the tier and is a false claim.</li>
         <li>"SCL Certified (AI-5, AI-7, AI-11)." Certification is a determination across the applicable requirement sets for the tier, not a menu. Partial conformance is not certification and may not be described using the mark.</li>
         <li>"SCL certification pending." There is no such status. See section 07.</li>
         <li>"SCL assessed." SCL does not license this wording. Use the exact term granted, or none.</li>

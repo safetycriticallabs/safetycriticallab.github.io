@@ -12,7 +12,7 @@
 <meta property="og:type" content="website">
 <meta property="og:image" content="https://safetycriticallabs.com/img/og-tile.png">
 <meta name="twitter:card" content="summary">
-<meta name="theme-color" content="#EBF1F8">
+<meta name="theme-color" content="#FAF9F5">
 <link rel="icon" type="image/x-icon" href="favicon.ico">
 <link rel="icon" type="image/png" sizes="16x16" href="img/favicon-16x16.png">
 <link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32x32.png">
@@ -26,12 +26,11 @@
 <link rel="stylesheet" href="styles.css">
 <style>
 /* Generated page. Edit generate_faq.py, not this file. */
-.faq-wrap { max-width: 760px; margin: 0 auto; padding: 72px 24px 96px; }
-.faq-wrap > p.faq-intro { margin-bottom: 40px; }
+.faq-wrap { padding: 0 24px 96px; }
 .faq-entry { margin-bottom: 36px; }
 .faq-entry h2 { font-size: 1.15rem; line-height: 1.35; margin: 0 0 10px; scroll-margin-top: 90px; }
 .faq-entry p { margin: 0 0 8px; }
-.faq-more { font-size: 0.92rem; }
+.prose p.faq-more { font-size: 0.92rem; }
 </style>
 </head>
 <body>
@@ -47,7 +46,7 @@
       <li class="gn-dropdown">
         <button class="gn-dropdown-toggle" type="button" aria-expanded="false" aria-haspopup="true">Company <span class="gn-dropdown-arrow" aria-hidden="true"></span></button>
         <ul class="gn-dropdown-menu">
-          <li><a href="/position" class="active">Position</a></li>
+          <li><a href="/position">Position</a></li>
           <li><a href="/expertise">Expertise</a></li>
           <li><a href="/markets">Markets</a></li>
           <li><a href="/contact">Contact</a></li>
@@ -72,12 +71,25 @@
   </div>
 </nav>
 
-<main id="main">
-  <div class="faq-wrap">
-    <h1>Questions about certifying AI systems</h1>
-    <p class="faq-intro">The full Ask SCL question library, in plain text. These are the
-    same answers the assistant on <a href="/search">Ask SCL</a> draws from. Last updated
-    2026-09-18.</p>
+<main id="main" tabindex="-1">
+
+<div class="page-shell">
+
+<div class="inner-hero">
+  <div class="fw-hero-glow"></div>
+  <div class="inner-hero-inner">
+    <div>
+      <div class="inner-hero-breadcrumb"><a href="/">Safety Critical Labs</a><span>/</span> Questions</div>
+      <h1>Questions about certifying AI systems</h1>
+    </div>
+    <p class="inner-hero-lead">
+      The full Ask SCL question library, in plain text. These are the same answers the
+      assistant on <a href="/search">Ask SCL</a> draws from. Last updated 2026-09-18.
+    </p>
+  </div>
+</div>
+
+  <div class="faq-wrap prose">
 
     <article class="faq-entry">
       <h2 id="faq-1">What is SCL?</h2>
@@ -261,7 +273,7 @@
     </article>
     <article class="faq-entry">
       <h2 id="faq-37">What happens after we are certified?</h2>
-      <p>Certification is not a one time event. Safety Critical systems carry an annual surveillance audit, Mission Critical systems a biennial one, and Operational Support systems a triennial one. Reassessment is triggered by a model version change, a significant environment change, a drift threshold breach, or an incident involving an AI assisted decision. The validity period is scoped per engagement.</p>
+      <p>Certification is not a one time event. Safety-Critical systems carry an annual surveillance audit, Mission-Critical systems a biennial one, and Operational Support systems a triennial one. Reassessment is triggered by a model version change, a significant environment change, a drift threshold breach, or an incident involving an AI assisted decision. The validity period is scoped per engagement.</p>
       <p class="faq-more"><a href="/process">Read more</a></p>
     </article>
     <article class="faq-entry">
@@ -316,6 +328,8 @@
     </article>
 
   </div>
+
+</div>
 </main>
 
 <footer class="site-footer">

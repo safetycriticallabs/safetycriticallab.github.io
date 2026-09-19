@@ -681,7 +681,7 @@
     {
       "id": "faq-37",
       "q": "What happens after we are certified?",
-      "a": "Certification is not a one time event. Safety Critical systems carry an annual surveillance audit, Mission Critical systems a biennial one, and Operational Support systems a triennial one. Reassessment is triggered by a model version change, a significant environment change, a drift threshold breach, or an incident involving an AI assisted decision. The validity period is scoped per engagement.",
+      "a": "Certification is not a one time event. Safety-Critical systems carry an annual surveillance audit, Mission-Critical systems a biennial one, and Operational Support systems a triennial one. Reassessment is triggered by a model version change, a significant environment change, a drift threshold breach, or an incident involving an AI assisted decision. The validity period is scoped per engagement.",
       "keywords": [
         "after",
         "surveillance",

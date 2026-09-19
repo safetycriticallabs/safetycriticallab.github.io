@@ -13,7 +13,7 @@
 <meta property="og:url" content="https://safetycriticallabs.com/presentation">
 <meta property="og:type" content="website">
 <meta property="og:image" content="https://safetycriticallabs.com/img/og-tile.png">
-<meta name="theme-color" content="#EBF1F8">
+<meta name="theme-color" content="#FAF9F5">
 <link rel="icon" type="image/x-icon" href="favicon.ico">
 <link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32x32.png">
 <link rel="apple-touch-icon" sizes="180x180" href="img/apple-touch-icon.png">
@@ -1003,9 +1003,9 @@ const sections = {
         { num: "1", title: "Introduction", badge: "Scope & Classification", desc: "Establishes the framework's purpose, defines what constitutes an AI system, and determines which requirements apply based on consequence classification.",
           subs: [
             { text: "1.1 Purpose and rationale for AI specific requirements", summary: "AI behavior emerges from training data rather than explicit code. This breaks the traceability assumption that underpins traditional verification. The framework exists because existing software assurance standards were written for systems where a reviewer can read the artifact and trace it to a requirement." },
-            { text: "1.2 Scope, applicability criteria, and AI system classification (three tiers)", summary: "Defines what qualifies as an AI system and assigns it to one of three classification tiers (Safety Critical, Mission Critical, Operational Support) based on consequence of failure. Classification drives which requirements apply and how much tailoring is permitted." },
+            { text: "1.2 Scope, applicability criteria, and AI system classification (three tiers)", summary: "Defines what qualifies as an AI system and assigns it to one of three classification tiers (Safety-Critical, Mission-Critical, Operational Support) based on consequence of failure. Classification drives which requirements apply and how much tailoring is permitted." },
             { text: "1.2.3 Gap analysis: traditional software assumptions vs. AI/ML reality", summary: "Maps the specific ways traditional software assumptions break with AI: unbounded operational scope, training data integrity and traceability, bias and fairness, no test coverage equivalent, static after deployment, unpredictable outputs, OOD vulnerability, adversarial vulnerability, decision opacity, operator trust, and personal data protection. Each gap traces to the requirement set that addresses it." },
-            { text: "1.2.5 Tailoring authority by classification level", summary: "Defines who can approve tailoring (reducing or modifying requirements) at each tier. Safety Critical requires Project Safety Review Board approval. Mission Critical requires Chief Engineer approval with documented rationale. Operational Support permits tailoring with Software Assurance authority approval." },
+            { text: "1.2.5 Tailoring authority by classification level", summary: "Defines who can approve tailoring (reducing or modifying requirements) at each tier. Safety-Critical requires Project Safety Review Board approval. Mission-Critical requires Chief Engineer approval with documented rationale. Operational Support permits tailoring with Software Assurance authority approval." },
             { text: "1.3 Normative and informative references, and the domain standards citation convention", summary: "Table 1-9 lists the three normative references with the extent of each invocation: ISO/IEC 22989:2022, ISO/IEC 5338:2023 and IEEE 1012-2024. Table 1-10 lists the informative references, including NIST AI RMF, DO-178C, ISO 26262, ISO/IEC 27701, ISO/IEC 29100, NIST Privacy Framework, EU AI Act, and related privacy regulations (GDPR, HIPAA, CCPA). Each Section 2 and Section 3 requirement lists related domain standards inline by domain (General, Aviation, Automotive, Medical, EU, Cross-Domain) as a crosswalk that levies nothing." },
             { text: "1.4 Verb conventions: shall (requirement), should (guidance), will (expectation)", summary: "Three verbs carry specific meaning. 'Shall' denotes a requirement with a formal verification in Section 2. 'Should' denotes informative guidance in Section 4 with no verification requirement. 'Will' denotes an expectation met by the sum of its supporting 'shall' statements." },
             { text: "1.5 Threshold category definitions (performance, confidence, drift, OOD, escalation)", summary: "Five threshold categories every AI system must document regardless of classification: performance degradation, confidence, data drift, out of distribution detection, and human escalation. The categories are mandatory. The actual values are project defined. Section 4.1 provides example ranges." }
@@ -1017,9 +1017,9 @@ const sections = {
             { text: "AI-2 Addressing AI Bias", summary: "Requires bias risk assessment identifying protected classes and demographic groups, performance monitoring across those groups, and documented mitigation when disparities are found. Ensures the model performs equitably across all operational populations." },
             { text: "AI-3 ML Test Coverage", summary: "Defines test coverage methods for ML models where traditional code coverage metrics do not apply. Covers input domain coverage, boundary analysis, and edge case testing. Requires documented coverage criteria appropriate to the AI function." },
             { text: "AI-4 Continuous Validation", summary: "Requires ongoing monitoring for performance degradation and data drift after deployment. Defines revalidation triggers when thresholds are exceeded. Establishes surveillance intervals based on classification level." },
-            { text: "AI-5 Hallucination Prevention", summary: "Requires defined criteria for what constitutes a hallucination for each AI function, detection mechanisms, response procedures (quarantine, block autonomous execution, trigger human review), and event logging. Safety Critical systems require independent output validation using dissimilar methods." },
+            { text: "AI-5 Hallucination Prevention", summary: "Requires defined criteria for what constitutes a hallucination for each AI function, detection mechanisms, response procedures (quarantine, block autonomous execution, trigger human review), and event logging. Safety-Critical systems require independent output validation using dissimilar methods." },
             { text: "AI-6 Out-of-Distribution Detection", summary: "Requires statistical characterization of the training data distribution, runtime detection of inputs falling outside that distribution, defined fallback behavior when OOD inputs are detected, and event logging for trend analysis." },
-            { text: "AI-7 Adversarial Robustness", summary: "Requires threat modeling for adversarial attacks on inputs, training data, and model parameters. Includes adversarial testing and defense validation. Applies fully to Safety Critical systems. Tailored for Mission Critical." },
+            { text: "AI-7 Adversarial Robustness", summary: "Requires threat modeling for adversarial attacks on inputs, training data, and model parameters. Includes adversarial testing and defense validation. Applies fully to Safety-Critical systems. Tailored for Mission-Critical." },
             { text: "AI-8 Explainability", summary: "Requires decision explanations sufficient for operators to verify AI reasoning and establish appropriate trust. Covers decision attribution methods, operator comprehension validation, and explanation fidelity (ensuring explanations accurately reflect the model's actual reasoning)." },
             { text: "AI-9 Human-AI Teaming", summary: "Requires support for effective human oversight: trust calibration mechanisms, override authority for safety critical actions, and maintained situational awareness. The human remains the final authority. The AI supports, informs, and defers." },
             { text: "AI-10 Privacy and Data Protection", summary: "Requires personal data protection mechanisms for AI systems that process personal data. Covers personal data identification and minimization, lawful basis and consent, data subject rights, privacy-enhancing techniques, cross-border data transfer controls, privacy impact assessment, and privacy compliance audit trail." }
@@ -1084,11 +1084,11 @@ const sections = {
     data: {
       intro: "Once a component is in scope, classification sets how hard the framework pushes on it. It determines which requirements apply and how much tailoring authority is available, and it is driven by consequence of failure, not probability.",
       tiers: [
-        { name: "Safety Critical AI", color: "red", desc: "AI outputs directly affect human safety or system survivability.", checklistQs: "Could AI malfunction result in loss of life or critical equipment? Is the AI in the control path for safety-critical functions?", examples: "Surgical guidance systems, autonomous vehicle collision avoidance, medical diagnostic AI that determines treatment, flight control systems", reqs: "AI-1 through AI-10 (all core requirements, no tailoring without PSRB approval), plus AI-11 through AI-13 as the architecture requires." },
-        { name: "Mission Critical AI", color: "gold", desc: "AI outputs affect operational success but not human safety.", checklistQs: "Could AI malfunction result in loss of operational objectives? Is the AI in the decision path for mission-critical functions?", examples: "Predictive maintenance for aircraft engines, medical triage prioritization, financial fraud detection, spam filter for flight operations communications", reqs: "AI-1 through AI-6, AI-8, AI-9, AI-10; AI-7 tailored (CE approval). AI-11, AI-12, AI-13 conditionally per system design" },
+        { name: "Safety-Critical AI", color: "red", desc: "AI outputs directly affect human safety or system survivability.", checklistQs: "Could AI malfunction result in loss of life or critical equipment? Is the AI in the control path for safety-critical functions?", examples: "Surgical guidance systems, autonomous vehicle collision avoidance, medical diagnostic AI that determines treatment, flight control systems", reqs: "AI-1 through AI-10 (all core requirements, no tailoring without PSRB approval), plus AI-11 through AI-13 as the architecture requires." },
+        { name: "Mission-Critical AI", color: "gold", desc: "AI outputs affect operational success but not human safety.", checklistQs: "Could AI malfunction result in loss of operational objectives? Is the AI in the decision path for mission-critical functions?", examples: "Predictive maintenance for aircraft engines, medical triage prioritization, financial fraud detection, spam filter for flight operations communications", reqs: "AI-1 through AI-6, AI-8, AI-9, AI-10; AI-7 tailored (CE approval). AI-11, AI-12, AI-13 conditionally per system design" },
         { name: "Operational Support AI", color: "blue", desc: "AI supports operations but does not drive critical decisions.", checklistQs: "Does the AI support operations without driving critical decisions?", examples: "Corporate email spam filter, schedule optimization, meeting transcription, documentation assistants", reqs: "AI-1 through AI-6 and AI-10 minimum; AI-7 through AI-9 as tailored (SA approval). AI-11, AI-12, AI-13 conditionally per system design" }
       ],
-      footer: "The same AI capability can fall into different tiers depending on operational context. A spam filter for marketing emails is Operational Support. A spam filter for flight operations communications could be Mission Critical."
+      footer: "The same AI capability can fall into different tiers depending on operational context. A spam filter for marketing emails is Operational Support. A spam filter for flight operations communications could be Mission-Critical."
     }
   },
   "just-test-it": {
@@ -1200,8 +1200,8 @@ const sections = {
       tabs: ["Threshold Selection", "Deployment Validation", "Continuous Learning", "Tooling Integration"],
       content: [
         { title: "Threshold Selection", items: [
-          { phase: "Bias Metrics (AI-2)", desc: "Demographic parity difference: 2% or less for Safety Critical, 5% or less for Mission Critical. Equalized odds difference: 3% or less TPR/FPR difference across groups. Tighter thresholds for crew health and safety functions." },
-          { phase: "Drift Detection (AI-4)", desc: "Population Stability Index below 0.1 is negligible. Between 0.1 and 0.25 is moderate, triggering alerts. Above 0.25 is significant, halting autonomous operation for Safety Critical systems." },
+          { phase: "Bias Metrics (AI-2)", desc: "Demographic parity difference: 2% or less for Safety-Critical, 5% or less for Mission-Critical. Equalized odds difference: 3% or less TPR/FPR difference across groups. Tighter thresholds for crew health and safety functions." },
+          { phase: "Drift Detection (AI-4)", desc: "Population Stability Index below 0.1 is negligible. Between 0.1 and 0.25 is moderate, triggering alerts. Above 0.25 is significant, halting autonomous operation for Safety-Critical systems." },
           { phase: "Performance Degradation (AI-4)", desc: "5% or less accuracy drop from baseline. Baseline established during V&V. Consider mission phase sensitivity. Threshold values are documented and justified based on mission risk tolerance." },
           { phase: "Confidence Threshold (AI-8)", desc: "Expected Calibration Error of 0.05 or less. Reliability slope between 0.9 and 1.1. A stated 90% confidence should be correct approximately 90% of the time. Critical for operator trust calibration. Validate across operational scenarios, not just aggregate test data." },
           { phase: "OOD Detection (AI-6)", desc: "Detection rate of 97% or greater with a false positive rate of 2% or less. Validate against realistic out of distribution scenarios from the operational environment, not just synthetic noise. Balance detection sensitivity against operational false alarm burden." },
@@ -1214,10 +1214,10 @@ const sections = {
           { phase: "Format Conversion", desc: "Converting between frameworks: PyTorch to ONNX to TensorRT. Each conversion involves numerical transformations. Rounding behavior, operator differences, and optimization passes can all change outputs at the margins." }
         ], note: "Revalidation means side by side performance comparisons on representative test datasets. Degradation must be documented and accepted within defined margins." },
         { title: "Continuous Learning Controls", items: [
-          { phase: "Safety Critical AI", desc: "Five controls required: rollback to last verified model, approval for updates prior to activation, shadow mode validation before operational use, automated performance bounds with automatic reversion, continuous validation per AI-4 with tightened thresholds." },
-          { phase: "Mission Critical AI", desc: "Four controls required: performance monitoring per AI-4, automated rollback at defined thresholds, logging of all model updates, periodic review of learning trajectory." },
+          { phase: "Safety-Critical AI", desc: "Five controls required: rollback to last verified model, approval for updates prior to activation, shadow mode validation before operational use, automated performance bounds with automatic reversion, continuous validation per AI-4 with tightened thresholds." },
+          { phase: "Mission-Critical AI", desc: "Four controls required: performance monitoring per AI-4, automated rollback at defined thresholds, logging of all model updates, periodic review of learning trajectory." },
           { phase: "Operational Support AI", desc: "Two controls required: baseline performance tracking, anomaly alerting for significant behavior changes." },
-          { phase: "Minimum Classification", desc: "Systems employing continuous learning are classified no lower than Mission Critical. A system whose behavior changes during operations without a code release requires at minimum the controls of Mission Critical classification." }
+          { phase: "Minimum Classification", desc: "Systems employing continuous learning are classified no lower than Mission-Critical. A system whose behavior changes during operations without a code release requires at minimum the controls of Mission-Critical classification." }
         ], note: "Controls are scaled by classification. A system that learns during operations is a system whose verified behavior can change. The controls ensure that change remains within acceptable bounds." },
         { title: "Tooling Integration", items: [
           { phase: "CI/CD Pipeline Integration", desc: "Drift detection (AI-4), bias monitoring (AI-2), and performance validation can be automated as pipeline stages alongside your existing build, test, and deploy steps. Model validation runs the same way unit tests run: automatically, on every change, with pass/fail gates." },
@@ -1293,8 +1293,8 @@ const sections = {
       intro: "Traditional software does not change after deployment unless someone changes the code. AI systems can degrade while the code stays the same. Data drifts, operational conditions shift, and the model's performance erodes without any release, any commit, or any alert from your existing change management process. The framework requires the customer to monitor continuously (AI-4). Surveillance is SCL verifying that the customer's monitoring is working and that the certified system is still performing within the bounds it was assessed against. Surveillance is not a full reassessment every time. It is a focused review of the evidence that the system remains within certified performance bounds. The cadences below reflect the risk exposure at each classification level.",
       headers: ["Classification", "Surveillance Cadence", "Scope"],
       rows: [
-        ["Safety Critical", "Annual audit", "Full reassessment of drift metrics, OOD logs, bias monitoring, operational performance, and model integrity verification"],
-        ["Mission Critical", "Biennial audit", "Focused reassessment of continuous validation records, model update history, and performance trend analysis"],
+        ["Safety-Critical", "Annual audit", "Full reassessment of drift metrics, OOD logs, bias monitoring, operational performance, and model integrity verification"],
+        ["Mission-Critical", "Biennial audit", "Focused reassessment of continuous validation records, model update history, and performance trend analysis"],
         ["Operational Support", "Triennial audit", "Confirmation the system remains in its declared advisory role, with continuous validation records and model update history reviewed"], ["Triggered (all tiers)", "On trigger event", "Model version change, environment change, drift threshold breach, or safety related incident"]
       ],
       footer: "Triggered reassessment is mandatory. A model version change means the certified artifact is no longer the deployed artifact. The certificate applies to a specific assessed configuration. When the configuration changes, the assessment must be revisited regardless of how minor the change appears."
@@ -1303,7 +1303,7 @@ const sections = {
   "cognitive-twin": {
     group: "Stakeholders", title: "Cognitive Twin System", type: "ct-intro",
     data: {
-      classification: "Safety Critical AI",
+      classification: "Safety-Critical AI",
       subtitle: "Full certification assessment of an AI system from concept to determination",
       description: "An AI driven neurobehavioral model that acts as a personalized digital avatar for each astronaut. Trained on individualized cognitive, emotional, and physiological data, the twin simulates mental performance under mission scenarios and detects early signs of cognitive decline.",
       features: [
@@ -1313,7 +1313,7 @@ const sections = {
         { label: "Adaptation", value: "Continuous learning throughout the mission duration" },
         { label: "Team Mode", value: "Multi agent crew level model sharing high level readiness data across individual twins" }
       ],
-      classificationRationale: "Undetected cognitive decline during a critical mission phase (EVA, docking, emergency response) could result in loss of crew. The twin directly influences crew tasking and health decisions. This is Safety Critical AI. All core requirements apply. AI-11, AI-12, AI-13 conditionally per system design. No tailoring without PSRB approval."
+      classificationRationale: "Undetected cognitive decline during a critical mission phase (EVA, docking, emergency response) could result in loss of crew. The twin directly influences crew tasking and health decisions. This is Safety-Critical AI. All core requirements apply. AI-11, AI-12, AI-13 conditionally per system design. No tailoring without PSRB approval."
     }
   },
   "ct-requirements": {
@@ -3374,7 +3374,7 @@ function renderReqVisual(type) {
         '<div class="rv-drift-controls">' +
           '<button class="rv-drift-btn" id="drift-btn" onclick="runDrift()">Start Monitoring</button>' +
           '<span class="rv-drift-readout" id="drift-readout">Accuracy: <span class="ok">94.0%</span></span>' +
-          '<span class="rv-drift-readout" id="drift-month" style="margin-left:auto;">Month: <span>—</span></span>' +
+          '<span class="rv-drift-readout" id="drift-month" style="margin-left:auto;">Month: <span>-</span></span>' +
         '</div>' +
         '<div class="rv-drift-alert" id="drift-alert">⚠ ALERT: Accuracy below 85% threshold. Reassessment triggered. No code changed. No deployment changed. The data moved.</div>' +
       '</div>';
@@ -3907,7 +3907,7 @@ function renderCTModel() {
   html += '<div class="wt-panel wt-panel-red" style="margin-top:16px;">';
   html += '<div class="wt-panel-label">Continuous Learning: The Design Choice That Changes Everything</div>';
   html += '<div style="font-size:12px;color:var(--ink2);line-height:1.65;">The twin adapts throughout the mission. It learns each astronaut\'s evolving baseline as their body adjusts to microgravity, as sleep patterns shift, as chronic stress accumulates. This is not a bug. It is the design. A static model trained on ground data would become increasingly wrong as the mission progresses.</div>';
-  html += '<div style="font-size:12px;color:var(--ink2);line-height:1.65;margin-top:8px;">But continuous learning means the model you certified at launch is not the model running at month six. The framework addresses this directly: Section 4.2 requires rollback capability, approval gates before activation, shadow mode validation, automated performance bounds with automatic reversion, and tightened continuous validation thresholds. All five controls are mandatory for Safety Critical classification.</div>';
+  html += '<div style="font-size:12px;color:var(--ink2);line-height:1.65;margin-top:8px;">But continuous learning means the model you certified at launch is not the model running at month six. The framework addresses this directly: Section 4.2 requires rollback capability, approval gates before activation, shadow mode validation, automated performance bounds with automatic reversion, and tightened continuous validation thresholds. All five controls are mandatory for Safety-Critical classification.</div>';
   html += '</div>';
   
   html += '<div class="wt-callout"><p><strong>Framework connection:</strong> AI-3 requires test coverage across operational input distributions. The cognitive states that matter most (long duration fatigue, confinement stress) are exactly the states absent from ground training. AI-5 hallucination prevention requires detection of fabricated outputs. A twin that invents a cognitive decline signal triggers a false alarm during a critical operation.</p></div>';

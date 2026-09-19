@@ -131,6 +131,7 @@ if not areas:
 
 shell = SHELL_SRC.read_text()
 nav = grab(r'<nav class="global-nav".*?</nav>', shell, "the global nav")
+nav = nav.replace(' class="active"', '')   # position.html marks itself active; this page is not Position
 footer = grab(r'<footer class="site-footer".*?</footer>', shell, "the site footer")
 
 sections, n_subs = [], 0
@@ -176,7 +177,7 @@ page = f"""<!DOCTYPE html>
 <meta property="og:type" content="website">
 <meta property="og:image" content="https://safetycriticallabs.com/img/og-tile.png">
 <meta name="twitter:card" content="summary">
-<meta name="theme-color" content="#EBF1F8">
+<meta name="theme-color" content="#FAF9F5">
 <link rel="icon" type="image/x-icon" href="favicon.ico">
 <link rel="icon" type="image/png" sizes="16x16" href="img/favicon-16x16.png">
 <link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32x32.png">
@@ -196,8 +197,7 @@ page = f"""<!DOCTYPE html>
    path animates the reader through most of the framework to get there. A cited
    requirement should be on screen at once. */
 html {{ scroll-behavior: auto; }}
-.req-wrap {{ max-width: 780px; margin: 0 auto; padding: 72px 24px 96px; }}
-.req-intro {{ margin-bottom: 12px; }}
+.req-wrap {{ padding: 0 24px 96px; }}
 .req-toc {{ margin: 0 0 48px; padding: 0; list-style: none; font-size: 0.95rem; line-height: 2; }}
 .req-toc li {{ display: inline; }}
 .req-toc li:not(:last-child)::after {{ content: " \\00B7 "; color: rgba(12,34,66,0.35); }}
@@ -208,8 +208,8 @@ html {{ scroll-behavior: auto; }}
 .req-entry h3 {{ font-size: 1.02rem; line-height: 1.35; margin: 0 0 8px; scroll-margin-top: 90px; }}
 .req-entry:target {{ border-left-color: #2E6DB4; }}
 .req-id {{ font-family: var(--mono); font-size: 0.86em; font-weight: 500; color: #1E5A9A; margin-right: 6px; }}
-.req-statement {{ margin: 0 0 8px; }}
-.req-part {{ margin: 0 0 8px; font-size: 0.94rem; color: var(--ink-2); }}
+.prose p.req-statement {{ margin: 0 0 8px; font-weight: 400; }}   /* the normative statement keeps regular weight; rationale and verification read at 300 */
+.prose p.req-part {{ margin: 0 0 8px; font-size: 0.94rem; color: var(--ink-2); }}
 .req-label {{ font-weight: 600; color: var(--ink); }}
 </style>
 </head>
@@ -218,16 +218,30 @@ html {{ scroll-behavior: auto; }}
 
 {nav}
 
-<main id="main">
-  <div class="req-wrap">
-    <h1>{esc(H1)}</h1>
-    <p class="req-intro">The complete text of the AI Requirements Framework, version {esc(version)},
-    last updated {esc(updated)}. Every requirement is published with its rationale, the method by
-    which it is verified, and the criteria that decide whether the verification succeeded. This is
-    the same text as the deposited record; cite the framework at the concept DOI
-    <a href="https://doi.org/{CONCEPT_DOI}" rel="noopener">{CONCEPT_DOI}</a>, not at this URL.
-    The <a href="/framework">framework overview</a> summarizes the thirteen areas, and
-    <a href="/search">Ask SCL</a> answers questions grounded in this text.</p>
+<main id="main" tabindex="-1">
+
+<div class="page-shell">
+
+<div class="inner-hero">
+  <div class="fw-hero-glow"></div>
+  <div class="inner-hero-inner">
+    <div>
+      <div class="inner-hero-breadcrumb"><a href="/">Safety Critical Labs</a><span>/</span> Requirements</div>
+      <h1>{esc(H1)}</h1>
+    </div>
+    <p class="inner-hero-lead">
+      The complete text of the AI Requirements Framework, version {esc(version)}, last updated
+      {esc(updated)}. Every requirement is published with its rationale, the method by which it is
+      verified, and the criteria that decide whether the verification succeeded. This is the same
+      text as the deposited record; cite the framework at the concept DOI
+      <a href="https://doi.org/{CONCEPT_DOI}" rel="noopener">{CONCEPT_DOI}</a>, not at this URL.
+      The <a href="/framework">framework overview</a> summarizes the thirteen areas, and
+      <a href="/search">Ask SCL</a> answers questions grounded in this text.
+    </p>
+  </div>
+</div>
+
+  <div class="req-wrap prose">
     <ul class="req-toc">
 {chr(10).join(f'      <li><a href="#{esc(anchor(a["id"]))}">{esc(a["id"])}</a></li>' for a in areas)}
     </ul>
@@ -235,6 +249,8 @@ html {{ scroll-behavior: auto; }}
 {body}
 
   </div>
+
+</div>
 </main>
 
 {footer}

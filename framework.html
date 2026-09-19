@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#FAF9F5">
 <title>AI Requirements Framework: Thirteen Requirement Areas for Safety-Critical AI | Safety Critical Labs</title>
 <meta name="description" content="The SCL AI Requirements Framework: thirteen requirement areas for AI specific failure modes. Algorithm agnostic and openly published under a citable DOI.">
 <meta property="og:title" content="The Framework | Safety Critical Labs">
@@ -365,7 +366,7 @@
   font-size: clamp(28px, 3vw, 38px);
   font-weight: 600; color: var(--ink); margin-bottom: 16px; line-height: 1.1; letter-spacing: -0.02em;
 }
-.os-left p { font-size: 15px; color: var(--ink-2); line-height: 1.8; font-weight: 300; margin-bottom: 16px; }
+.os-left p { font-size: 15px; color: var(--ink-2); line-height: 1.75; font-weight: 300; margin-bottom: 16px; }
 
 .os-right { display: flex; flex-direction: column; gap: 12px; }
 
@@ -398,15 +399,7 @@
 }
 
 /* ─── BRACKETED MONO EYEBROW (showcase sections) ──────────── */
-.fw-eyebrow-mono {
-  font-family: var(--mono);
-  font-size: 12px;
-  font-weight: 500;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: rgba(12,34,66,0.6);
-  margin-bottom: 20px;
-}
+.fw-eyebrow-mono { margin-bottom: 20px; }
 
 /* Showcase title — blue, big, like the index .fw-title */
 .fw-showcase-title {
@@ -575,8 +568,8 @@
     <div style="display:flex; justify-content:space-between; align-items:flex-end; gap: 32px; margin-bottom: 48px; flex-wrap: wrap;">
       <h2 class="section-title" style="margin-bottom:0;">AI-1 through AI-13</h2>
       <div class="class-key" role="group" aria-label="Filter requirements by classification tier">
-        <div class="class-item" data-tier="safety" role="button" tabindex="0" aria-pressed="false"><span class="class-dot dot-safety-tier"></span>Safety Critical</div>
-        <div class="class-item" data-tier="mission" role="button" tabindex="0" aria-pressed="false"><span class="class-dot dot-mission-tier"></span>Mission Critical</div>
+        <div class="class-item" data-tier="safety" role="button" tabindex="0" aria-pressed="false"><span class="class-dot dot-safety-tier"></span>Safety-Critical</div>
+        <div class="class-item" data-tier="mission" role="button" tabindex="0" aria-pressed="false"><span class="class-dot dot-mission-tier"></span>Mission-Critical</div>
         <div class="class-item" data-tier="operational" role="button" tabindex="0" aria-pressed="false"><span class="class-dot dot-operational-tier"></span>Operational Support</div>
         <div class="class-key-hint">Click a tier to filter · Esc to clear</div>
       </div>
@@ -727,7 +720,7 @@
     <div class="struct-grid fade-up">
       <div class="struct-col">
         <div class="struct-col-title">Tier 1</div>
-        <div class="struct-col-name">Safety Critical AI</div>
+        <div class="struct-col-name">Safety-Critical AI</div>
         <div class="struct-col-desc">AI outputs directly affect human safety or system survivability. All AI-1 through AI-10 apply. No tailoring without Project Safety Review Board approval. AI-11, AI-12, AI-13 apply conditionally per system design.</div>
         <div class="struct-reqs">
           <span class="struct-req-tag">AI-1</span>
@@ -747,7 +740,7 @@
       </div>
       <div class="struct-col">
         <div class="struct-col-title">Tier 2</div>
-        <div class="struct-col-name">Mission Critical AI</div>
+        <div class="struct-col-name">Mission-Critical AI</div>
         <div class="struct-col-desc">AI outputs affect operational success but not human safety. AI-1 through AI-6, AI-8, AI-9, and AI-10 apply; AI-7 is tailored with Chief Engineer approval and documented rationale. AI-11, AI-12, AI-13 apply conditionally per system design.</div>
         <div class="struct-reqs">
           <span class="struct-req-tag">AI-1</span>
@@ -823,10 +816,10 @@
       <h2 class="fw-showcase-title" style="margin-bottom: 20px;">
         Read every requirement <br>before you engage.
       </h2>
-      <p style="font-size: 15px; color: var(--ink-2); line-height: 1.8; font-weight: 300; margin-bottom: 16px;">
+      <p style="font-size: 15px; color: var(--ink-2); line-height: 1.75; font-weight: 300; margin-bottom: 16px;">
         The framework is openly published under a citable DOI. <a href="/requirements">Every requirement, verification method, and evidence standard</a> is available for review before any assessment begins. Verification is co-located: every requirement carries its verification, and every verification traces to a requirement.
       </p>
-      <p style="font-size: 15px; color: var(--ink-2); line-height: 1.8; font-weight: 300;">
+      <p style="font-size: 15px; color: var(--ink-2); line-height: 1.75; font-weight: 300;">
         If you believe a requirement is technically incorrect, insufficiently grounded, or missing coverage for a known AI failure mode, SCL welcomes that challenge. The standard improves through scrutiny.
       </p>
     </div>

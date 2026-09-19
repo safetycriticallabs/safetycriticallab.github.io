@@ -75,6 +75,7 @@ for e in entries:
 
 shell = SHELL_SRC.read_text()
 nav = grab(r'<nav class="global-nav".*?</nav>', shell, "the global nav")
+nav = nav.replace(' class="active"', '')   # position.html marks itself active; this page is not Position
 footer = grab(r'<footer class="site-footer".*?</footer>', shell, "the site footer")
 
 blocks = []
@@ -105,7 +106,7 @@ page = f"""<!DOCTYPE html>
 <meta property="og:type" content="website">
 <meta property="og:image" content="https://safetycriticallabs.com/img/og-tile.png">
 <meta name="twitter:card" content="summary">
-<meta name="theme-color" content="#EBF1F8">
+<meta name="theme-color" content="#FAF9F5">
 <link rel="icon" type="image/x-icon" href="favicon.ico">
 <link rel="icon" type="image/png" sizes="16x16" href="img/favicon-16x16.png">
 <link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32x32.png">
@@ -119,12 +120,11 @@ page = f"""<!DOCTYPE html>
 <link rel="stylesheet" href="styles.css">
 <style>
 /* Generated page. Edit generate_faq.py, not this file. */
-.faq-wrap {{ max-width: 760px; margin: 0 auto; padding: 72px 24px 96px; }}
-.faq-wrap > p.faq-intro {{ margin-bottom: 40px; }}
+.faq-wrap {{ padding: 0 24px 96px; }}
 .faq-entry {{ margin-bottom: 36px; }}
 .faq-entry h2 {{ font-size: 1.15rem; line-height: 1.35; margin: 0 0 10px; scroll-margin-top: 90px; }}
 .faq-entry p {{ margin: 0 0 8px; }}
-.faq-more {{ font-size: 0.92rem; }}
+.prose p.faq-more {{ font-size: 0.92rem; }}
 </style>
 </head>
 <body>
@@ -132,16 +132,31 @@ page = f"""<!DOCTYPE html>
 
 {nav}
 
-<main id="main">
-  <div class="faq-wrap">
-    <h1>{esc(H1)}</h1>
-    <p class="faq-intro">The full Ask SCL question library, in plain text. These are the
-    same answers the assistant on <a href="/search">Ask SCL</a> draws from. Last updated
-    {esc(updated)}.</p>
+<main id="main" tabindex="-1">
+
+<div class="page-shell">
+
+<div class="inner-hero">
+  <div class="fw-hero-glow"></div>
+  <div class="inner-hero-inner">
+    <div>
+      <div class="inner-hero-breadcrumb"><a href="/">Safety Critical Labs</a><span>/</span> Questions</div>
+      <h1>{esc(H1)}</h1>
+    </div>
+    <p class="inner-hero-lead">
+      The full Ask SCL question library, in plain text. These are the same answers the
+      assistant on <a href="/search">Ask SCL</a> draws from. Last updated {esc(updated)}.
+    </p>
+  </div>
+</div>
+
+  <div class="faq-wrap prose">
 
 {body}
 
   </div>
+
+</div>
 </main>
 
 {footer}

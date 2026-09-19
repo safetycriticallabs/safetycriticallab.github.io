@@ -262,7 +262,7 @@ for c in CATEGORIES:
     if not rows:
         continue
     label = c[:-6].strip() if c.endswith(" TERMS") else c
-    label = label.title().replace("Ai/Ml", "AI/ML").replace("Odd", "ODD")
+    label = label.title().replace("Ai/Ml", "AI/ML").replace("Odd", "ODD").replace(" And ", " and ")
     cslug = slug(label)
     toc.append(f'      <li><a href="#{esc(cslug)}">{esc(label)}</a> <span class="gl-toc-n">{len(rows)}</span></li>')
     items = []
@@ -292,6 +292,7 @@ def grab(pattern, text, what):
 
 
 nav = grab(r'<nav class="global-nav".*?</nav>', shell, "the global nav")
+nav = nav.replace(' class="active"', '')   # position.html marks itself active; this page is not Position
 footer = grab(r'<footer class="site-footer".*?</footer>', shell, "the site footer")
 updated = data.get("updated", "")
 n_cats = len([c for c in CATEGORIES if any(t["cat"] == c for t in terms)])
@@ -311,6 +312,7 @@ page = f"""<!DOCTYPE html>
 <meta property="og:type" content="website">
 <meta property="og:image" content="https://safetycriticallabs.com/img/og-tile.png">
 <meta name="twitter:card" content="summary">
+<meta name="theme-color" content="#FAF9F5">
 <link rel="icon" type="image/x-icon" href="favicon.ico">
 <link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32x32.png">
 <link rel="icon" type="image/png" sizes="192x192" href="img/favicon-192x192.png">
@@ -325,9 +327,8 @@ page = f"""<!DOCTYPE html>
    the bottom becomes a multi-second scroll past 80 other terms. Same override
    requirements.html carries, for the same reason. */
 html {{ scroll-behavior: auto; }}
-.gl-wrap {{ max-width: 820px; margin: 0 auto; padding: 0 40px 120px; }}
+.gl-wrap {{ max-width: 760px; margin: 0 auto; padding: 0 40px 120px; }}
 .gl-lede {{ font-size: 17px; color: var(--ink-2); font-weight: 300; line-height: 1.8; margin-bottom: 32px; }}
-.gl-lede a {{ color: var(--blue); text-decoration: none; border-bottom: 1px solid rgba(46,109,180,0.3); }}
 
 .gl-tools {{ display: flex; flex-wrap: wrap; gap: 12px; align-items: center; margin-bottom: 28px; }}
 .gl-search {{
@@ -346,10 +347,7 @@ html {{ scroll-behavior: auto; }}
 
 .gl-cat + .gl-cat {{ border-top: 1px solid var(--rule); padding-top: 48px; }}
 .gl-cat {{ margin-bottom: 48px; }}
-.gl-cat-title {{
-  font-family: var(--mono); font-size: 11px; font-weight: 500; letter-spacing: 0.1em;
-  text-transform: uppercase; color: var(--blue); margin: 0 0 24px 0;
-}}
+.gl-cat-title {{ margin: 0 0 24px 0; }}
 .gl-cat-n {{ color: var(--ink-2); margin-left: 6px; }}
 
 .gl-chunk {{ display: block; height: 0; scroll-margin-top: 96px; }}
@@ -362,7 +360,6 @@ html {{ scroll-behavior: auto; }}
 }}
 .gl-term:hover .gl-anchor, .gl-anchor:focus {{ opacity: 1; color: var(--blue); }}
 .gl-def {{ font-size: 15px; color: var(--ink-2); line-height: 1.75; font-weight: 300; margin: 0; }}
-.gl-def a {{ color: var(--blue); text-decoration: none; border-bottom: 1px solid rgba(46,109,180,0.3); }}
 .gl-src {{ font-family: var(--mono); font-size: 11px; color: var(--ink-2); margin: 6px 0 0 0; font-weight: 400; }}
 .gl-empty {{ font-size: 15px; color: var(--ink-2); font-weight: 300; padding: 24px 0; }}
 

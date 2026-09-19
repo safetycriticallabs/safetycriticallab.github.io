@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#FAF9F5">
 <title>Ask SCL: Answers on AI Certification for Safety-Critical Systems | Safety Critical Labs</title>
 <meta name="description" content="Ask SCL, the AI assistant for Safety Critical Labs. Answers about AI certification, the framework, the process, and accreditation, grounded in SCL's published documentation.">
 <meta property="og:title" content="Ask SCL | Safety Critical Labs">
@@ -38,14 +39,7 @@
   text-align: center;
 }
 
-.search-eyebrow {
-  font-family: var(--mono);
-  font-size: 12px;
-  letter-spacing: 0.18em;
-  color: rgba(12,34,66,0.6);
-  text-transform: uppercase;
-  margin-bottom: 20px;
-}
+.search-eyebrow { margin-bottom: 20px; }
 
 .search-title {
   font-family: var(--sans);
@@ -308,23 +302,8 @@
   color: rgba(12,34,66,0.7);
 }
 .search-empty-text { font-size: 15px; margin-bottom: 16px; }
-.search-empty-cta {
-  display: inline-flex;
-  align-items: center;
-  padding: 10px 22px;
-  border: 1px solid var(--blue);
-  border-radius: 6px;
-  color: #0C2242;
-  background: transparent;
-  text-decoration: none;
-  font-size: 14px;
-  font-weight: 500;
-  transition: all 0.25s ease;
-}
-.search-empty-cta:hover {
-  background: var(--blue);
-  color: #fff;
-}
+.search-empty-cta { display: inline-flex; align-items: center; padding: 10px 22px; border: 1px solid #0C2242; border-radius: 8px; color: #0C2242; background: transparent; text-decoration: none; font-size: 13px; font-weight: 500; transition: all 0.25s ease; letter-spacing: 0.04em; }
+.search-empty-cta:hover { background: #0C2242; color: #FAF9F5; }
 
 /* ── Ask SCL conversation thread (streamed, multi-turn) ──
    No bubbles on either side: the question is set as the turn's heading and the

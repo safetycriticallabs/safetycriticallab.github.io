@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#FAF9F5">
 <title>What SCL Issues | Safety Critical Labs</title>
 <meta name="description" content="Every document a Safety Critical Labs assessment produces: what each one is for, what it states, who receives it, and how long it lasts.">
 <meta property="og:title" content="What SCL Issues | Safety Critical Labs">
@@ -24,15 +25,7 @@
 /* Shared legal page styles */
 /* Hero cursor glow styles live in styles.css (promoted 2026-08-24) */
 
-.fw-eyebrow-mono {
-  font-family: var(--mono);
-  font-size: 12px;
-  font-weight: 500;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: rgba(12,34,66,0.6);
-  margin-bottom: 20px;
-}
+.fw-eyebrow-mono { margin-bottom: 20px; }
 
 .legal-section {
   background: #FAF9F5;
@@ -105,8 +98,6 @@
 }
 .legal-block p:last-child { margin-bottom: 0; }
 .legal-block p strong { color: var(--ink); font-weight: 500; }
-.legal-block a { color: var(--blue); text-decoration: none; border-bottom: 1px solid rgba(46,109,180,0.3); }
-.legal-block a:hover { color: var(--blue-dk); border-bottom-color: var(--blue-dk); }
 .legal-block ul {
   list-style: none;
   padding: 0;
@@ -159,7 +150,7 @@
 .dl-table td strong { color: var(--ink); font-weight: 500; }
 .dl-table tr:last-child td { border-bottom: none; }
 .wrap-scroll { overflow-x: auto; }
-.dl-meta { font-family: var(--mono); font-size: 11px; letter-spacing: 0.05em; text-transform: uppercase; color: var(--blue); margin: 0 0 10px 0; font-weight: 500; }
+.dl-meta { margin: 0 0 10px 0; }
 </style>
 </head>
 <body>
@@ -223,12 +214,12 @@
     <div class="legal-meta">
       <div class="legal-meta-item">Effective<strong>September 11, 2026</strong></div>
       <div class="legal-meta-item">Applies to<strong>Every document an SCL assessment produces</strong></div>
-      <div class="legal-meta-item">Contact<strong><a href="/contact" style="color:#0C2242;text-decoration:none;">/contact</a></strong></div>
+      <div class="legal-meta-item">Contact<strong><a href="/contact">/contact</a></strong></div>
     </div>
 
     <div class="legal-review-note is-standing">
       <strong>Where this stands today.</strong> Safety Critical Labs has issued no certificates. The register at
-      <a href="/verify" style="color:#0C2242;">/verify</a> records an issued count of zero. This page describes the
+      <a href="/verify">/verify</a> records an issued count of zero. This page describes the
       documents an assessment produces and the rules that govern them, not a body of documents already in
       circulation.
     </div>
@@ -339,8 +330,8 @@
       <div class="wrap-scroll">
       <table class="dl-table">
         <tr><th>Classification</th><th>Surveillance</th></tr>
-        <tr><td><strong>Safety Critical</strong></td><td>Annual surveillance audit</td></tr>
-        <tr><td><strong>Mission Critical</strong></td><td>Biennial surveillance audit</td></tr>
+        <tr><td><strong>Safety-Critical</strong></td><td>Annual surveillance audit</td></tr>
+        <tr><td><strong>Mission-Critical</strong></td><td>Biennial surveillance audit</td></tr>
         <tr><td><strong>Operational Support</strong></td><td>Triennial surveillance audit</td></tr>
       </table>
       </div>

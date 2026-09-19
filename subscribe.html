@@ -380,7 +380,7 @@
 </footer>
 
 <script>
-/* ─── SUBSCRIBE FORM (Brevo) ──────────────────────────────── */
+/* ─── SUBSCRIBE FORM (Kit) ────────────────────────────────── */
 (function () {
 
   /* ┌─────────────────────────────────────────────────────────────┐
@@ -481,7 +481,7 @@
       confirmBody.textContent = 'A confirmation email is on the way. Click the link inside it to finish subscribing. Briefings are sent only when there is something worth saying.';
       showConfirmation();
     }).catch(function () {
-      /* Network failure. The submission did not reach Brevo, so show
+      /* Network failure. The submission did not reach Kit, so show
          an error instead of claiming success. */
       submitBtn.disabled = false;
       submitBtn.textContent = 'Subscribe';

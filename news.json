@@ -1,5 +1,12 @@
 [
   {
+    "title": "Framework v3.7 released",
+    "url": "https://doi.org/10.5281/zenodo.22775993",
+    "date": "2026-09-15",
+    "type": "Framework Release",
+    "summary": "The current published revision, now the standard SCL assesses against, under a new citable DOI. A new Section 1.6 Conformity Basis states what the certification determination rests on, and defines the certified configuration: boundary and classification, the operational design domain, the declared thresholds, the declared attack pattern sets, and the security baseline. The normative reference list"
+  },
+  {
     "title": "White paper revised to v3.7",
     "url": "https://ssrn.com/abstract=6875639",
     "date": "2026-09-01",
@@ -7,11 +14,11 @@
     "summary": "The white paper on SSRN is replaced with a v3.7 revision, 68 pages, bringing the preprint level with the current standard. The version it replaced described the framework at v3.0. The revision carries the failure-defined principle, the two-tier requirement structure, and the co-located verification approach as they now stand. SSRN retains no prior version, so the superseded paper is gone."
   },
   {
-    "title": "Framework v3.7 released",
-    "url": "https://doi.org/10.5281/zenodo.22775993",
-    "date": "2026-09-01",
+    "title": "Framework v3.6 released",
+    "url": "https://doi.org/10.5281/zenodo.21924937",
+    "date": "2026-08-13",
     "type": "Framework Release",
-    "summary": "The current published revision, now the standard SCL assesses against, under a new citable DOI. A new Section 1.6 Conformity Basis states what the certification determination rests on, and defines the certified configuration: boundary and classification, the operational design domain, the declared thresholds, the declared attack pattern sets, and the security baseline. The normative reference list"
+    "summary": "Point revision published under a new citable DOI. This release makes the applicability determination verifiable. Whether the framework applies now turns on a single anchor criterion, whether a component's correctness can be fully verified against explicitly written specification by established methods, with the list of mechanisms treated as illustrative rather than load bearing. Each determination"
   },
   {
     "title": "Paper accepted to AIAA SciTech Forum 2027",
@@ -19,13 +26,6 @@
     "date": "2026-08-01",
     "type": "Publication",
     "summary": "The abstract submitted in May was accepted on August 24, 2026 into session IS-05 of the Intelligent Systems: Space Trusted Autonomy track. The final manuscript is due December 1, 2026, with presentation scheduled for January 11, 2027 at the forum in Orlando, Florida."
-  },
-  {
-    "title": "Framework v3.6 released",
-    "url": "https://doi.org/10.5281/zenodo.21924937",
-    "date": "2026-08-01",
-    "type": "Framework Release",
-    "summary": "Point revision published under a new citable DOI. This release makes the applicability determination verifiable. Whether the framework applies now turns on a single anchor criterion, whether a component's correctness can be fully verified against explicitly written specification by established methods, with the list of mechanisms treated as illustrative rather than load bearing. Each determination"
   },
   {
     "title": "Framework v3.5 released",

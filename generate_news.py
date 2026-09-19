@@ -29,6 +29,13 @@ row sits between October 2025 and February 2025 in the file. The feed is sorted
 by date here, so the ordering defect does not propagate. The page should be
 reordered separately.
 
+A row whose exact day is published elsewhere on the site may carry
+data-date="YYYY-MM-DD" on the update-row div, and that day is used instead. It
+is opt-in per row, the visible month label is left alone, and it exists because
+a first-of-month stamp on a framework release dates the deposit before it
+happened: /framework gives v3.7 as 15 September 2026, so the feed must not say
+1 September. Use it only where the site states the day itself.
+
 Run: python3 generate_news.py
 """
 
@@ -106,6 +113,8 @@ def main() -> int:
             raise ValueError(f"two update rows slugify to {slug!r}; give one a distinct title")
         seen_slugs[slug] = True
 
+        exact = re.search(r'\bdata-date="(\d{4}-\d{2}-\d{2})"', attrs)
+
         existing = re.search(r'\bid="([^"]+)"', attrs)
         if existing:
             slug = existing.group(1)
@@ -118,7 +127,7 @@ def main() -> int:
         items.append({
             "title": title,
             "url": link.group(1) if link else f"{SITE}/updates#{slug}",
-            "date": parse_month(raw_date).strftime("%Y-%m-%d"),
+            "date": exact.group(1) if exact else parse_month(raw_date).strftime("%Y-%m-%d"),
             "type": text_of(raw_type) if raw_type else "Update",
             "summary": text_of(raw_body)[:400] if raw_body else "",
         })

@@ -96,9 +96,7 @@
 .news-featured-read:hover { background: #0C2242; color: #FAF9F5; }
 
 .news-featured-image {
-  background:
-    radial-gradient(ellipse at 70% 30%, rgba(46,109,180,0.18), transparent 60%),
-    linear-gradient(135deg, #E8EEF6 0%, #DDE5F0 50%, #DDE5F0 100%);
+  background: var(--cream-2);   /* one flat surface; per-source pale-blue tints removed 2026-09-18 */
   border-radius: 14px;
   position: relative;
   overflow: hidden;
@@ -111,9 +109,9 @@
   content: '';
   position: absolute; inset: 0;
   background:
-    radial-gradient(circle at 30% 40%, rgba(46,109,180,0.10) 1px, transparent 1.5px),
-    radial-gradient(circle at 75% 65%, rgba(46,109,180,0.08) 1px, transparent 1.5px),
-    radial-gradient(circle at 50% 80%, rgba(46,109,180,0.06) 1px, transparent 1.5px);
+    radial-gradient(circle at 30% 40%, rgba(12,34,66,0.10) 1px, transparent 1.5px),
+    radial-gradient(circle at 75% 65%, rgba(12,34,66,0.08) 1px, transparent 1.5px),
+    radial-gradient(circle at 50% 80%, rgba(12,34,66,0.06) 1px, transparent 1.5px);
   background-size: 80px 80px, 110px 110px, 60px 60px;
   pointer-events: none;
   opacity: 0.6;
@@ -185,9 +183,7 @@
 }
 .news-card-image {
   height: 180px;
-  background:
-    radial-gradient(ellipse at 30% 40%, rgba(46,109,180,0.16), transparent 60%),
-    linear-gradient(135deg, #E8EEF6 0%, #DDE5F0 100%);
+  background: var(--cream-2);
   position: relative;
   overflow: hidden;
   flex-shrink: 0;
@@ -196,41 +192,13 @@
   content: '';
   position: absolute; inset: 0;
   background:
-    radial-gradient(circle at 25% 30%, rgba(46,109,180,0.10) 1px, transparent 1.5px),
-    radial-gradient(circle at 70% 65%, rgba(46,109,180,0.08) 1px, transparent 1.5px);
+    radial-gradient(circle at 25% 30%, rgba(12,34,66,0.10) 1px, transparent 1.5px),
+    radial-gradient(circle at 70% 65%, rgba(12,34,66,0.08) 1px, transparent 1.5px);
   background-size: 70px 70px, 90px 90px;
   pointer-events: none;
   opacity: 0.5;
 }
-/* Per-source tints on card image */
-.news-card[data-source="scl"] .news-card-image,
-.news-featured-image[data-source="scl"] {
-  background: linear-gradient(135deg, #DDE5F0 0%, #DDE5F0 100%);
-}
-.news-card[data-source="us"] .news-card-image,
-.news-featured-image[data-source="us"] {
-  background: linear-gradient(135deg, #E8EEF6 0%, #C8D4E8 100%);
-}
-.news-card[data-source="eu"] .news-card-image,
-.news-featured-image[data-source="eu"] {
-  background: linear-gradient(135deg, #DDE5F0 0%, #DDE5F0 100%);
-}
-.news-card[data-source="nist"] .news-card-image,
-.news-featured-image[data-source="nist"] {
-  background: linear-gradient(135deg, #FAF9F5 0%, #DDE5F0 100%);
-}
-.news-card[data-source="mit"] .news-card-image,
-.news-featured-image[data-source="mit"] {
-  background: linear-gradient(135deg, #E8EEF6 0%, #DDE5F0 100%);
-}
-.news-card[data-source="ai2"] .news-card-image,
-.news-featured-image[data-source="ai2"] {
-  background: linear-gradient(135deg, #FAF9F5 0%, #C8D4E8 100%);
-}
-.news-card[data-source="csrc"] .news-card-image,
-.news-featured-image[data-source="csrc"] {
-  background: linear-gradient(135deg, #E4EAF3 0%, #D6E0EE 100%);
-}
+/* Per-source tints removed 2026-09-18: every card image is var(--cream-2). */
 .news-basis {
   margin-top: 88px;
   padding-top: 40px;
@@ -305,7 +273,7 @@
   pointer-events: none;
 }
 .news-card-skeleton .news-card-image {
-  background: rgba(46,109,180,0.06);
+  background: var(--cream-2);   /* loading placeholder matches the loaded cover */
 }
 .news-card-skeleton .news-card-title,
 .news-card-skeleton .news-card-summary,
@@ -732,7 +700,7 @@
   /* ── Thumbnail extraction ───────────────────────────────────
      Kept for feeds that carry media:content, media:thumbnail or enclosure.
      None of the current sources does: regulatory and standards feeds publish
-     no article imagery, so every card falls back to the tinted gradient keyed
+     no article imagery, so every card shows the one flat var(--cream-2) cover keyed
      by data-source. */
   function extractImage(node) {
     var candidates = [];
@@ -818,7 +786,7 @@
      Empty by design. This page fetches no third party article page for a
      thumbnail any more: the sources that needed it were the press feeds, and
      they are gone. Regulatory feeds carry no images, so every card uses the
-     per source tint keyed by data-source. Leaving the mechanism in place but
+     flat var(--cream-2) cover; data-source is metadata only. Leaving the mechanism in place but
      unfed means restoring a vendor source does not silently restore a fetch to
      that vendor's servers as well. */
   var OG_HOSTS = {};
@@ -1075,7 +1043,7 @@
     document.getElementById('featured-link').href = item.url;
 
     /* Article thumbnail when the feed provides one; otherwise the
-       per-source background tint stands in. */
+       flat var(--cream-2) cover stands in. */
     document.getElementById('featured-image').setAttribute('data-source', item.key);
     setFeaturedImage(item);
   }

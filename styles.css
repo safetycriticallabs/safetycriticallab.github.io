@@ -12,7 +12,9 @@
   --ink-3:    #7A8FA6;
   --blue:      #2E6DB4;
   --blue-dk:   #1E5A9A;
-  --blue-lt:   #EBF1F8;
+  --blue-lt:   #EBF1F8;   /* the ONE pale blue: fields, selected states, chips, feedback boxes; never decoration */
+  --cream-2:   #F2EFE8;   /* raised or decorative surface on the cream page: card covers, bands */
+  --gold:      #DCB34B;   /* the emblem's gold ring, measured off the flat mark 2026-09-12 */
   --rule:     #E4E8EC;
   /* Single font family throughout the site — DM Sans only.
      The --serif and --mono aliases are kept for backwards compatibility
@@ -216,7 +218,7 @@ body, body * { font-style: normal !important; }
 .inner-hero {
   background:
     radial-gradient(ellipse at 70% 30%, rgba(46,109,180,0.08) 0%, transparent 60%),
-    linear-gradient(180deg, #EBF1F8 0%, #E6ECF5 100%);
+    linear-gradient(180deg, var(--blue-lt) 0%, var(--blue-lt) 100%);
   padding: 88px 40px 80px;
   border-bottom: 1px solid rgba(46,109,180,0.10);
   position: relative; overflow: hidden;
@@ -347,9 +349,9 @@ h2.section-title em { font-style: italic; color: var(--ink); font-family: var(--
   }
 }
 
-/* ─── FOOTER (pale blue, multi-column) ───────────────────── */
+/* ─── FOOTER (superseded by the navy footer below; kept for the layout rules) ─── */
 .site-footer {
-  background: #DDE5F0;
+  background: var(--cream-2);
   padding: 0;
   border-top: 1px solid rgba(46,109,180,0.18);
 }
@@ -462,7 +464,7 @@ h2.section-title em { font-style: italic; color: var(--ink); font-family: var(--
     position: fixed;
     top: 72px; left: 0; right: 0;
     height: calc(100vh - 72px);
-    background: #E6ECF5;
+    background: #FAF9F5;   /* the sheet matches the cream bar above it (was a pale-blue #E6ECF5, 2026-09-18) */
     flex-direction: column;
     align-items: stretch;
     padding: 8px 24px 40px;

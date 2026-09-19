@@ -120,30 +120,19 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background:
-    radial-gradient(ellipse at 30% 40%, rgba(46,109,180,0.18), transparent 60%),
-    linear-gradient(135deg, #E8EEF6 0%, #DDE5F0 100%);
+  background: var(--cream-2);   /* one flat surface for every cover; the per-organisation pale-blue tints are gone (2026-09-18) */
 }
 .docs-card-cover::after {
   content: '';
   position: absolute; inset: 0;
   background:
-    radial-gradient(circle at 25% 30%, rgba(46,109,180,0.10) 1px, transparent 1.5px),
-    radial-gradient(circle at 70% 65%, rgba(46,109,180,0.08) 1px, transparent 1.5px);
+    radial-gradient(circle at 25% 30%, rgba(12,34,66,0.10) 1px, transparent 1.5px),
+    radial-gradient(circle at 70% 65%, rgba(12,34,66,0.08) 1px, transparent 1.5px);
   background-size: 70px 70px, 90px 90px;
   pointer-events: none;
   opacity: 0.5;
 }
-/* Per-organization cover tints */
-.docs-card[data-org="iso"]    .docs-card-cover { background: linear-gradient(135deg, #E8EEF6 0%, #DDE5F0 100%); }
-.docs-card[data-org="nist"]   .docs-card-cover { background: linear-gradient(135deg, #DDE5F0 0%, #DDE5F0 100%); }
-.docs-card[data-org="ieee"]   .docs-card-cover { background: linear-gradient(135deg, #DDE5F0 0%, #C8D4E8 100%); }
-.docs-card[data-org="nasa"]   .docs-card-cover { background: linear-gradient(135deg, #FAF9F5 0%, #DDE5F0 100%); }
-.docs-card[data-org="faa"]    .docs-card-cover { background: linear-gradient(135deg, #DDE5F0 0%, #E8EEF6 100%); }
-.docs-card[data-org="rtca"]   .docs-card-cover { background: linear-gradient(135deg, #DDE5F0 0%, #DDE5F0 100%); }
-.docs-card[data-org="eu"]     .docs-card-cover { background: linear-gradient(135deg, #FAF9F5 0%, #C8D4E8 100%); }
-.docs-card[data-org="us"]     .docs-card-cover { background: linear-gradient(135deg, #E8EEF6 0%, #FAF9F5 100%); }
-.docs-card[data-org="aami"]   .docs-card-cover { background: linear-gradient(135deg, #DDE5F0 0%, #C8D4E8 100%); }
+/* Per-organisation cover tints removed 2026-09-18: every cover is var(--cream-2). */
 
 .docs-card-org-pill {
   position: absolute;

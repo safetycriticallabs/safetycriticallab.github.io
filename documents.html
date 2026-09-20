@@ -41,10 +41,10 @@
 /* Library section — flat cream */
 .docs-page-section {
   background: #FAF9F5;
-  padding: 88px 40px 120px;
+  padding: calc(var(--section-space) / 2) 40px;
 }
 .docs-page-inner {
-  max-width: 1140px;
+  max-width: var(--content-max);
   margin: 0 auto;
 }
 
@@ -275,9 +275,12 @@
 @media (max-width: 960px) {
   .docs-grid { grid-template-columns: 1fr 1fr; }
 }
+@media (max-width: 880.98px) {
+  .docs-page-section { padding: calc(var(--section-space) / 2) 24px; }
+}
+
 @media (max-width: 640px) {
   .docs-grid { grid-template-columns: 1fr; }
-  .docs-page-section { padding: 60px 24px 80px; }
 }
 </style>
 </head>
@@ -355,7 +358,7 @@
 
     <!-- Filter chips -->
     <div class="docs-filter-row" role="group" aria-label="Filter documents by organization">
-      <button class="docs-filter-chip active" aria-pressed="true" data-filter="all">All <span class="docs-filter-count">26</span></button>
+      <button class="docs-filter-chip active" aria-pressed="true" data-filter="all">All <span class="docs-filter-count">29</span></button>
       <button class="docs-filter-chip" aria-pressed="false" data-filter="iso">ISO/IEC <span class="docs-filter-count">8</span></button>
       <button class="docs-filter-chip" aria-pressed="false" data-filter="nist">NIST <span class="docs-filter-count">4</span></button>
       <button class="docs-filter-chip" aria-pressed="false" data-filter="ieee">IEEE <span class="docs-filter-count">1</span></button>
@@ -365,6 +368,9 @@
       <button class="docs-filter-chip" aria-pressed="false" data-filter="eu">EU <span class="docs-filter-count">2</span></button>
       <button class="docs-filter-chip" aria-pressed="false" data-filter="us">US Federal/State <span class="docs-filter-count">2</span></button>
       <button class="docs-filter-chip" aria-pressed="false" data-filter="aami">AAMI <span class="docs-filter-count">1</span></button>
+      <button class="docs-filter-chip" aria-pressed="false" data-filter="ul">UL <span class="docs-filter-count">1</span></button>
+      <button class="docs-filter-chip" aria-pressed="false" data-filter="easa">EASA <span class="docs-filter-count">1</span></button>
+      <button class="docs-filter-chip" aria-pressed="false" data-filter="sae">SAE <span class="docs-filter-count">1</span></button>
     </div>
 
     <!-- Normative Standards -->
@@ -418,7 +424,7 @@
 
     <!-- Reference Documents -->
     <div class="docs-section-heading">
-      [ Reference Documents ] <span class="docs-section-heading-count">18</span>
+      [ Reference Documents ] <span class="docs-section-heading-count">20</span>
     </div>
     <p class="docs-section-heading-desc">
       Informative references cited throughout the framework. Domain regulations, lifecycle standards, and supporting guidance that inform requirement interpretation.
@@ -658,11 +664,37 @@
           <div class="docs-card-meta"><span class="docs-card-org">EU</span><span class="docs-card-link">View source →</span></div>
         </div>
       </a>
+
+      <a class="docs-card" data-org="ul" data-status="reference" href="https://ulse.org/" target="_blank" rel="noopener">
+        <div class="docs-card-cover">
+          <span class="docs-card-org-pill">UL</span>
+          <span class="docs-card-status-pill is-reference">Reference</span>
+          <span class="docs-card-id">4600</span>
+        </div>
+        <div class="docs-card-content">
+          <div class="docs-card-title">Standard for Safety for the Evaluation of Autonomous Products</div>
+          <div class="docs-card-desc">Autonomous product safety case reference, listed in framework Table 1-10.</div>
+          <div class="docs-card-meta"><span class="docs-card-org">UL</span><span class="docs-card-link">View source →</span></div>
+        </div>
+      </a>
+
+      <a class="docs-card" data-org="easa" data-status="reference" href="https://www.easa.europa.eu/en/document-library/general-publications/easa-artificial-intelligence-concept-paper-issue-2" target="_blank" rel="noopener">
+        <div class="docs-card-cover">
+          <span class="docs-card-org-pill">EASA</span>
+          <span class="docs-card-status-pill is-reference">Reference</span>
+          <span class="docs-card-id">Issue 2</span>
+        </div>
+        <div class="docs-card-content">
+          <div class="docs-card-title">EASA Artificial Intelligence Concept Paper Issue 2</div>
+          <div class="docs-card-desc">Guidance for Level 1 and 2 machine learning applications. Source of the AI/ML constituent concept the framework adapts for the determination boundary in Section 1.2.1.</div>
+          <div class="docs-card-meta"><span class="docs-card-org">EASA</span><span class="docs-card-link">View source →</span></div>
+        </div>
+      </a>
     </div>
 
     <!-- Pending Verification -->
     <div class="docs-section-heading">
-      [ Pending Verification ] <span class="docs-section-heading-count">5</span>
+      [ Pending Verification ] <span class="docs-section-heading-count">6</span>
     </div>
     <p class="docs-section-heading-desc">
       Cited inline within the framework but not yet clause-verified against source. Retained as informative cross-references; will be re-verified when source documents become accessible. Not normative dependencies.
@@ -731,6 +763,19 @@
           <div class="docs-card-title">Human Factors Engineering - Design of Medical Devices</div>
           <div class="docs-card-desc">Human factors reference cited in AI-9.8 (Workload Management) medical row.</div>
           <div class="docs-card-meta"><span class="docs-card-org">AAMI</span><span class="docs-card-link">View source →</span></div>
+        </div>
+      </a>
+
+      <a class="docs-card" data-org="sae" data-status="pending" href="https://www.sae.org/standards/content/arp6983/" target="_blank" rel="noopener">
+        <div class="docs-card-cover">
+          <span class="docs-card-org-pill">SAE</span>
+          <span class="docs-card-status-pill is-pending">Pending</span>
+          <span class="docs-card-id">ARP6983</span>
+        </div>
+        <div class="docs-card-content">
+          <div class="docs-card-title">Process Standard for Aeronautical Safety-Related Products Implementing AI</div>
+          <div class="docs-card-desc">SAE ARP6983 / EUROCAE ED-324, cited in the Section 1.2.1 determination boundary discussion and in the AI-11 and AI-12 aviation rows.</div>
+          <div class="docs-card-meta"><span class="docs-card-org">SAE / EUROCAE</span><span class="docs-card-link">View source →</span></div>
         </div>
       </a>
     </div>

@@ -194,7 +194,7 @@
 /* ─── STRUCTURE EXPLAINER ─────────────────────────────────── */
 .structure-section {
   background: #FAF9F5;
-  padding: 110px 40px 130px;
+  padding: calc(var(--section-space) / 2) 40px;
   border-top: 1px solid rgba(46,109,180,0.10);
   position: relative;
 }
@@ -205,7 +205,7 @@
   pointer-events: none;
 }
 
-.struct-inner { max-width: 1140px; margin: 0 auto; }
+.struct-inner { max-width: var(--content-max); margin: 0 auto; }
 
 .struct-grid {
   display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px;
@@ -270,12 +270,12 @@
 /* ─── PUBLISHED STANDARD BAND ─────────────────────────────── */
 .pub-standard-band {
   background: #FAF9F5;
-  padding: 110px 40px 130px;
+  padding: calc(var(--section-space) / 2) 40px;
   border-top: 1px solid rgba(46,109,180,0.10);
   position: relative;
 }
 .pub-standard-grid {
-  max-width: 1140px; margin: 0 auto;
+  max-width: var(--content-max); margin: 0 auto;
   display: grid; grid-template-columns: 1fr 1fr; gap: 80px;
   /* start, not center. The prose column is 393px against a 976px rows column,
      and centring it dropped the heading 291px down the band, opening a void
@@ -322,7 +322,7 @@
   background: #FAF9F5;
   border-top: 1px solid rgba(46,109,180,0.10);
   border-bottom: 1px solid rgba(46,109,180,0.10);
-  padding: 110px 40px;
+  padding: calc(var(--section-space) / 2) 40px;
   position: relative;
 }
 .open-standard-band::after {
@@ -342,7 +342,7 @@
 
 /* Transition bridge to /process */
 .fw-transition-cta {
-  max-width: 1140px;
+  max-width: var(--content-max);
   margin: 48px auto 0;
   text-align: center;
   position: relative;
@@ -357,7 +357,7 @@
 }
 
 .os-inner {
-  max-width: 1140px; margin: 0 auto;
+  max-width: var(--content-max); margin: 0 auto;
   display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center;
 }
 
@@ -385,14 +385,13 @@
 .os-item-val a { color: #0C2242; text-decoration: none; }
 .os-item-val a:hover { text-decoration: underline; }
 
-@media (max-width: 880px) {
+@media (max-width: 880.98px) {
   .inner-hero-inner { grid-template-columns: 1fr !important; gap: 24px !important; }
   .pub-standard-grid { grid-template-columns: 1fr !important; gap: 40px !important; }
   .fw-full-grid { grid-template-columns: 1fr 1fr; }
   .struct-grid { grid-template-columns: 1fr; }
   .os-inner { grid-template-columns: 1fr; gap: 36px; }
-  .structure-section { padding: 60px 24px; }
-  .open-standard-band { padding: 56px 24px; }
+  .structure-section, .pub-standard-band, .open-standard-band { padding: calc(var(--section-space) / 2) 24px; }
 }
 @media (max-width: 580px) {
   .fw-full-grid { grid-template-columns: 1fr; }

@@ -71,6 +71,26 @@ def grab(pattern, source, what):
     return m.group(0)
 
 
+def drop_title_continuation(body):
+    """A [R.id] or [V.id] title that wrapped in the PDF leaves its second line at
+    the top of the body. Only AI-12.8 wraps today (CONSIDERATIONS)), but the test is
+    general: a requirement statement always contains lowercase, a title fragment
+    never does."""
+    head, sep, rest = body.partition("\n")
+    h = head.strip()
+    if sep and h and len(h) < 80 and not any(c.islower() for c in h) and any(c.isalpha() for c in h):
+        return rest
+    return body
+
+
+def split_crosswalk(s):
+    """The Related Domain Standards crosswalk is informative (framework.json sec-1.3.1
+    and sec-1.6: it levies nothing and checklists never derive from it), so it does not
+    belong inside the normative paragraph it trails."""
+    head, sep, tail = (s or "").partition("Related Domain Standards")
+    return (head, tail) if sep else (s, "")
+
+
 def parse_requirement(text):
     """Split one requirement into its four published parts. The shape is
     [R.id] TITLE / statement / Rationale: / [V.id] TITLE / method / Success Criteria:
@@ -79,17 +99,28 @@ def parse_requirement(text):
     mv = re.search(r"\[V\.[A-Z0-9.\-]+\][^\n]*\n", t)
     r_part, v_part = (t[:mv.start()], t[mv.end():]) if mv else (t, "")
     r_head = re.match(r"\[R\.[A-Z0-9.\-]+\][^\n]*\n", r_part)
-    r_body = r_part[r_head.end():] if r_head else r_part
+    r_body = drop_title_continuation(r_part[r_head.end():] if r_head else r_part)
     stmt, _, rationale = r_body.partition("Rationale:")
-    verif, _, criteria = v_part.partition("Success Criteria:")
-    return {"statement": unwrap(stmt), "rationale": unwrap(rationale),
-            "verification": unwrap(verif), "criteria": unwrap(criteria)}
+    verif, _, criteria = drop_title_continuation(v_part).partition("Success Criteria:")
+    parts = {"statement": stmt, "rationale": rationale, "verification": verif, "criteria": criteria}
+    cross = ""
+    for key in ("criteria", "verification", "rationale", "statement"):
+        body, tail = split_crosswalk(parts[key])
+        if tail:
+            parts[key], cross = body, tail
+            break
+    out = {k: unwrap(v) for k, v in parts.items()}
+    out["crosswalk"] = unwrap(cross)
+    return out
 
 
 def area_intro(text):
     """The area's own normative statement, the paragraph after its [R.AI-n] line."""
     m = re.search(r"\[R\.AI-\d{1,2}\][^\n]*\n(.*?)(?=\n[A-Z][a-z]+ [a-z]|\n\[|\Z)", text or "", re.S)
-    return unwrap(m.group(1)) if m else ""
+    if not m:
+        return "", ""
+    body, cross = split_crosswalk(drop_title_continuation(m.group(1)))
+    return unwrap(body), unwrap(cross)
 
 
 data = json.loads((HERE / "framework.json").read_text())
@@ -139,7 +170,7 @@ for a in areas:
     aid = a["id"]
     atitle = re.sub(r"^AI-\d{1,2}:\s*", "", a.get("title", aid))
     atitle = re.sub(r"\s*\([^)]*\)\s*$", "", atitle).strip()
-    intro = area_intro(joined.get(aid, ""))
+    intro, intro_cross = area_intro(joined.get(aid, ""))
     rows = []
     for s in subs_by_area.get(aid, []):
         p = parse_requirement(joined.get(s["id"], s.get("text", "")))
@@ -154,11 +185,15 @@ for a in areas:
             parts.append(f'      <p class="req-part"><span class="req-label">Verification.</span> {esc(p["verification"])}</p>')
         if p["criteria"]:
             parts.append(f'      <p class="req-part"><span class="req-label">Success criteria.</span> {esc(p["criteria"])}</p>')
+        if p["crosswalk"]:
+            parts.append(f'      <p class="req-part req-crosswalk"><span class="req-label">Related domain standards (informative).</span> {esc(p["crosswalk"])}</p>')
         rows.append('    <article class="req-entry">\n' + "\n".join(parts) + '\n    </article>')
     sections.append(
         f'  <section class="req-area" id="{esc(anchor(aid))}">\n'
         f'    <h2><span class="req-id">{esc(aid)}</span> {esc(atitle)}</h2>\n'
         + (f'    <p class="req-area-intro">{esc(intro)}</p>\n' if intro else "")
+        + (f'    <p class="req-part req-crosswalk">'
+           f'<span class="req-label">Related domain standards (informative).</span> {esc(intro_cross)}</p>\n' if intro_cross else "")
         + "\n".join(rows) + "\n  </section>")
 
 body = "\n".join(sections)
@@ -197,7 +232,7 @@ page = f"""<!DOCTYPE html>
    path animates the reader through most of the framework to get there. A cited
    requirement should be on screen at once. */
 html {{ scroll-behavior: auto; }}
-.req-wrap {{ padding: 0 24px 96px; }}
+.req-wrap {{ padding: calc(var(--section-space) / 2) 24px 96px; }}
 .req-toc {{ margin: 0 0 48px; padding: 0; list-style: none; font-size: 0.95rem; line-height: 2; }}
 .req-toc li {{ display: inline; }}
 .req-toc li:not(:last-child)::after {{ content: " \\00B7 "; color: rgba(12,34,66,0.35); }}
@@ -211,6 +246,10 @@ html {{ scroll-behavior: auto; }}
 .prose p.req-statement {{ margin: 0 0 8px; font-weight: 400; }}   /* the normative statement keeps regular weight; rationale and verification read at 300 */
 .prose p.req-part {{ margin: 0 0 8px; font-size: 0.94rem; color: var(--ink-2); }}
 .req-label {{ font-weight: 600; color: var(--ink); }}
+/* The crosswalk carries no conformity burden (framework.json sec-1.6), so it reads
+   one step back from the normative parts rather than inside them. */
+.prose p.req-crosswalk {{ margin: 8px 0 0; font-size: 0.88rem; color: var(--ink-3); }}
+.req-crosswalk .req-label {{ color: var(--ink-2); font-weight: 500; }}
 </style>
 </head>
 <body>

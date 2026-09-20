@@ -25,6 +25,7 @@
   /* One vertical rhythm for the whole site: sections take half of this
      on each side, so adjacent sections sum to the token (mirrors index). */
   --section-space: clamp(90px, 11vw, 168px);
+  --content-max: 1200px;   /* one content column: the hero and every section share it */
 }
 
 /* Base link colour. An anchor that no author rule colours falls through to the
@@ -225,7 +226,7 @@ body, body * { font-style: normal !important; }
 }
 
 .inner-hero-inner {
-  max-width: 1140px; margin: 0 auto; position: relative; z-index: 1;
+  max-width: var(--content-max); margin: 0 auto; position: relative; z-index: 1;
   display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: end;
 }
 
@@ -260,7 +261,7 @@ body, body * { font-style: normal !important; }
 
 /* ─── SECTION BASE ────────────────────────────────────────── */
 .page-section { padding: calc(var(--section-space) / 2) 40px; }
-.section-inner { max-width: 1200px; margin: 0 auto; }
+.section-inner { max-width: var(--content-max); margin: 0 auto; }
 
 h2.section-title {
   font-family: var(--sans);

@@ -151,6 +151,11 @@
 .dl-table tr:last-child td { border-bottom: none; }
 .wrap-scroll { overflow-x: auto; }
 .dl-meta { margin: 0 0 10px 0; }
+/* Phone: the legal column follows the hero's 24px gutter (styles.css inner-hero
+   at 880.98px), instead of holding a 40px gutter and 88px of top padding. */
+@media (max-width: 880.98px) {
+  .legal-section { padding: 60px 24px 88px; }
+}
 </style>
 </head>
 <body>

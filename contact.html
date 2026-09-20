@@ -131,7 +131,7 @@
   border-top: 1px solid rgba(46,109,180,0.10);
 }
 
-.expect-inner { max-width: 1140px; margin: 0 auto; }
+.expect-inner { max-width: 1200px; margin: 0 auto; }
 
 .expect-grid {
   display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin-top: 48px;
@@ -336,8 +336,16 @@
 
         <div class="contact-info-list">
           <div class="ci-row">
+            <span class="ci-label">Email</span>
+            <span class="ci-value"><a href="mailto:kevin.williams@safetycriticallabs.com">kevin.williams@safetycriticallabs.com</a></span>
+          </div>
+          <div class="ci-row">
             <span class="ci-label">Location</span>
             <span class="ci-value">Remote and on site assessments available worldwide</span>
+          </div>
+          <div class="ci-row">
+            <span class="ci-label">Complaints</span>
+            <span class="ci-value">Complaints and appeals are filed here and acknowledged within five business days. The process is set out at <a href="/complaints">/complaints</a>.</span>
           </div>
         </div>
       </div>
@@ -353,11 +361,11 @@
           <div class="form-row">
             <div class="form-field">
               <label class="form-label" for="name">Name</label>
-              <input class="form-input" type="text" id="name" name="name" required placeholder="Your name">
+              <input class="form-input" type="text" id="name" name="name" placeholder="Your name">
             </div>
             <div class="form-field">
               <label class="form-label" for="email">Email</label>
-              <input class="form-input" type="email" id="email" name="email" required placeholder="your@email.com">
+              <input class="form-input" type="email" id="email" name="email" placeholder="your@email.com">
             </div>
           </div>
           <div class="form-field">
@@ -372,14 +380,14 @@
             <label class="form-label" for="message">Message</label>
             <textarea class="form-textarea" id="message" name="message" placeholder="How can we help?"></textarea>
           </div>
-          <p class="form-note">Supporting documents can be sent by email after first contact.</p>
+          <p class="form-note">Supporting documents can be sent by email after first contact. Name and email are optional if you are filing a complaint anonymously; without them SCL cannot acknowledge the report or tell you the outcome.</p>
           <div class="form-error" id="formError" role="alert">
             Your message could not be sent. Please email <a href="mailto:kevin.williams@safetycriticallabs.com">kevin.williams@safetycriticallabs.com</a> instead.
           </div>
           <button type="submit" class="form-submit">Send message</button>
         </form>
         <div class="form-success" id="formSuccess" role="status" tabindex="-1">
-          Your message has been received. A member of the SCL team will be in touch shortly.
+          Your message has been received. SCL will be in touch.
         </div>
       </div>
     </div>

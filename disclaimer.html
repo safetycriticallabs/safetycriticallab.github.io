@@ -129,6 +129,11 @@
 @media (max-width: 580px) {
   .cert-says-grid { grid-template-columns: 1fr; }
 }
+/* Phone: the legal column follows the hero's 24px gutter (styles.css inner-hero
+   at 880.98px), instead of holding a 40px gutter and 88px of top padding. */
+@media (max-width: 880.98px) {
+  .legal-section { padding: 60px 24px 88px; }
+}
 </style>
 </head>
 <body>

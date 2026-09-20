@@ -150,6 +150,11 @@
 .route-table td strong { color: var(--ink); font-weight: 500; }
 .route-table tr:last-child td { border-bottom: none; }
 .wrap-scroll { overflow-x: auto; }
+/* Phone: the legal column follows the hero's 24px gutter (styles.css inner-hero
+   at 880.98px), instead of holding a 40px gutter and 88px of top padding. */
+@media (max-width: 880.98px) {
+  .legal-section { padding: 60px 24px 88px; }
+}
 </style>
 </head>
 <body>
@@ -299,7 +304,7 @@
       <div class="legal-block-num">06</div>
       <h2 class="legal-block-title">Who reviews an appeal</h2>
       <p><strong>Not the people who made the decision.</strong> Appeals are reviewed by a panel independent of the original assessment. The controlling rule is that nobody decides an appeal against a determination they made, and it does not bend.</p>
-      <p>At SCL's current scale, the panel is chaired by the SCL Principal and includes at least one qualified reviewer who was not involved in the original assessment.</p>
+      <p>At SCL's current scale, the panel is chaired by the SCL Principal and includes an external member who had no involvement in the original assessment. A second qualified SCL reviewer joins the panel when one is engaged.</p>
       <p><strong>Where the Principal led the assessment under appeal</strong>, which today is every assessment, because SCL operates with one qualified assessor who is also the Principal, the panel must include an external member who reviews the appeal independently, and that member's concurrence is required for the decision. The Principal may take part in deliberation but cannot decide an appeal against their own assessment alone. This is the standing arrangement rather than an exception, and it is stated that way here because a panel with no involvement at all in the original assessment is not available at one assessor. That panel becomes available when a second qualified assessor is engaged. The limitation and what compensates for it are set out at <a href="/impartiality">/impartiality</a>.</p>
       <p>Every panel member completes a conflict of interest disclosure specific to the appeal. Any member with a conflict is replaced.</p>
     </div>
@@ -351,7 +356,7 @@
     <div class="legal-block">
       <div class="legal-block-num">10</div>
       <h2 class="legal-block-title">How to file a complaint, and what SCL does with it</h2>
-      <p>Write to SCL through <a href="/contact">/contact</a>. Include your contact information unless you are filing anonymously, a description of the concern with as much specificity as you can give, any supporting evidence, and the outcome you are looking for if you have one in mind.</p>
+      <p>Write to SCL through <a href="/contact">/contact</a>. Include your contact information, or leave the name and email fields blank if you are filing anonymously, a description of the concern with as much specificity as you can give, any supporting evidence, and the outcome you are looking for if you have one in mind.</p>
       <ul>
         <li><strong>Acknowledgment, 5 business days.</strong> SCL confirms receipt and that the complaint has been logged.</li>
         <li><strong>Initial assessment, 10 business days.</strong> SCL determines whether the concern is substantive, whether it relates to a specific assessment, assessor or certificate, whether it needs investigation or can be resolved by clarification, and whether it requires immediate action such as suspending a certificate while the matter is examined.</li>

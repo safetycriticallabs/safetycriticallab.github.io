@@ -26,6 +26,16 @@
      on each side, so adjacent sections sum to the token (mirrors index). */
   --section-space: clamp(90px, 11vw, 168px);
   --content-max: 1200px;   /* one content column: the hero and every section share it */
+  /* One card: same corner, same hairline, same hover tint wherever a page puts a
+     same-rank box. Grid GAPS stay per-grid, they are density, not identity. */
+  --radius-card: 14px;
+  --card-border: rgba(46,109,180,0.10);
+  --card-border-hover: var(--blue);
+  /* Form failure, shared by /contact and /assess */
+  /* A field boundary has to clear 3:1 (SC 1.4.11); the old 0.10 hairline read 1.23:1. */
+  --field-border: rgba(46,109,180,0.80);
+  --fail-tint: #FEF5F5;
+  --fail-line: #C8272D;
 }
 
 /* Base link colour. An anchor that no author rule colours falls through to the
@@ -249,6 +259,10 @@ body, body * { font-style: normal !important; }
   font-size: clamp(38px, 4.5vw, 60px);
   font-weight: 600; line-height: 1.05;
   color: var(--ink); letter-spacing: -0.025em;
+  /* Even lines instead of a one-word last line. A heading that carries its own
+     <br> still balances inside each segment, so an authored break narrows what is
+     balanced rather than switching it off. Ignored where unsupported. */
+  text-wrap: balance;
 }
 .inner-hero h1 em { font-style: italic; color: var(--ink); font-family: var(--serif); font-weight: 400; font-size: 1.05em; }
 
@@ -269,6 +283,18 @@ h2.section-title {
   font-weight: 600; line-height: 1.08;
   color: var(--ink); margin-bottom: 20px;
   letter-spacing: -0.025em;
+}
+/* Promoted 2026-09-20 from six identical page copies (framework, process,
+   expertise, contact, markets, accreditation). Same size as h2.section-title so a
+   page cannot run two large heading sizes. */
+.fw-showcase-title {
+  font-family: var(--sans);
+  font-size: clamp(30px, 3.2vw, 46px);
+  font-weight: 600;
+  line-height: 1.08;
+  letter-spacing: -0.025em;
+  color: #0C2242;
+  margin-bottom: 20px;
 }
 h2.section-title em { font-style: italic; color: var(--ink); font-family: var(--serif); font-size: 1.05em; font-weight: 400; }
 

@@ -1569,8 +1569,8 @@
      restored 2026-09-13 as the third column of the bottom row. The old version
      was a scrolling ticker of SCL milestones; this one shows what /subscribe
      itself promises, the four things a briefing contains, over the real form.
-     Form values are that page's own: input #FAF9F5 on a #0C2242 hairline at 6px,
-     button #0C2242 at 8px, placeholder you@organization.com. ── */
+     Form values are that page's own: input var(--blue-lt) on a var(--field-border)
+     hairline at 8px, button #0C2242 at 8px, placeholder you@organization.com. ── */
   .sc-sub-stage{ flex-direction:column; justify-content:center; gap:14px; width:100%; }
   .sc-sub-eyebrow{ font-family:var(--mono); font-size:10px; letter-spacing:0.18em; text-transform:uppercase; color:rgba(12, 34, 66,0.66) !important; text-align:center; }
   .sc-receive{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; }
@@ -1578,8 +1578,8 @@
   .sc-receive li:last-child{ border-bottom:1px solid rgba(12, 34, 66,0.10); }
   .sc-receive b{ font-family:var(--mono); font-size:10px; font-weight:400; color:rgba(12, 34, 66,0.5) !important; flex-shrink:0; }
   .sc-sub-form{ display:flex; gap:8px; width:100%; }
-  .sc-sub-form input{ flex:1; min-width:0; background:#FAF9F5; border:1px solid #0C2242; border-radius:6px; padding:10px 12px; outline:none; color:#0C2242 !important; font-family:var(--sans); font-size:16px; }   /* 16px: under it mobile Safari zooms the viewport on focus */
-  .sc-sub-form input::placeholder{ color:rgba(12, 34, 66,0.45); }
+  .sc-sub-form input{ flex:1; min-width:0; background:var(--blue-lt); border:1px solid var(--field-border); border-radius:8px; padding:10px 12px; outline:none; color:#0C2242 !important; font-family:var(--sans); font-size:16px; }   /* 16px: under it mobile Safari zooms the viewport on focus */
+  .sc-sub-form input::placeholder{ color:rgba(12, 34, 66,0.65); }   /* the field has no other label; 0.45 measured 2.72:1 */
   .sc-sub-btn{ flex-shrink:0; background:#0C2242; color:#FAF9F5 !important; border:none; border-radius:8px; padding:10px 16px; font-family:var(--sans); font-size:13px; font-weight:600; cursor:pointer; transition:background .2s ease; }
   .sc-sub-btn:hover{ background:#173A64; }
 

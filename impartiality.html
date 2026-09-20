@@ -98,12 +98,12 @@
 }
 .legal-block p:last-child { margin-bottom: 0; }
 .legal-block p strong { color: var(--ink); font-weight: 500; }
-.legal-block ul {
+.legal-block > ul {
   list-style: none;
   padding: 0;
   margin: 8px 0 0 0;
 }
-.legal-block ul li {
+.legal-block > ul > li {
   font-size: 15px;
   color: var(--ink-2);
   line-height: 1.7;
@@ -112,7 +112,7 @@
   position: relative;
   margin-bottom: 8px;
 }
-.legal-block ul li::before {
+.legal-block > ul > li::before {
   content: '';
   position: absolute;
   left: 0;
@@ -122,7 +122,7 @@
   background: var(--blue);
   border-radius: 50%;
 }
-.legal-block ul li strong { color: var(--ink); font-weight: 500; }
+.legal-block > ul > li strong { color: var(--ink); font-weight: 500; }
 
 .legal-review-note {
   margin-top: 56px;

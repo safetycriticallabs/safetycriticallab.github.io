@@ -222,7 +222,7 @@ page = f"""<!DOCTYPE html>
 <link rel="shortcut icon" href="favicon.ico">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css">
 <style>
 /* Generated page. Edit generate_requirements.py, not this file. */
@@ -232,15 +232,19 @@ page = f"""<!DOCTYPE html>
    path animates the reader through most of the framework to get there. A cited
    requirement should be on screen at once. */
 html {{ scroll-behavior: auto; }}
-.req-wrap {{ padding: calc(var(--section-space) / 2) 24px 96px; }}
+/* The section carries the frame; the wrap keeps the 760px .prose measure, so a
+   gutter on the wrap cannot eat it from the inside (it read 712px before). */
+.req-section {{ padding: calc(var(--section-space) / 2) 40px; }}
+@media (max-width: 880.98px) {{ .req-section {{ padding: calc(var(--section-space) / 2) 24px; }} }}
+
 .req-toc {{ margin: 0 0 48px; padding: 0; list-style: none; font-size: 0.95rem; line-height: 2; }}
 .req-toc li {{ display: inline; }}
 .req-toc li:not(:last-child)::after {{ content: " \\00B7 "; color: rgba(12,34,66,0.35); }}
 .req-area {{ margin-bottom: 56px; }}
-.req-area > h2 {{ font-size: 1.35rem; line-height: 1.3; margin: 0 0 8px; scroll-margin-top: 90px; }}
+.req-area > h2 {{ font-size: 1.35rem; font-weight: 600; line-height: 1.3; margin: 0 0 8px; scroll-margin-top: 90px; }}
 .req-area-intro {{ margin: 0 0 28px; color: var(--ink-2); }}
 .req-entry {{ margin: 0 0 30px; padding-left: 16px; border-left: 2px solid rgba(46,109,180,0.18); }}
-.req-entry h3 {{ font-size: 1.02rem; line-height: 1.35; margin: 0 0 8px; scroll-margin-top: 90px; }}
+.req-entry h3 {{ font-size: 1.02rem; font-weight: 600; line-height: 1.35; margin: 0 0 8px; scroll-margin-top: 90px; }}
 .req-entry:target {{ border-left-color: #2E6DB4; }}
 .req-id {{ font-family: var(--mono); font-size: 0.86em; font-weight: 500; color: #1E5A9A; margin-right: 6px; }}
 .prose p.req-statement {{ margin: 0 0 8px; font-weight: 400; }}   /* the normative statement keeps regular weight; rationale and verification read at 300 */
@@ -280,6 +284,7 @@ html {{ scroll-behavior: auto; }}
   </div>
 </div>
 
+  <section class="req-section">
   <div class="req-wrap prose">
     <ul class="req-toc">
 {chr(10).join(f'      <li><a href="#{esc(anchor(a["id"]))}">{esc(a["id"])}</a></li>' for a in areas)}
@@ -288,6 +293,7 @@ html {{ scroll-behavior: auto; }}
 {body}
 
   </div>
+  </section>
 
 </div>
 </main>

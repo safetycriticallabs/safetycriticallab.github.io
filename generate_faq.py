@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Build questions.html, the crawlable copy of the Ask SCL question library.
 
-faq.json holds 40 written answers. search.html only ever renders them after a
+faq.json holds the written answers. search.html only ever renders them after a
 visitor types into the composer, so a crawler that fetches /search sees the
 shell and nothing else. Googlebot renders JavaScript but does not type into
 search boxes, and the ChatGPT, Claude and Perplexity fetchers mostly do not
@@ -116,13 +116,17 @@ page = f"""<!DOCTYPE html>
 <link rel="shortcut icon" href="favicon.ico">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css">
 <style>
 /* Generated page. Edit generate_faq.py, not this file. */
-.faq-wrap {{ padding: 0 24px 96px; }}
+/* The section carries the frame; the wrap keeps the 760px .prose measure, so a
+   gutter on the wrap cannot eat it from the inside (it read 712px before). */
+.faq-section {{ padding: calc(var(--section-space) / 2) 40px; }}
+@media (max-width: 880.98px) {{ .faq-section {{ padding: calc(var(--section-space) / 2) 24px; }} }}
+
 .faq-entry {{ margin-bottom: 36px; }}
-.faq-entry h2 {{ font-size: 1.15rem; line-height: 1.35; margin: 0 0 10px; scroll-margin-top: 90px; }}
+.faq-entry h2 {{ font-size: 1.15rem; font-weight: 600; line-height: 1.35; margin: 0 0 10px; scroll-margin-top: 90px; }}
 .faq-entry p {{ margin: 0 0 8px; }}
 .prose p.faq-more {{ font-size: 0.92rem; }}
 </style>
@@ -150,11 +154,13 @@ page = f"""<!DOCTYPE html>
   </div>
 </div>
 
+  <section class="faq-section">
   <div class="faq-wrap prose">
 
 {body}
 
   </div>
+  </section>
 
 </div>
 </main>

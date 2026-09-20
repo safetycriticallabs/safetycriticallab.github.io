@@ -262,7 +262,7 @@
   transition: border-color 0.25s, box-shadow 0.25s, transform 0.25s;
 }
 .faq-item:hover {
-  border-color: var(--blue);
+  border-color: var(--card-border-hover);
   box-shadow: 0 10px 28px rgba(15,35,64,0.10);
   transform: translateY(-3px);
 }
@@ -854,6 +854,15 @@
      dvh so iOS Safari's toolbar counts against it; the vh line is the fallback. */
   .search-input { font-size: 17px; max-height: 46vh; max-height: 46dvh; }
   .search-form.is-composer .search-input { max-height: 34vh; max-height: 34dvh; }
+  /* Keep the composer's own controls at the 44px target: the desktop rules set
+     attach and send to 40px, and a phone is where the chat IS the page. */
+  .ask-attach-btn,
+  .search-form.is-composer .search-submit { width: 44px; height: 44px; }
+  .ask-chip-remove { width: 32px; height: 32px; }
+  /* The chip has to be able to shrink, or a long filename plus a wider remove
+     button pushes the composer past the viewport. */
+  .ask-attachment { min-width: 0; }
+  .ask-chip-name { min-width: 0; max-width: 100%; }
 }
 </style>
 </head>
@@ -909,7 +918,7 @@
     <div class="hero-seal" id="hero-seal" aria-hidden="true"></div>
     <div class="search-eyebrow">[ Ask SCL ]</div>
     <h1 class="search-title">What do you want to know?</h1>
-    <p class="search-lead" id="search-lead">Search common questions about AI certification, the framework, the process, and accreditation. <a href="/questions">Read all 40 answers</a>.</p>
+    <p class="search-lead" id="search-lead">Search common questions about AI certification, the framework, the process, and accreditation. <a href="/questions">Read all 47 answers</a>.</p>
 
     <div class="chat-header">
       <span class="chat-avatar" id="chat-avatar-slot" aria-hidden="true"></span>

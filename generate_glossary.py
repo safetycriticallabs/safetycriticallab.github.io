@@ -319,7 +319,7 @@ page = f"""<!DOCTYPE html>
 <link rel="apple-touch-icon" sizes="180x180" href="img/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css">
 <style>
 /* The site stylesheet sets scroll-behavior: smooth, which is right for a short
@@ -327,7 +327,11 @@ page = f"""<!DOCTYPE html>
    the bottom becomes a multi-second scroll past 80 other terms. Same override
    requirements.html carries, for the same reason. */
 html {{ scroll-behavior: auto; }}
-.gl-wrap {{ max-width: 760px; margin: 0 auto; padding: calc(var(--section-space) / 2) 40px 120px; }}
+/* The section carries the frame; the wrap keeps the 760px .prose measure, so a
+   gutter on the wrap cannot eat it from the inside (it read 712px before). */
+.gl-section {{ padding: calc(var(--section-space) / 2) 40px; }}
+@media (max-width: 880.98px) {{ .gl-section {{ padding: calc(var(--section-space) / 2) 24px; }} }}
+.gl-wrap {{ max-width: 760px; margin: 0 auto; }}
 .gl-lede {{ font-size: 17px; color: var(--ink-2); font-weight: 300; line-height: 1.8; margin-bottom: 32px; }}
 
 .gl-tools {{ display: flex; flex-wrap: wrap; gap: 12px; align-items: center; margin-bottom: 28px; }}
@@ -364,7 +368,6 @@ html {{ scroll-behavior: auto; }}
 .gl-empty {{ font-size: 15px; color: var(--ink-2); font-weight: 300; padding: 24px 0; }}
 
 @media (max-width: 880px) {{
-  .gl-wrap {{ padding: calc(var(--section-space) / 2) 24px 80px; }}
   .gl-toc {{ grid-template-columns: 1fr 1fr; }}
 }}
 </style>
@@ -392,6 +395,7 @@ html {{ scroll-behavior: auto; }}
   </div>
 </div>
 
+<section class="gl-section">
 <div class="gl-wrap">
   <p class="gl-lede">These are the definitions an SCL assessment runs on. Where a term is taken from an
     existing standard, the source is named under the definition rather than paraphrased, so a reader can
@@ -415,6 +419,7 @@ html {{ scroll-behavior: auto; }}
 {chr(10).join(sections)}
 
 </div>
+</section>
 
 </div>
 

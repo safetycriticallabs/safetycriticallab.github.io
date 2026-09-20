@@ -18,7 +18,7 @@
         "company",
         "what"
       ],
-      "link": "/position"
+      "link": "/"
     },
     {
       "id": "faq-2",
@@ -299,7 +299,7 @@
         "conflict",
         "difference"
       ],
-      "link": "/position"
+      "link": "/impartiality"
     },
     {
       "id": "faq-18",

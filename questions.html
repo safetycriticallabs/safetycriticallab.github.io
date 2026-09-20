@@ -26,9 +26,13 @@
 <link rel="stylesheet" href="styles.css">
 <style>
 /* Generated page. Edit generate_faq.py, not this file. */
-.faq-wrap { padding: 0 24px 96px; }
+/* The section carries the frame; the wrap keeps the 760px .prose measure, so a
+   gutter on the wrap cannot eat it from the inside (it read 712px before). */
+.faq-section { padding: calc(var(--section-space) / 2) 40px; }
+@media (max-width: 880.98px) { .faq-section { padding: calc(var(--section-space) / 2) 24px; } }
+
 .faq-entry { margin-bottom: 36px; }
-.faq-entry h2 { font-size: 1.15rem; line-height: 1.35; margin: 0 0 10px; scroll-margin-top: 90px; }
+.faq-entry h2 { font-size: 1.15rem; font-weight: 600; line-height: 1.35; margin: 0 0 10px; scroll-margin-top: 90px; }
 .faq-entry p { margin: 0 0 8px; }
 .prose p.faq-more { font-size: 0.92rem; }
 </style>
@@ -89,12 +93,13 @@
   </div>
 </div>
 
+  <section class="faq-section">
   <div class="faq-wrap prose">
 
     <article class="faq-entry">
       <h2 id="faq-1">What is SCL?</h2>
       <p>Safety Critical Labs is an independent certification authority for artificial intelligence in safety-critical systems. It holds AI and machine learning to the same rigor as traditional safety-critical software, anchored in human-spaceflight-grade standards. The product is the certification mark, not consulting. The closest analogies are bodies like UL, DNV, and ISO registrars.</p>
-      <p class="faq-more"><a href="/position">Read more</a></p>
+      <p class="faq-more"><a href="/">Read more</a></p>
     </article>
     <article class="faq-entry">
       <h2 id="faq-2">What is the SCL framework?</h2>
@@ -174,7 +179,7 @@
     <article class="faq-entry">
       <h2 id="faq-17">How is SCL different from a consultancy?</h2>
       <p>A consultancy helps you build a system. SCL certifies whether a finished system meets an independent standard, and does not consult on the systems it assesses, so the mark stays independent. The product is the certification mark itself. The model is closer to UL or DNV than to an advisory firm.</p>
-      <p class="faq-more"><a href="/position">Read more</a></p>
+      <p class="faq-more"><a href="/impartiality">Read more</a></p>
     </article>
     <article class="faq-entry">
       <h2 id="faq-18">What is the SCL mark?</h2>
@@ -328,6 +333,7 @@
     </article>
 
   </div>
+  </section>
 
 </div>
 </main>

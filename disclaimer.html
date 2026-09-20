@@ -69,6 +69,34 @@
   line-height: 1.75; font-weight: 300; margin: 0 0 14px;
 }
 .legal-block p:last-child { margin-bottom: 0; }
+
+/* The same list recipe the other six legal-template pages carry; block 03 has a
+   bare ul and styles.css zeroes list padding globally. */
+.legal-block > ul {
+  list-style: none;
+  padding: 0;
+  margin: 8px 0 0 0;
+}
+.legal-block > ul > li {
+  font-size: 15px;
+  color: var(--ink-2);
+  line-height: 1.7;
+  font-weight: 300;
+  padding-left: 22px;
+  position: relative;
+  margin-bottom: 8px;
+}
+.legal-block > ul > li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 11px;
+  width: 6px;
+  height: 6px;
+  background: var(--blue);
+  border-radius: 50%;
+}
+.legal-block > ul > li strong { color: var(--ink); font-weight: 500; }
 .legal-block p strong { color: var(--ink); font-weight: 500; }
 
 /* Two-up "does say / does not say" card */

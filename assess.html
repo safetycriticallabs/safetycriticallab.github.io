@@ -209,15 +209,15 @@
 
 /* Validation / error state */
 .q-card.error {
-  border-color: #C8272D;
-  background: #FEF5F5;
-  box-shadow: 0 0 0 1px #C8272D inset;
+  border-color: var(--fail-line);
+  background: var(--fail-tint);
+  box-shadow: 0 0 0 1px var(--fail-line) inset;
 }
-.q-card.error .q-label { color: #C8272D; }
+.q-card.error .q-label { color: var(--fail-line); }
 .assess-error-banner {
-  background: #FEF2F2;
-  border: 1px solid #C8272D;
-  border-left: 4px solid #C8272D;
+  background: var(--fail-tint);
+  border: 1px solid var(--fail-line);
+  border-left: 4px solid var(--fail-line);
   border-radius: 4px;
   padding: 14px 18px 14px 22px;
   margin-bottom: 20px;
@@ -246,16 +246,14 @@
   padding-top: 32px;
   border-top: 1px solid var(--rule);
 }
-.assess-btn { font-family: var(--sans); font-size: 13px; font-weight: 500; letter-spacing: 0.04em; padding: 14px 32px; border-radius: 8px; cursor: pointer; transition: background 0.2s, color 0.15s, border-color 0.15s; border: none; text-decoration: none; display: inline-block; }
-.assess-btn-back { background: transparent; color: #0C2242; border: 1px solid #0C2242; }
-.assess-btn-back:hover { border-color: #0C2242; color: #FAF9F5; background: #0C2242; }
-.assess-btn-next { background: #0C2242; color: #FAF9F5; border: 1px solid #0C2242; }
-.assess-btn-next:hover { background: #081A34; color: #FAF9F5; border-color: #081A34; }
-.assess-btn-next:disabled {
+/* The step navigation uses the shell .btn / .btn-outline / .btn-solid; the
+   private copies that used to sit here said the same thing in different words
+   and rendered 4px shorter than an a.btn. Only the disabled state is local. */
+.btn:disabled {
   opacity: 0.4;
   cursor: not-allowed;
 }
-.assess-btn-next:disabled:hover {
+.btn:disabled:hover {
   opacity: 0.4;
 }
 
@@ -586,7 +584,7 @@
 
       <div class="assess-nav">
         <div></div>
-        <button class="assess-btn assess-btn-next" id="btn-next-1">Continue</button>
+        <button class="btn btn-solid" id="btn-next-1">Continue</button>
       </div>
     </div>
 
@@ -669,8 +667,8 @@
       </div>
 
       <div class="assess-nav">
-        <button class="assess-btn assess-btn-back" id="btn-back-2">Back</button>
-        <button class="assess-btn assess-btn-next" id="btn-next-2">Continue</button>
+        <button class="btn btn-outline" id="btn-back-2">Back</button>
+        <button class="btn btn-solid" id="btn-next-2">Continue</button>
       </div>
     </div>
 
@@ -753,8 +751,8 @@
       </div>
 
       <div class="assess-nav">
-        <button class="assess-btn assess-btn-back" id="btn-back-3">Back</button>
-        <button class="assess-btn assess-btn-next" id="btn-next-3">Continue</button>
+        <button class="btn btn-outline" id="btn-back-3">Back</button>
+        <button class="btn btn-solid" id="btn-next-3">Continue</button>
       </div>
     </div>
 
@@ -882,8 +880,8 @@
       </div>
 
       <div class="assess-nav">
-        <button class="assess-btn assess-btn-back" id="btn-back-4">Back</button>
-        <button class="assess-btn assess-btn-next" id="btn-next-4">Continue</button>
+        <button class="btn btn-outline" id="btn-back-4">Back</button>
+        <button class="btn btn-solid" id="btn-next-4">Continue</button>
       </div>
     </div>
 
@@ -982,8 +980,8 @@
       </div>
 
       <div class="assess-nav">
-        <button class="assess-btn assess-btn-back" id="btn-back-5">Back</button>
-        <button class="assess-btn assess-btn-next" id="btn-next-5">See Results</button>
+        <button class="btn btn-outline" id="btn-back-5">Back</button>
+        <button class="btn btn-solid" id="btn-next-5">See Results</button>
       </div>
     </div>
 
@@ -1022,7 +1020,7 @@
       <h2>Ready to close the <em>gaps?</em></h2>
       <p>Download your assessment report and share it with the SCL team when you're ready to engage.</p>
       <div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap;align-items:center;">
-        <button id="downloadReportBtn" class="btn btn-solid" style="cursor:pointer;">Download Report</button>
+        <button id="downloadReportBtn" class="btn btn-solid">Download Report</button>
         <a href="/contact" class="btn btn-solid">Get Certified</a>
       </div>
     </div>

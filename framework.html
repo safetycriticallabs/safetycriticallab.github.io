@@ -63,23 +63,26 @@
 .class-item {
   display: flex; align-items: center; gap: 8px;
   font-family: var(--sans); font-size: 11px;
-  font-weight: 500; letter-spacing: 0.04em; text-transform: uppercase; color: var(--ink-3);
-  padding: 5px 10px;
-  border-radius: 3px;
-  border: 1px solid transparent;
+  font-weight: 500; letter-spacing: 0.04em; text-transform: uppercase; color: #0C2242;
+  padding: 8px 16px;
+  border-radius: 6px;
+  border: 1px solid #0C2242;
   cursor: pointer;
   user-select: none;
   transition: background 0.15s, color 0.15s, border-color 0.15s;
 }
-.class-item:hover {
-  background: var(--white);
-  color: var(--ink-2);
-  border-color: var(--rule);
+/* Hover has to differ from selected, or a hovered tier reads as the filtered one. */
+.class-item:not(.active):hover {
+  background: var(--blue-lt);
+  color: #0C2242;
+  border-color: #0C2242;
 }
+/* Same chip as the organisation filter on /documents, so the site has one
+   selectable-chip recipe rather than a blue one and a navy one. */
 .class-item.active {
-  background: var(--blue);
-  color: #fff;
-  border-color: var(--blue);
+  background: #0C2242;
+  color: #FAF9F5;
+  border-color: #0C2242;
 }
 .class-item.active .class-dot { background: #fff; }
 .class-item:focus-visible {
@@ -140,7 +143,7 @@
 
 .fw-card {
   background: #FAF9F5;
-  border: 1px solid rgba(46,109,180,0.10); border-radius: 14px;
+  border: 1px solid var(--card-border); border-radius: var(--radius-card);
   padding: 28px;
   transition: border-color 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease, opacity 0.2s ease;
   cursor: default; position: relative;
@@ -153,7 +156,7 @@
   transition: height 0.35s ease;
 }
 .fw-card:hover {
-  border-color: rgba(46,109,180,0.30);
+  border-color: var(--card-border-hover);
   transform: translateY(-3px);
   box-shadow: 0 10px 28px rgba(15,35,64,0.10);
 }
@@ -214,9 +217,9 @@
 
 .struct-col {
   background: #FAF9F5;
-  border: 1px solid rgba(46,109,180,0.10);
+  border: 1px solid var(--card-border);
   padding: 32px 28px;
-  border-radius: 14px;
+  border-radius: var(--radius-card);
   transition: border-color 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
   position: relative;
 }
@@ -286,8 +289,8 @@
 .pub-standard-rows { display: flex; flex-direction: column; gap: 12px; }
 .pub-standard-row {
   background: #FAF9F5;
-  border: 1px solid rgba(46,109,180,0.12);
-  border-radius: 14px; padding: 20px 24px;
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-card); padding: 20px 24px;
   display: grid; grid-template-columns: 72px 1fr; gap: 16px;
   align-items: center;
 }
@@ -361,18 +364,15 @@
   display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center;
 }
 
-.os-left h2 {
-  font-family: var(--sans);
-  font-size: clamp(28px, 3vw, 38px);
-  font-weight: 600; color: var(--ink); margin-bottom: 16px; line-height: 1.1; letter-spacing: -0.02em;
-}
+/* The heading carries .fw-showcase-title (styles.css); this is page spacing only. */
+.os-left h2 { margin-bottom: 16px; }
 .os-left p { font-size: 15px; color: var(--ink-2); line-height: 1.75; font-weight: 300; margin-bottom: 16px; }
 
 .os-right { display: flex; flex-direction: column; gap: 12px; }
 
 .os-item {
-  background: #FAF9F5; border: 1px solid rgba(46,109,180,0.12);
-  border-radius: 14px; padding: 18px 22px;
+  background: #FAF9F5; border: 1px solid var(--card-border);
+  border-radius: var(--radius-card); padding: 18px 22px;
   display: grid; grid-template-columns: 80px 1fr; gap: 16px;
 }
 
@@ -401,15 +401,6 @@
 .fw-eyebrow-mono { margin-bottom: 20px; }
 
 /* Showcase title — blue, big, like the index .fw-title */
-.fw-showcase-title {
-  font-family: var(--sans);
-  font-size: clamp(30px, 3.4vw, 46px);
-  font-weight: 600;
-  line-height: 1.08;
-  letter-spacing: -0.025em;
-  color: #0C2242;
-  margin-bottom: 20px;
-}
 .fw-showcase-title em {
   font-family: inherit;
   font-size: inherit !important;
@@ -452,8 +443,8 @@
 }
 .failmode-card {
   background: var(--white);
-  border: 1px solid var(--rule);
-  border-radius: 10px;
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-card);
   padding: 26px 26px 22px;
   display: flex;
   flex-direction: column;
@@ -786,7 +777,7 @@
   <div class="os-inner">
     <div class="os-left">
       <div class="fw-eyebrow-mono">[ What Assessment Produces ]</div>
-      <h2>A binary determination. <br>A documented risk score.</h2>
+      <h2 class="fw-showcase-title">A binary determination. <br>A documented risk score.</h2>
       <p>
         Assessment against this framework produces one of two outcomes, accompanied by a quantified risk score. Each determination is documented against a specific version of the framework, at a defined classification level, with every finding on record. There is no maturity index and no subjective rating.
       </p>
@@ -812,7 +803,7 @@
   <div class="pub-standard-grid">
     <div>
       <div class="fw-eyebrow-mono">[ Published Standard ]</div>
-      <h2 class="fw-showcase-title" style="margin-bottom: 20px;">
+      <h2 class="fw-showcase-title">
         Read every requirement <br>before you engage.
       </h2>
       <p style="font-size: 15px; color: var(--ink-2); line-height: 1.75; font-weight: 300; margin-bottom: 16px;">

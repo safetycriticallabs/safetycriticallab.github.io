@@ -138,12 +138,9 @@
 }
 .legal-review-note strong { color: var(--ink); font-weight: 500; }
 .legal-review-note.is-standing { margin-top: 0; margin-bottom: 56px; }
-.limit-note {
-  margin: 18px 0 0 0; padding: 18px 22px;
-  background: #FAF9F5; border: 1px solid rgba(46,109,180,0.12);
-  border-left: 3px solid var(--gold); border-radius: 14px;
-  font-size: 14px; color: var(--ink-2); line-height: 1.7; font-weight: 300;
-}
+/* Same callout as .legal-review-note (shared rule in styles.css); the gold rule
+   is the modifier, and it means a stated limitation rather than a review note. */
+.limit-note { margin-top: 18px; border-left-color: var(--gold); }
 .limit-note strong { color: var(--ink); font-weight: 500; }
 /* Phone: the legal column follows the hero's 24px gutter (styles.css inner-hero
    at 880.98px), instead of holding a 40px gutter and 88px of top padding. */

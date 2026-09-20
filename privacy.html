@@ -233,6 +233,10 @@
           <span class="processor-desc"><strong>Newsletter delivery.</strong> Receives the address submitted on /subscribe, sends the double opt-in confirmation, and stores confirmed subscriber addresses for sending briefings. Formerly ConvertKit. See <a href="https://kit.com/privacy" target="_blank" rel="noopener">Kit privacy policy</a>.</span>
         </div>
         <div class="processor-item">
+          <span class="processor-name">Google Fonts</span>
+          <span class="processor-desc"><strong>Web fonts.</strong> Every page loads the DM Sans typeface from fonts.googleapis.com and fonts.gstatic.com, so opening any page on the Site sends your IP address and user agent to Google. See <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Google privacy policy</a>.</span>
+        </div>
+        <div class="processor-item">
           <span class="processor-name">Zoho Mail</span>
           <span class="processor-desc"><strong>Email infrastructure.</strong> Provides the email service used to receive and respond to inquiries. See <a href="https://www.zoho.com/privacy.html" target="_blank" rel="noopener">Zoho privacy policy</a>.</span>
         </div>
@@ -242,7 +246,7 @@
         </div>
         <div class="processor-item">
           <span class="processor-name">Cloudflare</span>
-          <span class="processor-desc"><strong>DNS and Ask SCL infrastructure.</strong> Provides DNS resolution for the domain. Runs three services in the Ask SCL path: Workers handles requests to the assistant; D1 stores retained questions, only when the retention box is ticked; Workers AI runs a relevance-ranking model that scores your question against SCL&rsquo;s own framework text before answering, and does not generate answers. Your question is sent to it whenever ranking is attempted, including attempts that then fail, after which SCL&rsquo;s own keyword matching is used instead. May process standard request metadata. See <a href="https://www.cloudflare.com/privacypolicy/" target="_blank" rel="noopener">Cloudflare privacy policy</a>.</span>
+          <span class="processor-desc"><strong>DNS, Ask SCL infrastructure and the news feed proxy.</strong> Provides DNS resolution for the domain. Loading /news, and the home page, sends the regulatory feed requests through a Cloudflare Worker that fetches them on your behalf. The Ask page also loads its PDF reader from Cloudflare's cdnjs. In the Ask SCL path Cloudflare runs three services: Workers handles requests to the assistant; D1 stores retained questions, only when the retention box is ticked; Workers AI runs a relevance-ranking model that scores your question against SCL&rsquo;s own framework text before answering, and does not generate answers. Your question is sent to it whenever ranking is attempted, including attempts that then fail, after which SCL&rsquo;s own keyword matching is used instead. May process standard request metadata. See <a href="https://www.cloudflare.com/privacypolicy/" target="_blank" rel="noopener">Cloudflare privacy policy</a>.</span>
         </div>
       </div>
     </div>

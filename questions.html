@@ -35,6 +35,12 @@
 .faq-entry h2 { font-size: 1.15rem; font-weight: 600; line-height: 1.35; margin: 0 0 10px; scroll-margin-top: 90px; }
 .faq-entry p { margin: 0 0 8px; }
 .prose p.faq-more { font-size: 0.92rem; }
+/* Same control as .faq-link on the Ask page, so "Read more" reads the same in
+   both places instead of falling through to the bare anchor rule. */
+.faq-more a { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 500;
+  letter-spacing: 0.02em; color: #0C2242; text-decoration: none; }
+.faq-more a::after { content: '92'; transition: transform 0.2s; }
+.faq-more a:hover::after { transform: translateX(3px); }
 </style>
 </head>
 <body>
@@ -278,7 +284,7 @@
     </article>
     <article class="faq-entry">
       <h2 id="faq-37">What happens after we are certified?</h2>
-      <p>Certification is not a one time event. Safety-Critical systems carry an annual surveillance audit, Mission-Critical systems a biennial one, and Operational Support systems a triennial one. Reassessment is triggered by a model version change, a significant environment change, a drift threshold breach, or an incident involving an AI assisted decision. The validity period is scoped per engagement.</p>
+      <p>Certification is not a one time event. Safety-Critical systems carry an annual surveillance audit, Mission-Critical systems a biennial one, and Operational Support systems a triennial one. Reassessment is triggered by a model version change, a significant environment change, a drift threshold breach, or an incident involving an AI assisted decision.</p>
       <p class="faq-more"><a href="/process">Read more</a></p>
     </article>
     <article class="faq-entry">

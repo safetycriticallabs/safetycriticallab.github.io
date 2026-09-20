@@ -35,7 +35,7 @@
 /* ─── ASSESSMENT TOOL ─────────────────────────────────────── */
 .assess-section {
   background: #FAF9F5;
-  padding: 80px 40px;
+  padding: 88px 40px 120px;
   min-height: 60vh;
 }
 .assess-inner {
@@ -90,17 +90,8 @@
 }
 
 /* Provisional classification hint (steps 4 and 5) */
-.tier-hint {
-  display: none;
-  font-size: 13px; color: var(--ink-2);
-  line-height: 1.5;
-  background: rgba(46,109,180,0.06);
-  border: 1px solid rgba(46,109,180,0.18);
-  border-radius: 3px;
-  padding: 10px 14px;
-  margin-bottom: 32px;
-  max-width: 600px;
-}
+/* .tier-hint carries the shared .note-aside recipe; only its layout is local. */
+.tier-hint { display: none; margin-bottom: 32px; max-width: 600px; }
 
 /* Question card */
 .q-card {
@@ -131,7 +122,7 @@
   border: 1px solid rgba(46,109,180,0.10);
   border-radius: 4px;
   cursor: pointer;
-  background: #FCFAF3;
+  background: var(--cream-2);
   position: relative;
   transition: border-color 0.2s, background 0.2s;
 }
@@ -190,7 +181,7 @@
   font-family: var(--sans);
   font-size: 14px;
   color: var(--ink);
-  background-color: #FCFAF3;
+  background-color: var(--cream-2);
   cursor: pointer;
   appearance: none;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%232E6DB4' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");
@@ -209,17 +200,9 @@
   box-shadow: 0 0 0 1px var(--fail-line) inset;
 }
 .q-card.error .q-label { color: var(--fail-line); }
-.assess-error-banner {
-  background: var(--fail-tint);
-  border: 1px solid var(--fail-line);
-  border-left: 4px solid var(--fail-line);
-  border-radius: 4px;
-  padding: 14px 18px 14px 22px;
-  margin-bottom: 20px;
-  font-size: 13px;
-  color: #7A1B1E;
-  line-height: 1.5;
-}
+/* The frame comes from the shared notice rule in styles.css; only the error
+   text colour and the spacing are local. */
+.assess-error-banner { margin-bottom: 20px; color: #7A1B1E; }
 .assess-error-banner strong {
   display: block;
   color: var(--bad);
@@ -256,10 +239,10 @@
 .results-section {
   display: none;
   background: #FAF9F5;
-  padding: 110px 40px 130px;
+  padding: 88px 40px 120px;
 }
 .results-inner {
-  max-width: 900px;
+  max-width: 760px;   /* the same column the form above it uses */
   margin: 0 auto;
 }
 .results-header {
@@ -424,8 +407,8 @@
   .q-card { padding: 24px; }
 }
 @media (max-width: 580px) {
-  .assess-section { padding: 48px 20px; }
-  .results-section { padding: 48px 20px; }
+  .assess-section { padding: 60px 24px 88px; }
+  .results-section { padding: 60px 24px 88px; }
   .results-grid { grid-template-columns: 1fr; }
   .results-cta { padding: 32px 24px; }
 }
@@ -1007,7 +990,7 @@
       <p>Download your assessment report and share it with the SCL team when you're ready to engage.</p>
       <div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap;align-items:center;">
         <button id="downloadReportBtn" class="btn btn-solid">Download Report</button>
-        <a href="/contact" class="btn btn-solid">Get Certified</a>
+        <a href="/contact" class="btn btn-outline">Get Certified</a>
       </div>
     </div>
 
@@ -1275,9 +1258,12 @@
     var consequence = parseInt(document.querySelector('input[name="q-consequence"]:checked').value);
     var override = document.querySelector('input[name="q-override"]:checked').value;
 
+    /* Heuristic. Appendix B classifies on the consequence questions alone; the
+       override shortcut below is this page's own and Phase 1 replaces it with a
+       recorded applicability determination. */
     if (consequence === 3 || override === 'no') return { tier: 1, label: 'Safety-Critical AI', desc: 'Your system classification is Tier 1: Safety-Critical AI. All core requirement areas (AI-1 through AI-10) apply. AI-11, AI-12, AI-13 apply conditionally per system design. Annual surveillance audits required.' };
-    if (consequence === 2 || override === 'partial') return { tier: 2, label: 'Mission-Critical AI', desc: 'Your system classification is Tier 2: Mission-Critical AI. AI-1 through AI-6, AI-8, AI-9, and AI-10 apply. AI-7 (adversarial robustness) may be tailored based on threat environment.' };
-    return { tier: 3, label: 'Operational Support AI', desc: 'Your system classification is Tier 3: Operational Support AI. AI-1 through AI-6 and AI-10 apply at minimum. AI-8 and AI-9 may be scoped to your specific operational context.' };
+    if (consequence === 2 || override === 'partial') return { tier: 2, label: 'Mission-Critical AI', desc: 'Your system classification is Tier 2: Mission-Critical AI. AI-1 through AI-6, AI-8, AI-9 and AI-10 apply, with AI-7 (adversarial robustness) tailored to the threat environment. AI-11, AI-12 and AI-13 apply conditionally per system design. Biennial surveillance audits required.' };
+    return { tier: 3, label: 'Operational Support AI', desc: 'Your system classification is Tier 3: Operational Support AI. AI-1 through AI-6 and AI-10 apply at minimum, with AI-7, AI-8 and AI-9 tailored to the operational context. AI-11, AI-12 and AI-13 apply conditionally per system design. Triennial surveillance audits required.' };
   }
 
   /* ── Provisional tier hint shown in steps 4 and 5 ── */
@@ -1647,9 +1633,9 @@
     if (cq === 3 || override === 'no') {
       classification = { tier: 1, label: 'Safety-Critical AI', desc: 'All core requirement areas (AI-1 through AI-10) apply. AI-11, AI-12, AI-13 apply conditionally per system design. Annual surveillance audits required.' };
     } else if (cq === 2 || override === 'partial') {
-      classification = { tier: 2, label: 'Mission-Critical AI', desc: 'AI-1 through AI-6, AI-8, AI-9, and AI-10 apply. AI-7 (adversarial robustness) may be tailored based on threat environment.' };
+      classification = { tier: 2, label: 'Mission-Critical AI', desc: 'AI-1 through AI-6, AI-8, AI-9 and AI-10 apply, with AI-7 (adversarial robustness) tailored to the threat environment. AI-11, AI-12 and AI-13 apply conditionally per system design. Biennial surveillance audits required.' };
     } else {
-      classification = { tier: 3, label: 'Operational Support AI', desc: 'AI-1 through AI-6 and AI-10 apply at minimum. AI-8 and AI-9 may be scoped to your specific operational context.' };
+      classification = { tier: 3, label: 'Operational Support AI', desc: 'AI-1 through AI-6 and AI-10 apply at minimum, with AI-7, AI-8 and AI-9 tailored to the operational context. AI-11, AI-12 and AI-13 apply conditionally per system design. Triennial surveillance audits required.' };
     }
 
     var scores = {};
@@ -2063,7 +2049,7 @@
       pdf.setFont('helvetica', 'normal');
       pdf.setFontSize(7.5);
       pdf.setTextColor(INK_LIGHT[0], INK_LIGHT[1], INK_LIGHT[2]);
-      var disclaimer = 'This report reflects a self assessment only. It does not constitute a formal certification, determination, or endorsement by Safety Critical Labs. The responses recorded herein have not been independently verified. To obtain a formal assessment against the SCL AI Requirements Framework, contact the SCL team. Safety Critical Labs \u00b7 DOI 10.5281/zenodo.22775993 \u00b7 Framework v3.7';
+      var disclaimer = 'This report reflects a self assessment only. It does not constitute a formal certification, determination, or endorsement by Safety Critical Labs. The responses recorded herein have not been independently verified. To obtain a formal assessment against the SCL AI Requirements Framework, contact the SCL team. Safety Critical Labs \u00b7 DOI 10.5281/zenodo.19024420 \u00b7 Framework v3.7';
       var dLines = wrapText(pdf, disclaimer, CW);
       pdf.text(dLines, ML, y);
 

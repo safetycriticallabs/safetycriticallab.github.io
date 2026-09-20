@@ -86,15 +86,8 @@
 }
 .phase-body { font-size: 15px; color: var(--ink-2); line-height: 1.75; font-weight: 300; margin-bottom: 24px; }
 .phase-checklist { display: flex; flex-direction: column; gap: 8px; }
-.phase-note {
-  margin-top: 20px;
-  padding: 14px 18px;
-  background: #FAF9F5;
-  border: 1px solid rgba(46,109,180,0.10);
-  border-left: 3px solid var(--blue);
-  font-size: 13px; color: var(--ink-2); line-height: 1.65;
-  border-radius: 0 10px 10px 0;
-}
+/* .phase-note and .ev-note carry the shared .note-aside recipe; only spacing is local. */
+.phase-note { margin-top: 20px; }
 .phase-note strong { color: var(--ink); }
 .phase-subsection { margin-top: 32px; }
 .phase-subsection-label {
@@ -150,12 +143,7 @@
 
 /* EVIDENCE PACKAGE PARTS (used inside Phase 2) */
 .ev-intro { font-size: 16px; color: var(--ink-2); line-height: 1.8; font-weight: 300; margin-bottom: 24px; }
-.ev-note {
-  padding: 16px 20px;
-  background: #FAF9F5; border-left: 3px solid var(--blue);
-  border-radius: 0 10px 10px 0;
-  font-size: 13px; color: var(--ink-2); line-height: 1.65;
-}
+/* .ev-note takes the shared .note-aside recipe. */
 .ev-note strong { color: var(--ink); }
 .ev-list { display: flex; flex-direction: column; gap: 8px; }
 .ev-item {
@@ -332,7 +320,7 @@
             </div>
             <div class="check-item fade-up">
               <span class="check-dot"></span>
-              <span class="check-text"><strong>Evidence package review report:</strong> Formal output. Documents open items, requests for additional evidence, and preliminary findings. Client has opportunity to address open items before Phase 3.</span>
+              <span class="check-text"><strong>Evidence Review Report:</strong> Formal output. Documents open items, requests for additional evidence, and preliminary findings. Client has opportunity to address open items before Phase 3.</span>
             </div>
           </div>
           <div class="phase-note fade-up">
@@ -367,6 +355,10 @@
             </div>
             <div class="check-item check-item-score fade-up">
               <span class="check-dot"></span>
+              <span class="check-text"><strong>Technical Assessment Report:</strong> Formal output, signed by the Lead Assessor. States the findings against each applicable requirement, the evidence each rests on, and the quantified risk score. It is the last word on findings; the determination itself is made in Phase 4, not at the closing meeting.</span>
+            </div>
+            <div class="check-item fade-up">
+              <span class="check-dot" aria-hidden="true"></span>
               <span class="check-text"><strong>Risk score calculation:</strong> Using a structured consequence based scoring methodology, the technical assessment produces a quantified risk score for your system. The score reflects assessed failure modes, operational consequences, and the effectiveness of human oversight controls. It is reproducible, documented, and issued with your certificate. A number your leadership, your regulators, and your procurement officers can read.</span>
             </div>
             <div class="check-item fade-up">
@@ -395,7 +387,7 @@
             </div>
             <div class="check-item fade-up">
               <span class="check-dot"></span>
-              <span class="check-text"><strong>Certificate (if certified):</strong> States system name and version, client organization, SCL framework version, classification level, requirement sets assessed, risk score, issue date, validity period, and surveillance due date. The certificate does not state the system is safe. It states the system was assessed against a defined standard, met the applicable requirements, and carries a documented risk level at the time of assessment.</span>
+              <span class="check-text"><strong>Certificate (if certified):</strong> States the certificate number, the Certification Determination Document number, system name and version, client organization, the operational claim, SCL framework version and its version DOI, classification level, requirement sets assessed, notable exclusions, risk score, issue date, validity period, surveillance due date, the Lead Assessor and the Principal's signature. The full field list is at <a href="/deliverables">/deliverables</a>. The certificate does not state the system is safe. It states the system was assessed against a defined standard, met the applicable requirements, and carries a documented risk level at the time of assessment.</span>
             </div>
             <div class="check-item fade-up">
               <span class="check-dot"></span>

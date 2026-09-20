@@ -41,16 +41,16 @@
     width: 100%;
     max-width: 520px;
     background: #FAF9F5;
-    border: 1px solid rgba(12,34,66,0.12);
-    border-radius: 16px;
+    border: 1px solid rgba(46,109,180,0.12);
+    border-radius: 14px;
     padding: 56px 48px;
     text-align: center;
-    box-shadow: 0 12px 40px rgba(15,35,64,0.10);
+    box-shadow: 0 10px 28px rgba(15,35,64,0.10);
   }
   .nf-eyebrow { font-size: 12px; font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(12,34,66,0.66); margin-bottom: 20px; }   /* this page loads no styles.css, so the shared label rule cannot reach it */
   .nf-title {
     font-size: 32px;
-    font-weight: 700;
+    font-weight: 600;
     letter-spacing: -0.025em;
     color: #0C2242;
     line-height: 1.15;
@@ -60,7 +60,7 @@
     font-size: 15px;
     line-height: 1.7;
     font-weight: 400;
-    color: #3D5068;
+    color: #33475F;   /* --ink-2; this page loads no styles.css, so the value is a hand copy */
     margin-bottom: 32px;
   }
   .nf-actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
@@ -69,6 +69,11 @@
   .nf-btn-solid:hover { background: #081A34; border-color: #081A34; color: #FAF9F5; }
   .nf-btn-outline { color: #0C2242; border: 1px solid #0C2242; }
   .nf-btn-outline:hover { border-color: #0C2242; background: #0C2242; color: #FAF9F5; }
+  @media (max-width: 480px) {
+    .nf-card { padding: 40px 24px; }
+    .nf-actions { flex-direction: column; }
+    .nf-btn { text-align: center; }
+  }
 </style>
 </head>
 <body>

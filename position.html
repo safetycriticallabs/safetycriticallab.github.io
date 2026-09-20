@@ -65,20 +65,24 @@
 .position-block p strong { color: var(--ink); font-weight: 500; }
 
 /* Mid-essay pull quote — the hinge of the argument */
+/* The rule hangs into the margin so the quote keeps the column's left edge;
+   it used to push its own text 31px right of every paragraph around it. */
 .position-pull {
-  margin: 64px 0;
+  margin: 64px 0 64px -28px;
   padding: 0 0 0 28px;
   border-left: 3px solid var(--blue);
   font-family: var(--serif);
-  font-size: 27px;
+  font-size: 26px;
   line-height: 1.4;
   color: #0C2242;
   font-weight: 400;
 }
 
 /* Closing stance — set in a quiet card to mark the conclusion */
+/* Same idea: the card hangs its rule and padding into the margin so its text
+   starts on the column edge and keeps the full measure. */
 .position-block.is-stance {
-  margin-top: 64px;
+  margin: 64px -44px 0;
   padding: 44px 44px 46px;
   background: #FAF9F5;
   border: 1px solid rgba(46,109,180,0.12);
@@ -92,7 +96,7 @@
   .position-block { margin-top: 44px; }
   .position-block h2 { font-size: 21px; }
   .position-pull { font-size: 22px; margin: 48px 0; padding-left: 20px; }
-  .position-block.is-stance { padding: 28px 24px 30px; }
+  .position-block.is-stance { margin: 48px 0 0; padding: 28px 24px 30px; }   /* no negative margin inside a 24px gutter */
 }
 </style>
 </head>

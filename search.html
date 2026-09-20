@@ -129,7 +129,7 @@
 .ask-attach-btn.is-attached::after {
   content: ''; position: absolute; top: 6px; right: 6px;
   width: 7px; height: 7px; border-radius: 50%;
-  background: var(--blue); border: 1.5px solid var(--paper, #FAF9F5);
+  background: var(--blue); border: 1.5px solid var(--bg);
 }
 .ask-attachment { display: none; }
 .ask-attachment.visible { display: block; }
@@ -581,7 +581,7 @@
 }
 .ask-consent input { margin: 3px 0 0; flex: none; cursor: pointer; }
 .ask-consent a { color: inherit; text-decoration: underline; }
-.ask-consent a:hover { color: var(--ink, #0F2340); }
+.ask-consent a:hover { color: var(--ink); }
 .search-loading {
   text-align: center;
   padding: 28px 0;
@@ -631,7 +631,7 @@
   display: block;
   width: 42px; height: 42px; border-radius: 50%;
   border: 1px solid rgba(46,109,180,0.3);
-  background: #fff;
+  background: var(--bg);
   flex: none;
   overflow: hidden;
   box-shadow: 0 1px 4px rgba(15,35,64,0.08);
@@ -695,7 +695,7 @@
   display: block;
   width: var(--seal-size); height: var(--seal-size); border-radius: 50%;
   border: 1px solid rgba(46,109,180,0.28);
-  background: #fff;
+  background: var(--bg);
   flex: none;
   overflow: hidden;
   margin-top: 0;
@@ -726,7 +726,7 @@
    animations disabled the finished seal simply stands there. */
 .scl-inst { display: block; width: 100%; height: 100%; }
 .scl-inst circle, .scl-inst rect { transform-origin: 50% 50%; }
-.scl-inst .in-outer { fill: #fff; stroke: #0F2647; stroke-width: 5; }
+.scl-inst .in-outer { fill: var(--bg); stroke: #0C2242; stroke-width: 5; }
 .scl-inst .in-text {
   fill: none; stroke: rgba(12,34,66,0.4); stroke-width: 3;
   stroke-dasharray: 0.9 1.7;   /* micro-text illusion at avatar sizes */
@@ -734,7 +734,7 @@
 .scl-inst .in-gold { fill: none; stroke: var(--gold); stroke-width: 3.4; }
 .scl-inst .in-thin1 { fill: none; stroke: rgba(12,34,66,0.5); stroke-width: 1; }
 .scl-inst .in-thin2 { fill: none; stroke: rgba(46,109,180,0.55); stroke-width: 1; }
-.scl-inst .in-lens { fill: #0E2A52; }
+.scl-inst .in-lens { fill: #0C2242; }
 .scl-inst .in-lens-rim { fill: none; stroke: var(--gold); stroke-width: 1.6; }
 .scl-inst .in-core { fill: #6FA0DC; }
 .scl-inst .in-bar { fill: #6FA0DC; }
@@ -840,9 +840,13 @@
   .chat-avatar.is-waiting, .ask-msg-avatar.is-waiting { animation: none !important; }
 }
 
+@media (max-width: 880.98px) {
+  .search-page { padding: 60px 24px 80px; }
+}
 @media (max-width: 640px) {
-  .search-page { padding: 56px 24px 80px; }
-  .search-page.chat-active { padding: 10px 14px 14px; }
+  /* The horizontal gutter stays 24 across the mode switch, as it stays 40 on
+     desktop; only the vertical changes when a conversation starts. */
+  .search-page.chat-active { padding: 10px 24px 14px; }
   .search-page.chat-active .search-inner { height: calc(100dvh - 72px - 24px); }
   .chat-avatar { width: 36px; height: 36px; }
   .ask-thread { --seal-size: 26px; --seal-gap: 10px; }
@@ -1514,7 +1518,7 @@
      completion handler no-ops when its captured generation is stale. */
   var askGen = 0;
 
-  var ASK_DISCLOSURE = 'Built with Llama. Answers come from an open-weight Llama 3.1 model SCL fine-tuned and runs on its own hardware, grounded in SCL\'s published documentation. Verify anything load-bearing against the standard. '
+  var ASK_DISCLOSURE = 'Built with Llama. Answers come from an open-weight Llama 3.1 model SCL fine-tuned and runs on its own hardware, grounded in SCL\'s published documentation. A Cloudflare ranking service sees your question in order to choose which passages are used. Verify anything load-bearing against the standard. '
     + '<a href="https://www.llama.com/llama3_1/license/" target="_blank" rel="noopener">Llama 3.1 Community License</a>';
   /* The thread footer only exists after the first send; the hero copy shows
      the same notice before that. Ask mode only: a plain library search has

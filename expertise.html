@@ -58,12 +58,8 @@
 
 .cred-items { display: flex; flex-direction: column; gap: 12px; }
 
-.cred-item {
-  background: #FAF9F5; border: 1px solid rgba(46,109,180,0.10);
-  border-radius: 14px; padding: 18px 22px;
-  display: flex; gap: 16px; align-items: flex-start;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
-}
+/* Surface, border and hover come from the shared tile rule in styles.css. */
+.cred-item { display: flex; gap: 16px; align-items: flex-start; }
 .cred-item:hover {
   border-color: rgba(46,109,180,0.25);
   box-shadow: 0 10px 28px rgba(15,35,64,0.10);
@@ -132,7 +128,7 @@
         <a href="/">Safety Critical Labs</a>
         <span>/</span> Expertise
       </div>
-      <h1>Assessment built <br>from inside the <br>operational environment.</h1>
+      <h1>Assessment built <br class="brk-desktop">from inside the <br class="brk-desktop">operational environment.</h1>
     </div>
     <p class="inner-hero-lead">
       What you are paying for is a well run assessment. One conducted by people who have worked inside the systems they are evaluating, with every finding traced to a published requirement, and a determination that holds up when it matters.
@@ -144,7 +140,7 @@
 <section class="page-section expertise-section">
   <div class="section-inner">
     <div class="fw-eyebrow-mono">[ What Grounds the Assessment ]</div>
-    <h2 class="fw-showcase-title">Practitioner built. <br>Structurally independent.</h2>
+    <h2 class="fw-showcase-title">Practitioner built. <br class="brk-desktop">Structurally independent.</h2>
     <div class="expertise-grid">
       <div>
         <p class="expertise-lead">
@@ -157,7 +153,7 @@
       <div class="cred-items">
         <div class="cred-item fade-up">
           <span class="cred-bullet"></span>
-          <span class="cred-text"><strong>Assessed from both sides.</strong> SCL assessment work is carried out by an assessor who has written certification requirements for human spaceflight systems and has prepared laboratories to pass ISO 9001 quality audits. SCL knows what an assessment asks of the organization being assessed, because it has had to produce that evidence itself.</span>
+          <span class="cred-text"><strong>Assessed from both sides.</strong> SCL assessment work is carried out by an assessor who has written certification requirements inside a NASA human spaceflight program and has prepared laboratories to pass ISO 9001 quality audits. SCL knows what an assessment asks of the organization being assessed, because it has had to produce that evidence itself.</span>
         </div>
         <div class="cred-item fade-up">
           <span class="cred-bullet"></span>
@@ -166,10 +162,6 @@
         <div class="cred-item fade-up">
           <span class="cred-bullet"></span>
           <span class="cred-text"><strong>A record built to hold up.</strong> Every finding traceable to a requirement. Every determination documented. Retained for a minimum of ten years and available for regulatory review.</span>
-        </div>
-        <div class="cred-item fade-up">
-          <span class="cred-bullet"></span>
-          <span class="cred-text"><strong>Active in the regulatory conversation.</strong> Participation in AI policy development across multiple regulated industries. Certification records established now are how standards gain traction.</span>
         </div>
         <div class="cred-item fade-up">
           <span class="cred-bullet"></span>

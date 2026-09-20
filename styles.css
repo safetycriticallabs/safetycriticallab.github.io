@@ -859,6 +859,56 @@ h2.section-title em { font-style: italic; color: var(--ink); font-family: var(--
 }
 /* 404.html loads no styles.css and keeps its own copy of this label rule. */
 
+/* A break authored for the desktop measure, hidden where the phone would break
+   again inside the resulting line and leave one word alone. */
+@media (max-width: 880.98px) { br.brk-desktop { display: none; } }
+
+/* ── One bordered tile ──
+   A cream card with a blue-tinted hairline that lifts 3px on hover was written
+   four times under four names (.cred-item, .ci-row, .market-gap, .accred-step)
+   with four borders, three radii and three hover tints. The figure here is
+   framework.html's .os-item, which the others were nearly. */
+.cred-item, .ci-row, .market-gap, .accred-step {
+  background: #FAF9F5;
+  border: 1px solid rgba(46,109,180,0.12);
+  border-radius: var(--radius-card);
+  padding: 18px 22px;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+}
+.cred-item:hover, .ci-row:hover, .market-gap:hover, .accred-step:hover {
+  border-color: rgba(46,109,180,0.28);
+  box-shadow: 0 10px 28px rgba(15,35,64,0.10);
+  transform: translateY(-3px);
+}
+
+/* ── One aside notice ──
+   The same role was built four ways across /process, /mark, /deliverables and
+   /assess: four radii, three hairline tints and two accent widths. */
+/* ── One closing band ──
+   .accred-meaning-band, .accred-path-band, .agnostic-band and .expect-section
+   were byte-identical at 110px 40px 130px under four names, so the seam above
+   them read 70.4 then 110 on every page in the company family. */
+.accred-meaning-band, .accred-path-band, .agnostic-band, .expect-section {
+  background: #FAF9F5;
+  padding: calc(var(--section-space) / 2) 40px;
+  border-top: 1px solid var(--card-border);
+}
+@media (max-width: 880.98px) {
+  .accred-meaning-band, .accred-path-band, .agnostic-band, .expect-section {
+    padding: calc(var(--section-space) / 2) 24px;
+  }
+}
+
+.phase-note, .ev-note, .legal-review-note, .limit-note, .tier-hint, .assess-error-banner {
+  background: #FAF9F5;
+  border: 1px solid var(--card-border);
+  border-left: 3px solid var(--blue);
+  border-radius: var(--radius-card);
+  padding: 16px 20px;
+  font-size: 13px; font-weight: 300; line-height: 1.65; color: var(--ink-2);
+}
+.assess-error-banner { border-left-color: var(--fail-line); background: var(--fail-tint); }
+
 /* ── One requirement identifier (AI-n / AI-n.m) ──
    It was styled five ways: 13px/0.1em navy on the framework tiles, a 10px tinted
    tag in the structure columns, 12px chips on the failure map and /evidence, and
@@ -874,6 +924,13 @@ h2.section-title em { font-style: italic; color: var(--ink); font-family: var(--
 
 /* Legal-page meta strip (Effective, Scope, Contact): the link stays quiet like
    .gl-toc a and .ci-value a; underline on hover only. */
+@media (max-width: 640px) {
+  /* The strip wrapped on content length, so each legal page laid its masthead
+     out differently. One column below 640 makes all seven agree. */
+  /* .legal-section scopes it so this beats the seven private .legal-meta rules,
+     which sit later in source order inside each page. */
+  .legal-section .legal-meta { display: grid; grid-template-columns: 1fr; gap: 20px; }
+}
 .legal-meta-item a { text-decoration: none; }
 .legal-meta-item a:hover { text-decoration: underline; }
 

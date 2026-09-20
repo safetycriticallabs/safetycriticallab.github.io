@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#FAF9F5">
-<title>AI Certification by Industry: Aerospace, Aviation, Medical Devices, Automotive | Safety Critical Labs</title>
-<meta name="description" content="SCL certifies AI systems in aerospace, aviation, medical devices, and automotive. Domain agnostic, wherever AI failure is measured in lives or missions.">
+<title>AI Certification by Industry: Aerospace, Aviation, Medical Devices, Automotive, Industrial | Safety Critical Labs</title>
+<meta name="description" content="SCL certifies AI systems in aerospace, aviation, medical devices, automotive, and industrial manufacturing. Domain agnostic, wherever AI failure is measured in lives or missions.">
 <meta property="og:title" content="Markets | Safety Critical Labs">
-<meta property="og:description" content="AI certification for aerospace, aviation, medical devices, and automotive. Domain agnostic. Applicable wherever AI failure has consequence.">
+<meta property="og:description" content="AI certification for aerospace, aviation, medical devices, automotive, and industrial manufacturing. Domain agnostic. Applicable wherever AI failure has consequence.">
 <link rel="canonical" href="https://safetycriticallabs.com/markets">
 <meta name="twitter:card" content="summary">
 <meta property="og:url" content="https://safetycriticallabs.com/markets">
@@ -75,12 +75,8 @@
 
 .market-gaps { display: flex; flex-direction: column; gap: 10px; margin-bottom: 28px; }
 
-.market-gap {
-  background: #FAF9F5; border: 1px solid rgba(46,109,180,0.12);
-  border-radius: 12px; padding: 18px 20px;
-  display: grid; grid-template-columns: 140px 1fr; gap: 16px;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
-}
+/* Surface, border and hover come from the shared tile rule in styles.css. */
+.market-gap { display: grid; grid-template-columns: 140px 1fr; gap: 16px; }
 .market-gap:hover {
   border-color: rgba(46,109,180,0.30);
   box-shadow: 0 10px 28px rgba(15,35,64,0.10);
@@ -97,10 +93,8 @@
 .mg-gap strong { color: var(--ink); font-weight: 500; }
 
 /* ─── AGNOSTIC BAND ───────────────────────────────────────── */
+/* Frame from the shared band rule in styles.css. */
 .agnostic-band {
-  background: #FAF9F5;
-  padding: 110px 40px 130px;
-  border-top: 1px solid rgba(46,109,180,0.10);
   position: relative;
 }
 
@@ -116,7 +110,6 @@
   .inner-hero-inner { grid-template-columns: 1fr !important; gap: 24px !important; }
   .market-block { grid-template-columns: 1fr; gap: 32px; }
   .market-gap { grid-template-columns: 1fr; gap: 4px; }
-  .agnostic-band { padding: 60px 24px; }
 }
 
 /* Inner hero styles live in styles.css now (cream + blue palette) */
@@ -196,7 +189,7 @@
       </div>
       <div class="market-content">
         <p class="market-body">
-          The SCL framework was developed from inside a government human spaceflight program to address exactly this problem, for crewed vehicles where the consequence of an incorrect AI output cannot be undone.
+          The SCL framework was developed from inside a NASA human spaceflight program to address exactly this problem, for crewed vehicles where the consequence of an incorrect AI output cannot be undone.
         </p>
         <p class="market-body">
           <strong>No AI specific certification path currently exists</strong> for human rated spacecraft. The governing software standard covers deterministic systems. The AI requirements developed inside the spaceflight program are a direct response to that gap. The SCL framework is the continuation of that work in the commercial and defense sectors.
@@ -356,6 +349,9 @@
       </p>
       <p>
         The SCL framework was developed in spaceflight, where the requirements pressure was greatest and the regulatory gap was most clearly defined. But hallucination doesn't care what industry you're in. Distributional drift happens in every deployed model. The framework is explicitly algorithm agnostic and applicable to neural networks, decision trees, reinforcement learning systems, and hybrid architectures.
+      </p>
+      <p>
+        The sectors above are where SCL concentrates, not a limit on what can be assessed. The applicability determination classifies every system that contains a learned component as Safety-Critical, Mission-Critical or Operational Support AI, and that classification decides which requirements apply rather than whether the system can be certified.
       </p>
     </div>
   </div>

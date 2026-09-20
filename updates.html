@@ -39,8 +39,10 @@
   background: #FAF9F5;
   padding: 88px 40px 120px;
 }
+/* The hero inner is --content-max; the timeline lines up under it instead of
+   starting 120px inside the heading that introduces it. */
 .updates-page-inner {
-  max-width: 960px;
+  max-width: var(--content-max);
   margin: 0 auto;
 }
 
@@ -221,12 +223,14 @@
   text-align: center;
 }
 
+@media (max-width: 880.98px) {
+  .updates-page-section { padding: 60px 24px 80px; }
+}
 @media (max-width: 760px) {
   .update-row { grid-template-columns: 1fr; gap: 12px; }
   .updates-timeline::before { display: none; }
   .update-row::before { display: none; }
   .updates-timeline { padding-left: 0; }
-  .updates-page-section { padding: 60px 24px 80px; }
 }
 </style>
 </head>
@@ -536,6 +540,17 @@
         </div>
       </div>
 
+      <!-- March 2026: first Zenodo deposit -->
+      <div class="update-row" data-type="framework" id="first-zenodo-deposit-citable-doi-registered">
+        <div class="update-date">March 2026</div>
+        <div class="update-card">
+          <span class="update-type">Framework Release</span>
+          <h2 class="update-title">First Zenodo deposit, <em>citable DOI registered</em></h2>
+          <p class="update-body">
+            The AI Requirements Framework was deposited to Zenodo on 14 March 2026 and assigned a citable DOI. Cite the framework at the concept DOI <a href="https://doi.org/10.5281/zenodo.19024420" rel="noopener">10.5281/zenodo.19024420</a>, which always resolves to the most recent version. Thirteen versions have been deposited to date, from 14 March 2026 to 15 September 2026. Entries dated before 14 March 2026 carry document revision dates from the framework's own revision history; entries dated on or after it carry Zenodo deposit dates.
+          </p>
+        </div>
+      </div>
       <!-- January 2026: Framework v2.1 -->
       <div class="update-row" data-type="framework" id="framework-v2-1-odd-and-privacy">
         <div class="update-date">January 2026</div>
@@ -560,17 +575,6 @@
         </div>
       </div>
 
-      <!-- March 2026: first Zenodo deposit -->
-      <div class="update-row" data-type="framework" id="first-zenodo-deposit-citable-doi-registered">
-        <div class="update-date">March 2026</div>
-        <div class="update-card">
-          <span class="update-type">Framework Release</span>
-          <h2 class="update-title">First Zenodo deposit, <em>citable DOI registered</em></h2>
-          <p class="update-body">
-            The AI Requirements Framework was deposited to Zenodo on 14 March 2026 and assigned a citable DOI. Cite the framework at the concept DOI <a href="https://doi.org/10.5281/zenodo.19024420" rel="noopener">10.5281/zenodo.19024420</a>, which always resolves to the most recent version. Thirteen versions have been deposited to date, from 14 March 2026 to 15 September 2026. Dates shown above this entry are document revision dates from the framework's own revision history; dates on and after this entry are deposit dates.
-          </p>
-        </div>
-      </div>
 
       <!-- February 2025: Framework v1.0 -->
       <div class="update-row" data-type="framework" id="framework-v1-0-initial-development">

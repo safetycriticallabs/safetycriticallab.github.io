@@ -62,12 +62,8 @@
   margin-top: 40px;
 }
 
-.ci-row {
-  background: #FAF9F5; border: 1px solid var(--card-border);
-  border-radius: 12px; padding: 18px 22px;
-  display: grid; grid-template-columns: 120px 1fr; gap: 16px; align-items: center;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
-}
+/* Surface, border and hover come from the shared tile rule in styles.css. */
+.ci-row { display: grid; grid-template-columns: 120px 1fr; gap: 16px; align-items: center; }
 .ci-row:hover {
   border-color: rgba(46,109,180,0.25);
   box-shadow: 0 10px 28px rgba(15,35,64,0.10);
@@ -116,11 +112,7 @@
 .pathway:hover .pathway-cta { color: #0C2242; border-color: var(--blue); }
 
 /* ─── FAQ / WHAT TO EXPECT ────────────────────────────────── */
-.expect-section {
-  background: #FAF9F5;
-  padding: 110px 40px 130px;
-  border-top: 1px solid rgba(46,109,180,0.10);
-}
+/* Frame from the shared band rule in styles.css. */
 
 .expect-inner { max-width: 1200px; margin: 0 auto; }
 
@@ -183,7 +175,7 @@
   outline: none; width: 100%;
 }
 .form-input:focus,
-.form-textarea:focus { border-color: var(--blue); background: #FCFAF3; }
+.form-textarea:focus { border-color: var(--blue); background: var(--cream-2); }
 
 .form-textarea { resize: vertical; min-height: 140px; line-height: 1.6; }
 
@@ -239,7 +231,6 @@
 @media (max-width: 880px) {
   .contact-layout { grid-template-columns: 1fr; gap: 48px; }
   .ci-row { grid-template-columns: 1fr; gap: 4px; }
-  .expect-section { padding: 60px 24px; }
   .expect-grid { grid-template-columns: 1fr; }
 }
 
@@ -301,7 +292,7 @@
         <a href="/">Safety Critical Labs</a>
         <span>/</span> Contact
       </div>
-      <h1>Begin with a conversation <br>about your AI system.</h1>
+      <h1>Begin with a conversation <br class="brk-desktop">about your AI system.</h1>
     </div>
     <p class="inner-hero-lead">
       Whether you're preparing for regulatory scrutiny, responding to a procurement requirement, or building responsible AI practices before you're required to, the right starting point is a conversation.
@@ -312,10 +303,11 @@
 <!-- CONTACT LAYOUT -->
 <section class="page-section contact-section">
   <div class="section-inner">
+    <div class="fw-eyebrow-mono">[ Get in Touch ]</div>
+    <h2 class="fw-showcase-title">Ready to certify <br class="brk-desktop">your AI system?</h2>
+
     <div class="contact-layout">
       <div class="contact-left">
-        <div class="fw-eyebrow-mono">[ Get in Touch ]</div>
-        <h2 class="fw-showcase-title">Ready to certify <br>your AI system?</h2>
         <p>
           Safety Critical Labs assesses AI systems at any stage of development, from early-stage integration through pre-launch certification. A certificate, once issued, carries a surveillance schedule that keeps it valid. Every engagement begins with a conversation about your system, your timeline, and your regulatory context.
         </p>
@@ -369,7 +361,7 @@
             <label class="form-label" for="message">Message</label>
             <textarea class="form-textarea" id="message" name="message" placeholder="How can we help?"></textarea>
           </div>
-          <p class="form-note">Supporting documents can be sent by email after first contact. Name and email are optional if you are filing a complaint anonymously; without them SCL cannot acknowledge the report or tell you the outcome.</p>
+          <p class="form-note">Submissions are handled by Formspree and forwarded to SCL email; see <a href="/privacy">/privacy</a>. Supporting documents can be sent by email after first contact. Name and email are optional if you are filing a complaint anonymously; without them SCL cannot acknowledge the report or tell you the outcome.</p>
           <div class="form-error" id="formError" role="alert">
             Your message could not be sent. Please email <a href="mailto:kevin.williams@safetycriticallabs.com">kevin.williams@safetycriticallabs.com</a> instead.
           </div>

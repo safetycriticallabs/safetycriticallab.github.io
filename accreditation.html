@@ -84,11 +84,9 @@
 .accred-status-body strong { color: var(--ink); font-weight: 500; }
 
 /* Path band (cream gradient, steps in horizontal flow) */
+/* Frame from the shared band rule in styles.css; this one also closes at the bottom. */
 .accred-path-band {
-  background: #FAF9F5;
-  border-top: 1px solid rgba(46,109,180,0.10);
-  border-bottom: 1px solid rgba(46,109,180,0.10);
-  padding: 110px 40px;
+  border-bottom: 1px solid var(--card-border);
   position: relative;
 }
 .accred-path-inner {
@@ -101,13 +99,13 @@
   gap: 12px;
   margin-top: 48px;
 }
+/* Surface, border and hover come from the shared tile rule in styles.css.
+   4.11: flex column plus margin-top auto on the pill so the status pills line up
+   across a row the grid has stretched to equal height. */
 .accred-step {
-  background: #FAF9F5;
-  border: 1px solid rgba(46,109,180,0.12);
-  border-radius: 14px;
   padding: 28px 24px;
   position: relative;
-  transition: border-color 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
+  display: flex; flex-direction: column;
 }
 .accred-step:hover {
   border-color: rgba(46,109,180,0.28);
@@ -150,7 +148,7 @@
   text-transform: uppercase;
   padding: 4px 10px;
   border-radius: 3px;
-  margin-top: 14px;
+  margin-top: auto;   /* the grid stretches the cards; pin the pill to the bottom */
 }
 .accred-step-status.is-done {
   background: #0C2242;
@@ -169,11 +167,7 @@
 }
 
 /* Closing section: what the mark becomes */
-.accred-meaning-band {
-  background: #FAF9F5;
-  padding: 110px 40px 130px;
-  border-top: 1px solid rgba(46,109,180,0.10);
-}
+/* Frame from the shared band rule in styles.css. */
 .accred-meaning-grid {
   max-width: 1200px;
   margin: 0 auto;
@@ -197,7 +191,6 @@
   .accred-meaning-grid { grid-template-columns: 1fr; gap: 36px; }
 }
 @media (max-width: 580px) {
-  .accred-path-band, .accred-meaning-band { padding: 60px 24px; }
   .accred-grid { grid-template-columns: 1fr; gap: 36px; }
   .accred-steps { grid-template-columns: 1fr; }
 }
@@ -275,7 +268,7 @@
     <div class="accred-grid">
       <div>
         <p>
-          ISO/IEC 17065 is the international standard for bodies that certify products, processes, and services. Accreditation under it is granted by a national accreditation body that has itself been audited against ISO/IEC 17011. In the United States, the recognized body is the ANSI National Accreditation Board (ANAB).
+          ISO/IEC 17065 is the international standard for bodies that certify products, processes, and services. Accreditation under it is granted by a national accreditation body that has itself been audited against ISO/IEC 17011. In the United States, recognized bodies include the ANSI National Accreditation Board (ANAB) and A2LA. SCL filed its intake with ANAB, which is why the steps below describe ANAB's process.
         </p>
         <p>
           For Safety Critical Labs, accreditation does one specific thing. It moves the SCL mark from <strong>"a defensible third-party assessment against a published standard"</strong> to <strong>"an assessment whose conformity has been independently verified by a body that regulators already recognize."</strong>
@@ -367,7 +360,7 @@
   <div class="accred-meaning-grid">
     <div>
       <div class="fw-eyebrow-mono">[ What the Mark Becomes ]</div>
-      <h2 class="fw-showcase-title">A certificate regulators <br>can reference.</h2>
+      <h2 class="fw-showcase-title">A certificate regulators <br class="brk-desktop">can reference.</h2>
     </div>
     <div class="accred-meaning-right">
       <p>

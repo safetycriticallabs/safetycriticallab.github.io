@@ -129,6 +129,12 @@ page = f"""<!DOCTYPE html>
 .faq-entry h2 {{ font-size: 1.15rem; font-weight: 600; line-height: 1.35; margin: 0 0 10px; scroll-margin-top: 90px; }}
 .faq-entry p {{ margin: 0 0 8px; }}
 .prose p.faq-more {{ font-size: 0.92rem; }}
+/* Same control as .faq-link on the Ask page, so "Read more" reads the same in
+   both places instead of falling through to the bare anchor rule. */
+.faq-more a {{ display: inline-flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 500;
+  letter-spacing: 0.02em; color: #0C2242; text-decoration: none; }}
+.faq-more a::after {{ content: '\2192'; transition: transform 0.2s; }}
+.faq-more a:hover::after {{ transform: translateX(3px); }}
 </style>
 </head>
 <body>

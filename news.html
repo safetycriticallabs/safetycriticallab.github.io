@@ -293,8 +293,12 @@
   .news-featured-image { min-height: 260px; }
   .news-grid { grid-template-columns: repeat(2, 1fr); }
 }
+/* The shell switches the nav and hero at 880.98; the body follows it there
+   rather than holding a 40px gutter down to 640. */
+@media (max-width: 880.98px) {
+  .news-page-section { padding: 60px 24px 80px; }
+}
 @media (max-width: 640px) {
-  .news-page-section { padding: 56px 24px 80px; }
   .news-featured-text { grid-template-columns: 1fr; gap: 12px; }
   .news-featured-meta { flex-direction: column; gap: 16px; align-items: flex-start; }
   .news-grid { grid-template-columns: 1fr; }

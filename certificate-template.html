@@ -588,16 +588,21 @@
     html:not(.embed) { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
     html:not(.embed) body { padding: 24px 12px; overflow-x: hidden; }
     html:not(.embed) .cert-stage {
-      /* The sheet is 8.5in, 816px at 96dpi, and the three fixed brackets each
-         sat one step too low: at 375px the 0.44 step gave 359px of sheet inside
-         351px of room, so it clipped about 4px a side. Scaling to the viewport
-         fits exactly at every width instead of at four of them. */
-      --cert-s: min(0.72, calc((100vw - 24px) / 816));
+      --cert-s: 0.72;
       transform: scale(var(--cert-s));
       transform-origin: top center;
       margin-bottom: calc((var(--cert-s) - 1) * 11in);
     }
   }
+  /* The sheet is 8.5in, 816px at 96dpi, inside (viewport - 24px) of room. Each
+     bracket starts at the width where its own scale fits: 0.72 needs 612px,
+     0.55 needs 473, 0.44 needs 383, 0.38 needs 334. They used to start one step
+     late, so 375px drew 359px of sheet into 351px and clipped a few px a side.
+     A unitless scale cannot be derived from 100vw in CSS, hence fixed steps. */
+  @media screen and (max-width: 611px) { html:not(.embed) .cert-stage { --cert-s: 0.55; } }
+  @media screen and (max-width: 472px) { html:not(.embed) .cert-stage { --cert-s: 0.44; } }
+  @media screen and (max-width: 382px) { html:not(.embed) .cert-stage { --cert-s: 0.38; } }
+  @media screen and (max-width: 333px) { html:not(.embed) .cert-stage { --cert-s: 0.34; } }
 
   /* PRINT */
   @media print {

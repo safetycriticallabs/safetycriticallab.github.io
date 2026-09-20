@@ -1016,6 +1016,9 @@
   /* Same recipe as .inner-hero h1 in styles.css, so the one page a visitor lands
      on does not set its headline in a different size, weight and tracking. */
   .sc-hero .sc-heading { text-align:left; font-size:clamp(38px,4.5vw,60px); line-height:1.05; letter-spacing:-0.025em; margin:16px 0 0; }
+  /* The other half of that recipe: styles.css 539 drops .inner-hero h1 to 32px at
+     the same bound, and it cannot reach this selector. */
+  @media (max-width: 880.98px) { .sc-hero .sc-heading { font-size: 32px; line-height: 1.1; letter-spacing: -0.02em; } }
   .sc-head-link { color:inherit; text-decoration:underline; text-underline-offset:7px; text-decoration-thickness:3px; text-decoration-color:rgba(12, 34, 66,0.3); transition:text-decoration-color .2s ease; }
   .sc-head-link:hover { text-decoration-color:#0C2242; }
   .sc-hero .sc-intro-cta { justify-content:flex-start; margin:34px 0 0; }
@@ -1784,8 +1787,8 @@
   }
   .nr-row:hover .nr-row-title { transform: translateX(6px); color: #2E6DB4 !important; }
   .nr-row-meta { flex-shrink: 0; display: flex; align-items: baseline; gap: 14px; }
-  .nr-row-date { font-family: var(--mono); font-size: 12px; letter-spacing: 0.04em; color: rgba(12, 34, 66,0.5) !important; white-space: nowrap; }
-  .nr-row-cat { flex-shrink: 0; font-family: var(--sans); font-size: 14px; font-weight: 400; color: rgba(12, 34, 66,0.5) !important; white-space: nowrap; text-align: right; }
+  .nr-row-date { font-family: var(--mono); font-size: 12px; letter-spacing: 0.04em; color: rgba(12, 34, 66,0.66) !important; white-space: nowrap; }
+  .nr-row-cat { flex-shrink: 0; font-family: var(--sans); font-size: 14px; font-weight: 400; color: rgba(12, 34, 66,0.66) !important; white-space: nowrap; text-align: right; }
   @media (max-width: 860px) {
     .news-rows { grid-template-columns: 1fr; gap: 30px; margin-top: 56px; }
     .nr-headline { max-width: none; }
@@ -1808,15 +1811,18 @@
        runs its own progress: normal gutter width on the way in, spreading to
        the full screen edge as its centre rises through the 3/4 line (measured
        from the TOP of the viewport), and staying spread once you are past it.
-       --tile-bleed cancels .showcase-cards' 40px side padding exactly, so the
-       card lands flush to the screen edge and no further; html clips the
+       --tile-bleed cancels .showcase-cards' side padding exactly, so the
+       card lands flush to the screen edge and no further. It reads --page-gut
+       rather than a constant, because that padding is 40px on a laptop and
+       24px on a phone, and a constant would send the tile past the edge by the
+       difference (found in review 2026-09-19); html clips the
        viewport horizontally (styles.css), so the negative margin cannot start
        a sideways scroll either way. --tile-x defaults to 0, the ordinary
        contained layout, so no-JS and reduced-motion get the normal page. Height is
        pinned by the script at --tile-x 0, the NARROW and therefore TALLEST
        state: spreading reflows the text shorter, and pinning the short end
        would let every tile below shift as you scrolled. */
-    .sc-card { --tile-x: 0; --tile-bleed: 40px;
+    .sc-card { --tile-x: 0; --tile-bleed: var(--page-gut);
                margin-inline: calc(var(--tile-x) * var(--tile-bleed) * -1); }
     .sc-grid.sc-tiles-pinned .sc-card { min-height: var(--tile-h, 300px); }
     /* #sc-fw spreads too, but its STAGE must not. The stage is aspect-ratio
@@ -2331,7 +2337,7 @@
     <div class="news-rows">
       <div class="nr-statement">
         <div class="nr-eyebrow">[ The record ]</div>
-        <h2 class="nr-headline">What SCL has published, and when.</h2>
+        <h2 class="nr-headline">Recent publications, and when.</h2>
         <a href="/updates" class="nr-all">All updates <span aria-hidden="true">&rarr;</span></a>
       </div>
       <div class="nr-list" id="nr-list"></div>

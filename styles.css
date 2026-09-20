@@ -31,11 +31,18 @@
   --radius-card: 14px;
   --card-border: rgba(46,109,180,0.10);
   --card-border-hover: var(--blue);
+  /* Status, one set for /evidence, /assess and /verify. Measured on cream:
+     --ok 5.04:1, --warn-text 5.61:1, --bad 5.27:1 as text; --warn 3.61:1 is the
+     graphic amber, because no amber clears 4.5:1 as text and still reads as a dot. */
+  --ok:        #2D7A3A;
+  --warn:      #B5751A;
+  --warn-text: #8A5A14;
+  --bad:       #C8272D;
   /* Form failure, shared by /contact and /assess */
   /* A field boundary has to clear 3:1 (SC 1.4.11); the old 0.10 hairline read 1.23:1. */
   --field-border: rgba(46,109,180,0.80);
   --fail-tint: #FEF5F5;
-  --fail-line: #C8272D;
+  --fail-line: var(--bad);
 }
 
 /* Base link colour. An anchor that no author rule colours falls through to the
@@ -91,7 +98,9 @@ body, body * { font-style: normal !important; }
 
 .global-nav-inner {
   height: 100%;
-  max-width: 1400px;
+  /* content box = --content-max, so the wordmark sits on the same left edge as
+     the hero, the sections and the footer at every width. */
+  max-width: calc(var(--content-max) + 80px);
   margin: 0 auto;
   padding: 0 40px;
   display: flex; align-items: center;
@@ -197,7 +206,7 @@ body, body * { font-style: normal !important; }
 .gn-cta:hover {
   background: var(--blue) !important;
   border-color: var(--blue) !important;
-  color: #fff !important;
+  color: var(--white) !important;
   text-decoration: none !important;
 }
 
@@ -385,7 +394,7 @@ h2.section-title em { font-style: italic; color: var(--ink); font-family: var(--
 }
 
 .footer-inner {
-  max-width: 1400px;
+  max-width: calc(var(--content-max) + 80px);
   margin: 0 auto;
   padding: 88px 40px 32px;
 }
@@ -841,11 +850,27 @@ h2.section-title em { font-style: italic; color: var(--ink); font-family: var(--
    sibling classes in other tones and weights; each page rule now keeps only
    its spacing and the type comes from here (2026-09-18). */
 .fw-eyebrow-mono, .search-eyebrow, .sub-eyebrow, .sc-eyebrow, .verify-eyebrow,
-.news-eyebrow, .docs-section-heading, .dl-meta, .gl-cat-title {
+.news-eyebrow, .docs-section-heading, .dl-meta, .gl-cat-title,
+.struct-col-title, .pub-standard-row-label, .os-item-label, .ev-method-label,
+.failmode-incident, .docs-card-org, .gl-count,
+.step-eyebrow, .results-score-caption, .results-classification {
   font-family: var(--mono); font-size: 12px; font-weight: 500; letter-spacing: 0.18em;
   text-transform: uppercase; color: rgba(12,34,66,0.66);   /* 0.66 is 5.1:1 on cream; 0.6 was 4.26:1, under AA for 12px text */
 }
 /* 404.html loads no styles.css and keeps its own copy of this label rule. */
+
+/* ── One requirement identifier (AI-n / AI-n.m) ──
+   It was styled five ways: 13px/0.1em navy on the framework tiles, a 10px tinted
+   tag in the structure columns, 12px chips on the failure map and /evidence, and
+   a 0.86em blue run-in on /requirements. */
+.fw-card-id, .req-id, .ev-area-tag, .failmode-map a {
+  font-family: var(--mono); font-size: 12px; font-weight: 500;
+  letter-spacing: 0.06em; color: var(--ink);
+}
+.ev-area-tag, .failmode-map a {
+  background: var(--blue-lt); border-radius: 4px; padding: 3px 9px;
+  text-decoration: none; white-space: nowrap;
+}
 
 /* Legal-page meta strip (Effective, Scope, Contact): the link stays quiet like
    .gl-toc a and .ci-value a; underline on hover only. */

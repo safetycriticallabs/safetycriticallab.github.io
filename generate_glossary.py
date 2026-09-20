@@ -295,6 +295,7 @@ nav = grab(r'<nav class="global-nav".*?</nav>', shell, "the global nav")
 nav = nav.replace(' class="active"', '')   # position.html marks itself active; this page is not Position
 footer = grab(r'<footer class="site-footer".*?</footer>', shell, "the site footer")
 updated = data.get("updated", "")
+published = data.get("published", "")   # the deposit date; "updated" is the corpus regeneration
 n_cats = len([c for c in CATEGORIES if any(t["cat"] == c for t in terms)])
 n_terms = len(terms)
 
@@ -338,12 +339,12 @@ html {{ scroll-behavior: auto; }}
 .gl-search {{
   flex: 1 1 260px; font-family: var(--sans); font-size: 15px; font-weight: 300;
   padding: 11px 14px; border: 1px solid var(--rule); border-radius: 10px;
-  background: #FFF; color: var(--ink);
+  background: var(--blue-lt); color: var(--ink);
 }}
 .gl-search:focus {{ outline: none; border-color: var(--blue); }}
-.gl-count {{ font-family: var(--mono); font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-2); }}
+/* .gl-count takes the shared label rule in styles.css. */
 
-.gl-toc {{ list-style: none; padding: 0; margin: 0 0 56px 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(215px, 1fr)); gap: 6px 18px; }}
+.gl-toc {{ list-style: none; padding: 0; margin: 0 0 56px 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 6px 18px; }}   /* 215 + gaps overshot the 760 measure by 1px and fell back to two columns */
 .gl-toc li {{ font-size: 14px; }}
 .gl-toc a {{ color: var(--ink); text-decoration: none; border-bottom: 1px solid transparent; font-weight: 400; }}
 .gl-toc a:hover {{ color: var(--blue); border-bottom-color: rgba(46,109,180,0.3); }}
@@ -367,8 +368,11 @@ html {{ scroll-behavior: auto; }}
 .gl-src {{ font-family: var(--mono); font-size: 11px; color: var(--ink-2); margin: 6px 0 0 0; font-weight: 400; }}
 .gl-empty {{ font-size: 15px; color: var(--ink-2); font-weight: 300; padding: 24px 0; }}
 
-@media (max-width: 880px) {{
-  .gl-toc {{ grid-template-columns: 1fr 1fr; }}
+@media (max-width: 880.98px) {{
+  .gl-toc {{ grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); }}
+}}
+@media (max-width: 480px) {{
+  .gl-toc {{ grid-template-columns: 1fr; }}
 }}
 </style>
 </head>
@@ -399,8 +403,9 @@ html {{ scroll-behavior: auto; }}
 <div class="gl-wrap">
   <p class="gl-lede">These are the definitions an SCL assessment runs on. Where a term is taken from an
     existing standard, the source is named under the definition rather than paraphrased, so a reader can
-    check it. Where the framework defines a term itself, it says so. Framework text last updated
-    {esc(updated)}. Cite the framework at the concept DOI
+    check it. Where the framework defines a term itself, it says so. The framework text was
+    deposited {esc(published)}; this page was regenerated from the corpus on {esc(updated)}.
+    Cite the framework at the concept DOI
     <a href="https://doi.org/{CONCEPT_DOI}" rel="noopener">{CONCEPT_DOI}</a>, not at this URL.
     <a href="/requirements">Every requirement in full</a> and
     <a href="/search">Ask SCL</a> answers questions grounded in this text.</p>

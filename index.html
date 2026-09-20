@@ -4,9 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Safety Critical Labs: AI Certification Authority for Safety-Critical Systems</title>
-<meta name="description" content="Safety Critical Labs is an AI certification authority for safety critical systems. Formal determinations issued against a published, citable standard.">
+<meta name="description" content="Safety Critical Labs is an AI certification authority for safety-critical systems. Formal determinations issued against a published, citable standard.">
 <meta property="og:title" content="Safety Critical Labs">
-<meta property="og:description" content="AI certification for safety critical systems. Formal determinations issued against a published, citable standard.">
+<meta property="og:description" content="AI certification for safety-critical systems. Formal determinations issued against a published, citable standard.">
 <link rel="alternate" type="application/rss+xml" title="Safety Critical Labs" href="/feed.xml">
 <link rel="canonical" href="https://safetycriticallabs.com/">
 <meta name="twitter:card" content="summary">
@@ -27,7 +27,7 @@
       "alternateName": "SCL",
       "url": "https://safetycriticallabs.com/",
       "logo": "https://safetycriticallabs.com/img/favicon-512x512.png",
-      "description": "Safety Critical Labs is an AI certification authority for safety critical systems. Formal determinations issued against a published, citable standard.",
+      "description": "Safety Critical Labs is an AI certification authority for safety-critical systems. Formal determinations issued against a published, citable standard.",
       "email": "kevin.williams@safetycriticallabs.com",
       "sameAs": [
         "https://github.com/safetycriticallabs",
@@ -99,7 +99,7 @@
 .cert-face {
   position: absolute; inset: 0;
   background: #FAF9F5;
-  border: 1px solid #c8ccd4;
+  border: 1px solid var(--rule);
   padding: 26px 32px;
   font-family: var(--sans);
   display: flex; flex-direction: column;
@@ -359,7 +359,7 @@
 }
 .cert-qr svg { width: 100%; height: 100%; display: block; }
 .cert-qr:empty {
-  border: 1px solid var(--rule); background: #f8f9fb;
+  border: 1px solid var(--rule); background: var(--bg);
 }
 .cert-qr:empty::before {
   content: 'QR'; position: absolute; inset: 0;
@@ -508,7 +508,7 @@
   background: #FAF9F5;
   border: 1px solid var(--rule);
   border-top: 3px solid var(--blue);
-  border-radius: 16px;
+  border-radius: var(--radius-card);
   box-shadow: 0 14px 44px rgba(12,34,66,0.13);
   padding: 24px 26px 22px;
   z-index: 5;
@@ -822,10 +822,10 @@
 
   /* ── PAGE WIDTH ── One shared max-width for every homepage container (nav,
      hero/cards, news, footer) so the logo and CTA sit at the same left/right
-     edges as the content below. Tune --page-w to widen or narrow the whole
+     edges as the content below. Tune --content-max in styles.css to widen or narrow the whole
      page; --page-gut is the edge gutter on narrow screens. Was a mismatched
      1080 / 1200 / 1280 before. */
-  :root { --page-w: 1280px; --page-gut: 40px; }
+  :root { --page-gut: 40px; }   /* the column itself is --content-max in styles.css */
   /* Phones: 24px, which is what the hero, sections and footer use on every inner
      page (styles.css 533 to 539). The band below used to keep its own 24 while
      the hero, cards and footer held 40, so the home had two left edges. */
@@ -841,25 +841,21 @@
   .news-section { padding-top: calc(var(--section-space) / 2) !important; padding-bottom: calc(var(--section-space) / 2) !important; }
   .site-footer { margin-top: calc(var(--section-space) / 2) !important; }
 
-  .global-nav-inner { max-width: var(--page-w) !important; }
-  .sc-inner        { max-width: var(--page-w) !important; }
-  .news-inner      { max-width: var(--page-w) !important; }
-  .site-footer .footer-inner { max-width: var(--page-w) !important; }
-  /* Move the nav's gutter from the inner (which insets the logo 40px past the
-     content columns) onto the outer bar, so the logo/CTA align flush with the
-     cards, news and footer below. Uniform --page-gut on every section keeps
-     the alignment on narrower screens too. */
-  .global-nav { padding-left: var(--page-gut) !important; padding-right: var(--page-gut) !important; }
-  .global-nav-inner { padding-left: 0 !important; padding-right: 0 !important; }
+  /* One column on every page: --content-max in styles.css, which the nav inner
+     and the footer inner now resolve to as well, so the wordmark, the cards,
+     the bands and the footer brand share a left edge at every width. */
+  .sc-inner        { max-width: var(--content-max) !important; }
+  .news-inner      { max-width: var(--content-max) !important; }
   .showcase-cards { padding-left: var(--page-gut) !important; padding-right: var(--page-gut) !important; }
-  /* Footer-inner carries its own 40px padding (base sheet) on top of the
-     section gutter — zero it so the footer brand lines up with the columns. */
-  .site-footer .footer-inner { padding-left: 0 !important; padding-right: 0 !important; }
 
   /* All lettering → one dark NAVY BLUE (reads blue, not black). Same brand-blue
      hue as #2E6DB4, darkened into navy. Also pulls the currentColor SVG
      seal/constellation to the same navy. */
   body, body * { color: #0C2242 !important; }
+  /* Carve-out: the bracketed eyebrow is 66 percent navy on every other page
+     (styles.css small-label rule), and the body-wide navy above was flattening
+     it to solid here. */
+  .sc-eyebrow, .news-eyebrow, .nr-eyebrow { color: rgba(12,34,66,0.66) !important; }
   /* CTA text is pinned by a higher-specificity !important in styles.css;
      match it here so it flips too (its blue border is left as-is). */
   .gn-cta { color: #0C2242 !important; }
@@ -1004,7 +1000,7 @@
   /* ── Showcase cards: the mark + the framework as dark-panel cards (xAI grid,
      Anthropic color). Cream section, navy cards, blue-glow previews. ── */
   .showcase-cards { padding: 224px 24px 40px; }
-  @media (max-width: 640px) { .showcase-cards { padding-top: 120px; } }   /* phones: 224px left a third of the first screen empty */   /* more room between the nav and the headline */
+  @media (max-width: 640px) { .showcase-cards { padding-top: 152px; } }   /* phones: 224px left a third of the first screen empty */   /* more room between the nav and the headline */
   .sc-inner { max-width: 1080px; margin: 0 auto; }
   .sc-eyebrow { text-align: center; }
   .sc-heading { text-align: center; font-size: clamp(26px, 3.2vw, 40px); font-weight: 600; letter-spacing: -0.01em; margin: 12px 0 28px; }
@@ -1023,13 +1019,16 @@
   .sc-head-link:hover { text-decoration-color:#0C2242; }
   .sc-hero .sc-intro-cta { justify-content:flex-start; margin:34px 0 0; }
   .sc-hero-aside { padding-top:clamp(8px,3.2vw,42px); }
-  .sc-hero-lead { font-size:clamp(16px,1.35vw,19px); line-height:1.55; color:rgba(12, 34, 66,0.74) !important; max-width:44ch; }
-  @media (max-width:860px){ .sc-hero { grid-template-columns:1fr; gap:22px; margin-bottom:44px; } .sc-hero-aside { padding-top:0; } }
+  /* Same recipe as .inner-hero-lead in styles.css: 17px/300/1.75 behind the
+     2px navy bar, so the lead reads the same on the landing page as on the 22
+     inner heroes. */
+  .sc-hero-lead { font-size:17px; font-weight:300; line-height:1.75; color:var(--ink-2) !important; max-width:44ch; border-left:2px solid #0C2242; padding-left:20px; }
+  @media (max-width:880.98px){ .sc-hero { grid-template-columns:1fr; gap:22px; margin-bottom:44px; } .sc-hero-aside { padding-top:0; } .sc-hero-lead { font-size:15px; padding-left:16px; } }
   /* Six columns so the rows run two-over-three: the two artefacts on top at
      half width each, then the three things a visitor can actually DO. Subscribe
      came back 2026-09-13 after being retired 2026-08-26, which is what made a
      third column worth having. */
-  .sc-grid { display: grid; grid-template-columns: repeat(6, 1fr); grid-auto-rows: 1fr; gap: 30px; }
+  .sc-grid { display: grid; grid-template-columns: repeat(6, 1fr); grid-auto-rows: 1fr; gap: 28px; }
   #sc-cert, #sc-fw { grid-column: span 3; }
   #sc-ask, #sc-assess, #sc-subscribe { grid-column: span 2; }
   /* Between the one-column stack (640px) and full width, three across is too
@@ -1051,7 +1050,7 @@
      is not a scroll container. See the matching html rule in styles.css. The
      card is display:flex, so dropping `hidden` costs no block formatting
      context either. */
-  .sc-card { position: relative; background: #0C2242 !important; border: none; border-radius: 16px; padding: 22px; min-height: 300px; cursor: pointer; text-align: left; overflow: hidden; overflow: clip; display: flex; flex-direction: column; font-family: var(--sans); transition: transform 0.32s cubic-bezier(.16,1,.3,1), box-shadow 0.32s ease; }
+  .sc-card { position: relative; background: #0C2242 !important; border: none; border-radius: var(--radius-card); padding: 22px; min-height: 300px; cursor: pointer; text-align: left; overflow: hidden; overflow: clip; display: flex; flex-direction: column; font-family: var(--sans); transition: transform 0.32s cubic-bezier(.16,1,.3,1), box-shadow 0.32s ease; }
   .sc-card:hover { transform: translateY(-5px); box-shadow: 0 18px 42px rgba(12,34,66,0.22); }
   .sc-label { font-size: 16px; font-weight: 600; color: #FAF9F5 !important; }
   .sc-sub { font-size: 13px; line-height: 1.5; color: rgba(250,249,245,0.62) !important; margin-top: 4px; }
@@ -1078,11 +1077,11 @@
   #sc-ask .sc-sub, #sc-subscribe .sc-sub { min-height: 3em; }   /* 2 lines at line-height 1.5 */
   .sc-foot { text-align: center; font-size: 13px; color: rgba(12, 34, 66,0.6) !important; margin-top: 18px; }
   .sc-stage { flex: 1; display: flex; align-items: center; justify-content: center; margin: 6px 0 10px; }
-  .sc-expand { position: absolute; top: 20px; right: 22px; z-index: 5; cursor: pointer; font-family: var(--mono); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: #FAF9F5 !important; background: none; border: none; padding: 0; display: inline-flex; align-items: center; gap: 7px; opacity: 0.55; transition: opacity 0.25s ease; }
+  .sc-expand { position: absolute; top: 20px; right: 22px; z-index: 5; cursor: pointer; font-family: var(--mono); font-size: 12px; font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase; color: #FAF9F5 !important; background: none; border: none; padding: 0; display: inline-flex; align-items: center; gap: 7px; opacity: 0.55; transition: opacity 0.25s ease; }
   .sc-card:hover .sc-expand { opacity: 1; }
   .sc-expand-arw { display: inline-block; transition: transform 0.25s ease; }
   .sc-expand:hover .sc-expand-arw { transform: translateX(4px); }
-  .sc-doc { width: 152px; background: #F4F1E9; border-radius: 7px; padding: 14px; box-shadow: 0 10px 24px rgba(12,34,66,0.3); animation: sc-float 5.5s ease-in-out infinite; }
+  .sc-doc { width: 152px; background: var(--cream-2); border-radius: 7px; padding: 14px; box-shadow: 0 10px 24px rgba(12,34,66,0.3); animation: sc-float 5.5s ease-in-out infinite; }
   @keyframes sc-float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)} }
   .sc-docseal { width: 28px; height: 28px; border-radius: 50%; border: 2px solid #0C2242; margin: 0 auto 8px; position: relative; }
   .sc-docseal::after { content:""; position:absolute; inset:5px; border-radius:50%; border:1px solid #7FA6DA; }
@@ -1112,13 +1111,13 @@
   .sc-grid-wide {
     --sc-max: 1560px;               /* wide cap — moderate, well under full-bleed */
     --expand: 0;                    /* 0..1, written by JS on scroll */
-    max-width: calc(var(--page-w) + (min(var(--sc-max), 100vw - 64px) - var(--page-w)) * var(--expand));
+    max-width: calc(var(--content-max) + (min(var(--sc-max), 100vw - 64px) - var(--content-max)) * var(--expand));
     margin-inline: auto;
   }
   .sc-grid-wide.sc-pinned { grid-auto-rows: var(--sc-rowh, 1fr); }
   .sc-grid-wide.sc-pinned #sc-fw #fw-showcase:not(.is-expanded) { height: var(--sc-fwh); }
   @media (prefers-reduced-motion: reduce) { .sc-grid-wide { --expand: 0 !important; } }
-  @media (max-width: 1360px) { .sc-grid-wide { max-width: var(--page-w) !important; } }
+  @media (max-width: 1360px) { .sc-grid-wide { max-width: var(--content-max) !important; } }
 
   /* ═══ INTERACTIVE SHOWCASE — live cert + firework in-card, expand to modal ═══ */
 
@@ -1135,6 +1134,7 @@
       radial-gradient(ellipse 98% 94% at 50% 44%, transparent 42%, rgba(12, 34, 66,0.15) 100%),
       #FAF9F5 !important; border: 1px solid rgba(12, 34, 66,0.12); box-shadow: 0 2px 26px rgba(12, 34, 66,0.06); }
   #sc-cert .sc-label { color: #0C2242 !important; }
+  #sc-cert .sc-sub { color: rgba(12,34,66,0.66) !important; }   /* this tile is cream, not navy */
   /* In the card (not expanded), the cert slowly floats + rotates in 3D so the
      depth effect is self-evident — no caption needed. Expanding stops it so the
      grab/tilt interaction takes over. */
@@ -1317,7 +1317,7 @@
   .fw3d-tip span { color:#0C2242 !important; }
   .fw3d-tip .fw3d-tip-id { opacity:.55; margin-right:8px; }
   #fw-showcase:not(.is-expanded) .fw3d-tip { display:none; }
-  .fw3d-detail { position:absolute; left:38px; bottom:34px; width:min(360px,44%); z-index:7; background:rgba(250,249,245,0.94); backdrop-filter:blur(3px); -webkit-backdrop-filter:blur(3px); border:1px solid rgba(12, 34, 66,0.1); border-radius:16px; padding:20px 22px; box-shadow:0 12px 32px rgba(12,34,66,0.12); opacity:0; visibility:hidden; transform:translateY(10px); pointer-events:none; transition:opacity .28s ease, transform .28s ease, visibility .28s; }   /* visibility keeps the closed panel's controls out of the tab order */
+  .fw3d-detail { position:absolute; left:38px; bottom:34px; width:min(360px,44%); z-index:7; background:rgba(250,249,245,0.94); backdrop-filter:blur(3px); -webkit-backdrop-filter:blur(3px); border:1px solid rgba(12, 34, 66,0.1); border-radius:var(--radius-card); padding:20px 22px; box-shadow:0 12px 32px rgba(12,34,66,0.12); opacity:0; visibility:hidden; transform:translateY(10px); pointer-events:none; transition:opacity .28s ease, transform .28s ease, visibility .28s; }   /* visibility keeps the closed panel's controls out of the tab order */
   .fw3d-detail.is-on { opacity:1; visibility:visible; transform:none; pointer-events:auto; }
   #fw-showcase:not(.is-expanded) .fw3d-detail { display:none; }
   .fw3d-detail-close { position:absolute; top:6px; right:10px; border:none; background:transparent; color:#0C2242 !important; font-size:22px; line-height:1; cursor:pointer; opacity:.45; }
@@ -1328,7 +1328,7 @@
   .fw3d-d-prevents { font-size:15px; line-height:1.55; margin:6px 0 14px; color:rgba(12, 34, 66,0.82) !important; }
   .fw3d-d-link { font-family:var(--mono); font-size:12.5px; color:#2E6DB4 !important; text-decoration:none; }
   .fw3d-d-link:hover { text-decoration:underline; }
-  .fw3d-d-tier { display:inline-block; font-family:var(--mono); font-size:10px; letter-spacing:.12em; text-transform:uppercase; color:#1E5A9A !important; background:rgba(46,109,180,0.10); border:1px solid rgba(46,109,180,0.25); border-radius:4px; padding:1px 7px; margin:6px 0 2px; }
+  .fw3d-d-tier { display:inline-block; font-family:var(--mono); font-size:10px; letter-spacing:.12em; text-transform:uppercase; color:var(--blue-dk) !important; background:var(--blue-lt); border:1px solid rgba(46,109,180,0.25); border-radius:4px; padding:1px 7px; margin:6px 0 2px; }
   /* Orientation line — top-center headline for the map (bottom-left collided
      with the modal CTA). Rises in after the burst settles; the "Select one."
      cue pulses gently as the call to action; gone once an area is selected. */
@@ -1475,6 +1475,8 @@
   .sc-ask-seal{ display:flex; align-items:center; justify-content:center; gap:9px; }
   .sc-ask-seal svg{ width:30px; height:30px; flex-shrink:0; }
   /* Eyebrow carries /search's own measured values: 0.18em mono, uppercase. */
+  /* 10px, not the shared 12px: these two sit inside a tile where the shared size
+     crowds the label against the field below it. Tracking and tone match. */
   .sc-ask-eyebrow{ font-family:var(--mono); font-size:10px; letter-spacing:0.18em; text-transform:uppercase; color:rgba(12, 34, 66,0.66) !important; }   /* 5.14:1 on #FAF9F5 */
 
   /* The example questions are TEXT, and now look like it. They used to carry
@@ -1542,12 +1544,12 @@
      restates its key, restate it here, and nowhere in between. */
   .sc-assess-dot{ width:9px; height:9px; border-radius:50%; margin-left:auto; flex-shrink:0; background:#5B6B84; transition:background .5s ease; }
   .sc-assess-dot.is-strong{ background:#2D7A3A; } .sc-assess-dot.is-partial{ background:#C8861A; } .sc-assess-dot.is-gap{ background:#C8272D; }
-  @media (max-width:960px){ .sc-assess-rows{ display:none; } }   /* narrow fine-pointer windows: the ring alone */
+  @media (max-width:880.98px){ .sc-assess-rows{ display:none; } }   /* narrow fine-pointer windows: the ring alone */
   @media (prefers-reduced-motion: reduce){ .sc-ring-fill{ transition:none; } .sc-assess-dot{ transition:none; } }
   /* Inverted with the card: a cream pill on a cream ground is invisible. Now it
      matches the nav's own Get Certified pill, navy on cream. */
-  .sc-assess-cta{ display:flex; align-items:center; justify-content:center; gap:8px; width:100%; background:#0C2242; color:#FAF9F5 !important; border-radius:10px; padding:11px 18px; font-size:14px; font-weight:600; text-decoration:none; transition:background .2s ease; }
-  .sc-assess-cta:hover{ background:#173A64; }
+  .sc-assess-cta{ display:flex; align-items:center; justify-content:center; gap:8px; width:100%; background:#0C2242; color:#FAF9F5 !important; border-radius:8px; padding:11px 18px; font-size:14px; font-weight:600; text-decoration:none; transition:background .2s ease; }
+  .sc-assess-cta:hover{ background:#081A34; }
 
   /* Common-questions tile → mirrors the /search "Ask SCL" page: the seal, the
      eyebrow, the example questions, over the real search bar.
@@ -1580,14 +1582,14 @@
   .sc-sub-form{ display:flex; gap:8px; width:100%; }
   .sc-sub-form input{ flex:1; min-width:0; background:var(--blue-lt); border:1px solid var(--field-border); border-radius:8px; padding:10px 12px; outline:none; color:#0C2242 !important; font-family:var(--sans); font-size:16px; }   /* 16px: under it mobile Safari zooms the viewport on focus */
   .sc-sub-form input::placeholder{ color:rgba(12, 34, 66,0.65); }   /* the field has no other label; 0.45 measured 2.72:1 */
-  .sc-sub-btn{ flex-shrink:0; background:#0C2242; color:#FAF9F5 !important; border:none; border-radius:8px; padding:10px 16px; font-family:var(--sans); font-size:13px; font-weight:600; cursor:pointer; transition:background .2s ease; }
-  .sc-sub-btn:hover{ background:#173A64; }
+  .sc-sub-btn{ flex-shrink:0; background:#0C2242; color:#FAF9F5 !important; border:none; border-radius:8px; padding:10px 16px; font-family:var(--sans); font-size:13px; font-weight:500; letter-spacing:0.04em; cursor:pointer; transition:background .2s ease; }
+  .sc-sub-btn:hover{ background:#081A34; }
 
   /* ── Footer: Anthropic-style. A left brand column (small SCL mark up top,
      copyright + social pinned to the bottom) with link columns on the right,
      one of which stacks a Briefings sub-group. Navy. Fully defined here so it
      stays index-only (styles.css untouched). ── */
-  .site-footer{ background:#0C2242 !important; border-top:none !important; padding-left:var(--page-gut) !important; padding-right:var(--page-gut) !important; margin-top:40px; }
+  .site-footer{ background:#0C2242 !important; border-top:none !important; margin-top:40px; }
   .site-footer .footer-inner{ padding-top:156px !important; padding-bottom:116px !important; min-height:480px; }
 
   .footer-top{ display:flex !important; gap:clamp(56px, 9vw, 150px); align-items:stretch; }
@@ -1665,7 +1667,7 @@
        No gold accent on the card: the surface is the gold, so a second gold
        on top would say the same thing twice. Labels take the emblem ring blue
        #15466C instead. */
-    border-radius: 16px;
+    border-radius: var(--radius-card);
     background: #F0E7D2 !important;
     border: 1px solid rgba(12,34,66,0.13);
     text-decoration: none;
@@ -1689,7 +1691,7 @@
     font-family: var(--sans);
     font-size: 14.5px;
     line-height: 1.5;
-    color: #47535F !important;          /* 6.39:1 on #F0E7D2 */
+    color: var(--ink-2) !important;     /* 8.1:1 on #F0E7D2 */
     margin: 0;
   }
   .na-card-foot { margin-top: 26px; }
@@ -1726,7 +1728,7 @@
     gap: 8px;
     align-self: flex-start;
     padding: 10px 22px;
-    border-radius: 6px;
+    border-radius: 8px;
     border: 1px solid rgba(12,34,66,0.30);
     background: transparent !important;
     color: #0C2242 !important;
@@ -1741,7 +1743,10 @@
   /* Skeleton cards while the feeds load */
   .na-skel { pointer-events: none; }
   .na-skel .skel-line { background: rgba(12,34,66,0.10); border-radius: 4px; height: 13px; margin: 0 0 11px; }
-  @media (max-width: 900px) {
+  @media (max-width: 960px) {
+    .news-list { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 640px) {
     .news-list { grid-template-columns: 1fr; }
     .na-card { min-height: 0; }
   }
@@ -1754,7 +1759,7 @@
      (display:block, not the old 2-col grid) so the one-sentence statement extends
      across the section instead of wrapping in a narrow column. */
   .news-header { display: block; }
-  .news-lead { font-size: clamp(24px, 2.5vw, 34px); font-weight: 600; line-height: 1.14; letter-spacing: -0.015em; color: #0C2242 !important; border-left: none; padding-left: 0; margin: 0; }
+  .news-lead { font-size: 17px; font-weight: 300; line-height: 1.75; color: var(--ink-2) !important; border-left: none; padding-left: 0; margin: 0 0 8px; max-width: 62ch; }
 
   /* ── The record block: a bold statement on the left + SCL's own recent
      publications on the right, below the regulatory cards. Each row is title
@@ -1769,8 +1774,9 @@
     align-items: start;
     margin-top: var(--section-space);
   }
-  .nr-eyebrow { font-family: var(--mono); font-size: 12px; letter-spacing: 0.18em; text-transform: uppercase; color: #0C2242 !important; margin-bottom: 18px; }
-  .nr-headline { font-family: var(--sans); font-size: clamp(24px, 2.5vw, 34px); font-weight: 600; line-height: 1.14; letter-spacing: -0.015em; color: #0C2242 !important; margin: 0 0 26px; max-width: 16ch; }
+  .nr-eyebrow { font-family: var(--mono); font-size: 12px; font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase; margin-bottom: 18px; }
+  /* Same clamp as h2.section-title in styles.css. */
+  .nr-headline { font-family: var(--sans); font-size: clamp(30px, 3.2vw, 46px); font-weight: 600; line-height: 1.08; letter-spacing: -0.025em; color: #0C2242 !important; margin: 0 0 26px; max-width: 16ch; }
   .nr-all { display: inline-flex; align-items: center; gap: 8px; font-family: var(--sans); font-size: 15px; font-weight: 500; color: #0C2242 !important; text-decoration: none; }
   .nr-all span { transition: transform 0.22s ease; }
   .nr-all:hover span { transform: translateX(4px); }
@@ -1789,7 +1795,7 @@
   .nr-row-meta { flex-shrink: 0; display: flex; align-items: baseline; gap: 14px; }
   .nr-row-date { font-family: var(--mono); font-size: 12px; letter-spacing: 0.04em; color: rgba(12, 34, 66,0.66) !important; white-space: nowrap; }
   .nr-row-cat { flex-shrink: 0; font-family: var(--sans); font-size: 14px; font-weight: 400; color: rgba(12, 34, 66,0.66) !important; white-space: nowrap; text-align: right; }
-  @media (max-width: 860px) {
+  @media (max-width: 880.98px) {
     .news-rows { grid-template-columns: 1fr; gap: 30px; margin-top: 56px; }
     .nr-headline { max-width: none; }
     .nr-row { padding: 16px 2px; gap: 16px; }
@@ -2048,7 +2054,7 @@
                         </div>
 
                         <div class="cert-disclaimer">
-                          This certificate records conformance to a defined standard at the time of assessment. It does not constitute a claim that the assessed system is safe, free from defect, or approved for any specific regulatory purpose.
+                          This certificate records conformance to a defined standard at the time of assessment. It does not constitute a claim that the assessed system is safe, free from defect, or approved for any specific regulatory purpose. The Certification Determination Document is the binding artifact and governs in case of conflict.
                         </div>
                       </div>
                     </div>
@@ -2105,20 +2111,20 @@
                           <div class="cert-area"><span class="cert-area-id">AI-3</span><span class="cert-area-label">ML test coverage</span></div>
                           <div class="cert-area"><span class="cert-area-id">AI-4</span><span class="cert-area-label">Continuous validation</span></div>
                           <div class="cert-area"><span class="cert-area-id">AI-5</span><span class="cert-area-label">Hallucination prevention</span></div>
-                          <div class="cert-area"><span class="cert-area-id">AI-6</span><span class="cert-area-label">Out of distribution detection</span></div>
+                          <div class="cert-area"><span class="cert-area-id">AI-6</span><span class="cert-area-label">Out-of-distribution detection</span></div>
                           <div class="cert-area"><span class="cert-area-id">AI-7</span><span class="cert-area-label">Adversarial robustness</span></div>
                           <div class="cert-area"><span class="cert-area-id">AI-8</span><span class="cert-area-label">Explainability</span></div>
-                          <div class="cert-area"><span class="cert-area-id">AI-9</span><span class="cert-area-label">Human and AI teaming</span></div>
+                          <div class="cert-area"><span class="cert-area-id">AI-9</span><span class="cert-area-label">Human-AI teaming</span></div>
                           <div class="cert-area"><span class="cert-area-id">AI-10</span><span class="cert-area-label">Privacy and data protection</span></div>
                           <div class="cert-area"><span class="cert-area-id">AI-11</span><span class="cert-area-label">Multi-model systems</span></div>
-                          <div class="cert-area"><span class="cert-area-id">AI-12</span><span class="cert-area-label">Neural network requirements</span></div>
+                          <div class="cert-area"><span class="cert-area-id">AI-12</span><span class="cert-area-label">Neural networks</span></div>
                           <div class="cert-area"><span class="cert-area-id">AI-13</span><span class="cert-area-label">Continuous learning and adaptation</span></div>
                         </div>
 
                         <div class="cert-mid-rule"></div>
 
                         <div class="cert-back-note">
-                          Evaluated against the requirement sets that apply to the certified system, under the <strong>SCL AI Requirements Framework</strong>. Scan to confirm this record against the public register.
+                          Evaluated against the requirement sets that apply to the certified system, under the <strong>SCL AI Requirements Framework v3.7</strong>. Scan to confirm this record against the public register.
                         </div>
 
                       </div>
@@ -2147,6 +2153,7 @@
           <a class="sc-modal-cta" href="/process">See the certification process &rarr;</a>
         </div>
         <div class="sc-label">Certificate of Conformance</div>
+        <div class="sc-sub">SCL is pre-accreditation: ANAB intake is on file, formal engagement deferred.</div>
       </div>
       <div class="sc-card" id="sc-fw">
         <button class="sc-expand" type="button" data-expands="fw-showcase" aria-label="Expand the thirteen requirement areas">Expand <span class="sc-expand-arw" aria-hidden="true">&rarr;</span></button>
@@ -2184,6 +2191,7 @@
               </div>
         </div>
         <div class="sc-label">Thirteen requirement areas</div>
+        <div class="sc-sub">Framework v3.7. Cite it at the concept DOI 10.5281/zenodo.19024420.</div>
       </div>
 
       <div class="sc-card" id="sc-ask">
@@ -2229,7 +2237,7 @@
           </form>
         </div>
         <div class="sc-label"><a href="/search">Ask SCL <span class="sc-label-arw" aria-hidden="true">&rarr;</span></a></div>
-        <div class="sc-sub">Ask SCL about certification, the framework, and the process.</div>
+        <div class="sc-sub">Ask SCL about certification, the framework, the process, and accreditation.</div>
       </div>
 
       <div class="sc-card" id="sc-assess">
@@ -2248,7 +2256,7 @@
               <div class="sc-ring-num" id="sc-ring-num">0<span>%</span></div>
             </div>
             <div class="sc-assess-rows">
-              <div class="sc-assess-row"><span class="sc-assess-id">AI-1</span>Data foundations<span class="sc-assess-dot"></span></div>
+              <div class="sc-assess-row"><span class="sc-assess-id">AI-1</span>Operational and data foundations<span class="sc-assess-dot"></span></div>
               <div class="sc-assess-row"><span class="sc-assess-id">AI-4</span>Continuous validation<span class="sc-assess-dot"></span></div>
               <div class="sc-assess-row"><span class="sc-assess-id">AI-6</span>Out-of-distribution detection<span class="sc-assess-dot"></span></div>
             </div>
@@ -2293,7 +2301,8 @@
     <div class="news-header">
       <div class="news-header-left">
         <div class="news-eyebrow">[ Regulatory ]</div>
-        <p class="news-lead">The rules in force and the drafts open for comment, from the Federal Register, the EU Commission, and NIST. Instruments move in years, so the date on each one is part of what it tells you.</p>
+        <h2 class="nr-headline">The rules in force, and the drafts open for comment.</h2>
+        <p class="news-lead">From the Federal Register, EUR-Lex, and NIST. Instruments move in years, so the date on each one is part of what it tells you.</p>
       </div>
     </div>
 
@@ -2336,7 +2345,7 @@
          of a reader by editorial choice. See /impartiality section 10. -->
     <div class="news-rows">
       <div class="nr-statement">
-        <div class="nr-eyebrow">[ The record ]</div>
+        <div class="nr-eyebrow">[ The Record ]</div>
         <h2 class="nr-headline">Recent publications, and when.</h2>
         <a href="/updates" class="nr-all">All updates <span aria-hidden="true">&rarr;</span></a>
       </div>
@@ -2712,13 +2721,13 @@
     { id: 'AI-3',  label: 'ML test coverage', prevents: 'Strong average performance that hides untested edge cases, boundary conditions, and injected failure modes.' },
     { id: 'AI-4',  label: 'Continuous validation', prevents: 'A model accurate at deployment quietly drifting wrong as the world changes around it.' },
     { id: 'AI-5',  label: 'Hallucination prevention', prevents: 'An AI stating fabricated facts, policies, or values with the same confidence as correct ones.' },
-    { id: 'AI-6',  label: 'Out of distribution detection', prevents: 'The model meeting an input unlike anything it was trained on and responding as if it were routine.' },
+    { id: 'AI-6',  label: 'Out-of-distribution detection', prevents: 'The model meeting an input unlike anything it was trained on and responding as if it were routine.' },
     { id: 'AI-7',  label: 'Adversarial robustness', prevents: 'Inputs, training data, or the model itself manipulated by an adversary to force a chosen failure.' },
     { id: 'AI-8',  label: 'Explainability', prevents: 'A safety-critical decision that cannot be inspected, questioned, or justified after the fact.' },
-    { id: 'AI-9',  label: 'Human and AI teaming', prevents: 'Operators who over-trust, under-trust, or lose the authority to override the AI when it matters.' },
+    { id: 'AI-9',  label: 'Human-AI teaming', prevents: 'Operators who over-trust, under-trust, or lose the authority to override the AI when it matters.' },
     { id: 'AI-10', label: 'Privacy and data protection', prevents: 'Personal or protected data exposed, retained, or transferred without lawful basis or control.' },
     { id: 'AI-11', label: 'Multi-model systems', prevents: 'One model’s error cascading through a chain of models into a system-level failure.' },
-    { id: 'AI-12', label: 'Neural network requirements', prevents: 'Network-specific failures: miscalibrated confidence, brittle features, and unverified deployment transforms.' },
+    { id: 'AI-12', label: 'Neural networks', prevents: 'Network-specific failures: miscalibrated confidence, brittle features, and unverified deployment transforms.' },
     { id: 'AI-13', label: 'Continuous learning and adaptation', prevents: 'A model that keeps learning after deployment teaching itself the wrong thing, unnoticed.' }
   ];
 
@@ -3292,7 +3301,7 @@
     },
     eu: {
       label: 'EU AI Act',
-      sublabel: 'European Union',
+      sublabel: 'EUR-Lex',
       seal: 'img/eu-flag.svg',
       summary: 'Legislative proposals, implementing acts, and corrigenda to the AI Act and related Union law.',
     },
@@ -3803,13 +3812,13 @@
     { id: 'AI-3',  label: 'ML test coverage', prevents: 'Strong average performance that hides untested edge cases, boundary conditions, and injected failure modes.' },
     { id: 'AI-4',  label: 'Continuous validation', prevents: 'A model accurate at deployment quietly drifting wrong as the world changes around it.' },
     { id: 'AI-5',  label: 'Hallucination prevention', prevents: 'An AI stating fabricated facts, policies, or values with the same confidence as correct ones.' },
-    { id: 'AI-6',  label: 'Out of distribution detection', prevents: 'The model meeting an input unlike anything it was trained on and responding as if it were routine.' },
+    { id: 'AI-6',  label: 'Out-of-distribution detection', prevents: 'The model meeting an input unlike anything it was trained on and responding as if it were routine.' },
     { id: 'AI-7',  label: 'Adversarial robustness', prevents: 'Inputs, training data, or the model itself manipulated by an adversary to force a chosen failure.' },
     { id: 'AI-8',  label: 'Explainability', prevents: 'A safety-critical decision that cannot be inspected, questioned, or justified after the fact.' },
-    { id: 'AI-9',  label: 'Human and AI teaming', prevents: 'Operators who over-trust, under-trust, or lose the authority to override the AI when it matters.' },
+    { id: 'AI-9',  label: 'Human-AI teaming', prevents: 'Operators who over-trust, under-trust, or lose the authority to override the AI when it matters.' },
     { id: 'AI-10', label: 'Privacy and data protection', prevents: 'Personal or protected data exposed, retained, or transferred without lawful basis or control.' },
     { id: 'AI-11', label: 'Multi-model systems', tier: 'Conditional: multi-model systems', prevents: 'One model’s error cascading through a chain of models into a system-level failure.' },
-    { id: 'AI-12', label: 'Neural network requirements', tier: 'Conditional: neural networks', prevents: 'Network-specific failures: miscalibrated confidence, brittle features, and unverified deployment transforms.' },
+    { id: 'AI-12', label: 'Neural networks', tier: 'Conditional: neural networks', prevents: 'Network-specific failures: miscalibrated confidence, brittle features, and unverified deployment transforms.' },
     { id: 'AI-13', label: 'Continuous learning and adaptation', tier: 'Conditional: continuous learning', prevents: 'A model that keeps learning after deployment teaching itself the wrong thing, unnoticed.' }
   ];
 

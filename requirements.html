@@ -37,16 +37,17 @@ html { scroll-behavior: auto; }
 .req-section { padding: calc(var(--section-space) / 2) 40px; }
 @media (max-width: 880.98px) { .req-section { padding: calc(var(--section-space) / 2) 24px; } }
 
-.req-toc { margin: 0 0 48px; padding: 0; list-style: none; font-size: 0.95rem; line-height: 2; }
-.req-toc li { display: inline; }
-.req-toc li:not(:last-child)::after { content: " \00B7 "; color: rgba(12,34,66,0.35); }
+.req-toc { list-style: none; padding: 0; margin: 0 0 56px 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 6px 18px; }
+.req-toc li { font-size: 14px; }
+.req-toc a { color: var(--ink); text-decoration: none; border-bottom: 1px solid transparent; }
+.req-toc a:hover { color: var(--blue); border-bottom-color: rgba(46,109,180,0.3); }
 .req-area { margin-bottom: 56px; }
 .req-area > h2 { font-size: 1.35rem; font-weight: 600; line-height: 1.3; margin: 0 0 8px; scroll-margin-top: 90px; }
 .req-area-intro { margin: 0 0 28px; color: var(--ink-2); }
 .req-entry { margin: 0 0 30px; padding-left: 16px; border-left: 2px solid rgba(46,109,180,0.18); }
-.req-entry h3 { font-size: 1.02rem; font-weight: 600; line-height: 1.35; margin: 0 0 8px; scroll-margin-top: 90px; }
+.req-entry h3 { font-size: 17px; font-weight: 600; letter-spacing: -0.01em; line-height: 1.35; margin: 0 0 8px; scroll-margin-top: 90px; }   /* same entry heading as .gl-name on /glossary */
 .req-entry:target { border-left-color: #2E6DB4; }
-.req-id { font-family: var(--mono); font-size: 0.86em; font-weight: 500; color: #1E5A9A; margin-right: 6px; }
+.req-id { margin-right: 6px; }   /* type from the shared identifier rule in styles.css */
 .prose p.req-statement { margin: 0 0 8px; font-weight: 400; }   /* the normative statement keeps regular weight; rationale and verification read at 300 */
 .prose p.req-part { margin: 0 0 8px; font-size: 0.94rem; color: var(--ink-2); }
 .req-label { font-weight: 600; color: var(--ink); }
@@ -106,8 +107,9 @@ html { scroll-behavior: auto; }
       <h1>Every requirement, in full</h1>
     </div>
     <p class="inner-hero-lead">
-      The complete text of the AI Requirements Framework, version 3.7, last updated
-      2026-09-18. Every requirement is published with its rationale, the method by which it is
+      The complete text of the AI Requirements Framework, version 3.7, deposited
+      2026-09-15, with this page regenerated from the corpus on 2026-09-18. Every
+      requirement is published with its rationale, the method by which it is
       verified, and the criteria that decide whether the verification succeeded. This is the same
       text as the deposited record; cite the framework at the concept DOI
       <a href="https://doi.org/10.5281/zenodo.19024420" rel="noopener">10.5281/zenodo.19024420</a>, not at this URL.

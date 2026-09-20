@@ -80,7 +80,7 @@
 .docs-filter-chip.active {
   background: #0C2242;
   border-color: #0C2242;
-  color: #fff;
+  color: var(--white);
 }
 .docs-filter-count {
   margin-left: 6px;
@@ -223,13 +223,8 @@
   padding-top: 14px;
   border-top: 1px solid rgba(46,109,180,0.10);
 }
-.docs-card-org {
-  font-family: var(--mono);
-  font-size: 10px;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: rgba(12,34,66,0.6);
-}
+/* .docs-card-org takes the shared label rule in styles.css; it was 10px at 0.6
+   alpha, which measures 4.26:1 on cream and misses AA. */
 .docs-card-link {
   font-family: var(--sans);
   font-size: 12px;
@@ -249,7 +244,7 @@
 .docs-section-heading-count {
   margin-left: 8px;
   font-family: var(--mono);
-  color: rgba(12,34,66,0.45);
+  color: rgba(12,34,66,0.66);   /* 0.45 measured 3.0:1 inside a 12px heading */
 }
 .docs-section-heading-desc {
   font-family: var(--sans);

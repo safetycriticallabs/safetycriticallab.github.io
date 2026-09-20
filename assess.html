@@ -31,7 +31,6 @@
 /* Hero cursor glow styles live in styles.css (promoted 2026-08-24) */
 
 /* Bracketed mono eyebrow + showcase title */
-.fw-eyebrow-mono { margin-bottom: 20px; }
 
 /* ─── ASSESSMENT TOOL ─────────────────────────────────────── */
 .assess-section {
@@ -75,11 +74,7 @@
 }
 
 /* Step header */
-.step-eyebrow {
-  font-family: var(--sans); font-size: 13px;
-  font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase;
-  color: #0C2242; margin-bottom: 16px;
-}
+.step-eyebrow { margin-bottom: 16px; }   /* type from the shared label rule in styles.css */
 .step-title {
   font-family: var(--sans);
   font-size: clamp(24px, 3vw, 34px);
@@ -88,8 +83,8 @@
   margin-bottom: 12px;
 }
 .step-desc {
-  font-size: 16px; color: var(--ink-2);
-  line-height: 1.7; font-weight: 300;
+  font-size: 15px; color: var(--ink-2);
+  line-height: 1.75; font-weight: 300;
   margin-bottom: 36px;
   max-width: 600px;
 }
@@ -227,7 +222,7 @@
 }
 .assess-error-banner strong {
   display: block;
-  color: #C8272D;
+  color: var(--bad);
   font-size: 14px;
   font-weight: 600;
   margin-bottom: 4px;
@@ -309,25 +304,16 @@
   font-size: 20px; color: var(--ink-3);
   font-weight: 400;
 }
-.results-score-caption {
-  font-family: var(--sans); font-size: 11px;
-  font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase;
-  color: var(--ink-3);
-  margin-bottom: 16px;
-}
+.results-score-caption { margin-bottom: 16px; }   /* type from the shared label rule in styles.css */
 .results-note {
   font-size: 13px; color: var(--ink-3);
   line-height: 1.6; font-weight: 300;
   max-width: 560px; margin: 12px auto 0;
 }
-.results-classification {
-  font-family: var(--sans); font-size: 13px;
-  font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase;
-  color: var(--ink-2); margin-bottom: 8px;
-}
+.results-classification { margin-bottom: 8px; }   /* type from the shared label rule in styles.css */
 .results-summary {
-  font-size: 16px; color: var(--ink-2);
-  line-height: 1.7; font-weight: 300;
+  font-size: 15px; color: var(--ink-2);
+  line-height: 1.75; font-weight: 300;
   max-width: 560px; margin: 0 auto;
 }
 
@@ -357,9 +343,9 @@
   top: 0; left: 0; right: 0;
   height: 3px;
 }
-.result-card.status-strong::before { background: #2D7A3A; }
-.result-card.status-partial::before { background: #C8861A; }
-.result-card.status-gap::before { background: #C8272D; }
+.result-card.status-strong::before { background: var(--ok); }
+.result-card.status-partial::before { background: var(--warn); }
+.result-card.status-gap::before { background: var(--bad); }
 .result-card.status-na::before { background: var(--ink-3); }
 
 .result-card-id {
@@ -379,13 +365,13 @@
   display: inline-block;
 }
 .status-strong .result-card-status {
-  background: rgba(45,122,58,0.1); color: #2D7A3A;
+  background: rgba(45,122,58,0.1); color: var(--ok);
 }
 .status-partial .result-card-status {
-  background: rgba(200,134,26,0.1); color: #C8861A;
+  background: rgba(200,134,26,0.1); color: var(--warn-text);
 }
 .status-gap .result-card-status {
-  background: rgba(200,39,45,0.1); color: #C8272D;
+  background: rgba(200,39,45,0.1); color: var(--bad);
 }
 .status-na .result-card-status {
   background: rgba(0,0,0,0.04); color: var(--ink-3);
@@ -522,7 +508,7 @@
 
     <!-- STEP 1: Classification -->
     <div class="assess-step active" id="step-1">
-      <div class="step-eyebrow">Step 1: Classification</div>
+      <div class="step-eyebrow">[ Step 1 of 5: Classification ]</div>
       <div class="step-title" role="heading" aria-level="2">What kind of system are you building?</div>
       <div class="step-desc">These questions help determine which classification tier applies and which requirement areas are relevant to your system.</div>
 
@@ -590,7 +576,7 @@
 
     <!-- STEP 2: Data & Testing (AI-1, AI-2, AI-3) -->
     <div class="assess-step" id="step-2">
-      <div class="step-eyebrow">Step 2: Data &amp; Testing</div>
+      <div class="step-eyebrow">[ Step 2 of 5: Data and Testing ]</div>
       <div class="step-title" role="heading" aria-level="2">Training data and test coverage</div>
       <div class="step-desc">These questions map to AI-1 (operational and data foundations), AI-2 (addressing AI bias), and AI-3 (ML test coverage).</div>
 
@@ -674,7 +660,7 @@
 
     <!-- STEP 3: Runtime Safety (AI-4, AI-5, AI-6) -->
     <div class="assess-step" id="step-3">
-      <div class="step-eyebrow">Step 3: Runtime Safety</div>
+      <div class="step-eyebrow">[ Step 3 of 5: Runtime Safety ]</div>
       <div class="step-title" role="heading" aria-level="2">Monitoring, confidence, and edge detection</div>
       <div class="step-desc">These questions map to AI-4 (continuous validation), AI-5 (hallucination prevention), and AI-6 (out of distribution detection).</div>
 
@@ -758,7 +744,7 @@
 
     <!-- STEP 4: Advanced Requirements (AI-7, AI-8, AI-9, AI-10) -->
     <div class="assess-step" id="step-4">
-      <div class="step-eyebrow">Step 4: Robustness &amp; Oversight</div>
+      <div class="step-eyebrow">[ Step 4 of 5: Robustness and Oversight ]</div>
       <div class="step-title" role="heading" aria-level="2">Adversarial testing, explainability, and human teaming</div>
       <div class="step-desc">These requirements apply based on your classification level. Answer based on your current state. If a requirement doesn't apply to your tier, you can select "Not applicable."</div>
       <div class="tier-hint" id="tierHint4"></div>
@@ -823,7 +809,7 @@
 
       <div class="q-card">
         <div class="q-label" id="label-q-ai9">
-          AI-9: Human and AI teaming
+          AI-9: Human-AI teaming
           <div class="q-sublabel">Are AI authority limits, human override requirements, and interaction audit trails formally defined?</div>
         </div>
         <div class="q-options" data-name="q-ai9" role="radiogroup" aria-labelledby="label-q-ai9">
@@ -887,7 +873,7 @@
 
     <!-- STEP 5: Architecture & Paradigm Requirements (AI-11, AI-12, AI-13) -->
     <div class="assess-step" id="step-5">
-      <div class="step-eyebrow">Step 5: Architecture &amp; Paradigm</div>
+      <div class="step-eyebrow">[ Step 5 of 5: Architecture and Paradigm ]</div>
       <div class="step-title" role="heading" aria-level="2">Multi-model, neural network, and continuous learning</div>
       <div class="step-desc">These requirements apply conditionally based on your system's design choices. If your system does not use the indicated architecture or paradigm, select "Not applicable."</div>
       <div class="tier-hint" id="tierHint5"></div>
@@ -993,7 +979,7 @@
   <div class="results-inner">
 
     <div class="results-header">
-      <div class="step-eyebrow">Your Readiness Report</div>
+      <div class="step-eyebrow">[ Your Readiness Report ]</div>
       <div class="results-score-ring">
         <svg viewBox="0 0 140 140">
           <circle class="ring-bg" cx="70" cy="70" r="65"/>
@@ -1008,9 +994,9 @@
     </div>
 
     <div class="results-key">
-      <div class="results-key-item"><span class="results-key-dot" style="background:#2D7A3A;"></span>Strong</div>
-      <div class="results-key-item"><span class="results-key-dot" style="background:#C8861A;"></span>Partial</div>
-      <div class="results-key-item"><span class="results-key-dot" style="background:#C8272D;"></span>Gap</div>
+      <div class="results-key-item"><span class="results-key-dot" style="background:var(--ok);"></span>Strong</div>
+      <div class="results-key-item"><span class="results-key-dot" style="background:var(--warn);"></span>Partial</div>
+      <div class="results-key-item"><span class="results-key-dot" style="background:var(--bad);"></span>Gap</div>
       <div class="results-key-item"><span class="results-key-dot" style="background:var(--ink-3);"></span>Not applicable</div>
     </div>
 
@@ -1119,13 +1105,13 @@
     'ai3': { id: 'AI-3', title: 'ML test coverage' },
     'ai4': { id: 'AI-4', title: 'Continuous validation' },
     'ai5': { id: 'AI-5', title: 'Hallucination prevention' },
-    'ai6': { id: 'AI-6', title: 'Out of distribution detection' },
+    'ai6': { id: 'AI-6', title: 'Out-of-distribution detection' },
     'ai7': { id: 'AI-7', title: 'Adversarial robustness' },
     'ai8': { id: 'AI-8', title: 'Explainability' },
-    'ai9': { id: 'AI-9', title: 'Human and AI teaming' },
+    'ai9': { id: 'AI-9', title: 'Human-AI teaming' },
     'ai10': { id: 'AI-10', title: 'Privacy and data protection' },
     'ai11': { id: 'AI-11', title: 'Multi-model systems' },
-    'ai12': { id: 'AI-12', title: 'Neural network requirements' },
+    'ai12': { id: 'AI-12', title: 'Neural networks' },
     'ai13': { id: 'AI-13', title: 'Continuous learning and adaptation' }
   };
 
@@ -1509,7 +1495,7 @@
       }
     },
     ai6: {
-      id: 'AI-6', title: 'Out of distribution detection',
+      id: 'AI-6', title: 'Out-of-distribution detection',
       question: 'Can your system detect when it receives inputs outside its training distribution, and does it log and escalate these events?',
       context: 'AI-6 evaluates the system\'s ability to recognize inputs it was not designed to handle. OOD detection with logging, alerting, and defined escalation procedures ensures the system does not silently produce unreliable outputs when encountering novel or unexpected data.',
       answers: {
@@ -1541,7 +1527,7 @@
       }
     },
     ai9: {
-      id: 'AI-9', title: 'Human and AI teaming',
+      id: 'AI-9', title: 'Human-AI teaming',
       question: 'Are AI authority limits, human override requirements, and interaction audit trails formally defined?',
       context: 'AI-9 addresses the formal definition of human and AI interaction boundaries. Authority limits, override procedures, trust calibration testing, and audit trails must be established. This requirement ensures there is clarity about what the AI can decide autonomously versus what requires human authorization.',
       answers: {
@@ -1574,7 +1560,7 @@
       }
     },
     ai12: {
-      id: 'AI-12', title: 'Neural network requirements',
+      id: 'AI-12', title: 'Neural networks',
       question: 'If your system uses neural networks, is the architecture documented with confidence calibration, explainability methods, training integrity controls, and deployment transformation validation?',
       context: 'AI-12 applies when the system uses neural networks. It requires architecture documentation, confidence calibration, neural network explainability methods, training integrity verification, OOD detection extensions specific to neural networks, adversarial vulnerability mitigation, generative model hallucination constraints, and deployment transformation validation.',
       answers: {

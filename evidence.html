@@ -49,11 +49,7 @@
   background: var(--white);
   padding: 22px 24px;
 }
-.ev-method-label {
-  font-size: 11px; font-weight: 600; letter-spacing: 0.08em;
-  text-transform: uppercase; color: var(--ink-3);
-  margin-bottom: 8px;
-}
+.ev-method-label { margin-bottom: 8px; }   /* type from the shared label rule in styles.css */
 .ev-method-value {
   font-size: 15px; font-weight: 500; color: var(--ink); line-height: 1.4;
 }
@@ -87,21 +83,16 @@
   gap: 16px; margin-bottom: 18px;
 }
 .ev-areas { display: flex; gap: 6px; flex-wrap: wrap; }
-.ev-area-tag {
-  font-family: var(--mono); font-size: 12px; font-weight: 500;
-  letter-spacing: 0.06em; color: #0C2242;
-  background: var(--blue-lt); border-radius: 4px;
-  padding: 3px 9px;
-}
+/* .ev-area-tag takes the shared identifier rule in styles.css. */
 .ev-chip {
   font-size: 11px; font-weight: 600; letter-spacing: 0.07em;
   text-transform: uppercase; white-space: nowrap;
   padding: 5px 11px; border-radius: 999px;
   border: 1px solid;
 }
-.ev-chip.pass   { color: #2D7A3A; border-color: #2D7A3A; background: rgba(45,122,58,0.06); }
-.ev-chip.warn   { color: #B5751A; border-color: #B5751A; background: rgba(181,117,26,0.07); }
-.ev-chip.deny   { color: #A63D2F; border-color: #A63D2F; background: rgba(166,61,47,0.06); }
+.ev-chip.pass   { color: var(--ok); border-color: var(--ok); background: rgba(45,122,58,0.06); }
+.ev-chip.warn   { color: var(--warn-text); border-color: var(--warn); background: rgba(181,117,26,0.07); }
+.ev-chip.deny   { color: var(--bad); border-color: var(--bad); background: rgba(200,39,45,0.06); }
 
 .ev-panel-title {
   font-size: 21px; font-weight: 600; letter-spacing: -0.02em;
@@ -117,10 +108,10 @@
   font-family: var(--mono); font-size: 30px; font-weight: 500;
   color: var(--ink); letter-spacing: -0.01em;
 }
-.ev-metric-num.deny { color: #A63D2F; }
+.ev-metric-num.deny { color: var(--bad); }
 .ev-metric-label { font-size: 13px; color: var(--ink-2); font-weight: 300; line-height: 1.5; flex: 1; min-width: 160px; }
 .ev-body {
-  font-size: 14.5px; line-height: 1.7; font-weight: 300;
+  font-size: 14px; line-height: 1.65; font-weight: 300;
   color: var(--ink-2); margin-bottom: 18px;
 }
 .ev-body strong { font-weight: 600; color: var(--ink); }
@@ -138,15 +129,15 @@
   padding: 48px 44px;
   margin-bottom: 56px;
 }
-.ev-callout .fw-eyebrow-mono { color: rgba(255,255,255,0.5); }
+.ev-callout .fw-eyebrow-mono { color: rgba(250,249,245,0.62); }
 .ev-callout h2 {
   font-size: 28px; font-weight: 600; letter-spacing: -0.02em;
-  color: #fff; line-height: 1.25; margin: 8px 0 18px;
+  color: var(--white); line-height: 1.25; margin: 8px 0 18px;
 }
 .ev-callout h2 em { font-size: inherit !important; font-weight: inherit !important; font-style: normal !important; color: inherit !important; }
 .ev-callout p {
   font-size: 16px; line-height: 1.75; font-weight: 300;
-  color: rgba(255,255,255,0.8); max-width: 680px; margin: 0;
+  color: rgba(250,249,245,0.8); max-width: 680px; margin: 0;
 }
 
 /* Source / repo band */
@@ -169,13 +160,14 @@
   max-width: 760px; margin: 40px auto 0; text-align: center;
 }
 
-@media (max-width: 860px) {
+@media (max-width: 880.98px) {
   .ev-method { grid-template-columns: 1fr 1fr; }
   .ev-grid { grid-template-columns: 1fr; }
   .ev-source-band { grid-template-columns: 1fr; gap: 32px; }
 }
-@media (max-width: 480px) {
+@media (max-width: 640px) {
   .ev-method { grid-template-columns: 1fr; }
+  .ev-callout { padding: 32px 24px; }
   .ev-source-row { grid-template-columns: 1fr; gap: 4px; }
   .ev-source-row-value { min-width: 0; overflow-wrap: anywhere; }
 }
@@ -269,7 +261,7 @@
     <div class="ev-grid">
 
       <!-- AI-1 : Data leakage -->
-      <div class="ev-panel" style="--accent:#B5751A;">
+      <div class="ev-panel" style="--accent:var(--warn);">
         <div class="ev-panel-head">
           <div class="ev-areas"><span class="ev-area-tag">AI-1</span></div>
           <span class="ev-chip warn">Leakage caught</span>
@@ -286,7 +278,7 @@
       </div>
 
       <!-- AI-4 : Drift monitoring -->
-      <div class="ev-panel" style="--accent:#2D7A3A;">
+      <div class="ev-panel" style="--accent:var(--ok);">
         <div class="ev-panel-head">
           <div class="ev-areas"><span class="ev-area-tag">AI-4</span></div>
           <span class="ev-chip pass">Monitor qualified</span>
@@ -303,7 +295,7 @@
       </div>
 
       <!-- AI-6 / AI-12 : OOD detection -->
-      <div class="ev-panel" style="--accent:#A63D2F;">
+      <div class="ev-panel" style="--accent:var(--bad);">
         <div class="ev-panel-head">
           <div class="ev-areas"><span class="ev-area-tag">AI-6</span><span class="ev-area-tag">AI-12</span></div>
           <span class="ev-chip deny">Denial finding</span>
@@ -320,7 +312,7 @@
       </div>
 
       <!-- AI-8 / AI-12 : Calibration -->
-      <div class="ev-panel" style="--accent:#2D7A3A;">
+      <div class="ev-panel" style="--accent:var(--ok);">
         <div class="ev-panel-head">
           <div class="ev-areas"><span class="ev-area-tag">AI-8</span><span class="ev-area-tag">AI-12</span></div>
           <span class="ev-chip pass">Fail &rarr; pass</span>
@@ -340,8 +332,8 @@
 
     <!-- Failures retained -->
     <div class="ev-callout">
-      <div class="fw-eyebrow-mono">[ Why the failures stay in ]</div>
-      <h2>A bench that cannot fail its subject <br>is not evidence.</h2>
+      <div class="fw-eyebrow-mono">[ Why the Failures Stay In ]</div>
+      <h2>A bench that cannot fail its subject is not evidence.</h2>
       <p>
         Two of the four results above are failures. The softmax detector performs worse than chance. The out-of-the-box calibration does not pass. They are kept because they are the point. A verification method that certifies whatever it is pointed at proves nothing. These are held to the same pass and fail criteria a real assessment would apply, and they are allowed to fail.
       </p>
@@ -351,7 +343,7 @@
     <div class="fw-eyebrow-mono">[ Reproduce It ]</div>
     <div class="ev-source-band" style="margin-top: 8px;">
       <div>
-        <h2 class="section-title" style="margin-bottom: 16px;">Open pipeline. <br>Open data.</h2>
+        <h2 class="section-title" style="margin-bottom: 16px;">Open pipeline. Open data.</h2>
         <p style="font-size: 15px; color: var(--ink-2); line-height: 1.8; font-weight: 300;">
           The full pipeline, configuration, seeds, and result files are public. Every figure on this page traces to a JSON artifact in the repository, produced under a pre-declared configuration. The framework these methods verify against is openly published under a citable DOI.
         </p>

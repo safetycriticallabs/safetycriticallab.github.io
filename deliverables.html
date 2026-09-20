@@ -151,6 +151,14 @@
 .dl-table tr:last-child td { border-bottom: none; }
 .wrap-scroll { overflow-x: auto; }
 .dl-meta { margin: 0 0 10px 0; }
+/* .legal-block p (0,1,1) out-specifies the shared label rule in styles.css (0,1,0),
+   so these lines rendered at 15px/300 with the label's tracking and case. */
+.legal-block p.dl-meta { font-size: 12px; font-weight: 500; line-height: 1.6; color: rgba(12,34,66,0.66); }
+/* The at-a-glance table is wider than the phone column; let it reach the gutter so
+   the sideways scroll is visible rather than clipped inside the text measure. */
+@media (max-width: 880.98px) {
+  .wrap-scroll { margin: 0 -24px; padding: 0 24px; }
+}
 /* Phone: the legal column follows the hero's 24px gutter (styles.css inner-hero
    at 880.98px), instead of holding a 40px gutter and 88px of top padding. */
 @media (max-width: 880.98px) {

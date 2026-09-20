@@ -35,7 +35,7 @@
 .fw-showcase-title {
   font-family: var(--sans);
   font-size: clamp(30px, 3.4vw, 46px);
-  font-weight: 700;
+  font-weight: 600;
   line-height: 1.08;
   letter-spacing: -0.025em;
   color: var(--ink);
@@ -197,89 +197,10 @@
   .footer-meta { text-align: left; }
 }
 
-/* ═══ MATCH HOMEPAGE SHELL ══════════════════════════════════════════
-   Page-scoped replica of index.html's shell treatment (navy ink, wordmark,
-   dropdown nav, solid-navy CTA, dark-navy footer). On rollout this whole
-   block moves into styles.css so every page shares one identical shell. */
-
-/* 1) One navy ink for ALL text — kills the blue-accent look, matches index. */
-body, body * { color: #0C2242 !important; }
-/* Carve-out: the phase number badge sits on a blue disc, keep it light. */
-.phase-num-badge { color: #FAF9F5 !important; }
-
-/* 2) Flat cream shell surfaces — no gradients, tan bands, frost, or hairline. */
-.global-nav { background: #FAF9F5; backdrop-filter: none; -webkit-backdrop-filter: none; border-bottom: none !important; }
-.inner-hero { background: #FAF9F5; border-bottom: none; }
-
-/* 3) Nav — heavier/larger wordmark, links clustered right, dropdowns, solid-navy CTA. */
-.gn-text { font-weight: 700; letter-spacing: 0.02em; }
-.gn-text-full { font-size: 19px; }
-/* Wordmark scroll-collapse — full name wipes to "SCL" past 40px (matches index). */
-@media (min-width: 481px) {
-  .gn-wordmark { position: relative; overflow: hidden; display: inline-flex; align-items: center; height: 30px; }
-  .gn-text-full, .gn-text-abbr { display: block; height: 30px; line-height: 30px; white-space: nowrap; }
-  .gn-text-full { opacity: 1; clip-path: inset(0 0 0 0); transition: opacity 0.34s ease 0.30s, clip-path 0.44s cubic-bezier(0.5,0,0.2,1) 0.30s; }
-  .gn-text-abbr { position: absolute; left: 0; top: 0; font-size: 22px; opacity: 0; pointer-events: none; transition: opacity 0.3s ease 0s; background: none !important; -webkit-text-fill-color: #0C2242 !important; color: #0C2242 !important; filter: none !important; }
-  .global-nav.gn-compact .gn-text-full { opacity: 0; clip-path: inset(0 100% 0 0); transition: opacity 0.34s ease 0s, clip-path 0.44s cubic-bezier(0.5,0,0.2,1) 0s; }
-  .global-nav.gn-compact .gn-text-abbr { opacity: 1; transition: opacity 0.34s ease 0.34s; }
-}
-@media (min-width: 881px) {
-  .gn-links { margin-left: auto; gap: clamp(18px, 2vw, 28px); }
-  .gn-search { margin-left: 12px !important; }
-  .gn-dropdown-toggle {
-    font-family: var(--sans); font-size: 13px; font-weight: 500;
-    letter-spacing: 0.04em; text-transform: uppercase;
-    color: #0C2242 !important; padding: 8px 0;
-  }
-  /* Navy panel, matching styles.css:761-763 and therefore every other page.
-     This page had been the only one on a light blue #D5E0EC panel. */
-  .gn-dropdown-menu {
-    background: rgba(12,34,66,0.97) !important;
-    border: 1px solid rgba(250,249,245,0.14) !important;
-    box-shadow: 0 14px 34px rgba(12,34,66,0.30) !important;
-    border-radius: 10px !important; padding: 8px !important;
-  }
-  .gn-dropdown-menu a { color: rgba(250,249,245,0.72) !important; padding: 9px 14px !important; border-radius: 6px; }
-  .gn-dropdown-menu a:hover { color: #FAF9F5 !important; background: rgba(250,249,245,0.10) !important; }
-}
-/* Mobile accordion styling moved into styles.css (2026-09-18) so every page shares it. */
-.gn-cta {
-  background: #0C2242 !important; color: #FAF9F5 !important; border-color: #0C2242 !important;
-  border-radius: 8px !important; height: 40px !important; padding: 0 26px !important;
-  display: inline-flex !important; align-items: center; justify-content: center; font-size: 14px !important;
-}
-.gn-cta:hover { background: #081A34 !important; border-color: #081A34 !important; color: #FAF9F5 !important; }
-
-/* 4) In-page buttons → SOLID navy pill, consistent with the nav CTA. */
-.btn-solid { background: #0C2242 !important; border: 1px solid #0C2242; color: #FAF9F5 !important; border-radius: 8px; }
-.btn-solid:hover { background: #081A34 !important; border-color: #081A34; color: #FAF9F5 !important; }
-
-/* 5) Footer → dark-navy block: SCL mark + social, grouped link columns. */
-.site-footer { background: #0C2242 !important; border-top: none !important; margin-top: 40px; }
-.site-footer .footer-inner { padding-top: 156px !important; padding-bottom: 116px !important; min-height: 480px; }
-.footer-top { display: flex !important; gap: clamp(56px, 9vw, 150px); align-items: stretch; }
-.footer-brand { flex: 0 0 auto; min-width: 240px; display: flex; flex-direction: column; justify-content: space-between; gap: 60px; }
-.footer-logo { font-family: var(--sans); font-weight: 700; font-size: 56px; letter-spacing: -0.02em; line-height: 1; color: #FAF9F5 !important; }
-.footer-brand-bottom { display: flex; flex-direction: column; gap: 16px; }
-.footer-copyright { margin: 0 !important; font-size: 13px; line-height: 1.6; color: rgba(250,249,245,0.5) !important; }
-.footer-social { display: flex; gap: 15px; }
-.footer-social a, .footer-social a svg, .footer-social a path { color: rgba(250,249,245,0.58) !important; fill: currentColor; }
-.footer-social a { display: inline-flex; transition: color .2s ease; }
-.footer-social a:hover, .footer-social a:hover svg, .footer-social a:hover path { color: #FAF9F5 !important; }
-.footer-cols { flex: 1; display: grid !important; grid-template-columns: repeat(4,1fr); gap: 30px; margin-bottom: 0 !important; }
-.footer-col { display: flex; flex-direction: column; gap: 52px; border: none !important; }
-.footer-col-group { display: flex; flex-direction: column; }
-.footer-col-label { font-size: 14px !important; font-weight: 600 !important; color: #FAF9F5 !important; margin-bottom: 18px !important; text-transform: none !important; letter-spacing: 0 !important; padding: 0 !important; }
-.footer-col-group a { display: block; font-size: 14px; color: rgba(250,249,245,0.6) !important; text-decoration: none; padding: 7px 0; transition: color .2s ease; letter-spacing: 0.01em; }
-.footer-col-group a:hover { color: #FAF9F5 !important; }
-@media (max-width: 900px) {
-  .site-footer .footer-inner { padding-top: 64px !important; padding-bottom: 56px !important; }
-  .footer-top { flex-direction: column; gap: 48px; }
-  .footer-brand { flex: none; gap: 28px; }
-  .footer-cols { grid-template-columns: repeat(2,1fr); gap: 44px 30px; }
-  .footer-col { gap: 36px; }
-  .footer-col-label::after { display: none !important; }
-}
+/* The page-scoped shell replica that sat here (navy ink !important, nav, CTA,
+   footer) was deleted 2026-09-19: styles.css SHARED SHELL now supplies all of
+   it, and the body-wide recolour was flattening the shared eyebrow, the phase
+   subtitles, the blue evidence labels and the breadcrumb slash to one navy. */
 </style>
 </head>
 <body>
@@ -438,7 +359,7 @@ body, body * { color: #0C2242 !important; }
             </div>
           </div>
           <p class="phase-body">
-            The structured audit of your AI system against the framework requirements. Where evidence review examined documentation, technical assessment examines the system itself: its architecture, its test infrastructure, and the operational validity of its verification claims. This is also the phase where the risk score is calculated. The items below are the activities that make up the audit, the grading they produce, and the remediation path for any conditional findings.
+            The structured audit of your AI system against the framework requirements. Where evidence review examined documentation, technical assessment examines the system itself: its architecture, its test infrastructure, and the operational validity of its verification claims. This is also the phase where the risk score is calculated. The items below are the activities that make up the audit, the grading they produce, and the remediation path for any Major finding.
           </p>
           <div class="phase-checklist">
             <div class="check-item fade-up">

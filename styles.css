@@ -280,6 +280,7 @@ h2.section-title em { font-style: italic; color: var(--ink); font-family: var(--
 
 /* ─── BUTTONS ─────────────────────────────────────────────── */
 .btn {
+  line-height: 1.6;   /* a button element would otherwise keep UA normal and sit 4px shorter than an a.btn */
   font-family: var(--sans); font-size: 13px;
   font-weight: 500; letter-spacing: 0.04em;
   padding: 14px 32px; border-radius: 8px;

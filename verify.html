@@ -25,41 +25,21 @@
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css">
 <style>
-.verify-page {
-  min-height: calc(100vh - 72px);
-  display: flex; align-items: center; justify-content: center;
-  padding: 80px 24px;
-  position: relative;
+/* This page used to build its own viewport-sized box (min-height 100vh,
+   overflow hidden, flex centring) with a private cursor glow. It now carries the
+   family's hero and a reading section, so the breadcrumb, the H1 size and the
+   glow all come from styles.css, and Safari has one less scroll container to
+   latch a trackpad gesture onto (see the note at styles.css line 45). */
+.verify-section {
   background: #FAF9F5;
-  overflow: hidden;
+  padding: 88px 40px 120px;
 }
-.verify-page-glow {
-  position: absolute; inset: 0;
-  z-index: 0;
-  pointer-events: none;
-  opacity: 0;
-  transition: opacity 0.4s;
-  background: radial-gradient(520px circle at var(--glow-x, 50%) var(--glow-y, 50%), rgba(46,109,180,0.10), transparent 60%);
-}
-.verify-page:hover .verify-page-glow { opacity: 1; }
 .verify-card {
-  width: 100%; max-width: 640px;
-  padding: 24px 0;
+  width: 100%; max-width: 760px;
+  margin: 0 auto;
   text-align: center;
-  position: relative;
-  z-index: 1;
 }
 .verify-eyebrow { margin-bottom: 20px; }
-.verify-title {
-  font-family: var(--sans);
-  font-size: clamp(28px, 3vw, 38px);
-  font-weight: 600; letter-spacing: -0.025em;
-  color: #0C2242; line-height: 1.15;
-  margin-bottom: 28px;
-}
-.verify-title em {
-  font-size: inherit !important; font-weight: inherit !important; font-style: normal !important; color: inherit !important;
-}
 .verify-id-block {
   background: #FAF9F5;
   border: 1px solid rgba(46,109,180,0.12);
@@ -138,11 +118,11 @@
   color: var(--ink);
   background: #FAF9F5;
   border: 1px solid rgba(46,109,180,0.25);
-  border-radius: 4px;
-  padding: 10px 14px;
+  border-radius: 8px;
+  padding: 14px 16px;
+  line-height: 1.6;
 }
 .verify-lookup input:focus { outline: none; border-color: var(--blue); }
-.verify-lookup .btn { padding: 10px 22px; }
 .verify-file {
   max-width: 420px; margin: 32px auto 0;
   padding-top: 28px;
@@ -199,8 +179,12 @@
   display: flex; gap: 12px; justify-content: center;
   flex-wrap: wrap;
 }
+@media (max-width: 880.98px) {
+  .verify-section { padding: 60px 24px 88px; }
+}
 @media (max-width: 580px) {
-  .verify-card { padding: 8px 0; }
+  .verify-actions { flex-direction: column; }
+  .verify-actions .btn { width: 100%; }
 }
 </style>
 </head>
@@ -249,11 +233,21 @@
 <main id="main" tabindex="-1">
 <div class="page-shell">
 
-<div class="verify-page">
-  <div class="verify-page-glow"></div>
+<div class="inner-hero">
+  <div class="fw-hero-glow"></div>
+  <div class="inner-hero-inner">
+    <div>
+      <div class="inner-hero-breadcrumb"><a href="/">Safety Critical Labs</a><span>/</span> Verify a certificate</div>
+      <h1>Independent record of conformance.</h1>
+    </div>
+    <p class="inner-hero-lead">
+      Every certificate SCL issues is listed in a public register. Check a certificate number against it here, or compare a certificate file against the fingerprint the register holds for that record.
+    </p>
+  </div>
+</div>
+
+<section class="verify-section">
   <div class="verify-card">
-    <div class="verify-eyebrow">[ Certificate Verification ]</div>
-    <h1 class="verify-title">Independent record <br>of conformance.</h1>
 
     <div class="verify-id-block" id="verify-id-block" hidden>
       <div class="verify-id-label">Certificate Number</div>
@@ -299,7 +293,7 @@
       <div class="verify-file-result" id="verify-file-result" hidden></div>
     </div>
   </div>
-</div>
+</section>
 
 </div>
 
@@ -565,18 +559,6 @@
     handleFile(e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0]);
   });
   input.addEventListener('change', function () { handleFile(input.files && input.files[0]); });
-})();
-
-/* ─── Cursor glow on the verify page background ───────────── */
-(function() {
-  var glow = document.querySelector('.verify-page-glow');
-  var page = document.querySelector('.verify-page');
-  if (!glow || !page) return;
-  page.addEventListener('mousemove', function(e) {
-    var rect = page.getBoundingClientRect();
-    glow.style.setProperty('--glow-x', (e.clientX - rect.left) + 'px');
-    glow.style.setProperty('--glow-y', (e.clientY - rect.top) + 'px');
-  });
 })();
 </script>
 

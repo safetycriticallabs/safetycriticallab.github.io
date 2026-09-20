@@ -42,6 +42,7 @@
 .search-eyebrow { margin-bottom: 20px; }
 
 .search-title {
+  text-wrap: balance;   /* as styles.css does for .inner-hero h1 */
   font-family: var(--sans);
   font-size: clamp(36px, 4.5vw, 56px);
   font-weight: 600;
@@ -255,8 +256,8 @@
 
 .faq-item {
   background: #FAF9F5;
-  border: 1px solid rgba(46,109,180,0.16);
-  border-radius: 14px;
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-card);
   padding: 22px 26px;
   margin-bottom: 12px;
   transition: border-color 0.25s, box-shadow 0.25s, transform 0.25s;
@@ -306,11 +307,8 @@
 .search-empty-cta:hover { background: #0C2242; color: #FAF9F5; }
 
 /* ── Ask SCL conversation thread (streamed, multi-turn) ──
-   No bubbles on either side: the question is set as the turn's heading and the
-   answer follows beside the seal. FAQ cards keep their card look below. */
-/* The seal column is declared once. The question is padded by exactly the same
-   amount, so the question, the answer and every control under it sit on one
-   text column and only the seal hangs out to the left. */
+   The visitor's question is a bubble, the answer is not. FAQ cards keep their
+   card look below. The bubble itself is described at .ask-msg-user. */
 .ask-thread { display: flex; flex-direction: column; gap: 16px; --seal-size: 36px; --seal-gap: 14px; }
 .ask-thread > .ask-msg-ai { margin: 6px 0 14px; }
 /* The visitor's question is a bubble again, in SCL blue. Evenly rounded rather
@@ -458,7 +456,7 @@
 .ask-stopped {
   display: block; margin-top: 10px; padding-top: 8px;
   border-top: 1px solid rgba(12,34,66,0.08);
-  font-size: 12px; line-height: 1.6; color: #8A4B1F;
+  font-size: 12px; line-height: 1.6; color: var(--warn-text);
 }
 /* Where the assistant stops seeing. */
 #search-results-list:focus-visible {
@@ -489,7 +487,7 @@
   font-size: 12px; line-height: 1.5; color: rgba(12,34,66,0.55);
   margin: 6px 2px 0; min-height: 0; text-align: right;
 }
-.ask-count.is-at-cap { color: #8A4B1F; text-align: left; }
+.ask-count.is-at-cap { color: var(--warn-text); text-align: left; }
 /* Wait state: what the assistant is doing, so 25 seconds of silence does not
    read as a broken page. Measured median is 19s, p90 25s, worst 37s. */
 .ask-wait {

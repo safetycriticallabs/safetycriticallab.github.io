@@ -26,14 +26,6 @@
 /* Hero cursor glow styles live in styles.css (promoted 2026-08-24) */
 
 
-.legal-section {
-  background: #FAF9F5;
-  padding: 88px 40px 120px;
-}
-.legal-inner {
-  max-width: 760px;
-  margin: 0 auto;
-}
 
 .legal-meta {
   display: flex;
@@ -41,15 +33,9 @@
   gap: 24px;
   padding-bottom: 24px;
   margin-bottom: 48px;
-  border-bottom: 1px solid rgba(46,109,180,0.12);
+  border-bottom: 1px solid var(--card-border);
 }
-.legal-meta-item {
-  font-family: var(--mono);
-  font-size: 11px;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: rgba(12,34,66,0.6);
-}
+/* .legal-meta-item takes the shared label rule in styles.css. */
 .legal-meta-item strong {
   display: block;
   color: #0C2242;
@@ -65,13 +51,8 @@
   margin-bottom: 40px;
 }
 .legal-block:last-child { margin-bottom: 0; }
-.legal-block-num {
-  font-family: var(--mono);
-  font-size: 11px;
-  letter-spacing: 0.18em;
-  color: rgba(12,34,66,0.55);
-  margin-bottom: 6px;
-}
+/* .legal-block-num takes the shared label rule in styles.css. */
+.legal-block-num { margin-bottom: 6px; }
 .legal-block-title {
   font-family: var(--sans);
   font-size: 22px;
@@ -80,13 +61,6 @@
   margin: 0 0 14px;
   line-height: 1.25;
   letter-spacing: -0.01em;
-}
-.legal-block-title em {
-  font-family: inherit;
-  font-size: inherit !important;
-  font-weight: inherit !important;
-  font-style: normal !important;
-  color: inherit !important;
 }
 .legal-block p {
   font-size: 15px;
@@ -129,8 +103,8 @@
 .legal-review-note.is-standing { margin-top: 0; margin-bottom: 56px; }
 .mark-example {
   margin: 16px 0 0 0; padding: 18px 22px;
-  background: #FAF9F5; border: 1px solid rgba(46,109,180,0.12);
-  border-left: 3px solid var(--blue); border-radius: 14px;
+  background: #FAF9F5; border: 1px solid var(--card-border);
+  border-left: 3px solid var(--blue); border-radius: var(--radius-card);
   font-size: 15px; color: var(--ink); line-height: 1.7; font-weight: 400;
 }
 .mark-seal { margin: 20px 0 4px 0; }
@@ -144,11 +118,6 @@
 .mark-seal figcaption {
   font-family: var(--mono); font-size: 11px; letter-spacing: 0.06em;
   text-transform: uppercase; color: var(--ink-2); margin-top: 10px; font-weight: 500;
-}
-/* Phone: the legal column follows the hero's 24px gutter (styles.css inner-hero
-   at 880.98px), instead of holding a 40px gutter and 88px of top padding. */
-@media (max-width: 880.98px) {
-  .legal-section { padding: 60px 24px 88px; }
 }
 </style>
 </head>
@@ -238,7 +207,7 @@
       <div class="legal-block-num">02</div>
       <h2 class="legal-block-title">Status and ownership of the marks</h2>
       <p>The SCL name, the SCL seal, and the SCL Certified certification mark are owned by Safety Critical Labs. Applications covering SCL marks are on file with the United States Patent and Trademark Office.</p>
-      <p><strong>None of them is registered. A pending application is not a registration.</strong> No SCL mark carries the registered symbol, and nothing on this site, in any SCL document, or in any authorized use by a certificate holder may describe an SCL mark as a registered trademark. SCL marks are designated with the TM symbol.</p>
+      <p><strong>None of them is registered. A pending application is not a registration.</strong> No SCL mark carries the registered symbol, and nothing on this site, in any SCL document, or in any authorized use by a certificate holder may describe an SCL mark as a registered trademark. Where a designation is used, SCL marks carry the TM symbol, never the registered symbol.</p>
       <p>Registration status changes nothing about what this page governs. The question this page answers is what a display of the SCL Certified mark tells a reader, and that is settled by SCL's own rules and by the public register at <a href="/verify">/verify</a>, not by the state of any filing. A certificate is either in the register or it is not.</p>
     </div>
 
@@ -323,7 +292,7 @@
       <div class="legal-block-num">08</div>
       <h2 class="legal-block-title">How long a claim lasts</h2>
       <p><strong>A certificate is a point in time determination with a defined validity period and a surveillance schedule set by classification tier.</strong> The right to display the mark lasts exactly as long as the certificate is current, and not one day longer.</p>
-      <p>The public register at <a href="/verify">/verify</a> is the authority on status. It reports each certificate as Valid, Expired, Suspended or Withdrawn.</p>
+      <p>The public register at <a href="/verify">/verify</a> is the authority on status. It reports each certificate as Valid, Expired, Suspended or Withdrawn, plus Specimen for the demonstration record.</p>
       <ul>
         <li><strong>Expired.</strong> The validity period has ended, or surveillance is overdue. The holder removes every display of the mark. No notice from SCL is required first; the holder is expected to track the date.</li>
         <li><strong>Suspended.</strong> The holder removes every display of the mark for the duration of the suspension.</li>

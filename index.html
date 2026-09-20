@@ -1365,7 +1365,7 @@
      with it, so they are back to the exact published values. If /assess ever
      restates its key, restate it here, and nowhere in between. */
   .sc-assess-dot{ width:9px; height:9px; border-radius:50%; margin-left:auto; flex-shrink:0; background:#5B6B84; transition:background .5s ease; }
-  .sc-assess-dot.is-strong{ background:#2D7A3A; } .sc-assess-dot.is-partial{ background:#C8861A; } .sc-assess-dot.is-gap{ background:#C8272D; }
+  .sc-assess-dot.is-strong{ background:var(--ok); } .sc-assess-dot.is-partial{ background:var(--warn); } .sc-assess-dot.is-gap{ background:var(--bad); }
   @media (max-width:880.98px){ .sc-assess-rows{ display:none; } }   /* narrow fine-pointer windows: the ring alone */
   @media (prefers-reduced-motion: reduce){ .sc-ring-fill{ transition:none; } .sc-assess-dot{ transition:none; } }
   /* Inverted with the card: a cream pill on a cream ground is invisible. Now it
@@ -1479,9 +1479,9 @@
 
        WHY A BROAD WARM FILL IS SAFE HERE, which the previous navy treatment
        was written to avoid. Every warm SIGNAL on this site is saturated:
-       .sc-assess-dot.is-partial #C8861A (chroma 0.136, on this same page),
-       /assess Partial #C8861A (0.136), evidence warn #B5751A (0.126), verify
-       warn #C98A1B (0.137). The ladder tops out at 0.062. The rule that keeps
+       the one status amber, --warn #B5751A (chroma 0.126), which /assess,
+       /evidence, /verify and the readiness dots on this page all now read.
+       The ladder tops out at 0.062. The rule that keeps
        surface and status apart is chroma, not hue: saturated warm is a claim,
        desaturated warm is paper. Do not raise this card's chroma past ~0.07
        without re-checking it against the /assess results key.
@@ -1944,7 +1944,7 @@
                         <div class="cert-mid-rule"></div>
 
                         <div class="cert-back-note">
-                          Evaluated against the requirement sets that apply to the certified system, under the <strong>SCL AI Requirements Framework v3.7</strong>. Scan to confirm this record against the public register.
+                          Evaluated against the requirement areas that apply to the certified system, under the <strong>SCL AI Requirements Framework v3.7</strong>. Scan to confirm this record against the public register.
                         </div>
 
                       </div>
@@ -3087,8 +3087,8 @@
        cannot desync it. Size and strength carry that one real distinction.
        This replaces a 300 degree hue sweep that was pure decoration and that
        put AI-8 at #BA5B4F and AI-9 at #BA854F, a hair from the published
-       Partial swatch #C8861A, in the same 2x2 as the tile that teaches that
-       key. Colour on this page means conformity state or it means nothing. */
+       Partial swatch --warn #B5751A, in the same 2x2 as the tile that teaches
+       that key. Colour on this page means conformity state or it means nothing. */
     var conditional = !!AREAS[i].tier;
     var size = conditional ? 7 : 9;
     var dotCol = conditional ? 'rgba(121,168,213,0.55)' : '#79A8D5';

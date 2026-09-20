@@ -247,7 +247,9 @@ html {{ scroll-behavior: auto; }}
 .req-area-intro {{ margin: 0 0 28px; color: var(--ink-2); }}
 .req-entry {{ margin: 0 0 30px; padding-left: 16px; border-left: 2px solid rgba(46,109,180,0.18); }}
 .req-entry h3 {{ font-size: 17px; font-weight: 600; letter-spacing: -0.01em; line-height: 1.35; margin: 0 0 8px; scroll-margin-top: 90px; }}   /* same entry heading as .gl-name on /glossary */
-.req-entry:target {{ border-left-color: #2E6DB4; }}
+/* Same :target treatment as /glossary: the entry name takes --blue-dk. */
+.req-entry:target {{ border-left-color: var(--blue-dk); }}
+.req-entry:target h3 {{ color: var(--blue-dk); }}
 .req-id {{ margin-right: 6px; }}   /* type from the shared identifier rule in styles.css */
 .prose p.req-statement {{ margin: 0 0 8px; font-weight: 400; }}   /* the normative statement keeps regular weight; rationale and verification read at 300 */
 .prose p.req-part {{ margin: 0 0 8px; font-size: 0.94rem; color: var(--ink-2); }}

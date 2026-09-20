@@ -22,12 +22,19 @@
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 :root {
-  /* Layered cream palette — no pure white anywhere.
-     surface (lightest, raised) → page (mid) → deep (insets/accents) */
+  /* The deck's own palette. It is self-contained: presentation.html links no
+     styles.css, so nothing here is the shell token of the same name, and two
+     names below deliberately differ from it. No pure white anywhere. */
   --bg: #FAF9F5;          /* page — flat site cream (matches styles.css) */
   --bg-cool: #FAF9F5;
-  --cream-deep: #D5E0EC;  /* deeper cream — insets / strong accents (matches site) */
-  --white: #FDFCF9;       /* raised surface — warm near-white for cards/chrome */
+  --cream-deep: #D5E0EC;  /* the deck's own inset and accent tint. Despite the name
+                             it is a pale blue-grey, not a cream, and it matches no
+                             site token: styles.css has no counterpart and its
+                             decorative surface is --cream-2 #F2EFE8. */
+  --white: #FDFCF9;       /* the deck's raised surface, a warm near-white for cards
+                             and chrome. Shadows the shell name: styles.css --white
+                             is #FAF9F5, the flat page cream, so a rule using this
+                             token must not be copied into the shared sheet as is. */
   --ink: #0C2242;
   --ink2: #33475F;
   --ink3: #7A8FA6;
@@ -37,7 +44,9 @@
   --rule: #E4E8EC;
   --green: #2D7A3A;
   --green-lt: #F3FAF5;
-  --gold: #6B4E0A;
+  --gold: #6B4E0A;        /* dark gold ink for tier and outcome accents. Shadows the
+                             shell name: styles.css --gold is #DCB34B, the emblem's
+                             ring, which is far too light to set type in. */
   --gold-lt: #FFFCF0;
   /* Unified on DM Sans to match styles.css. The --serif and --mono
      aliases are kept for backwards compatibility with existing markup. */
@@ -67,7 +76,9 @@ body.is-cover .c-spark { display: block; opacity: var(--op, 0.14); animation: cT
 ::-webkit-scrollbar-thumb { background: var(--rule); border-radius: 3px; }
 button { font-family: inherit; cursor: pointer; }
 
-.app { display: flex; flex-direction: column; height: 100vh; position: relative; z-index: 1; }
+/* dvh so iOS Safari's toolbar counts against the height; the vh line is the
+   fallback. Same pattern search.html documents at its own composer rules. */
+.app { display: flex; flex-direction: column; height: 100vh; height: 100dvh; position: relative; z-index: 1; }
 
 /* Header */
 .header { padding: 0 24px; height: 60px; border-bottom: 1px solid var(--rule); display: flex; align-items: center; gap: 16px; background: #FAF9F5; flex-shrink: 0; }
@@ -87,7 +98,7 @@ button { font-family: inherit; cursor: pointer; }
 
 /* Sidebar — slide-in "Slides" drawer (no longer a persistent column, so the
    slide fills the full frame for presenting). Reuses all existing nav markup. */
-.sidebar { position: fixed; top: 0; left: 0; width: 300px; height: 100vh; border-right: 1px solid var(--rule); padding: 16px 0 8px; overflow-y: auto; background: var(--white); z-index: 60; transform: translateX(-100%); transition: transform 0.28s cubic-bezier(0.22,1,0.36,1); box-shadow: 12px 0 44px rgba(12,34,66,0.16); }
+.sidebar { position: fixed; top: 0; left: 0; width: 300px; height: 100vh; height: 100dvh; border-right: 1px solid var(--rule); padding: 16px 0 8px; overflow-y: auto; background: var(--white); z-index: 60; transform: translateX(-100%); transition: transform 0.28s cubic-bezier(0.22,1,0.36,1); box-shadow: 12px 0 44px rgba(12,34,66,0.16); }
 .sidebar.open { transform: none; }
 .nav-backdrop { position: fixed; inset: 0; background: rgba(12,34,66,0.32); opacity: 0; pointer-events: none; transition: opacity 0.28s; z-index: 55; }
 .nav-backdrop.open { opacity: 1; pointer-events: auto; }
@@ -117,7 +128,7 @@ button { font-family: inherit; cursor: pointer; }
 .content-header .section-label { font-family: var(--mono); font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink3); margin-bottom: 6px; }
 
 /* Title slide */
-.title-slide { min-height: calc(100vh - 180px); display: flex; flex-direction: column; justify-content: center; padding: 20px 40px; max-width: 880px; margin: 0 auto; }
+.title-slide { min-height: calc(100vh - 180px); min-height: calc(100dvh - 180px); display: flex; flex-direction: column; justify-content: center; padding: 20px 40px; max-width: 880px; margin: 0 auto; }
 .title-logo { width: 96px; height: 96px; object-fit: contain; margin-bottom: 30px; filter: drop-shadow(0 8px 22px rgba(15,35,64,0.12)); }
 .title-eyebrow { font-family: var(--mono); font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--blue); margin-bottom: 32px; display: flex; align-items: center; gap: 14px; }
 .title-eyebrow::before { content: ''; width: 28px; height: 2px; background: var(--blue); display: inline-block; }
@@ -813,23 +824,23 @@ td:first-child { color: var(--ink); font-weight: 500; }
    Fixed nav bar lives OUTSIDE the zoomed .deck-canvas so its buttons stay
    thumb-sized while slides scale to fit the screen width. */
 .brand-short { display: none; }
-.mobile-nav { display: none; position: fixed; left: 0; right: 0; bottom: 0; z-index: 50; align-items: center; gap: 12px; padding: 10px 14px calc(10px + env(safe-area-inset-bottom)); background: var(--bg); border-top: 1px solid var(--rule); }
+.mobile-nav { display: none; position: fixed; left: 0; right: 0; bottom: 0; z-index: 50; align-items: center; gap: 12px; padding: 10px 14px; background: var(--bg); border-top: 1px solid var(--rule); }
 .mobile-nav button { flex: 1; min-height: 48px; padding: 11px 12px; background: transparent; border: 1px solid var(--rule); border-radius: 8px; color: var(--ink2); font-size: 14px; font-weight: 500; letter-spacing: 0.02em; }
 .mobile-nav button.primary { background: var(--ink); border-color: var(--ink); color: #FAF9F5; }
 .mobile-nav button:disabled { background: transparent; color: var(--rule); border-color: var(--rule); cursor: default; }
 .mobile-nav-pos { font-family: var(--mono); font-size: 12px; letter-spacing: 0.06em; color: var(--ink3); white-space: nowrap; }
 @media (max-width: 699px), (max-width: 985px) and (pointer: coarse) {
-  .header { padding: env(safe-area-inset-top) 14px 0; height: calc(60px + env(safe-area-inset-top)); gap: 12px; }
+  .header { padding: 0 14px; height: 60px; gap: 12px; }
   /* the globe intro's fixed caption (z 51) would otherwise draw across the
      nav bar (z 50) — keep its bottom edge clear of the bar */
-  .cover-tour-name { bottom: calc(110px + env(safe-area-inset-bottom)); }
+  .cover-tour-name { bottom: 110px; }
   .header-menu { height: 44px; min-width: 44px; }
   .header-brand .brand-full { display: none; }
   .header-brand .brand-short { display: inline; }
   .header-counter { display: none; }
   .header-cta { height: 40px; padding: 0 16px; font-size: 13px; }
   .sidebar { width: min(300px, 85vw); }
-  .content { padding-bottom: calc(69px + env(safe-area-inset-bottom)); }
+  .content { padding-bottom: 69px; }
   .nav-footer { display: none; }
   .mobile-nav { display: flex; }
 }
@@ -1392,12 +1403,13 @@ const sections = {
     group: "Context", title: "The Published Standard", type: "standard",
     data: {
       doi: "10.5281/zenodo.22775993",
+      citeDoi: "10.5281/zenodo.19024420",
       title: "AI Requirements Framework for Safety Critical Systems, Version 3.7",
       publisher: "Safety Critical Labs",
       license: "CC BY-SA 4.0",
       points: [
         { title: "Openly Published", desc: "Full requirement text, verification methods, and evidence standards are publicly available. No NDA required." },
-        { title: "Permanently Citable", desc: "The DOI is citable in regulatory filings, procurement documentation, and academic reference. v3.7 always resolves to v3.7." },
+        { title: "Permanently Citable", desc: "Cite the concept DOI in regulatory filings, procurement documentation and academic reference: it always resolves to the current version. The version DOI beneath it pins a reader to v3.7, which is what a conformity record needs." },
         { title: "Open to Challenge", desc: "Technical challenges to requirements are accepted. A standard that cannot be challenged cannot improve." }
       ]
     }
@@ -3703,7 +3715,7 @@ function renderAgenda(data) {
 }
 
 function renderStandard(data) {
-  let html = '<div class="doi-block"><div><div class="doi-label">Canonical DOI</div><div class="doi-value">' + data.doi + '</div><div class="doi-title">' + data.title + '</div><div class="doi-meta">' + data.publisher + ' · ' + data.license + '</div></div><a href="https://doi.org/' + data.doi + '" target="_blank" rel="noopener" class="doi-btn">Download Framework</a></div><div class="features">';
+  let html = '<div class="doi-block"><div><div class="doi-label">Cite this</div><div class="doi-value">' + data.citeDoi + '</div><div class="doi-meta">This version, v3.7: ' + data.doi + '</div><div class="doi-title">' + data.title + '</div><div class="doi-meta">' + data.publisher + ' · ' + data.license + '</div></div><a href="https://doi.org/' + data.citeDoi + '" target="_blank" rel="noopener" class="doi-btn">Download Framework</a></div><div class="features">';
   data.points.forEach(p => { html += '<div class="feature"><div class="title">' + p.title + '</div><p>' + p.desc + '</p></div>'; });
   html += '</div>';
   return html;

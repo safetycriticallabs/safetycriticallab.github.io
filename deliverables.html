@@ -26,14 +26,6 @@
 /* Hero cursor glow styles live in styles.css (promoted 2026-08-24) */
 
 
-.legal-section {
-  background: #FAF9F5;
-  padding: 88px 40px 120px;
-}
-.legal-inner {
-  max-width: 760px;
-  margin: 0 auto;
-}
 
 .legal-meta {
   display: flex;
@@ -41,15 +33,9 @@
   gap: 24px;
   padding-bottom: 24px;
   margin-bottom: 48px;
-  border-bottom: 1px solid rgba(46,109,180,0.12);
+  border-bottom: 1px solid var(--card-border);
 }
-.legal-meta-item {
-  font-family: var(--mono);
-  font-size: 11px;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: rgba(12,34,66,0.6);
-}
+/* .legal-meta-item takes the shared label rule in styles.css. */
 .legal-meta-item strong {
   display: block;
   color: #0C2242;
@@ -65,13 +51,8 @@
   margin-bottom: 40px;
 }
 .legal-block:last-child { margin-bottom: 0; }
-.legal-block-num {
-  font-family: var(--mono);
-  font-size: 11px;
-  letter-spacing: 0.18em;
-  color: rgba(12,34,66,0.55);
-  margin-bottom: 6px;
-}
+/* .legal-block-num takes the shared label rule in styles.css. */
+.legal-block-num { margin-bottom: 6px; }
 .legal-block-title {
   font-family: var(--sans);
   font-size: 22px;
@@ -80,13 +61,6 @@
   margin: 0 0 14px;
   line-height: 1.25;
   letter-spacing: -0.01em;
-}
-.legal-block-title em {
-  font-family: inherit;
-  font-size: inherit !important;
-  font-weight: inherit !important;
-  font-style: normal !important;
-  color: inherit !important;
 }
 .legal-block p {
   font-size: 15px;
@@ -127,32 +101,10 @@
 .legal-review-note { margin-top: 56px; }
 .legal-review-note strong { color: var(--ink); font-weight: 500; }
 .legal-review-note.is-standing { margin-top: 0; margin-bottom: 56px; }
-.dl-table { width: 100%; border-collapse: collapse; margin: 18px 0 0 0; font-size: 14px; }
-.dl-table th, .dl-table td {
-  text-align: left; padding: 12px 14px; vertical-align: top;
-  border-bottom: 1px solid var(--rule); color: var(--ink-2); font-weight: 300; line-height: 1.6;
-}
-.dl-table th {
-  font-family: var(--mono); font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase;
-  color: var(--ink); font-weight: 500; border-bottom: 1px solid rgba(46,109,180,0.25);
-}
-.dl-table td strong { color: var(--ink); font-weight: 500; }
-.dl-table tr:last-child td { border-bottom: none; }
-.wrap-scroll { overflow-x: auto; }
 .dl-meta { margin: 0 0 10px 0; }
 /* .legal-block p (0,1,1) out-specifies the shared label rule in styles.css (0,1,0),
    so these lines rendered at 15px/300 with the label's tracking and case. */
 .legal-block p.dl-meta { font-size: 12px; font-weight: 500; line-height: 1.6; color: rgba(12,34,66,0.66); }
-/* The at-a-glance table is wider than the phone column; let it reach the gutter so
-   the sideways scroll is visible rather than clipped inside the text measure. */
-@media (max-width: 880.98px) {
-  .wrap-scroll { margin: 0 -24px; padding: 0 24px; }
-}
-/* Phone: the legal column follows the hero's 24px gutter (styles.css inner-hero
-   at 880.98px), instead of holding a 40px gutter and 88px of top padding. */
-@media (max-width: 880.98px) {
-  .legal-section { padding: 60px 24px 88px; }
-}
 </style>
 </head>
 <body>
@@ -233,11 +185,11 @@
       <div class="wrap-scroll">
       <table class="dl-table">
         <tr><th>Document</th><th>Phase</th><th>Issued when</th><th>What it settles</th></tr>
-        <tr><td><strong>Applicability Determination Record</strong></td><td>1</td><td>Always, and signed</td><td>Scope, classification, tailoring</td></tr>
-        <tr><td><strong>Evidence Review Report</strong></td><td>2</td><td>Always</td><td>Preliminary findings, open items</td></tr>
-        <tr><td><strong>Technical Assessment Report</strong></td><td>3</td><td>Always</td><td>Final findings and the risk score</td></tr>
-        <tr><td><strong>Certification Determination Document</strong></td><td>4</td><td><strong>Always, certified or not</strong></td><td>The determination, and the authoritative certified scope</td></tr>
-        <tr><td><strong>Certificate</strong></td><td>4</td><td>Only on a Certified determination</td><td>A short public summary of the above</td></tr>
+        <tr><td><strong>Applicability Determination Record</strong></td><td>01</td><td>Always, and signed</td><td>Scope, classification, tailoring</td></tr>
+        <tr><td><strong>Evidence Review Report</strong></td><td>02</td><td>Always</td><td>Preliminary findings, open items</td></tr>
+        <tr><td><strong>Technical Assessment Report</strong></td><td>03</td><td>Always</td><td>Final findings and the risk score</td></tr>
+        <tr><td><strong>Certification Determination Document</strong></td><td>04</td><td><strong>Always, certified or not</strong></td><td>The determination, and the authoritative certified scope</td></tr>
+        <tr><td><strong>Certificate</strong></td><td>04</td><td>Only on a Certified determination</td><td>A short public summary of the above</td></tr>
       </table>
       </div>
       <p style="margin-top:20px;">A separate product, the <strong>Readiness Report</strong>, is described at section 08. It is not part of a certification assessment and produces no determination.</p>
@@ -339,7 +291,7 @@
       </div>
       <p style="margin-top:20px;">A surveillance audit is an abbreviated assessment. It confirms there have been no material changes to the system, that continuous validation requirements are being met, that logged out-of-distribution events, hallucination events and bias threshold exceedances have been reviewed, that operational use is still inside the certified Operational Design Domain and Exclusions, and that the system's actual use still matches its classification.</p>
       <p><strong>Any expansion of use beyond the certified scope requires re-assessment before operation continues in the expanded scope.</strong> That is not a recommendation.</p>
-      <p>The register at <a href="/verify">/verify</a> is the authority on current status, and reports each certificate as Valid, Expired, Suspended or Withdrawn. A certificate that has lapsed is not a weaker certificate; the right to display the mark ends with it.</p>
+      <p>The register at <a href="/verify">/verify</a> is the authority on current status, and reports each certificate as Valid, Expired, Suspended or Withdrawn, plus Specimen for the demonstration record. A certificate that has lapsed is not a weaker certificate; the right to display the mark ends with it.</p>
     </div>
 
     <div class="legal-block">

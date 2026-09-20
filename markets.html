@@ -31,10 +31,6 @@
 /* Bracketed mono eyebrow + showcase title */
 .fw-eyebrow-mono { margin-bottom: 20px; }
 /* Headings stay uniform — no weight/size/slant/colour shift on any word. */
-.inner-hero h1 em, .fw-showcase-title em, h1 em, h2 em {
-  font-family: inherit; font-size: inherit !important; font-weight: inherit !important;
-  font-style: normal !important; color: inherit !important;
-}
 
 /* Markets section background — cream + radial blue glow */
 .markets-section {
@@ -49,12 +45,8 @@
 }
 .market-block:first-child { border-top: none; padding-top: 0; }
 
-.market-seq {
-  font-family: var(--sans); font-size: 13px;
-  font-weight: 600;
-  letter-spacing: 0.06em; text-transform: uppercase;
-  color: #0C2242; margin-bottom: 22px;
-}
+/* .market-seq takes the shared label rule in styles.css. */
+.market-seq { margin-bottom: 22px; }
 
 .market-name {
   font-size: 32px; font-weight: 600; letter-spacing: -0.02em;
@@ -98,15 +90,13 @@
   position: relative;
 }
 
-.ag-inner { max-width: 1200px; margin: 0 auto; }
-
-.ag-inner { text-align: center; }
-.ag-inner .section-title { text-align: center; }
-.ag-prose { max-width: 760px; margin: 40px auto 0; text-align: left; }
-.ag-prose p { font-size: 15px; color: var(--ink-2); line-height: 1.75; font-weight: 300; margin-bottom: 16px; }
+.ag-inner { max-width: var(--content-max); margin: 0 auto; text-align: center; }
+/* Measure and paragraph type from .prose in styles.css. */
+.ag-prose { margin: 40px auto 0; text-align: left; }
+.ag-prose p { color: var(--ink-2); margin-bottom: 16px; }
 .ag-prose p strong { color: var(--ink); font-weight: 500; }
 
-@media (max-width: 880px) {
+@media (max-width: 880.98px) {
   .inner-hero-inner { grid-template-columns: 1fr !important; gap: 24px !important; }
   .market-block { grid-template-columns: 1fr; gap: 32px; }
   .market-gap { grid-template-columns: 1fr; gap: 4px; }
@@ -339,11 +329,11 @@
 </section>
 
 <!-- DOMAIN AGNOSTIC -->
-<div class="agnostic-band">
+<section class="agnostic-band">
   <div class="ag-inner">
     <div class="fw-eyebrow-mono">[ Domain Agnostic ]</div>
     <h2 class="fw-showcase-title">The failure modes are <br>the same everywhere.</h2>
-    <div class="ag-prose">
+    <div class="ag-prose prose">
       <p>
         A language model in a cockpit that hallucinates a clearance. A diagnostic imaging model in an operating room that misclassifies a scan. A perception system in an autonomous vehicle that fails to detect an out of distribution object. <strong>The failure mode is the same. The consequence differs only in specifics.</strong>
       </p>
@@ -355,7 +345,7 @@
       </p>
     </div>
   </div>
-</div>
+</section>
 
 </div>
 

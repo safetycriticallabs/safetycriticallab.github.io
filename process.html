@@ -33,11 +33,6 @@
 /* ─── BRACKETED MONO EYEBROW + SHOWCASE TITLE ─────────────── */
 .fw-eyebrow-mono { margin-bottom: 20px; }
 .fw-showcase-title { margin-bottom: 48px; }
-/* Headings stay uniform — no weight / size / slant / colour shift on any word. */
-.inner-hero h1 em, .fw-showcase-title em, h1 em, h2 em, h3 em {
-  font-family: inherit; font-size: inherit !important; font-weight: inherit !important;
-  font-style: normal !important; color: inherit !important;
-}
 
 /* ─── PHASES SECTION (cream + blue gradient) ──────────────── */
 .phases-section {
@@ -67,12 +62,12 @@
 }
 
 .phases-detail { display: flex; flex-direction: column; gap: 0; }
-.phase-block { padding: 48px 0; border-top: 1px solid rgba(46,109,180,0.12); }
+.phase-block { padding: 48px 0; border-top: 1px solid var(--card-border); }
 .phase-block:first-child { border-top: none; padding-top: 0; }
 .phase-header { display: flex; gap: 20px; align-items: flex-start; margin-bottom: 24px; }
 .phase-num-badge {
   width: 48px; height: 48px; border-radius: 50%;
-  background: #0C2242; color: #fff;
+  background: #0C2242; color: #FAF9F5;
   display: flex; align-items: center; justify-content: center;
   font-family: var(--sans); font-size: 14px; font-weight: 600;
   flex-shrink: 0;
@@ -102,8 +97,8 @@
 .check-item {
   display: flex; gap: 12px; align-items: flex-start;
   padding: 16px 20px;
-  background: #FAF9F5; border: 1px solid rgba(46,109,180,0.12);
-  border-radius: 12px;
+  background: #FAF9F5; border: 1px solid var(--card-border);
+  border-radius: var(--radius-card);
   transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
 }
 .check-item:hover {
@@ -147,8 +142,8 @@
 .ev-note strong { color: var(--ink); }
 .ev-list { display: flex; flex-direction: column; gap: 8px; }
 .ev-item {
-  background: #FAF9F5; border: 1px solid rgba(46,109,180,0.12);
-  border-radius: 12px; padding: 18px 20px;
+  background: #FAF9F5; border: 1px solid var(--card-border);
+  border-radius: var(--radius-card); padding: 18px 20px;
   display: grid; grid-template-columns: 160px 1fr; gap: 16px;
   transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
 }

@@ -24,24 +24,14 @@
 <style>
 /* Hero cursor glow styles live in styles.css (promoted 2026-08-24) */
 
-.fw-eyebrow-mono { margin-bottom: 20px; }
 
-.legal-section {
-  background: #FAF9F5;
-  padding: 88px 40px 120px;
-}
-.legal-inner { max-width: 760px; margin: 0 auto; }
 
 .legal-meta {
   display: flex; flex-wrap: wrap; gap: 24px;
   padding-bottom: 24px; margin-bottom: 48px;
-  border-bottom: 1px solid rgba(46,109,180,0.12);
+  border-bottom: 1px solid var(--card-border);
 }
-.legal-meta-item {
-  font-family: var(--mono); font-size: 11px;
-  letter-spacing: 0.14em; text-transform: uppercase;
-  color: rgba(12,34,66,0.6);
-}
+/* .legal-meta-item takes the shared label rule in styles.css. */
 .legal-meta-item strong {
   display: block; color: #0C2242; font-weight: 500;
   margin-top: 4px; letter-spacing: 0.04em; text-transform: none;
@@ -50,19 +40,12 @@
 
 .legal-block { margin-bottom: 40px; }
 .legal-block:last-child { margin-bottom: 0; }
-.legal-block-num {
-  font-family: var(--mono); font-size: 11px;
-  letter-spacing: 0.18em; color: rgba(12,34,66,0.55);
-  margin-bottom: 6px;
-}
+/* .legal-block-num takes the shared label rule in styles.css. */
+.legal-block-num { margin-bottom: 6px; }
 .legal-block-title {
   font-family: var(--sans); font-size: 22px;
   font-weight: 600; color: #0C2242;
   margin: 0 0 14px; line-height: 1.25; letter-spacing: -0.01em;
-}
-.legal-block-title em {
-  font-family: inherit; font-size: inherit !important; font-weight: inherit !important;
-  font-style: normal !important; color: inherit !important;
 }
 .legal-block p {
   font-size: 15px; color: var(--ink-2);
@@ -74,8 +57,8 @@
 .processor-list { display: flex; flex-direction: column; gap: 12px; margin-top: 8px; }
 .processor-item {
   background: #FAF9F5;
-  border: 1px solid rgba(46,109,180,0.10);
-  border-radius: 14px;
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-card);
   padding: 16px 20px;
   display: grid;
   grid-template-columns: 130px 1fr;
@@ -98,25 +81,12 @@
 }
 .processor-desc strong { color: var(--ink); font-weight: 500; }
 
-.legal-review-note {
-  margin-top: 56px;
-  padding: 20px 24px;
-  background: #FAF9F5;
-  border: 1px solid rgba(46,109,180,0.12);
-  border-left: 3px solid var(--blue);
-  border-radius: 14px;
-  font-size: 13px; color: var(--ink-2);
-  line-height: 1.65; font-weight: 300;
-}
+/* .legal-review-note takes the shared notice rule in styles.css. */
+.legal-review-note { margin-top: 56px; }
 .legal-review-note strong { color: var(--ink); font-weight: 500; }
 
 @media (max-width: 580px) {
   .processor-item { grid-template-columns: 1fr; gap: 4px; }
-}
-/* Phone: the legal column follows the hero's 24px gutter (styles.css inner-hero
-   at 880.98px), instead of holding a 40px gutter and 88px of top padding. */
-@media (max-width: 880.98px) {
-  .legal-section { padding: 60px 24px 88px; }
 }
 </style>
 </head>
@@ -263,6 +233,7 @@
       <p>If you have submitted information through the Site, you may:</p>
       <p><strong>Request a copy</strong> of what we hold about you. <strong>Request correction</strong> of inaccurate information. <strong>Request deletion</strong> of your information, subject to limited legal retention obligations.</p>
       <p>To exercise any of these rights, contact <a href="/contact">SCL</a>. We will respond within a reasonable timeframe.</p>
+      <p>One exception, set out in full in section 02. Retained Ask SCL questions carry no identifier, so in the ordinary case we cannot connect one to you and cannot locate, export, correct or delete it on request. Rights that do not depend on identifying you are unaffected, retention is off unless you turn it on, and retained questions are deleted after 12 months in any event.</p>
     </div>
 
     <div class="legal-block">

@@ -42,6 +42,7 @@
 .sub-eyebrow { margin-bottom: 20px; }
 
 .sub-title {
+  text-wrap: balance;   /* as styles.css does for .inner-hero h1 */
   font-family: var(--sans);
   font-size: clamp(36px, 4.5vw, 56px);
   font-weight: 600;
@@ -125,7 +126,7 @@
 
 /* What subscribers receive */
 .sub-receive {
-  border-top: 1px solid rgba(46,109,180,0.14);
+  border-top: 1px solid var(--card-border);
   padding-top: 40px;
   text-align: left;
 }
@@ -146,8 +147,8 @@
 }
 .sub-receive-item {
   background: #FAF9F5;
-  border: 1px solid rgba(46,109,180,0.14);
-  border-radius: 12px;
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-card);
   padding: 18px 20px;
 }
 .sub-receive-item-title {

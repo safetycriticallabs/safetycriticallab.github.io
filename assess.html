@@ -96,8 +96,8 @@
 /* Question card */
 .q-card {
   background: #FAF9F5;
-  border: 1px solid rgba(46,109,180,0.10);
-  border-radius: 14px;
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-card);
   padding: 28px 32px;
   margin-bottom: 20px;
 }
@@ -308,8 +308,8 @@
 }
 .result-card {
   background: #FAF9F5;
-  border: 1px solid rgba(46,109,180,0.10);
-  border-radius: 14px;
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-card);
   padding: 24px;
   position: relative;
   overflow: hidden;
@@ -341,17 +341,18 @@
   color: var(--ink); line-height: 1.3;
   margin-bottom: 10px;
 }
+/* The status pill /evidence and /verify use: same size, weight, tracking and shape. */
 .result-card-status {
   font-family: var(--sans); font-size: 11px;
-  font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase;
-  padding: 4px 10px; border-radius: 2px;
+  font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase;
+  padding: 5px 11px; border-radius: 999px;
   display: inline-block;
 }
 .status-strong .result-card-status {
   background: rgba(45,122,58,0.1); color: var(--ok);
 }
 .status-partial .result-card-status {
-  background: rgba(200,134,26,0.1); color: var(--warn-text);
+  background: rgba(181,117,26,0.1); color: var(--warn-text);
 }
 .status-gap .result-card-status {
   background: rgba(200,39,45,0.1); color: var(--bad);
@@ -378,8 +379,8 @@
 /* CTA band — cream, blue accents */
 .results-cta {
   background: #FAF9F5;
-  border: 1px solid rgba(46,109,180,0.12);
-  border-radius: 14px;
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-card);
   padding: 48px;
   text-align: center;
 }
@@ -390,10 +391,6 @@
   color: #0C2242; margin-bottom: 12px;
   letter-spacing: -0.015em;
 }
-.results-cta h3 em {
-  font-family: inherit; font-size: inherit !important; font-weight: inherit !important;
-  font-style: normal !important; color: inherit !important;
-}
 .results-cta p {
   font-size: 15px; color: var(--ink-2);
   line-height: 1.7; font-weight: 300;
@@ -401,14 +398,16 @@
   max-width: 480px; margin-left: auto; margin-right: auto;
 }
 /* Responsive */
-@media (max-width: 880px) {
-  .inner-hero-inner { grid-template-columns: 1fr !important; gap: 24px !important; }
+/* Phone: the assess column follows the hero's 24px gutter (styles.css inner-hero
+   at 880.98px), the same ladder verify.html uses. The hero grid itself collapses
+   in styles.css, so this page no longer repeats it. */
+@media (max-width: 880.98px) {
+  .assess-section { padding: 60px 24px 88px; }
+  .results-section { padding: 60px 24px 88px; }
   .results-grid { grid-template-columns: 1fr 1fr; }
   .q-card { padding: 24px; }
 }
-@media (max-width: 580px) {
-  .assess-section { padding: 60px 24px 88px; }
-  .results-section { padding: 60px 24px 88px; }
+@media (max-width: 640px) {
   .results-grid { grid-template-columns: 1fr; }
   .results-cta { padding: 32px 24px; }
 }
@@ -1678,11 +1677,10 @@
   var INK = [10, 10, 15];
   var INK_MID = [42, 42, 58];
   var INK_LIGHT = [107, 107, 128];
-  var NAVY = [15, 35, 64];
-  var RULE = [216, 212, 200];
-  var BG_LIGHT = [247, 245, 240];
+  var NAVY = [12, 34, 66];         /* --ink */
+  var BG_LIGHT = [250, 249, 245];  /* --bg */
   var WHITE = [255, 255, 255];
-  var GOLD = [139, 115, 64];
+  var GOLD = [139, 115, 64];       /* the legible-on-white gold: --gold #DCB34B is 1.9:1 as 7pt text */
 
   function checkPage(pdf, y, needed, margin, pageH) {
     if (y + needed > pageH - margin) {
@@ -1727,7 +1725,7 @@
          ───────────────────────────────────────────── */
 
       /* Dark header band */
-      pdf.setFillColor(15, 35, 64);
+      pdf.setFillColor(NAVY[0], NAVY[1], NAVY[2]);
       pdf.rect(0, 0, PW, 52, 'F');
 
       /* Wordmark */
@@ -1852,7 +1850,7 @@
 
       var barW = (data.percentage / 100) * CW;
       if (barW > 0) {
-        var barColor = data.percentage >= 70 ? [45,122,58] : data.percentage >= 40 ? [200,134,26] : [200,39,45];
+        var barColor = data.percentage >= 70 ? [45,122,58] : data.percentage >= 40 ? [181,117,26] : [200,39,45];   /* --ok / --warn / --bad */
         pdf.setFillColor(barColor[0], barColor[1], barColor[2]);
         pdf.roundedRect(ML, y, barW, 12, 2, 2, 'F');
       }
@@ -1879,7 +1877,7 @@
 
       /* Page header */
       function drawPageHeader() {
-        pdf.setFillColor(15, 35, 64);
+        pdf.setFillColor(NAVY[0], NAVY[1], NAVY[2]);
         pdf.rect(0, 0, PW, 18, 'F');
         pdf.setFont('helvetica', 'bold');
         pdf.setFontSize(8);

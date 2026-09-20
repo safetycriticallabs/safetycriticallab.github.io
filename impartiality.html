@@ -25,16 +25,7 @@
 /* Shared legal page styles */
 /* Hero cursor glow styles live in styles.css (promoted 2026-08-24) */
 
-.fw-eyebrow-mono { margin-bottom: 20px; }
 
-.legal-section {
-  background: #FAF9F5;
-  padding: 88px 40px 120px;
-}
-.legal-inner {
-  max-width: 760px;
-  margin: 0 auto;
-}
 
 .legal-meta {
   display: flex;
@@ -42,15 +33,9 @@
   gap: 24px;
   padding-bottom: 24px;
   margin-bottom: 48px;
-  border-bottom: 1px solid rgba(46,109,180,0.12);
+  border-bottom: 1px solid var(--card-border);
 }
-.legal-meta-item {
-  font-family: var(--mono);
-  font-size: 11px;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: rgba(12,34,66,0.6);
-}
+/* .legal-meta-item takes the shared label rule in styles.css. */
 .legal-meta-item strong {
   display: block;
   color: #0C2242;
@@ -66,13 +51,8 @@
   margin-bottom: 40px;
 }
 .legal-block:last-child { margin-bottom: 0; }
-.legal-block-num {
-  font-family: var(--mono);
-  font-size: 11px;
-  letter-spacing: 0.18em;
-  color: rgba(12,34,66,0.55);
-  margin-bottom: 6px;
-}
+/* .legal-block-num takes the shared label rule in styles.css. */
+.legal-block-num { margin-bottom: 6px; }
 .legal-block-title {
   font-family: var(--sans);
   font-size: 22px;
@@ -81,13 +61,6 @@
   margin: 0 0 14px;
   line-height: 1.25;
   letter-spacing: -0.01em;
-}
-.legal-block-title em {
-  font-family: inherit;
-  font-size: inherit !important;
-  font-weight: inherit !important;
-  font-style: normal !important;
-  color: inherit !important;
 }
 .legal-block p {
   font-size: 15px;
@@ -124,29 +97,14 @@
 }
 .legal-block > ul > li strong { color: var(--ink); font-weight: 500; }
 
-.legal-review-note {
-  margin-top: 56px;
-  padding: 20px 24px;
-  background: #FAF9F5;
-  border: 1px solid rgba(46,109,180,0.12);
-  border-left: 3px solid var(--blue);
-  border-radius: 14px;
-  font-size: 13px;
-  color: var(--ink-2);
-  line-height: 1.65;
-  font-weight: 300;
-}
+/* .legal-review-note takes the shared notice rule in styles.css. */
+.legal-review-note { margin-top: 56px; }
 .legal-review-note strong { color: var(--ink); font-weight: 500; }
 .legal-review-note.is-standing { margin-top: 0; margin-bottom: 56px; }
 /* Same callout as .legal-review-note (shared rule in styles.css); the gold rule
    is the modifier, and it means a stated limitation rather than a review note. */
 .limit-note { margin-top: 18px; border-left-color: var(--gold); }
 .limit-note strong { color: var(--ink); font-weight: 500; }
-/* Phone: the legal column follows the hero's 24px gutter (styles.css inner-hero
-   at 880.98px), instead of holding a 40px gutter and 88px of top padding. */
-@media (max-width: 880.98px) {
-  .legal-section { padding: 60px 24px 88px; }
-}
 </style>
 </head>
 <body>
@@ -280,7 +238,7 @@
       <h2 class="legal-block-title">Assessment decisions and commercial decisions</h2>
       <p>A determination is issued for every completed assessment, including Not Certified. The Certification Determination Document is the deliverable, and the client receives it whatever it says. A client who does not certify has received what they paid for.</p>
       <p>Fees are set by classification tier and scope, agreed before the assessment begins, and do not change based on the outcome. There is no success fee, no contingent element, and no discount for a favourable result.</p>
-      <p>Any client may challenge a determination through the appeals process at <a href="/complaints">/complaints</a>, at no cost, within 60 days. Anyone at all may complain about SCL's conduct or about a certificate SCL has issued, through the same route.</p>
+      <p>Any client may challenge a determination through the appeals process at <a href="/complaints">/complaints</a>, at no cost, within 60 calendar days. Anyone at all may complain about SCL's conduct or about a certificate SCL has issued, through the same route.</p>
     </div>
 
     <div class="legal-block" id="one-assessor">

@@ -29,7 +29,7 @@
   "@type": "TechArticle",
   "name": "Requirements and Verification Standards for Artificial Intelligence in Safety-Critical Applications",
   "headline": "AI Requirements Framework",
-  "description": "A published requirements and verification standard for artificial intelligence and machine learning in safety-critical and mission-critical systems. Thirteen requirement sets in two tiers, domain-agnostic, supplementing DO-178C, ISO 26262 and NASA NPR 7150.2D rather than replacing them.",
+  "description": "A published requirements and verification standard for artificial intelligence and machine learning in safety-critical and mission-critical systems. Thirteen requirement areas in two groups, core and conditional, domain-agnostic, supplementing DO-178C, ISO 26262 and NASA NPR 7150.2D rather than replacing them.",
   "url": "https://safetycriticallabs.com/framework",
   "identifier": "https://doi.org/10.5281/zenodo.19024420",
   "sameAs": "https://doi.org/10.5281/zenodo.22775993",
@@ -323,13 +323,6 @@
   pointer-events: none;
 }
 .open-standard-band .os-inner { position: relative; z-index: 1; }
-.os-left h2 em {
-  font-family: inherit;
-  font-size: inherit !important;
-  font-weight: inherit !important;
-  font-style: normal !important;
-  color: inherit !important;
-}
 
 /* Transition bridge to /process */
 .fw-transition-cta {
@@ -370,7 +363,6 @@
 .os-item-val a:hover { text-decoration: underline; }
 
 @media (max-width: 880.98px) {
-  .inner-hero-inner { grid-template-columns: 1fr !important; gap: 24px !important; }
   .pub-standard-grid { grid-template-columns: 1fr !important; gap: 40px !important; }
   .fw-full-grid { grid-template-columns: 1fr 1fr; }
   .struct-grid { grid-template-columns: 1fr; }
@@ -385,28 +377,9 @@
 .fw-eyebrow-mono { margin-bottom: 20px; }
 
 /* Showcase title — blue, big, like the index .fw-title */
-.fw-showcase-title em {
-  font-family: inherit;
-  font-size: inherit !important;
-  font-weight: inherit !important;
-  font-style: normal !important;
-  color: inherit !important;
-}
 
-/* ─── HERO ENHANCEMENTS (cursor glow + constellation) ─────── */
-.inner-hero { z-index: 0; }
-.fw-hero-glow {
-  position: absolute; inset: 0;
-  z-index: 0;
-  pointer-events: none;
-  opacity: 0;
-  transition: opacity 0.4s;
-  background: radial-gradient(520px circle at var(--glow-x, 70%) var(--glow-y, 30%), rgba(46,109,180,0.10), transparent 60%);
-}
-.inner-hero:hover .fw-hero-glow { opacity: 1; }
-
-/* Make sure hero content sits above the glow */
-.inner-hero-inner { z-index: 2; }
+/* The hero glow and its stacking come from styles.css; the page only has to
+   provide the <div class="fw-hero-glow"> in the markup. */
 
 /* Inner hero styles live in styles.css now (cream + blue palette) */
 
@@ -448,7 +421,7 @@
   display: flex; align-items: baseline; gap: 10px;
 }
 .failmode-map a { transition: background 0.2s ease; }   /* type from the shared identifier rule in styles.css */
-.failmode-map a:hover { background: var(--blue-lt); }
+.failmode-map a:hover { background: #0C2242; color: #FAF9F5; }
 .failmode-map span { font-size: 13px; color: var(--ink-3); font-weight: 300; line-height: 1.5; }
 .failmode-foot {
   margin-top: 36px;
@@ -573,7 +546,7 @@
       <div class="fw-card" id="ai-7" data-tiers="safety mission" data-tailored-at="mission">
         <div class="fw-card-id">AI-7</div>
         <div class="fw-card-title">Adversarial robustness</div>
-        <div class="fw-card-body">Data poisoning protection, adversarial input protection, model inversion and extraction protection, model integrity, adversarial event logging, and AI supply chain security.</div>
+        <div class="fw-card-body">Data poisoning protection, adversarial input protection, model inversion and extraction protection, model integrity, adversarial event logging, AI supply chain security, and artifact load safety.</div>
       </div>
       <div class="fw-card" id="ai-8" data-tiers="safety mission">
         <div class="fw-card-id">AI-8</div>
@@ -771,7 +744,6 @@
 
 </div>
 
-
 <!-- PUBLISHED STANDARD BAND -->
 <div class="pub-standard-band">
   <div class="pub-standard-grid">
@@ -780,10 +752,10 @@
       <h2 class="fw-showcase-title">
         Read every requirement <br>before you engage.
       </h2>
-      <p style="font-size: 15px; color: var(--ink-2); line-height: 1.75; font-weight: 300; margin-bottom: 16px;">
+      <p class="section-lead" style="margin-bottom: 16px;">
         The framework is openly published under a citable DOI. <a href="/requirements">Every requirement, verification method, and evidence standard</a> is available for review before any assessment begins. Verification is co-located: every requirement carries its verification, and every verification traces to a requirement.
       </p>
-      <p style="font-size: 15px; color: var(--ink-2); line-height: 1.75; font-weight: 300;">
+      <p class="section-lead">
         If you believe a requirement is technically incorrect, insufficiently grounded, or missing coverage for a known AI failure mode, SCL welcomes that challenge. The standard improves through scrutiny.
       </p>
     </div>
@@ -802,7 +774,7 @@
       </div>
       <div class="pub-standard-row">
         <span class="pub-standard-row-label">Version history</span>
-        <span class="pub-standard-row-value">Thirteen versions published on Zenodo since 14 March 2026: v1.0 (March 2026), v2.0 (April 2026), v3.0 (May 2026, thirteen requirement sets established), v3.6 (13 August 2026), v3.7 (15 September 2026, current). Development began February 2025. <a href="/updates">See the full release history</a>.</span>
+        <span class="pub-standard-row-value">Thirteen versions published on Zenodo since 14 March 2026: v1.0 (March 2026), v2.0 (April 2026), v3.0 (May 2026, thirteen requirement areas established), v3.6 (13 August 2026), v3.7 (15 September 2026, current). Development began February 2025. <a href="/updates">See the full release history</a>.</span>
       </div>
       <div class="pub-standard-row">
         <span class="pub-standard-row-label">License</span>

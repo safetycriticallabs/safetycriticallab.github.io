@@ -13,7 +13,7 @@
   --blue:      #2E6DB4;
   --blue-dk:   #1E5A9A;
   --blue-lt:   #EBF1F8;   /* the ONE pale blue: fields, selected states, chips, feedback boxes; never decoration */
-  --cream-2:   #F2EFE8;   /* raised or decorative surface on the cream page: card covers, bands */
+  --cream-2:   #F2EFE8;   /* raised or decorative surface on the cream page: card covers, bands, fields inside a cream card */
   --gold:      #DCB34B;   /* the emblem's gold ring, measured off the flat mark 2026-09-12 */
   --rule:     #E4E8EC;
   /* Single font family throughout the site — DM Sans only.
@@ -151,7 +151,7 @@ body, body * { font-style: normal !important; }
 }
 /* Contact lives in the mobile menu only — desktop has the Get Certified CTA. */
 .gn-links > li.gn-mobile-link { display: none; }
-@media (max-width: 880px) {
+@media (max-width: 880.98px) {
   .gn-links > li.gn-mobile-link { display: block; }
 }
 
@@ -273,7 +273,9 @@ body, body * { font-style: normal !important; }
      balanced rather than switching it off. Ignored where unsupported. */
   text-wrap: balance;
 }
-.inner-hero h1 em { font-style: italic; color: var(--ink); font-family: var(--serif); font-weight: 400; font-size: 1.05em; }
+/* An <em> inside a heading is emphasis in the markup, not a type change: four
+   pages carried their own neutraliser for exactly this. One rule, here. */
+h1 em, h2 em, h3 em { font: inherit; color: inherit; }
 
 .inner-hero-lead {
   font-size: 17px; color: rgba(46,109,180,0.78);
@@ -305,7 +307,6 @@ h2.section-title {
   color: #0C2242;
   margin-bottom: 20px;
 }
-h2.section-title em { font-style: italic; color: var(--ink); font-family: var(--serif); font-size: 1.05em; font-weight: 400; }
 
 .section-lead {
   font-size: 18px; color: var(--ink-2);
@@ -572,7 +573,6 @@ h2.section-title em { font-style: italic; color: var(--ink); font-family: var(--
   .inner-hero { padding: 60px 24px 48px; }
   .inner-hero-inner { grid-template-columns: 1fr; gap: 24px; }
   .inner-hero h1 { font-size: 32px; line-height: 1.1; letter-spacing: -0.02em; }
-  .inner-hero h1 em { font-size: 1.02em; }
   .inner-hero-lead { font-size: 15px; padding-left: 16px; }
   .page-section { padding: calc(var(--section-space) / 2) 24px; }
   .footer-inner { padding: 48px 24px 24px; }
@@ -839,11 +839,24 @@ h2.section-title em { font-style: italic; color: var(--ink); font-family: var(--
 .inner-hero h1 { color: #0C2242; }
 .inner-hero-lead { color: #0C2242; }
 
-/* ── Long-form prose: one measure, size and weight for every reading page ──
-   Used by the legal pages, position, glossary, markets and the generated
-   questions and requirements pages, so paragraphs read the same everywhere. */
-.prose { max-width: 760px; margin: 0 auto; }
+/* ── Long-form prose: one measure for every reading column ──
+   .prose itself is worn by the generated /questions and /requirements wraps;
+   the legal template, /position and the /markets closing band each built the
+   same 760px measure under a private name instead. The measure is shared
+   here. Paragraph type stays per page below, because a legal clause and an
+   essay genuinely set their paragraphs differently. */
+.prose, .legal-inner, .position-inner { max-width: 760px; margin: 0 auto; }
 .prose p { font-size: 15px; font-weight: 300; line-height: 1.75; }
+
+/* The frame that column sits in: the same cream ground and the same
+   88/40/120 on all seven legal-template pages and on /position, eight copies
+   of three declarations. /position used to drop to the 24px gutter at 640,
+   so between 641 and 881 its body column held 40px while its own hero was
+   already at 24px; on the shared bound the two now agree. */
+.legal-section, .position-section { background: #FAF9F5; padding: 88px 40px 120px; }
+@media (max-width: 880.98px) {
+  .legal-section, .position-section { padding: 60px 24px 88px; }
+}
 
 /* ── Small uppercase label (eyebrows, category titles, meta lines): one style ──
    Pages used to carry seventeen private copies of .fw-eyebrow-mono and eight
@@ -852,7 +865,8 @@ h2.section-title em { font-style: italic; color: var(--ink); font-family: var(--
 .fw-eyebrow-mono, .search-eyebrow, .sub-eyebrow, .sc-eyebrow, .verify-eyebrow,
 .news-eyebrow, .docs-section-heading, .dl-meta, .gl-cat-title,
 .struct-col-title, .pub-standard-row-label, .os-item-label, .ev-method-label,
-.failmode-incident, .docs-card-org, .gl-count,
+.failmode-incident, .docs-card-org, .gl-count, .legal-block-num,
+.legal-meta-item, .accred-status-label, .accred-step-num, .market-seq,
 .step-eyebrow, .results-score-caption, .results-classification {
   font-family: var(--mono); font-size: 12px; font-weight: 500; letter-spacing: 0.18em;
   text-transform: uppercase; color: rgba(12,34,66,0.66);   /* 0.66 is 5.1:1 on cream; 0.6 was 4.26:1, under AA for 12px text */
@@ -870,7 +884,7 @@ h2.section-title em { font-style: italic; color: var(--ink); font-family: var(--
    framework.html's .os-item, which the others were nearly. */
 .cred-item, .ci-row, .market-gap, .accred-step {
   background: #FAF9F5;
-  border: 1px solid rgba(46,109,180,0.12);
+  border: 1px solid var(--card-border);
   border-radius: var(--radius-card);
   padding: 18px 22px;
   transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
@@ -934,6 +948,32 @@ h2.section-title em { font-style: italic; color: var(--ink); font-family: var(--
 .legal-meta-item a { text-decoration: none; }
 .legal-meta-item a:hover { text-decoration: underline; }
 
+/* A numbered legal block that is a link target has to clear the 72px fixed
+   nav. [id] takes this to 0,2,0 so it beats the seven private .legal-block
+   rules, which parse later inside each page. */
+.legal-block[id] { scroll-margin-top: 96px; }
+
+/* ── One data table ──
+   /complaints called it .route-table and /deliverables called it .dl-table and
+   the eleven declarations were identical to the character. The phone bleed was
+   on one of them only, so at 880.98px the deliverables table met the gutter and
+   the complaints table clipped inside the text measure. Both bleed now. */
+.route-table, .dl-table { width: 100%; border-collapse: collapse; margin: 18px 0 0 0; font-size: 14px; }
+.route-table th, .route-table td, .dl-table th, .dl-table td {
+  text-align: left; padding: 12px 14px; vertical-align: top;
+  border-bottom: 1px solid var(--rule); color: var(--ink-2); font-weight: 300; line-height: 1.6;
+}
+.route-table th, .dl-table th {
+  font-family: var(--mono); font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase;
+  color: var(--ink); font-weight: 500; border-bottom: 1px solid rgba(46,109,180,0.25);
+}
+.route-table td strong, .dl-table td strong { color: var(--ink); font-weight: 500; }
+.route-table tr:last-child td, .dl-table tr:last-child td { border-bottom: none; }
+.wrap-scroll { overflow-x: auto; }
+@media (max-width: 880.98px) {
+  .wrap-scroll { margin: 0 -24px; padding: 0 24px; }
+}
+
 
 /* ── Footer: dark-navy block (SCL mark + grouped columns, no socials) ── */
 .site-footer { background: #0C2242; border-top: none; margin-top: 40px; }
@@ -965,10 +1005,10 @@ h2.section-title em { font-style: italic; color: var(--ink); font-family: var(--
    reason). No ≤560px override: the 2-col layout carries down. */
 
 /* ── Mobile-menu CTA (cloned in by nav.js) ── The bar's "Get Certified" pill
-   is hidden at ≤880px, so nav.js clones it in as the menu's last item. Menu
+   is hidden at ≤880.98px, so nav.js clones it in as the menu's last item. Menu
    copy only exists to be shown there; keep it out of the desktop inline row. */
 .gn-links .gn-menu-cta-item { display: none; }
-@media (max-width: 880px) {
+@media (max-width: 880.98px) {
   .gn-links .gn-menu-cta-item { display: block; padding: 24px 0 0; }
   .gn-menu-cta-item .gn-cta { width: 100%; }
 }

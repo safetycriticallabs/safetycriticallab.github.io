@@ -13,9 +13,13 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&display=swap" rel="stylesheet">
 <script>
-/* GitHub Pages serves this file for any unknown path. Certificates
-   print the path form safetycriticallabs.com/verify/<id>, so rewrite
-   that form to the real static page, preserving the id. */
+/* GitHub Pages serves this file for any unknown path. The certificate face
+   prints the query form safetycriticallabs.com/verify?id=<id>, which resolves
+   on its own and never reaches here. This rewrite is a courtesy for the path
+   form /verify/<id>, which nothing prints but a reader may guess: it forwards
+   to the real static page, preserving the id. The redirect target below keeps
+   its explicit .html, because a page reached by a URL that did not resolve
+   should not depend on the host mapping another one. */
 (function () {
   var match = window.location.pathname.match(/\/verify\/([^\/?#]+)/);
   if (match) {
@@ -86,7 +90,7 @@
   </p>
   <div class="nf-actions">
     <a href="/" class="nf-btn nf-btn-solid">Safety Critical Labs</a>
-    <a href="/verify.html" class="nf-btn nf-btn-outline">Verify a certificate</a>
+    <a href="/verify" class="nf-btn nf-btn-outline">Verify a certificate</a>
   </div>
 </div>
 

@@ -25,16 +25,7 @@
 /* Hero cursor glow styles live in styles.css (promoted 2026-08-24) */
 
 /* Headings stay uniform — no weight / size / slant / colour shift on any word. */
-.inner-hero h1 em, .position-block h2 em, h1 em, h2 em, h3 em {
-  font-family: inherit; font-size: inherit !important; font-weight: inherit !important;
-  font-style: normal !important; color: inherit !important;
-}
 
-.position-section {
-  background: #FAF9F5;
-  padding: 88px 40px 120px;
-}
-.position-inner { max-width: 760px; margin: 0 auto; }
 
 /* Lede — the thesis, set apart in serif above the body */
 .position-lede {
@@ -85,13 +76,17 @@
   margin: 64px -44px 0;
   padding: 44px 44px 46px;
   background: #FAF9F5;
-  border: 1px solid rgba(46,109,180,0.12);
+  border: 1px solid var(--card-border);
   border-left: 3px solid var(--blue);
-  border-radius: 14px;
+  border-radius: var(--radius-card);
 }
 
+/* The hangs unwind where the gutter narrows: -44px does not fit inside 24px. */
+@media (max-width: 880.98px) {
+  .position-pull { margin: 64px 0; padding-left: 28px; }
+  .position-block.is-stance { margin: 64px 0 0; }
+}
 @media (max-width: 640px) {
-  .position-section { padding: 60px 24px 88px; }
   .position-lede { font-size: 21px; padding-bottom: 36px; }
   .position-block { margin-top: 44px; }
   .position-block h2 { font-size: 21px; }

@@ -448,8 +448,10 @@ h2.section-title em { font-style: italic; color: var(--ink); font-family: var(--
 
 /* ─── RESPONSIVE ──────────────────────────────────────────── */
 @media (max-width: 880.98px) {
-  .global-nav { padding: 0 20px; }
-  .global-nav-inner { padding: 0 20px; }
+  /* One 24px phone gutter, matching .inner-hero and .page-section below, so the
+     wordmark sits on the same left edge as the content under it. */
+  .global-nav { padding: 0 24px; }
+  .global-nav-inner { padding: 0; }
 
   .gn-search { margin-left: auto; margin-right: 6px; order: 2; }
   .gn-hamburger {

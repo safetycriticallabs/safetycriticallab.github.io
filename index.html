@@ -56,7 +56,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preconnect" href="https://scl-cors-proxy.kevwill94.workers.dev" crossorigin>
 <link rel="preconnect" href="https://www.federalregister.gov" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css">
 <style>
 /* ─── INDEX PAGE STYLES ─────────────────────────────── */
@@ -792,7 +792,7 @@
   .news-lead { font-size: 15px; padding-left: 16px; }
 }
 @media (max-width: 880.98px) {
-  .news-section { padding: 60px 24px 80px; }
+  .news-section { padding: 60px var(--page-gut) 80px; }
 }
 
 /* Reduced motion — show the cert at its resting state; no tilt/flight. */
@@ -826,6 +826,10 @@
      page; --page-gut is the edge gutter on narrow screens. Was a mismatched
      1080 / 1200 / 1280 before. */
   :root { --page-w: 1280px; --page-gut: 40px; }
+  /* Phones: 24px, which is what the hero, sections and footer use on every inner
+     page (styles.css 533 to 539). The band below used to keep its own 24 while
+     the hero, cards and footer held 40, so the home had two left edges. */
+  @media (max-width: 880.98px) { :root { --page-gut: 24px; } }
 
   /* ── SECTION SPACING ── One consistent, generous vertical gap between every
      section (hero→tiles, tiles→news, news→footer). A gap = two half-paddings, so
@@ -1003,13 +1007,15 @@
   @media (max-width: 640px) { .showcase-cards { padding-top: 120px; } }   /* phones: 224px left a third of the first screen empty */   /* more room between the nav and the headline */
   .sc-inner { max-width: 1080px; margin: 0 auto; }
   .sc-eyebrow { text-align: center; }
-  .sc-heading { text-align: center; font-size: clamp(26px, 3.2vw, 40px); font-weight: 700; letter-spacing: -0.01em; margin: 12px 0 28px; }
+  .sc-heading { text-align: center; font-size: clamp(26px, 3.2vw, 40px); font-weight: 600; letter-spacing: -0.01em; margin: 12px 0 28px; }
 
   /* ── Hero: Anthropic-style two-column — big left-aligned headline + CTA on the
      left, a high-level positioning paragraph on the right. ── */
   .sc-hero { display:grid; grid-template-columns:1.55fr 1fr; gap:clamp(40px,6vw,96px); align-items:start; text-align:left; margin-bottom:clamp(56px,7vw,88px); }
   .sc-hero .sc-eyebrow { text-align:left; }
-  .sc-hero .sc-heading { text-align:left; font-size:clamp(34px,5vw,60px); line-height:1.04; letter-spacing:-0.02em; margin:16px 0 0; }
+  /* Same recipe as .inner-hero h1 in styles.css, so the one page a visitor lands
+     on does not set its headline in a different size, weight and tracking. */
+  .sc-hero .sc-heading { text-align:left; font-size:clamp(38px,4.5vw,60px); line-height:1.05; letter-spacing:-0.025em; margin:16px 0 0; }
   .sc-head-link { color:inherit; text-decoration:underline; text-underline-offset:7px; text-decoration-thickness:3px; text-decoration-color:rgba(12, 34, 66,0.3); transition:text-decoration-color .2s ease; }
   .sc-head-link:hover { text-decoration-color:#0C2242; }
   .sc-hero .sc-intro-cta { justify-content:flex-start; margin:34px 0 0; }
@@ -1493,7 +1499,7 @@
   .sc-ask-search{ display:flex; align-items:center; gap:10px; width:100%; padding:7px 7px 7px 14px; border-radius:16px; background:#FAF9F5; border:1px solid #2E6DB4; transition:box-shadow .25s ease; }
   .sc-ask-search:focus-within{ box-shadow:0 4px 24px rgba(46,109,180,0.16); }   /* search.html:90-92 */
   .sc-ask-icon{ display:inline-flex; flex-shrink:0; cursor:text; color:rgba(12, 34, 66,0.55) !important; }
-  .sc-ask-search input{ flex:1; min-width:0; height:44px; background:none; border:none; outline:none; color:#0C2242 !important; font-family:var(--sans); font-size:14px; }
+  .sc-ask-search input{ flex:1; min-width:0; height:44px; background:none; border:none; outline:none; color:#0C2242 !important; font-family:var(--sans); font-size:16px; }   /* 16px: under it mobile Safari zooms the viewport on focus */
   .sc-ask-search input::placeholder{ color:rgba(12, 34, 66,0.55); }   /* 4.61:1; it is the field's only visible label */
   .sc-ask-submit{ flex-shrink:0; display:inline-flex; align-items:center; justify-content:center; width:44px; height:44px; border-radius:6px; border:1px solid rgba(12, 34, 66,0.30); background:transparent; color:#0C2242 !important; cursor:pointer; transition:background .25s ease, color .25s ease, border-color .25s ease; }
   /* BOTH the svg and its children, exactly as the footer icons do it. The
@@ -1569,7 +1575,7 @@
   .sc-receive li:last-child{ border-bottom:1px solid rgba(12, 34, 66,0.10); }
   .sc-receive b{ font-family:var(--mono); font-size:10px; font-weight:400; color:rgba(12, 34, 66,0.5) !important; flex-shrink:0; }
   .sc-sub-form{ display:flex; gap:8px; width:100%; }
-  .sc-sub-form input{ flex:1; min-width:0; background:#FAF9F5; border:1px solid #0C2242; border-radius:6px; padding:10px 12px; outline:none; color:#0C2242 !important; font-family:var(--sans); font-size:13px; }
+  .sc-sub-form input{ flex:1; min-width:0; background:#FAF9F5; border:1px solid #0C2242; border-radius:6px; padding:10px 12px; outline:none; color:#0C2242 !important; font-family:var(--sans); font-size:16px; }   /* 16px: under it mobile Safari zooms the viewport on focus */
   .sc-sub-form input::placeholder{ color:rgba(12, 34, 66,0.45); }
   .sc-sub-btn{ flex-shrink:0; background:#0C2242; color:#FAF9F5 !important; border:none; border-radius:8px; padding:10px 16px; font-family:var(--sans); font-size:13px; font-weight:600; cursor:pointer; transition:background .2s ease; }
   .sc-sub-btn:hover{ background:#173A64; }
@@ -1777,11 +1783,14 @@
     transition: transform 0.22s ease, color 0.2s ease;
   }
   .nr-row:hover .nr-row-title { transform: translateX(6px); color: #2E6DB4 !important; }
+  .nr-row-meta { flex-shrink: 0; display: flex; align-items: baseline; gap: 14px; }
+  .nr-row-date { font-family: var(--mono); font-size: 12px; letter-spacing: 0.04em; color: rgba(12, 34, 66,0.5) !important; white-space: nowrap; }
   .nr-row-cat { flex-shrink: 0; font-family: var(--sans); font-size: 14px; font-weight: 400; color: rgba(12, 34, 66,0.5) !important; white-space: nowrap; text-align: right; }
   @media (max-width: 860px) {
     .news-rows { grid-template-columns: 1fr; gap: 30px; margin-top: 56px; }
     .nr-headline { max-width: none; }
     .nr-row { padding: 16px 2px; gap: 16px; }
+    .nr-row-meta { flex-direction: column; align-items: flex-end; gap: 2px; }
   }
 
   /* ── PHONE LAYOUT (≤640px, the shell's one phone value): the four showcase
@@ -3373,6 +3382,13 @@
   function renderRecordRows() {
     var container = document.getElementById('nr-list');
     if (!container) return;
+    /* Month precision only: generate_news.py stamps a month-precision row as the
+       first of its month, so a day here would assert a day the source never gave. */
+    function recordMonth(s) {
+      var m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(s || '');
+      if (!m) return '';
+      return new Date(+m[1], +m[2] - 1, +m[3]).toLocaleDateString('en-US', { year: 'numeric', month: 'short' });
+    }
     fetch('/news.json')
       .then(function (r) { return r.ok ? r.json() : Promise.reject(); })
       .then(function (items) {
@@ -3381,7 +3397,10 @@
           html += '<a class="nr-row" href="' + encodeURI(it.url || '/updates') + '"'
             + (/^https?:/.test(it.url || '') ? ' target="_blank" rel="noopener"' : '') + '>'
             +   '<span class="nr-row-title">' + escapeHtml(it.title || '') + '</span>'
-            +   '<span class="nr-row-cat">' + escapeHtml(it.type || '') + '</span>'
+            +   '<span class="nr-row-meta">'
+            +     '<span class="nr-row-date">' + escapeHtml(recordMonth(it.date)) + '</span>'
+            +     '<span class="nr-row-cat">' + escapeHtml(it.type || '') + '</span>'
+            +   '</span>'
             + '</a>';
         });
         if (html) container.innerHTML = html;

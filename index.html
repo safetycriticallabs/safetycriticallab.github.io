@@ -54,7 +54,7 @@
 <link rel="shortcut icon" href="favicon.ico">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="preconnect" href="https://scl-cors-proxy.kevwill94.workers.dev" crossorigin>
+<link rel="preconnect" href="https://feeds.safetycriticallabs.com" crossorigin>
 <link rel="preconnect" href="https://www.federalregister.gov" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css">
@@ -852,7 +852,6 @@
   .sc-card { position: relative; background: #0C2242 !important; border: none; border-radius: var(--radius-card); padding: 22px; min-height: 300px; cursor: pointer; text-align: left; overflow: hidden; overflow: clip; display: flex; flex-direction: column; font-family: var(--sans); transition: transform 0.32s cubic-bezier(.16,1,.3,1), box-shadow 0.32s ease; }
   .sc-card:hover { transform: translateY(-5px); box-shadow: 0 18px 42px rgba(12,34,66,0.22); }
   .sc-label { font-size: 16px; font-weight: 600; color: #FAF9F5 !important; }
-  .sc-sub { font-size: 13px; line-height: 1.5; color: rgba(250,249,245,0.62) !important; margin-top: 4px; }
 
   /* RESERVE TWO LINES OF SUB-LINE ON THE TWO TILES THAT HOLD A TEXT FIELD.
      Both scroll-scrubbed effects on this page resize the cards continuously as
@@ -873,7 +872,6 @@
      layout: the JS pins each card at its NARROWEST and therefore tallest state,
      which is the two-line state, so this is space the card already had.
      Scoped to the two tiles that can hold a caret, so no other tile changes. */
-  #sc-ask .sc-sub, #sc-subscribe .sc-sub { min-height: 3em; }   /* 2 lines at line-height 1.5 */
   .sc-foot { text-align: center; font-size: 13px; color: rgba(12, 34, 66,0.6) !important; margin-top: 18px; }
   .sc-stage { flex: 1; display: flex; align-items: center; justify-content: center; margin: 6px 0 10px; }
   .sc-expand { position: absolute; top: 20px; right: 22px; z-index: 5; cursor: pointer; font-family: var(--mono); font-size: 12px; font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase; color: #FAF9F5 !important; background: none; border: none; padding: 0; display: inline-flex; align-items: center; gap: 7px; opacity: 0.55; transition: opacity 0.25s ease; }
@@ -933,7 +931,6 @@
       radial-gradient(ellipse 98% 94% at 50% 44%, transparent 42%, rgba(12, 34, 66,0.15) 100%),
       #FAF9F5 !important; border: 1px solid rgba(12, 34, 66,0.12); box-shadow: 0 2px 26px rgba(12, 34, 66,0.06); }
   #sc-cert .sc-label { color: #0C2242 !important; }
-  #sc-cert .sc-sub { color: rgba(12,34,66,0.66) !important; }   /* this tile is cream, not navy */
   /* In the card (not expanded), the cert slowly floats + rotates in 3D so the
      depth effect is self-evident — no caption needed. Expanding stops it so the
      grab/tilt interaction takes over. */
@@ -1027,7 +1024,6 @@
       radial-gradient(ellipse 98% 94% at 50% 44%, transparent 42%, rgba(12, 34, 66,0.15) 100%),
       #FAF9F5 !important; border:1px solid rgba(12, 34, 66,0.12); box-shadow:0 2px 26px rgba(12, 34, 66,0.06); }
   #sc-ask .sc-label, #sc-assess .sc-label, #sc-subscribe .sc-label { color:#0C2242 !important; }
-  #sc-ask .sc-sub, #sc-assess .sc-sub, #sc-subscribe .sc-sub { color:rgba(12, 34, 66,0.66) !important; }
 
   /* ── #sc-ask and #sc-subscribe are not buttons ───────────────────────────
      The other three tiles are: cert and fw open their modal from a click
@@ -1973,7 +1969,6 @@
           <a class="sc-modal-cta" href="/process">See the certification process &rarr;</a>
         </div>
         <div class="sc-label">Certificate of Conformance</div>
-        <div class="sc-sub">A specimen. What a certificate states, and what it does not.</div>
       </div>
       <div class="sc-card" id="sc-fw">
         <button class="sc-expand" type="button" data-expands="fw-showcase" aria-label="Expand the thirteen requirement areas">Expand <span class="sc-expand-arw" aria-hidden="true">&rarr;</span></button>
@@ -1999,7 +1994,6 @@
               </div>
         </div>
         <div class="sc-label">Thirteen requirement areas</div>
-        <div class="sc-sub">Framework v3.7. Cite it at the concept DOI 10.5281/zenodo.19024420.</div>
       </div>
 
       <div class="sc-card" id="sc-ask">
@@ -2045,7 +2039,6 @@
           </form>
         </div>
         <div class="sc-label"><a href="/search">Ask SCL <span class="sc-label-arw" aria-hidden="true">&rarr;</span></a></div>
-        <div class="sc-sub">Ask SCL about certification, the framework, the process, and accreditation.</div>
       </div>
 
       <div class="sc-card" id="sc-assess">
@@ -2072,7 +2065,6 @@
           <a class="sc-assess-cta" href="/assess">Start the assessment &rarr;</a>
         </div>
         <div class="sc-label">Readiness assessment</div>
-        <div class="sc-sub">How ready is your AI system to certify? A free self assessment across the thirteen requirement areas.</div>
       </div>
 
       <div class="sc-card" id="sc-subscribe">
@@ -2096,7 +2088,6 @@
           </form>
         </div>
         <div class="sc-label"><a href="/subscribe">Stay informed <span class="sc-label-arw" aria-hidden="true">&rarr;</span></a></div>
-        <div class="sc-sub">Occasional briefings on AI regulation. Never on a schedule.</div>
       </div>
 
     </div><!-- /.sc-grid-wide -->
@@ -2504,7 +2495,7 @@
 
 /* ─── REGULATORY LANDSCAPE FEEDS ─────────────────────────── */
 (function () {
-  const CORS_PROXY = 'https://scl-cors-proxy.kevwill94.workers.dev/?url=';
+  const CORS_PROXY = 'https://feeds.safetycriticallabs.com/?url=';
 
   /* ── Cached regulatory cards ─────────────────────────
      The three cards render instantly from the last visit's

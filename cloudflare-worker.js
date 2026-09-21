@@ -8,9 +8,12 @@
  * Deploy: dashboard.cloudflare.com → Workers & Pages → Create → Worker
  * Paste this whole file as the Worker code and click Deploy.
  * The deployed worker the site uses is:
- *   https://scl-cors-proxy.kevwill94.workers.dev
+ *   https://feeds.safetycriticallabs.com
+ * served by a zone route on safetycriticallabs.com rather than the
+ * workers.dev hostname, which corporate filters commonly block and which
+ * cannot carry a zone WAF rate rule. The workers.dev URL still resolves.
  * `CORS_PROXY` in index.html and news.html points to:
- *   const CORS_PROXY = 'https://scl-cors-proxy.kevwill94.workers.dev/?url=';
+ *   const CORS_PROXY = 'https://feeds.safetycriticallabs.com/?url=';
  * Edits to this file take effect only after a manual redeploy.
  *
  * Free tier: 100,000 requests/day. Your traffic is well below this.

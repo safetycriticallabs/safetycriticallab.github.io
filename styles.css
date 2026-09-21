@@ -945,6 +945,18 @@ h2.section-title {
      which sit later in source order inside each page. */
   .legal-section .legal-meta { display: grid; grid-template-columns: 1fr; gap: 20px; }
 }
+/* ── One subscribe hand-off ──
+   /updates and /news both close with the same nudge, a rule then the button.
+   Width stays per page, because each band closes a different column: the
+   updates band closes a 1200px card grid, the news band a 760px prose column,
+   and a rule wider than the block above it reads as a different grid. */
+.updates-subscribe-band, .news-subscribe-band {
+  margin-top: 64px;
+  padding-top: 48px;
+  border-top: 1px solid var(--card-border);
+  text-align: center;
+}
+
 .legal-meta-item a { text-decoration: none; }
 .legal-meta-item a:hover { text-decoration: underline; }
 

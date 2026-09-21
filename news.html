@@ -215,6 +215,10 @@
 }
 .news-basis p { font-family: var(--sans); font-size: 15px; line-height: 1.75; color: rgba(12,34,66,0.78); margin: 0 0 16px; font-weight: 300; }
 .news-basis p:last-child { margin-bottom: 0; }
+/* Frame from the shared hand-off rule in styles.css; the measure is this
+   page's own, matching .news-basis so the rule closes the column it follows
+   rather than running 440px past it. */
+.news-subscribe-band { max-width: 760px; }
 
 .news-card-source-pill {
   position: absolute;
@@ -413,6 +417,10 @@
       <p>So there is no industry news here, and no coverage of any company or any person in the AI industry, favourable or otherwise. A certification body that publishes an opinion about a vendor's products has spent something it cannot get back, and the opinion is always worth less than the impartiality it costs. There was a curated vendor reading list on this page until September 2026, and what it was and why it went are described on the impartiality page.</p>
       <p>One vendor is named elsewhere on this site. Ask SCL runs on an open weight Llama 3.1 model that SCL fine tuned and runs on its own hardware, and the Llama 3.1 Community License requires that attribution. It is a disclosure of a dependency, not an endorsement, and it is part of why SCL takes no published position on any model vendor at all.</p>
     </section>
+
+    <div class="news-subscribe-band">
+      <a href="/subscribe" class="btn btn-solid">Subscribe</a>
+    </div>
 
   </div>
 </section>

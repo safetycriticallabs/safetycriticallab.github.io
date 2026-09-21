@@ -2745,7 +2745,17 @@
   /* ── EUR-Lex (EU AI Act) ────────────────────────────── */
   var euAiKeywords = /artificial intelligence|AI Act|2024\/1689|high-risk AI|AI system|AI regulation|machine learning|algorithmic|AI agent|2025\/454/i;
 
-  /* Key EU AI Act documents — always-available fallback */
+  /* Key EU AI Act documents. In practice this IS the tile: the fetch below
+     has never produced a match. Checked 2026-09-20, all six standing EUR-Lex
+     RSS feeds (rssId 162, 163, 164, 165, 166, 168, 169) return 100 items each
+     and ZERO matching euAiKeywords, because they are chronological firehoses
+     of all EU law and AI acts are too rare to stay in a 100-item window. No
+     AI-specific EUR-Lex feed exists, and search-as-RSS forms 302 or 404. So
+     unlike the Federal Register tile this cannot be fixed with a better query.
+     The three entries below were each confirmed in force on 2026-09-20 against
+     their EUR-Lex pages. Re-confirm before changing them: the Federal Register
+     tile spent years showing EO 14110 after it was revoked, precisely because a
+     silently-failing fetch made a stale fallback look like a live result. */
   var euAiFallback = [
     { title: 'Proposal amending Regulation (EU) 2024/1689 - Digital Omnibus on AI', url: 'https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:52025PC0836', date: formatDate('2025-11-19'), type: 'Legislative Proposal' },
     { title: 'European Strategy for Artificial Intelligence - Communication from the Commission', url: 'https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:52025DC0724', date: formatDate('2025-10-08'), type: 'Commission Communication' },

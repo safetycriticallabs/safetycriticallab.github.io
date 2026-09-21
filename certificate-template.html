@@ -169,6 +169,12 @@
     color: var(--navy);
     margin-bottom: 4px;
   }
+  /* The designation hangs outside the centred run. Measured: at 13px with 0.2em
+     tracking the glyph adds 13.48px, which walks the wordmark 6.74px left of the
+     seal centred above it. Width 0 keeps it out of the run. No sup and no size
+     change: DM Sans 700 already draws U+2122 raised to cap height, ink 4.53px to
+     9.10px above the baseline against cap S at 9.26px. */
+  .head-tm { display: inline-block; width: 0; overflow: visible; letter-spacing: normal; }
   .head-sub {
     font-family: 'IBM Plex Mono', monospace;
     font-size: 9px; letter-spacing: 0.18em;
@@ -662,7 +668,7 @@
     <!-- HEADER -->
     <div class="head">
       <img src="img/SCL_Logo_3d_sm.png" alt="Safety Critical Labs" class="head-logo" draggable="false">
-      <div class="head-wordmark">Safety Critical Labs</div>
+      <div class="head-wordmark">Safety Critical Labs<span class="head-tm">&#8482;</span></div>
       <div class="head-sub">AI Certification Authority</div>
     </div>
 
@@ -738,7 +744,7 @@
           <div class="admin-value" data-field="frameworkDOI">10.5281/zenodo.22775993</div>
         </div>
         <div class="admin-row">
-          <div class="admin-label">Requirement Sets</div>
+          <div class="admin-label">Requirement Areas</div>
           <div class="admin-value" data-field="requirementSets">AI-1 to AI-10, AI-12</div>
         </div>
       </div>
@@ -810,7 +816,7 @@
 
     <div class="head">
       <img src="img/SCL_Logo_3d_sm.png" alt="" class="head-logo" draggable="false">
-      <div class="head-wordmark">Safety Critical Labs</div>
+      <div class="head-wordmark">Safety Critical Labs<span class="head-tm">&#8482;</span></div>
       <div class="head-sub">Conformance Verification</div>
     </div>
 
@@ -841,7 +847,7 @@
         <div class="mid-rule"></div>
 
         <div class="back-note">
-          Evaluated against the requirement sets listed on the face of this certificate, under the <strong data-field="frameworkVersioned">SCL AI Requirements Framework v3.7</strong>. Scan to confirm this record against the public register.
+          Evaluated against the requirement areas listed on the face of this certificate, under the <strong data-field="frameworkVersioned">SCL AI Requirements Framework v3.7</strong>. Scan to confirm this record against the public register.
         </div>
 
       </div>

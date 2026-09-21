@@ -1973,7 +1973,7 @@
           <a class="sc-modal-cta" href="/process">See the certification process &rarr;</a>
         </div>
         <div class="sc-label">Certificate of Conformance</div>
-        <div class="sc-sub">SCL is pre-accreditation: ANAB intake is on file, formal engagement deferred.</div>
+        <div class="sc-sub">A specimen. What a certificate states, and what it does not.</div>
       </div>
       <div class="sc-card" id="sc-fw">
         <button class="sc-expand" type="button" data-expands="fw-showcase" aria-label="Expand the thirteen requirement areas">Expand <span class="sc-expand-arw" aria-hidden="true">&rarr;</span></button>
@@ -2695,27 +2695,46 @@
   /* ── US Federal Register ───────────────────────────── */
   var frAiKeywords = /artificial intelligence|AI safety|AI system|AI risk|machine learning|algorithmic|autonomous|neural network|AI governance|AI regulation/i;
 
+  /* Shown only if the fetch fails. Every entry is checked against the Federal
+     Register's own disposition_notes field before it goes here: the previous
+     first entry was EO 14110, which that field records as "Revoked by: EO
+     14148, January 20, 2025", so the tile was presenting a revoked order as
+     current federal AI governance whenever the live query came back empty,
+     which with order=newest was every time. Re-check disposition before
+     changing these. */
   var frFallback = [
-    { title: 'Executive Order on Safe, Secure, and Trustworthy Artificial Intelligence', url: 'https://www.federalregister.gov/documents/2023/11/01/2023-24283/safe-secure-and-trustworthy-development-and-use-of-artificial-intelligence', date: formatDate('2023-10-30'), type: 'Executive Order' },
-    { title: 'Request for Comment on AI Accountability Policy', url: 'https://www.federalregister.gov/documents/2023/04/13/2023-07776/ai-accountability-policy-request-for-comment', date: formatDate('2023-04-13'), type: 'Notice' },
-    { title: 'National AI Initiative Office Request for Information', url: 'https://www.federalregister.gov/documents/2023/05/23/2023-10718/request-for-information-national-artificial-intelligence-research-resource', date: formatDate('2023-05-23'), type: 'Notice' }
+    { title: 'Promoting Advanced Artificial Intelligence Innovation and Security', url: 'https://www.federalregister.gov/documents/2026/06/05/2026-11415/promoting-advanced-artificial-intelligence-innovation-and-security', date: formatDate('2026-06-05'), type: 'Executive Order' },
+    { title: 'Ensuring a National Policy Framework for Artificial Intelligence', url: 'https://www.federalregister.gov/documents/2025/12/16/2025-23092/ensuring-a-national-policy-framework-for-artificial-intelligence', date: formatDate('2025-12-16'), type: 'Executive Order' },
+    { title: 'Policy Statement Concerning the Suppression of Accuracy in Artificial Intelligence Systems', url: 'https://www.federalregister.gov/documents/2026/07/07/2026-13628/policy-statement-concerning-the-suppression-of-accuracy-in-artificial-intelligence-systems', date: formatDate('2026-07-07'), type: 'Notice' }
   ];
 
-  fetch('https://www.federalregister.gov/api/v1/documents.json?conditions%5Bterm%5D=%22artificial+intelligence%22&order=newest&per_page=25&fields%5B%5D=title&fields%5B%5D=publication_date&fields%5B%5D=html_url&fields%5B%5D=type')
+  fetch('https://www.federalregister.gov/api/v1/documents.json?conditions%5Bterm%5D=%22artificial+intelligence%22&order=relevance&per_page=100&fields%5B%5D=title&fields%5B%5D=publication_date&fields%5B%5D=html_url&fields%5B%5D=type')
     .then(function (r) { return r.json(); })
     .then(function (data) {
-      var filtered = [];
-      for (var i = 0; i < data.results.length && filtered.length < 5; i++) {
+      /* order=relevance puts AI-titled documents first. Measured against the
+         live API on 2026-09-20, order=newest returned 25 documents that merely
+         mention AI in full text and ZERO whose title matched frAiKeywords, so
+         this filter always emptied and the tile always fell through to
+         frFallback. Relevance at 100 returns 62 title matches.
+         This tile promises rules, proposed rules and executive orders, so keep
+         those three types and lead with the most recent, not with API order. */
+      var INSTRUMENTS = { 'Presidential Document': 1, 'Rule': 1, 'Proposed Rule': 1 };
+      var matched = [];
+      for (var i = 0; i < data.results.length; i++) {
         var doc = data.results[i];
-        if (frAiKeywords.test(doc.title)) {
-          filtered.push({
-            title: escapeHtml(doc.title),
-            url: doc.html_url,
-            date: formatDate(doc.publication_date),
-            type: doc.type || 'Document'
-          });
-        }
+        if (frAiKeywords.test(doc.title) && INSTRUMENTS[doc.type]) { matched.push(doc); }
       }
+      matched.sort(function (a, b) {
+        return (b.publication_date || '').localeCompare(a.publication_date || '');
+      });
+      var filtered = matched.slice(0, 5).map(function (doc) {
+        return {
+          title: escapeHtml(doc.title),
+          url: doc.html_url,
+          date: formatDate(doc.publication_date),
+          type: doc.type || 'Document'
+        };
+      });
       var items = filtered.length > 0 ? filtered : frFallback;
       addNewsItem('us', items[0]);
     })

@@ -171,6 +171,85 @@
   .ev-source-row-value { min-width: 0; overflow-wrap: anywhere; }
 }
 </style>
+<style>
+/* ═══ 2026-09-26: the incident gallery moved here from the framework page.
+   Band styles copied verbatim from framework.html. ═══ */
+/* The band's closing button now jumps down this page to the measurements. */
+#ev-measured { scroll-margin-top: 88px; }
+.failmode-section { background: var(--bg); }
+.failmode-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  margin-top: 40px;
+}
+.failmode-card {
+  background: var(--white);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-card);
+  padding: 26px 26px 22px;
+  display: flex;
+  flex-direction: column;
+}
+.failmode-incident { margin-bottom: 10px; }
+.failmode-title {
+  font-size: 18px; font-weight: 600; letter-spacing: -0.015em;
+  color: var(--ink); line-height: 1.3; margin-bottom: 12px;
+}
+.failmode-body {
+  font-size: 14px; line-height: 1.65; font-weight: 300;
+  color: var(--ink-2); margin-bottom: 18px;
+}
+.failmode-map {
+  margin-top: auto; padding-top: 16px;
+  border-top: 1px solid var(--rule);
+  display: flex; align-items: baseline; gap: 10px;
+}
+.failmode-map a { transition: background 0.2s ease; }
+.failmode-map a:hover { background: #0C2242; color: #FAF9F5; }
+.failmode-map span { font-size: 13px; color: var(--ink-3); font-weight: 300; line-height: 1.5; }
+.failmode-foot {
+  margin-top: 36px;
+  display: flex; align-items: center; gap: 20px; flex-wrap: wrap;
+}
+.failmode-foot p {
+  font-size: 14px; color: var(--ink-3); font-weight: 300; margin: 0;
+  max-width: 480px; line-height: 1.6;
+}
+@media (max-width: 880.98px) {
+  .failmode-grid { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 640px) {
+  .failmode-grid { grid-template-columns: 1fr; }
+}
+/* The measured chapter, for cream: the figure cards the framework page drew
+   for night, in the page's own ink and the validated chart blues. */
+.visually-hidden { position: absolute !important; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+[id^="ev-result-"] { scroll-margin-top: 88px; }
+.fwx-measured { margin-top: 44px; }
+.fwx-measured-lead { font-size: 16px; font-weight: 300; line-height: 1.7; color: var(--ink-2); max-width: 640px; margin: 0 0 24px; }
+.fwx-measured-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; margin-bottom: 40px; }
+.fwx-fig { margin: 0; padding: 24px 24px 20px; border-radius: var(--radius-card); background: #FAF9F5; border: 1px solid var(--card-border); display: flex; flex-direction: column; }
+.fwx-fig-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 12px; }
+.fwx-fig-head .ev-areas { display: flex; flex-wrap: wrap; gap: 6px; }
+.fwx-chip { font-family: var(--sans); font-size: 11px; font-weight: 500; letter-spacing: 0.04em; text-transform: uppercase; padding: 4px 10px; border-radius: 999px; border: 1px solid currentColor; white-space: nowrap; }
+.fwx-chip.pass { color: var(--ok); }
+.fwx-chip.warn { color: var(--warn-text); }   /* --warn is the graphic amber, 3.61:1 as text (styles.css); --warn-text is 5.61:1 */
+.fwx-chip.deny { color: var(--bad); }
+.fwx-fig-title { font-size: 17px; font-weight: 600; color: var(--ink); line-height: 1.3; margin-bottom: 10px; letter-spacing: -0.01em; }
+/* Capped so the chart's own labels stay near the card's text size: at full card
+   width the 320-unit drawing scaled its 11px labels to about 24px. */
+.fwx-fig-svg { width: 100%; max-width: 400px; height: auto; display: block; margin: 4px auto 8px; font-family: var(--sans); }
+.fwx-fig-metric { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 14px; margin-bottom: 12px; }
+.fwx-fig-num { font-size: 26px; font-weight: 600; letter-spacing: -0.02em; color: var(--ink); }
+.fwx-fig-num.deny { color: var(--bad); }
+.fwx-fig-label { font-size: 13px; color: var(--ink-2); font-weight: 300; line-height: 1.5; flex-basis: 100%; }
+.fwx-fig-cap { margin-top: auto; padding-top: 12px; border-top: 1px solid var(--card-border); font-size: 13px; color: var(--ink-2); font-weight: 300; line-height: 1.55; }
+.fwx-fig-cap b { color: var(--ink); font-weight: 500; }
+.fwx-fig-cap a { color: var(--ink); text-decoration: underline; text-decoration-color: rgba(46,109,180,0.35); text-underline-offset: 3px; }
+.fwx-fig-cap a:hover { text-decoration-color: var(--ink); }
+@media (max-width: 880.98px) { .fwx-measured-grid { grid-template-columns: 1fr; } }
+</style>
 </head>
 <body>
 <a class="skip-link" href="#main">Skip to content</a>
@@ -235,7 +314,104 @@
 </div>
 
 <!-- METHODOLOGY -->
-<section class="page-section">
+<section class="page-section failmode-section">
+  <div class="section-inner">
+    <div class="fw-eyebrow-mono">[ Requirements Defined by Failure ]</div>
+    <h2 class="section-title" style="margin-bottom: 16px;">The failures these <br>requirements target.</h2>
+    <p style="font-size:16px;color:var(--ink-2);font-weight:300;line-height:1.75;max-width:640px;">
+      Each requirement area exists because a class of AI failure has already happened in the field. These are documented public cases, each mapped to the area written to catch that failure mode. The mapping names the target. It does not claim any outcome would have changed.
+    </p>
+    <div class="failmode-grid">
+
+      <div class="failmode-card">
+        <div class="failmode-incident">Uber ATG &middot; Tempe, 2018</div>
+        <div class="failmode-title">An automated vehicle did not classify a pedestrian in time</div>
+        <div class="failmode-body">The NTSB investigation found the automated driving system alternated between classifications for a pedestrian crossing outside a crosswalk, and did not brake in time to avoid a fatal collision.</div>
+        <div class="failmode-map"><a href="/requirements#ai-6">AI-6</a><span>The failure mode out-of-distribution detection targets.</span></div>
+      </div>
+
+      <div class="failmode-card">
+        <div class="failmode-incident">Air Canada &middot; Tribunal, 2024</div>
+        <div class="failmode-title">A support chatbot stated a refund policy that did not exist</div>
+        <div class="failmode-body">A civil resolution tribunal held the airline liable after its website assistant described a bereavement refund it did not in fact offer, and ruled the company responsible for what its bot said.</div>
+        <div class="failmode-map"><a href="/requirements#ai-5">AI-5</a><span>The failure mode hallucination prevention targets.</span></div>
+      </div>
+
+      <div class="failmode-card">
+        <div class="failmode-incident">Zillow Offers &middot; 2021</div>
+        <div class="failmode-title">A home-pricing model drifted out of its market</div>
+        <div class="failmode-body">Zillow wound down its algorithmic home-buying unit after model price forecasts diverged from a fast-moving housing market, taking an inventory writedown reported above 300 million dollars.</div>
+        <div class="failmode-map"><a href="/requirements#ai-4">AI-4</a><span>The failure mode continuous validation targets.</span></div>
+      </div>
+
+      <div class="failmode-card">
+        <div class="failmode-incident">Amazon &middot; Recruiting, 2018</div>
+        <div class="failmode-title">A hiring model learned to penalize women</div>
+        <div class="failmode-body">Amazon scrapped an internal recruiting model, reported in 2018, after finding it downgraded resumes that referenced women's activities, a bias absorbed from a decade of historical hiring data.</div>
+        <div class="failmode-map"><a href="/requirements#ai-2">AI-2</a><span>The failure mode addressing AI bias targets.</span></div>
+      </div>
+
+      <div class="failmode-card">
+        <div class="failmode-incident">Cruise &middot; San Francisco, 2023</div>
+        <div class="failmode-title">A robotaxi mishandled the moment after a collision</div>
+        <div class="failmode-body">California regulators suspended Cruise's driverless permits after one of its vehicles, following an initial impact from another car, executed a pull-over maneuver that dragged a pedestrian who was in its path.</div>
+        <div class="failmode-map"><a href="/requirements#ai-9">AI-9</a><span>The failure mode human and AI teaming targets.</span></div>
+      </div>
+
+      <div class="failmode-card">
+        <div class="failmode-incident">Microsoft Tay &middot; 2016</div>
+        <div class="failmode-title">A live-learning bot was corrupted within a day</div>
+        <div class="failmode-body">Microsoft withdrew its conversational bot Tay less than a day after release, when users exploited its habit of learning from live interactions to steer it into offensive output.</div>
+        <div class="failmode-map"><a href="/requirements#ai-13">AI-13</a><span>The failure mode continuous learning and adaptation targets.</span></div>
+      </div>
+
+    </div>
+
+    <div class="fwx-measured">
+      <p class="fwx-measured-lead">The same classes of failure, run as pass and fail measurements on public data. NASA <span style="white-space: nowrap">C-MAPSS</span> FD001, methods and thresholds of framework v3.7.</p>
+      <div class="fwx-measured-grid">
+      <figure class="fwx-fig">
+        <div class="fwx-fig-head"><span class="ev-areas"><span class="ev-area-tag">AI-1</span></span><span class="fwx-chip warn">Leakage caught</span></div>
+        <div class="fwx-fig-title">A leaky split inflates measured accuracy</div>
+        <svg class="fwx-fig-svg" viewBox="0 0 320 124" aria-hidden="true"><line x1="24" y1="62" x2="296" y2="62" stroke="rgba(12,34,66,0.18)" stroke-width="1"/><line x1="103.2" y1="62" x2="195.7" y2="62" stroke="#1F5CA6" stroke-width="2"/><circle cx="103.2" cy="62" r="6" fill="#6592D4" stroke="#FAF9F5" stroke-width="2"/><circle cx="195.7" cy="62" r="6" fill="#1F5CA6" stroke="#FAF9F5" stroke-width="2"/><text x="103.2" y="48" text-anchor="middle" font-size="12" font-weight="600" fill="#0C2242">80.33%</text><text x="103.2" y="34" text-anchor="middle" font-size="11.5" fill="rgba(12,34,66,0.66)">clean split</text><text x="195.7" y="48" text-anchor="middle" font-size="12" font-weight="600" fill="#0C2242">83.05%</text><text x="195.7" y="34" text-anchor="middle" font-size="11.5" fill="rgba(12,34,66,0.66)">leaky split</text><text x="24.0" y="92" text-anchor="middle" font-size="11" fill="rgba(12,34,66,0.66)">78%</text><text x="160.0" y="92" text-anchor="middle" font-size="11" fill="rgba(12,34,66,0.66)">82%</text><text x="296.0" y="92" text-anchor="middle" font-size="11" fill="rgba(12,34,66,0.66)">86%</text><text x="296" y="114" text-anchor="end" font-size="11" fill="rgba(12,34,66,0.66)">78 to 86% shown</text></svg>
+        <span class="visually-hidden">Clean split 80.33 percent, leaky split 83.05 percent, on a 78 to 86 percent scale.</span>
+        <div class="fwx-fig-metric"><span class="fwx-fig-num">+2.72 pp</span><span class="fwx-fig-label">test accuracy when engines are allowed to bleed across train and test, versus a clean unit-level split</span></div>
+        <figcaption class="fwx-fig-cap">This is the failure mode <b>AI-1</b> targets: train, validation, and test separation with documented provenance. <a href="#ev-result-1">See it measured</a>.</figcaption>
+      </figure>
+      <figure class="fwx-fig">
+        <div class="fwx-fig-head"><span class="ev-areas"><span class="ev-area-tag">AI-4</span></span><span class="fwx-chip pass">Monitor qualified</span></div>
+        <div class="fwx-fig-title">A drift monitor earned through four failed designs</div>
+        <svg class="fwx-fig-svg" viewBox="0 0 320 124" aria-hidden="true"><line x1="24" y1="62" x2="296" y2="62" stroke="rgba(12,34,66,0.18)" stroke-width="1"/><line x1="129.2" y1="62" x2="236.2" y2="62" stroke="#1F5CA6" stroke-width="2"/><circle cx="129.2" cy="62" r="6" fill="#6592D4" stroke="#FAF9F5" stroke-width="2"/><circle cx="236.2" cy="62" r="6" fill="#1F5CA6" stroke="#FAF9F5" stroke-width="2"/><text x="129.2" y="48" text-anchor="middle" font-size="12" font-weight="600" fill="#0C2242">0.58σ</text><text x="129.2" y="34" text-anchor="middle" font-size="11.5" fill="rgba(12,34,66,0.66)">first alert</text><text x="236.2" y="48" text-anchor="middle" font-size="12" font-weight="600" fill="#0C2242">1.17σ</text><text x="236.2" y="34" text-anchor="middle" font-size="11.5" fill="rgba(12,34,66,0.66)">inhibit</text><text x="24.0" y="92" text-anchor="middle" font-size="11" fill="rgba(12,34,66,0.66)">0σ</text><text x="160.0" y="92" text-anchor="middle" font-size="11" fill="rgba(12,34,66,0.66)">0.75σ</text><text x="296.0" y="92" text-anchor="middle" font-size="11" fill="rgba(12,34,66,0.66)">1.5σ</text></svg>
+        <span class="visually-hidden">First alert at 0.58 sigma and inhibit at 1.17 sigma of injected bias, on a 0 to 1.5 sigma scale.</span>
+        <div class="fwx-fig-metric"><span class="fwx-fig-num">0.58σ / 1.17σ</span><span class="fwx-fig-label">injected bias at first alert and at inhibit, once the monitor was designed against a measured no-drift floor</span></div>
+        <figcaption class="fwx-fig-cap">This is the failure mode <b>AI-4</b> targets: post-deployment drift monitoring with thresholds meaningful against a sampling floor. <a href="#ev-result-2">See it measured</a>.</figcaption>
+      </figure>
+      <figure class="fwx-fig">
+        <div class="fwx-fig-head"><span class="ev-areas"><span class="ev-area-tag">AI-6</span><span class="ev-area-tag">AI-12</span></span><span class="fwx-chip deny">Denial finding</span></div>
+        <div class="fwx-fig-title">Softmax confidence detects OOD worse than chance</div>
+        <svg class="fwx-fig-svg" viewBox="0 0 320 124" aria-hidden="true"><line x1="12" y1="96" x2="308" y2="96" stroke="rgba(12,34,66,0.18)" stroke-width="1"/><line x1="12" y1="56.0" x2="260.8" y2="56.0" stroke="#0C2242" stroke-width="1" stroke-dasharray="3 3" opacity="0.7"/><text x="308" y="60.0" text-anchor="end" font-size="11" fill="rgba(12,34,66,0.66)">chance</text><path d="M74.0,96 V90.64 a4,4 0 0 1 4,-4 h16 a4,4 0 0 1 4,4 V96 Z" fill="#1F5CA6"/><text x="86.0" y="80.6" text-anchor="middle" font-size="12" font-weight="600" fill="#0C2242">0.117</text><text x="86.0" y="114" text-anchor="middle" font-size="11.5" fill="rgba(12,34,66,0.66)">max-softmax</text><path d="M222.0,96 V20.0 a4,4 0 0 1 4,-4 h16 a4,4 0 0 1 4,4 V96 Z" fill="#6592D4"/><text x="234.0" y="10.0" text-anchor="middle" font-size="12" font-weight="600" fill="#0C2242">1.0</text><text x="234.0" y="114" text-anchor="middle" font-size="11.5" fill="rgba(12,34,66,0.66)">Mahalanobis</text></svg>
+        <span class="visually-hidden">Max-softmax AUROC 0.117, Mahalanobis AUROC 1.0, chance 0.5.</span>
+        <div class="fwx-fig-metric"><span class="fwx-fig-num deny">AUROC 0.117</span><span class="fwx-fig-label">for max-softmax OOD scoring: below 0.5 means the model is most confident exactly when it is most wrong</span></div>
+        <figcaption class="fwx-fig-cap">This is the failure mode <b>AI-6</b> and <b>AI-12</b> target: a characterized OOD response, not a confidence threshold assumed to work. <a href="#ev-result-3">See it measured</a>.</figcaption>
+      </figure>
+      <figure class="fwx-fig">
+        <div class="fwx-fig-head"><span class="ev-areas"><span class="ev-area-tag">AI-8</span><span class="ev-area-tag">AI-12</span></span><span class="fwx-chip pass">Fail → pass</span></div>
+        <div class="fwx-fig-title">Confidence miscalibrated, then corrected and re-checked</div>
+        <svg class="fwx-fig-svg" viewBox="0 0 320 124" aria-hidden="true"><line x1="12" y1="96" x2="308" y2="96" stroke="rgba(12,34,66,0.18)" stroke-width="1"/><line x1="12" y1="76.0" x2="211.2" y2="76.0" stroke="#0C2242" stroke-width="1" stroke-dasharray="3 3" opacity="0.7"/><text x="308" y="80.0" text-anchor="end" font-size="11" fill="rgba(12,34,66,0.66)">pass criterion</text><path d="M74.0,96 V36.00000000000001 a4,4 0 0 1 4,-4 h16 a4,4 0 0 1 4,4 V96 Z" fill="#6592D4"/><text x="86.0" y="26.0" text-anchor="middle" font-size="12" font-weight="600" fill="#0C2242">0.160</text><text x="86.0" y="114" text-anchor="middle" font-size="11.5" fill="rgba(12,34,66,0.66)">before</text><path d="M222.0,96 V88.0 a4,4 0 0 1 4,-4 h16 a4,4 0 0 1 4,4 V96 Z" fill="#1F5CA6"/><text x="234.0" y="66.0" text-anchor="middle" font-size="12" font-weight="600" fill="#0C2242">0.030</text><text x="234.0" y="114" text-anchor="middle" font-size="11.5" fill="rgba(12,34,66,0.66)">after</text></svg>
+        <span class="visually-hidden">Expected calibration error 0.160 before and 0.030 after temperature scaling, against a 0.05 pass criterion.</span>
+        <div class="fwx-fig-metric"><span class="fwx-fig-num">0.160 → 0.030</span><span class="fwx-fig-label">expected calibration error before and after temperature scaling, against a 0.05 pass criterion</span></div>
+        <figcaption class="fwx-fig-cap">This is the failure mode <b>AI-8</b> and <b>AI-12</b> target: confidence that means what it says, demonstrated by measurement. <a href="#ev-result-4">See it measured</a>.</figcaption>
+      </figure>
+      </div>
+      <div class="failmode-foot">
+        <a href="#ev-measured" class="btn btn-solid">See these failure modes measured</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MEASURED RESULTS -->
+<section class="page-section" id="ev-measured">
   <div class="section-inner">
     <div class="fw-eyebrow-mono">[ Subject Under Test ]</div>
     <div class="ev-method">
@@ -260,7 +436,7 @@
     <div class="ev-grid">
 
       <!-- AI-1 : Data leakage -->
-      <div class="ev-panel" style="--accent:var(--warn);">
+      <div class="ev-panel" id="ev-result-1" style="--accent:var(--warn);">
         <div class="ev-panel-head">
           <div class="ev-areas"><span class="ev-area-tag">AI-1</span></div>
           <span class="ev-chip warn">Leakage caught</span>
@@ -277,7 +453,7 @@
       </div>
 
       <!-- AI-4 : Drift monitoring -->
-      <div class="ev-panel" style="--accent:var(--ok);">
+      <div class="ev-panel" id="ev-result-2" style="--accent:var(--ok);">
         <div class="ev-panel-head">
           <div class="ev-areas"><span class="ev-area-tag">AI-4</span></div>
           <span class="ev-chip pass">Monitor qualified</span>
@@ -294,7 +470,7 @@
       </div>
 
       <!-- AI-6 / AI-12 : OOD detection -->
-      <div class="ev-panel" style="--accent:var(--bad);">
+      <div class="ev-panel" id="ev-result-3" style="--accent:var(--bad);">
         <div class="ev-panel-head">
           <div class="ev-areas"><span class="ev-area-tag">AI-6</span><span class="ev-area-tag">AI-12</span></div>
           <span class="ev-chip deny">Denial finding</span>
@@ -311,7 +487,7 @@
       </div>
 
       <!-- AI-8 / AI-12 : Calibration -->
-      <div class="ev-panel" style="--accent:var(--ok);">
+      <div class="ev-panel" id="ev-result-4" style="--accent:var(--ok);">
         <div class="ev-panel-head">
           <div class="ev-areas"><span class="ev-area-tag">AI-8</span><span class="ev-area-tag">AI-12</span></div>
           <span class="ev-chip pass">Fail &rarr; pass</span>

@@ -4,3 +4,7 @@
 # never reach this PUBLIC repo. Kept out by a global ignore until 2026-09-13; that
 # lived at ~/.config/git/ignore and so protected this machine only, not the repo.
 .claude/settings.local.json
+
+# Local design mockups built by Claude from framework.html and evidence.html; never publish.
+framework-mockup.html
+evidence-mockup.html

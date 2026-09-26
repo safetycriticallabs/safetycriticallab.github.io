@@ -436,12 +436,6 @@
 </style>
 <style>
 /* ═══ The framework as a product showcase (2026-09-24). ═══ */
-.mock-banner {
-  position: fixed; right: 16px; bottom: 16px; z-index: 300; pointer-events: none;
-  font-family: var(--sans); font-size: 11px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase;
-  background: #0C2242; color: #FAF9F5; padding: 8px 14px; border-radius: 999px;
-  box-shadow: 0 6px 20px rgba(12,34,66,0.25);
-}
 
 /* ─── HERO: navy stage ────────────────────────────────────── */
 .fwx-hero {
@@ -1096,6 +1090,8 @@ html.fwx-door.fwx-scene .pub-standard-rows > .btn:focus-visible, html.fwx-door.f
 html.fwx-still .fwx-copy { opacity: 0; transform: translateY(18px); pointer-events: none; }
 html.fwx-still .fwx-copy-left > *, html.fwx-still .fwx-copy-right > * { animation-play-state: paused; }
 html.fwx-still .fwx-hero::after { opacity: 0; }
+/* Focus inside the words shows them at once, even mid-bang, with their ring. */
+.fwx-copy:focus-within .fwx-copy-left > *, .fwx-copy:focus-within .fwx-copy-right > * { animation: none; opacity: 1; transform: none; }
 /* The hero's two buttons in the same marks as the standard's (treatment A). */
 html.fwx-scene .fwx-cta { gap: 4px 30px; }
 html.fwx-scene .fwx-cta .btn {
@@ -1221,7 +1217,7 @@ html.fwx-door body.is-bare .failmode-section .section-inner > .failmode-grid { v
 /* ─── BARE MODE: everything that is read is hidden, so the object can be
    judged on its own. Visibility, not display: every box keeps its size, so
    the scroll distances are unchanged and the animation runs exactly as it
-   does with the text in place. Press b, or add ?bare to the URL. ─ */
+   does with the text in place. Mockup only; the live page never sets it. ─ */
 body.is-bare .global-nav,
 body.is-bare .site-footer,
 body.is-bare .fwx-hero-inner,
@@ -1231,13 +1227,6 @@ body.is-bare .structure-section,
 body.is-bare .open-standard-band,
 body.is-bare .pub-standard-band,
 body.is-bare .fw-transition-cta { visibility: hidden; }
-.fwx-hint {
-  position: fixed; left: 16px; bottom: 16px; z-index: 300; pointer-events: none; display: none;
-  font-family: var(--sans); font-size: 11px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase;
-  background: rgba(250,249,245,0.9); color: #0C2242; padding: 8px 14px; border-radius: 999px;
-}
-body.is-bare .fwx-hint { display: block; }
-body.is-centre .fwx-hint { display: none; }
 /* The centrepiece view scrolls now: the page's own content is set aside and a
    track gives the scroll its length. */
 body.is-centre .page-shell, body.is-centre .site-footer { display: none; }
@@ -1925,7 +1914,7 @@ gsap.utils.toArray('.slide-right').forEach(function(el) {
   var narrow = window.matchMedia('(max-width: 880.98px)');
   /* The centrepiece view, ?centre or ?center: the system alone, formed,
      centred and full bleed, with the scroll locked. */
-  var CENTRE = /(^|[?&])(centre|center)(=|&|$)/.test(location.search);
+  var CENTRE = false;
   var TAU = Math.PI * 2, NAV = CENTRE ? 0 : 72;
   var track = null;
   if (CENTRE) {
@@ -2049,7 +2038,7 @@ gsap.utils.toArray('.slide-right').forEach(function(el) {
     return sgOut;
   }
   /* ?core: the dive home into the glowing core, on its own, with no bang. */
-  var CORE_VIEW = TRAVEL && /(^|[?&])core(=|&|$)/.test(location.search);
+  var CORE_VIEW = false;
   var CORE_HOLD = 1.0, CORE_T = 3.6, CORE_R = 0.27, coreT = 0, coreLast = null, coreRate = 1;
   /* Inside the core, step 1: after the orb has been seen whole for GOLD_WAIT
      seconds, GOLD_T seconds in through the gold to p-gold. NIGHT_R: the
@@ -2057,18 +2046,18 @@ gsap.utils.toArray('.slide-right').forEach(function(el) {
      corona. GOLD_A by GOLD_B: the gold's lit inner edge on screen, in units,
      at the widest of its sway; GOLD_M: the pixels kept inside it. */
   var CORE_IN = false, GOLD_WAIT = 1.5, GOLD_T = 3.0, NIGHT_R = 42, GOLD_A = 56.7, GOLD_B = 50.9, GOLD_M = 24;
-  var GOLD_S_ASK = +((location.search.match(/[?&]golds=([0-9.]+)/) || [])[1] || 0);
+  var GOLD_S_ASK = 0;
   var goldS = 1, goldX = 0, goldY = 0, goldPX = 0, goldPY = 0;
   /* For comparison only: ?corona=blue lets the core's outer corona shade into
      SCL blue instead of fading gold over navy, which reads olive. */
-  var CORONA_BLUE = /[?&]corona=blue/.test(location.search);
+  var CORONA_BLUE = false;
   var coreS = 1, coreX = 0, coreY = 0;
   var bangOn = TRAVEL && !CORE_VIEW && !reduce.matches && !location.hash && !((window.pageYOffset || 0) > 2);
   var bangT = 0, bangLast = null, bangRate = 1, openS = 1;
   var tgtS = 1, tgtX = 0, tgtY = 0, dustGrow = 1, dustA = 1, heatK = 0, hotK = 0, flashA = 0, shock = -1;
   /* ?orb holds the opening on the orb, before it goes, so the mark can be
      judged on its own. A click sets it off. */
-  var ORB_HOLD = bangOn && /(^|[?&])orb(=|&|$)/.test(location.search), ORB_AT = 0.85;
+  var ORB_HOLD = false, ORB_AT = 0.85;
   /* The orb is seen a little from above, so its rings are rings in space and
      its bar is an equator: the tilt of the rings, and the bar's curve. */
   var ORB_TILT = 0.50, ORB_CURV = 0.24, ORB_SWAY = 0.12;
@@ -2751,7 +2740,7 @@ gsap.utils.toArray('.slide-right').forEach(function(el) {
   /* The sections in the scene's own language (the tiers first). ?cards keeps
      the card style for comparison. The shade is the scene's dark side: one
      soft darkening across the right of the screen, behind the words. */
-  var SCENE = !/(^|[?&])cards(=|&|$)/.test(location.search);
+  var SCENE = true;
   var sceneOn = SCENE && TRAVEL && !CENTRE && doorPage();
   document.documentElement.classList.toggle('fwx-scene', sceneOn);
   var shade = null, sceneBlocks = [];
@@ -2820,7 +2809,10 @@ gsap.utils.toArray('.slide-right').forEach(function(el) {
   }
   if (STILL && copyEl) {
     window.addEventListener('scroll', stillFrame, { passive: true });
-    copyEl.addEventListener('focusin', stillFrame);
+    /* Focus arriving in the words during the bang: they show at once (CSS,
+       :focus-within) and the rest of the bang plays out quickly, as Escape
+       does, so a keyboard reader never stands on a link they cannot see. */
+    copyEl.addEventListener('focusin', function () { if (bangOn) bangSkip(); stillFrame(); });
   }
   var p = 0, settled = false;
   /* The bang: the first half screen of scroll, and nothing else. */
@@ -3745,7 +3737,6 @@ gsap.utils.toArray('.slide-right').forEach(function(el) {
     document.documentElement.style.background = on ? '#050E1C' : '';
     window.dispatchEvent(new Event('resize'));   /* the object re-measures and repaints */
   }
-  bare(/(^|[?&])bare(=|&|$)/.test(location.search));
 })();
 
 /* Starfield: one canvas per dark band, drawn once per size, seeded so it

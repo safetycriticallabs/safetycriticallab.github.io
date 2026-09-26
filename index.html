@@ -3005,7 +3005,9 @@
   document.querySelectorAll('.sc-modal-close').forEach(function (b) {
     b.addEventListener('click', close);
   });
-  if (backdrop) backdrop.addEventListener('click', close);
+  /* The backdrop is parsed after this script, so looked up when clicked:
+     bound here at parse time it was always null and never closed the modal. */
+  document.addEventListener('click', function (e) { if (e.target && e.target.id === 'sc-modal-backdrop') close(); });
   document.addEventListener('keydown', function (e) {
     if (e.key === 'Escape') { close(); return; }
     if (e.key !== 'Tab' || !open) return;

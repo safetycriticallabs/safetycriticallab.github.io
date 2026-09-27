@@ -54,88 +54,6 @@
 </script>
 <link rel="stylesheet" href="styles.css">
 <style>
-/* ─── CLASSIFICATION KEY ──────────────────────────────────── */
-.class-key {
-  display: flex; gap: 16px; flex-wrap: wrap;
-  margin-bottom: 48px;
-}
-
-.class-item {
-  display: flex; align-items: center; gap: 8px;
-  font-family: var(--sans); font-size: 11px;
-  font-weight: 500; letter-spacing: 0.04em; text-transform: uppercase; color: #0C2242;
-  padding: 8px 16px;
-  border-radius: 6px;
-  border: 1px solid #0C2242;
-  cursor: pointer;
-  user-select: none;
-  transition: background 0.15s, color 0.15s, border-color 0.15s;
-}
-/* Hover has to differ from selected, or a hovered tier reads as the filtered one. */
-.class-item:not(.active):hover {
-  background: var(--blue-lt);
-  color: #0C2242;
-  border-color: #0C2242;
-}
-/* Same chip as the organisation filter on /documents, so the site has one
-   selectable-chip recipe rather than a blue one and a navy one. */
-.class-item.active {
-  background: #0C2242;
-  color: #FAF9F5;
-  border-color: #0C2242;
-}
-.class-item.active .class-dot { background: var(--white); }
-.class-item:focus-visible {
-  outline: 2px solid var(--blue);
-  outline-offset: 2px;
-}
-.class-key-hint {
-  font-family: var(--sans); font-size: 10px;
-  font-weight: 400; letter-spacing: 0.02em;
-  color: var(--ink-3);
-  margin-top: 6px;
-  width: 100%;
-  text-align: right;
-}
-
-.class-dot {
-  width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0;
-}
-.dot-safety-tier { background: var(--blue); }
-.dot-mission-tier { background: var(--ink-2); }
-.dot-operational-tier { background: var(--ink-3); }
-
-/* Interactive filter state on the card grid */
-.fw-full-grid.filtering .fw-card {
-  opacity: 0.28;
-  transition: opacity 0.25s ease, border-color 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
-}
-.fw-full-grid.filtering .fw-card:hover { transform: none; }
-.fw-full-grid.filtering .fw-card.highlight {
-  opacity: 1;
-  border-color: var(--blue);
-  box-shadow: 0 10px 28px rgba(43,108,176,0.14);
-  transform: translateY(-2px);
-}
-.fw-full-grid.filtering .fw-card.highlight .fw-scope {
-  background: var(--blue);
-  color: var(--white);
-  border-color: var(--blue);
-}
-.fw-full-grid.filtering .fw-card.highlight-tailored {
-  opacity: 0.78;
-  border-color: rgba(12,34,66,0.55);
-  border-style: dashed;
-  box-shadow: 0 6px 20px rgba(43,108,176,0.08);
-  transform: translateY(-1px);
-}
-.fw-full-grid.filtering .fw-card.highlight-tailored .fw-scope {
-  background: transparent;
-  color: #0C2242;
-  border-color: var(--blue);
-  border-style: dashed;
-}
-
 /* ─── FULL FRAMEWORK GRID ─────────────────────────────────── */
 .fw-full-grid {
   display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;
@@ -609,8 +527,6 @@ a.fwx-cell:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; 
 .fwx-steps.fw-full-grid { display: block; max-width: 640px; margin: 0 auto; padding: 0 0 12vh; }
 /* The heading sits with the steps, clear of the panel on the left. */
 .fwx-walk-head { padding: 6vh 0 2vh; }
-.fwx-walk-head .class-key { margin-bottom: 0; }
-.fwx-walk-head .class-key-hint { text-align: left; }
 .fw-card.fwx-step {
   background: transparent; border: 0; border-radius: 0; padding: 40px 0; overflow: visible; box-shadow: none; transform: none;
   min-height: 0; display: flex; flex-direction: column; justify-content: center;
@@ -633,16 +549,6 @@ a.fwx-cell:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; 
 .fwx-step-prevents { font-size: clamp(18px, 1.7vw, 22px); font-weight: 500; line-height: 1.4; color: var(--ink); margin: 0 0 18px; max-width: 30em; }
 .fwx-step .fw-card-body { font-size: 15px; max-width: 34em; margin-bottom: 0; }
 .fwx-step .fw-card-detail { border-top: 0; padding-top: 0; margin-top: 16px; }
-/* The tier chips are a lens, not a filter: every area applies at every tier, as
-   applies, tailored or conditional, so a chip marks each step's state (the
-   tier figure's three cell treatments) instead of hiding steps. */
-.fw-full-grid.filtering .fw-card.fwx-step, .fw-full-grid.filtering .fw-card.fwx-step.highlight, .fw-full-grid.filtering .fw-card.fwx-step.highlight-tailored { box-shadow: none; transform: none; border: 0; }
-.fw-full-grid.filtering .fw-card.fwx-step:not(.is-active):not(:target) { opacity: 0.82; }
-.fw-full-grid.filtering .fw-card.fwx-step.is-active { opacity: 1; }
-.fw-full-grid.filtering .fw-card.fwx-step.highlight .fw-card-id { background: #0C2242; color: #FAF9F5; padding: 3px 8px; border-radius: 4px; }
-.fw-full-grid.filtering .fw-card.fwx-step.highlight-tailored .fw-card-id { border: 1.5px dashed rgba(12,34,66,0.75); padding: 2px 7px; border-radius: 4px; }
-.fwx-tailored { display: none; }
-.fw-full-grid.filtering .fw-card.fwx-step.highlight-tailored .fwx-tailored { display: inline-block; border: 0; padding: 0; color: #0C2242; }
 @media (max-width: 880.98px) {
   .fwx-walk { display: block; }
   /* One column: the system is behind the reading, not beside it, so the left
@@ -653,7 +559,7 @@ a.fwx-cell:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; 
 @media (prefers-reduced-motion: reduce) {
   .fw-card.fwx-step, .fwx-walk-dots, .fwx-walk-dots i { transition: none; }
   .fwx-obj-bg { transition: none; }
-  .fwx-steps.is-walking .fw-card.fwx-step:not(.is-active):not(:target), .fw-full-grid.filtering .fw-card.fwx-step:not(.is-active):not(:target) { opacity: 1; }
+  .fwx-steps.is-walking .fw-card.fwx-step:not(.is-active):not(:target) { opacity: 1; }
 }
 
 /* ─── MEASURED: the four /evidence results as figure cards ─ */
@@ -704,20 +610,12 @@ a.fwx-cell:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; 
 .fw-card-section { background: linear-gradient(180deg, #050E1C 0%, #050E1C 84%, #0B1D37 100%); }
 .fwx-walk-head .fw-eyebrow-mono { color: rgba(214,226,242,0.74); }
 .fwx-walk-head h2.section-title { color: #FAF9F5; }
-.fwx-walk-head .class-key-hint { color: rgba(250,249,245,0.66); }
-.fwx-walk-head .class-item { color: #FAF9F5; border-color: rgba(250,249,245,0.5); background: transparent; }
-.fwx-walk-head .class-item:not(.active):hover { background: rgba(250,249,245,0.1); border-color: #FAF9F5; }
-.fwx-walk-head .class-item.active { background: #FAF9F5; color: #0C2242; border-color: #FAF9F5; }
-.fwx-walk-head .class-item.active .class-dot { background: #0C2242; }
 .fwx-step .fw-card-id { color: rgba(214,226,242,0.84); }
 .fwx-step .fw-card-title, .fwx-step-prevents { color: #FAF9F5; }
 .fwx-step .fw-card-body, .fwx-step .fw-card-detail { color: rgba(250,249,245,0.78); }
 .fwx-step-label { color: rgba(214,226,242,0.82); }
 .fwx-step .fw-scope { color: rgba(250,249,245,0.84); border-color: rgba(250,249,245,0.42); }
 .fwx-step .fw-card-detail { border-top-color: rgba(250,249,245,0.14); }
-.fw-full-grid.filtering .fw-card.fwx-step.highlight .fw-card-id { background: #FAF9F5; color: #0C2242; }
-.fw-full-grid.filtering .fw-card.fwx-step.highlight-tailored .fw-card-id { border-color: rgba(250,249,245,0.78); color: #FAF9F5; }
-.fw-full-grid.filtering .fw-card.fwx-step.highlight-tailored .fwx-tailored { color: #FAF9F5; }
 .fw-card.fwx-step:target { border-left-color: #79A8D5; }
 .fw-card-section a:focus-visible, .fw-card-section button:focus-visible { outline: 2px solid #79A8D5; outline-offset: 3px; }
 /* ── THE JOURNEY. The thirteen are read inside the travel: one column over the
@@ -747,7 +645,6 @@ a.fwx-cell:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; 
   }
 }
 .fw-card-section.fwx-travel .fwx-walk-head .fw-eyebrow-mono { color: #D6E2F2; }
-.fw-card-section.fwx-travel .fwx-walk-head .class-key-hint { color: #FAF9F5; }
 .fwx-id-link:hover { border-bottom-color: currentColor; }
 @media (min-width: 881px) and (max-width: 1100px) {
   .fw-card-section.fwx-travel .fwx-steps.fw-full-grid { margin-left: 54vw; width: 42vw; }
@@ -1208,8 +1105,6 @@ html.fwx-door body.is-bare .failmode-section .section-inner > .failmode-grid { v
 /* The section's own 140px cream scrim paints over its last child, which is now
    the tier legend. Lift the column above it, as the other bands already do. */
 .struct-inner { position: relative; z-index: 1; }
-/* Pre-existing on the live page: 10px at 3.16:1. Fixed here, flagged there. */
-.class-key-hint { color: var(--ink-2); }
 .fw-card.fwx-step:target { border-left: 2px solid var(--blue); padding-left: 18px; }
 .fw-card-section.fwx-travel .fw-card.fwx-step:target { border-left: 0; padding-left: 0; }
 .fw-card-section.fwx-travel .fwx-step:target .fwx-step-text { border-left: 2px solid #79A8D5; padding-left: 18px; }
@@ -1377,12 +1272,6 @@ body.is-bare .fwx-hero::after { display: none; }
         <div class="fw-eyebrow-mono">[ Framework v3.7 ]</div>
         <div style="display:flex; justify-content:space-between; align-items:flex-end; gap: 32px; margin-bottom: 48px; flex-wrap: wrap;">
           <h2 class="section-title" style="margin-bottom:0;">AI-1 through AI-13</h2>
-          <div class="class-key" role="group" aria-label="Filter requirements by classification tier">
-            <div class="class-item" data-tier="safety" role="button" tabindex="0" aria-pressed="false"><span class="class-dot dot-safety-tier"></span>Safety-Critical</div>
-            <div class="class-item" data-tier="mission" role="button" tabindex="0" aria-pressed="false"><span class="class-dot dot-mission-tier"></span>Mission-Critical</div>
-            <div class="class-item" data-tier="operational" role="button" tabindex="0" aria-pressed="false"><span class="class-dot dot-operational-tier"></span>Operational Support</div>
-            <div class="class-key-hint">Click a tier to filter · Esc to clear</div>
-          </div>
         </div>
         </div>
         </div>
@@ -1442,7 +1331,7 @@ body.is-bare .fwx-hero::after { display: none; }
       </article>
       <article class="fw-card fwx-step" id="ai-7" data-tiers="safety mission operational" data-tailored-at="mission operational" aria-labelledby="ai-7-t" data-step="6"><!-- Table 1-3 correction, unconfirmed 2026-09-24 -->
         <div class="fwx-step-text">
-        <div class="fw-card-id"><a class="fwx-id-link" href="/requirements#ai-7">AI-7</a><span class="fw-scope fwx-tailored">Tailored</span></div>
+        <div class="fw-card-id"><a class="fwx-id-link" href="/requirements#ai-7">AI-7</a></div>
         <h3 class="fw-card-title" id="ai-7-t">Adversarial robustness</h3>
         <div class="fwx-step-label">The failure it prevents</div>
         <p class="fwx-step-prevents">Inputs, training data, or the model itself manipulated by an adversary to force a chosen failure.</p>
@@ -1451,7 +1340,7 @@ body.is-bare .fwx-hero::after { display: none; }
       </article>
       <article class="fw-card fwx-step" id="ai-8" data-tiers="safety mission operational" data-tailored-at="operational" aria-labelledby="ai-8-t" data-step="7"><!-- Table 1-3 correction, unconfirmed 2026-09-24 -->
         <div class="fwx-step-text">
-        <div class="fw-card-id"><a class="fwx-id-link" href="/requirements#ai-8">AI-8</a><span class="fw-scope fwx-tailored">Tailored</span></div>
+        <div class="fw-card-id"><a class="fwx-id-link" href="/requirements#ai-8">AI-8</a></div>
         <h3 class="fw-card-title" id="ai-8-t">Explainability</h3>
         <div class="fwx-step-label">The failure it prevents</div>
         <p class="fwx-step-prevents">A safety-critical decision that cannot be inspected, questioned, or justified after the fact.</p>
@@ -1460,7 +1349,7 @@ body.is-bare .fwx-hero::after { display: none; }
       </article>
       <article class="fw-card fwx-step" id="ai-9" data-tiers="safety mission operational" data-tailored-at="operational" aria-labelledby="ai-9-t" data-step="8"><!-- Table 1-3 correction, unconfirmed 2026-09-24 -->
         <div class="fwx-step-text">
-        <div class="fw-card-id"><a class="fwx-id-link" href="/requirements#ai-9">AI-9</a><span class="fw-scope fwx-tailored">Tailored</span></div>
+        <div class="fw-card-id"><a class="fwx-id-link" href="/requirements#ai-9">AI-9</a></div>
         <h3 class="fw-card-title" id="ai-9-t">Human-AI teaming</h3>
         <div class="fwx-step-label">The failure it prevents</div>
         <p class="fwx-step-prevents">Operators who over-trust, under-trust, or lose the authority to override the AI when it matters.</p>
@@ -1808,67 +1697,6 @@ gsap.utils.toArray('.slide-right').forEach(function(el) {
 
 /* Hero cursor glow driver lives in footer.js (promoted 2026-08-24) */
 
-/* ─── Interactive classification legend ─────── */
-(function() {
-  var legendItems = document.querySelectorAll('.class-item[data-tier]');
-  var grid = document.querySelector('.fw-full-grid');
-  var cards = document.querySelectorAll('.fw-card[data-tiers]');
-  if (!legendItems.length || !grid || !cards.length) return;
-
-  function clearFilter() {
-    grid.classList.remove('filtering');
-    cards.forEach(function(c) {
-      c.classList.remove('highlight');
-      c.classList.remove('highlight-tailored');
-    });
-    legendItems.forEach(function(i) {
-      i.classList.remove('active');
-      i.setAttribute('aria-pressed', 'false');
-    });
-  }
-
-  function applyFilter(tier, activeItem) {
-    grid.classList.add('filtering');
-    cards.forEach(function(c) {
-      var tiers = (c.dataset.tiers || '').split(/\s+/);
-      var tailoredAt = c.dataset.tailoredAt;
-      c.classList.remove('highlight');
-      c.classList.remove('highlight-tailored');
-      if (tiers.indexOf(tier) !== -1) {
-        if (tailoredAt && tailoredAt.split(/\s+/).indexOf(tier) !== -1) c.classList.add('highlight-tailored');
-        else c.classList.add('highlight');
-      }
-    });
-    legendItems.forEach(function(i) {
-      var isThis = i === activeItem;
-      i.classList.toggle('active', isThis);
-      i.setAttribute('aria-pressed', isThis ? 'true' : 'false');
-    });
-  }
-
-  legendItems.forEach(function(item) {
-    function toggle() {
-      if (item.classList.contains('active')) {
-        clearFilter();
-      } else {
-        applyFilter(item.dataset.tier, item);
-      }
-    }
-    item.addEventListener('click', toggle);
-    item.addEventListener('keydown', function(e) {
-      if (e.key === 'Enter' || e.key === ' ') {
-        e.preventDefault();
-        toggle();
-      }
-    });
-  });
-
-  document.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape' && grid.classList.contains('filtering')) {
-      clearFilter();
-    }
-  });
-})();
 
 /* ─── The thirteen-area burst, once as the hero and once pinned beside the areas ─── */
   var AREAS = [
@@ -2058,9 +1886,17 @@ gsap.utils.toArray('.slide-right').forEach(function(el) {
   /* ?orb holds the opening on the orb, before it goes, so the mark can be
      judged on its own. A click sets it off. */
   var ORB_HOLD = false, ORB_AT = 0.85;
-  /* The orb is seen a little from above, so its rings are rings in space and
-     its bar is an equator: the tilt of the rings, and the bar's curve. */
-  var ORB_TILT = 0.50, ORB_CURV = 0.24, ORB_SWAY = 0.12;
+  /* The orb is seen a little from above, so its rings are rings in space: the
+     tilt of the rings. Its bar stays straight across the lens with the eye at
+     the centre, as on the logo, and takes the equator's curve only as the orb
+     becomes the mass. Until 2026-09-27 it curved at rest too, which read as a
+     smile with the eye hanging below it. ORB_CURV is the rest curve.
+     Everything matched to the logo that day is the opening orb's alone: the
+     core, which the thirteen areas lead into, keeps the look it had, down to
+     its curve (CORE_CURV). The core's path is the only one where hotK is
+     above 0, and there hotK equals sl, so choosing by hotK > 0 swaps nothing
+     mid-transition: at sl 0 both are the mass. */
+  var ORB_TILT = 0.50, ORB_CURV = 0, ORB_SWAY = 0.12, CORE_CURV = 0.24;
   if (bangOn) document.documentElement.classList.add('fwx-banging');
   /* The constellation by itself: at the very top the hero's words wait, so
      the object can be explored first (stillFrame keeps this up to date). */
@@ -2946,13 +2782,14 @@ gsap.utils.toArray('.slide-right').forEach(function(el) {
   /* ── The drawing ──────────────────────────────────────────────────────── */
   var t0 = null, raf = null, seen = true, bloom = 0;
   var COOL = '#D6E2F2', WARM = '#E8C983', WHITE = '#FAF9F5', GOLD = '#DCB34B';
-  /* The mark's own values, from the reduced mark in index.html, which records
-     that they were measured off SCL_Logo_watermark.png on 2026-09-12. The lens
-     is lifted off the seal's #0F2A4E because this ground is darker than the
-     cream the seal was measured on and a true #0F2A4E reads as a hole. */
-  var LENS_IN = '#63BEFC', LENS_MID = '#2A86DC', LENS_OUT = '#134C8C';
+  /* The mark as the logo draws it (SCL Logo 3d.png, measured 2026-09-27): a
+     navy disc lit from its centre, and across it a straight bar and a centred
+     eye in the logo's blue, #5292DE there, lifted a step here so they hold on
+     the dark ground. Inside the white heat the navy lens reads as the logo's
+     disc rather than as a hole. Until 2026-09-27 the lens was a bright sky
+     blue ball with a pale bar and eye, which lost the mark's contrast. */
   var LENS_RIM = 'rgba(158,213,255,0.92)';
-  var BAR = '#9CC6EE', EYE = '#C9E0F8';
+  var BAR = '#5A98E2', EYE = '#6AA6EC';
   var screenPos = [];
   var DEG = Math.PI / 180;
 
@@ -3293,12 +3130,12 @@ gsap.utils.toArray('.slide-right').forEach(function(el) {
     }
     var RINGS = [
       /* the gold: the orbital plane at rest, the mark's heavy gold ring sealed */
-      { a: 0,           sp: 0,     R0: 58, R1: 58, w0: 2.3, w1: 5.6, c: GOLD,                n0: 0.95, n1: 0.97, f0: 0.30 },
+      { a: 0,           sp: 0,     R0: 58, R1: 58, w0: 2.3, w1: 5.6, c: GOLD,                n0: 0.95, n1: 0.97 },
       /* the upright hoop becomes the ring immediately inside the gold */
-      { a: Math.PI / 2, sp: 0.17,  R0: 48, R1: 35, w0: 1.4, w1: 2.8, c: 'rgb(160,196,236)',  n0: 0.74, n1: 0.90, f0: 0.22 },
+      { a: Math.PI / 2, sp: 0.17,  R0: 48, R1: 43, w0: 1.4, w1: 1.8, R1c: 35, w1c: 2.8, c: 'rgb(160,196,236)',  n0: 0.74, n1: 0.90 },
       /* the leaning hoop: not part of the orb, which stops at the gold; it
        appears as the mass forms */
-      { a: 0.84,        sp: -0.11, R0: 52, R1: 52, w0: 1.3, w1: 1.7, c: COOL,                n0: 0.62, n1: 0.40, f0: 0.18, fade: 1 }
+      { a: 0.84,        sp: -0.11, R0: 52, R1: 52, w0: 1.3, w1: 1.7, c: COOL,                n0: 0.62, n1: 0.40, fade: 1 }
     ];
     function hub(wantNear) {
       /* A ring in two halves, the far one behind the body and the near one in
@@ -3306,30 +3143,47 @@ gsap.utils.toArray('.slide-right').forEach(function(el) {
          pass behind it, and at that size the join between the halves shows,
          so as the core relights the far half crossfades onto the near pass
          and, once it has, the ring is drawn whole. */
-      function ringPass(R, bs, col, lw, aNear, aFar) {
-        if (hotK > 0.995) { if (wantNear) ringHalf(cx, cy, R, bs.u, bs.v, sinP, cosP, true, col, lw, aNear, true); return; }
+      /* xk: how far the far half has crossfaded onto the near pass. */
+      function ringPass(R, bs, col, lw, aNear, aFar, xk) {
+        if (xk > 0.995) { if (wantNear) ringHalf(cx, cy, R, bs.u, bs.v, sinP, cosP, true, col, lw, aNear, true); return; }
         if (wantNear) {
           ringHalf(cx, cy, R, bs.u, bs.v, sinP, cosP, true, col, lw, aNear);
-          if (hotK > 0) ringHalf(cx, cy, R, bs.u, bs.v, sinP, cosP, false, col, lw, aFar * hotK);
-        } else ringHalf(cx, cy, R, bs.u, bs.v, sinP, cosP, false, col, lw, aFar * (1 - hotK));
+          if (xk > 0) ringHalf(cx, cy, R, bs.u, bs.v, sinP, cosP, false, col, lw, aFar * xk);
+        } else ringHalf(cx, cy, R, bs.u, bs.v, sinP, cosP, false, col, lw, aFar * (1 - xk));
       }
+      /* The ring inside the gold is drawn whole at rest, as the logo's inner
+         rings are: behind, its far half sat under the heat and read white
+         against the blue near half. It clears the lens there, so nothing
+         should pass behind it, and it hands its far half back as the orb
+         starts to go. */
+      var restK = Math.max(0, Math.min(1, (sl - 0.92) / 0.08));
       for (var i2 = 0; i2 < RINGS.length; i2++) {
         var h = RINGS[i2];
         var bs = basis(h.a + (FACE - ORB_TILT - h.a) * sl,
                        wrap(clock * h.sp) * (1 - sl) + ORB_SWAY * Math.sin(clock * 0.55) * sl);
         var near1 = h.n0 + (h.n1 - h.n0) * sl;
-        var hw = (h.w0 + (h.w1 - h.w0) * sl) * (1 - (i2 === 0 ? 0.55 : 0.6) * hotK), hR = h.R0 + (h.R1 - h.R0) * sl;
+        var core1 = hotK > 0 && h.R1c !== undefined, R1 = core1 ? h.R1c : h.R1, w1 = core1 ? h.w1c : h.w1;
+        var hw = (h.w0 + (w1 - h.w0) * sl) * (1 - (i2 === 0 ? 0.55 : 0.6) * hotK), hR = h.R0 + (R1 - h.R0) * sl;
         var ak = (h.fade ? 1 - sl : 1) * (i2 === 1 ? 1 - 0.35 * hotK : 1) * bloom;
         /* At the core the inner ring takes the corona's colour rather than
            cutting through it in blue. */
         var hc = (i2 === 1 && hotK > 0) ? mixc([160, 196, 236], [250, 238, 210], 0.7 * hotK) : h.c;
-        ringPass(hR, bs, hc, hw, near1 * ak, (h.f0 + (near1 - h.f0) * sl) * ak);
+        /* Solid all the way round: the far half as strong as the near one
+           (it faded to about a third until 2026-09-27, which broke the gold),
+           and on the mass the part behind the body shows faintly through it,
+           as the equator's far half does, so every ring reads as a loop. */
+        ringPass(hR, bs, hc, hw, near1 * ak, near1 * ak, i2 === 1 ? Math.max(hotK, restK) : hotK);
+        if (wantNear && sl < 1) {
+          g.save(); g.beginPath(); g.arc(cx, cy, bodyR, 0, TAU); g.clip();
+          ringHalf(cx, cy, hR, bs.u, bs.v, sinP, cosP, false, hc, hw, 0.30 * (1 - sl) * near1 * ak);
+          g.restore();
+        }
         if (i2 === 0 && sl > 0.01) {
           /* Lit from the point at its centre: bright on the inner edge, in
              shadow on the outer, which is what makes the ring a solid. */
           var ga = sl * bloom;
-          ringPass(hR - hw * 0.30, bs, 'rgb(255,240,200)', hw * 0.30, 0.70 * ga, 0.56 * ga);
-          ringPass(hR + hw * 0.32, bs, 'rgb(120,84,22)', hw * 0.30, 0.55 * ga, 0.44 * ga);
+          ringPass(hR - hw * 0.30, bs, 'rgb(255,240,200)', hw * 0.30, 0.70 * ga, 0.56 * ga, hotK);
+          ringPass(hR + hw * 0.32, bs, 'rgb(120,84,22)', hw * 0.30, 0.55 * ga, 0.44 * ga, hotK);
         }
       }
     }
@@ -3338,7 +3192,9 @@ gsap.utils.toArray('.slide-right').forEach(function(el) {
        caught by the light of the disk around it, the gold ring round it in
        the plane and the pale bar and eye still across its face, so the mark
        is the thing everything orbits rather than a badge beside it. */
-    var bodyR = 24 + 16 * (1 - sl);
+    /* The orb's lens is 34 so it fills more of the gold, as the logo's disc
+       does (24 until 2026-09-27); the core keeps 24. Both are 40 as the mass. */
+    var bodyR = hotK > 0 ? 24 + 16 * (1 - sl) : 34 + 6 * (1 - sl);
     function mixa(a, b, t) {
       return [a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t, a[2] + (b[2] - a[2]) * t];
     }
@@ -3368,18 +3224,21 @@ gsap.utils.toArray('.slide-right').forEach(function(el) {
         g.fillStyle = og;
         g.fillRect(cx - hr, cy - hr, hr * 2, hr * 2);
       }
-      /* Shaded as a solid lit from inside and from the upper left: white hot
-         where it faces the light, SCL blue through the body, deep at the
-         limb. As the mass the same stops carry the old dark ramp exactly. */
+      /* Shaded as the logo's navy disc, lit from its centre and a little from
+         the upper left: SCL blue at the heart, deep navy at the limb. As the
+         mass the same stops carry the old dark ramp exactly. */
       /* At the core the light moves inward: from a highlight at the upper
          left to a glow from within, white through most of the face. */
       var fo = 1 - 0.7 * hotK;
+      var LIT = hotK > 0
+        ? [[255, 252, 242], [204, 233, 255], [99, 190, 252], [42, 134, 220], [16, 58, 118]]   /* the core, as it was */
+        : [[92, 150, 214], [58, 112, 176], [30, 76, 132], [14, 46, 90], [6, 24, 50]];         /* the orb, the logo's disc */
       var lg = g.createRadialGradient(cx - cr * 0.28 * fo, cy - cr * 0.32 * fo, 0, cx, cy, cr);
-      lg.addColorStop(0,    mixc([24, 56, 96], mixa([255, 252, 242], [255, 253, 247], hotK), sl));
-      lg.addColorStop(0.14, mixc([21, 50, 88], mixa([204, 233, 255], [250, 250, 246], hotK), sl));
-      lg.addColorStop(0.38, mixc([16, 41, 74], mixa([99, 190, 252], [196, 228, 255], hotK), sl));
-      lg.addColorStop(0.72, mixc([10, 27, 53], mixa([42, 134, 220], [84, 168, 242], hotK), sl));
-      lg.addColorStop(1,    mixc([6, 16, 34], mixa([16, 58, 118], [22, 78, 150], hotK), sl));
+      lg.addColorStop(0,    mixc([24, 56, 96], mixa(LIT[0], [255, 253, 247], hotK), sl));
+      lg.addColorStop(0.14, mixc([21, 50, 88], mixa(LIT[1], [250, 250, 246], hotK), sl));
+      lg.addColorStop(0.38, mixc([16, 41, 74], mixa(LIT[2], [196, 228, 255], hotK), sl));
+      lg.addColorStop(0.72, mixc([10, 27, 53], mixa(LIT[3], [84, 168, 242], hotK), sl));
+      lg.addColorStop(1,    mixc([6, 16, 34], mixa(LIT[4], [22, 78, 150], hotK), sl));
       g.globalAlpha = bloom; g.fillStyle = lg;
       g.beginPath(); g.arc(cx, cy, cr, 0, TAU); g.fill();
       /* The limb, lit from behind by the disk. Strongest as the mass. */
@@ -3415,19 +3274,31 @@ gsap.utils.toArray('.slide-right').forEach(function(el) {
          As the mass it is the body's equator, so it curves with the sphere and
          its front half is the part you see, and the eye sits where that
          equator faces you. The same mark, drawn on a body instead of on it. */
-      var curv = sinP * (1 - sl) + ORB_CURV * sl;
-      var bw = cr * (0.86 + 0.09 * sl), bh = (1.6 + 0.8 * sl) * (1 - 0.6 * hotK);
+      var core = hotK > 0;
+      var curv = sinP * (1 - sl) + (core ? CORE_CURV : ORB_CURV) * sl;
+      var bw = cr * (1 - 0.05 * sl), bh = (1.6 + (core ? 0.8 : -0.1) * sl) * (1 - 0.6 * hotK);
       g.globalAlpha = (0.42 + 0.58 * sl) * (1 - 0.3 * hotK) * bloom;
       /* At the core the bar is an equator line in the lens's own blue, not a
          pale band across it. */
       g.strokeStyle = hotK > 0 ? mixc([156, 198, 238], [70, 140, 215], hotK) : BAR;
       g.lineWidth = bh * 2; g.lineCap = 'round';
+      /* On the mass the equator runs limb to limb and over the horizon, cut
+         at the limb rather than stopping short of it (0.86 of the radius
+         until 2026-09-27), and its far half shows faintly through, so it
+         reads as a line around the whole planet. At rest the clip clears the
+         bar's round ends, so the orb and the core are unchanged. */
+      g.save(); g.beginPath(); g.arc(cx, cy, cr + bh * sl, 0, TAU); g.clip();
       g.beginPath();
       if (curv > 0.01) g.ellipse(cx, cy, bw, bw * curv, 0, 0, Math.PI);
       else { g.moveTo(cx - bw, cy); g.lineTo(cx + bw, cy); }
       g.stroke();
+      if (curv > 0.01 && sl < 1) {
+        g.globalAlpha *= 0.30 * (1 - sl);
+        g.beginPath(); g.ellipse(cx, cy, bw, bw * curv, 0, Math.PI, TAU); g.stroke();
+      }
+      g.restore();
       g.lineCap = 'butt';
-      var er = cr * (0.16 + 0.21 * sl) * (1 - 0.5 * hotK), ey0 = cy + bw * curv;
+      var er = cr * (0.16 + (core ? 0.21 : 0.10) * sl) * (1 - 0.5 * hotK), ey0 = cy + bw * curv;
       if (hotK > 0.01) {
         /* At the core the eye is the hottest point, with a glow of its own. */
         var eg = g.createRadialGradient(cx, ey0, er * 0.5, cx, ey0, er * 3.2);

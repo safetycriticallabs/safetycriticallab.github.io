@@ -1081,8 +1081,8 @@
      and break click-to-expand.
      Tunables: --sc-max (how far it breaks out), the START/END scroll window in
      the JS (where in the scroll it goes from contained→full), the 1360px floor.
-     The scrub holds still while a text field in the grid has focus; see typing()
-     in the widen script for why Safari needs that. ── */
+     The text fields in the tiles hold one width through the scrub; see
+     .sc-field for why Safari needs that. ── */
   .sc-grid-wide {
     --sc-max: 1560px;               /* wide cap — moderate, well under full-bleed */
     --expand: 0;                    /* 0..1, written by JS on scroll */
@@ -1489,7 +1489,7 @@
   /* Typed into = the submit fills in, so once there is something to send the
      thing to press is unmissable. Driven off :placeholder-shown, so that
      placeholder attribute has to stay on the input. */
-  .sc-ask-search input:not(:placeholder-shown) ~ .sc-ask-submit{ background:#0C2242; color:#FAF9F5 !important; border-color:#0C2242; }
+  .sc-ask-search:has(input:not(:placeholder-shown)) .sc-ask-submit{ background:#0C2242; color:#FAF9F5 !important; border-color:#0C2242; }
   @media (max-width: 640px){ .sc-ask-icon{ display:none; } .sc-ask-search{ padding-left:10px; } }
   @media (prefers-reduced-motion: reduce){ .sc-ask-search, .sc-ask-submit{ transition:none; } }
 
@@ -1580,10 +1580,28 @@
   .sc-receive li:last-child{ border-bottom:1px solid rgba(12, 34, 66,0.10); }
   .sc-receive b{ font-family:var(--mono); font-size:10px; font-weight:400; color:rgba(12, 34, 66,0.5) !important; flex-shrink:0; }
   .sc-sub-form{ display:flex; gap:8px; width:100%; }
-  .sc-sub-form input{ flex:1; min-width:0; background:var(--blue-lt); border:1px solid var(--field-border); border-radius:8px; padding:10px 12px; outline:none; color:#0C2242 !important; font-family:var(--sans); font-size:16px; }   /* 16px: under it mobile Safari zooms the viewport on focus */
+  .sc-sub-field{ background:var(--blue-lt); border:1px solid var(--field-border); border-radius:8px; padding:10px 12px; }
+  .sc-sub-form input{ background:none; border:none; padding:0; outline:none; color:#0C2242 !important; font-family:var(--sans); font-size:16px; }   /* 16px: under it mobile Safari zooms the viewport on focus */
   .sc-sub-form input::placeholder{ color:rgba(12, 34, 66,0.65); }   /* the field has no other label; 0.45 measured 2.72:1 */
   .sc-sub-btn{ flex-shrink:0; background:#0C2242; color:#FAF9F5 !important; border:none; border-radius:8px; padding:10px 16px; font-family:var(--sans); font-size:13px; font-weight:500; letter-spacing:0.04em; cursor:pointer; transition:background .2s ease; }
   .sc-sub-btn:hover{ background:#081A34; }
+
+  /* THE TEXT FIELDS IN THE TILES KEEP ONE WIDTH WHILE THE TILES MOVE. Safari
+     scrolls back to the caret every time a focused text field changes width
+     (WebKit's RenderTextControlSingleLine::layout), and both scroll scrubs
+     below resize the cards on every frame, so a field that stretched with its
+     card pulled the page back to it and scrolling up hit a wall where the
+     tiles start to narrow. A vertical move alone does not trigger it, and
+     Chrome has no such code, so a clean Chrome run proves nothing. Each scrub
+     measures the fields at its narrowest state (--hold-wide, --hold-phone) and
+     holds them there while it is pinned; the label around each field is the
+     visible box, and that is what grows, so the tile looks the same and a
+     click anywhere in the box still lands in the field. Reproduced and
+     verified in WebKit 2026-09-26. */
+  .sc-field{ flex:1; min-width:0; display:flex; align-items:center; cursor:text; }
+  .sc-field input{ flex:1; min-width:0; }
+  .sc-grid-wide.sc-pinned .sc-field input{ flex:0 0 var(--hold-wide); }
+  .sc-grid.sc-tiles-pinned .sc-field input{ flex:0 0 var(--hold-phone); }
 
   /* ── Footer: Anthropic-style. A left brand column (small SCL mark up top,
      copyright + social pinned to the bottom) with link columns on the right,
@@ -2304,7 +2322,7 @@
             <label class="sc-ask-icon" for="sc-ask-q">
               <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
             </label>
-            <input id="sc-ask-q" type="text" name="q" placeholder="Ask a question" aria-label="Ask a question" autocomplete="off" enterkeyhint="search">
+            <label class="sc-field"><input id="sc-ask-q" type="text" name="q" placeholder="Ask a question" aria-label="Ask a question" autocomplete="off" enterkeyhint="search"></label>
             <button type="submit" class="sc-ask-submit" aria-label="Ask">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/></svg>
             </button>
@@ -2355,7 +2373,7 @@
             <li><b>04</b>Accreditation status</li>
           </ul>
           <form class="sc-sub-form" action="/subscribe" method="get">
-            <input type="email" name="email" placeholder="you@organization.com" aria-label="Email address" autocomplete="off">
+            <label class="sc-field sc-sub-field"><input type="email" name="email" placeholder="you@organization.com" aria-label="Email address" autocomplete="off"></label>
             <button type="submit" class="sc-sub-btn">Subscribe</button>
           </form>
         </div>
@@ -3675,6 +3693,22 @@
 })();
 </script>
 
+<!-- Each tile field's box is its label, and while the tiles are widened it is
+     wider than the field it holds (see .sc-field). A press on the box beside
+     the field would first focus <main>, which carries tabindex=-1 for the skip
+     link, and Safari then scrolls a few px, so the release could land off the
+     box and the click never reach the field. Put the focus straight in. -->
+<script>
+document.querySelectorAll('.sc-field').forEach(function(box){
+  box.addEventListener('mousedown', function(e){
+    var f = box.querySelector('input');
+    if(!f || e.target === f || e.button !== 0) return;
+    e.preventDefault();
+    f.focus({ preventScroll: true });
+  });
+});
+</script>
+
 <!-- Cards: scroll-SCRUBBED widen. The grid width tracks scroll position via
      --expand (0..1) so the cards visibly expand out as you scroll (and narrow on
      scroll-up). Height is pinned once up front so nothing below shifts. Passive
@@ -3685,6 +3719,7 @@
   if(!grid) return;
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
   var fw = grid.querySelector('#fw-showcase');
+  var fields = grid.querySelectorAll('.sc-field input');
   var MIN_W = 1360;                 // below this there's no room to grow -> no-op
   var BEGIN = 0.12, FULL = 0.95;    // expansion runs from BEGIN..FULL of the scroll
                                     // distance down to the cards: contained at the top
@@ -3707,30 +3742,15 @@
     var gap = parseFloat(getComputedStyle(grid).rowGap) || 30;        // .sc-grid gap:30px
     grid.style.setProperty('--sc-rowh', ((gh - gap) / 2) + 'px');     // 2 rows / 4 cards
     if(fw) grid.style.setProperty('--sc-fwh', fw.getBoundingClientRect().height + 'px');
+    // Hold each text field at this, its narrowest width (see .sc-field)
+    Array.prototype.forEach.call(fields, function(f){ f.style.setProperty('--hold-wide', f.getBoundingClientRect().width + 'px'); });
     grid.classList.add('sc-pinned');
   }
 
   function smooth(p){ p = p < 0 ? 0 : p > 1 ? 1 : p; return p * p * (3 - 2 * p); }
 
-  /* Hold the width while a text field in the grid has focus. WebKit scrolls the
-     caret back into view every time a focused text field changes SIZE
-     (RenderTextControlSingleLine::layout), and this scrub changes the Ask and
-     Subscribe field widths on every frame. So with a caret in either one, Safari
-     pulled the page back to it on every frame and scrolling up hit a wall where
-     the tiles start to narrow. A vertical move alone does not trigger it, which
-     is why reserving caption lines (048e0b7) never fixed it. Chrome has no such
-     code, so a clean Chrome run proves nothing; the stall was reproduced and this
-     guard verified in WebKit on 2026-09-26. The scrub resumes on the first scroll
-     after the field loses focus. Resuming on blur itself was tried and moved the
-     Ask and Subscribe buttons between mousedown and mouseup, so the click missed. */
-  function typing(){
-    var f = document.activeElement;
-    return !!f && grid.contains(f) && (f.matches('input, textarea') || f.isContentEditable);
-  }
-
   function update(){
     ticking = false;
-    if(typing()) return;
     if(!expandable()){ grid.style.setProperty('--expand', '0'); return; }
     var s0 = anchor * BEGIN, s1 = anchor * FULL;                      // scroll positions for 0..1
     var p = smooth((window.scrollY - s0) / (s1 - s0));
@@ -3769,6 +3789,7 @@
   if(!grid) return;
   var cards = [].slice.call(grid.querySelectorAll('.sc-card'));
   var fwStage = grid.querySelector('#sc-fw #fw-showcase');
+  var fields = grid.querySelectorAll('.sc-field input');
   if(!cards.length) return;
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
   var phone  = window.matchMedia('(max-width: 640px)');
@@ -3803,22 +3824,15 @@
     /* Freeze the firework stage at its CONTAINED width before anything spreads,
        so its aspect-ratio height stays put while its card bleeds out. */
     if(fwStage) fwStage.style.setProperty('--fw-w', fwStage.getBoundingClientRect().width + 'px');
+    // Hold each text field at this, its narrowest width (see .sc-field)
+    Array.prototype.forEach.call(fields, function(f){ f.style.setProperty('--hold-phone', f.getBoundingClientRect().width + 'px'); });
     grid.classList.add('sc-tiles-pinned');
   }
 
   function smooth(p){ p = p < 0 ? 0 : p > 1 ? 1 : p; return p * p * (3 - 2 * p); }
 
-  /* Hold the spread while a text field in the grid has focus, for the same
-     WebKit reason as typing() in the desktop widen script above: a focused
-     field that changes width makes Safari scroll back to its caret. */
-  function typing(){
-    var f = document.activeElement;
-    return !!f && grid.contains(f) && (f.matches('input, textarea') || f.isContentEditable);
-  }
-
   function update(){
     ticking = false;
-    if(typing()) return;
     if(!active()){ cards.forEach(function(c){ c.style.setProperty('--tile-x','0'); }); return; }
     cards.forEach(function(c, i){
       var r = c.getBoundingClientRect();

@@ -1515,6 +1515,36 @@
   .sc-assess-dot{ width:9px; height:9px; border-radius:50%; margin-left:auto; flex-shrink:0; background:#5B6B84; transition:background .5s ease; }
   .sc-assess-dot.is-strong{ background:var(--ok); } .sc-assess-dot.is-partial{ background:var(--warn); } .sc-assess-dot.is-gap{ background:var(--bad); }
   @media (max-width:880.98px){ .sc-assess-rows{ display:none; } }   /* narrow fine-pointer windows: the ring alone */
+  /* The area rows have to fit the card (2026-09-26). On one line beside the
+     150px ring they need a card about 490px wide, and until the scroll widen
+     runs the card is 381px, so they ran off the right edge at every desktop
+     width before the widen, always from 1101 to 1359 (which never widens), and
+     from 881 to about 1085 two across.
+     Three across, the card is taller than it is wide, so the ring goes on top
+     and the rows take the full width under it. The ring follows the stage from
+     88px on the 1101px layout up to 128px, which it reaches on a 378px card,
+     just under the 381px the scroll widen starts from. So while --expand runs
+     only the rows get longer: the ring, the row heights and the start link
+     stay put.
+     Two across (881 to 1100) the card is wider than it is tall, and this tile
+     sets the row height there (334px), so there is no height to stack into.
+     The ring stays beside the rows and takes the width they leave, 150px at
+     1100 down to about 50px at 881. The rows give up 2px of side padding and
+     2px of gap so they fit the 1101px card, the narrowest three across. Card
+     heights are unchanged at every width. */
+  @media (min-width: 881px) {
+    .sc-assess-stage{ container-type:inline-size; }
+    .sc-assess-demo{ --ring:clamp(88px, 100cqi - 200px, 128px); flex-direction:column; gap:16px; }
+    .sc-assess-rows{ align-self:stretch; }
+    .sc-assess-row{ padding:9px 10px; gap:8px; }
+    .sc-ring{ width:var(--ring); height:var(--ring); }
+    .sc-ring-num{ font-size:max(12px, calc(var(--ring) * .22)); }
+    .sc-ring-num span{ font-size:max(9px, calc(var(--ring) * .107)); }
+  }
+  @media (min-width: 881px) and (max-width: 1100px) {
+    .sc-assess-demo{ --ring:clamp(40px, 100cqi - 288px, 150px); flex-direction:row; }
+    .sc-assess-rows{ align-self:auto; }
+  }
   @media (prefers-reduced-motion: reduce){ .sc-ring-fill{ transition:none; } .sc-assess-dot{ transition:none; } }
   /* Inverted with the card: a cream pill on a cream ground is invisible. Now it
      matches the nav's own Get Certified pill, navy on cream. */

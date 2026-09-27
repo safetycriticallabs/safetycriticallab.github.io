@@ -56,7 +56,10 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preconnect" href="https://feeds.safetycriticallabs.com" crossorigin>
 <link rel="preconnect" href="https://www.federalregister.gov" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap" rel="stylesheet">
+<!-- IBM Plex Mono is for the certificate sheet only, which sets its labels in it
+     the way certificate-template.html does. The template embed below already
+     fetches the same files, so this adds no download. -->
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css">
 <style>
 /* ─── INDEX PAGE STYLES ─────────────────────────────── */
@@ -100,7 +103,7 @@
   position: absolute; inset: 0;
   background: #FAF9F5;
   border: 1px solid var(--rule);
-  padding: 26px 32px;
+  padding: 0;   /* the .cert-sheet inside carries the template's own margins */
   font-family: var(--sans);
   display: flex; flex-direction: column;
   overflow: hidden;
@@ -176,31 +179,6 @@
   transform: translate(-50%, -50%) translate(calc(var(--wm-x, 0px) * -1), var(--wm-y, 0px));
 }
 
-/* ─── CERT BACK (verification "proof" face) ─────────────────────────── */
-.cert-areas {
-  display: grid; grid-template-columns: 1fr 1fr;
-  gap: 2px 14px; margin-bottom: 2px;
-}
-.cert-area { display: flex; gap: 6px; align-items: baseline; text-align: left; }
-.cert-area-id {
-  font-family: var(--mono); font-size: 6px; font-weight: 600;
-  letter-spacing: 0.04em; color: var(--blue);
-  min-width: 26px; flex-shrink: 0;
-}
-.cert-area-label { font-size: 7px; line-height: 1.15; color: var(--ink-2); }
-.cert-back-note {
-  font-family: var(--serif); font-style: italic;
-  font-size: 7px; line-height: 1.3; color: var(--ink-2);
-  text-align: center; max-width: 300px; margin: 0 auto;
-}
-.cert-back-note strong { color: var(--ink); font-weight: 600; font-style: normal; }
-.cert-back-verify { text-align: center; }
-.cert-qr.cert-qr-lg { width: 42px; height: 42px; margin: 0 auto 2px; }  /* .cert-qr (56px, later) would otherwise win */
-.cert-back-doi {
-  font-family: var(--mono); font-size: 6px; letter-spacing: 0.08em;
-  color: var(--ink-3); margin-top: 1px;
-}
-
 /* Flip affordance — subtle pill, appears on hover (always shown on touch) */
 .cert-flip-hint {
   position: absolute; bottom: 9px; right: 11px; z-index: 6;
@@ -217,6 +195,82 @@
 .cert-flip-hint:hover { color: var(--blue); border-color: var(--blue); }
 .cert-flip-hint:focus-visible { opacity: 0.9; }
 @media (hover: none) { .cert-flip-hint { opacity: 0.8; } }
+
+/* ─── CERT SHEET: a copy of certificate-template.html ──────────────────
+   Each face holds one .cert-sheet laid out at the template's own letter
+   size, 816 by 1056px (8.5 by 11in at 96dpi), with the template's own
+   values, then scaled down to fit the face. Laying it out at full size is
+   what makes it wrap line for line like the template. The copy before this
+   one set shrunken type by hand, drifted behind the template, and by
+   2026-09-26 was missing the exclusions, the risk score and the second
+   signature, with its bottom third clipped off the face.
+   Class names are the template's with a cert- prefix, except: .certificate
+   is .cert-sheet, .content is .cert-content, .specimen-overlay(-inner) is
+   .cert-specimen(-inner), .system-attribution is .cert-attribution,
+   .verify-block is .cert-verify, .verify-text a is the span .cert-verify-link,
+   .qr-target is .cert-qr (.back-qr is .cert-qr-lg), and .back-areas and
+   .back-area(-id, -label) are .cert-areas and .cert-area(-id, -label).
+   When certificate-template.html changes, change this too.
+   Colours carry !important only because the home-only `body, body *` navy
+   rule would otherwise flatten them. */
+.cert-sheet {
+  --cert-navy: #0C2242;
+  --cert-navy-mid: #33475F;
+  --cert-navy-light: #6b7891;   /* the template's small-type ink, darker than the site --ink-3 */
+  --cert-rule: #E4E8EC;
+  --cert-rule-strong: #c8ccd4;
+  position: absolute; top: 0; left: 0;
+  width: 816px; height: 1056px;
+  padding: 0.55in 0.75in;
+  display: flex; flex-direction: column;
+  overflow: hidden;
+  transform: scale(0.36520);    /* 298 / 816: the 300px face less its 1px border each side */
+  transform-origin: top left;
+  /* Start from the template page's defaults so nothing inherited from the
+     card (the body's 1.6 leading, the tile's alignment) leaks into the sheet. */
+  font: 400 16px/normal 'DM Sans', sans-serif;
+  /* The template asks Google for DM Sans without its opsz axis and is served
+     it fixed at optical size 14. This page loads the axis, and automatic
+     optical sizing then sets opsz from each font size: the 8.5px disclaimer
+     sets at 9, about 1% wider (it ran to a third line), and the 38px system
+     name at 38, about 7% narrower. Pinning 14 matches the template at every
+     size. */
+  font-variation-settings: "opsz" 14;
+  letter-spacing: normal; word-spacing: normal;
+  text-transform: none; text-align: left;
+  -webkit-text-size-adjust: 100%; text-size-adjust: 100%;
+  color: var(--cert-navy) !important;
+}
+
+.cert-specimen {
+  position: absolute; inset: 0;
+  z-index: 2;
+  overflow: hidden;
+  pointer-events: none;
+  user-select: none; -webkit-user-select: none;
+}
+.cert-specimen-inner {
+  position: absolute; top: 50%; left: 50%;
+  width: 220%;
+  transform: translate(-50%, -50%) rotate(-30deg);
+  display: flex; flex-direction: column;
+  gap: 1.1in;
+  text-align: center;
+}
+.cert-specimen-inner span {
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 700; font-size: 52px;
+  letter-spacing: 0.35em; word-spacing: 0.5em;
+  text-transform: uppercase;
+  color: rgba(15,35,64,0.07) !important;
+  white-space: nowrap;
+}
+
+.cert-content {
+  position: relative; z-index: 1;
+  display: flex; flex-direction: column;
+  flex: 1;
+}
 
 .cert-body-region {
   position: relative;
@@ -236,146 +290,287 @@
   z-index: 0;
 }
 
-.cert-head { text-align: center; margin-bottom: 10px; }
+.cert-head { text-align: center; margin-bottom: 22px; }
 .cert-head-logo {
-  width: 44px; height: 44px; object-fit: contain;
-  margin: 0 auto 6px; display: block;
+  width: 84px; height: 84px;
+  object-fit: contain;
+  margin: 0 auto 12px;
+  display: block;
 }
 .cert-head-wordmark {
-  font-weight: 700; font-size: 7px;
+  font-weight: 700; font-size: 13px;
   letter-spacing: 0.2em; text-transform: uppercase;
-  color: var(--ink);
+  color: var(--cert-navy) !important;
+  margin-bottom: 4px;
 }
 .cert-head-sub {
-  font-family: var(--mono); font-size: 5.5px;
-  letter-spacing: 0.18em; text-transform: uppercase;
-  color: var(--ink-3);
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px; letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--cert-navy-light) !important;
 }
 
 .cert-top-rule {
   width: 100%; height: 1px;
-  background: var(--ink);
-  margin-bottom: 10px;
+  background: var(--cert-navy);
+  margin-bottom: 22px;
 }
 
 .cert-doc-type {
-  font-family: var(--mono); font-size: 6.5px; font-weight: 600;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px; font-weight: 600;
   letter-spacing: 0.26em; text-transform: uppercase;
-  color: var(--ink); text-align: center; margin-bottom: 5px;
+  color: var(--cert-navy) !important;
+  text-align: center;
+  margin-bottom: 16px;
 }
 
-.cert-focal { text-align: center; margin-bottom: 14px; }
+.cert-focal { text-align: center; margin-bottom: 18px; }
 .cert-verb {
-  font-family: var(--serif); font-style: italic;
-  font-size: 11px; color: var(--ink-2); margin-bottom: 6px;
+  font-size: 21px;
+  color: var(--cert-navy-mid) !important;
+  margin-bottom: 14px;
 }
 .cert-system-name {
-  font-size: 20px; font-weight: 600;
-  letter-spacing: -0.025em; color: var(--ink);
-  line-height: 1.1; margin-bottom: 4px;
+  font-size: 38px; font-weight: 600;
+  letter-spacing: -0.025em;
+  color: var(--cert-navy) !important;
+  line-height: 1.1;
+  margin-bottom: 10px;
+  text-wrap: balance;
+  word-wrap: break-word;
 }
 .cert-attribution {
-  font-family: var(--mono); font-size: 6px;
-  letter-spacing: 0.1em; text-transform: uppercase;
-  color: var(--ink-3); margin-bottom: 10px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px; letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--cert-navy-light) !important;
+  margin-bottom: 22px;
+  text-wrap: balance;
 }
 .cert-standard-lead {
-  font-size: 8px; color: var(--ink-2); margin-bottom: 4px;
+  font-size: 14px;
+  color: var(--cert-navy-mid) !important;
+  margin-bottom: 8px;
 }
 .cert-standard-name {
-  font-size: 12px; font-weight: 600;
-  letter-spacing: -0.01em; color: var(--ink); margin-bottom: 4px;
+  font-size: 22px; font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--cert-navy) !important;
+  margin-bottom: 10px;
+  text-wrap: balance;
 }
 .cert-standard-tail {
-  font-size: 8px; line-height: 1.5; color: var(--ink-2);
-  max-width: 280px; margin: 0 auto;
+  font-size: 14px; line-height: 1.6;
+  color: var(--cert-navy-mid) !important;
+  max-width: 5.0in;
+  margin: 0 auto;
+  text-wrap: balance;
 }
-.cert-standard-tail strong { color: var(--ink); font-weight: 600; }
+.cert-standard-tail strong,
+.cert-back-note strong { color: var(--cert-navy) !important; font-weight: 600; }
 
-.cert-claim { text-align: center; margin-bottom: 14px; }
-.cert-claim-label {
-  font-family: var(--mono); font-size: 5.5px; font-weight: 500;
+.cert-claim { text-align: center; margin-bottom: 18px; }
+.cert-claim-label,
+.cert-score-label,
+.cert-excl-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px; font-weight: 500;
   letter-spacing: 0.22em; text-transform: uppercase;
-  color: var(--ink-3); margin-bottom: 4px;
+  color: var(--cert-navy-light) !important;
+  margin-bottom: 8px;
 }
 .cert-claim-body {
-  font-family: var(--serif); font-style: italic;
-  font-size: 8px; line-height: 1.5; color: var(--ink-2);
-  max-width: 300px; margin: 0 auto;
+  font-size: 15.5px; line-height: 1.5;
+  color: var(--cert-navy-mid) !important;
+  max-width: 5.4in;
+  margin: 0 auto;
+  text-wrap: balance;
+}
+
+/* Notable exclusions and the assessed risk score, paired on one row */
+.cert-pair {
+  display: grid; grid-template-columns: 2.1fr 1fr;
+  gap: 26px; align-items: center;
+  margin-bottom: 14px;
+}
+.cert-pair > .cert-score { border-left: 1px solid var(--cert-rule); padding-left: 26px; }
+.cert-score { text-align: center; }
+.cert-score-label { margin-bottom: 5px; }
+.cert-score-value {
+  font-size: 25px; font-weight: 600; letter-spacing: -0.01em;
+  color: var(--cert-navy) !important;
+  line-height: 1;
+}
+.cert-score-scale {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px; letter-spacing: 0.12em;
+  color: var(--cert-navy-light) !important;
+  margin-left: 4px;
+}
+.cert-excl { text-align: center; }
+.cert-excl-body {
+  font-size: 13.5px; line-height: 1.5;
+  color: var(--cert-navy-mid) !important;
+  max-width: 5.4in;
+  margin: 0 auto;
+  text-wrap: balance;
 }
 
 .cert-mid-rule {
   width: 100%; height: 1px;
-  background: var(--rule); margin-bottom: 5px;
+  background: var(--cert-rule);
+  margin-bottom: 14px;
 }
 
 .cert-admin {
   display: grid; grid-template-columns: 1fr 1fr 1fr;
-  gap: 10px; margin-bottom: 14px;
+  gap: 20px;
+  margin-bottom: 18px;
 }
-.cert-admin-cell { text-align: center; }
-.cert-admin-cell + .cert-admin-cell { border-left: 1px solid var(--rule); }
+.cert-admin-cell {
+  text-align: center;
+  display: flex; flex-direction: column;
+  justify-content: center;
+}
+.cert-admin-cell + .cert-admin-cell { border-left: 1px solid var(--cert-rule); }
+.cert-admin-row { margin-bottom: 8px; }
+.cert-admin-row:last-child { margin-bottom: 0; }
 .cert-admin-label {
-  font-family: var(--mono); font-size: 5px;
-  letter-spacing: 0.2em; text-transform: uppercase;
-  color: var(--ink-3); margin-bottom: 2px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 8.5px; letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--cert-navy-light) !important;
+  margin-bottom: 3px;
 }
 .cert-admin-value {
-  font-family: var(--mono); font-size: 6.5px; font-weight: 500;
-  color: var(--ink); letter-spacing: 0.02em;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px; font-weight: 500;
+  color: var(--cert-navy) !important;
+  letter-spacing: 0.02em;
+  word-wrap: break-word;
 }
 
-.cert-signature { text-align: center; margin-bottom: 12px; }
+/* Two signatures: the lead assessor and the principal */
+.cert-sigs {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 40px; margin-bottom: 16px;
+}
+.cert-signature { text-align: center; margin-bottom: 24px; }
 .cert-sig-line {
-  width: 120px; height: 1px;
-  background: var(--ink); margin: 0 auto 4px;
+  width: 220px; height: 1px;
+  background: var(--cert-navy);
+  margin: 0 auto 8px;
 }
 .cert-sig-name {
-  font-size: 7.5px; font-weight: 600; color: var(--ink); margin-bottom: 1px;
+  font-size: 13px; font-weight: 600;
+  color: var(--cert-navy) !important;
+  margin-bottom: 2px;
 }
 .cert-sig-title {
-  font-family: var(--mono); font-size: 5.5px;
-  letter-spacing: 0.14em; text-transform: uppercase;
-  color: var(--ink-3);
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9.5px; letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--cert-navy-light) !important;
 }
 
 .cert-verify {
   display: flex; justify-content: space-between; align-items: center;
-  padding-top: 8px; border-top: 1px solid var(--rule); margin-bottom: 6px;
+  gap: 16px;
+  padding-top: 16px;
+  border-top: 1px solid var(--cert-rule);
+  margin-bottom: 12px;
 }
 .cert-verify-text {
-  font-family: var(--mono); font-size: 6px; line-height: 1.5;
-  color: var(--ink-3);
+  flex: 1; min-width: 0;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px; line-height: 1.5;
+  color: var(--cert-navy-light) !important;
 }
 .cert-verify-text strong {
-  display: block; font-weight: 500; color: var(--ink);
-  font-size: 5.5px; letter-spacing: 0.18em;
-  text-transform: uppercase; margin-bottom: 2px;
+  display: block;
+  font-weight: 500;
+  color: var(--cert-navy) !important;
+  font-size: 9px; letter-spacing: 0.18em;
+  text-transform: uppercase;
+  margin-bottom: 4px;
 }
+/* The template's verify line is a link; here it is plain text, because a
+   click anywhere on the tiled cert opens it rather than following a link. */
+.cert-verify-link { color: var(--cert-navy) !important; word-break: break-all; }
+
 .cert-qr {
-  width: 42px; height: 42px; flex-shrink: 0;   /* match the back-face QR for front/back consistency */
+  width: 72px; height: 72px;
+  flex-shrink: 0;
   position: relative;
 }
 .cert-qr svg { width: 100%; height: 100%; display: block; }
-.cert-qr:empty {
-  border: 1px solid var(--rule); background: var(--bg);
-}
 .cert-qr:empty::before {
-  content: 'QR'; position: absolute; inset: 0;
+  content: 'QR';
+  position: absolute; inset: 0;
   display: flex; align-items: center; justify-content: center;
-  font-family: var(--mono); font-size: 7px; color: var(--ink-3);
+  border: 1px dashed var(--cert-rule-strong);
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px;
+  color: var(--cert-navy-light) !important;
 }
 
 .cert-disclaimer {
-  font-size: 5px; line-height: 1.5; color: var(--ink-3);
-  text-align: center; font-style: italic; margin-bottom: 6px;
+  font-size: 8.5px; line-height: 1.5;
+  color: var(--cert-navy-light) !important;
+  text-align: center;
+  max-width: 6.5in;
+  margin: 0 auto 10px;
 }
 
 .cert-accred {
-  text-align: center; font-family: var(--mono);
-  font-size: 5px; letter-spacing: 0.18em;
-  text-transform: uppercase; color: var(--ink-3);
-  padding-top: 5px; border-top: 1px solid var(--rule);
+  text-align: center;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 8.5px; letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--cert-navy-light) !important;
+  padding-top: 8px;
+  border-top: 1px solid var(--cert-rule);
+}
+
+/* Back face: the requirement areas, the register note, the QR and the DOI */
+.cert-areas {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 14px 44px;
+  max-width: 6.2in;
+  margin: 0 auto 26px;
+}
+.cert-area { display: flex; gap: 12px; align-items: baseline; text-align: left; }
+.cert-area-id {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px; font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--cert-navy) !important;
+  min-width: 44px;
+  flex-shrink: 0;
+}
+.cert-area-label { font-size: 13.5px; line-height: 1.35; color: var(--cert-navy-mid) !important; }
+.cert-back-note {
+  font-size: 14px; line-height: 1.6;
+  color: var(--cert-navy-mid) !important;
+  text-align: center;
+  max-width: 5.4in;
+  margin: 0 auto;
+  text-wrap: balance;
+}
+.cert-back-verify {
+  text-align: center;
+  padding-top: 16px;
+  border-top: 1px solid var(--cert-rule);
+  margin-bottom: 12px;
+}
+.cert-qr.cert-qr-lg { width: 120px; height: 120px; margin: 0 auto 12px; }
+.cert-back-doi {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  color: var(--cert-navy-light) !important;
+  margin-top: 6px;
 }
 
 /* ─── LOADING SKELETON (used by the news section) ─────────── */
@@ -853,25 +1048,6 @@
   .sc-card:hover { transform: translateY(-5px); box-shadow: 0 18px 42px rgba(12,34,66,0.22); }
   .sc-label { font-size: 16px; font-weight: 600; color: #FAF9F5 !important; }
 
-  /* RESERVE TWO LINES OF SUB-LINE ON THE TWO TILES THAT HOLD A TEXT FIELD.
-     Both scroll-scrubbed effects on this page resize the cards continuously as
-     you scroll: --expand moves the grid from 1280px to 1360px on desktop, and
-     --tile-x bleeds each card out to the screen edge on phones. A card's height
-     is pinned by the JS, so when this sub-line rewraps from one line to two at
-     the narrow end it cannot make the card taller. Instead .sc-stage above it
-     gives up the 19.5px, and because the stage centres its contents everything
-     inside shifts vertically by half of that, the ask field included.
-     Measured: #sc-ask-q sits at viewport top 521.1 at --expand 1 and 511.3 at
-     --expand 0. Nine point eight pixels does not sound like much, but if the
-     caret is in that field the browser is obliged to keep it in view, so it
-     scrolls back every frame the width changes and the page stops responding.
-     It shows up going UP because the scrub sits clamped at its wide end while
-     you scroll down, and only starts moving again when you reverse.
-     Reserving the second line makes the sub-line the same height at every
-     width, so the stage never resizes and the caret never moves. It costs no
-     layout: the JS pins each card at its NARROWEST and therefore tallest state,
-     which is the two-line state, so this is space the card already had.
-     Scoped to the two tiles that can hold a caret, so no other tile changes. */
   .sc-foot { text-align: center; font-size: 13px; color: rgba(12, 34, 66,0.6) !important; margin-top: 18px; }
   .sc-stage { flex: 1; display: flex; align-items: center; justify-content: center; margin: 6px 0 10px; }
   .sc-expand { position: absolute; top: 20px; right: 22px; z-index: 5; cursor: pointer; font-family: var(--mono); font-size: 12px; font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase; color: #FAF9F5 !important; background: none; border: none; padding: 0; display: inline-flex; align-items: center; gap: 7px; opacity: 0.55; transition: opacity 0.25s ease; }
@@ -904,7 +1080,9 @@
      cert/firework modals and any of those would make it their containing block
      and break click-to-expand.
      Tunables: --sc-max (how far it breaks out), the START/END scroll window in
-     the JS (where in the scroll it goes from contained→full), the 1360px floor. ── */
+     the JS (where in the scroll it goes from contained→full), the 1360px floor.
+     The scrub holds still while a text field in the grid has focus; see typing()
+     in the widen script for why Safari needs that. ── */
   .sc-grid-wide {
     --sc-max: 1560px;               /* wide cap — moderate, well under full-bleed */
     --expand: 0;                    /* 0..1, written by JS on scroll */
@@ -1243,50 +1421,24 @@
   /* Cert paper = WHITE, matching certificate-template.html. A hairline border +
      lift shadow keep the white document distinct against the cream ground/modal. */
   #sc-cert-stage .cert-face{ background:#ffffff!important; border:1px solid rgba(12,34,66,0.14)!important; box-shadow:0 4px 14px rgba(12,34,66,.10),0 24px 60px rgba(12,34,66,.16)!important; }
-  /* Front cert = the real certificate-template.html embedded (816×1056) and scaled
-     to the 300px card. pointer-events:none lets the 3D tilt/flip work through it. */
-  #sc-cert-stage .cert-front { padding: 0 !important; }
-  /* Card teaser fills the face with the original cert padding. */
-  #sc-cert-stage .cert-front-inner {
-    position: absolute; inset: 0;
-    display: flex; flex-direction: column;
-    padding: 26px 32px;
-  }
-  /* The pixel-exact template embed shows ONLY when expanded (an iframe won't paint
-     inside the card's 3D turntable); the styled teaser shows in the card. */
-  /* Keep the embed loaded+rendered (visibility, not display:none) so it paints the
-     instant the cert is expanded; hidden behind the styled teaser in the card. */
+  /* The card shows each face's .cert-sheet, the template copy styled near the
+     top of this file. Expanded, the front swaps to a live embed of the template
+     itself. An iframe won't paint inside the card's 3D turntable, so the embed
+     stays loaded and rendered (visibility, not display:none) behind the sheet
+     and paints the instant the cert is expanded. */
   #sc-cert-stage .cert-front-inner { z-index: 1; }
   #sc-cert-stage:not(.is-expanded) .cert-tpl-frame { visibility: hidden; }
   #sc-cert-stage.is-expanded .cert-front-inner { display: none; }
   #sc-cert-stage .cert-tpl-frame {
     position: absolute; top: 0; left: 0;
     width: 816px; height: 1056px;
-    transform: scale(0.36765);      /* 300 / 816 */
+    transform: scale(0.36520);      /* 298 / 816, the same fit as .cert-sheet */
     transform-origin: top left;
     border: none; pointer-events: none; background: #fff;
     z-index: 0;
   }
-  /* SPECIMEN watermark on the (bespoke) back face — mirrors the front/template.
-     Sized for the 300px card design; colour is !important so the page-wide navy
-     ink rule can't turn the faint watermark solid. */
-  #sc-cert-stage .cert-specimen { position: absolute; inset: 0; z-index: 2; overflow: hidden; pointer-events: none; user-select: none; }
-  #sc-cert-stage .cert-specimen-inner {
-    position: absolute; top: 50%; left: 50%; width: 220%;
-    transform: translate(-50%, -50%) rotate(-30deg);
-    display: flex; flex-direction: column; gap: 38px; text-align: center;
-  }
-  #sc-cert-stage .cert-specimen-inner span {
-    font-family: var(--sans); font-weight: 700; font-size: 19px;
-    letter-spacing: 0.35em; word-spacing: 0.5em; text-transform: uppercase;
-    color: rgba(15, 35, 64, 0.07) !important; white-space: nowrap;
-  }
   #sc-cert-stage .cert-sheen{ background:linear-gradient(var(--sheen-angle,110deg),transparent 43%,rgba(150,195,255,.12) 47%,rgba(255,255,255,.42) 50%,rgba(210,165,255,.12) 53%,transparent 57%)!important; }
   #sc-cert-stage .cert-qr{ background:#ffffff!important; }
-  #sc-cert-stage .cert-doc-type,#sc-cert-stage .cert-head-wordmark,#sc-cert-stage .cert-system-name,#sc-cert-stage strong{ color:var(--ink)!important; }
-  #sc-cert-stage .cert-head-sub,#sc-cert-stage .cert-verb,#sc-cert-stage .cert-attribution,#sc-cert-stage .cert-standard-lead,#sc-cert-stage .cert-standard-tail,#sc-cert-stage .cert-admin-value,#sc-cert-stage .cert-area-label,#sc-cert-stage .cert-back-note{ color:var(--ink-2)!important; }
-  #sc-cert-stage .cert-standard-name,#sc-cert-stage .cert-claim-label,#sc-cert-stage .cert-admin-label,#sc-cert-stage .cert-area-id,#sc-cert-stage .cert-verify-text strong{ color:var(--ink)!important; }
-  #sc-cert-stage .cert-disclaimer,#sc-cert-stage .cert-back-doi,#sc-cert-stage .cert-accred,#sc-cert-stage .cert-sig-title{ color:var(--ink-3)!important; }
 
   /* ── Card 3: Ask SCL → the /search landing state over a live search bar ── */
   .sc-ask-stage{ flex-direction:column; justify-content:center; gap:14px; width:100%; padding:4px 2px; }
@@ -1832,99 +1984,147 @@
         <div class="sc-stage cert-stage" id="sc-cert-stage">
           <div class="cert-doc">
 
-                  <!-- FRONT — the certificate of conformance -->
+                  <!-- FRONT: the certificate of conformance. The .cert-sheet is a copy
+                       of certificate-template.html's front face; keep the two in step. -->
                   <div class="cert-face cert-front">
 
-                    <!-- Card teaser: the styled 3D face (renders inside the flip/turntable). -->
-                    <div class="cert-front-inner">
-                    <!-- SPECIMEN watermark — matches the certificate template / back face -->
-                    <div class="cert-specimen" aria-hidden="true">
-                      <div class="cert-specimen-inner">
-                        <span>Specimen&ensp;Specimen&ensp;Specimen&ensp;Specimen&ensp;Specimen</span>
-                        <span>Specimen&ensp;Specimen&ensp;Specimen&ensp;Specimen&ensp;Specimen</span>
-                        <span>Specimen&ensp;Specimen&ensp;Specimen&ensp;Specimen&ensp;Specimen</span>
-                        <span>Specimen&ensp;Specimen&ensp;Specimen&ensp;Specimen&ensp;Specimen</span>
-                        <span>Specimen&ensp;Specimen&ensp;Specimen&ensp;Specimen&ensp;Specimen</span>
-                        <span>Specimen&ensp;Specimen&ensp;Specimen&ensp;Specimen&ensp;Specimen</span>
-                        <span>Specimen&ensp;Specimen&ensp;Specimen&ensp;Specimen&ensp;Specimen</span>
-                        <span>Specimen&ensp;Specimen&ensp;Specimen&ensp;Specimen&ensp;Specimen</span>
-                        <span>Specimen&ensp;Specimen&ensp;Specimen&ensp;Specimen&ensp;Specimen</span>
-                      </div>
-                    </div>
-                    <div class="cert-head">
-                      <img src="img/SCL_Logo_3d_sm.png" alt="Safety Critical Labs" class="cert-head-logo">
-                      <div class="cert-head-wordmark">Safety Critical Labs</div>
-                      <div class="cert-head-sub">AI Certification Authority</div>
-                    </div>
+                    <!-- Card teaser: the template's front laid out at full size and scaled
+                         to the face, so it renders inside the flip and the turntable. -->
+                    <div class="cert-front-inner cert-sheet">
 
-                    <div class="cert-top-rule"></div>
-
-                    <div class="cert-body-region">
-                      <img src="img/SCL_Logo_watermark.png" alt="" class="cert-watermark">
-                      <div class="cert-body-content">
-
-                        <div class="cert-doc-type">Certificate of Conformance</div>
-
-                        <div class="cert-focal">
-                          <div class="cert-verb">This is to certify that</div>
-                          <div class="cert-system-name">System Name</div>
-                          <div class="cert-attribution">Organization &middot; Version X.X &middot; Assessed Month YYYY</div>
-                          <div class="cert-standard-lead">has been formally assessed against the</div>
-                          <div class="cert-standard-name">SCL AI Requirements Framework</div>
-                          <div class="cert-standard-tail">and certified at the <strong>Safety-Critical</strong> level for the operational claim stated below.</div>
-                        </div>
-
-                        <div class="cert-claim">
-                          <div class="cert-claim-label">Operational Claim</div>
-                          <div class="cert-claim-body">One sentence operational claim describing the certified role and intended scope of the system.</div>
-                        </div>
-
-                        <div class="cert-mid-rule"></div>
-
-                        <div class="cert-admin">
-                          <div class="cert-admin-cell">
-                            <div class="cert-admin-label">Certificate No.</div>
-                            <div class="cert-admin-value">SCL-CERT-2025-001</div>
-                          </div>
-                          <div class="cert-admin-cell">
-                            <div class="cert-admin-label">Issued</div>
-                            <div class="cert-admin-value">DD Mon YYYY</div>
-                          </div>
-                          <div class="cert-admin-cell">
-                            <div class="cert-admin-label">Framework DOI</div>
-                            <div class="cert-admin-value">10.5281/zenodo.22775993</div>
-                          </div>
-                        </div>
-
-                        <div class="cert-signature">
-                          <div class="cert-sig-line"></div>
-                          <div class="cert-sig-name">Principal</div>
-                          <div class="cert-sig-title">Safety Critical Labs</div>
-                        </div>
-
-                      </div>
-
-                      <div class="cert-body-footer">
-                        <div class="cert-verify">
-                          <div class="cert-verify-text">
-                            <strong>Verify Online</strong>
-                            safetycriticallabs.com/verify?id=SCL-CERT-2025-001
-                          </div>
-                          <div class="cert-qr" id="cert-mini-qr"></div>
-                        </div>
-
-                        <div class="cert-disclaimer">
-                          This certificate records conformance to a defined standard at the time of assessment. It does not constitute a claim that the assessed system is safe, free from defect, or approved for any specific regulatory purpose. The Certification Determination Document is the binding artifact and governs in case of conflict.
+                      <!-- SPECIMEN overlay, as on the template -->
+                      <div class="cert-specimen" aria-hidden="true">
+                        <div class="cert-specimen-inner">
+                          <span>Specimen&ensp;Specimen&ensp;Specimen&ensp;Specimen&ensp;Specimen</span>
+                          <span>Specimen&ensp;Specimen&ensp;Specimen&ensp;Specimen&ensp;Specimen</span>
+                          <span>Specimen&ensp;Specimen&ensp;Specimen&ensp;Specimen&ensp;Specimen</span>
+                          <span>Specimen&ensp;Specimen&ensp;Specimen&ensp;Specimen&ensp;Specimen</span>
+                          <span>Specimen&ensp;Specimen&ensp;Specimen&ensp;Specimen&ensp;Specimen</span>
+                          <span>Specimen&ensp;Specimen&ensp;Specimen&ensp;Specimen&ensp;Specimen</span>
+                          <span>Specimen&ensp;Specimen&ensp;Specimen&ensp;Specimen&ensp;Specimen</span>
+                          <span>Specimen&ensp;Specimen&ensp;Specimen&ensp;Specimen&ensp;Specimen</span>
+                          <span>Specimen&ensp;Specimen&ensp;Specimen&ensp;Specimen&ensp;Specimen</span>
                         </div>
                       </div>
-                    </div>
 
-                    <div class="cert-accred">Independent Certification &middot; Safety Critical Labs</div>
+                      <div class="cert-content">
+
+                        <div class="cert-head">
+                          <img src="img/SCL_Logo_3d_sm.png" alt="Safety Critical Labs" class="cert-head-logo" draggable="false">
+                          <div class="cert-head-wordmark">Safety Critical Labs</div>
+                          <div class="cert-head-sub">AI Certification Authority</div>
+                        </div>
+
+                        <div class="cert-top-rule"></div>
+
+                        <div class="cert-body-region">
+                          <img src="img/SCL_Logo_watermark_cert.png" alt="" class="cert-watermark">
+                          <div class="cert-body-content">
+
+                            <div class="cert-doc-type">Certificate of Conformance</div>
+
+                            <div class="cert-focal">
+                              <div class="cert-verb">This is to certify that</div>
+                              <div class="cert-system-name">System Name</div>
+                              <div class="cert-attribution">Organization &middot; Version X.X &middot; Assessed Month YYYY</div>
+                              <div class="cert-standard-lead">has been formally assessed against the</div>
+                              <div class="cert-standard-name">SCL AI Requirements Framework</div>
+                              <div class="cert-standard-tail">and certified at the <strong>Safety-Critical</strong> level for the operational claim stated below.</div>
+                            </div>
+
+                            <div class="cert-claim">
+                              <div class="cert-claim-label">Operational Claim</div>
+                              <div class="cert-claim-body">One sentence operational claim describing the certified role and intended scope of the system.</div>
+                            </div>
+
+                            <div class="cert-pair">
+                              <div class="cert-excl">
+                                <div class="cert-excl-label">Notable Exclusions</div>
+                                <div class="cert-excl-body">Material exclusions from the certified scope, summarised so a third party can spot a mismatch with their own intended use.</div>
+                              </div>
+                              <div class="cert-score">
+                                <div class="cert-score-label">Assessed Risk Score</div>
+                                <div class="cert-score-value">2.4<span class="cert-score-scale">/ 5.0</span></div>
+                              </div>
+                            </div>
+
+                            <div class="cert-mid-rule"></div>
+
+                            <div class="cert-admin">
+                              <div class="cert-admin-cell">
+                                <div class="cert-admin-row">
+                                  <div class="cert-admin-label">Certificate No.</div>
+                                  <div class="cert-admin-value">SCL-CERT-2025-001</div>
+                                </div>
+                                <div class="cert-admin-row">
+                                  <div class="cert-admin-label">Determination Doc.</div>
+                                  <div class="cert-admin-value">SCL-DET-2025-001</div>
+                                </div>
+                              </div>
+                              <div class="cert-admin-cell">
+                                <div class="cert-admin-row">
+                                  <div class="cert-admin-label">Issued</div>
+                                  <div class="cert-admin-value">DD Mon YYYY</div>
+                                </div>
+                                <div class="cert-admin-row">
+                                  <div class="cert-admin-label">Valid Through</div>
+                                  <div class="cert-admin-value">DD Mon YYYY</div>
+                                </div>
+                                <div class="cert-admin-row">
+                                  <div class="cert-admin-label">Surveillance Due</div>
+                                  <div class="cert-admin-value">DD Mon YYYY</div>
+                                </div>
+                              </div>
+                              <div class="cert-admin-cell">
+                                <div class="cert-admin-row">
+                                  <div class="cert-admin-label">Framework DOI</div>
+                                  <div class="cert-admin-value">10.5281/zenodo.22775993</div>
+                                </div>
+                                <div class="cert-admin-row">
+                                  <div class="cert-admin-label">Requirement Areas</div>
+                                  <div class="cert-admin-value">AI-1 to AI-10, AI-12</div>
+                                </div>
+                              </div>
+                            </div>
+
+                            <div class="cert-sigs">
+                              <div class="cert-signature">
+                                <div class="cert-sig-line"></div>
+                                <div class="cert-sig-name">Lead Assessor Name</div>
+                                <div class="cert-sig-title">Lead Assessor</div>
+                              </div>
+                              <div class="cert-signature">
+                                <div class="cert-sig-line"></div>
+                                <div class="cert-sig-name">Principal Name</div>
+                                <div class="cert-sig-title">Principal</div>
+                              </div>
+                            </div>
+
+                          </div>
+
+                          <div class="cert-body-footer">
+                            <div class="cert-verify">
+                              <div class="cert-verify-text">
+                                <strong>Verify Online</strong>
+                                <span class="cert-verify-link">safetycriticallabs.com/verify?id=SCL-CERT-2025-001</span>
+                              </div>
+                              <div class="cert-qr" id="cert-mini-qr"></div>
+                            </div>
+
+                            <div class="cert-disclaimer">
+                              This certificate records conformance to a defined standard at the time of assessment. It does not constitute a claim that the assessed system is safe, free from defect, or approved for any specific regulatory purpose. The Certification Determination Document is the binding artifact and governs in case of conflict.
+                            </div>
+                          </div>
+                        </div>
+
+                        <div class="cert-accred">Independent Certification &middot; Safety Critical Labs</div>
+
+                      </div>
                     </div>
 
                     <!-- Expanded only: a live, pixel-exact embed of the real certificate template.
                          (An iframe can't paint inside the card's 3D turntable, so it is shown only
-                         when the cert is expanded flat — where you actually read it.) -->
+                         when the cert is expanded flat, where you actually read it.) -->
                     <iframe class="cert-tpl-frame" src="certificate-template.html?embed=1" scrolling="no" tabindex="-1" aria-hidden="true" title="Certificate of Conformance"></iframe>
 
                     <!-- Light-catching sheen overlay (animated on tilt, see stamp JS) -->
@@ -1933,75 +2133,83 @@
                     <button class="cert-flip-hint" type="button" aria-label="Flip to verification details">Verification &#8635;</button>
                   </div>
 
-                  <!-- BACK — the verification / proof face -->
+                  <!-- BACK: the verification face, a copy of certificate-template.html's
+                       back face; keep the two in step. -->
                   <div class="cert-face cert-back">
 
-                    <div class="cert-head">
-                      <img src="img/SCL_Logo_3d_sm.png" alt="" class="cert-head-logo">
-                      <div class="cert-head-wordmark">Safety Critical Labs</div>
-                      <div class="cert-head-sub">Conformance Verification</div>
-                    </div>
+                    <div class="cert-sheet">
 
-                    <div class="cert-top-rule"></div>
-
-                    <!-- SPECIMEN watermark — matches the front / certificate template -->
-                    <div class="cert-specimen" aria-hidden="true">
-                      <div class="cert-specimen-inner">
-                        <span>Specimen&ensp;Specimen&ensp;Specimen&ensp;Specimen&ensp;Specimen</span>
-                        <span>Specimen&ensp;Specimen&ensp;Specimen&ensp;Specimen&ensp;Specimen</span>
-                        <span>Specimen&ensp;Specimen&ensp;Specimen&ensp;Specimen&ensp;Specimen</span>
-                        <span>Specimen&ensp;Specimen&ensp;Specimen&ensp;Specimen&ensp;Specimen</span>
-                        <span>Specimen&ensp;Specimen&ensp;Specimen&ensp;Specimen&ensp;Specimen</span>
-                        <span>Specimen&ensp;Specimen&ensp;Specimen&ensp;Specimen&ensp;Specimen</span>
-                        <span>Specimen&ensp;Specimen&ensp;Specimen&ensp;Specimen&ensp;Specimen</span>
-                        <span>Specimen&ensp;Specimen&ensp;Specimen&ensp;Specimen&ensp;Specimen</span>
-                        <span>Specimen&ensp;Specimen&ensp;Specimen&ensp;Specimen&ensp;Specimen</span>
-                      </div>
-                    </div>
-
-                    <div class="cert-body-region">
-                      <img src="img/SCL_Logo_watermark.png" alt="" class="cert-watermark">
-                      <div class="cert-body-content">
-
-                        <div class="cert-doc-type">Framework Requirement Areas</div>
-
-                        <div class="cert-areas">
-                          <div class="cert-area"><span class="cert-area-id">AI-1</span><span class="cert-area-label">Operational and data foundations</span></div>
-                          <div class="cert-area"><span class="cert-area-id">AI-2</span><span class="cert-area-label">Addressing AI bias</span></div>
-                          <div class="cert-area"><span class="cert-area-id">AI-3</span><span class="cert-area-label">ML test coverage</span></div>
-                          <div class="cert-area"><span class="cert-area-id">AI-4</span><span class="cert-area-label">Continuous validation</span></div>
-                          <div class="cert-area"><span class="cert-area-id">AI-5</span><span class="cert-area-label">Hallucination prevention</span></div>
-                          <div class="cert-area"><span class="cert-area-id">AI-6</span><span class="cert-area-label">Out-of-distribution detection</span></div>
-                          <div class="cert-area"><span class="cert-area-id">AI-7</span><span class="cert-area-label">Adversarial robustness</span></div>
-                          <div class="cert-area"><span class="cert-area-id">AI-8</span><span class="cert-area-label">Explainability</span></div>
-                          <div class="cert-area"><span class="cert-area-id">AI-9</span><span class="cert-area-label">Human-AI teaming</span></div>
-                          <div class="cert-area"><span class="cert-area-id">AI-10</span><span class="cert-area-label">Privacy and data protection</span></div>
-                          <div class="cert-area"><span class="cert-area-id">AI-11</span><span class="cert-area-label">Multi-model systems</span></div>
-                          <div class="cert-area"><span class="cert-area-id">AI-12</span><span class="cert-area-label">Neural networks</span></div>
-                          <div class="cert-area"><span class="cert-area-id">AI-13</span><span class="cert-area-label">Continuous learning and adaptation</span></div>
+                      <!-- SPECIMEN overlay, as on the template -->
+                      <div class="cert-specimen" aria-hidden="true">
+                        <div class="cert-specimen-inner">
+                          <span>Specimen&ensp;Specimen&ensp;Specimen&ensp;Specimen&ensp;Specimen</span>
+                          <span>Specimen&ensp;Specimen&ensp;Specimen&ensp;Specimen&ensp;Specimen</span>
+                          <span>Specimen&ensp;Specimen&ensp;Specimen&ensp;Specimen&ensp;Specimen</span>
+                          <span>Specimen&ensp;Specimen&ensp;Specimen&ensp;Specimen&ensp;Specimen</span>
+                          <span>Specimen&ensp;Specimen&ensp;Specimen&ensp;Specimen&ensp;Specimen</span>
+                          <span>Specimen&ensp;Specimen&ensp;Specimen&ensp;Specimen&ensp;Specimen</span>
+                          <span>Specimen&ensp;Specimen&ensp;Specimen&ensp;Specimen&ensp;Specimen</span>
+                          <span>Specimen&ensp;Specimen&ensp;Specimen&ensp;Specimen&ensp;Specimen</span>
+                          <span>Specimen&ensp;Specimen&ensp;Specimen&ensp;Specimen&ensp;Specimen</span>
                         </div>
-
-                        <div class="cert-mid-rule"></div>
-
-                        <div class="cert-back-note">
-                          Evaluated against the requirement areas that apply to the certified system, under the <strong>SCL AI Requirements Framework v3.7</strong>. Scan to confirm this record against the public register.
-                        </div>
-
                       </div>
 
-                      <div class="cert-body-footer">
-                        <div class="cert-back-verify">
-                          <div class="cert-qr cert-qr-lg" id="cert-back-qr"></div>
-                          <div class="cert-verify-text">
-                            <strong>Verify Online</strong>
-                            safetycriticallabs.com/verify?id=SCL-CERT-2025-001
+                      <div class="cert-content">
+
+                        <div class="cert-head">
+                          <img src="img/SCL_Logo_3d_sm.png" alt="" class="cert-head-logo" draggable="false">
+                          <div class="cert-head-wordmark">Safety Critical Labs</div>
+                          <div class="cert-head-sub">Conformance Verification</div>
+                        </div>
+
+                        <div class="cert-top-rule"></div>
+
+                        <div class="cert-body-region">
+                          <img src="img/SCL_Logo_watermark_cert.png" alt="" class="cert-watermark">
+                          <div class="cert-body-content">
+
+                            <div class="cert-doc-type">Framework Requirement Areas</div>
+
+                            <div class="cert-areas">
+                              <div class="cert-area"><span class="cert-area-id">AI-1</span><span class="cert-area-label">Operational and data foundations</span></div>
+                              <div class="cert-area"><span class="cert-area-id">AI-2</span><span class="cert-area-label">Addressing AI bias</span></div>
+                              <div class="cert-area"><span class="cert-area-id">AI-3</span><span class="cert-area-label">ML test coverage</span></div>
+                              <div class="cert-area"><span class="cert-area-id">AI-4</span><span class="cert-area-label">Continuous validation</span></div>
+                              <div class="cert-area"><span class="cert-area-id">AI-5</span><span class="cert-area-label">Hallucination prevention</span></div>
+                              <div class="cert-area"><span class="cert-area-id">AI-6</span><span class="cert-area-label">Out-of-distribution detection</span></div>
+                              <div class="cert-area"><span class="cert-area-id">AI-7</span><span class="cert-area-label">Adversarial robustness</span></div>
+                              <div class="cert-area"><span class="cert-area-id">AI-8</span><span class="cert-area-label">Explainability</span></div>
+                              <div class="cert-area"><span class="cert-area-id">AI-9</span><span class="cert-area-label">Human-AI teaming</span></div>
+                              <div class="cert-area"><span class="cert-area-id">AI-10</span><span class="cert-area-label">Privacy and data protection</span></div>
+                              <div class="cert-area"><span class="cert-area-id">AI-11</span><span class="cert-area-label">Multi-model systems</span></div>
+                              <div class="cert-area"><span class="cert-area-id">AI-12</span><span class="cert-area-label">Neural networks</span></div>
+                              <div class="cert-area"><span class="cert-area-id">AI-13</span><span class="cert-area-label">Continuous learning and adaptation</span></div>
+                            </div>
+
+                            <div class="cert-mid-rule"></div>
+
+                            <div class="cert-back-note">
+                              Evaluated against the requirement areas listed on the face of this certificate, under the <strong>SCL AI Requirements Framework v3.7</strong>. Scan to confirm this record against the public register.
+                            </div>
+
                           </div>
-                          <div class="cert-back-doi">DOI 10.5281/zenodo.22775993</div>
+
+                          <div class="cert-body-footer">
+                            <div class="cert-back-verify">
+                              <div class="cert-qr cert-qr-lg" id="cert-back-qr"></div>
+                              <div class="cert-verify-text">
+                                <strong>Verify Online</strong>
+                                <span class="cert-verify-link">safetycriticallabs.com/verify?id=SCL-CERT-2025-001</span>
+                              </div>
+                              <div class="cert-back-doi">DOI 10.5281/zenodo.22775993</div>
+                            </div>
+                          </div>
                         </div>
+
+                        <div class="cert-accred">Independent Certification &middot; Safety Critical Labs</div>
+
                       </div>
                     </div>
-
-                    <div class="cert-accred">Independent Certification &middot; Safety Critical Labs</div>
 
                     <div class="cert-sheen" aria-hidden="true"></div>
 
@@ -2504,7 +2712,7 @@
 
       /* The EXPANDED front face is the same-origin template iframe, whose
          watermark can't see this page's CSS vars — drive it directly so the
-         front parallaxes exactly like the hand-built back face. */
+         front parallaxes exactly like the back face's .cert-sheet. */
       var wm = tplWatermark();
       if (wm) wm.style.transform = 'translate(-50%, -50%) translate(' +
         (pDY * 0.7).toFixed(1) + 'px, ' + (-pRX * 0.7).toFixed(1) + 'px)';
@@ -3474,8 +3682,25 @@
 
   function smooth(p){ p = p < 0 ? 0 : p > 1 ? 1 : p; return p * p * (3 - 2 * p); }
 
+  /* Hold the width while a text field in the grid has focus. WebKit scrolls the
+     caret back into view every time a focused text field changes SIZE
+     (RenderTextControlSingleLine::layout), and this scrub changes the Ask and
+     Subscribe field widths on every frame. So with a caret in either one, Safari
+     pulled the page back to it on every frame and scrolling up hit a wall where
+     the tiles start to narrow. A vertical move alone does not trigger it, which
+     is why reserving caption lines (048e0b7) never fixed it. Chrome has no such
+     code, so a clean Chrome run proves nothing; the stall was reproduced and this
+     guard verified in WebKit on 2026-09-26. The scrub resumes on the first scroll
+     after the field loses focus. Resuming on blur itself was tried and moved the
+     Ask and Subscribe buttons between mousedown and mouseup, so the click missed. */
+  function typing(){
+    var f = document.activeElement;
+    return !!f && grid.contains(f) && (f.matches('input, textarea') || f.isContentEditable);
+  }
+
   function update(){
     ticking = false;
+    if(typing()) return;
     if(!expandable()){ grid.style.setProperty('--expand', '0'); return; }
     var s0 = anchor * BEGIN, s1 = anchor * FULL;                      // scroll positions for 0..1
     var p = smooth((window.scrollY - s0) / (s1 - s0));
@@ -3553,8 +3778,17 @@
 
   function smooth(p){ p = p < 0 ? 0 : p > 1 ? 1 : p; return p * p * (3 - 2 * p); }
 
+  /* Hold the spread while a text field in the grid has focus, for the same
+     WebKit reason as typing() in the desktop widen script above: a focused
+     field that changes width makes Safari scroll back to its caret. */
+  function typing(){
+    var f = document.activeElement;
+    return !!f && grid.contains(f) && (f.matches('input, textarea') || f.isContentEditable);
+  }
+
   function update(){
     ticking = false;
+    if(typing()) return;
     if(!active()){ cards.forEach(function(c){ c.style.setProperty('--tile-x','0'); }); return; }
     cards.forEach(function(c, i){
       var r = c.getBoundingClientRect();

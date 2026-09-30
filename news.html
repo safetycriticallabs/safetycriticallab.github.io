@@ -629,6 +629,9 @@
       url: 'https://github.com/safetycriticallabs/cmapss-verification-demo', date: d('2026-07-01') },
 
     /* EUR-Lex */
+    { key: 'eu', title: 'Regulation (EU) 2026/1744, Digital Omnibus on AI, amending the AI Act',
+      summary: 'Adopted regulation amending the AI Act to simplify the implementation of harmonised rules on artificial intelligence.',
+      url: 'https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32026R1744', date: d('2026-07-24') },
     { key: 'eu', title: 'Proposal amending Regulation (EU) 2024/1689, Digital Omnibus on AI',
       summary: 'Legislative proposal amending the AI Act.',
       url: 'https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:52025PC0836', date: d('2025-11-19') },
@@ -788,6 +791,9 @@
       var image = extractImage(node) || firstImgFromHtml(descEl ? descEl.textContent : '');
 
       if (title && link) {
+        /* EUR-Lex serves corrigenda to other language versions under their
+           non-English title; they change nothing in the English text. */
+        if (/does not concern the English version/i.test(summary)) continue;
         if (applyFilter && !passesGate(title, summary)) continue;
         out.push({ key: sourceKey, title: title, url: link, date: date, summary: summary, image: image });
       }

@@ -3040,18 +3040,20 @@
   /* ── EUR-Lex (EU AI Act) ────────────────────────────── */
   var euAiKeywords = /artificial intelligence|AI Act|2024\/1689|high-risk AI|AI system|AI regulation|machine learning|algorithmic|AI agent|2025\/454/i;
 
-  /* Key EU AI Act documents. In practice this IS the tile: the fetch below
-     has never produced a match. Checked 2026-09-20, all six standing EUR-Lex
+  /* Key EU AI Act documents. In practice this is usually the tile: the fetch
+     below rarely produces a match. Checked 2026-09-20, all six standing EUR-Lex
      RSS feeds (rssId 162, 163, 164, 165, 166, 168, 169) return 100 items each
      and ZERO matching euAiKeywords, because they are chronological firehoses
      of all EU law and AI acts are too rare to stay in a 100-item window. No
      AI-specific EUR-Lex feed exists, and search-as-RSS forms 302 or 404. So
      unlike the Federal Register tile this cannot be fixed with a better query.
      The three entries below were each confirmed in force on 2026-09-20 against
-     their EUR-Lex pages. Re-confirm before changing them: the Federal Register
+     their EUR-Lex pages, and 2026/1744 on 2026-09-30 (OJ L 24.7.2026). The
+     Omnibus proposal stays as the record of what 2026/1744 adopted. Re-confirm before changing them: the Federal Register
      tile spent years showing EO 14110 after it was revoked, precisely because a
      silently-failing fetch made a stale fallback look like a live result. */
   var euAiFallback = [
+    { title: 'Regulation (EU) 2026/1744 - Digital Omnibus on AI, amending the AI Act', url: 'https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32026R1744', date: formatDate('2026-07-24'), type: 'Amending Regulation' },
     { title: 'Proposal amending Regulation (EU) 2024/1689 - Digital Omnibus on AI', url: 'https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:52025PC0836', date: formatDate('2025-11-19'), type: 'Legislative Proposal' },
     { title: 'European Strategy for Artificial Intelligence - Communication from the Commission', url: 'https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:52025DC0724', date: formatDate('2025-10-08'), type: 'Commission Communication' },
     { title: 'Commission Implementing Regulation (EU) 2025/454 - Rules for the application of the AI Act', url: 'https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32025R0454', date: formatDate('2025-03-07'), type: 'Implementing Regulation' },
@@ -3070,6 +3072,11 @@
       for (var i = 0; i < rssItems.length && filtered.length < 5; i++) {
         var title = rssItems[i].querySelector('title') ? rssItems[i].querySelector('title').textContent : '';
         var desc = rssItems[i].querySelector('description') ? rssItems[i].querySelector('description').textContent : '';
+        /* A corrigendum to another language version has no English title, so
+           EUR-Lex serves it in that language (seen 2026-09-30: a German-only
+           corrigendum to Regulation (EU) 2026/1744). It changes nothing in
+           the English text, so it is not news here. Skip it. */
+        if (/does not concern the English version/i.test(desc)) continue;
         if (euAiKeywords.test(title) || euAiKeywords.test(desc)) {
           var link = rssItems[i].querySelector('link') ? rssItems[i].querySelector('link').textContent : '';
           var pubDate = rssItems[i].querySelector('pubDate') ? rssItems[i].querySelector('pubDate').textContent : '';

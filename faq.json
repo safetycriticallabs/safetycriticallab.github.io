@@ -1,5 +1,5 @@
 {
-  "updated": "2026-09-18",
+  "updated": "2026-09-30",
   "note": "Question library for the Ask SCL page (search.html) and the ask worker grounding corpus (ask-worker.js). Single source of truth. Keep answers factual and do not overstate SCL's status. Each entry carries a stable id (faq-N) that the Worker renders in the prompt so the model can cite FAQ content; never renumber, append new ids.",
   "entries": [
     {
@@ -124,7 +124,7 @@
     {
       "id": "faq-8",
       "q": "What standards does the framework build on?",
-      "a": "The framework is domain-agnostic and layers on top of established safety-critical software standards rather than replacing them. It supplements DO-178C for airborne software, ISO 26262 for automotive, and NASA's NPR 7150.2D for spaceflight software, adding AI-specific requirements and verification. This lets teams keep their existing standard and add the AI assurance layer on top.",
+      "a": "The framework is domain-agnostic and layers on top of established safety-critical software standards rather than replacing them. It supplements DO-178C for airborne software, ISO 26262 for automotive, and NASA's NPR 7150.2D for spaceflight software, adding AI-specific requirements and verification. This lets teams keep their existing standard and add the AI assurance layer on top. Where a regulation bears on a requirement, the framework cites it too, for example articles of the EU AI Act, Regulation (EU) 2024/1689, which entered into force on 1 August 2024 and applies in stages.",
       "keywords": [
         "standards",
         "do-178c",
@@ -136,7 +136,9 @@
         "aviation",
         "automotive",
         "spaceflight",
-        "build"
+        "build",
+        "eu ai act",
+        "regulation"
       ],
       "link": "/framework"
     },
@@ -450,7 +452,7 @@
     {
       "id": "faq-26",
       "q": "What does an SCL certificate not say?",
-      "a": "A certificate records that a system met the framework's applicable requirements at the time of assessment. It does not say the system is safe, that it will not fail, or that it is approved for any regulatory purpose. It is not a regulator's clearance and does not move operator responsibility to SCL.",
+      "a": "A certificate records that a system met the framework's applicable requirements at the time of assessment. It does not say the system is safe, that it will not fail, or that it is approved for any regulatory purpose. It is not a regulator's clearance and does not move operator responsibility to SCL. In regulated fields a regulator decides whether a product may be sold or used, for example FDA for medical devices and the FAA for aircraft, and an SCL certificate sits alongside that review rather than replacing it.",
       "keywords": [
         "not",
         "does not",
@@ -466,7 +468,9 @@
         "limits",
         "disclaimer",
         "mean",
-        "sue"
+        "sue",
+        "regulator",
+        "who checks"
       ],
       "link": "/disclaimer"
     },

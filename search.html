@@ -90,7 +90,7 @@
 .search-form.is-composer {
   min-height: 0;
   padding: 8px 10px 8px 20px;
-  margin-top: 18px;
+  margin-top: 14px;
   flex-direction: row;
   align-items: center;
   flex-wrap: wrap;
@@ -309,8 +309,14 @@
 /* ── Ask SCL conversation thread (streamed, multi-turn) ──
    The visitor's question is a bubble, the answer is not. FAQ cards keep their
    card look below. The bubble itself is described at .ask-msg-user. */
-.ask-thread { display: flex; flex-direction: column; gap: 16px; --seal-size: 36px; --seal-gap: 14px; }
-.ask-thread > .ask-msg-ai { margin: 6px 0 14px; }
+/* Vertical rhythm, tightened 2026-10-02. Measured before: 16px from a question
+   to its answer and 44px from an answer to the next question, with a two
+   exchange thread standing 502px on a laptop and 786px on a phone. The gaps
+   now run 12px and 26px. The answer keeps 1.7, the leading the FAQ answers on
+   this same page use; 1.6 was tried and reviewed out, because it would have
+   made the product text the tightest running text on the site. */
+.ask-thread { display: flex; flex-direction: column; gap: 12px; --seal-size: 36px; --seal-gap: 14px; }
+.ask-thread > .ask-msg-ai { margin: 0 0 6px; }
 /* The visitor's question is a bubble again, in SCL blue. Evenly rounded rather
    than tailed, sized to its own text and set against the right edge, so it reads
    as the thing the visitor said and needs no label to say so. The seal answers
@@ -321,7 +327,7 @@
   max-width: min(78%, 560px);
   background: #0C2242; color: #FAF9F5;
   border: 0; border-radius: 16px;
-  padding: 11px 17px;
+  padding: 9px 15px;
   font-size: 15px; font-weight: 400; line-height: 1.55;
   overflow-wrap: anywhere;
 }
@@ -330,7 +336,7 @@
 .ask-msg-user-text { display: block; white-space: pre-wrap; }
 /* An answer belongs to the question above it, so it sits tight under it. The
    space between turns is opened above the next question instead. */
-.ask-thread > .ask-msg-user { margin: 14px 0 0; }
+.ask-thread > .ask-msg-user { margin: 8px 0 0; }
 .ask-thread > .ask-msg-user:first-child { margin-top: 0; }
 .ask-thread > .ask-msg-user + .ask-msg-ai { margin-top: 0; }
 /* The attachment travels WITH the message it was sent on, the way it reads in
@@ -362,7 +368,7 @@
   border-radius: 0;
   box-shadow: none;
   padding: 1px 0 0;
-  font-size: 15.5px; line-height: 1.72;
+  font-size: 15.5px; line-height: 1.7;
   color: var(--ink);
   white-space: pre-wrap; overflow-wrap: anywhere;
 }
@@ -395,7 +401,7 @@
    reserved their row: with no bubble to anchor it that read as an unexplained
    band of empty page between turns. They are quiet instead of invisible now, so
    the space they take is space they earn. */
-.ask-actions { display: flex; gap: 6px; margin-top: 10px; }
+.ask-actions { display: flex; gap: 6px; margin-top: 8px; }
 .ask-action {
   display: inline-block; text-decoration: none;
   font: inherit; font-size: 12px; line-height: 1.4;
@@ -454,7 +460,7 @@
 .ask-stop:focus-visible { outline: 2px solid #2E6DB4; outline-offset: 2px; }
 .ask-retry:focus-visible { outline: 2px solid #2E6DB4; outline-offset: 2px; }
 .ask-stopped {
-  display: block; margin-top: 10px; padding-top: 8px;
+  display: block; margin-top: 8px; padding-top: 6px;
   border-top: 1px solid rgba(12,34,66,0.08);
   font-size: 12px; line-height: 1.6; color: var(--warn-text);
 }
@@ -463,7 +469,7 @@
   outline: 2px solid #2E6DB4; outline-offset: 2px; border-radius: 8px;
 }
 .ask-histmark {
-  position: relative; margin: 18px 0 14px; padding: 0 0 0 0;
+  position: relative; margin: 14px 0 10px; padding: 0 0 0 0;
   font-size: 11.5px; line-height: 1.5; color: rgba(12,34,66,0.5);
   text-align: center;
 }
@@ -474,7 +480,7 @@
 }
 .ask-histmark::after { display: none; }
 .ask-restored {
-  margin: 0 0 14px; padding: 8px 12px;
+  margin: 0 0 10px; padding: 8px 12px;
   font-size: 12.5px; line-height: 1.55; color: rgba(12,34,66,0.65);
   background: rgba(12,34,66,0.035); border-radius: 8px;
 }
@@ -491,7 +497,7 @@
 /* Wait state: what the assistant is doing, so 25 seconds of silence does not
    read as a broken page. Measured median is 19s, p90 25s, worst 37s. */
 .ask-wait {
-  display: block; margin-top: 6px;
+  display: block; margin-top: 4px;
   font-size: 12px; line-height: 1.5; color: rgba(12,34,66,0.55);
 }
 /* Retry, offered on the error path so a failed question is one click from
@@ -510,8 +516,8 @@
    bubble so a copied answer carries its sources with it. */
 .ask-grounding {
   display: block;
-  margin: 10px 0 0;
-  padding-top: 8px;
+  margin: 8px 0 0;
+  padding-top: 6px;
   border-top: 1px solid rgba(12,34,66,0.08);
   font-size: 12px;
   line-height: 1.6;
@@ -534,24 +540,80 @@
   border: 1px solid rgba(12,34,66,0.16); border-radius: 5px;
   padding: 0 6px; margin: 0 1px;
 }
-.ask-thread-footer { margin: 10px 0 26px; }
+/* Under the composer, in chat mode, one row instead of a stack. Measured on
+   2026-10-02 before this change: consent, the Llama paragraph and New
+   conversation took 178px of an 800px laptop window and about 290px of an
+   812px phone, more than the composer and the chat header together, and all
+   of it came out of the transcript. The consent control stays the first line
+   under the composer, because that is the point of use the PIA describes; its
+   wording was shortened the same day, see consentHtml() for what moved to the
+   notice. The Llama notice drops to a summary line that still
+   carries the words Built with Llama and the instruction to verify anything
+   load-bearing, which the self-assessment drafts cite as the trust-calibration
+   measure, with the full paragraph one click away, and New conversation shares
+   that line. Opening the paragraph borrows room from the transcript for as
+   long as it is open, which is the visitor's call. */
+.ask-below-row {
+  display: flex; align-items: flex-start; justify-content: space-between;
+  flex-wrap: wrap; gap: 6px 18px;
+  margin: 8px 0 0;
+}
+.ask-about { flex: 1 1 260px; min-width: 0; }
+/* Open, the paragraph takes the whole row and New conversation drops under it,
+   so keyboard focus runs strictly downward through the open text. */
+.ask-about[open] { flex-basis: 100%; }
+.ask-about > summary {
+  display: inline-block;
+  list-style: none; cursor: pointer;
+  font-size: 12px; line-height: 1.6; color: rgba(12,34,66,0.6);
+  padding: 0 2px; border-radius: 4px;
+}
+.ask-about > summary::-webkit-details-marker { display: none; }
+.ask-about > summary:hover { color: #0C2242; }
+.ask-about > summary:focus-visible { outline: 2px solid #2E6DB4; outline-offset: 2px; }
+/* The toggle words and their chevron stay together when the line wraps */
+.ask-about-label { white-space: nowrap; }
+/* Same chevron as the nav dropdowns, drawn from borders, so no glyph to load.
+   Position and rotation are both in the transform, so it pivots in place. */
+.ask-about-arrow {
+  width: 6px; height: 6px; display: inline-block; margin-left: 7px;
+  border-right: 1.5px solid currentColor; border-bottom: 1.5px solid currentColor;
+  transform: translateY(-2px) rotate(45deg);
+  transition: transform 0.2s;
+}
+.ask-about[open] .ask-about-arrow { transform: translateY(2px) rotate(-135deg); }
+@media (prefers-reduced-motion: reduce) { .ask-about-arrow { transition: none; } }
+.ask-about .ask-disclosure { margin: 6px 0 0; }
+.ask-thread-footer { margin: 0; flex: none; }
 .ask-new {
   font-family: var(--sans); font-size: 12px; font-weight: 500;
-  letter-spacing: 0.03em; text-transform: uppercase;
+  letter-spacing: 0.03em; text-transform: uppercase; line-height: 1.6;
   color: #1E5A9A; background: none; border: none; cursor: pointer; padding: 0;
   text-decoration: underline; text-underline-offset: 4px;
 }
 .ask-new:hover { color: #0C2242; }
 
-/* Sender tag above each AI bubble (only used when ASK_ENDPOINT is configured) */
+/* Sender tag above each AI answer, kept for assistive technology only. On
+   screen the seal beside every answer and the header above the thread already
+   say who is speaking, so the printed tag was 22px of repetition per answer
+   (measured 2026-10-02). A screen reader moving through the log still needs
+   the words, because the question bubble and the answer are otherwise two
+   unlabelled blocks of text, so the tag stays in the DOM and leaves the layout
+   with the same clip pattern .search-results-label uses in chat mode. */
 .ask-answer-tag {
-  font-family: var(--mono);
-  font-size: 10px;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: rgba(12,34,66,0.55);
-  margin: 0 0 6px 2px;
+  position: absolute;
+  width: 1px; height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  user-select: none;   /* a drag-select or Cmd+A paste should match the screen */
 }
+/* With the tag out of the flow the first line of the answer meets the seal
+   directly; 4px of lead plus the body's own 1px puts the centre of that 26.4px
+   line at 18.2px, against the 36px seal's 18. The phone seal is 26px, so the
+   phone block takes the lead back out. */
+.ask-msg-content { padding-top: 4px; }
 .ask-disclosure {
   font-size: 12px;
   line-height: 1.6;
@@ -617,34 +679,44 @@
 .search-page.chat-active .search-eyebrow,
 .search-page.chat-active .search-title,
 .search-page.chat-active .search-lead { display: none; }
+/* One row: seal, name, status, all on a line. Measured 2026-10-02 before this
+   change the header stood 63px tall on a laptop and 78px on a phone, where the
+   status line wrapped under the name; the nav directly above it already says
+   where the visitor is, so the header's job is to name the assistant and carry
+   the live seal, and a 32px seal does that as well as a 42px one. On a phone
+   the status keeps every word (the readiness self-assessment cites it as the
+   visible state under AI-9.2) and drops to a tighter setting under the name.
+   The row wraps rather than clips: under a browser minimum font size or
+   text-only zoom the status falls under the name, as it did before. */
 .search-page.chat-active .chat-header {
   display: flex;
   align-items: center;
-  gap: 14px;
+  gap: 12px;
   flex: none;
-  padding: 6px 2px 14px;
+  padding: 2px 2px 8px;
   border-bottom: 1px solid rgba(46,109,180,0.16);
 }
 .chat-avatar {
   display: block;
-  width: 42px; height: 42px; border-radius: 50%;
+  width: 32px; height: 32px; border-radius: 50%;
   border: 1px solid rgba(46,109,180,0.3);
   background: var(--bg);
   flex: none;
   overflow: hidden;
   box-shadow: 0 1px 4px rgba(15,35,64,0.08);
 }
+.chat-header-text { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0 12px; min-width: 0; }
 .chat-header-name {
   font-family: var(--sans);
   font-size: 16px; font-weight: 600;
   color: #0C2242; line-height: 1.2;
+  white-space: nowrap;
 }
 .chat-header-status {
-  display: flex; align-items: center;
+  display: block; min-width: 0;
   font-family: var(--mono);
   font-size: 10.5px; letter-spacing: 0.1em; text-transform: uppercase;
   color: rgba(12,34,66,0.55);
-  margin-top: 4px;
 }
 .search-page.chat-active .search-results {
   flex: 1 1 auto;
@@ -661,7 +733,7 @@
   flex: 1 1 auto;
   min-height: 96px;
   overflow-y: auto;
-  padding: 8px 10px 14px 2px;
+  padding: 4px 10px 10px 2px;
   overscroll-behavior: contain;
 }
 .search-page.chat-active #search-results-list::-webkit-scrollbar { width: 8px; }
@@ -701,7 +773,11 @@
 /* The answer takes the panel's full width. A narrower reading measure was tried
    and read as a column pushed against the left edge with the page empty beside
    it; the panel is already the measure. */
-.ask-msg-content { min-width: 0; flex: 1; max-width: 100%; }
+/* position: relative gives the clipped sender tag its containing block here,
+   inside the scrolling list. Without it the tag's box resolves against the
+   page whenever the article carries no transform, which is every answer under
+   prefers-reduced-motion, and the document grew by the height of the thread. */
+.ask-msg-content { position: relative; min-width: 0; flex: 1; max-width: 100%; }
 
 
 /* Messages enter with a small rise instead of popping in */
@@ -846,8 +922,17 @@
      desktop; only the vertical changes when a conversation starts. */
   .search-page.chat-active { padding: 10px 24px 14px; }
   .search-page.chat-active .search-inner { height: calc(100dvh - 72px - 24px); }
-  .chat-avatar { width: 36px; height: 36px; }
+  .chat-avatar { width: 26px; height: 26px; }
+  .search-page.chat-active .chat-header { gap: 10px; }
+  .chat-header-text { display: block; }
+  .chat-header-name { font-size: 15px; }
+  /* The status face is DM Sans (var(--mono) resolves to it). At 10.5px with
+     0.1em tracking its 44 characters did not fit in the 291px beside the seal
+     and wrapped; at 10px with 0.04em they measure 258px, 33px to spare at a
+     375px viewport, one line down to 360 and two lines at 320. */
+  .chat-header-status { font-size: 10px; letter-spacing: 0.04em; margin-top: 2px; }
   .ask-thread { --seal-size: 26px; --seal-gap: 10px; }
+  .ask-msg-content { padding-top: 0; }
   .search-form { padding: 20px 22px; min-height: 160px; }
   .search-form.is-composer { padding: 8px 10px 8px 16px; min-height: 0; }
   .ask-msg-user { max-width: 88%; font-size: 14.5px; }
@@ -861,6 +946,11 @@
   .ask-attach-btn,
   .search-form.is-composer .search-submit { width: 44px; height: 44px; }
   .ask-chip-remove { width: 32px; height: 32px; }
+  /* The summary and New conversation are the two smallest targets under the
+     composer on a phone; a little vertical padding keeps a thumb aimed at one
+     from landing on the consent box above or the other control below. */
+  .ask-about > summary { padding: 3px 2px; }
+  .ask-new { padding: 6px 0; }
   /* The chip has to be able to shrink, or a long filename plus a wider remove
      button pushes the composer past the viewport. */
   .ask-attachment { min-width: 0; }
@@ -924,7 +1014,7 @@
 
     <div class="chat-header">
       <span class="chat-avatar" id="chat-avatar-slot" aria-hidden="true"></span>
-      <div>
+      <div class="chat-header-text">
         <div class="chat-header-name">Ask SCL</div>
         <div class="chat-header-status">AI assistant &middot; grounded in SCL documentation</div>
       </div>
@@ -1516,8 +1606,8 @@
      completion handler no-ops when its captured generation is stale. */
   var askGen = 0;
 
-  var ASK_DISCLOSURE = 'Built with Llama. Answers come from an open-weight Llama 3.1 model SCL fine-tuned and runs on its own hardware, grounded in SCL\'s published documentation. A Cloudflare ranking service sees your question in order to choose which passages are used. Verify anything load-bearing against the standard. '
-    + '<a href="https://www.llama.com/llama3_1/license/" target="_blank" rel="noopener">Llama 3.1 Community License</a>';
+  var ASK_DISCLOSURE = 'Built with Llama. Answers come from an open-weight Llama 3.1 model SCL fine-tuned and runs on its own hardware, grounded in SCL\'s published documentation. A Cloudflare ranking service sees your question in order to choose which passages are used. That service is not always available, and when it is not, SCL\'s own keyword matching chooses the passages instead. Verify anything load-bearing against the standard. '
+    + '<a href="https://dev.meta.ai/llama/llama3_1/license" target="_blank" rel="noopener">Llama 3.1 Community License</a>';
   /* The thread footer only exists after the first send; the hero copy shows
      the same notice before that. Ask mode only: a plain library search has
      no model to disclose. */
@@ -1536,12 +1626,19 @@
   function setAskConsent(on) {
     try { on ? localStorage.setItem(ASK_CONSENT_KEY, '1') : localStorage.removeItem(ASK_CONSENT_KEY); } catch (e) {}
   }
+  /* The label is the consent statement plus the two facts a visitor weighs at
+     the moment of ticking, and the link to the notice that holds the rest. It
+     used to carry four sentences and ran to four lines on a phone, which made
+     it the tallest thing under the composer once the Llama paragraph folded
+     away (2026-10-02). "Off by default" is gone from the words because the
+     unticked box says it; the scrubbing of contact details, the date and the
+     passages stored are in the notice at /privacy#ask, one tap from here. */
   function consentHtml() {
     return '<label class="ask-consent">'
       + '<input type="checkbox" id="ask-consent-box"' + (askConsent() ? ' checked' : '') + '>'
-      + '<span>Let SCL keep my questions to improve this assistant. Off by default. '
-      + 'Questions are stored without any identifier and scrubbed of contact details. '
-      + 'Attached documents are never kept. <a href="/privacy#ask">How this works</a></span>'
+      + '<span>Let SCL keep my questions to improve this assistant. '
+      + 'Stored without identifiers; attached documents are never kept. '
+      + '<a href="/privacy#ask">How this works</a></span>'
       + '</label>';
   }
 
@@ -1866,10 +1963,25 @@
          than the last thing on the page. It is a choice the visitor has to be
          able to find; the disclosure below it is only informational. */
       consentHtml()
-      + '<p class="ask-disclosure">' + ASK_DISCLOSURE + '</p>'
-      + '<div class="ask-thread-footer"><button type="button" class="ask-new" id="ask-new">New conversation</button></div>'
+      /* One row under the consent line: the Llama notice as a summary that
+         opens to the full paragraph, and New conversation beside it. The hero
+         copy of the notice still shows the whole paragraph before the first
+         send; this is the chat-mode form, where the transcript needs the room. */
+      + '<div class="ask-below-row">'
+      +   '<details class="ask-about">'
+      +     '<summary>Built with Llama. Verify anything load-bearing against the standard. '
+      +       '<span class="ask-about-label">About these answers<span class="ask-about-arrow" aria-hidden="true"></span></span></summary>'
+      +     '<p class="ask-disclosure">' + ASK_DISCLOSURE + '</p>'
+      +   '</details>'
+      +   '<div class="ask-thread-footer"><button type="button" class="ask-new" id="ask-new">New conversation</button></div>'
+      + '</div>'
       + '<div class="ask-related">' + relatedHtml(q) + '</div>';
     resultsWrap.appendChild(threadFooter);   /* below the composer, outside the list innerHTML wipes */
+    /* Opening the paragraph shrinks the transcript from the bottom. A reader at
+       the end of the newest answer would otherwise watch its last lines slide
+       under the composer, so the transcript follows if it was near the bottom
+       and is left alone if the reader had scrolled up to reread. */
+    threadFooter.querySelector('.ask-about').addEventListener('toggle', function () { followIfNearBottom(resultsList); });
     var consentBox = document.getElementById('ask-consent-box');
     if (consentBox) consentBox.addEventListener('change', function () { setAskConsent(this.checked); });
     document.getElementById('ask-new').addEventListener('click', function () {

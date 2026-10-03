@@ -1865,10 +1865,58 @@
     return handle;
   }
 
+  /* Whether the transcript should keep the newest text in view. The previous
+     rule followed whenever the reader was within 260px of the bottom, and that
+     made scrolling up during a stream impossible: a wheel tick moves about
+     100px, the next token arrived milliseconds later and snapped the list back
+     to the bottom, so the reader could never get out of the band (Kevin,
+     2026-10-02). The reader's intent is now read directly. A wheel up, an up
+     key, a press on the scrollbar or a finger on the list pauses following
+     before the browser has even scrolled, so no token can race it. Returning
+     to the bottom by a downward move, or sending a new question, resumes it. */
+  var followStream = true;
+  var FOLLOW_REARM_PX = 32;
+  var lastListTop = 0, touchListTop = 0;
+  function listGap() { return resultsList.scrollHeight - resultsList.scrollTop - resultsList.clientHeight; }
+  /* Up-input counts as intent only when there is something above to reveal. A
+     list that cannot scroll fires no scroll event, so a disarm there could never
+     be undone and the stream would quietly run on below the fold. */
+  function canRevealAbove() { return resultsList.scrollTop > 0; }
+  resultsList.addEventListener('wheel', function (e) { if (e.deltaY < 0 && canRevealAbove()) followStream = false; }, { passive: true });
+  resultsList.addEventListener('keydown', function (e) {
+    var up = e.key === 'ArrowUp' || e.key === 'PageUp' || e.key === 'Home' || (e.key === ' ' && e.shiftKey);
+    if (up && canRevealAbove()) followStream = false;
+  });
+  /* A press on the vertical scrollbar is the start of a drag; pre-empt it the
+     way wheel and keys are, so the first token cannot swallow the gesture. */
+  resultsList.addEventListener('mousedown', function (e) {
+    if (e.target === resultsList && e.offsetX >= resultsList.clientWidth && canRevealAbove()) followStream = false;
+  });
+  /* A finger on the list pauses following while it is down. Lifting it re-arms
+     when no drag happened, a tap or a long press to select, or when it ends at
+     the bottom; touchcancel is Safari taking the gesture over mid-press. */
+  resultsList.addEventListener('touchstart', function () { touchListTop = resultsList.scrollTop; followStream = false; }, { passive: true });
+  function touchDone() { if (resultsList.scrollTop === touchListTop || listGap() < FOLLOW_REARM_PX) followStream = true; }
+  resultsList.addEventListener('touchend', touchDone, { passive: true });
+  resultsList.addEventListener('touchcancel', touchDone, { passive: true });
+  /* Direction matters. Smooth scrolling and trackpads move up in steps of a few
+     pixels, each one a scroll event inside the band, and re-arming on any of
+     them would hand the reader straight back to the bottom. An upward move
+     disarms, unless it is the browser clamping onto the bottom after the list
+     changed size; only a downward move into the band, which includes the
+     autoscroll's own landing, re-arms. */
+  resultsList.addEventListener('scroll', function () {
+    var y = resultsList.scrollTop, gap = listGap();
+    if (y < lastListTop) { if (gap > 1) followStream = false; }
+    else if (gap < FOLLOW_REARM_PX) followStream = true;
+    lastListTop = y;
+  }, { passive: true });
+
   /* In chat mode every scroll targets the thread region ONLY: scrollIntoView
      walks scrollable ancestors and was dragging the WINDOW down with it,
      pushing the panel header under the fixed nav. */
   function scrollThreadBottom() {
+    followStream = true;   /* a new message is what the reader is waiting for */
     if (pageEl.classList.contains('chat-active')) {
       resultsList.scrollTop = resultsList.scrollHeight;
     } else if (thread && thread.lastChild) {
@@ -1876,12 +1924,12 @@
     }
   }
 
-  /* Follow the stream only while the reader is already near the bottom;
-     scrolling up to reread must not be fought by the autoscroll. */
+  /* Follow the stream only while the reader wants the bottom; scrolling up to
+     reread must not be fought by the autoscroll. */
   function followIfNearBottom(el) {
+    if (!followStream) return;
     if (pageEl.classList.contains('chat-active')) {
-      var gap = resultsList.scrollHeight - resultsList.scrollTop - resultsList.clientHeight;
-      if (gap < 260) resultsList.scrollTop = resultsList.scrollHeight;
+      resultsList.scrollTop = resultsList.scrollHeight;
       return;
     }
     var r = el.getBoundingClientRect();

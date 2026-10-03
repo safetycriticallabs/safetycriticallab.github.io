@@ -86,7 +86,7 @@ const DEFAULT_MODEL = 'scl-sft-v2:latest';  // production since 2026-09-10; roll
                                             // which is the un-tuned base and has not been production since 09-02.
                                             // This constant is the floor if OLLAMA_MODEL is ever lost, so it must
                                             // track whatever production actually serves.
-const WORKER_BUILD = '2026-10-01.1'; // bump on every dashboard paste; echoed by /bench/retrieve so a paste can be verified from outside
+const WORKER_BUILD = '2026-10-02.1'; // bump on every dashboard paste; echoed by /bench/retrieve so a paste can be verified from outside
 const MAX_QUESTION_CHARS = 500;
 const MAX_HISTORY_MSGS = 8;          // most recent turns kept
 const MAX_HISTORY_MSG_CHARS = 1200;  // each turn truncated to this
@@ -546,6 +546,160 @@ function selectExcerpts(question, framework, qvec, vectors) {
     parts.push('\n[' + picked[n].id + '] ' + picked[n].title + '\n' + picked[n].text);
   }
   return parts.join('\n');
+}
+
+/* ── Explainers and reference summaries (step 3 stage E, 2026-10-02) ───────
+   Entries whose id starts exp- (SCL's plain-language explainers) or ref- (an
+   outside document's own summary, quoted) are searched apart from SCL's
+   framework entries, never with them:
+   - The framework search above (keyword, rescue, rerank) runs on the
+     framework entries ALONE. Adding any number of exp- or ref- entries leaves
+     every question's framework excerpts byte for byte as they were, because
+     keyword scoring weighs each word by how many entries contain it, and a
+     shared pool shifted those weights (measured: bench q28 lost its gold
+     AI-8.3 when six explainers joined the pool). This is R10: outside text
+     never pushes SCL's own entries aside.
+   - A separate, deterministic pick adds explainers and reference summaries on
+     their own budget, each kind under its own heading AFTER the framework
+     excerpts, explainers before references, so a reference summary is never
+     put ahead of SCL's text. It runs whether or not the framework search found
+     anything, so "Is AI regulated?" can reach an explainer, and it spends no
+     reranker call.
+   - By meaning, an entry qualifies only when the question sits closer to it
+     than to SCL's own nearest framework entry, by SUPP_EXP_MARGIN (explainers)
+     or SUPP_REF_MARGIN (references) in cosine. An absolute floor cannot work:
+     nomic similarities sit in a narrow band, and the broad explainers cleared
+     any usable floor on 41 of the 64 bench questions, which are about SCL.
+     Measured against the framework instead, no bench question is closer to a
+     reference, and one is closer to an explainer by the margin.
+   - Exactly: an explainer also qualifies when one of its multi-word keywords
+     appears in the question. A question that names a Federal Register
+     document number gets only the references it names (up to SUPP_REF_MAX);
+     otherwise at most SUPP_REF_UNNAMED_MAX reference qualifies by meaning,
+     because the next one down was usually a sibling document (an extension
+     notice beside the notice it extends).
+   - With no exp- or ref- entry in the corpus (the published corpus until step
+     3 stage I) splitCorpus hands back the very objects it was given and the
+     pick returns '', so every prompt is byte for byte what it was before.
+   Margins were calibrated on ask-corpus/calibration/, the practice set and the
+   bench, never on the held-out set (ask-eval/heldout/): 26 of 30 explainer and
+   28 of 30 reference calibration questions found their entry, no negative
+   question drew a reference, and the bench drew one explainer. */
+const SUPP_EXP_MAX = 2;
+const SUPP_REF_MAX = 2;
+const SUPP_REF_UNNAMED_MAX = 1;
+const SUPP_BUDGET_CHARS = 6500;
+const SUPP_EXP_MARGIN = 0.02;
+const SUPP_REF_MARGIN = 0.01;
+const EXPLAINER_HEADING = '--- SCL explainers: plain-language background written by SCL, not framework requirements (cite these IDs) ---';
+const REFERENCE_HEADING = '--- Reference summaries of outside documents: each is the publishing agency\'s own summary, not SCL text and not an SCL requirement (cite these IDs) ---';
+
+function isSupplementaryEntry(c) {
+  return !!c && typeof c.id === 'string' && /^(?:exp|ref)-/.test(c.id);
+}
+
+/* {fw, vectors} for the framework search (framework entries only, vectors
+   filtered to match or null), plus the exp-/ref- entries with their vector
+   rows. With none of those, fw and vectors are returned unchanged. */
+function splitCorpus(fw, vectors) {
+  var entries = (fw && Array.isArray(fw.entries)) ? fw.entries : [];
+  var coreIdx = [], suppIdx = [];
+  for (var i = 0; i < entries.length; i++) (isSupplementaryEntry(entries[i]) ? suppIdx : coreIdx).push(i);
+  if (!suppIdx.length) return { fw: fw, vectors: vectors, supp: [], dim: vectors ? vectors.dim : 0 };
+  var pick = function (arr, idx) { return idx.map(function (k) { return arr[k]; }); };
+  var fwCore = Object.assign({}, fw, { entries: pick(entries, coreIdx) });
+  var vOk = !!(vectors && Array.isArray(vectors.vecs) && vectors.vecs.length === entries.length
+               && Array.isArray(vectors.scales) && Array.isArray(vectors.ids));
+  var vCore = null;
+  if (vOk) {
+    vCore = Object.assign({}, vectors, { count: coreIdx.length, ids: pick(vectors.ids, coreIdx),
+                                         scales: pick(vectors.scales, coreIdx), vecs: pick(vectors.vecs, coreIdx) });
+    if (!vectorsValid(vCore, fwCore)) vCore = null;
+  }
+  var supp = [];
+  for (var j = 0; j < suppIdx.length; j++) {
+    var k = suppIdx[j];
+    supp.push({ c: entries[k], vec: vOk ? vectors.vecs[k] : null, scale: vOk ? vectors.scales[k] : null });
+  }
+  return { fw: fwCore, vectors: vCore, supp: supp, dim: vOk ? vectors.dim : 0 };
+}
+
+function suppCosine(qvec, s, dim) {
+  if (!qvec || !s.vec || !dim || qvec.length !== dim || s.vec.length !== dim) return null;
+  var qn = 0, dot = 0;
+  for (var d = 0; d < dim; d++) { qn += qvec[d] * qvec[d]; dot += s.vec[d] * qvec[d]; }
+  return (dot * s.scale) / (Math.sqrt(qn) || 1);
+}
+
+function refDocNumber(id) {
+  var m = /^ref-fr-(\d{4}-\d{4,6})-\d+$/.exec(id);
+  return m ? m[1] : '';
+}
+
+/* The exp-/ref- excerpt block for one question, or ''. Any surprise returns ''
+   and leaves the framework excerpts standing. */
+function selectSupplementary(question, sp, qvec) {
+  if (!sp || !sp.supp || !sp.supp.length) return '';
+  try {
+    var qNorm = question.toLowerCase();
+    // The question's similarity to SCL's nearest framework entry: the bar an
+    // explainer or reference must clear by its margin. No usable vectors, no
+    // bar and no meaning-based pick (exact matches still count).
+    var coreMax = null;
+    if (qvec && sp.vectors && sp.dim && qvec.length === sp.dim) {
+      var cs = cosineAll(qvec, sp.vectors);
+      for (var ci = 0; ci < cs.length; ci++) if (coreMax === null || cs[ci] > coreMax) coreMax = cs[ci];
+    }
+    var exp = [], ref = [], namedAny = false;
+    for (var i = 0; i < sp.supp.length; i++) {
+      var s = sp.supp[i], c = s.c;
+      var sim = coreMax === null ? null : suppCosine(qvec, s, sp.dim);
+      var phrase = false;
+      var kws = c.keywords || [];
+      for (var k = 0; k < kws.length; k++) {
+        if (kws[k].length >= 8 && kws[k].indexOf(' ') !== -1 && qNorm.indexOf(kws[k]) !== -1) { phrase = true; break; }
+      }
+      if (c.id.lastIndexOf('exp-', 0) === 0) {
+        if (phrase || (sim !== null && sim - coreMax >= SUPP_EXP_MARGIN)) exp.push({ c: c, strong: phrase, sim: sim === null ? -1 : sim });
+      } else {
+        var doc = refDocNumber(c.id);
+        var named = !!doc && new RegExp('(^|[^0-9])' + doc + '([^0-9]|$)').test(qNorm);
+        if (named) namedAny = true;
+        if (named || (sim !== null && sim - coreMax >= SUPP_REF_MARGIN)) ref.push({ c: c, strong: named, sim: sim === null ? -1 : sim });
+      }
+    }
+    var order = function (a, b) { return a.strong !== b.strong ? (a.strong ? -1 : 1) : b.sim - a.sim; };
+    exp.sort(order);
+    ref.sort(order);
+    // A question naming a document gets the documents it names; otherwise the
+    // best reference by meaning alone.
+    ref = namedAny ? ref.filter(function (x) { return x.strong; }) : ref.slice(0, SUPP_REF_UNNAMED_MAX);
+    var used = 0;
+    var section = function (list, max, heading) {
+      var out = [];
+      for (var t = 0; t < list.length && out.length < max; t++) {
+        var e = list[t].c;
+        if (used + e.text.length > SUPP_BUDGET_CHARS) continue;
+        used += e.text.length;
+        out.push(e);
+      }
+      if (!out.length) return '';
+      var parts = ['\n\n' + heading];
+      for (var n = 0; n < out.length; n++) parts.push('\n[' + out[n].id + '] ' + out[n].title + '\n' + out[n].text);
+      return parts.join('\n');
+    };
+    return section(exp, SUPP_EXP_MAX, EXPLAINER_HEADING) + section(ref, SUPP_REF_MAX, REFERENCE_HEADING);
+  } catch (err) {
+    console.log('explainer and reference pick failed; framework picks kept', err && err.message);
+    return '';
+  }
+}
+
+/* The keyword path's whole excerpt block (framework, then explainers and
+   references), for the offline harness, which has no reranker. */
+function selectExcerptsSplit(question, fw, qvec, vectors) {
+  var sp = splitCorpus(fw, vectors);
+  return selectExcerpts(question, sp.fw, sp.vectors ? qvec : null, sp.vectors) + selectSupplementary(question, sp, qvec);
 }
 
 /* ── Opt-in question retention (2026-08-28) ───────────────────────────────
@@ -1086,15 +1240,19 @@ async function loadGrounding(env, retrievalQuery, upstreamHeaders) {
    then serves FAQ-only). `keyword` is returned for the bench route, which
    reuses it rather than scoring the corpus a second time. */
 async function selectGrounding(retrievalQuery, fw, vectors, qvec, env) {
-  const keyword = selectExcerpts(retrievalQuery, fw, vectors ? qvec : null, vectors);
+  // Framework search on framework entries only; explainers and references
+  // after it on their own (see "Explainers and reference summaries").
+  const sp = splitCorpus(fw, vectors);
+  const keyword = selectExcerpts(retrievalQuery, sp.fw, sp.vectors ? qvec : null, sp.vectors);
   let excerpts = keyword;
   let rr = null;
   if (env.RERANK === 'on') {
-    rr = await rerankSelect(retrievalQuery, fw, vectors ? qvec : null, vectors, env,
+    rr = await rerankSelect(retrievalQuery, sp.fw, sp.vectors ? qvec : null, sp.vectors, env,
                             env.RERANK_GUARD || 'none', parseFloat(env.RERANK_MARGIN || '1'));
     if (rr) excerpts = rr.text;
   }
-  return { excerpts: excerpts, rerankUsed: !!rr, rr: rr, keyword: keyword };
+  const supplementary = selectSupplementary(retrievalQuery, sp, qvec);
+  return { excerpts: excerpts + supplementary, rerankUsed: !!rr, rr: rr, keyword: keyword, supplementary: supplementary };
 }
 
 /* The system message. Excerpts go LAST so the stable instructions+FAQ prefix
@@ -1258,6 +1416,9 @@ async function benchRetrieve(request, env) {
     fw = merged.fw;
     vectors = merged.vectors;
   }
+  // The framework search below runs on framework entries only, exactly as
+  // selectGrounding does (step 3 stage E).
+  var sp = splitCorpus(fw, vectors);
 
   // The visitor path, exactly as the answer route runs it (its catch included),
   // unless the request opts out with "prompt": false to save its reranker call.
@@ -1285,7 +1446,7 @@ async function benchRetrieve(request, env) {
         && margin === parseFloat(env.RERANK_MARGIN || '1') && !(pinMaxArg > 0) && !(pinScoreArg > 0)) {
       rr = visitor.rr;   // the identical call the visitor path just made
     } else {
-      rr = await rerankSelect(question, fw, vectors ? qvec : null, vectors, env, guard, margin, pinMaxArg, pinScoreArg);
+      rr = await rerankSelect(question, sp.fw, sp.vectors ? qvec : null, sp.vectors, env, guard, margin, pinMaxArg, pinScoreArg);
     }
     if (rr) {
       out.rerank_used = true;
@@ -1301,9 +1462,14 @@ async function benchRetrieve(request, env) {
   if (!excerpts) {
     // The visitor path already ran this exact call (same question, corpus and
     // vectors); reuse it so the bench scores the corpus once, not twice.
-    excerpts = (visitor && !visitor.threw) ? visitor.keyword : selectExcerpts(question, fw, vectors ? qvec : null, vectors);
+    excerpts = (visitor && !visitor.threw) ? visitor.keyword : selectExcerpts(question, sp.fw, sp.vectors ? qvec : null, sp.vectors);
     out.ids = servedIdsOf(excerpts);
   }
+  // Explainers and references follow the framework excerpts, as on the
+  // visitor path; out.ids stays the framework ids, these are listed apart.
+  var suppBlock = (visitor && !visitor.threw) ? visitor.supplementary : selectSupplementary(question, sp, qvec);
+  excerpts += suppBlock;
+  out.supplementary_ids = servedIdsOf(suppBlock);
   out.excerpts_chars = excerpts.length;
   out.excerpts = excerpts;
 

@@ -86,7 +86,7 @@ const DEFAULT_MODEL = 'scl-sft-v2:latest';  // production since 2026-09-10; roll
                                             // which is the un-tuned base and has not been production since 09-02.
                                             // This constant is the floor if OLLAMA_MODEL is ever lost, so it must
                                             // track whatever production actually serves.
-const WORKER_BUILD = '2026-10-02.1'; // bump on every dashboard paste; echoed by /bench/retrieve so a paste can be verified from outside
+const WORKER_BUILD = '2026-10-03.1'; // bump on every dashboard paste; echoed by /bench/retrieve so a paste can be verified from outside
 const MAX_QUESTION_CHARS = 500;
 const MAX_HISTORY_MSGS = 8;          // most recent turns kept
 const MAX_HISTORY_MSG_CHARS = 1200;  // each turn truncated to this
@@ -614,7 +614,8 @@ function selectExcerpts(question, framework, qvec, vectors) {
      Measured against the framework instead, no bench question is closer to a
      reference, and one is closer to an explainer by the margin.
    - Exactly: an explainer also qualifies when one of its multi-word keywords
-     appears in the question. A question that names a Federal Register
+     appears in the question, unless its cosine sits more than
+     SUPP_PHRASE_FLOOR below the nearest framework entry's. A question that names a Federal Register
      document number gets only the references it names (up to SUPP_REF_MAX);
      otherwise at most SUPP_REF_UNNAMED_MAX reference qualifies by meaning,
      because the next one down was usually a sibling document (an extension
@@ -623,15 +624,19 @@ function selectExcerpts(question, framework, qvec, vectors) {
      3 stage I) splitCorpus hands back the very objects it was given and the
      pick returns '', so every prompt is byte for byte what it was before.
    Margins were calibrated on ask-corpus/calibration/, the practice set and the
-   bench, never on the held-out set (ask-eval/heldout/): 26 of 30 explainer and
-   28 of 30 reference calibration questions found their entry, no negative
-   question drew a reference, and the bench drew one explainer. */
+   bench, never on the held-out set (ask-eval/heldout/). Retuned 2026-10-03 after
+   a rewording test (four visitor styles per question) showed reworded questions
+   losing their entry and drawing the wrong reference: on the calibration and
+   practice originals and their 296 rewrites, a fitting entry is found for 88
+   and 80 percent, an irrelevant reference appears for 7 and 6 percent, and the
+   bench draws one explainer and no reference. */
 const SUPP_EXP_MAX = 2;
 const SUPP_REF_MAX = 2;
 const SUPP_REF_UNNAMED_MAX = 1;
 const SUPP_BUDGET_CHARS = 6500;
-const SUPP_EXP_MARGIN = 0.02;
-const SUPP_REF_MARGIN = 0.01;
+const SUPP_EXP_MARGIN = 0.01;
+const SUPP_REF_MARGIN = 0.03;
+const SUPP_PHRASE_FLOOR = -0.06;
 const EXPLAINER_HEADING = '--- SCL explainers: plain-language background written by SCL, not framework requirements (cite these IDs) ---';
 const REFERENCE_HEADING = '--- Reference summaries of outside documents: each is the publishing agency\'s own summary, not SCL text and not an SCL requirement (cite these IDs) ---';
 
@@ -705,7 +710,10 @@ function selectSupplementary(question, sp, qvec) {
         if (kw.length >= 8 && kw.indexOf(' ') !== -1 && qNorm.indexOf(kw) !== -1) { phrase = true; break; }
       }
       if (c.id.lastIndexOf('exp-', 0) === 0) {
-        if (phrase || (sim !== null && sim - coreMax >= SUPP_EXP_MARGIN)) exp.push({ c: c, strong: phrase, sim: sim === null ? -1 : sim });
+        // A keyword phrase counts unless the explainer sits far below SCL's
+        // nearest framework entry (SUPP_PHRASE_FLOOR); without vectors it counts.
+        var phraseOk = phrase && (sim === null || sim - coreMax >= SUPP_PHRASE_FLOOR);
+        if (phraseOk || (sim !== null && sim - coreMax >= SUPP_EXP_MARGIN)) exp.push({ c: c, strong: phraseOk, sim: sim === null ? -1 : sim });
       } else {
         var doc = refDocNumber(c.id);
         var named = !!doc && new RegExp('(^|[^0-9])' + doc + '([^0-9]|$)').test(qNorm);

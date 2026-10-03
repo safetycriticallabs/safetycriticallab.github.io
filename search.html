@@ -494,11 +494,34 @@
   margin: 6px 2px 0; min-height: 0; text-align: right;
 }
 .ask-count.is-at-cap { color: var(--warn-text); text-align: left; }
-/* Wait state: what the assistant is doing, so 25 seconds of silence does not
-   read as a broken page. Measured median is 19s, p90 25s, worst 37s. */
+/* Wait state: what the assistant is doing and for how long, so 25 seconds of
+   silence does not read as a broken page. Measured median is 19s, p90 25s,
+   worst 37s. */
+.ask-wait-row {
+  display: flex; align-items: baseline; gap: 10px;
+  margin-top: 4px;
+}
 .ask-wait {
-  display: block; margin-top: 4px;
+  display: inline;
   font-size: 12px; line-height: 1.5; color: rgba(12,34,66,0.55);
+}
+/* Elapsed seconds beside the stage line, added 2026-10-02. The stage words say
+   what is happening; the clock says how long it has been, which is the other
+   thing a visitor wants from a page that is silent for twenty seconds, and it
+   makes the wait legible as a measurement rather than a stall. The served
+   DM Sans has no tabular figures (its GSUB carries no tnum, checked against the
+   Google Fonts build on 2026-10-02, and "1" is less than half the width of
+   "0"), so the digits cannot be made fixed-width. The clock is therefore a
+   right-aligned column: the unit stays put at the right edge and the digits
+   grow leftwards into the gap, so nothing on the line jitters as it counts.
+   tabular-nums stays declared for the system fallback face, which honours it.
+   Hidden from assistive technology: the stage line is the live region, and a
+   number that changes every second must not be announced every second. */
+.ask-wait-clock {
+  flex: none; min-width: 3ch; text-align: right; white-space: nowrap;
+  font-family: var(--mono); font-size: 12px; line-height: 1.5;
+  font-variant-numeric: tabular-nums;
+  color: rgba(12,34,66,0.45);
 }
 /* Retry, offered on the error path so a failed question is one click from
    being asked again rather than retyped. */
@@ -1892,6 +1915,8 @@
     [18000, 'Still working. The model runs on SCL hardware, so answers take a little longer.'],
   ];
   function startWait(ai) {
+    var row = document.createElement('span');
+    row.className = 'ask-wait-row';
     var line = document.createElement('span');
     line.className = 'ask-wait';
     /* The bubble around this is aria-live="off" while the answer streams, so
@@ -1899,13 +1924,35 @@
        its own polite live region inside that silence, so a screen reader user
        still hears what the assistant is doing during a twenty second wait. */
     line.setAttribute('role', 'status');
-    ai.body.appendChild(line);
-    ai.wait = { line: line, timers: [] };
+    /* The clock is a sibling of the live region, not a child of it, and is
+       aria-hidden besides: a screen reader hears the three stage lines and
+       nothing else, while a sighted visitor watches the seconds count. It is
+       empty until the first whole second so a fast answer never flashes "0 s". */
+    var clock = document.createElement('span');
+    clock.className = 'ask-wait-clock';
+    clock.setAttribute('aria-hidden', 'true');
+    row.appendChild(line);
+    row.appendChild(clock);
+    ai.body.appendChild(row);
+    var now = function () { return (window.performance && performance.now) ? performance.now() : Date.now(); };
+    var t0 = now();
+    ai.wait = { line: line, row: row, timers: [], tick: null };
     WAIT_STAGES.forEach(function (s) {
       ai.wait.timers.push(setTimeout(function () {
         if (ai.wait && ai.wait.line.isConnected) ai.wait.line.textContent = s[1];
       }, s[0]));
     });
+    /* Half-second ticks so the displayed second is never more than half a
+       second stale; the value is always computed from t0, never accumulated,
+       so timer drift cannot make it lie. Self-clearing if the row leaves the
+       page by any route stopWait did not see, such as New conversation
+       wiping the thread while a request is in flight. */
+    var tick = setInterval(function () {
+      if (!row.isConnected) { clearInterval(tick); return; }
+      var secs = Math.floor((now() - t0) / 1000);
+      if (secs >= 1) clock.textContent = secs + ' s';
+    }, 500);
+    ai.wait.tick = tick;
   }
   /* Abort the request, keep whatever arrived, and say plainly that it is
      unfinished. A partial answer from a certification authority must never be
@@ -1929,7 +1976,8 @@
   function stopWait(ai) {
     if (!ai || !ai.wait) return;
     ai.wait.timers.forEach(clearTimeout);
-    if (ai.wait.line.parentNode) ai.wait.line.parentNode.removeChild(ai.wait.line);
+    if (ai.wait.tick) clearInterval(ai.wait.tick);
+    if (ai.wait.row.parentNode) ai.wait.row.parentNode.removeChild(ai.wait.row);
     ai.wait = null;
   }
 
@@ -1989,6 +2037,10 @@
       askBusy = false;
       setInst(headerInst, null);
       convo = []; convoEls = []; turns = []; clearThread(); thread = null; histMark = null;
+      /* The old thread's nodes leave the DOM now rather than waiting hidden for
+         the next question: an in-flight wait clock is tied to its row and stops
+         on its next tick once the row is disconnected. */
+      resultsList.innerHTML = '';
       clearAttachment();   /* the document belongs to the conversation */
       composerHome();
       setQuery('');

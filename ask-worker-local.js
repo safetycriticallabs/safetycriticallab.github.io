@@ -403,6 +403,47 @@ function vectorsValid(vectors, framework) {
   return true;
 }
 
+/* vectorsValid, except that explainer and reference rows (exp-/ref-, step 3
+   stage E) may be missing or malformed without taking the framework rows down
+   with them: a bad outside row, or a vector file published a moment before or
+   after framework.json gained or lost exp-/ref- entries, must not push SCL's
+   own search off hybrid and rerank (R10). A valid file comes back as the very
+   same object. Otherwise the framework rows must match the framework entries
+   one for one, in order, exactly as vectorsValid requires, and the result is
+   aligned to framework.entries with null for each unusable exp-/ref- row (no
+   meaning-based pick for that entry). Anything else is null, as before. */
+function alignVectors(vectors, framework) {
+  if (vectorsValid(vectors, framework)) return vectors;
+  if (!vectors || !framework || !Array.isArray(framework.entries)) return null;
+  if (vectors.version !== framework.version || vectors.model !== EMBED_MODEL
+      || vectors.query_prefix !== EMBED_QUERY_PREFIX || !Number.isInteger(vectors.dim) || vectors.dim <= 0
+      || !Array.isArray(vectors.ids) || !Array.isArray(vectors.vecs) || !Array.isArray(vectors.scales)) return null;
+  var rowOk = function (k) {
+    return Array.isArray(vectors.vecs[k]) && vectors.vecs[k].length === vectors.dim && Number.isFinite(vectors.scales[k]);
+  };
+  var fileCore = [], fileSupp = Object.create(null);
+  for (var i = 0; i < vectors.ids.length; i++) {
+    var vid = vectors.ids[i];
+    if (typeof vid !== 'string') return null;
+    if (/^(?:exp|ref)-/.test(vid)) { if (!(vid in fileSupp) && rowOk(i)) fileSupp[vid] = i; }
+    else fileCore.push(i);
+  }
+  var entries = framework.entries, ids = [], vecs = [], scales = [], c = 0;
+  for (var j = 0; j < entries.length; j++) {
+    var id = entries[j].id;
+    if (isSupplementaryEntry(entries[j])) {
+      var s = (id in fileSupp) ? fileSupp[id] : -1;
+      ids.push(id); vecs.push(s >= 0 ? vectors.vecs[s] : null); scales.push(s >= 0 ? vectors.scales[s] : null);
+      continue;
+    }
+    var k = fileCore[c++];
+    if (k === undefined || vectors.ids[k] !== id || !rowOk(k)) return null;
+    ids.push(id); vecs.push(vectors.vecs[k]); scales.push(vectors.scales[k]);
+  }
+  if (c !== fileCore.length) return null;
+  return Object.assign({}, vectors, { count: entries.length, ids: ids, vecs: vecs, scales: scales });
+}
+
 // Exact-id mention ("ai-4.1", "ai-12") with prefix-collision rejection: a
 // match followed by a digit is "ai-1" inside "ai-12" and does not count; a
 // following "." is the parent-area case and does.
@@ -653,11 +694,15 @@ function selectSupplementary(question, sp, qvec) {
     var exp = [], ref = [], namedAny = false;
     for (var i = 0; i < sp.supp.length; i++) {
       var s = sp.supp[i], c = s.c;
+      // A malformed entry is skipped on its own; it must not switch the
+      // channel off for every question through the catch below.
+      if (typeof c.title !== 'string' || typeof c.text !== 'string' || !c.text) continue;
       var sim = coreMax === null ? null : suppCosine(qvec, s, sp.dim);
       var phrase = false;
-      var kws = c.keywords || [];
+      var kws = Array.isArray(c.keywords) ? c.keywords : [];
       for (var k = 0; k < kws.length; k++) {
-        if (kws[k].length >= 8 && kws[k].indexOf(' ') !== -1 && qNorm.indexOf(kws[k]) !== -1) { phrase = true; break; }
+        var kw = typeof kws[k] === 'string' ? kws[k].toLowerCase() : '';
+        if (kw.length >= 8 && kw.indexOf(' ') !== -1 && qNorm.indexOf(kw) !== -1) { phrase = true; break; }
       }
       if (c.id.lastIndexOf('exp-', 0) === 0) {
         if (phrase || (sim !== null && sim - coreMax >= SUPP_EXP_MARGIN)) exp.push({ c: c, strong: phrase, sim: sim === null ? -1 : sim });
@@ -675,7 +720,7 @@ function selectSupplementary(question, sp, qvec) {
     // best reference by meaning alone.
     ref = namedAny ? ref.filter(function (x) { return x.strong; }) : ref.slice(0, SUPP_REF_UNNAMED_MAX);
     var used = 0;
-    var section = function (list, max, heading) {
+    var fill = function (list, max) {
       var out = [];
       for (var t = 0; t < list.length && out.length < max; t++) {
         var e = list[t].c;
@@ -683,12 +728,20 @@ function selectSupplementary(question, sp, qvec) {
         used += e.text.length;
         out.push(e);
       }
+      return out;
+    };
+    var section = function (out, heading) {
       if (!out.length) return '';
       var parts = ['\n\n' + heading];
       for (var n = 0; n < out.length; n++) parts.push('\n[' + out[n].id + '] ' + out[n].title + '\n' + out[n].text);
       return parts.join('\n');
     };
-    return section(exp, SUPP_EXP_MAX, EXPLAINER_HEADING) + section(ref, SUPP_REF_MAX, REFERENCE_HEADING);
+    // Documents the question names get the budget first; the block still
+    // prints explainers before references.
+    var refsOut = namedAny ? fill(ref, SUPP_REF_MAX) : null;
+    var expOut = fill(exp, SUPP_EXP_MAX);
+    if (refsOut === null) refsOut = fill(ref, SUPP_REF_MAX);
+    return section(expOut, EXPLAINER_HEADING) + section(refsOut, REFERENCE_HEADING);
   } catch (err) {
     console.log('explainer and reference pick failed; framework picks kept', err && err.message);
     return '';
@@ -961,7 +1014,7 @@ const STAGED_ID_RE = /^(?:exp|ref)-[a-z0-9]+(?:-[a-z0-9]+)*$/;
 const STAGED_MAX_ID_CHARS = 64;
 const STAGED_KIND_RE = /^[a-z][a-z-]{0,39}$/;
 const STAGED_MAX_TITLE_CHARS = 200;
-const STAGED_MAX_TEXT_CHARS = EXCERPT_BUDGET_CHARS; // a longer entry could never be served
+const STAGED_MAX_TEXT_CHARS = SUPP_BUDGET_CHARS; // staged ids are exp-/ref-, served only within that budget, so a longer entry could never be served
 const STAGED_MAX_KEYWORDS = 40;
 const STAGED_MAX_KEYWORD_CHARS = 80;
 const STAGED_MAX_AREA_CHARS = 20;
@@ -1125,7 +1178,7 @@ function mergeStaged(fw, vectors, staged) {
       scales: vectors.scales.concat(staged.vectors.scales),
       vecs: vectors.vecs.concat(staged.vectors.vecs),
     });
-    if (!vectorsValid(v2, fw2)) v2 = null;
+    v2 = alignVectors(v2, fw2);
   }
   return { fw: fw2, vectors: v2 };
 }
@@ -1223,10 +1276,8 @@ async function loadGrounding(env, retrievalQuery, upstreamHeaders) {
       vectors = await vecResp.json().catch(() => null);
       if (tag && vectors) { vecCacheTag = tag; vecCacheParsed = vectors; }
     }
-    if (!vectorsValid(vectors, fw)) {
-      console.log('framework_vectors.json missing/stale/mismatched; keyword-only retrieval');
-      vectors = null;
-    }
+    vectors = alignVectors(vectors, fw);
+    if (!vectors) console.log('framework_vectors.json missing/stale/mismatched; keyword-only retrieval');
   } else if (vecResp && vecResp.ok && vecResp.body) {
     vecResp.body.cancel().catch(() => {});
   }
@@ -1252,7 +1303,11 @@ async function selectGrounding(retrievalQuery, fw, vectors, qvec, env) {
     if (rr) excerpts = rr.text;
   }
   const supplementary = selectSupplementary(retrievalQuery, sp, qvec);
-  return { excerpts: excerpts + supplementary, rerankUsed: !!rr, rr: rr, keyword: keyword, supplementary: supplementary };
+  // `framework` is the block before explainers and references: the retrieval
+  // mode is read from it (an explainer is not a keyword pick), and document
+  // mode serves it alone.
+  return { excerpts: excerpts + supplementary, framework: excerpts, rerankUsed: !!rr, rr: rr, keyword: keyword,
+           supplementary: supplementary };
 }
 
 /* The system message. Excerpts go LAST so the stable instructions+FAQ prefix
@@ -1428,7 +1483,7 @@ async function benchRetrieve(request, env) {
     try {
       visitor = await selectGrounding(retrievalQueryFor(question, []), fw, vectors, qvec, env);
     } catch (e) {
-      visitor = { excerpts: '', rerankUsed: false, rr: null, threw: true };
+      visitor = { excerpts: '', framework: '', rerankUsed: false, rr: null, threw: true };
     }
   }
 
@@ -1468,6 +1523,7 @@ async function benchRetrieve(request, env) {
   // Explainers and references follow the framework excerpts, as on the
   // visitor path; out.ids stays the framework ids, these are listed apart.
   var suppBlock = (visitor && !visitor.threw) ? visitor.supplementary : selectSupplementary(question, sp, qvec);
+  var requestFramework = excerpts;
   excerpts += suppBlock;
   out.supplementary_ids = servedIdsOf(suppBlock);
   out.excerpts_chars = excerpts.length;
@@ -1483,13 +1539,13 @@ async function benchRetrieve(request, env) {
     var faqBlock = renderFaq(faqText);
     if (visitor) {
       out.prompt = describePrompt(buildSystemPrompt(faqBlock, visitor.excerpts, null), visitor.excerpts,
-                                  retrievalModeOf(visitor.rerankUsed, visitor.excerpts));
+                                  retrievalModeOf(visitor.rerankUsed, visitor.framework));
     } else {
       out.prompt = null;
       out.prompt_skipped = '"prompt": false in the request; the visitor path was not run';
     }
     out.request_prompt = describePrompt(buildSystemPrompt(faqBlock, excerpts, null), excerpts,
-                                        retrievalModeOf(out.rerank_used, excerpts));
+                                        retrievalModeOf(out.rerank_used, requestFramework));
     out.request_prompt.same_as_visitor = visitor ? out.request_prompt.system === out.prompt.system : null;
   } else {
     out.prompt = null;
@@ -1750,16 +1806,22 @@ export default {
     // picks keyword plus rescue excerpts and, with RERANK on, the reranked
     // set. Any throw on the way, rerank included, serves FAQ-only.
     let excerpts = '';
+    let frameworkExcerpts = '';
     let rerankUsed = false;
     try {
       const g = await loadGrounding(env, retrievalQuery, upstreamHeaders);
       if (g) {
         const sel = await selectGrounding(retrievalQuery, g.fw, g.vectors, g.qvec, env);
-        excerpts = sel.excerpts;
+        // Document mode serves the framework block alone: the attached
+        // document already spends the room explainers and references would
+        // need inside num_ctx (measured 2026-10-02, step 3 stage E review).
+        excerpts = doc ? sel.framework : sel.excerpts;
+        frameworkExcerpts = sel.framework;
         rerankUsed = sel.rerankUsed;
       }
     } catch (e) {
       excerpts = '';
+      frameworkExcerpts = '';
       rerankUsed = false;
     }
 
@@ -1769,7 +1831,7 @@ export default {
        answer (and the bench can check a deploy from outside). Never the
        question text: headers are logged in places the prompt is not. */
     const servedIds = servedIdsOf(excerpts);
-    const retrievalMode = retrievalModeOf(rerankUsed, excerpts);
+    const retrievalMode = retrievalModeOf(rerankUsed, frameworkExcerpts);
     const withRetrievalHeaders = (h) => {
       h['X-Ask-Retrieved'] = servedIds.join(',');
       h['X-SCL-Retrieval'] = retrievalMode;
@@ -1819,6 +1881,14 @@ export default {
           // prompt (6863 tokens) answered in 45s including a cold load. The
           // window size alone changes no answer: it is headroom, not content,
           // so it cannot dilute the model the way extra excerpts do.
+          //   Re-measured 2026-10-02 with the Llama 3.1 tokenizer (step 3 stage
+          // E review), superseding the counts above: instructions 783, rendered
+          // FAQ 5203 (47 entries), framework block up to 3.76k, and the
+          // explainer and reference block up to 1.69k in normal mode only
+          // (document mode leaves it out). The largest bench or practice
+          // prompt with explainers staged is 9.4k; a crafted worst case with
+          // full history passes 11888 (num_ctx less num_predict), so stage F
+          // sends only the matching FAQ entries before any explainer goes live.
           // Excerpts go LAST in the system
           // block so the stable instructions+FAQ prefix stays reusable in
           // Ollama's KV prefix cache across questions.

@@ -70,9 +70,11 @@
  *   user turn so short follow-ups keep their subject).
  *   document is optional: excerpts of a visitor-attached file, selected
  *   client-side per question (the full file never reaches this worker). When
- *   present, the rendered FAQ stays in the prompt, the excerpts follow it
+ *   present, the FAQ block stays in the prompt, the excerpts follow it
  *   framed as untrusted content with a no-verdict rule, then framework
  *   excerpts (2026-09-08; before that document mode dropped the FAQ).
+ *   The FAQ block is the whole FAQ on the live Worker until the stage I
+ *   release, and the question's matched entries (selectFaq) in test mode.
  *
  * Rate limiting: per-isolate token bucket (RATE_MAX per RATE_WINDOW_MS per IP)
  * plus a global in-flight cap (Ollama serializes; queueing helps nobody).
@@ -86,30 +88,27 @@ const DEFAULT_MODEL = 'scl-sft-v2:latest';  // production since 2026-09-10; roll
                                             // which is the un-tuned base and has not been production since 09-02.
                                             // This constant is the floor if OLLAMA_MODEL is ever lost, so it must
                                             // track whatever production actually serves.
-const WORKER_BUILD = '2026-10-03.1'; // bump on every dashboard paste; echoed by /bench/retrieve so a paste can be verified from outside
+const WORKER_BUILD = '2026-10-03.2'; // bump on every dashboard paste; echoed by /bench/retrieve so a paste can be verified from outside
 const MAX_QUESTION_CHARS = 500;
 const MAX_HISTORY_MSGS = 8;          // most recent turns kept
 const MAX_HISTORY_MSG_CHARS = 1200;  // each turn truncated to this
-// Token budget guard. Measured with cl100k BPE (tiktoken, 2026-09-08), not
-// the old chars/3.5 rule, which under-counted headroom by ~25%. The FAQ is
-// now rendered to plain text by renderFaq (40 entries, 17359 chars, 3564
-// tokens; the raw JSON of the 34-entry file it replaced was 5245 tokens):
-// instructions 0.66k + FAQ 3.56k + keyword and rescue excerpts <=2.9k at the
-// full 14000 char cap (framework text measures 4.8 chars/token) + question
-// ~0.14k + num_predict 0.4k leaves ~4.6k of the 12288 num_ctx for history and
-// the chat template.
+// Token budget guard. Sizes were first measured with cl100k BPE (tiktoken,
+// 2026-09-08), not the old chars/3.5 rule, which under-counted headroom by
+// ~25%. The current figures, measured with the Llama 3.1 tokenizer through
+// the chat template, are the sizing record in the num_ctx comment on the chat
+// call in fetch() below; the FAQ figures once kept here were superseded first
+// by the FAQ growing to 47 entries and then by stage F's matched block.
 // 2800 chars is ~0.65k tokens and keeps the grounding from being silently
-// truncated by a long conversation. Re-measure when faq.json grows: each
-// rendered entry costs ~80 tokens.
+// truncated by a long conversation.
 const MAX_HISTORY_TOTAL_CHARS = 2800;
 const STREAM_IDLE_MS = 90000;        // per-read watchdog while streaming (first token can
                                      // near a minute on cold start; later gaps mean a stall)
 // Visitor-attached document excerpts (optional). 8000 chars is ~1.7k tokens
 // at the measured 4.8 chars/token (the old 2.3k figure was chars/3.5). Since
-// 2026-09-08 document mode keeps the rendered FAQ, so it is the binding case:
-// doc instructions 0.73k + FAQ 2.74k + doc <=1.7k + framework excerpts
-// <=1.7k + rescues <=1.25k + history 0.65k + question 0.14k + num_predict
-// 0.4k is ~9.3k, leaving ~3.0k of num_ctx 12288 for the chat template.
+// 2026-09-08 document mode keeps the FAQ block, so it is the binding case;
+// the current totals for both modes are in the num_ctx comment on the chat
+// call (stage F: 9554 tokens at the English worst case with a document, 2334
+// to spare after num_predict).
 const MAX_DOC_NAME_CHARS = 120;
 const MAX_DOC_EXCERPT_CHARS = 8000;
 // Content-Length is BYTES while every content cap below is JS chars; CJK text
@@ -129,8 +128,8 @@ const UPSTREAM_TIMEOUT_MS = 90000; // cold start: model load + prompt eval can n
 const CHAT_OPTIONS = Object.freeze({ temperature: 0.2, num_ctx: 12288, num_predict: 400 });
 
 // Framework excerpts appended per question, capped so the whole prompt stays
-// inside num_ctx 12288: ~0.66k instructions + ~2.74k rendered FAQ + <=2.9k
-// keyword and rescue excerpts + question. The offline bench at
+// inside num_ctx 12288 (the sizing record is the num_ctx comment on the chat
+// call in fetch() below). The offline bench at
 // scl-internal-main/ask-eval/ runs THIS file's own retrieval code (no mirror
 // to keep in lockstep); re-run it after touching scoring.
 const EXCERPT_BUDGET_CHARS = 8000;
@@ -217,6 +216,8 @@ let vecCacheTag = '';
 let vecCacheParsed = null;
 let fwCacheTag = '';
 let fwCacheParsed = null;
+let faqVecCacheTag = '';     // faq_vectors.json, fetched only when the matched FAQ is on (stage F)
+let faqVecCacheParsed = null;
 function rateLimited(ip) {
   const now = Date.now();
   if (rateHits.size > 500) {
@@ -274,10 +275,12 @@ function drainNdjson(buffer, controller, encoder) {
 }
 
 // Shared identity paragraph. SYSTEM_INSTRUCTIONS must stay stable ACROSS
-// requests (nothing per-request may precede the excerpts block): the stable
-// instructions+FAQ prefix is what Ollama's KV prefix cache reuses across
-// questions. Deliberate one-time edits (like the 2026-08-26 certification-
-// claim rule) just invalidate the cache once.
+// requests: the stable prefix is what Ollama's KV prefix cache reuses across
+// questions. With the whole FAQ that prefix is instructions plus FAQ and
+// nothing per-request precedes the excerpts; with the matched FAQ (stage F)
+// it is instructions plus the FAQ heading and the fixed FAQ_ALWAYS entries,
+// and the per-question picks follow them. Deliberate one-time edits (like the
+// 2026-08-26 certification-claim rule) just invalidate the cache once.
 const ASSISTANT_IDENTITY = `You are Ask SCL, the question-answering assistant on the public website of Safety Critical Labs (SCL), an independent certification authority for AI in safety-critical systems. You are built with Llama: an open-weight Llama 3.1 model that SCL fine-tuned and runs on hardware SCL controls, so no cloud AI provider generates your answers. Before you answer, a small ranking model hosted by Cloudflare scores the question against SCL's own framework text to choose which passages you are given; that ranking service is not always available, and when it is not, SCL's own keyword matching chooses them instead. Cloudflare also runs the request handling for the assistant. SCL does not publish further detail about the model configuration, which may change over time; if asked what model you are, say exactly this. If a visitor asks what you are or how you work, answer plainly from this paragraph. You are an informational assistant only and play no part in certification decisions. The conversation may include earlier turns; answer follow-up questions using ONLY the reference entries below, and if a follow-up is ambiguous, ask what the visitor means rather than guessing. SCL publishes the AI Requirements Framework: ten core requirement areas (AI-1 through AI-10) plus three conditional architecture and paradigm areas (AI-11 multi-model, AI-12 neural networks, AI-13 continuous learning), which supplements the domain safety standard a system already follows, such as DO-178C, ISO 26262, or NPR 7150.2D.`;
 
 // The one company status fact both prompts state. Change it here and in faq.json
@@ -337,6 +340,160 @@ function renderFaq(faqJsonText) {
     var id = (typeof e.id === 'string' && e.id) ? e.id : ('faq-' + (i + 1));
     blocks.push('[' + id + '] Q: ' + q + '\nA: ' + a);
   }
+  return 'SCL FAQ, published answers to common questions (each entry carries an id in square brackets; cite an entry by that id, for example (faq-3)):\n\n' + blocks.join('\n\n') + '\n';
+}
+
+/* ── FAQ by relevance (step 3 stage F, 2026-10-03) ───────────────────────────
+   Until this change every prompt carried all 47 FAQ entries, about 5.2k of the
+   12,288-token window, and the learner test of 2026-10-01 traced wrong answers
+   to FAQ lines stretched over questions they never addressed. selectFaq sends
+   instead:
+   - FAQ_ALWAYS, the few entries that say what SCL is, its accreditation
+     status, whether it has certified anyone yet and how to reach it, in file
+     order, so no question is answered without them (the short fixed part the
+     plan calls for, kept as citable entries rather than new prose);
+   - then up to FAQ_MAX_PICK entries chosen for the question. Keyword picks
+     first, scored by the very scoreEntries the framework search uses (an
+     entry's question is its title, its answer its text) and kept above that
+     scorer's own floor. Then, when a query vector and a usable
+     faq_vectors.json are present, the top cosine ranks fill the remaining
+     slots, at most FAQ_RESCUE_EXTRA of them, exactly as cosine rescues the
+     framework picks: a keyword pick is never displaced or reordered.
+   The block keeps renderFaq's heading and entry format, so the citing rule in
+   the instructions, the bench grader and the parity check read it unchanged.
+   Unparseable faq.json falls back to renderFaq, as before.
+   faq_vectors.json is built by embed_faq.py beside embed_corpus.py. Each row
+   carries a hash of the entry text it embedded, so an entry edited after the
+   build loses only its own meaning-based match (alignFaqVectors), and a
+   missing or stale file costs nothing but the cosine side.
+   The live Worker keeps sending the full FAQ until the stage I release flips
+   FAQ_MATCHED_LIVE; a Worker in TEST_MODE sends the matched block, so the test
+   copy measures what visitors will get. */
+const FAQ_VECTORS_URL = 'https://safetycriticallabs.com/faq_vectors.json';
+const FAQ_ALWAYS = ['faq-1', 'faq-7', 'faq-20', 'faq-23'];
+const FAQ_MAX_PICK = 5;
+const FAQ_RESCUE_TOP = 3;
+const FAQ_RESCUE_EXTRA = 2;
+const FAQ_MATCHED_LIVE = false; // stage I release: true, and every Worker sends the matched block
+
+function faqSelectionOn(env) {
+  return FAQ_MATCHED_LIVE || testModeOn(env);
+}
+
+/* faq.json's entries as {id, q, a, keywords}, skipping the ones renderFaq
+   skips and numbering the unnamed ones as it does, or null when the text is
+   not the file the site publishes (callers then fall back to renderFaq). */
+function faqEntriesOf(faqJsonText) {
+  var parsed;
+  try { parsed = JSON.parse(faqJsonText); } catch (e) { return null; }
+  var entries = parsed && Array.isArray(parsed.entries) ? parsed.entries : null;
+  if (!entries) return null;
+  var out = [];
+  for (var i = 0; i < entries.length; i++) {
+    var e = entries[i] || {};
+    var q = typeof e.q === 'string' ? e.q.trim() : '';
+    var a = typeof e.a === 'string' ? e.a.trim() : '';
+    if (!q || !a) continue;
+    var kws = Array.isArray(e.keywords) ? e.keywords.filter(function (k) { return typeof k === 'string'; }) : [];
+    out.push({ id: (typeof e.id === 'string' && e.id) ? e.id : ('faq-' + (i + 1)), q: q, a: a, keywords: kws });
+  }
+  return out;
+}
+
+/* FNV-1a, 32 bits, over the code points of the text embed_faq.py embeds for an
+   entry, without its model prefix: question, newline, the keywords joined by
+   comma and space, newline, answer. The same function there stamps each vector
+   row, so a row is used only for the exact text it embedded and an edit to the
+   question, the keywords or the answer drops it. Eight lowercase hex digits. */
+function faqEntryHash(e) {
+  var s = e.q + '\n' + e.keywords.join(', ') + '\n' + e.a, h = 0x811c9dc5;
+  for (var i = 0; i < s.length; i++) {
+    var c = s.codePointAt(i);
+    if (c > 0xffff) i++;
+    h = Math.imul(h ^ c, 0x01000193) >>> 0;
+  }
+  return ('0000000' + h.toString(16)).slice(-8);
+}
+
+/* The vector rows for `entries`, aligned to them (null where no usable row
+   exists), or null when the file cannot be used at all: wrong model, prefix or
+   dimension, or no row matching any entry. A row matches an entry when its id
+   and its hash of the entry text both agree. */
+function alignFaqVectors(vectors, entries) {
+  if (!vectors || !entries || vectors.model !== EMBED_MODEL || vectors.query_prefix !== EMBED_QUERY_PREFIX
+      || !Number.isInteger(vectors.dim) || vectors.dim <= 0 || !Array.isArray(vectors.ids) || !Array.isArray(vectors.hashes)
+      || !Array.isArray(vectors.vecs) || !Array.isArray(vectors.scales)) return null;
+  var byId = Object.create(null);
+  for (var i = 0; i < vectors.ids.length; i++) {
+    if (typeof vectors.ids[i] === 'string' && !(vectors.ids[i] in byId)) byId[vectors.ids[i]] = i;
+  }
+  var vecs = [], scales = [], usable = 0;
+  for (var j = 0; j < entries.length; j++) {
+    var k = byId[entries[j].id];
+    var ok = k !== undefined && vectors.hashes[k] === faqEntryHash(entries[j])
+      && Array.isArray(vectors.vecs[k]) && vectors.vecs[k].length === vectors.dim && Number.isFinite(vectors.scales[k]);
+    vecs.push(ok ? vectors.vecs[k] : null);
+    scales.push(ok ? vectors.scales[k] : null);
+    if (ok) usable++;
+  }
+  return usable ? { dim: vectors.dim, vecs: vecs, scales: scales } : null;
+}
+
+/* The FAQ block for one question: FAQ_ALWAYS, then the keyword picks in score
+   order, then cosine rescues into the remaining slots. qvec and faqVectors may
+   be null (keyword picks only). Same heading and entry lines as renderFaq. */
+function selectFaq(question, faqJsonText, qvec, faqVectors) {
+  var entries = faqEntriesOf(faqJsonText);
+  if (!entries || !entries.length) return renderFaq(faqJsonText);
+  // One entry per id, the first in file order (as alignFaqVectors keeps the
+  // first row per id); a scored candidate carries its own entry (src), so the
+  // text served is the text that scored even if faq.json repeats an id.
+  var byId = Object.create(null);
+  for (var i = 0; i < entries.length; i++) if (!(entries[i].id in byId)) byId[entries[i].id] = entries[i];
+  var picked = [], have = Object.create(null);
+  for (var a = 0; a < FAQ_ALWAYS.length; a++) {
+    var fixed = byId[FAQ_ALWAYS[a]];
+    if (fixed && !have[fixed.id]) { picked.push(fixed); have[fixed.id] = true; }
+  }
+  var sc = scoreEntries(question, { entries: entries.map(function (e) {
+    return { id: e.id, title: e.q, keywords: e.keywords, text: e.a, src: e };
+  }) });
+  var matched = 0;
+  if (sc) {
+    for (var m = 0; m < sc.keep.length && matched < FAQ_MAX_PICK; m++) {
+      var c = sc.keep[m].c.src;
+      if (!c || have[c.id]) continue;
+      picked.push(c); have[c.id] = true; matched++;
+    }
+  }
+  var al = (qvec && faqVectors) ? alignFaqVectors(faqVectors, entries) : null;
+  if (al && qvec.length === al.dim && matched < FAQ_MAX_PICK) {
+    try {
+      var qn = 0;
+      for (var d = 0; d < al.dim; d++) qn += qvec[d] * qvec[d];
+      qn = Math.sqrt(qn) || 1;
+      var ranked = [];
+      for (var e2 = 0; e2 < entries.length; e2++) {
+        var v = al.vecs[e2];
+        if (!v) continue;
+        var dot = 0;
+        for (var d2 = 0; d2 < al.dim; d2++) dot += v[d2] * qvec[d2];
+        ranked.push({ sim: (dot * al.scales[e2]) / qn, c: entries[e2] });
+      }
+      ranked.sort(function (x, y) { return y.sim - x.sim; });
+      var added = 0;
+      for (var t = 0; t < FAQ_RESCUE_TOP && t < ranked.length && added < FAQ_RESCUE_EXTRA && matched < FAQ_MAX_PICK; t++) {
+        var rc = ranked[t].c;
+        if (have[rc.id]) continue;
+        picked.push(rc); have[rc.id] = true; matched++; added++;
+      }
+    } catch (err) {
+      /* the cosine side may never take the keyword picks down with it */
+      console.log('faq cosine rescue failed; keyword picks kept', err && err.message);
+    }
+  }
+  var blocks = [];
+  for (var n = 0; n < picked.length; n++) blocks.push('[' + picked[n].id + '] Q: ' + picked[n].q + '\nA: ' + picked[n].a);
   return 'SCL FAQ, published answers to common questions (each entry carries an id in square brackets; cite an entry by that id, for example (faq-3)):\n\n' + blocks.join('\n\n') + '\n';
 }
 
@@ -1238,7 +1395,11 @@ async function loadGrounding(env, retrievalQuery, upstreamHeaders) {
   const embedUrl = env.OLLAMA_URL.replace(/\/+$/, '') + '/api/embed';
   const embedController = new AbortController();
   const embedTimer = setTimeout(() => embedController.abort(), EMBED_TIMEOUT_MS);
-  const [fwResp, vecResp, qvec] = await Promise.all([
+  // faq_vectors.json rides along only when the matched FAQ is on (stage F):
+  // a Worker sending the full FAQ never asks for it, so nothing it sends or
+  // fetches changes.
+  const wantFaqVectors = faqSelectionOn(env);
+  const [fwResp, vecResp, qvec, faqVecResp] = await Promise.all([
     fetch(FRAMEWORK_URL, { cf: { cacheTtl: 300, cacheEverything: true } }),
     fetch(VECTORS_URL, {
       cf: { cacheTtl: 300, cacheEverything: true },
@@ -1259,8 +1420,14 @@ async function loadGrounding(env, retrievalQuery, upstreamHeaders) {
       const v = j && Array.isArray(j.embeddings) && j.embeddings[0];
       return Array.isArray(v) && v.length ? v : null;
     }).catch(() => null),
+    wantFaqVectors
+      ? fetch(FAQ_VECTORS_URL, { cf: { cacheTtl: 300, cacheEverything: true }, signal: AbortSignal.timeout(5000) }).catch(() => null)
+      : Promise.resolve(null),
   ]).finally(() => clearTimeout(embedTimer));
-  if (!(fwResp && fwResp.ok)) return null;
+  if (!(fwResp && fwResp.ok)) {
+    if (faqVecResp && faqVecResp.body) faqVecResp.body.cancel().catch(() => {});
+    return null;
+  }
   // Parsing ~700KB of JSON (framework + vectors) every request is the real
   // CPU cost on the free Workers plan; cache both parsed files per isolate,
   // keyed by etag (GitHub Pages serves stable etags; no etag -> parse every
@@ -1289,7 +1456,22 @@ async function loadGrounding(env, retrievalQuery, upstreamHeaders) {
   } else if (vecResp && vecResp.ok && vecResp.body) {
     vecResp.body.cancel().catch(() => {});
   }
-  return { fw: fw, vectors: vectors, qvec: qvec };
+  // The FAQ vector file is aligned to faq.json's entries later, in selectFaq
+  // (alignFaqVectors), because the FAQ text is fetched apart from this loader.
+  let faqVectors = null;
+  if (qvec && faqVecResp && faqVecResp.ok) {
+    const ftag = faqVecResp.headers.get('etag') || '';
+    if (ftag && faqVecCacheTag === ftag && faqVecCacheParsed) {
+      faqVectors = faqVecCacheParsed;
+      if (faqVecResp.body) faqVecResp.body.cancel().catch(() => {});
+    } else {
+      faqVectors = await faqVecResp.json().catch(() => null);
+      if (ftag && faqVectors) { faqVecCacheTag = ftag; faqVecCacheParsed = faqVectors; }
+    }
+  } else if (faqVecResp && faqVecResp.ok && faqVecResp.body) {
+    faqVecResp.body.cancel().catch(() => {});
+  }
+  return { fw: fw, vectors: vectors, qvec: qvec, faqVectors: faqVectors };
 }
 
 /* Keyword plus rescue picks first; then, only when RERANK is on, the
@@ -1318,9 +1500,11 @@ async function selectGrounding(retrievalQuery, fw, vectors, qvec, env) {
            supplementary: supplementary };
 }
 
-/* The system message. Excerpts go LAST so the stable instructions+FAQ prefix
+/* The system message. Excerpts go LAST, and the matched FAQ block opens with
+   its fixed FAQ_ALWAYS entries, so the stable prefix (instructions, the FAQ
+   heading and FAQ_ALWAYS; the whole FAQ while the live Worker still sends it)
    stays reusable in Ollama's KV prefix cache across questions. Document mode
-   (doc non-null) keeps the rendered FAQ and frames the visitor's excerpts as
+   (doc non-null) keeps the FAQ block and frames the visitor's excerpts as
    untrusted data between it and the framework excerpts. */
 function buildSystemPrompt(faqBlock, excerpts, doc) {
   return doc
@@ -1457,6 +1641,7 @@ async function benchRetrieve(request, env) {
   var fw = null;
   var vectors = null;
   var qvec = null;
+  var faqVectors = null;
   var faqText = null;
   try {
     // The same loader the answer route uses, on the same query it would use
@@ -1469,6 +1654,7 @@ async function benchRetrieve(request, env) {
     fw = loaded[0].fw;
     vectors = loaded[0].vectors;
     qvec = loaded[0].qvec;
+    faqVectors = loaded[0].faqVectors;
     faqText = loaded[1];
   } catch (e) {
     return new Response(JSON.stringify({ error: 'grounding unavailable: ' + (e && e.message) }), { status: 503, headers: { 'Content-Type': 'application/json' } });
@@ -1544,7 +1730,17 @@ async function benchRetrieve(request, env) {
   out.staged_ids = staged ? staged.entries.map(function (x) { return x.id; }) : [];
   out.chat = { model: env.OLLAMA_MODEL || DEFAULT_MODEL, options: CHAT_OPTIONS };
   if (faqText !== null) {
-    var faqBlock = renderFaq(faqText);
+    // The FAQ block exactly as the answer route builds it for this question
+    // (no history, so the retrieval query is the question itself): the matched
+    // block in test mode or after the stage I release, the full one otherwise.
+    var matchFaq = faqSelectionOn(env);
+    var faqBlock = matchFaq ? selectFaq(question, faqText, qvec, faqVectors) : renderFaq(faqText);
+    out.faq_mode = matchFaq ? 'matched' : 'full';
+    out.faq_ids = servedIdsOf(faqBlock);
+    // true only when selectFaq's cosine side ran: a usable vector file AND a
+    // query vector of the file's dimension, the same gate selectFaq applies
+    var alq = (matchFaq && qvec && faqVectors) ? alignFaqVectors(faqVectors, faqEntriesOf(faqText)) : null;
+    out.faq_vectors = matchFaq ? !!(alq && qvec.length === alq.dim) : null;
     if (visitor) {
       out.prompt = describePrompt(buildSystemPrompt(faqBlock, visitor.excerpts, null), visitor.excerpts,
                                   retrievalModeOf(visitor.rerankUsed, visitor.framework));
@@ -1789,7 +1985,11 @@ export default {
       release();
       return reply(503, { error: 'Reference material unavailable, try again shortly' }, origin);
     }
-    const faqBlock = renderFaq(faqText);
+    // The FAQ block is built below, once the query embedding is known: with
+    // the matched FAQ on (stage F) selectFaq uses it for the cosine rescue,
+    // and a Worker still sending the full FAQ renders the same block as ever.
+    const matchFaq = faqSelectionOn(env);
+    let faqBlock = null;
 
     // Framework corpus is best-effort: retrieval failure degrades to FAQ-only.
     // retrievalQueryFor carries the previous user turn only for a short
@@ -1819,6 +2019,7 @@ export default {
     try {
       const g = await loadGrounding(env, retrievalQuery, upstreamHeaders);
       if (g) {
+        if (matchFaq) faqBlock = selectFaq(retrievalQuery, faqText, g.qvec, g.faqVectors);
         const sel = await selectGrounding(retrievalQuery, g.fw, g.vectors, g.qvec, env);
         // Document mode serves the framework block alone: the attached
         // document already spends the room explainers and references would
@@ -1832,6 +2033,9 @@ export default {
       frameworkExcerpts = '';
       rerankUsed = false;
     }
+    // No grounding (framework fetch failed or threw before the FAQ block was
+    // built): the matched FAQ still works from keywords alone.
+    if (faqBlock === null) faqBlock = matchFaq ? selectFaq(retrievalQuery, faqText, null, null) : renderFaq(faqText);
 
     /* Served entry ids (servedIdsOf), computed once per request from the
        excerpt block. Used by the retention row below and echoed to the
@@ -1894,12 +2098,24 @@ export default {
           // FAQ 5203 (47 entries), framework block up to 3.76k, and the
           // explainer and reference block up to 1.69k in normal mode only
           // (document mode leaves it out). The largest bench or practice
-          // prompt with explainers staged is 9.4k; a crafted worst case with
-          // full history passes 11888 (num_ctx less num_predict), so stage F
-          // sends only the matching FAQ entries before any explainer goes live.
+          // prompt with explainers staged was 9.4k; a crafted worst case with
+          // full history passed 11888 (num_ctx less num_predict).
+          //   Stage F (2026-10-03, same tokenizer and template): the matched
+          // FAQ block is at most 1274 tokens (FAQ_ALWAYS plus the five longest
+          // entries by token count) against 5203 for the whole FAQ, 325 with
+          // FAQ_ALWAYS alone. Every cap filled at once with the densest
+          // framework prose, the framework block at its stage E worst (3761)
+          // and full history: normal mode 8920 with the explainer and reference
+          // block, document mode 9554, leaving 2968 and 2334 after num_predict;
+          // the same prompts with the whole FAQ ran 961 and 1595 past the
+          // window. Real prompts: bench 1444 to 4931 (median about 3830, before
+          // 6018 to 9053), practice up to 4877. A prompt filled with CJK ideographs can still pass the
+          // window (each is two or three tokens and every cap counts chars),
+          // which was so before stage F and is unchanged by it.
           // Excerpts go LAST in the system
-          // block so the stable instructions+FAQ prefix stays reusable in
-          // Ollama's KV prefix cache across questions.
+          // block so the stable prefix (instructions, then the FAQ_ALWAYS
+          // entries that open the FAQ block) stays reusable in Ollama's KV
+          // prefix cache across questions.
           // num_predict 300 -> 400 (2026-09-08): the limitations audit found
           // answers that enumerate items stopping at the cap mid-sentence.
           options: CHAT_OPTIONS,

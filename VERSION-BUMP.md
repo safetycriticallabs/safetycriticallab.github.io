@@ -41,13 +41,21 @@ Surface as of 2026-09-15, measured before any v3.7 propagation:
 (e) Update ASSISTANT_IDENTITY in ask-worker-local.js if the area count changed.
     Bump WORKER_BUILD. Paste to the dashboard. Verify from outside via POST /bench/retrieve.
 
-(f) Regenerate questions.html if faq.json changed in the same bump:
+(f) Regenerate questions.html and faq_vectors.json if faq.json changed in the same bump:
         python3 generate_faq.py
-    questions.html MUST be committed in the same commit as any faq.json change.
-    The deployed Worker fetches faq.json from the live site, so a push changes what the
+        python3 embed_faq.py
+    questions.html and faq_vectors.json MUST be committed in the same commit as any faq.json
+    change. The deployed Worker fetches faq.json from the live site, so a push changes what the
     public assistant says with no Worker deploy. Check: git diff --stat -- faq.json is
-    empty after running the generator, and grep -c 'id="faq-' questions.html matches the
+    empty after running the generators, and grep -c 'id="faq-' questions.html matches the
     entry count.
+    faq_vectors.json (Ask SCL step 3 stage F, 2026-10-03) is the cosine side of the matched FAQ:
+    a Worker with the matched FAQ on (the TEST_MODE copy now; every Worker once the stage I
+    release flips FAQ_MATCHED_LIVE) sends only the FAQ entries that fit the question, and uses a
+    vector row only when its hash of the embedded text (question, keywords, answer) matches, so a
+    stale file costs the edited entries their meaning-based match and nothing else. The live
+    Worker sends the whole FAQ and does not read the file until that release. Rebuilding it needs
+    Ollama with nomic-embed-text.
 
 (g) Add one row to updates.html and one LOG line to STATUS.md.
     Label development dates and deposit dates as such. Never merge them into one claim.

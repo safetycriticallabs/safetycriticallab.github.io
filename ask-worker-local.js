@@ -88,7 +88,7 @@ const DEFAULT_MODEL = 'scl-sft-v2:latest';  // production since 2026-09-10; roll
                                             // which is the un-tuned base and has not been production since 09-02.
                                             // This constant is the floor if OLLAMA_MODEL is ever lost, so it must
                                             // track whatever production actually serves.
-const WORKER_BUILD = '2026-10-03.2'; // bump on every dashboard paste; echoed by /bench/retrieve so a paste can be verified from outside
+const WORKER_BUILD = '2026-10-04.1'; // bump on every dashboard paste; echoed by /bench/retrieve so a paste can be verified from outside
 const MAX_QUESTION_CHARS = 500;
 const MAX_HISTORY_MSGS = 8;          // most recent turns kept
 const MAX_HISTORY_MSG_CHARS = 1200;  // each turn truncated to this
@@ -107,7 +107,7 @@ const STREAM_IDLE_MS = 90000;        // per-read watchdog while streaming (first
 // at the measured 4.8 chars/token (the old 2.3k figure was chars/3.5). Since
 // 2026-09-08 document mode keeps the FAQ block, so it is the binding case;
 // the current totals for both modes are in the num_ctx comment on the chat
-// call (stage F: 9554 tokens at the English worst case with a document, 2334
+// call (stage F: 9861 tokens at the English worst case with a document, 2027
 // to spare after num_predict).
 const MAX_DOC_NAME_CHARS = 120;
 const MAX_DOC_EXCERPT_CHARS = 8000;
@@ -371,7 +371,13 @@ function renderFaq(faqJsonText) {
    copy measures what visitors will get. */
 const FAQ_VECTORS_URL = 'https://safetycriticallabs.com/faq_vectors.json';
 const FAQ_ALWAYS = ['faq-1', 'faq-7', 'faq-20', 'faq-23'];
-const FAQ_MAX_PICK = 5;
+// 7, raised from 5 on 2026-10-04 after the first stage F bench: with 5, a
+// bench question about how an assessment confirms the right standards apply
+// had the process entry (faq-4) above the floor in sixth place and cut off,
+// and lost its pass. Entries above the floor are specific to the question, so
+// the cap binds mostly on questions about SCL itself; questions from outside
+// the FAQ's subjects seldom have more than two picks plus the rescues.
+const FAQ_MAX_PICK = 7;
 const FAQ_RESCUE_TOP = 3;
 const FAQ_RESCUE_EXTRA = 2;
 const FAQ_MATCHED_LIVE = false; // stage I release: true, and every Worker sends the matched block
@@ -2101,15 +2107,16 @@ export default {
           // prompt with explainers staged was 9.4k; a crafted worst case with
           // full history passed 11888 (num_ctx less num_predict).
           //   Stage F (2026-10-03, same tokenizer and template): the matched
-          // FAQ block is at most 1274 tokens (FAQ_ALWAYS plus the five longest
-          // entries by token count) against 5203 for the whole FAQ, 325 with
-          // FAQ_ALWAYS alone. Every cap filled at once with the densest
-          // framework prose, the framework block at its stage E worst (3761)
-          // and full history: normal mode 8920 with the explainer and reference
-          // block, document mode 9554, leaving 2968 and 2334 after num_predict;
-          // the same prompts with the whole FAQ ran 961 and 1595 past the
-          // window. Real prompts: bench 1444 to 4931 (median about 3830, before
-          // 6018 to 9053), practice up to 4877. A prompt filled with CJK ideographs can still pass the
+          // FAQ block is at most 1581 tokens (FAQ_ALWAYS plus the seven longest
+          // entries by token count; 1274 with the cap of five used on 10-03)
+          // against 5203 for the whole FAQ, 325 with FAQ_ALWAYS alone. Every
+          // cap filled at once with the densest framework prose, the framework
+          // block at its stage E worst (3761) and full history: normal mode
+          // 9227 with the explainer and reference block, document mode 9861,
+          // leaving 2661 and 2027 after num_predict; the same prompts with the
+          // whole FAQ ran 961 and 1595 past the window. Real prompts with the
+          // cap of seven: bench 1444 to 5010 (median 4020, before 6018 to
+          // 9053), practice up to 4877. A prompt filled with CJK ideographs can still pass the
           // window (each is two or three tokens and every cap counts chars),
           // which was so before stage F and is unchanged by it.
           // Excerpts go LAST in the system

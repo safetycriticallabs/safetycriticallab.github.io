@@ -3834,12 +3834,11 @@ document.querySelectorAll('.sc-field').forEach(function(box){
   var phone  = window.matchMedia('(max-width: 640px)');
   /* Measured against the screen. A tile starts to spread when its top edge
      rises past START of the way down the screen and is fully spread when it
-     reaches END, so it opens out while it comes into view and is full width
-     by the time it sits mid-screen. Raise both to spread sooner. Until
-     2026-10-05 it only began once the tile's top had left the screen, which
-     read as too late. */
-  var START = 0.65, END = 0.2;
-  var ticking = false, last = [];
+     reaches END, just under the nav. Raise both to spread sooner. Tuned by
+     feel on 2026-10-05: spreading only once the tile's top had left the
+     screen read as too late, and 0.8/0.35 then 0.65/0.2 as too early. */
+  var START = 0.5, END = 0.1;
+  var ticking = false, last = [], pinnedW = 0;
 
   function active(){ return phone.matches && !reduce.matches; }
 
@@ -3874,13 +3873,15 @@ document.querySelectorAll('.sc-field').forEach(function(box){
   function update(){
     ticking = false;
     if(!active()){ cards.forEach(function(c){ c.style.setProperty('--tile-x','0'); }); return; }
+    /* Every read before any write. Reading a tile's position straight after
+       resizing the one above it forced a fresh layout per tile, per frame. */
+    var vh = window.innerHeight;
+    var tops = cards.map(function(c){ return c.getBoundingClientRect().top; });
     cards.forEach(function(c, i){
-      var r = c.getBoundingClientRect();
       /* 0 while the tile's top is below START, 1 once it is above END.
          Clamped, so a tile stays spread once you are past it and is
          contained again if you scroll back above it. */
-      var vh = window.innerHeight;
-      var p = smooth((START * vh - r.top) / ((START - END) * vh));
+      var p = smooth((START * vh - tops[i]) / ((START - END) * vh));
       if(Math.abs(p - (last[i] === undefined ? -1 : last[i])) < 0.004) return;
       last[i] = p;
       c.style.setProperty('--tile-x', p.toFixed(3));
@@ -3888,13 +3889,18 @@ document.querySelectorAll('.sc-field').forEach(function(box){
   }
   function onScroll(){ if(!ticking){ ticking = true; requestAnimationFrame(update); } }
 
-  function init(){ last = []; pin(); update(); }
+  function init(){ last = []; pinnedW = window.innerWidth; pin(); update(); }
 
   window.addEventListener('scroll', onScroll, { passive: true });
   var rz;
+  /* Re-pin only when the WIDTH changes, since that is all the pinned heights
+     depend on. iPhone Safari fires resize whenever its address bar grows or
+     shrinks mid-scroll, a height-only change, and re-pinning on each one
+     re-measured every tile in the middle of the gesture. */
   window.addEventListener('resize', function(){
+    if(window.innerWidth === pinnedW){ onScroll(); return; }
     clearTimeout(rz);
-    rz = setTimeout(init, 160);          // re-pin: heights change with width
+    rz = setTimeout(init, 160);
   }, { passive: true });
   if(reduce.addEventListener) reduce.addEventListener('change', init);
 

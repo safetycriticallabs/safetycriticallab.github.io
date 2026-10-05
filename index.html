@@ -1153,6 +1153,15 @@
   @media (min-width:900px) and (min-height:760px)  { #sc-cert-stage.is-expanded .cert-doc{ --cert-rest:1.3; } }
   @media (min-width:900px) and (min-height:880px)  { #sc-cert-stage.is-expanded .cert-doc{ --cert-rest:1.42; } }
   @media (min-width:900px) and (min-height:1000px) { #sc-cert-stage.is-expanded .cert-doc{ --cert-rest:1.52; } }
+  /* Phones: 1.15 left the sheet 8px from the panel's sides at 393 wide and
+     flush with them at 375, with no room for the gyro tilt. Stepped down to
+     keep roughly 20 to 30px either side. */
+  @media (max-width:419.98px) { #sc-cert-stage.is-expanded .cert-doc{ --cert-rest:1; } }
+  @media (max-width:359.98px) { #sc-cert-stage.is-expanded .cert-doc{ --cert-rest:0.85; } }
+  /* Phones show the flip button all the time (no hover), and at the foot of
+     the front face it covered the end of the fine print. The front's top
+     corner is clear; the back face's button already sits in clear space. */
+  @media (max-width:640px) { #sc-cert-stage.is-expanded .cert-front .cert-flip-hint{ top:9px; bottom:auto; } }
   /* Phones: the tiles are shorter, so shrink the card cert a touch to keep the
      full 360° turntable clear of the tile edges. */
   /* The 0.68 teaser fits roomy desktop cards, but below ~1200px the equal-row
@@ -1924,6 +1933,10 @@
     #sc-fw #fw-showcase:not(.is-expanded) { aspect-ratio: 2/1; }
   }
   #sc-fw { isolation: isolate; background: #050E1C !important; border: 1px solid #2B5C94; }
+  /* Phones: the outline frames the tile inside the gutter, but once the tile
+     spreads to the screen edge it read as a blue line down each side, so it
+     fades out with the spread (--tile-x, 0 contained to 1 edge to edge). */
+  @media (max-width: 640px) { #sc-fw { border-color: rgba(43, 92, 148, calc(1 - var(--tile-x, 0))); } }
   #sc-fw #fw-showcase:not(.is-expanded) { position: static; margin-top: 0; margin-bottom: 0; perspective: none; overflow: visible; background: transparent !important; }
   #sc-fw #fw-showcase:not(.is-expanded)::before { display: none; }
   .sc-fw-video { position: absolute; inset: 0; z-index: -1; width: 100%; height: 100%; object-fit: cover; display: block; border: 0; }
@@ -3825,7 +3838,7 @@ document.querySelectorAll('.sc-field').forEach(function(box){
      by the time it sits mid-screen. Raise both to spread sooner. Until
      2026-10-05 it only began once the tile's top had left the screen, which
      read as too late. */
-  var START = 0.8, END = 0.35;
+  var START = 0.65, END = 0.2;
   var ticking = false, last = [];
 
   function active(){ return phone.matches && !reduce.matches; }

@@ -15,8 +15,8 @@
  *   2. Settings > Variables and Secrets:
  *        OLLAMA_URL                    plain var, e.g. https://ollama.safetycriticallabs.com
  *        CF_ACCESS_CLIENT_ID / _SECRET secrets, from the Zero Trust service token
- *        OLLAMA_MODEL                  scl-sft-v2 (required for production parity;
- *                                      the code falls back to DEFAULT_MODEL)
+ *        OLLAMA_MODEL                  scl-sft-v3 from the stage I release of 2026-10 (scl-sft-v2 before;
+ *                                      the code falls back to DEFAULT_MODEL, the v2 floor)
  *        RERANK                        on
  *        RERANK_GUARD                  pintop
  *        BENCH_TOKEN                   secret; without it /bench/retrieve is a 404
@@ -88,7 +88,7 @@ const DEFAULT_MODEL = 'scl-sft-v2:latest';  // production since 2026-09-10; roll
                                             // which is the un-tuned base and has not been production since 09-02.
                                             // This constant is the floor if OLLAMA_MODEL is ever lost, so it must
                                             // track whatever production actually serves.
-const WORKER_BUILD = '2026-10-04.2'; // bump on every dashboard paste; echoed by /bench/retrieve so a paste can be verified from outside
+const WORKER_BUILD = '2026-10-05.1'; // bump on every dashboard paste; echoed by /bench/retrieve so a paste can be verified from outside
 const MAX_QUESTION_CHARS = 500;
 const MAX_HISTORY_MSGS = 8;          // most recent turns kept
 const MAX_HISTORY_MSG_CHARS = 1200;  // each turn truncated to this
@@ -341,7 +341,7 @@ Reference entries follow.`;
    the stage I release flips RULES_LIVE; a Worker in TEST_MODE sends this set.
    Instruction tokens (Llama 3.1): 1377 normal, 1011 document, against 783 and
    793 for the live set; the stage F worst case keeps 2067 and 1809 to spare. */
-const RULES_LIVE = false; // stage I release: true, and every Worker sends the stage G rules
+const RULES_LIVE = true; // stage I release (2026-10-05.1): every Worker sends the stage G rules; false kept the pre-release set
 
 const ASSISTANT_IDENTITY_G = `You are Ask SCL, the question-answering assistant on the public website of Safety Critical Labs (SCL), an independent certification authority for AI in safety-critical systems. You help visitors understand how AI is regulated, governed, certified and assured, in any field, using the reference entries you are given; SCL is one source among those entries, not the subject of every answer. You are built with Llama: an open-weight Llama 3.1 model that SCL fine-tuned and runs on hardware SCL controls, so no cloud AI provider generates your answers. Before you answer, a small ranking model hosted by Cloudflare scores the question against the reference material to choose which entries you are given; that ranking service is not always available, and when it is not, SCL's own keyword matching chooses them instead. Cloudflare also runs the request handling for the assistant. SCL does not publish further detail about the model configuration, which may change over time; if asked what model you are, say exactly this. If a visitor asks what you are or how you work, answer plainly from this paragraph. You are an informational assistant only and play no part in certification decisions. The conversation may include earlier turns; answer follow-up questions using ONLY the reference entries below, and if a follow-up is ambiguous, ask what the visitor means rather than guessing. Among the entries you may be given excerpts from SCL's own standard, the AI Requirements Framework: ten core requirement areas (AI-1 through AI-10) plus three conditional architecture and paradigm areas (AI-11 multi-model, AI-12 neural networks, AI-13 continuous learning). It supplements the domain safety standard a system already follows, such as DO-178C, ISO 26262, or NPR 7150.2D.`;
 
@@ -445,7 +445,7 @@ const FAQ_ALWAYS = ['faq-1', 'faq-7', 'faq-20', 'faq-23'];
 const FAQ_MAX_PICK = 7;
 const FAQ_RESCUE_TOP = 3;
 const FAQ_RESCUE_EXTRA = 2;
-const FAQ_MATCHED_LIVE = false; // stage I release: true, and every Worker sends the matched block
+const FAQ_MATCHED_LIVE = true; // stage I release (2026-10-05.1): every Worker sends the matched block; false kept the whole FAQ
 
 function faqSelectionOn(env) {
   return FAQ_MATCHED_LIVE || testModeOn(env);
@@ -969,7 +969,12 @@ function selectSupplementary(question, sp, qvec) {
     var section = function (out, heading) {
       if (!out.length) return '';
       var parts = ['\n\n' + heading];
-      for (var n = 0; n < out.length; n++) parts.push('\n[' + out[n].id + '] ' + out[n].title + '\n' + out[n].text);
+      for (var n = 0; n < out.length; n++) {
+        var line = '\n[' + out[n].id + '] ' + out[n].title + '\n' + out[n].text;
+        // The outcome line is SCL's, labeled, after the verbatim summary (decision 5).
+        if (typeof out[n].outcome === 'string' && out[n].outcome.trim()) line += '\n' + OUTCOME_LABEL + out[n].outcome.trim();
+        parts.push(line);
+      }
       return parts.join('\n');
     };
     // Documents the question names get the budget first; the block still
@@ -1255,7 +1260,12 @@ const STAGED_MAX_KEYWORDS = 40;
 const STAGED_MAX_KEYWORD_CHARS = 80;
 const STAGED_MAX_AREA_CHARS = 20;
 const EMBED_DIM = 768; // nomic-embed-text output size; staged vectors must match it
-const STAGED_ENTRY_FIELDS = ['id', 'kind', 'title', 'text', 'keywords', 'area'];
+const STAGED_ENTRY_FIELDS = ['id', 'kind', 'title', 'text', 'keywords', 'area', 'outcome'];
+const STAGED_MAX_OUTCOME_CHARS = 300;
+/* Decision 5 (2026-10-05): a reference entry may carry one line SCL writes stating the
+   outcome and its force, printed after the agency's verbatim summary under its own
+   label so the model and the reader see it as SCL's reading, not agency text. */
+const OUTCOME_LABEL = 'SCL note on the outcome (written by SCL, not part of the agency text): ';
 const STAGED_VECTOR_FIELDS = ['model', 'query_prefix', 'version', 'dim', 'count', 'ids', 'scales', 'vecs'];
 // Characters no staged field may carry. Staged text reaches the model (and
 // later the public corpus), and these do not show on screen: the C0 controls
@@ -1355,8 +1365,16 @@ function validateStaged(s) {
             || /[\t\n]/.test(e.area) || STAGED_BAD_CHARS_RE.test(e.area) || STAGED_TEMPLATE_RE.test(e.area))) {
       return at + '.area must be null or a string of 1 to ' + STAGED_MAX_AREA_CHARS + ' characters, with no control or bidi characters and no <| or |>';
     }
+    if (e.outcome !== undefined && e.outcome !== null) {
+      if (typeof e.outcome !== 'string' || !e.outcome.trim() || e.outcome.length > STAGED_MAX_OUTCOME_CHARS
+          || /[\t\n\r]/.test(e.outcome) || STAGED_BAD_CHARS_RE.test(e.outcome) || STAGED_TEMPLATE_RE.test(e.outcome)
+          || e.outcome.indexOf('[') !== -1 || /^--- .+ ---$/.test(e.outcome)) {
+        return at + '.outcome must be null or one line of 1 to ' + STAGED_MAX_OUTCOME_CHARS + ' characters, with no "[", no control or bidi characters and no <| or |>';
+      }
+    }
     var c = { id: e.id, kind: e.kind, title: e.title, text: e.text, keywords: e.keywords.slice() };
     if (e.area !== undefined) c.area = e.area;
+    if (typeof e.outcome === 'string') c.outcome = e.outcome;
     clean.push(c);
   }
 

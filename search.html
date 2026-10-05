@@ -5,9 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#FAF9F5">
 <title>Ask SCL: Answers on AI Certification for Safety-Critical Systems | Safety Critical Labs</title>
-<meta name="description" content="Ask SCL, the AI assistant for Safety Critical Labs. Answers about AI certification, the framework, the process, and accreditation, grounded in SCL's published documentation.">
+<meta name="description" content="Ask SCL, the AI assistant for Safety Critical Labs. Plain answers about AI certification, the framework, the process, and how AI is regulated and assured, grounded in SCL's published material and in sources labeled by who wrote them.">
 <meta property="og:title" content="Ask SCL | Safety Critical Labs">
-<meta property="og:description" content="Ask SCL, the AI assistant for Safety Critical Labs. Answers grounded in SCL's published documentation.">
+<meta property="og:description" content="Ask SCL, the AI assistant for Safety Critical Labs. Answers grounded in SCL's published material and in sources labeled by who wrote them.">
 <link rel="canonical" href="https://safetycriticallabs.com/search">
 <meta name="twitter:card" content="summary">
 <meta property="og:url" content="https://safetycriticallabs.com/search">
@@ -1342,7 +1342,7 @@
     input.placeholder = 'Ask a question';
     input.maxLength = MAX_Q;   /* the worker rejects longer; enforce before dispatch */
     input.setAttribute('aria-describedby', 'ask-count');
-    if (lead) lead.textContent = 'Ask anything about AI certification, the framework, the process, or accreditation. Answers are generated from SCL\'s published documentation.';
+    if (lead) lead.textContent = 'Ask anything about AI certification, the framework, the process, or how AI is regulated and assured more widely. Answers are generated from SCL\'s published material and from sources labeled by who wrote them.';
   }
 
   function tokenize(s) {
@@ -1629,7 +1629,7 @@
      completion handler no-ops when its captured generation is stale. */
   var askGen = 0;
 
-  var ASK_DISCLOSURE = 'Built with Llama. Answers come from an open-weight Llama 3.1 model SCL fine-tuned and runs on its own hardware, grounded in SCL\'s published documentation. A Cloudflare ranking service sees your question in order to choose which passages are used. That service is not always available, and when it is not, SCL\'s own keyword matching chooses the passages instead. Verify anything load-bearing against the standard. '
+  var ASK_DISCLOSURE = 'Built with Llama. Answers come from an open-weight Llama 3.1 model SCL fine-tuned and runs on its own hardware, grounded in SCL\'s published material: the framework text, the question library, SCL\'s plain-language explainers and, as they are added, agencies\' own summaries of their documents, each labeled by who wrote it. A Cloudflare ranking service sees your question in order to choose which passages are used. That service is not always available, and when it is not, SCL\'s own keyword matching chooses the passages instead. Verify anything load-bearing against the standard. '
     + '<a href="https://dev.meta.ai/llama/llama3_1/license" target="_blank" rel="noopener">Llama 3.1 Community License</a>';
   /* The thread footer only exists after the first send; the hero copy shows
      the same notice before that. Ask mode only: a plain library search has

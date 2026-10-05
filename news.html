@@ -200,7 +200,7 @@
 }
 /* Per-source tints removed 2026-09-18: every card image is var(--cream-2). */
 .news-basis {
-  margin-top: 88px;
+  margin: 88px auto 0;   /* centred under the card grid, 2026-10-05 */
   padding-top: 40px;
   border-top: 1px solid rgba(12,34,66,0.14);
   max-width: 760px;
@@ -218,7 +218,7 @@
 /* Frame from the shared hand-off rule in styles.css; the measure is this
    page's own, matching .news-basis so the rule closes the column it follows
    rather than running 440px past it. */
-.news-subscribe-band { max-width: 760px; }
+.news-subscribe-band { max-width: 760px; margin-left: auto; margin-right: auto; }
 
 .news-card-source-pill {
   position: absolute;

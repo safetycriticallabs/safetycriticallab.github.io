@@ -909,10 +909,9 @@ html.fwx-scene .fwx-key i.conditional { width: 8px; height: 8px; border: 1px sol
   html.fwx-door.fwx-scene .structure-section a.fwx-cell::before { transition: none; }
 }
 /* ── THE BUTTONS IN THE SCENE'S OWN MARKS (treatment A; ?cards keeps the
-   old). No box: a point, the words, an arrow and a hairline beneath, sized
-   to the words. The download and the process carry a lit point, the SSRN
-   paper a ring; the arrow turns up and right for the two that open another
-   site. ── */
+   old). No box: a point, the words and a hairline beneath, sized to the
+   words. The download and the process carry a lit point, the SSRN paper a
+   ring. Arrows removed 2026-10-05 at Kevin's request. ── */
 html.fwx-door.fwx-scene .pub-standard-rows > .btn, html.fwx-door.fwx-scene .fw-transition-cta .btn {
   display: inline-flex; align-items: center; gap: 12px; align-self: flex-start; width: auto; min-height: 44px; box-sizing: border-box;
   padding: 10px 2px 12px; border: 0; border-radius: 0; box-shadow: none;
@@ -931,19 +930,7 @@ html.fwx-door.fwx-scene .pub-standard-rows > .btn::before, html.fwx-door.fwx-sce
   background: #FAF9F5; box-shadow: 0 0 8px 2px rgba(150,190,236,0.7);
 }
 html.fwx-door.fwx-scene .pub-standard-rows > .btn-outline::before { background: none; box-shadow: none; border: 1px solid rgba(250,249,245,0.7); }
-html.fwx-door.fwx-scene .pub-standard-rows > .btn::after, html.fwx-door.fwx-scene .fw-transition-cta .btn::after {
-  content: ""; flex: none; width: 12px; height: 12px; background: currentColor; transition: transform .2s ease;
-  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M1.5 6h8.5M6.8 2.6 10.2 6 6.8 9.4' fill='none' stroke='black' stroke-width='1.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / contain no-repeat; mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M1.5 6h8.5M6.8 2.6 10.2 6 6.8 9.4' fill='none' stroke='black' stroke-width='1.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / contain no-repeat;
-}
-html.fwx-door.fwx-scene .pub-standard-rows > .btn[target="_blank"]::after {
-  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M3 9 9 3M4.2 3H9v4.8' fill='none' stroke='black' stroke-width='1.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / contain no-repeat; mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M3 9 9 3M4.2 3H9v4.8' fill='none' stroke='black' stroke-width='1.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / contain no-repeat;
-}
-html.fwx-door.fwx-scene .pub-standard-rows > .btn:hover::after, html.fwx-door.fwx-scene .fw-transition-cta .btn:hover::after { transform: translateX(4px); }
-html.fwx-door.fwx-scene .pub-standard-rows > .btn[target="_blank"]:hover::after { transform: translate(3px, -3px); }
 html.fwx-door.fwx-scene .pub-standard-rows > .btn:focus-visible, html.fwx-door.fwx-scene .fw-transition-cta .btn:focus-visible { outline-offset: 4px; }
-@media (prefers-reduced-motion: reduce) {
-  html.fwx-door.fwx-scene .pub-standard-rows > .btn::after, html.fwx-door.fwx-scene .fw-transition-cta .btn::after { transition: none; }
-}
 /* ── THE NAV AND THE FOOTER IN THE SCENE'S NIGHT (this page only; Kevin:
    "the same dark color just for this page. So it can be seemless"). The
    shell sheet's cream colours are restated for night at the weight
@@ -1005,16 +992,9 @@ html.fwx-scene .fwx-cta .btn::before {
   background: #FAF9F5; box-shadow: 0 0 8px 2px rgba(150,190,236,0.7);
 }
 html.fwx-scene .fwx-cta .fwx-btn-ghost::before { background: none; box-shadow: none; border: 1px solid rgba(250,249,245,0.7); }
-html.fwx-scene .fwx-cta .btn::after {
-  content: ""; flex: none; width: 12px; height: 12px; background: currentColor; transition: transform .2s ease;
-  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M1.5 6h8.5M6.8 2.6 10.2 6 6.8 9.4' fill='none' stroke='black' stroke-width='1.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / contain no-repeat; mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M1.5 6h8.5M6.8 2.6 10.2 6 6.8 9.4' fill='none' stroke='black' stroke-width='1.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / contain no-repeat;
-}
-html.fwx-scene .fwx-cta .btn[target="_blank"]::after { -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M3 9 9 3M4.2 3H9v4.8' fill='none' stroke='black' stroke-width='1.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / contain no-repeat; mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M3 9 9 3M4.2 3H9v4.8' fill='none' stroke='black' stroke-width='1.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / contain no-repeat; }
-html.fwx-scene .fwx-cta .btn:hover::after { transform: translateX(4px); }
-html.fwx-scene .fwx-cta .btn[target="_blank"]:hover::after { transform: translate(3px, -3px); }
 html.fwx-scene .fwx-cta .btn:focus-visible { outline: 2px solid #79A8D5; outline-offset: 4px; }
 @media (prefers-reduced-motion: reduce) {
-  .fwx-copy, .fwx-hero::after, html.fwx-scene .fwx-cta .btn::after { transition: none; }
+  .fwx-copy, .fwx-hero::after { transition: none; }
 }
 /* The hero's words and the figures carry their own dark: a full-width band
    behind each, fading out above and below, rising with the words and coming

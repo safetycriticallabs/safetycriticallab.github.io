@@ -1599,7 +1599,12 @@
      click anywhere in the box still lands in the field. Reproduced and
      verified in WebKit 2026-09-26. */
   .sc-field{ flex:1; min-width:0; display:flex; align-items:center; cursor:text; }
-  .sc-field input{ flex:1; min-width:0; }
+  /* width:0 drops the input's default ~168px intrinsic width, which flex:1
+     never uses but the grid still counted: on a phone it made the Subscribe
+     form 300px at minimum, so the one tile column came out ~20px wider than
+     the page at 375 wide and every tile, the certificate first, sat off
+     centre and overshot the right edge when it spread. */
+  .sc-field input{ flex:1; min-width:0; width:0; }
   .sc-grid-wide.sc-pinned .sc-field input{ flex:0 0 var(--hold-wide); }
   .sc-grid.sc-tiles-pinned .sc-field input{ flex:0 0 var(--hold-phone); }
 
@@ -1847,8 +1852,8 @@
        .sc-grid-wide --expand effect (which line 1083 caps out below 1360px).
        Stacked tiles carry the same orientation as the desktop grid, so each
        runs its own progress: normal gutter width on the way in, spreading to
-       the full screen edge as its centre rises through the 3/4 line (measured
-       from the TOP of the viewport), and staying spread once you are past it.
+       the full screen edge as it rises into view (START and END in the
+       script), and staying spread once you are past it.
        --tile-bleed cancels .showcase-cards' side padding exactly, so the
        card lands flush to the screen edge and no further. It reads --page-gut
        rather than a constant, because that padding is 40px on a laptop and
@@ -3814,12 +3819,13 @@ document.querySelectorAll('.sc-field').forEach(function(box){
   if(!cards.length) return;
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
   var phone  = window.matchMedia('(max-width: 640px)');
-  /* Measured from the TOP DOWN. Progress starts the moment the top of the
-     screen reaches the tile's top edge, then tracks how far down the tile the
-     screen top has travelled: fully spread once it is this fraction of the
-     tile's own height in. So the spread runs as you scroll PAST a tile, not as
-     it arrives from the bottom. Lower it to finish sooner. */
-  var SPREAD_DEPTH = 0.75;
+  /* Measured against the screen. A tile starts to spread when its top edge
+     rises past START of the way down the screen and is fully spread when it
+     reaches END, so it opens out while it comes into view and is full width
+     by the time it sits mid-screen. Raise both to spread sooner. Until
+     2026-10-05 it only began once the tile's top had left the screen, which
+     read as too late. */
+  var START = 0.8, END = 0.35;
   var ticking = false, last = [];
 
   function active(){ return phone.matches && !reduce.matches; }
@@ -3857,12 +3863,11 @@ document.querySelectorAll('.sc-field').forEach(function(box){
     if(!active()){ cards.forEach(function(c){ c.style.setProperty('--tile-x','0'); }); return; }
     cards.forEach(function(c, i){
       var r = c.getBoundingClientRect();
-      /* 0 while the tile is still below the top of the screen, then ramps as the
-         screen top travels down through it: 1 once it is SPREAD_DEPTH of the
-         tile's height in. Clamped, so a tile stays spread once you are past it
-         and is contained again if you scroll back above it. */
-      var travel = SPREAD_DEPTH * r.height;
-      var p = smooth(travel > 0 ? -r.top / travel : 0);
+      /* 0 while the tile's top is below START, 1 once it is above END.
+         Clamped, so a tile stays spread once you are past it and is
+         contained again if you scroll back above it. */
+      var vh = window.innerHeight;
+      var p = smooth((START * vh - r.top) / ((START - END) * vh));
       if(Math.abs(p - (last[i] === undefined ? -1 : last[i])) < 0.004) return;
       last[i] = p;
       c.style.setProperty('--tile-x', p.toFixed(3));

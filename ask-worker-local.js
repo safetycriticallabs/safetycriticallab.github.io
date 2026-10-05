@@ -88,7 +88,7 @@ const DEFAULT_MODEL = 'scl-sft-v2:latest';  // production since 2026-09-10; roll
                                             // which is the un-tuned base and has not been production since 09-02.
                                             // This constant is the floor if OLLAMA_MODEL is ever lost, so it must
                                             // track whatever production actually serves.
-const WORKER_BUILD = '2026-10-05.1'; // bump on every dashboard paste; echoed by /bench/retrieve so a paste can be verified from outside
+const WORKER_BUILD = '2026-10-05.2'; // 2026-10-05.1 plus CONSENT_VERSION only; the copy was tested on .1 // bump on every dashboard paste; echoed by /bench/retrieve so a paste can be verified from outside
 const MAX_QUESTION_CHARS = 500;
 const MAX_HISTORY_MSGS = 8;          // most recent turns kept
 const MAX_HISTORY_MSG_CHARS = 1200;  // each turn truncated to this
@@ -1019,7 +1019,7 @@ function selectExcerptsSplit(question, fw, qvec, vectors) {
 
    Storage is best-effort and never blocks or fails an answer: no ASK_LOG
    binding, or any write error, and the assistant behaves exactly as before. */
-const CONSENT_VERSION = '2026-08-28';
+const CONSENT_VERSION = '2026-10-06'; // stage I release day (Kevin, 2026-10-05: the release date); set to the day of the live paste. Returning visitors are asked again because the privacy notice's description of what is stored changed (explainer and reference identifiers)
 const MAX_STORED_QUESTION_CHARS = 500;
 
 function scrubForStorage(s) {

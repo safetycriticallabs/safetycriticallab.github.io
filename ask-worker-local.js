@@ -88,7 +88,7 @@ const DEFAULT_MODEL = 'scl-sft-v2:latest';  // production since 2026-09-10; roll
                                             // which is the un-tuned base and has not been production since 09-02.
                                             // This constant is the floor if OLLAMA_MODEL is ever lost, so it must
                                             // track whatever production actually serves.
-const WORKER_BUILD = '2026-10-05.2'; // 2026-10-05.1 plus CONSENT_VERSION only; the copy was tested on .1 // bump on every dashboard paste; echoed by /bench/retrieve so a paste can be verified from outside
+const WORKER_BUILD = '2026-10-06.4'; // library step 3: kind 'excerpt' and names (2026-10-06.3) plus two outside entries on an unnamed question (SUPP_REF_UNNAMED_MAX 2). An excerpt rules sentence (2026-10-06.5) was measured and reverted: neutral on errors, reworded 52 of 64 bench answers // bump on every dashboard paste; echoed by /bench/retrieve so a paste can be verified from outside
 const MAX_QUESTION_CHARS = 500;
 const MAX_HISTORY_MSGS = 8;          // most recent turns kept
 const MAX_HISTORY_MSG_CHARS = 1200;  // each turn truncated to this
@@ -347,7 +347,7 @@ const ASSISTANT_IDENTITY_G = `You are Ask SCL, the question-answering assistant 
 
 const SYSTEM_INSTRUCTIONS_G = ASSISTANT_IDENTITY_G + `
 
-Answer using ONLY the reference entries provided below. They come in up to four kinds, each under its own heading, and each kind has a different author. FAQ entries, marked with an id in square brackets such as [faq-3], are SCL's published answers about SCL itself. Framework excerpts, with ids such as AI-4.1, are SCL's own requirements, quoted verbatim from the current published AI Requirements Framework. Explainers, with ids starting exp-, are plain-language background written by SCL; they are not requirements and bind no one. Reference summaries, with ids starting ref-, are the publishing agency's own words about its own document: attribute them to that agency by name (for example, "the FAA's summary says"), never present them as SCL's text or as an SCL requirement, and read each one to its end before stating the outcome, because the first sentence may describe a request or petition and a later sentence the agency's decision on it. Rules:
+Answer using ONLY the reference entries provided below. They come in up to four kinds, each under its own heading, and each kind has a different author. FAQ entries, marked with an id in square brackets such as [faq-3], are SCL's published answers about SCL itself. Framework excerpts, with ids such as AI-4.1, are SCL's own requirements, quoted verbatim from the current published AI Requirements Framework. Explainers, with ids starting exp-, are plain-language background written by SCL; they are not requirements and bind no one. Reference entries, with ids starting ref-, are the publishing organization's own words, a summary of or a verbatim excerpt from its own document: attribute them to that organization and document by name (for example, "the FAA's summary says"), never present them as SCL's text or as an SCL requirement, and read each one to its end before stating the outcome, because the first sentence may describe a request or petition and a later sentence the agency's decision on it. Rules:
 - Answer the question asked, about the subject the visitor named. Bring in SCL or its framework only when the question is about them or an entry from them answers the question; a question about the EU AI Act gets an answer about the EU AI Act.
 - Reply in one plain-text paragraph of 2 to 6 short sentences. Never use bullet points, numbered lists, markdown or em dashes. Name enumerations inline, for example "three conditional areas: AI-11, AI-12 and AI-13".
 - Cite the id of every entry you use, in parentheses, for example (AI-4.1), (faq-3), (exp-eu-ai-act) or (ref-fr-2026-19074-1). Never cite an id that is not present in the entries below, and never invent requirement text, document text or an id.
@@ -860,13 +860,13 @@ function selectExcerpts(question, framework, qvec, vectors) {
    bench draws one explainer and no reference. */
 const SUPP_EXP_MAX = 2;
 const SUPP_REF_MAX = 2;
-const SUPP_REF_UNNAMED_MAX = 1;
+const SUPP_REF_UNNAMED_MAX = 2;   // 2026-10-06.4: on the coverage set the intended NASA section was the document's second-best on four of five everyday misses; a first try of 2 was confounded by keyword-driven embedding changes and reverted, this is the clean measurement
 const SUPP_BUDGET_CHARS = 6500;
 const SUPP_EXP_MARGIN = 0.01;
 const SUPP_REF_MARGIN = 0.03;
 const SUPP_PHRASE_FLOOR = -0.06;
 const EXPLAINER_HEADING = '--- SCL explainers: plain-language background written by SCL, not framework requirements (cite these IDs) ---';
-const REFERENCE_HEADING = '--- Reference summaries of outside documents: each is the publishing agency\'s own summary, not SCL text and not an SCL requirement (cite these IDs) ---';
+const REFERENCE_HEADING = '--- Reference summaries and excerpts of outside documents: each is the publishing organization\'s own words, a summary of or a verbatim excerpt from its own document, not SCL text and not an SCL requirement (cite these IDs) ---';
 
 function isSupplementaryEntry(c) {
   return !!c && typeof c.id === 'string' && /^(?:exp|ref)-/.test(c.id);
@@ -905,9 +905,33 @@ function suppCosine(qvec, s, dim) {
   return (dot * s.scale) / (Math.sqrt(qn) || 1);
 }
 
-function refDocNumber(id) {
-  var m = /^ref-fr-(\d{4}-\d{4,6})-\d+$/.exec(id);
-  return m ? m[1] : '';
+/* The strings that name an outside document in a question (library step 2, 2026-10-06): a
+   Federal Register document number, an NPR number with or without its revision letter, and
+   the SWE ids an NPR section carries in its keywords. A question containing any of them
+   makes the entry "named"; an SWE id names a section more specifically than its document. */
+function refDocNames(c) {
+  var names = [];
+  // An entry's own names list (library step 3): the builder writes the document's number and title
+  // variants, lowercase, from the source record, never from a question.
+  if (Array.isArray(c.names)) for (var q = 0; q < c.names.length; q++) if (typeof c.names[q] === 'string' && c.names[q]) names.push({ s: c.names[q].toLowerCase(), rank: 1 });
+  var m = /^ref-fr-(\d{4}-\d{4,6})-\d+$/.exec(c.id);
+  if (m) names.push({ s: m[1], rank: 1 });
+  var n = /^ref-npr-(\d{4})-(\d+)([a-z])?(?:-|$)/.exec(c.id);
+  if (n) {
+    names.push({ s: n[1] + '.' + n[2] + (n[3] || ''), rank: 1 });
+    if (n[3]) names.push({ s: n[1] + '.' + n[2], rank: 1 });
+  }
+  var kws = Array.isArray(c.keywords) ? c.keywords : [];
+  for (var k = 0; k < kws.length; k++) if (/^swe-\d{3}$/.test(kws[k])) names.push({ s: kws[k], rank: 2 });
+  return names;
+}
+function namedRank(c, qNorm) {
+  var names = refDocNames(c), best = 0;
+  for (var i = 0; i < names.length; i++) {
+    var pat = names[i].s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&').replace(/-/g, '[- ]?');   // swe-033 also matches "swe 033" and "swe033"
+    if (new RegExp('(^|[^0-9a-z])' + pat + '([^0-9a-z]|$)').test(qNorm) && names[i].rank > best) best = names[i].rank;
+  }
+  return best;
 }
 
 /* The exp-/ref- excerpt block for one question, or ''. Any surprise returns ''
@@ -943,13 +967,17 @@ function selectSupplementary(question, sp, qvec) {
         var phraseOk = phrase && (sim === null || sim - coreMax >= SUPP_PHRASE_FLOOR);
         if (phraseOk || (sim !== null && sim - coreMax >= SUPP_EXP_MARGIN)) exp.push({ c: c, strong: phraseOk, sim: sim === null ? -1 : sim });
       } else {
-        var doc = refDocNumber(c.id);
-        var named = !!doc && new RegExp('(^|[^0-9])' + doc + '([^0-9]|$)').test(qNorm);
+        var named = namedRank(c, qNorm);   // 0 unnamed, 1 the document named, 2 the section's SWE id named
         if (named) namedAny = true;
-        if (named || (sim !== null && sim - coreMax >= SUPP_REF_MARGIN)) ref.push({ c: c, strong: named, sim: sim === null ? -1 : sim });
+        // A verbatim section (kind excerpt, library step 3) is also found by a keyword phrase, as an
+        // explainer is, under the same floor; an agency summary (kind reference) is not, since its
+        // keywords are broad topic words and the stage E tuning kept summaries to name or similarity.
+        var phraseSec = c.kind === 'excerpt' && phrase && (sim === null || sim - coreMax >= SUPP_PHRASE_FLOOR);
+        var rank = named + (phraseSec ? 1 : 0);
+        if (rank || (sim !== null && sim - coreMax >= SUPP_REF_MARGIN)) ref.push({ c: c, strong: rank, sim: sim === null ? -1 : sim });
       }
     }
-    var order = function (a, b) { return a.strong !== b.strong ? (a.strong ? -1 : 1) : b.sim - a.sim; };
+    var order = function (a, b) { var ra = +a.strong || 0, rb = +b.strong || 0; return rb !== ra ? rb - ra : b.sim - a.sim; };
     exp.sort(order);
     ref.sort(order);
     // A question naming a document gets the documents it names; otherwise the
@@ -1260,7 +1288,9 @@ const STAGED_MAX_KEYWORDS = 40;
 const STAGED_MAX_KEYWORD_CHARS = 80;
 const STAGED_MAX_AREA_CHARS = 20;
 const EMBED_DIM = 768; // nomic-embed-text output size; staged vectors must match it
-const STAGED_ENTRY_FIELDS = ['id', 'kind', 'title', 'text', 'keywords', 'area', 'outcome'];
+const STAGED_ENTRY_FIELDS = ['id', 'kind', 'title', 'text', 'keywords', 'area', 'outcome', 'names'];
+const STAGED_MAX_NAMES = 24;
+const STAGED_MAX_NAME_CHARS = 60;
 const STAGED_MAX_OUTCOME_CHARS = 300;
 /* Decision 5 (2026-10-05): a reference entry may carry one line SCL writes stating the
    outcome and its force, printed after the agency's verbatim summary under its own
@@ -1375,6 +1405,16 @@ function validateStaged(s) {
     var c = { id: e.id, kind: e.kind, title: e.title, text: e.text, keywords: e.keywords.slice() };
     if (e.area !== undefined) c.area = e.area;
     if (typeof e.outcome === 'string') c.outcome = e.outcome;
+    if (e.names !== undefined && e.names !== null) {
+      if (!Array.isArray(e.names) || e.names.length > STAGED_MAX_NAMES) return at + '.names must be an array of at most ' + STAGED_MAX_NAMES + ' lowercase strings';
+      for (var nn = 0; nn < e.names.length; nn++) {
+        var nm = e.names[nn];
+        if (typeof nm !== 'string' || !nm || nm.length > STAGED_MAX_NAME_CHARS || nm !== nm.trim() || nm !== nm.toLowerCase() || /[\t\n]/.test(nm) || STAGED_BAD_CHARS_RE.test(nm) || STAGED_TEMPLATE_RE.test(nm)) {
+          return at + '.names[' + nn + '] must be a trimmed lowercase string of 1 to ' + STAGED_MAX_NAME_CHARS + ' characters';
+        }
+      }
+      c.names = e.names.slice();
+    }
     clean.push(c);
   }
 

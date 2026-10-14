@@ -77,3 +77,6 @@ filesystem mtime, which resets on a fresh clone.
 
 Excluded on purpose: `/presentation`, `/certificate-template` and `/404`, all three of
 which carry `noindex`.
+
+`/presentation` was withdrawn from the site on 2026-10-14 while it is reworked. The counts
+above that name it are the 2026-09-15 measurement; skip it on a version bump until it returns.

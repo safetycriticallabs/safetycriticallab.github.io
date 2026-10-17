@@ -214,29 +214,33 @@
 }
 .search-submit:hover { background: #0C2242; color: #FAF9F5; border-color: #0C2242; }
 
-/* Starter prompt chips — quick-fill the input */
-.search-starters {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 10px;
-  margin-top: 32px;
-}
-.search-starter {
-  display: inline-flex;
-  align-items: center;
-  padding: 8px 16px;
-  border: 1px solid rgba(12,34,66,0.30);
-  border-radius: 6px;
-  background: transparent;
-  color: #0C2242;
+/* Rotating example questions (2026-10-17), in place of the six starter chips,
+   which were all about SCL. The empty hero box cycles through questions Ask SCL
+   answers well. The example IS the placeholder: the box has no border or
+   background, so fading the empty textarea fades only its placeholder, and the
+   text wraps and is read out the way any placeholder is. Tab, or sending the
+   empty box, puts the shown question in. Reduced motion holds the first one. */
+.search-input.is-rotating { transition: opacity 0.4s ease; }
+.search-input.is-hint-out { opacity: 0; }
+@media (prefers-reduced-motion: reduce) { .search-input.is-rotating { transition: none; } }
+/* Desktop cue for the Tab shortcut. Touch screens have no Tab key; there the
+   send button with an empty box does the same job. */
+.ask-tab-hint {
+  display: none;
+  flex-shrink: 0;
   font-family: var(--sans);
-  font-size: 13px;
+  font-size: 11px;
   font-weight: 500;
-  cursor: pointer;
-  transition: all 0.25s ease;
+  letter-spacing: 0.04em;
+  line-height: 1;
+  color: rgba(12,34,66,0.55);
+  border: 1px solid rgba(12,34,66,0.25);
+  border-radius: 4px;
+  padding: 4px 6px;
 }
-.search-starter:hover { background: #0C2242; color: #FAF9F5; border-color: #0C2242; }
+@media (hover: hover) and (pointer: fine) {
+  .ask-tab-hint.is-on { display: inline-block; }
+}
 
 /* Results list — hidden until search produces matches */
 .search-results {
@@ -644,7 +648,7 @@
   margin: 12px 0 0;
 }
 /* Hero-state copy of the disclosure, so the Built with Llama notice is on the
-   page before any question is sent. Centred under the starter chips; hidden
+   page before any question is sent. Centred under the question box; hidden
    once the thread footer carries the same text. */
 .ask-disclosure-hero { max-width: 540px; margin: 28px auto 0; }
 .search-page.chat-active .ask-disclosure-hero { display: none; }
@@ -1051,6 +1055,7 @@
           <line x1="21" y1="21" x2="16.65" y2="16.65"/>
         </svg>
         <textarea class="search-input" id="search-input" rows="1" placeholder="Search common questions" aria-label="Search common questions" autocomplete="off" enterkeyhint="send" autofocus></textarea>
+        <kbd class="ask-tab-hint" id="ask-tab-hint" aria-hidden="true" title="Press Tab to use this question">Tab</kbd>
         <button type="button" class="ask-attach-btn" id="ask-attach-btn" aria-label="Attach a document. PDF, DOCX, TXT, or MD." title="Attach a document">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/>
@@ -1066,14 +1071,6 @@
       </button>
     </form>
 
-    <div class="search-starters" id="search-starters">
-      <button class="search-starter" type="button">What is SCL?</button>
-      <button class="search-starter" type="button">How do I get certified?</button>
-      <button class="search-starter" type="button">What is the SCL framework?</button>
-      <button class="search-starter" type="button">How long does certification take?</button>
-      <button class="search-starter" type="button">What does it cost?</button>
-      <button class="search-starter" type="button">Is SCL accredited?</button>
-    </div>
     <p class="ask-disclosure ask-disclosure-hero" id="ask-hero-disclosure" hidden></p>
 
     <div class="search-results" id="search-results" hidden>
@@ -1255,7 +1252,6 @@
   var pageEl       = document.querySelector('.search-page');
   var input        = document.getElementById('search-input');
   var form         = document.getElementById('search-form');
-  var startersWrap = document.getElementById('search-starters');
   var resultsWrap  = document.getElementById('search-results');
   var resultsList  = document.getElementById('search-results-list');
   var resultsLabel = document.getElementById('search-results-label');
@@ -1339,9 +1335,115 @@
   var askMode = !!ASK_ENDPOINT;
   if (askMode) {
     input.placeholder = 'Ask a question';
+    input.setAttribute('aria-label', 'Ask a question');   /* fixed; the rotating example is only the placeholder */
     input.maxLength = MAX_Q;   /* the worker rejects longer; enforce before dispatch */
     input.setAttribute('aria-describedby', 'ask-count');
     if (lead) lead.textContent = 'Ask anything about AI certification, the framework, the process, or how AI is regulated and assured more widely. Answers are generated from SCL\'s published material and from sources labeled by who wrote them.';
+  }
+
+  /* Rotating example questions (2026-10-17; CSS note at .is-rotating). Every one
+     was replayed through the live Worker and scl-sft-v3 (seed 7 plus two
+     unseeded runs) and checked for accuracy before it went in; keep it that way,
+     because a rotating example is a promise that the answer is good. Ask mode
+     only, hero only, empty box only. Clicking or typing in the box freezes the
+     example on screen; leaving the box empty resumes the rotation. */
+  var EXAMPLES = [
+    'Who checks that AI products are safe?',
+    'When do the EU AI Act\'s rules apply?',
+    'Is a standard the same as a regulation?',
+    'Is AI regulated in the US?',
+    'What counts as high-risk AI in the EU?',
+    'Why isn\'t a benchmark score enough?'
+  ];
+  var EXAMPLE_MS = 4000, EXAMPLE_FADE_MS = 400;
+  var exIdx = 0, exTimer = null, exFrozen = false;
+  var tabHint = document.getElementById('ask-tab-hint');
+  var reduceMotion = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+  function inHero() { return askMode && !form.classList.contains('is-composer'); }
+  function showingExample() {
+    return inHero() && !input.value && !attachedDoc && EXAMPLES.indexOf(input.placeholder) !== -1;
+  }
+  function syncTabHint() { if (tabHint) tabHint.classList.toggle('is-on', showingExample()); }
+  /* A phone line holds fewer words, so an example can wrap. The box keeps the
+     height of the tallest one while it rotates, so the page does not jump every
+     four seconds as a two-line example follows a one-line one. */
+  function sizeForExamples() {
+    if (!inHero() || input.value) { if (!inHero()) input.style.minHeight = ''; return; }
+    input.style.minHeight = '';
+    var tallest = 0;
+    for (var i = 0; i < EXAMPLES.length; i++) {
+      input.value = EXAMPLES[i];
+      input.style.height = 'auto';
+      tallest = Math.max(tallest, input.scrollHeight);
+    }
+    input.value = '';
+    input.style.minHeight = tallest + 'px';
+    autogrow();
+  }
+  function tick() {
+    exTimer = null;
+    if (!inHero()) return;                    /* composer: placeholder belongs to the thread */
+    if (attachedDoc) {                        /* an unrelated example does not fit a document question */
+      if (EXAMPLES.indexOf(input.placeholder) !== -1) input.placeholder = 'Ask a question';
+      syncTabHint(); exTimer = setTimeout(tick, EXAMPLE_MS); return;
+    }
+    if (EXAMPLES.indexOf(input.placeholder) === -1) input.placeholder = EXAMPLES[exIdx];
+    syncTabHint();
+    if (exFrozen || reduceMotion || input.value || document.hidden) { exTimer = setTimeout(tick, EXAMPLE_MS); return; }
+    input.classList.add('is-hint-out');
+    exTimer = setTimeout(function () {
+      exIdx = (exIdx + 1) % EXAMPLES.length;
+      if (inHero() && !input.value && !attachedDoc && !exFrozen) input.placeholder = EXAMPLES[exIdx];
+      input.classList.remove('is-hint-out');
+      exTimer = setTimeout(tick, EXAMPLE_MS);
+    }, EXAMPLE_FADE_MS);
+  }
+  function startRotation() {
+    if (!askMode) return;
+    clearTimeout(exTimer);
+    exFrozen = false;
+    input.classList.remove('is-hint-out');
+    input.classList.toggle('is-rotating', !reduceMotion);
+    if (!input.value && !attachedDoc) input.placeholder = EXAMPLES[exIdx];
+    sizeForExamples();
+    syncTabHint();
+    exTimer = setTimeout(tick, EXAMPLE_MS);
+  }
+  function freezeExample() {
+    exFrozen = true;
+    input.classList.remove('is-hint-out');   /* never leave a half-faded box under the pointer */
+  }
+  /* Leaving hero mode (first question sent, restored thread) stops the cycle and
+     puts back the plain placeholder until finishAnswer sets "Ask a follow-up". */
+  function endRotation() {
+    clearTimeout(exTimer); exTimer = null;
+    input.classList.remove('is-hint-out', 'is-rotating');
+    input.style.minHeight = '';
+    if (EXAMPLES.indexOf(input.placeholder) !== -1) input.placeholder = 'Ask a question';
+    syncTabHint();
+  }
+  /* Puts the example on screen into the box. Returns false (and does nothing)
+     when there is no example showing: a typed draft, a thread, a document. */
+  function useExample() {
+    if (!showingExample()) return false;
+    setQuery(input.placeholder);
+    freezeExample();
+    syncTabHint();
+    input.focus();
+    input.setSelectionRange(input.value.length, input.value.length);
+    return true;
+  }
+  if (askMode) {
+    input.addEventListener('pointerdown', freezeExample);
+    input.addEventListener('input', function () { freezeExample(); syncTabHint(); });
+    input.addEventListener('blur', function () { if (!input.value) exFrozen = false; });
+    input.addEventListener('keydown', function (e) {
+      if (e.key !== 'Tab' || e.shiftKey || e.altKey || e.ctrlKey || e.metaKey || e.isComposing) return;
+      if (useExample()) e.preventDefault();   /* the next Tab moves on as usual */
+    });
+    window.addEventListener('resize', function () { if (inHero() && !input.value) sizeForExamples(); });
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { if (inHero() && !input.value) sizeForExamples(); });
+    startRotation();
   }
 
   function tokenize(s) {
@@ -1406,12 +1508,10 @@
 
   function showResults() {
     resultsWrap.removeAttribute('hidden');
-    startersWrap.style.display = 'none';
   }
 
   function hideResults() {
     resultsWrap.setAttribute('hidden', '');
-    startersWrap.style.display = '';
   }
 
   function topMatches(q, n) {
@@ -1605,6 +1705,7 @@
     window.scrollTo(0, 0);   /* the panel is viewport-sized; a scrolled body hides its header */
     if (form.classList.contains('is-composer')) return;
     form.classList.add('is-composer');
+    endRotation();
     var hadFocus = document.activeElement === input;
     resultsWrap.insertBefore(form, resultsList.nextSibling);
     /* Moving a focused element in the DOM drops focus to the document, which
@@ -2093,6 +2194,7 @@
       setQuery('');
       input.placeholder = 'Ask a question';
       hideResults();
+      startRotation();
       input.focus();
     });
   }
@@ -2927,24 +3029,12 @@
     });
   }
 
-  /* Starter chips: fill input, run, scroll first answer into view */
-  startersWrap.addEventListener('click', function (e) {
-    var btn = e.target.closest('.search-starter');
-    if (!btn) return;
-    if (askMode && askBusy) return;   /* mid-stream: don't clobber the draft or drop the click silently into a busy guard */
-    setQuery(btn.textContent);
-    run(input.value);
-    input.focus();
-    setTimeout(function () {
-      if (pageEl.classList.contains('chat-active')) return;   /* the thread scrolls itself */
-      var first = resultsList.querySelector('.faq-item, .ask-msg-user, .search-empty, .search-loading');
-      if (first) first.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    }, 60);
-  });
-
-  /* Submit: render inline. No auto-redirect. */
+  /* Submit: render inline. No auto-redirect. An empty hero box puts the example
+     it is showing into the box instead (the phone's way to take an example;
+     Tab is the keyboard's), so the visitor sees it and sends it themselves. */
   form.addEventListener('submit', function (e) {
     e.preventDefault();
+    if (useExample()) return;
     run(input.value);
   });
 

@@ -279,7 +279,7 @@
     </article>
     <article class="faq-entry">
       <h2 id="faq-37">What happens after we are certified?</h2>
-      <p>Certification is not a one time event. Safety-Critical systems carry an annual surveillance audit, Mission-Critical systems a biennial one, and Operational Support systems a triennial one. Reassessment is triggered by a model version change, a significant environment change, a drift threshold breach, or an incident involving an AI assisted decision.</p>
+      <p>Certification is not a one time event. Safety-Critical systems carry an annual surveillance audit, Mission-Critical systems a biennial one, and Operational Support systems a triennial one. Reassessment is triggered by a model version change, a significant operational environment change, a defined drift threshold breach, or an incident involving an AI assisted decision with safety consequences. The certificate covers only the Operational Claim and Operational Design Domain it records.</p>
       <p class="faq-more"><a href="/process">Read more</a></p>
     </article>
     <article class="faq-entry">
@@ -331,6 +331,16 @@
       <h2 id="faq-47">Does the framework cover a model at inference time, or only its training?</h2>
       <p>Both. The ODD under AI-1.0 states a performance envelope at the inference level, and the runtime requirements watch the deployed model: AI-4.1 monitors data drift against the training baseline, AI-4.2 holds performance above defined thresholds, AI-5.2 detects hallucinated outputs at inference time, AI-6.2 detects out-of-distribution inputs at runtime, AI-8.3 presents calibrated confidence with each output, and AI-13 controls learning that continues in operation. AI-4.7 revalidates a deployment-format model before operational use. The development side covers data provenance (AI-1.3), training data bias (AI-2.2), test coverage (AI-3), and the training distribution that runtime detection compares against (AI-6.1).</p>
       <p class="faq-more"><a href="/requirements#ai-4">Read more</a></p>
+    </article>
+    <article class="faq-entry">
+      <h2 id="faq-48">Does a certificate still cover our model after we retrain or modify it?</h2>
+      <p>Not automatically. A certificate names one system at the version recorded on it. A model that has been retrained, fine tuned, quantized, distilled, pruned, or otherwise modified from the certified artifact is a different system and requires its own assessment, and the mark does not travel to it until then. The exception is a change assessed as part of the certified configuration: a deployment format, such as a quantized model, revalidated under AI-4.7 within the assessment; a change made under an approved change control plan; or a continuous learning update inside the bounds declared under AI-13. Anything outside those requires recertification.</p>
+      <p class="faq-more"><a href="/mark">Read more</a></p>
+    </article>
+    <article class="faq-entry">
+      <h2 id="faq-49">If another product uses or embeds a certified system, is that product certified?</h2>
+      <p>No. Certification attaches to the system named on the certificate, at the version and within the Operational Claim and Operational Design Domain recorded there. A different product is a different system and needs its own assessment. Mark rights are not assignable, so they do not extend to a customer, a reseller, an integrator, or a party that embeds the certified system in its own product.</p>
+      <p class="faq-more"><a href="/mark">Read more</a></p>
     </article>
 
   </div>

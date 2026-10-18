@@ -686,7 +686,7 @@
     {
       "id": "faq-37",
       "q": "What happens after we are certified?",
-      "a": "Certification is not a one time event. Safety-Critical systems carry an annual surveillance audit, Mission-Critical systems a biennial one, and Operational Support systems a triennial one. Reassessment is triggered by a model version change, a significant environment change, a drift threshold breach, or an incident involving an AI assisted decision.",
+      "a": "Certification is not a one time event. Safety-Critical systems carry an annual surveillance audit, Mission-Critical systems a biennial one, and Operational Support systems a triennial one. Reassessment is triggered by a model version change, a significant operational environment change, a defined drift threshold breach, or an incident involving an AI assisted decision with safety consequences. The certificate covers only the Operational Claim and Operational Design Domain it records.",
       "keywords": [
         "after",
         "surveillance",
@@ -942,6 +942,39 @@
         "handle inference"
       ],
       "link": "/requirements#ai-4"
+    },
+    {
+      "id": "faq-48",
+      "q": "Does a certificate still cover our model after we retrain or modify it?",
+      "a": "Not automatically. A certificate names one system at the version recorded on it. A model that has been retrained, fine tuned, quantized, distilled, pruned, or otherwise modified from the certified artifact is a different system and requires its own assessment, and the mark does not travel to it until then. The exception is a change assessed as part of the certified configuration: a deployment format, such as a quantized model, revalidated under AI-4.7 within the assessment; a change made under an approved change control plan; or a continuous learning update inside the bounds declared under AI-13. Anything outside those requires recertification.",
+      "keywords": [
+        "retrain",
+        "fine tune",
+        "fine-tuned",
+        "distilled",
+        "pruned",
+        "derivative",
+        "keep showing",
+        "display the mark"
+      ],
+      "link": "/mark"
+    },
+    {
+      "id": "faq-49",
+      "q": "If another product uses or embeds a certified system, is that product certified?",
+      "a": "No. Certification attaches to the system named on the certificate, at the version and within the Operational Claim and Operational Design Domain recorded there. A different product is a different system and needs its own assessment. Mark rights are not assignable, so they do not extend to a customer, a reseller, an integrator, or a party that embeds the certified system in its own product.",
+      "keywords": [
+        "supplier",
+        "integrator",
+        "reseller",
+        "embed",
+        "embedded",
+        "embeds",
+        "reuse",
+        "subsidiary",
+        "vendor"
+      ],
+      "link": "/mark"
     }
   ]
 }

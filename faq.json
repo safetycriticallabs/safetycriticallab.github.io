@@ -1,5 +1,5 @@
 {
-  "updated": "2026-10-05",
+  "updated": "2026-10-17",
   "note": "Question library for the Ask SCL page (search.html) and the ask worker grounding corpus (ask-worker.js). Single source of truth. Keep answers factual and do not overstate SCL's status. Each entry carries a stable id (faq-N) that the Worker renders in the prompt so the model can cite FAQ content; never renumber, append new ids.",
   "entries": [
     {
@@ -354,24 +354,6 @@
         "valid",
         "confirm",
         "id"
-      ],
-      "link": "/verify"
-    },
-    {
-      "id": "faq-20",
-      "q": "Has SCL certified anyone yet?",
-      "a": "SCL is in early operation and has not issued a production certification yet. The register currently holds a specimen record that demonstrates what an issued certificate looks like. The verify page shows that specimen so you can see the format before real certifications are listed.",
-      "keywords": [
-        "certified",
-        "anyone",
-        "clients",
-        "yet",
-        "issued",
-        "customers",
-        "register",
-        "specimen",
-        "who",
-        "examples"
       ],
       "link": "/verify"
     },

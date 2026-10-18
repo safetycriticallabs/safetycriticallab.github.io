@@ -218,29 +218,14 @@
    which were all about SCL. The empty hero box cycles through questions Ask SCL
    answers well. The example IS the placeholder: the box has no border or
    background, so fading the empty textarea fades only its placeholder, and the
-   text wraps and is read out the way any placeholder is. Tab, or sending the
-   empty box, puts the shown question in. Reduced motion holds the first one. */
+   text wraps and is read out the way any placeholder is. Sending the empty
+   box (Enter, or the send button) puts the shown question in. Reduced motion
+   holds the first one. No Tab shortcut and no visible key cue (removed
+   2026-10-18: the cue read as confusing, and without it a Tab that filled the
+   box instead of moving focus would surprise keyboard users). */
 .search-input.is-rotating { transition: opacity 0.4s ease; }
 .search-input.is-hint-out { opacity: 0; }
 @media (prefers-reduced-motion: reduce) { .search-input.is-rotating { transition: none; } }
-/* Desktop cue for the Tab shortcut. Touch screens have no Tab key; there the
-   send button with an empty box does the same job. */
-.ask-tab-hint {
-  display: none;
-  flex-shrink: 0;
-  font-family: var(--sans);
-  font-size: 11px;
-  font-weight: 500;
-  letter-spacing: 0.04em;
-  line-height: 1;
-  color: rgba(12,34,66,0.55);
-  border: 1px solid rgba(12,34,66,0.25);
-  border-radius: 4px;
-  padding: 4px 6px;
-}
-@media (hover: hover) and (pointer: fine) {
-  .ask-tab-hint.is-on { display: inline-block; }
-}
 
 /* Results list — hidden until search produces matches */
 .search-results {
@@ -1055,7 +1040,6 @@
           <line x1="21" y1="21" x2="16.65" y2="16.65"/>
         </svg>
         <textarea class="search-input" id="search-input" rows="1" placeholder="Search common questions" aria-label="Search common questions" autocomplete="off" enterkeyhint="send" autofocus></textarea>
-        <kbd class="ask-tab-hint" id="ask-tab-hint" aria-hidden="true" title="Press Tab to use this question">Tab</kbd>
         <button type="button" class="ask-attach-btn" id="ask-attach-btn" aria-label="Attach a document. PDF, DOCX, TXT, or MD." title="Attach a document">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/>
@@ -1357,13 +1341,11 @@
   ];
   var EXAMPLE_MS = 4000, EXAMPLE_FADE_MS = 400;
   var exIdx = 0, exTimer = null, exFrozen = false;
-  var tabHint = document.getElementById('ask-tab-hint');
   var reduceMotion = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
   function inHero() { return askMode && !form.classList.contains('is-composer'); }
   function showingExample() {
     return inHero() && !input.value && !attachedDoc && EXAMPLES.indexOf(input.placeholder) !== -1;
   }
-  function syncTabHint() { if (tabHint) tabHint.classList.toggle('is-on', showingExample()); }
   /* A phone line holds fewer words, so an example can wrap. The box keeps the
      height of the tallest one while it rotates, so the page does not jump every
      four seconds as a two-line example follows a one-line one. */
@@ -1385,10 +1367,9 @@
     if (!inHero()) return;                    /* composer: placeholder belongs to the thread */
     if (attachedDoc) {                        /* an unrelated example does not fit a document question */
       if (EXAMPLES.indexOf(input.placeholder) !== -1) input.placeholder = 'Ask a question';
-      syncTabHint(); exTimer = setTimeout(tick, EXAMPLE_MS); return;
+      exTimer = setTimeout(tick, EXAMPLE_MS); return;
     }
     if (EXAMPLES.indexOf(input.placeholder) === -1) input.placeholder = EXAMPLES[exIdx];
-    syncTabHint();
     if (exFrozen || reduceMotion || input.value || document.hidden) { exTimer = setTimeout(tick, EXAMPLE_MS); return; }
     input.classList.add('is-hint-out');
     exTimer = setTimeout(function () {
@@ -1406,7 +1387,6 @@
     input.classList.toggle('is-rotating', !reduceMotion);
     if (!input.value && !attachedDoc) input.placeholder = EXAMPLES[exIdx];
     sizeForExamples();
-    syncTabHint();
     exTimer = setTimeout(tick, EXAMPLE_MS);
   }
   function freezeExample() {
@@ -1420,7 +1400,6 @@
     input.classList.remove('is-hint-out', 'is-rotating');
     input.style.minHeight = '';
     if (EXAMPLES.indexOf(input.placeholder) !== -1) input.placeholder = 'Ask a question';
-    syncTabHint();
   }
   /* Puts the example on screen into the box. Returns false (and does nothing)
      when there is no example showing: a typed draft, a thread, a document. */
@@ -1428,19 +1407,14 @@
     if (!showingExample()) return false;
     setQuery(input.placeholder);
     freezeExample();
-    syncTabHint();
     input.focus();
     input.setSelectionRange(input.value.length, input.value.length);
     return true;
   }
   if (askMode) {
     input.addEventListener('pointerdown', freezeExample);
-    input.addEventListener('input', function () { freezeExample(); syncTabHint(); });
+    input.addEventListener('input', freezeExample);
     input.addEventListener('blur', function () { if (!input.value) exFrozen = false; });
-    input.addEventListener('keydown', function (e) {
-      if (e.key !== 'Tab' || e.shiftKey || e.altKey || e.ctrlKey || e.metaKey || e.isComposing) return;
-      if (useExample()) e.preventDefault();   /* the next Tab moves on as usual */
-    });
     window.addEventListener('resize', function () { if (inHero() && !input.value) sizeForExamples(); });
     if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { if (inHero() && !input.value) sizeForExamples(); });
     startRotation();
@@ -3030,8 +3004,8 @@
   }
 
   /* Submit: render inline. No auto-redirect. An empty hero box puts the example
-     it is showing into the box instead (the phone's way to take an example;
-     Tab is the keyboard's), so the visitor sees it and sends it themselves. */
+     it is showing into the box instead, so the visitor sees it and sends it
+     themselves. */
   form.addEventListener('submit', function (e) {
     e.preventDefault();
     if (useExample()) return;

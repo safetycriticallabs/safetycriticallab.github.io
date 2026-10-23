@@ -254,6 +254,87 @@
   .draft-doc.draft-show-back .draft-back { transform: none; }
   .draft-sheen { display: none; }
 }
+
+/* ── THE GALAXY HERO ─────────────────────────────────────────────────
+   The hero takes the framework page's night: the bang recording the home
+   tile plays, img/framework-bang-*.mp4, behind the headline, with the draft
+   floating in front of it. The copy takes the framework hero's cream, over
+   a scrim on the left where it reads across the stars. The recording is
+   fetched when the hero is on screen, plays on screen and pauses off it,
+   and reduced motion leaves the poster standing; the button is the reader's
+   override. Re-record the mp4 whenever the orb or the bang changes, as the
+   home tile's recipe says. The nav goes to night with it, as on the
+   framework page, where styles.css's cream weights are restated. */
+.comment-hero { background: #050E1C; border-bottom: 0; isolation: isolate; }
+/* Wider than the hero and clipped by it, so the recording's centre, the
+   orb before the bang and the core after it, sits in the gap between the
+   words and the draft rather than behind the paragraph. */
+.comment-hero-video {
+  position: absolute; top: 0; left: 0; z-index: 0;
+  width: 130%; height: 100%; object-fit: cover; object-position: 50% 50%;
+  display: block; border: 0;
+}
+.comment-hero-copy { max-width: 560px; }
+.comment-hero-video::-webkit-media-controls, .comment-hero-video::-webkit-media-controls-enclosure { display: none !important; }
+.comment-hero-scrim {
+  position: absolute; inset: 0; z-index: 1; pointer-events: none;
+  background:
+    linear-gradient(to right, rgba(5,14,28,0.88) 0%, rgba(5,14,28,0.72) 36%, rgba(5,14,28,0.2) 58%, rgba(5,14,28,0) 72%),
+    linear-gradient(to top, rgba(5,14,28,0.7) 0%, rgba(5,14,28,0) 30%);
+}
+.comment-hero .inner-hero-inner { z-index: 2; }
+.comment-hero .inner-hero-breadcrumb, .comment-hero .inner-hero-breadcrumb a { color: rgba(214,226,242,0.78); }
+.comment-hero .inner-hero-breadcrumb a:hover { color: #FAF9F5; }
+.comment-hero .inner-hero-breadcrumb span { color: rgba(214,226,242,0.4); }
+.comment-hero h1 { color: #FAF9F5; }
+.comment-hero .inner-hero-lead { color: rgba(250,249,245,0.78); border-left-color: rgba(214,226,242,0.45); }
+.comment-hero .draft-caption { color: rgba(214,226,242,0.6); }
+/* On night the sheet casts no shadow a reader can see, so the ground under
+   it is a faint pool of the galaxy's light instead. */
+.comment-hero .draft-stage::after {
+  width: 60%; height: 34px; bottom: 6%;
+  background: radial-gradient(ellipse at 50% 50%, rgba(121,168,213,0.22), transparent 72%);
+}
+.comment-hero .draft-face { border-color: rgba(250,249,245,0.3); box-shadow: 0 6px 18px rgba(0,0,0,0.35), 0 30px 70px rgba(0,0,0,0.45); }
+.comment-hero-pause {
+  position: absolute; top: 16px; right: 16px; z-index: 5; width: 34px; height: 34px; padding: 0; border: 0; border-radius: 50%;
+  display: inline-flex; align-items: center; justify-content: center; cursor: pointer;
+  background: rgba(5,14,28,0.62); transition: background .2s ease;
+}
+.comment-hero-pause[hidden] { display: none; }
+.comment-hero-pause:hover { background: rgba(5,14,28,0.88); }
+.comment-hero-pause:focus-visible { outline: 2px solid #FAF9F5; outline-offset: 2px; }
+.comment-hero-pause svg { display: block; width: 14px; height: 14px; }
+.comment-hero-pause .i-play, .comment-hero-pause.is-paused .i-pause { display: none; }
+.comment-hero-pause.is-paused .i-play { display: block; }
+
+@media (max-width: 880.98px) {
+  /* A phone's hero is a tall column; the recording holds the top of it,
+     behind the words, and fades into the night the draft turns on. */
+  .comment-hero-video { height: 560px; width: 100%;
+    -webkit-mask-image: linear-gradient(to bottom, #000 55%, transparent 100%); mask-image: linear-gradient(to bottom, #000 55%, transparent 100%); }
+  .comment-hero-scrim { background: linear-gradient(to bottom, rgba(5,14,28,0.55) 0%, rgba(5,14,28,0.78) 60%, rgba(5,14,28,0) 100%); height: 560px; }
+}
+
+/* The nav, as on the framework page. */
+.global-nav { background: #050E1C; }
+.global-nav .gn-text, .global-nav .gn-text em { color: #FAF9F5; }
+.global-nav .gn-text-abbr { color: #FAF9F5 !important; -webkit-text-fill-color: #FAF9F5 !important; }
+.global-nav .gn-wordmark:hover .gn-text, .global-nav .gn-wordmark:hover .gn-text em { color: #D6E2F2 !important; }
+.global-nav .gn-wordmark:hover .gn-text-abbr { color: #D6E2F2 !important; -webkit-text-fill-color: #D6E2F2 !important; }
+.global-nav .gn-links a, .global-nav .gn-dropdown-toggle, .global-nav .gn-search { color: rgba(250,249,245,0.82); }
+.global-nav .gn-links a.active, .global-nav .gn-dropdown-toggle.has-active { color: #FAF9F5 !important; }
+.global-nav .gn-search:hover { color: #FAF9F5; }
+@media (hover: hover) {
+  .global-nav .gn-links a:hover, .global-nav .gn-links a.active:hover, .global-nav .gn-dropdown-toggle:hover { color: #FAF9F5 !important; }
+}
+.global-nav .gn-cta { background: #FAF9F5 !important; color: #0C2242 !important; border-color: #FAF9F5 !important; }
+.global-nav .gn-cta:hover { background: #EBF1F8 !important; border-color: #EBF1F8 !important; color: #0C2242 !important; }
+.global-nav .gn-hamburger span { background: #FAF9F5; }
+.global-nav a:focus-visible, .global-nav button:focus-visible, .global-nav .gn-dropdown-toggle:focus-visible { outline: 2px solid #79A8D5; outline-offset: 3px; border-radius: 4px; }
+@media (min-width: 881px) {
+  .global-nav .gn-dropdown-menu { background: rgba(5,14,28,0.97); border-color: rgba(250,249,245,0.14); box-shadow: 0 14px 34px rgba(0,0,0,0.45); }
+}
 </style>
 </head>
 <body>
@@ -299,7 +380,10 @@
 <div class="page-shell">
 
 <div class="inner-hero comment-hero">
-  <div class="fw-hero-glow"></div>
+  <video class="comment-hero-video" muted loop playsinline preload="none" poster="/img/framework-bang-poster.jpg" aria-hidden="true" tabindex="-1"
+         data-src-sm="/img/framework-bang-960.mp4" data-src-lg="/img/framework-bang-1280.mp4"></video>
+  <div class="comment-hero-scrim" aria-hidden="true"></div>
+  <button class="comment-hero-pause" type="button" aria-label="Pause the animation" hidden><svg class="i-pause" viewBox="0 0 14 14" aria-hidden="true"><rect x="3" y="2.5" width="2.6" height="9" rx="0.8" fill="#FAF9F5"/><rect x="8.4" y="2.5" width="2.6" height="9" rx="0.8" fill="#FAF9F5"/></svg><svg class="i-play" viewBox="0 0 14 14" aria-hidden="true"><path d="M4 2.6v8.8a.6.6 0 0 0 .9.5l7-4.4a.6.6 0 0 0 0-1L4.9 2.1a.6.6 0 0 0-.9.5z" fill="#FAF9F5"/></svg></button>
   <div class="inner-hero-inner">
     <div class="comment-hero-copy">
       <div class="inner-hero-breadcrumb"><a href="/">Safety Critical Labs</a><span>/</span> <a href="/framework">Framework</a><span>/</span> 4.0 public comment</div>
@@ -730,6 +814,48 @@
     }, { threshold: 0 }).observe(stage);
   }
   requestAnimationFrame(frame);
+})();
+</script>
+<script>
+/* ─── THE GALAXY HERO'S RECORDING ─────────────────────────────────────
+   The home tile's loader: fetched when the hero first comes on screen,
+   playing on screen and paused off it. Reduced motion leaves the poster
+   standing and the button offers play; it is the reader's override either
+   way, and stays hidden without script. */
+(function () {
+  var v = document.querySelector('.comment-hero-video');
+  if (!v) return;
+  var btn = document.querySelector('.comment-hero-pause');
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+  var wanted = !reduce.matches, inView = false, loaded = false;
+  function load() {
+    if (loaded) return;
+    loaded = true;
+    v.src = v.getBoundingClientRect().width > 700 ? v.getAttribute('data-src-lg') : v.getAttribute('data-src-sm');
+  }
+  function sync() {
+    if (wanted && inView) {
+      load();
+      var p = v.play();
+      if (p && p.catch) p.catch(function (err) { if (err && err.name === 'NotAllowedError') { wanted = false; label(); } });
+    }
+    else if (!v.paused) v.pause();
+    label();
+  }
+  function label() {
+    if (!btn) return;
+    btn.setAttribute('aria-label', wanted ? 'Pause the animation' : 'Play the animation');
+    btn.classList.toggle('is-paused', !wanted);
+  }
+  if (btn) {
+    btn.hidden = false;
+    btn.addEventListener('click', function (e) { e.preventDefault(); wanted = !wanted; sync(); });
+  }
+  if ('IntersectionObserver' in window) {
+    new IntersectionObserver(function (es) { inView = es[es.length - 1].isIntersecting; sync(); }, { threshold: 0.15 }).observe(v);
+  } else { inView = true; }
+  if (reduce.addEventListener) reduce.addEventListener('change', function () { wanted = !reduce.matches; sync(); });
+  sync();
 })();
 </script>
 <script src="/footer.js" defer></script>

@@ -124,8 +124,6 @@
    is showing. The sheet is laid out at letter size, 816 by 1056px, and scaled
    to the face, as the certificate sheet is, so its type wraps as the cover
    does. The driver is the script at the foot of this page. */
-.comment-hero .inner-hero-inner { grid-template-columns: minmax(0, 1fr) 380px; gap: 64px; align-items: center; }
-.comment-hero .inner-hero-lead { margin-top: 28px; }
 
 .draft-stage {
   position: relative; height: 470px;
@@ -240,8 +238,6 @@
 }
 
 @media (max-width: 880.98px) {
-  .comment-hero .inner-hero-inner { grid-template-columns: 1fr; gap: 8px; }
-  .comment-hero .inner-hero-lead { margin-top: 20px; }
   .draft-stage { height: 440px; margin-top: 16px; }
   .draft-doc { width: min(300px, 72vw); }
   .draft-caption { font-size: 10px; }
@@ -255,86 +251,80 @@
   .draft-sheen { display: none; }
 }
 
-/* ── THE GALAXY HERO ─────────────────────────────────────────────────
-   The hero takes the framework page's night: the bang recording the home
-   tile plays, img/framework-bang-*.mp4, behind the headline, with the draft
-   floating in front of it. The copy takes the framework hero's cream, over
-   a scrim on the left where it reads across the stars. The recording is
-   fetched when the hero is on screen, plays on screen and pauses off it,
-   and reduced motion leaves the poster standing; the button is the reader's
-   override. Re-record the mp4 whenever the orb or the bang changes, as the
-   home tile's recipe says. The nav goes to night with it, as on the
-   framework page, where styles.css's cream weights are restated. */
-.comment-hero { background: #050E1C; border-bottom: 0; isolation: isolate; }
-/* Wider than the hero and clipped by it, so the recording's centre, the
-   orb before the bang and the core after it, sits in the gap between the
-   words and the draft rather than behind the paragraph. */
-.comment-hero-video {
-  position: absolute; top: 0; left: 0; z-index: 0;
-  width: 130%; height: 100%; object-fit: cover; object-position: 50% 50%;
-  display: block; border: 0;
+
+
+/* ── THE READ ────────────────────────────────────────────────────────
+   The draft is the centrepiece. It opens alone on the first screen, then
+   moves to the side and stays there, pinned, while the page comes up
+   through the centre as one narrow column, one block at a time: the
+   block at the middle of the screen is at full strength and the rest are
+   dimmed, so the reader moves through in order. The sheet's opening
+   travel, --p from 0 to 1 over the first half screen of scroll, and each
+   block's focus, --f, are set by the script at the foot of the page.
+   Without script, or under reduced motion, the sheet is already at the
+   side and every block is at full strength. Phones: the sheet on a
+   screen of its own, then the column, with the same focus. */
+.comment-read {
+  max-width: var(--content-max); margin: 0 auto; padding: 0 40px;
+  display: grid; grid-template-columns: minmax(0, 1fr) 420px; gap: 48px; align-items: start;
+  --p: 1; --s0: 1; --dx: 0px; --dy: 0px;
 }
-.comment-hero-copy { max-width: 560px; }
-.comment-hero-video::-webkit-media-controls, .comment-hero-video::-webkit-media-controls-enclosure { display: none !important; }
-.comment-hero-scrim {
-  position: absolute; inset: 0; z-index: 1; pointer-events: none;
-  background:
-    linear-gradient(to right, rgba(5,14,28,0.88) 0%, rgba(5,14,28,0.72) 36%, rgba(5,14,28,0.2) 58%, rgba(5,14,28,0) 72%),
-    linear-gradient(to top, rgba(5,14,28,0.7) 0%, rgba(5,14,28,0) 30%);
+.comment-read-col.legal-section {
+  max-width: 640px; width: 100%; margin: 0 auto; background: transparent;
+  padding: calc(100vh - 72px) 0 36vh; padding-top: calc(100svh - 72px);
 }
-.comment-hero .inner-hero-inner { z-index: 2; }
-.comment-hero .inner-hero-breadcrumb, .comment-hero .inner-hero-breadcrumb a { color: rgba(214,226,242,0.78); }
-.comment-hero .inner-hero-breadcrumb a:hover { color: #FAF9F5; }
-.comment-hero .inner-hero-breadcrumb span { color: rgba(214,226,242,0.4); }
-.comment-hero h1 { color: #FAF9F5; }
-.comment-hero .inner-hero-lead { color: rgba(250,249,245,0.78); border-left-color: rgba(214,226,242,0.45); }
-.comment-hero .draft-caption { color: rgba(214,226,242,0.6); }
-/* On night the sheet casts no shadow a reader can see, so the ground under
-   it is a faint pool of the galaxy's light instead. */
-.comment-hero .draft-stage::after {
-  width: 60%; height: 34px; bottom: 6%;
-  background: radial-gradient(ellipse at 50% 50%, rgba(121,168,213,0.22), transparent 72%);
+.read-block { opacity: var(--f, 1); transition: opacity 0.18s linear; }
+.read-block + .read-block { margin-top: 34vh; }
+.read-hero.inner-hero { padding: 0; background: transparent; border: 0; overflow: visible; }
+.read-hero .inner-hero-lead { margin-top: 28px; }
+.read-block .comment-actions { margin-bottom: 28px; }
+.read-block .legal-meta { margin-bottom: 0; }
+.read-block .legal-review-note.is-standing { margin-bottom: 0; }
+.read-block.legal-block { margin-bottom: 0; }
+.comment-aside {
+  position: sticky; top: 72px; height: calc(100vh - 72px); height: calc(100svh - 72px);
+  display: flex; align-items: center; justify-content: center;
 }
-.comment-hero .draft-face { border-color: rgba(250,249,245,0.3); box-shadow: 0 6px 18px rgba(0,0,0,0.35), 0 30px 70px rgba(0,0,0,0.45); }
-.comment-hero-pause {
-  position: absolute; top: 16px; right: 16px; z-index: 5; width: 34px; height: 34px; padding: 0; border: 0; border-radius: 50%;
-  display: inline-flex; align-items: center; justify-content: center; cursor: pointer;
-  background: rgba(5,14,28,0.62); transition: background .2s ease;
+.comment-aside .draft-stage {
+  width: 100%;
+  transform: translate(calc(var(--dx) * (1 - var(--p))), calc(var(--dy) * (1 - var(--p))))
+             scale(calc(var(--s0) + (1 - var(--s0)) * var(--p)));
+  transform-origin: 50% 50%;
 }
-.comment-hero-pause[hidden] { display: none; }
-.comment-hero-pause:hover { background: rgba(5,14,28,0.88); }
-.comment-hero-pause:focus-visible { outline: 2px solid #FAF9F5; outline-offset: 2px; }
-.comment-hero-pause svg { display: block; width: 14px; height: 14px; }
-.comment-hero-pause .i-play, .comment-hero-pause.is-paused .i-pause { display: none; }
-.comment-hero-pause.is-paused .i-play { display: block; }
+.comment-aside .draft-caption { opacity: var(--p); }
+.comment-scroll-cue {
+  position: absolute; left: 0; right: 0; bottom: 20px; text-align: center; pointer-events: none;
+  font-family: var(--sans); font-size: 11px; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase;
+  color: rgba(12,34,66,0.55);
+  opacity: calc(1 - var(--p) * 4);
+  /* Under the sheet, wherever it is: the cue takes the sheet's own travel,
+     so on the first screen it sits beneath the centred sheet and not in the
+     empty column the sheet will move to. */
+  transform: translateX(calc(var(--dx) * (1 - var(--p))));
+}
+.comment-scroll-cue::after {
+  content: ""; display: block; width: 1px; height: 28px; margin: 10px auto 0;
+  background: linear-gradient(to bottom, rgba(12,34,66,0.55), rgba(12,34,66,0));
+  animation: comment-cue 1.8s ease-in-out infinite;
+}
+@keyframes comment-cue { 0%, 100% { transform: translateY(0); opacity: 1; } 50% { transform: translateY(6px); opacity: 0.5; } }
+.comment-read:not(.is-choreo) .comment-scroll-cue { display: none; }
 
 @media (max-width: 880.98px) {
-  /* A phone's hero is a tall column; the recording holds the top of it,
-     behind the words, and fades into the night the draft turns on. */
-  .comment-hero-video { height: 560px; width: 100%;
-    -webkit-mask-image: linear-gradient(to bottom, #000 55%, transparent 100%); mask-image: linear-gradient(to bottom, #000 55%, transparent 100%); }
-  .comment-hero-scrim { background: linear-gradient(to bottom, rgba(5,14,28,0.55) 0%, rgba(5,14,28,0.78) 60%, rgba(5,14,28,0) 100%); height: 560px; }
+  .comment-read { display: flex; flex-direction: column; align-items: stretch; padding: 0 24px; }
+  .comment-aside { order: 0; position: static; height: auto; display: block; }
+  .comment-aside .draft-stage { transform: none; height: calc(100vh - 72px); height: calc(100svh - 72px); min-height: 480px; margin: 0; }
+  .comment-aside .draft-doc { top: calc(50% - 20px); }
+  .comment-aside .draft-caption { bottom: 64px; opacity: 1; }
+  .comment-read-col.legal-section { order: 1; max-width: none; padding: 24px 0 20vh; }
+  .read-block + .read-block { margin-top: 22vh; }
+  .comment-scroll-cue { display: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .read-block { opacity: 1; transition: none; }
+  .comment-scroll-cue::after { animation: none; }
 }
 
-/* The nav, as on the framework page. */
-.global-nav { background: #050E1C; }
-.global-nav .gn-text, .global-nav .gn-text em { color: #FAF9F5; }
-.global-nav .gn-text-abbr { color: #FAF9F5 !important; -webkit-text-fill-color: #FAF9F5 !important; }
-.global-nav .gn-wordmark:hover .gn-text, .global-nav .gn-wordmark:hover .gn-text em { color: #D6E2F2 !important; }
-.global-nav .gn-wordmark:hover .gn-text-abbr { color: #D6E2F2 !important; -webkit-text-fill-color: #D6E2F2 !important; }
-.global-nav .gn-links a, .global-nav .gn-dropdown-toggle, .global-nav .gn-search { color: rgba(250,249,245,0.82); }
-.global-nav .gn-links a.active, .global-nav .gn-dropdown-toggle.has-active { color: #FAF9F5 !important; }
-.global-nav .gn-search:hover { color: #FAF9F5; }
-@media (hover: hover) {
-  .global-nav .gn-links a:hover, .global-nav .gn-links a.active:hover, .global-nav .gn-dropdown-toggle:hover { color: #FAF9F5 !important; }
-}
-.global-nav .gn-cta { background: #FAF9F5 !important; color: #0C2242 !important; border-color: #FAF9F5 !important; }
-.global-nav .gn-cta:hover { background: #EBF1F8 !important; border-color: #EBF1F8 !important; color: #0C2242 !important; }
-.global-nav .gn-hamburger span { background: #FAF9F5; }
-.global-nav a:focus-visible, .global-nav button:focus-visible, .global-nav .gn-dropdown-toggle:focus-visible { outline: 2px solid #79A8D5; outline-offset: 3px; border-radius: 4px; }
-@media (min-width: 881px) {
-  .global-nav .gn-dropdown-menu { background: rgba(5,14,28,0.97); border-color: rgba(250,249,245,0.14); box-shadow: 0 14px 34px rgba(0,0,0,0.45); }
-}
 </style>
 </head>
 <body>
@@ -379,13 +369,12 @@
 
 <div class="page-shell">
 
-<div class="inner-hero comment-hero">
-  <video class="comment-hero-video" muted loop playsinline preload="none" poster="/img/framework-bang-poster.jpg" aria-hidden="true" tabindex="-1"
-         data-src-sm="/img/framework-bang-960.mp4" data-src-lg="/img/framework-bang-1280.mp4"></video>
-  <div class="comment-hero-scrim" aria-hidden="true"></div>
-  <button class="comment-hero-pause" type="button" aria-label="Pause the animation" hidden><svg class="i-pause" viewBox="0 0 14 14" aria-hidden="true"><rect x="3" y="2.5" width="2.6" height="9" rx="0.8" fill="#FAF9F5"/><rect x="8.4" y="2.5" width="2.6" height="9" rx="0.8" fill="#FAF9F5"/></svg><svg class="i-play" viewBox="0 0 14 14" aria-hidden="true"><path d="M4 2.6v8.8a.6.6 0 0 0 .9.5l7-4.4a.6.6 0 0 0 0-1L4.9 2.1a.6.6 0 0 0-.9.5z" fill="#FAF9F5"/></svg></button>
-  <div class="inner-hero-inner">
-    <div class="comment-hero-copy">
+<!-- THE READ: the draft at the side, the page up the centre one block at a
+     time. The column keeps .legal-section for the shared legal page rules. -->
+<div class="comment-read" id="comment-read">
+  <div class="comment-read-col legal-section">
+
+    <div class="read-block read-hero inner-hero">
       <div class="inner-hero-breadcrumb"><a href="/">Safety Critical Labs</a><span>/</span> <a href="/framework">Framework</a><span>/</span> 4.0 public comment</div>
       <h1>Version 4.0 is open for comment.</h1>
       <p class="inner-hero-lead">
@@ -393,10 +382,64 @@
       </p>
     </div>
 
-    <!-- THE DRAFT. Part 1's cover on the front, Part 2's on the back; the
-         covers are set in HTML from the PDFs' first pages, so keep them in
-         step when the PDFs are rebuilt. Decorative for assistive technology:
-         the download buttons below are the path to the files. -->
+    <div class="read-block">
+    <div class="comment-actions">
+      <a class="btn btn-solid" href="/docs/AI_Requirements_Framework_v4_0_Public_Comment_Draft.pdf">Download Part 1 (PDF, 184 pages)</a>
+      <a class="btn btn-outline" href="/docs/AI_Requirements_Framework_v4_0_Part_2_Public_Comment_Draft.pdf">Download Part 2 (PDF, 24 pages)</a>
+      <a class="btn btn-outline" href="/docs/SCL_Framework_4_0_Comment_Template.docx" download>Comment template (Word)</a>
+      <a class="btn btn-outline" href="mailto:kevin.williams@safetycriticallabs.com?subject=SCL%204.0%20comment">Send a comment by email</a>
+    </div>
+    <div class="legal-meta">
+      <div class="legal-meta-item">Comment window<strong>October 22 to December 6, 2026</strong></div>
+      <div class="legal-meta-item">Send comments to<strong><a href="mailto:kevin.williams@safetycriticallabs.com?subject=SCL%204.0%20comment">kevin.williams@safetycriticallabs.com</a>, subject line "SCL 4.0 comment"</strong></div>
+    </div>
+    </div>
+
+    <div class="read-block">
+    <div class="legal-review-note is-standing">
+      <strong>Where this stands today.</strong> Version 3.7 remains the published standard and the version SCL assesses against; it is unchanged by this draft and stays citable at its own DOI. The 4.0 draft is not a published standard, carries no DOI, and binds nothing. It is deposited only after this window closes and every comment has been dispositioned, under the rule in SCL's framework development methodology that a version with normative changes is not published without an external technical read and a public comment window.
+    </div>
+    </div>
+
+    <div class="read-block legal-block">
+      <div class="legal-block-num">01</div>
+      <h2 class="legal-block-title">What 4.0 changes, in plain terms</h2>
+      <p>Version 3.7 asked whether a requirement was met. Version 4.0 asks what the evidence can actually establish, and makes the answer visible on the certificate. Every verification now names the class of evidence it produces: deterministic evidence closes a requirement; statistical evidence supports it at a stated confidence and never closes it; bounded evidence holds at a declared budget and nowhere else; surveillance evidence is an obligation in service. A verification can now resolve to insufficient evidence as well as pass, fail or not applicable. At the Safety-Critical tier an insufficient-evidence outcome blocks certification; below it, the outcome is carried on the certificate as a declared residual with closure due at the first surveillance. The residual list replaces the risk score on the certificate face.</p>
+      <p>The Safety-Critical tier now attests an architecture, not only a set of rates. A new requirement set, AI-14 Runtime Assurance, makes a conventionally verifiable monitor and an assured fallback the condition of a Safety-Critical determination. A learned component for which no such monitor and fallback can be built cannot be certified Safety-Critical under this framework, and the text says so.</p>
+      <p>Every rate, score or coverage figure must now be measured on a declared evaluation population with its strata stated (new Section 1.7), and every threshold must carry a derivation basis against criteria the standard itself states (Section 1.5). SCL sets no numeric thresholds, and the illustrative values in Section 5 are labelled as unsourced. The monitoring, alerting, response and logging cycle that several requirement sets repeated is stated once (new Section 4.6). The information classification controls move from AI-1 into a conditional set, AI-15. AI-2 is rescoped to disparity across declared strata; AI-5 applies where a system produces generative or free-form output. Ten 3.7 identifiers are retired and ten requirements are new, among them a hallucination audit that measures what detection missed in service; AI-1, AI-2, AI-5 and AI-7 are renumbered to close the gaps, each renumbered heading carries its 3.7 number for this edition, and the identifier map at the end of the draft's Document Revision History maps every 3.7 identifier to 4.0.</p>
+      <p>The standard is now two parts. Part 1 (SCL-ARF-001) is the standard itself: the requirements, the verification statements, the verification matrix and the conformity basis. Part 2 (SCL-ARF-002), issued with it at the same version, carries what supports applying the standard and nothing that defines a requirement: the AI classification determination, the verification evidence templates and the full revision record. Part 1 cites Part 2 as a normative reference for the classification determination and the required content of the evidence records, and for nothing else.</p>
+    </div>
+
+    <div class="read-block legal-block">
+      <div class="legal-block-num">02</div>
+      <h2 class="legal-block-title">What to read if you have an hour</h2>
+      <p>The design decisions live in about twenty pages of Part 1: Section 1.0 (how the framework is developed and governed), Sections 1.5 to 1.7 (threshold derivation and adequacy criteria, the conformity basis, declared evaluation populations), Section 4.1 (evidence classes, verification outcomes, the verification statement template, the residual list), Section 4.6 (the monitoring cycle), and AI-14 (Section 3.4). If you have standing in one domain, the Related Domain Standards crosswalk under each requirement is where a wrong citation would be caught; it carries no conformity burden, but it should still be right.</p>
+      <p>The questions SCL most wants answered: does the conformity model hold up; is runtime assurance the right condition for the Safety-Critical tier; is there a requirement that cannot be verified as written, or a verification whose success criterion does not discriminate; and is there a sentence that would be read differently from the way it was meant.</p>
+    </div>
+
+    <div class="read-block legal-block">
+      <div class="legal-block-num">03</div>
+      <h2 class="legal-block-title">How to comment</h2>
+      <p>Download <a href="/docs/SCL_Framework_4_0_Comment_Template.docx" download>the template</a>, or use the same three fields in an email: the clause or identifier the comment is about, the comment itself with its reasoning, and proposed replacement text where you have it. A comment with proposed text is far more likely to change the document than one without, because it can be adopted as written. Send it to <a href="mailto:kevin.williams@safetycriticallabs.com?subject=SCL%204.0%20comment">kevin.williams@safetycriticallabs.com</a> with "SCL 4.0 comment" in the subject line, by December 6, 2026. Say whether you are commenting for yourself or for an organisation, and whether SCL may name you in the published disposition record; unnamed is the default.</p>
+      <p>Comments are accepted only by email. Replies on social channels are read but are not comments, because a comment has to be a dated record that receives a written disposition, and a thread cannot be that.</p>
+    </div>
+
+    <div class="read-block legal-block">
+      <div class="legal-block-num">04</div>
+      <h2 class="legal-block-title">What happens to every comment</h2>
+      <p>Each comment receives one of four dispositions: accepted; accepted with modification; rejected, with the reason; or out of scope, with where it was routed. Every commenter receives a written reply with the disposition. A comment that changes normative wording goes through the same change control as any other edit: approved by the SCL Principal, built from the source, validated. When 4.0 is deposited, the disposition record is published on this page beside the final version, so that anyone can see what was raised and what was done with it.</p>
+    </div>
+
+    <div class="read-block legal-block">
+      <div class="legal-block-num">05</div>
+      <h2 class="legal-block-title">How the draft was made</h2>
+      <p>The draft was built from version 3.7 under SCL's documented framework development methodology, from a structured review of the 3.7 text conducted in October 2026. Drafting, build execution and validation were assisted by AI drafting tools operated under Safety Critical Labs' direction; every normative sentence was read and approved by the SCL Principal before the draft was released for comment, and no sentence was adopted without that reading. No external technical committee governs the text; this window, and the external readers invited before it opened, are the review the text receives. The readers are named in the published record at deposit, with their consent.</p>
+      <p><strong>Related pages.</strong> <a href="/framework">The framework</a>. <a href="/requirements">Requirements</a>. <a href="/glossary">Glossary</a>. <a href="/updates">Updates</a>.</p>
+    </div>
+
+  </div>
+
+  <aside class="comment-aside">
     <div class="draft-stage" id="draft-stage" aria-hidden="true">
       <div class="draft-doc" data-front-href="/docs/AI_Requirements_Framework_v4_0_Public_Comment_Draft.pdf" data-back-href="/docs/AI_Requirements_Framework_v4_0_Part_2_Public_Comment_Draft.pdf">
 
@@ -465,66 +508,9 @@
       </div>
       <div class="draft-caption">Click to open. Drag to turn.</div>
     </div>
-  </div>
+    <div class="comment-scroll-cue" aria-hidden="true">Scroll</div>
+  </aside>
 </div>
-
-<section class="legal-section">
-  <div class="legal-inner">
-
-    <div class="comment-actions">
-      <a class="btn btn-solid" href="/docs/AI_Requirements_Framework_v4_0_Public_Comment_Draft.pdf">Download Part 1 (PDF, 183 pages)</a>
-      <a class="btn btn-outline" href="/docs/AI_Requirements_Framework_v4_0_Part_2_Public_Comment_Draft.pdf">Download Part 2 (PDF, 23 pages)</a>
-      <a class="btn btn-outline" href="/docs/SCL_Framework_4_0_Comment_Template.docx" download>Comment template (Word)</a>
-      <a class="btn btn-outline" href="mailto:kevin.williams@safetycriticallabs.com?subject=SCL%204.0%20comment">Send a comment by email</a>
-    </div>
-
-    <div class="legal-meta">
-      <div class="legal-meta-item">Comment window<strong>October 22 to December 6, 2026</strong></div>
-      <div class="legal-meta-item">Send comments to<strong><a href="mailto:kevin.williams@safetycriticallabs.com?subject=SCL%204.0%20comment">kevin.williams@safetycriticallabs.com</a>, subject line "SCL 4.0 comment"</strong></div>
-    </div>
-
-    <div class="legal-review-note is-standing">
-      <strong>Where this stands today.</strong> Version 3.7 remains the published standard and the version SCL assesses against; it is unchanged by this draft and stays citable at its own DOI. The 4.0 draft is not a published standard, carries no DOI, and binds nothing. It is deposited only after this window closes and every comment has been dispositioned, under the rule in SCL's framework development methodology that a version with normative changes is not published without an external technical read and a public comment window.
-    </div>
-
-    <div class="legal-block">
-      <div class="legal-block-num">01</div>
-      <h2 class="legal-block-title">What 4.0 changes, in plain terms</h2>
-      <p>Version 3.7 asked whether a requirement was met. Version 4.0 asks what the evidence can actually establish, and makes the answer visible on the certificate. Every verification now names the class of evidence it produces: deterministic evidence closes a requirement; statistical evidence supports it at a stated confidence and never closes it; bounded evidence holds at a declared budget and nowhere else; surveillance evidence is an obligation in service. A verification can now resolve to insufficient evidence as well as pass, fail or not applicable. At the Safety-Critical tier an insufficient-evidence outcome blocks certification; below it, the outcome is carried on the certificate as a declared residual with closure due at the first surveillance. The residual list replaces the risk score on the certificate face.</p>
-      <p>The Safety-Critical tier now attests an architecture, not only a set of rates. A new requirement set, AI-14 Runtime Assurance, makes a conventionally verifiable monitor and an assured fallback the condition of a Safety-Critical determination. A learned component for which no such monitor and fallback can be built cannot be certified Safety-Critical under this framework, and the text says so.</p>
-      <p>Every rate, score or coverage figure must now be measured on a declared evaluation population with its strata stated (new Section 1.7), and every threshold must carry a derivation basis against criteria the standard itself states (Section 1.5). SCL sets no numeric thresholds, and the illustrative values in Section 5 are labelled as unsourced. The monitoring, alerting, response and logging cycle that several requirement sets repeated is stated once (new Section 4.6). The information classification controls move from AI-1 into a conditional set, AI-15. AI-2 is rescoped to disparity across declared strata; AI-5 applies where a system produces generative or free-form output. Ten 3.7 identifiers are retired and nine requirements are new; AI-1, AI-2, AI-5 and AI-7 are renumbered to close the gaps, each renumbered heading carries its 3.7 number for this edition, and the identifier map at the end of the draft's Document Revision History maps every 3.7 identifier to 4.0.</p>
-      <p>The standard is now two parts. Part 1 (SCL-ARF-001) is the standard itself: the requirements, the verification statements, the verification matrix and the conformity basis. Part 2 (SCL-ARF-002), issued with it at the same version, carries what supports applying the standard and nothing that defines a requirement: the AI classification determination, the verification evidence templates and the full revision record. Part 1 cites Part 2 as a normative reference for the classification determination and the required content of the evidence records, and for nothing else.</p>
-    </div>
-
-    <div class="legal-block">
-      <div class="legal-block-num">02</div>
-      <h2 class="legal-block-title">What to read if you have an hour</h2>
-      <p>The design decisions live in about twenty pages of Part 1: Section 1.0 (how the framework is developed and governed), Sections 1.5 to 1.7 (threshold derivation and adequacy criteria, the conformity basis, declared evaluation populations), Section 4.1 (evidence classes, verification outcomes, the verification statement template, the residual list), Section 4.6 (the monitoring cycle), and AI-14 (Section 3.4). If you have standing in one domain, the Related Domain Standards crosswalk under each requirement is where a wrong citation would be caught; it carries no conformity burden, but it should still be right.</p>
-      <p>The questions SCL most wants answered: does the conformity model hold up; is runtime assurance the right condition for the Safety-Critical tier; is there a requirement that cannot be verified as written, or a verification whose success criterion does not discriminate; and is there a sentence that would be read differently from the way it was meant.</p>
-    </div>
-
-    <div class="legal-block">
-      <div class="legal-block-num">03</div>
-      <h2 class="legal-block-title">How to comment</h2>
-      <p>Download <a href="/docs/SCL_Framework_4_0_Comment_Template.docx" download>the template</a>, or use the same three fields in an email: the clause or identifier the comment is about, the comment itself with its reasoning, and proposed replacement text where you have it. A comment with proposed text is far more likely to change the document than one without, because it can be adopted as written. Send it to <a href="mailto:kevin.williams@safetycriticallabs.com?subject=SCL%204.0%20comment">kevin.williams@safetycriticallabs.com</a> with "SCL 4.0 comment" in the subject line, by December 6, 2026. Say whether you are commenting for yourself or for an organisation, and whether SCL may name you in the published disposition record; unnamed is the default.</p>
-      <p>Comments are accepted only by email. Replies on social channels are read but are not comments, because a comment has to be a dated record that receives a written disposition, and a thread cannot be that.</p>
-    </div>
-
-    <div class="legal-block">
-      <div class="legal-block-num">04</div>
-      <h2 class="legal-block-title">What happens to every comment</h2>
-      <p>Each comment receives one of four dispositions: accepted; accepted with modification; rejected, with the reason; or out of scope, with where it was routed. Every commenter receives a written reply with the disposition. A comment that changes normative wording goes through the same change control as any other edit: approved by the SCL Principal, built from the source, validated. When 4.0 is deposited, the disposition record is published on this page beside the final version, so that anyone can see what was raised and what was done with it.</p>
-    </div>
-
-    <div class="legal-block">
-      <div class="legal-block-num">05</div>
-      <h2 class="legal-block-title">How the draft was made</h2>
-      <p>The draft was built from version 3.7 under SCL's documented framework development methodology, from a structured review of the 3.7 text conducted in October 2026. Drafting, build execution and validation were assisted by AI drafting tools operated under Safety Critical Labs' direction; every normative sentence was read and approved by the SCL Principal before the draft was released for comment, and no sentence was adopted without that reading. No external technical committee governs the text; this window, and the external readers invited before it opened, are the review the text receives. The readers are named in the published record at deposit, with their consent.</p>
-      <p><strong>Related pages.</strong> <a href="/framework">The framework</a>. <a href="/requirements">Requirements</a>. <a href="/glossary">Glossary</a>. <a href="/updates">Updates</a>.</p>
-    </div>
-
-  </div>
-</section>
 
 </div>
 
@@ -817,45 +803,67 @@
 })();
 </script>
 <script>
-/* ─── THE GALAXY HERO'S RECORDING ─────────────────────────────────────
-   The home tile's loader: fetched when the hero first comes on screen,
-   playing on screen and paused off it. Reduced motion leaves the poster
-   standing and the button offers play; it is the reader's override either
-   way, and stays hidden without script. */
+/* ─── THE READ'S SCROLL ───────────────────────────────────────────────
+   Sets --p, the sheet's travel from the centre of the first screen to
+   its side, and --f on each block, its focus by distance from the middle
+   of the screen. The travel runs on wide screens only; the focus runs on
+   every width. Reduced motion switches both off. */
 (function () {
-  var v = document.querySelector('.comment-hero-video');
-  if (!v) return;
-  var btn = document.querySelector('.comment-hero-pause');
+  var read = document.getElementById('comment-read');
+  if (!read) return;
+  var draft = read.querySelector('.draft-stage');
+  var blocks = read.querySelectorAll('.read-block');
+  var NAV = 72;
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
-  var wanted = !reduce.matches, inView = false, loaded = false;
-  function load() {
-    if (loaded) return;
-    loaded = true;
-    v.src = v.getBoundingClientRect().width > 700 ? v.getAttribute('data-src-lg') : v.getAttribute('data-src-sm');
+  var wide = window.matchMedia('(min-width: 881px)');
+  var ticking = false;
+  function clamp(v, a, b) { return v < a ? a : (v > b ? b : v); }
+
+  function measure() {
+    /* The sheet's rest geometry, read with the travel off. */
+    read.style.setProperty('--p', '1');
+    var r = draft.getBoundingClientRect();
+    var vh = window.innerHeight;
+    var cx = window.innerWidth / 2, cy = NAV + (vh - NAV) / 2;
+    read.style.setProperty('--dx', (cx - (r.left + r.width / 2)).toFixed(1) + 'px');
+    read.style.setProperty('--dy', (cy - (r.top + r.height / 2)).toFixed(1) + 'px');
+    var doc = draft.querySelector('.draft-doc');
+    var dh = doc ? doc.offsetHeight : r.height * 0.8;
+    read.style.setProperty('--s0', clamp(((vh - NAV) * 0.66) / dh, 1, 1.6).toFixed(3));
   }
-  function sync() {
-    if (wanted && inView) {
-      load();
-      var p = v.play();
-      if (p && p.catch) p.catch(function (err) { if (err && err.name === 'NotAllowedError') { wanted = false; label(); } });
+  function update() {
+    ticking = false;
+    var vh = window.innerHeight;
+    var choreo = read.classList.contains('is-choreo');
+    if (choreo) {
+      var p = clamp(window.pageYOffset / ((vh - NAV) * 0.6), 0, 1);
+      var e = p < 0.5 ? 2 * p * p : 1 - Math.pow(-2 * p + 2, 2) / 2;
+      read.style.setProperty('--p', e.toFixed(4));
     }
-    else if (!v.paused) v.pause();
-    label();
+    if (reduce.matches) return;
+    var mid = NAV + (vh - NAV) / 2, span = vh * 0.38;
+    for (var i = 0; i < blocks.length; i++) {
+      var b = blocks[i].getBoundingClientRect();
+      var dist = b.top > mid ? b.top - mid : (b.bottom < mid ? mid - b.bottom : 0);
+      blocks[i].style.setProperty('--f', (1 - clamp(dist / span, 0, 1) * 0.72).toFixed(3));
+    }
   }
-  function label() {
-    if (!btn) return;
-    btn.setAttribute('aria-label', wanted ? 'Pause the animation' : 'Play the animation');
-    btn.classList.toggle('is-paused', !wanted);
+  function onScroll() { if (!ticking) { ticking = true; requestAnimationFrame(update); } }
+  function setup() {
+    var want = wide.matches && !reduce.matches;
+    read.classList.toggle('is-choreo', want);
+    if (want) measure(); else read.style.setProperty('--p', '1');
+    if (reduce.matches) for (var i = 0; i < blocks.length; i++) blocks[i].style.removeProperty('--f');
+    update();
   }
-  if (btn) {
-    btn.hidden = false;
-    btn.addEventListener('click', function (e) { e.preventDefault(); wanted = !wanted; sync(); });
-  }
-  if ('IntersectionObserver' in window) {
-    new IntersectionObserver(function (es) { inView = es[es.length - 1].isIntersecting; sync(); }, { threshold: 0.15 }).observe(v);
-  } else { inView = true; }
-  if (reduce.addEventListener) reduce.addEventListener('change', function () { wanted = !reduce.matches; sync(); });
-  sync();
+  setup();
+  window.addEventListener('scroll', onScroll, { passive: true });
+  var rt;
+  window.addEventListener('resize', function () { clearTimeout(rt); rt = setTimeout(setup, 120); });
+  if (wide.addEventListener) wide.addEventListener('change', setup);
+  if (reduce.addEventListener) reduce.addEventListener('change', setup);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(setup);
+  window.addEventListener('load', setup);
 })();
 </script>
 <script src="/footer.js" defer></script>

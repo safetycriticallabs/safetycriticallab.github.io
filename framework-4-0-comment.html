@@ -7,7 +7,7 @@
 <title>Framework 4.0 Public Comment Draft | Safety Critical Labs</title>
 <meta name="description" content="Version 4.0 of the SCL AI Requirements Framework is open for public comment. The draft, what changed, what to read, how to comment, and what happens to every comment.">
 <meta property="og:title" content="Framework 4.0 Public Comment Draft | Safety Critical Labs">
-<meta property="og:description" content="Version 4.0 of the AI Requirements Framework is open for public comment. The draft, what changed, and how to send a comment.">
+<meta property="og:description" content="Version 4.0 of the AI Requirements Framework is open for public comment until December 6, 2026. The draft, what changed, and how to send a comment.">
 <link rel="canonical" href="https://safetycriticallabs.com/framework-4-0-comment">
 <meta name="twitter:card" content="summary">
 <meta property="og:url" content="https://safetycriticallabs.com/framework-4-0-comment">
@@ -45,6 +45,18 @@
   text-transform: none;
   font-family: var(--sans);
   font-size: 13px;
+}
+
+.comment-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin: 0 0 36px;
+}
+.comment-actions .btn { padding: 14px 24px; }
+@media (max-width: 640px) {
+  .comment-actions { flex-direction: column; }
+  .comment-actions .btn { text-align: center; }
 }
 
 .legal-block {
@@ -161,11 +173,15 @@
 <section class="legal-section">
   <div class="legal-inner">
 
+    <div class="comment-actions">
+      <a class="btn btn-solid" href="/docs/AI_Requirements_Framework_v4_0_Public_Comment_Draft.pdf">Download Part 1 (PDF, 183 pages)</a>
+      <a class="btn btn-outline" href="/docs/AI_Requirements_Framework_v4_0_Part_2_Public_Comment_Draft.pdf">Download Part 2 (PDF, 23 pages)</a>
+      <a class="btn btn-outline" href="/docs/SCL_Framework_4_0_Comment_Template.docx" download>Comment template (Word)</a>
+      <a class="btn btn-outline" href="mailto:kevin.williams@safetycriticallabs.com?subject=SCL%204.0%20comment">Send a comment by email</a>
+    </div>
+
     <div class="legal-meta">
-      <!-- Comment window: on the day this page goes live, replace the text below with the actual dates, e.g. "November 12 to December 24, 2026". Close date = publication date plus six weeks (development methodology Section 4.6: at least four weeks, six where the window crosses a holiday period). The same dates go in the /updates row. -->
-      <div class="legal-meta-item">Comment window<strong>Six weeks from the day this page is published</strong></div>
-      <div class="legal-meta-item">The draft<strong><a href="/docs/AI_Requirements_Framework_v4_0_Public_Comment_Draft.pdf">Part 1, PDF, 183 pages</a> and <a href="/docs/AI_Requirements_Framework_v4_0_Part_2_Public_Comment_Draft.pdf">Part 2, PDF, 23 pages</a></strong></div>
-      <div class="legal-meta-item">Comment template<strong><a href="/docs/SCL_Framework_4_0_Comment_Template.docx">Word (.docx)</a></strong></div>
+      <div class="legal-meta-item">Comment window<strong>October 22 to December 6, 2026</strong></div>
       <div class="legal-meta-item">Send comments to<strong><a href="mailto:kevin.williams@safetycriticallabs.com?subject=SCL%204.0%20comment">kevin.williams@safetycriticallabs.com</a>, subject line "SCL 4.0 comment"</strong></div>
     </div>
 
@@ -192,7 +208,7 @@
     <div class="legal-block">
       <div class="legal-block-num">03</div>
       <h2 class="legal-block-title">How to comment</h2>
-      <p>Download the template, or use the same three fields in an email: the clause or identifier the comment is about, the comment itself with its reasoning, and proposed replacement text where you have it. A comment with proposed text is far more likely to change the document than one without, because it can be adopted as written. Send it to <a href="mailto:kevin.williams@safetycriticallabs.com?subject=SCL%204.0%20comment">kevin.williams@safetycriticallabs.com</a> with "SCL 4.0 comment" in the subject line, before the window closes. Say whether you are commenting for yourself or for an organisation, and whether SCL may name you in the published disposition record; unnamed is the default.</p>
+      <p>Download <a href="/docs/SCL_Framework_4_0_Comment_Template.docx" download>the template</a>, or use the same three fields in an email: the clause or identifier the comment is about, the comment itself with its reasoning, and proposed replacement text where you have it. A comment with proposed text is far more likely to change the document than one without, because it can be adopted as written. Send it to <a href="mailto:kevin.williams@safetycriticallabs.com?subject=SCL%204.0%20comment">kevin.williams@safetycriticallabs.com</a> with "SCL 4.0 comment" in the subject line, by December 6, 2026. Say whether you are commenting for yourself or for an organisation, and whether SCL may name you in the published disposition record; unnamed is the default.</p>
       <p>Comments are accepted only by email. Replies on social channels are read but are not comments, because a comment has to be a dated record that receives a written disposition, and a thread cannot be that.</p>
     </div>
 

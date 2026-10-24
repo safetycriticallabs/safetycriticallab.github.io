@@ -26,7 +26,8 @@ Surface as of 2026-09-15, measured before any v3.7 propagation:
 ```
 (a) Regenerate framework.json BY HAND from the new framework PDF. No script does this.
     Then run: python3 embed_corpus.py to rebuild framework_vectors.json.
-    Confirm the Worker accepts the vectors with one retrieval-only bench pass.
+    Confirm the Worker accepts the vectors with one retrieval-only bench pass, and measure the
+    prompt budget as step (f) describes.
     vectorsValid refuses a stale file and retrieval silently degrades to keyword-only.
 
 (b) grep -rn "v3\.6" *.html          and update each of the 25.
@@ -50,12 +51,19 @@ Surface as of 2026-09-15, measured before any v3.7 propagation:
     empty after running the generators, and grep -c 'id="faq-' questions.html matches the
     entry count.
     faq_vectors.json (Ask SCL step 3 stage F, 2026-10-03) is the cosine side of the matched FAQ:
-    a Worker with the matched FAQ on (the TEST_MODE copy now; every Worker once the stage I
-    release flips FAQ_MATCHED_LIVE) sends only the FAQ entries that fit the question, and uses a
+    every Worker since the stage I release (2026-10-05.1, FAQ_MATCHED_LIVE true), the live one
+    included, sends the FAQ_ALWAYS entries plus the FAQ entries that fit the question, and uses a
     vector row only when its hash of the embedded text (question, keywords, answer) matches, so a
-    stale file costs the edited entries their meaning-based match and nothing else. The live
-    Worker sends the whole FAQ and does not read the file until that release. Rebuilding it needs
-    Ollama with nomic-embed-text.
+    stale file costs the edited entries their meaning-based match and nothing else. The Worker
+    fetches the file from the live site, edge-cached up to 300 seconds, so a pushed regeneration
+    reaches the public assistant with no Worker deploy. Rebuilding it needs Ollama with
+    nomic-embed-text.
+    Before pushing a faq.json change, measure the prompt budget, in scl-internal-main/ask-eval:
+        python3 prompt_budget.py --tag <name>
+    It exits 1 if the worst-case prompt with dense English text in every cap leaves less than
+    1000 tokens after num_predict (a prompt filled with CJK characters is reported, not gated),
+    and it names any FAQ_ALWAYS id that faq.json no longer has. Take such an id out of
+    FAQ_ALWAYS in ask-worker-local.js on the next Worker paste.
 
 (g) Add one row to updates.html and one LOG line to STATUS.md.
     Label development dates and deposit dates as such. Never merge them into one claim.

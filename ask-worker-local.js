@@ -8,7 +8,8 @@
  *              AI binding named AI, opt-in retention to a D1 binding named
  *              ASK_LOG, token-gated POST /bench/retrieve)
  *           -> Cloudflare Tunnel hostname (protected by Cloudflare Access)
- *           -> Ollama on the host running scl-sft-v2 (a Llama 3.1 8B fine-tune)
+ *           -> Ollama on the host running scl-sft-v3 (a Llama 3.1 8B fine-tune;
+ *              scl-sft-v2 before the stage I release of 2026-10-05)
  *
  * Deploy (dashboard paste, no wrangler):
  *   1. Bump WORKER_BUILD below, then paste this WHOLE file over the worker.
@@ -16,7 +17,8 @@
  *        OLLAMA_URL                    plain var, e.g. https://ollama.safetycriticallabs.com
  *        CF_ACCESS_CLIENT_ID / _SECRET secrets, from the Zero Trust service token
  *        OLLAMA_MODEL                  scl-sft-v3 from the stage I release of 2026-10 (scl-sft-v2 before;
- *                                      the code falls back to DEFAULT_MODEL, the v2 floor)
+ *                                      the code falls back to DEFAULT_MODEL, scl-sft-v3 since
+ *                                      build 2026-10-23.1)
  *        RERANK                        on
  *        RERANK_GUARD                  pintop
  *        BENCH_TOKEN                   secret; without it /bench/retrieve is a 404
@@ -73,8 +75,9 @@
  *   present, the FAQ block stays in the prompt, the excerpts follow it
  *   framed as untrusted content with a no-verdict rule, then framework
  *   excerpts (2026-09-08; before that document mode dropped the FAQ).
- *   The FAQ block is the whole FAQ on the live Worker until the stage I
- *   release, and the question's matched entries (selectFaq) in test mode.
+ *   The FAQ block is the question's matched entries (selectFaq) on every
+ *   Worker since the stage I release of 2026-10-05; before it the live Worker
+ *   sent the whole FAQ and only the test copy sent the matched entries.
  *
  * Rate limiting: per-isolate token bucket (RATE_MAX per RATE_WINDOW_MS per IP)
  * plus a global in-flight cap (Ollama serializes; queueing helps nobody).
@@ -83,12 +86,14 @@
  * rate rule on a custom route (workers.dev cannot get zone WAF).
  */
 
-const DEFAULT_MODEL = 'scl-sft-v2:latest';  // production since 2026-09-10; rollback is OLLAMA_MODEL=scl-sft,
-                                            // the previous fine-tune, still installed on the host. NOT llama3.1,
+const DEFAULT_MODEL = 'scl-sft-v3:latest';  // production since the stage I release of 2026-10-05; rollback is
+                                            // OLLAMA_MODEL=scl-sft-v2, the previous fine-tune (production
+                                            // 2026-09-10 to 10-05), still installed on the host. NOT llama3.1,
                                             // which is the un-tuned base and has not been production since 09-02.
                                             // This constant is the floor if OLLAMA_MODEL is ever lost, so it must
-                                            // track whatever production actually serves.
-const WORKER_BUILD = '2026-10-06.6'; // library: the stage G rules wording restored byte for byte (the reference sentence widened in 2026-10-06.1 reworded 48 of 64 live answers and cost three passes); the outside-documents heading, kind excerpt, names and the two-entry unnamed path stay // bump on every dashboard paste; echoed by /bench/retrieve so a paste can be verified from outside
+                                            // track whatever production actually serves. It named scl-sft-v2
+                                            // until build 2026-10-23.1.
+const WORKER_BUILD = '2026-10-23.1'; // FAQ_ALWAYS without faq-20 (removed from faq.json 2026-10-17): no prompt change, byte-identical on the 64 bench prompts; DEFAULT_MODEL scl-sft-v3, which changes nothing while OLLAMA_MODEL is set; previous 2026-10-06.6, library: the stage G rules wording restored byte for byte (the reference sentence widened in 2026-10-06.1 reworded 48 of 64 live answers and cost three passes); the outside-documents heading, kind excerpt, names and the two-entry unnamed path stay // bump on every dashboard paste; echoed by /bench/retrieve so a paste can be verified from outside
 const MAX_QUESTION_CHARS = 500;
 const MAX_HISTORY_MSGS = 8;          // most recent turns kept
 const MAX_HISTORY_MSG_CHARS = 1200;  // each turn truncated to this
@@ -337,10 +342,11 @@ Reference entries follow.`;
    live set is kept. Wording C of three drafted by isolated writers and judged
    blind on the practice set (ask-eval/improvement-framework.md 6.1, 2026-10-04);
    Kevin approved it on 2026-10-04.
-   Gated exactly like the matched FAQ: the live Worker keeps the set above until
-   the stage I release flips RULES_LIVE; a Worker in TEST_MODE sends this set.
-   Instruction tokens (Llama 3.1): 1377 normal, 1011 document, against 783 and
-   793 for the live set; the stage F worst case keeps 2067 and 1809 to spare. */
+   Gated exactly like the matched FAQ: the live Worker kept the set above until
+   the stage I release flipped RULES_LIVE (2026-10-05.1); since then every
+   Worker sends this set. Instruction tokens (Llama 3.1): 1377 normal, 1011
+   document, against 783 and 793 for the live set; the stage F worst case kept
+   2067 and 1809 to spare (2026-10-04). Current totals: the num_ctx comment. */
 const RULES_LIVE = true; // stage I release (2026-10-05.1): every Worker sends the stage G rules; false kept the pre-release set
 
 const ASSISTANT_IDENTITY_G = `You are Ask SCL, the question-answering assistant on the public website of Safety Critical Labs (SCL), an independent certification authority for AI in safety-critical systems. You help visitors understand how AI is regulated, governed, certified and assured, in any field, using the reference entries you are given; SCL is one source among those entries, not the subject of every answer. You are built with Llama: an open-weight Llama 3.1 model that SCL fine-tuned and runs on hardware SCL controls, so no cloud AI provider generates your answers. Before you answer, a small ranking model hosted by Cloudflare scores the question against the reference material to choose which entries you are given; that ranking service is not always available, and when it is not, SCL's own keyword matching chooses them instead. Cloudflare also runs the request handling for the assistant. SCL does not publish further detail about the model configuration, which may change over time; if asked what model you are, say exactly this. If a visitor asks what you are or how you work, answer plainly from this paragraph. You are an informational assistant only and play no part in certification decisions. The conversation may include earlier turns; answer follow-up questions using ONLY the reference entries below, and if a follow-up is ambiguous, ask what the visitor means rather than guessing. Among the entries you may be given excerpts from SCL's own standard, the AI Requirements Framework: ten core requirement areas (AI-1 through AI-10) plus three conditional architecture and paradigm areas (AI-11 multi-model, AI-12 neural networks, AI-13 continuous learning). It supplements the domain safety standard a system already follows, such as DO-178C, ISO 26262, or NPR 7150.2D.`;
@@ -414,8 +420,8 @@ function renderFaq(faqJsonText) {
    to FAQ lines stretched over questions they never addressed. selectFaq sends
    instead:
    - FAQ_ALWAYS, the few entries that say what SCL is, its accreditation
-     status, whether it has certified anyone yet and how to reach it, in file
-     order, so no question is answered without them (the short fixed part the
+     status and how to reach it (faq-20 was a fourth until it left faq.json on
+     2026-10-17), in file order, so no question is answered without them (the short fixed part the
      plan calls for, kept as citable entries rather than new prose);
    - then up to FAQ_MAX_PICK entries chosen for the question. Keyword picks
      first, scored by the very scoreEntries the framework search uses (an
@@ -431,11 +437,14 @@ function renderFaq(faqJsonText) {
    carries a hash of the entry text it embedded, so an entry edited after the
    build loses only its own meaning-based match (alignFaqVectors), and a
    missing or stale file costs nothing but the cosine side.
-   The live Worker keeps sending the full FAQ until the stage I release flips
-   FAQ_MATCHED_LIVE; a Worker in TEST_MODE sends the matched block, so the test
-   copy measures what visitors will get. */
+   Until the stage I release flipped FAQ_MATCHED_LIVE (2026-10-05.1) the live
+   Worker sent the full FAQ and only a Worker in TEST_MODE sent the matched
+   block; since then every Worker sends it. */
 const FAQ_VECTORS_URL = 'https://safetycriticallabs.com/faq_vectors.json';
-const FAQ_ALWAYS = ['faq-1', 'faq-7', 'faq-20', 'faq-23'];
+const FAQ_ALWAYS = ['faq-1', 'faq-7', 'faq-23'];
+// faq-20 left faq.json on 2026-10-17 (0f0e018). selectFaq skips a fixed id that faq.json lacks, so
+// dropping it here changes no byte of any prompt (checked on the 64 bench prompts, 2026-10-23); it
+// keeps the constant true to faq.json and stops a later faq-20 from being pinned by accident.
 // 7, raised from 5 on 2026-10-04 after the first stage F bench: with 5, a
 // bench question about how an assessment confirms the right standards apply
 // had the process entry (faq-4) above the floor in sixth place and cut off,
@@ -1631,7 +1640,7 @@ async function selectGrounding(retrievalQuery, fw, vectors, qvec, env) {
 
 /* The system message. Excerpts go LAST, and the matched FAQ block opens with
    its fixed FAQ_ALWAYS entries, so the stable prefix (instructions, the FAQ
-   heading and FAQ_ALWAYS; the whole FAQ while the live Worker still sends it)
+   heading and FAQ_ALWAYS; the whole FAQ before the stage I release)
    stays reusable in Ollama's KV prefix cache across questions. Document mode
    (doc non-null) keeps the FAQ block and frames the visitor's excerpts as
    untrusted data between it and the framework excerpts. */
@@ -2248,6 +2257,16 @@ export default {
           // 9053), practice up to 4877. Stage G's rule set adds 594 tokens in
           // normal mode and 218 in document mode (1377 and 1011 against 783
           // and 793), leaving 2067 and 1809 at the same worst case.
+          //   Re-measured 2026-10-23 with scl-internal-main/ask-eval/
+          // prompt_budget.py, which runs this file's own code and searches
+          // every entry for the worst blocks: 48 FAQ entries, three fixed
+          // (260 tokens), worst matched FAQ block 1572; framework block 3761
+          // (stage E's crafted worst was the true maximum); explainer and
+          // reference block up to 1870 with the NASA library. Stage G rules:
+          // normal 9989 and document 10124 (the document name now filled with
+          // dense text, not x), leaving 1899 and 1764, so document mode binds.
+          // Re-run that tool before adding FAQ or corpus entries or changing
+          // a cap.
           // A prompt filled with CJK ideographs can still pass the
           // window (each is two or three tokens and every cap counts chars),
           // which was so before stage F and is unchanged by it.

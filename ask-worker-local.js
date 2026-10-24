@@ -93,7 +93,7 @@ const DEFAULT_MODEL = 'scl-sft-v3:latest';  // production since the stage I rele
                                             // This constant is the floor if OLLAMA_MODEL is ever lost, so it must
                                             // track whatever production actually serves. It named scl-sft-v2
                                             // until build 2026-10-23.1.
-const WORKER_BUILD = '2026-10-23.1'; // FAQ_ALWAYS without faq-20 (removed from faq.json 2026-10-17): no prompt change, byte-identical on the 64 bench prompts; DEFAULT_MODEL scl-sft-v3, which changes nothing while OLLAMA_MODEL is set; previous 2026-10-06.6, library: the stage G rules wording restored byte for byte (the reference sentence widened in 2026-10-06.1 reworded 48 of 64 live answers and cost three passes); the outside-documents heading, kind excerpt, names and the two-entry unnamed path stay // bump on every dashboard paste; echoed by /bench/retrieve so a paste can be verified from outside
+const WORKER_BUILD = '2026-10-24.1'; // FAQ pick matches stems at word starts only (atWordStart); framework search unchanged; previous 2026-10-23.1: FAQ_ALWAYS without faq-20 (removed from faq.json 2026-10-17): no prompt change, byte-identical on the 64 bench prompts; DEFAULT_MODEL scl-sft-v3, which changes nothing while OLLAMA_MODEL is set; previous 2026-10-06.6, library: the stage G rules wording restored byte for byte (the reference sentence widened in 2026-10-06.1 reworded 48 of 64 live answers and cost three passes); the outside-documents heading, kind excerpt, names and the two-entry unnamed path stay // bump on every dashboard paste; echoed by /bench/retrieve so a paste can be verified from outside
 const MAX_QUESTION_CHARS = 500;
 const MAX_HISTORY_MSGS = 8;          // most recent turns kept
 const MAX_HISTORY_MSG_CHARS = 1200;  // each turn truncated to this
@@ -430,6 +430,8 @@ function renderFaq(faqJsonText) {
      faq_vectors.json are present, the top cosine ranks fill the remaining
      slots, at most FAQ_RESCUE_EXTRA of them, exactly as cosine rescues the
      framework picks: a keyword pick is never displaced or reordered.
+     Since 2026-10-24 the keyword picks match stems at word starts only (the
+     scorer's wordStart mode, see atWordStart); the framework search does not.
    The block keeps renderFaq's heading and entry format, so the citing rule in
    the instructions, the bench grader and the parity check read it unchanged.
    Unparseable faq.json falls back to renderFaq, as before.
@@ -537,7 +539,7 @@ function selectFaq(question, faqJsonText, qvec, faqVectors) {
   }
   var sc = scoreEntries(question, { entries: entries.map(function (e) {
     return { id: e.id, title: e.q, keywords: e.keywords, text: e.a, src: e };
-  }) });
+  }) }, true);   // word starts only: see atWordStart
   var matched = 0;
   if (sc) {
     for (var m = 0; m < sc.keep.length && matched < FAQ_MAX_PICK; m++) {
@@ -690,10 +692,26 @@ function idMentioned(qNorm, idLower) {
   return p !== -1;
 }
 
+/* A stem counts only where a word starts, so "train" (from "training") does
+   not hit "retrain". Used by the FAQ pick alone (2026-10-24): substring hits
+   had pulled the retraining entry, faq-48, into 19 of 64 bench prompts about
+   training data and the embedding entry, faq-49, into 6, crowding out more
+   specific entries. The framework search keeps substring matching, which its
+   measured selection depends on. */
+function atWordStart(hay, st) {
+  var p = hay.indexOf(st);
+  while (p !== -1) {
+    if (p === 0 || !/[a-z0-9]/.test(hay.charAt(p - 1))) return true;
+    p = hay.indexOf(st, p + 1);
+  }
+  return false;
+}
+
 // Shared scoring core. selectExcerpts and rerankSelect both ride THIS scored
 // candidate list, so the rerank path cannot drift from the keyword path the
 // way a reimplementation would (the scoring_mirror lesson, applied in-worker).
-function scoreEntries(question, framework) {
+function scoreEntries(question, framework, wordStart) {
+  var has = wordStart ? atWordStart : function (h, st) { return h.indexOf(st) !== -1; };
   var entries = (framework && framework.entries) || [];
   if (!entries.length) return null;
   var qTokens = tokenize(question).slice(0, MAX_QUERY_TOKENS);
@@ -713,7 +731,7 @@ function scoreEntries(question, framework) {
   for (var si = 0; si < stems.length; si++) {
     var hits = new Set();
     for (var fi = 0; fi < fields.length; fi++) {
-      if (fields[fi].text.indexOf(stems[si]) !== -1) hits.add(fi);
+      if (has(fields[fi].text, stems[si])) hits.add(fi);
     }
     weights.push(hits.size > 0 ? 1 / (1 + Math.log(hits.size)) : 0.6);
     textHits.push(hits);
@@ -739,8 +757,8 @@ function scoreEntries(question, framework) {
       var st = stems[j];
       if (st.length < 3) continue;
       var w = weights[j];
-      if (f.title.indexOf(st) !== -1) score += 10 * w;
-      if (f.kw.indexOf(st) !== -1) score += 8 * w;
+      if (has(f.title, st)) score += 10 * w;
+      if (has(f.kw, st)) score += 8 * w;
       if (textHits[j].has(i)) score += 2 * w;
     }
     // whole-phrase alias: multi-word keyword appearing verbatim in the question

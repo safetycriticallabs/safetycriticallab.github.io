@@ -462,6 +462,10 @@ html.fwx-banging .fwx-copy-left > *, html.fwx-banging .fwx-copy-right > * { anim
   opacity: 0; transition: opacity .18s ease;
 }
 .fwx-tip.is-on { opacity: 1; }
+/* While the thirteen stand in the row (the tiers, from above) the tip hangs
+   to the lower right of its mark: the row runs up and to the right, and its
+   first body stands near the left edge of the window. */
+.fwx-tip.is-row { transform: translate(16px, 14px); }
 .fwx-tip-id { font-size: 11px; letter-spacing: .04em; color: #79A8D5; }
 .fwx-tip-name { font-size: 12.5px; font-weight: 500; color: #FAF9F5; }
 
@@ -931,6 +935,28 @@ html.fwx-door.fwx-scene .pub-standard-rows > .btn::before, html.fwx-door.fwx-sce
 }
 html.fwx-door.fwx-scene .pub-standard-rows > .btn-outline::before { background: none; box-shadow: none; border: 1px solid rgba(250,249,245,0.7); }
 html.fwx-door.fwx-scene .pub-standard-rows > .btn:focus-visible, html.fwx-door.fwx-scene .fw-transition-cta .btn:focus-visible { outline-offset: 4px; }
+/* The two outcomes and the standard's rows in the tiers' language (a laptop
+   only; a phone reads under the core and keeps its cards). No boxes: the
+   scene has none. A hairline between rows, the words held by the shade and
+   their own soft dark, and the two outcomes marked as the scene marks things,
+   a lit point and a ring, in place of the coloured bars. With no space
+   between the two outcomes the level view's line lands on the hairline that
+   divides them. */
+@media (min-width: 881px) {
+  html.fwx-door.fwx-scene .os-right, html.fwx-door.fwx-scene .pub-standard-rows { gap: 0; }
+  html.fwx-door.fwx-scene .os-item, html.fwx-door.fwx-scene .pub-standard-row {
+    background: none; border: 0 !important; border-radius: 0; box-shadow: none;
+    border-top: 1px solid rgba(250,249,245,0.18) !important; padding: 18px 0;
+    text-shadow: 0 0 2px rgba(5,14,28,0.9), 0 0 12px rgba(5,14,28,0.7);
+  }
+  html.fwx-door.fwx-scene .os-item:first-child { border-top-color: transparent !important; }
+  html.fwx-door.fwx-scene .pub-standard-row:last-of-type { border-bottom: 1px solid rgba(250,249,245,0.18) !important; }
+  html.fwx-door.fwx-scene .os-item::before {
+    content: ""; position: absolute; left: -22px; top: 23px; width: 7px; height: 7px; border-radius: 50%;
+    background: #7FD08F; box-shadow: 0 0 8px rgba(127,208,143,0.7);
+  }
+  html.fwx-door.fwx-scene .os-item.fwx-notcert::before { background: none; box-shadow: none; border: 1.5px solid #79A8D5; width: 6px; height: 6px; }
+}
 /* ── THE NAV AND THE FOOTER IN THE SCENE'S NIGHT (this page only; Kevin:
    "the same dark color just for this page. So it can be seemless"). The
    shell sheet's cream colours are restated for night at the weight
@@ -1763,6 +1789,11 @@ gsap.utils.toArray('.slide-right').forEach(function(el) {
      not on the scroll. Scrolling, a key or a touch before it has finished
      plays the rest out quickly rather than cutting it. */
   var BANG_HOLD = 1.2, BANG_T = 3.6, BANG_SKIP = 0.7;
+  /* The opening is seen in depth from its first frame, not face-on: the view
+     it holds at (BANG_SQ) and the share of the roll it starts with
+     (BANG_ROLL), so the band wound round the mark is a ring seen at an angle
+     and the mark is a ball in the same space as what it opens into. */
+  var BANG_SQ = 0.60, BANG_ROLL = 0.4;
   /* The sand. SAND_R is the reach of the cursor in screen pixels; CARRY is
      how much of its speed the grains take; GRIP how quickly they take it;
      PUSH how hard they are thrown out of its path; K and C the spring back
@@ -1773,9 +1804,11 @@ gsap.utils.toArray('.slide-right').forEach(function(el) {
       SAND_K = 8.0, SAND_C = 6.0, SAND_MAXV = 1500;
   var ptr = { on: false, x: 0, y: 0, vx: 0, vy: 0, t: 0 }, sandLast = null, sandLive = 0;
   /* The grid the lines read the sand from, in the drawing's own units round
-     the centre: SG_X by SG_Y cells over plus or minus SG_HX and SG_HY. The
-     disk is seen at a slant, so it is flatter than it is wide. */
-  var SG_X = 64, SG_Y = 44, SG_HX = 340, SG_HY = 160, SG_GAIN = 1.4;
+     the centre: SG_X by SG_Y cells over plus or minus SG_HX and SG_HY.
+     Nearly as tall as it is wide: the tiers are read from above, where the
+     disk is close to a circle (it was half this height while every view was
+     at a slant; the cells are the size they were). */
+  var SG_X = 64, SG_Y = 88, SG_HX = 340, SG_HY = 320, SG_GAIN = 1.4;
   var SG_KX = SG_X / (2 * SG_HX), SG_KY = SG_Y / (2 * SG_HY);
   var sgX = new Float32Array(SG_X * SG_Y), sgY = new Float32Array(SG_X * SG_Y), sgW = new Float32Array(SG_X * SG_Y);
   var sgTX = new Float32Array(SG_X * SG_Y), sgTY = new Float32Array(SG_X * SG_Y), sgOn = false;
@@ -1866,16 +1899,18 @@ gsap.utils.toArray('.slide-right').forEach(function(el) {
      judged on its own. A click sets it off. */
   var ORB_HOLD = false, ORB_AT = 0.85;
   /* The orb is seen a little from above, so its rings are rings in space: the
-     tilt of the rings. Its bar stays straight across the lens with the eye at
-     the centre, as on the logo, and takes the equator's curve only as the orb
-     becomes the mass. Until 2026-09-27 it curved at rest too, which read as a
-     smile with the eye hanging below it. ORB_CURV is the rest curve.
+     tilt of the rings. From 2026-09-27 its bar was straight across the lens,
+     as on the flat logo, because on an orb seen face-on a curved bar read as
+     a smile with the eye hanging below it. Since 2026-11-11 the opening is
+     seen tilted (BANG_SQ), and there the bar curves round the ball as its
+     equator, so the ball reads as a ball: ORB_CURV is that rest curve. Set it
+     back to 0 only together with a face-on opening.
      Everything matched to the logo that day is the opening orb's alone: the
      core, which the thirteen areas lead into, keeps the look it had, down to
      its curve (CORE_CURV). The core's path is the only one where hotK is
      above 0, and there hotK equals sl, so choosing by hotK > 0 swaps nothing
      mid-transition: at sl 0 both are the mass. */
-  var ORB_TILT = 0.50, ORB_CURV = 0, ORB_SWAY = 0.12, CORE_CURV = 0.24;
+  var ORB_TILT = 0.50, ORB_CURV = 0.22, ORB_SWAY = 0.12, CORE_CURV = 0.24;
   if (bangOn) document.documentElement.classList.add('fwx-banging');
   /* The constellation by itself: at the very top the hero's words wait, so
      the object can be explored first (stillFrame keeps this up to date). */
@@ -2191,6 +2226,30 @@ gsap.utils.toArray('.slide-right').forEach(function(el) {
         stX = cLeftS - 40 - (GOLD_A + 2.6) * stS;
         stY = Math.max(readY - STD_RISE * gh, NAV + gh - (GOLD_B + 2.6) * stS + 12);
       }
+      /* The tiers from above: the system's centre past the lower left corner,
+         AI-13's orbit short of the column and clear of the nav. */
+      if (overOn()) {
+        var cO = document.querySelector('.fwx-steps'), cLeftO = cO ? cO.getBoundingClientRect().left : 0.62 * W;
+        ovX = OVER_X * W; ovY = NAV + OVER_Y * gh;
+        ovS = Math.max(0.5, Math.min((cLeftO - OVER_GAP * W - ovX) / SYS_R, (ovY - NAV - OVER_TOP * gh) / (SYS_R * SQUASH_OVER)));
+        ovY = Math.min(ovY, NAV + OVER_LIFT * gh + SYS_R * SQUASH_OVER * ovS);
+        /* And on a very wide, short window, where the height holds the scale,
+           the centre comes in from the left far enough to keep the row's
+           first body 24px inside the frame. */
+        ovX = Math.max(ovX, 24 - Math.cos(ARM_A) * 90 * ovS);
+        /* The assessment's frame, level with the orbits: the disc's edge 40px
+           left of the column, the mark at the left of the frame. */
+        lvYA = NAV + LEVEL_Y * gh; lvYB = NAV + LEVEL_ROW * gh;
+        lvS = Math.max(0.5, Math.min((cLeftO - 40 - LEVEL_X * W) / (SYS_R * LEVEL_RIM), LEVEL_FIT * gh / MARK_R));
+        lvX = cLeftO - 40 - SYS_R * LEVEL_RIM * lvS;
+        /* Where the disc is set down: past the reading height, the mark's
+           rings still whole under the nav. */
+        lvYC = Math.min(lvYB, Math.max(NAV + (LEVEL_ROW - LEVEL_PAST) * gh, NAV + MARK_R * lvS + 12));
+        /* The standard's own frame: the gold whole, left of the column. */
+        s3S = Math.max(0.5, Math.min(S3_FIT * gh / (GOLD_B + 2.6), (cLeftO - 64) / (2 * (GOLD_A + 2.6))));
+        s3X = Math.max(24 + (GOLD_A + 2.6) * s3S, Math.min(S3_X * W, cLeftO - 40 - (GOLD_A + 2.6) * s3S));
+        s3Y = NAV + S3_Y * gh; s3Y2 = s3Y + S3_DROP * gh; s3C = NAV + S3_CLOSE * gh;
+      }
       SOFT = !!dg;
       /* The stops, as scroll positions of the mid-screen line. On the page
          they are the articles themselves: the dive begins as the section head
@@ -2228,6 +2287,14 @@ gsap.utils.toArray('.slide-right').forEach(function(el) {
             AG[0] = layTop(tLast) + tLast.offsetHeight + keyH / 2;
             AG[1] = Math.max(AG[0] + 1, layTop(aFirst) - keyH / 2);
           }
+          /* The tiers' own stops, from above: the head, then each tier's
+             block, as positions of the mid-screen line. */
+          TKY.length = 0;
+          DG[0] = AG[0] - DIVE_LEAD * keyH; DG[1] = Math.max(DG[0] + 1, AG[1]);
+          if (overOn()) {
+            TKY.push(layTop(tierHead) + tierHead.offsetHeight / 2);
+            for (var tci = 0; tci < tierCols.length; tci++) TKY.push(layTop(tierCols[tci]) + tierCols[tci].offsetHeight / 2);
+          }
           /* The move to the standard's frame: from when the assessment's last
              row has left the top of the screen to when the standard's first
              line is about to enter at the bottom. */
@@ -2236,6 +2303,34 @@ gsap.utils.toArray('.slide-right').forEach(function(el) {
             var sFirst = stdHead.firstElementChild || stdHead;
             SG[0] = layTop(aLast) + aLast.offsetHeight + keyH / 2;
             SG[1] = Math.max(SG[0] + 1, layTop(sFirst) - keyH / 2);
+          }
+          /* The level view: where the gap between the two outcomes is on the
+             page, and the standard's dive, which starts once they have stood
+             at the reading height. */
+          lvGap = -1; SD[0] = SG[0]; SD[1] = SG[1];
+          if (overOn() && assessEl && stdHead) {
+            var oRows = assessEl.querySelectorAll('.os-item');
+            if (oRows.length >= 2) lvGap = (layTop(oRows[0]) + oRows[0].offsetHeight + layTop(oRows[1])) / 2;
+            else if (oRows.length) lvGap = layTop(oRows[0]) + oRows[0].offsetHeight / 2;
+            if (lvGap >= 0) {
+              /* k0 is how far into the dive the disc's end comes within
+                 TIP_CLEAR of the column, and rowOff the position at which
+                 the last outcome's foot is ROW_CLEAR above the disc: the
+                 dive starts no earlier than puts the second before the
+                 first. */
+              var oLast = oRows[oRows.length - 1], k0 = 0;
+              var rowOff = layTop(oLast) + oLast.offsetHeight - (Math.min(lvYC, s3Y) - ROW_CLEAR) + M0;
+              /* The standard's head centred, and the close centred. The dive
+                 ends a little before the first. */
+              S3G[0] = layTop(stdHead) + stdHead.offsetHeight / 2;
+              S3G[1] = Math.max(S3G[0] + 1, closeEl ? layTop(closeEl) + closeEl.offsetHeight / 2 : S3G[0] + 2 * keyH);
+              s3Doc = S3G[1] - M0 + NAV / 2 + s3C;   /* the closing line centred in the window */
+              var sdEnd = Math.max(SG[1], S3G[0] - S3_END * keyH);
+              while (k0 < 0.6 && lvTip(k0) <= cLeftO - TIP_CLEAR) k0 += 0.005;
+              SD[0] = Math.max(lvGap - lvYB + M0 + STD_HOLD * keyH, (rowOff - k0 * sdEnd) / (1 - k0));
+              SD[0] = Math.min(SD[0], sdEnd - STD_MIN * keyH);
+              SD[1] = Math.max(SD[0] + 1, sdEnd);
+            }
           }
         } else K[14] = K[13] + BACK * keyH;
       } else {
@@ -2309,6 +2404,150 @@ gsap.utils.toArray('.slide-right').forEach(function(el) {
   var STD_PUSH = 1.36, STD_RISE = 0.06, stS = 1, stX = 0, stY = 0, stK = 0, SG = [0, 1];
   var doorHead = incHead || tierHead, doorEnd = closeEl || stdEl || assessEl || tierEl || incEl;
   var readS = 1, readX = 0, readY = 0;
+  /* The tiers, read from above (a laptop only: a phone reads below the core
+     and keeps the dive). Past AI-13 the camera climbs instead of diving. The
+     roll comes off, the orbits open into circles and the mark is pushed past
+     the lower left corner, so the thirteen bands cross the frame as arcs. The
+     thirteen bodies come to stand in one row, in order, and each tier relights
+     that row in its key's own marks: a lit point where the area applies, a
+     dashed ring and a dashed line on its orbit where it is tailored, a thin
+     ring where it is conditional. Which is which is read from the tier's own
+     figure on the page, never listed here. Where the level view below cannot
+     run, the dive into the core waits for the empty gap before the assessment
+     and lands on the assessment's frame.
+     OVER_X and OVER_Y place the system's centre, in screen widths and ground
+     heights. OVER_GAP keeps AI-13's orbit that share of the width left of the
+     column, OVER_TOP that share of the ground under the nav. SQUASH_OVER is
+     the view on arriving and SQUASH_LOW the view at the last tier: the camera
+     comes down a little all the way through. Where the width is what holds
+     the scale (a window tall for its width) the centre comes up the left edge
+     instead, so AI-13's orbit still starts OVER_LIFT of the ground under the
+     nav and the row stays in the frame. ARM_A is the row's direction and
+     ARM_D its lean per orbit, in radians. ARM_BACK is how much of the way
+     back to where it came from a body is sent when the row lets go on the
+     way down: a third, so none has far to run while the camera is moving.
+     TIER_R is a ring's radius in
+     system units (a lit point's size, so the three marks keep their
+     proportion at every window size), TIER_N the dashes in half a tailored
+     orbit. DG is the gap the camera leaves the tiers in: the assessment's gap
+     AG, opened by DIVE_LEAD ground heights at its start (from when the last
+     tier's block begins to fade at the top, not from when it has gone). It
+     ends where AG ends, as the assessment's first line is about to enter. */
+  var OVER = true, OVER_X = -0.02, OVER_Y = 1.10, OVER_GAP = 0.06, OVER_TOP = 0.12, OVER_LIFT = 0.132;
+  var SQUASH_OVER = 0.96, SQUASH_LOW = 0.80, ARM_A = -1.2, ARM_D = 0.045, TIER_R = 3.35, TIER_N = 30;
+  var DIVE_LEAD = 0.24, ARM_BACK = 0.33, armDive = false;
+  var ovS = 1, ovX = 0, ovY = 0, armK = 0, TKY = [], DG = [0, 1], TT = new Float32Array(13), TC = new Float32Array(13);
+  var tierCols = tierEl ? [].slice.call(tierEl.querySelectorAll('.struct-col')) : [];
+  /* Per tier, per area: 0 applies, 1 tailored, 2 conditional. */
+  var tierKind = tierCols.map(function (col) {
+    var k = [];
+    [].forEach.call(col.querySelectorAll('.fwx-matrix a.fwx-cell'), function (c) {
+      var n = parseInt((c.getAttribute('href') || '').replace('#ai-', ''), 10);
+      if (n >= 1 && n <= 13) k[n - 1] = c.classList.contains('tailored') ? 1 : (c.classList.contains('conditional') ? 2 : 0);
+    });
+    return k;
+  });
+  var overOK = tierCols.length > 0 && tierKind.every(function (k) { for (var i = 0; i < 13; i++) if (k[i] === undefined) return false; return true; });
+  function overOn() { return OVER && overOK && sceneOn && !narrow.matches && !!tierHead && !!assessHead && doorPage(); }
+  /* Which tier is being read, off the scroll: 0 at the head, then 1 for each
+     tier, holding at each and changing in the middle half of the gap between
+     two, as the journey's stops do. */
+  function tierAt(line) {
+    var n = TKY.length - 1;
+    if (n < 1 || line <= TKY[0]) return 0;
+    if (line >= TKY[n]) return n;
+    var j = 0; while (j < n - 1 && line >= TKY[j + 1]) j++;
+    var u = j + smooth(((line - TKY[j]) / Math.max(1, TKY[j + 1] - TKY[j]) - 0.25) / 0.5);
+    return reduce.matches ? Math.round(u) : u;
+  }
+  /* The tier's light. At the head the whole framework is lit evenly. At a
+     tier the areas that apply and the tailored ones hold the light and the
+     conditional ones fall back to the level of a band already read. TT and TC
+     are how far each area is drawn tailored or conditional. stay falls to 0
+     as the dive leaves, which hands the light back whole. */
+  function tierLights(tp, stay) {
+    var j0 = Math.floor(tp), f = tp - j0, lit = Math.min(1, tp) * stay;
+    for (var i = 0; i < 13; i++) {
+      var k0 = j0 >= 1 ? tierKind[j0 - 1][i] : 0, k1 = j0 < tierKind.length ? tierKind[j0][i] : k0;
+      var c = (k0 === 2 ? 1 - f : 0) + (k1 === 2 ? f : 0), t = (k0 === 1 ? 1 - f : 0) + (k1 === 1 ? f : 0);
+      TC[i] = c * stay; TT[i] = t * stay;
+      if (lit > 0) LA[i] = 0.5 * lit * (1 - c);
+    }
+    if (lit > 0) LH = 1 - lit;
+  }
+  /* The assessment, level with the orbits (a laptop only, with the tiers from
+     above). Leaving the last tier the camera comes down instead of diving:
+     the orbits close up until the framework is seen from its own plane, a
+     thin disc running from the mark at the left of the frame to just short of
+     the column. It holds low while the head is read. As the two outcomes come
+     up the screen the gap between them meets the disc, and the disc rides up
+     with it to the reading height, closing and coming level as it goes, so
+     the whole framework is one line between the two. The dive into the core
+     then waits again, for the gap before the published standard, and lands on
+     the standard's frame: the core is reached once.
+     LEVEL_X is where the mark sits, in screen widths, and LEVEL_RIM how far
+     the disc's light runs, as a share of AI-13's radius: the scale puts that
+     edge 40px left of the column. LEVEL_FIT keeps the mark's own rings
+     (MARK_R units) inside the frame on a wide, short window, where the mark
+     then stands in from the left edge. LEVEL_Y is the disc's height while the
+     head is read and LEVEL_ROW its height between the outcomes, in ground
+     heights. SQUASH_LEVEL and SQUASH_LINE are the view at those two and
+     LEVEL_ROLL the lean it arrives with, which comes off as the disc is
+     picked up, so the end beside the outcomes is in the gap for the whole
+     ride. The ride's two ends are rounded: LEVEL_EASE where the disc is
+     picked up and LEVEL_SET where it is set down, in pixels. It is carried
+     LEVEL_PAST ground heights past the reading height before it is set down,
+     so the reading height is inside the ride and not its last pixel. SD is
+     the standard's dive: it begins STD_HOLD ground heights after the outcomes
+     reach the reading height, or later where the disc's end, which the zoom
+     pushes right, would otherwise be within TIP_CLEAR pixels of the column
+     before the foot of the last outcome is ROW_CLEAR pixels above the disc;
+     it is never given less than STD_MIN, and ends S3_END ground heights before
+     the standard's head is centred (never before the standard's gap SG
+     ends), landing on the standard's own frame. */
+  var LEVEL = true, LEVEL_X = 0.0486, LEVEL_RIM = 1.02, LEVEL_FIT = 0.30, MARK_R = 50, MARK_BODY = 40, LEVEL_Y = 0.686, LEVEL_ROW = 0.444, LEVEL_PAST = 0.077;
+  var SQUASH_LEVEL = 0.07, SQUASH_LINE = 0.045, LEVEL_ROLL = -0.03, LEVEL_EASE = 40, LEVEL_SET = 32, STD_HOLD = 0.10, STD_MIN = 0.6, TIP_CLEAR = 12, ROW_CLEAR = 16;
+  var lvS = 1, lvX = 0, lvYA = 0, lvYB = 0, lvYC = 0, lvGap = -1, SD = [0, 1];
+  function levelOn() { return LEVEL && lvGap >= 0 && !!stdHead; }
+  /* The dive's two easings. The level dive has its own: it lands on the
+     standard's own frame, which is not far in, so pan and zoom go together;
+     where that frame's centre is left of the level one the zoom leads in x,
+     so the disc grows toward the column before its centre moves. lvTip is
+     where the disc's end then is, for measure(). */
+  function divePan(k) { return smooth(k / 0.55); }
+  function diveZoom(k) { return smooth((k - 0.12) / 0.88); }
+  function lvPanX(k) { return s3X < lvX ? smooth((k - 0.2) / 0.6) : smooth(k); }
+  function lvTip(k) {
+    return lvX + (s3X - lvX) * lvPanX(k) + SYS_R * LEVEL_RIM * Math.exp(Math.log(lvS) + (Math.log(s3S) - Math.log(lvS)) * smooth(k));
+  }
+  /* The published standard, its own frame (with the level view only). The
+     core is reached once, here, and seen whole: the gold's outer edge is
+     S3_FIT ground heights tall and fits between the left edge and the
+     column, its centre S3_X screen widths in and S3_Y ground heights down.
+     The dive ends S3_END ground heights before the standard's head is
+     centred. Through the standard the camera draws back (to S3_BACK of the
+     scale at the close, the view closing to S3_SQ, the centre sinking by
+     S3_DROP), and at the close the core is picked up by the page and leaves
+     with it: it passes S3_CLOSE ground heights down as the closing line is
+     centred, at the page's own speed, and goes out under the nav as the
+     footer comes. S3G is the standard's head to the close, as positions of
+     the mid-screen line, and s3Doc the place on the page the core leaves
+     with. */
+  var S3_FIT = 0.336, S3_X = 0.2583, S3_Y = 0.4565, S3_END = 0.14, S3_BACK = 0.615, S3_SQ = 0.30, S3_DROP = 0.006, S3_CLOSE = 0.263;
+  var s3S = 1, s3X = 0, s3Y = 0, s3Y2 = 0, s3C = 0, s3Doc = 0, S3G = [0, 1];
+  /* g followed exactly between lo + rl and hi - rh and held outside lo and
+     hi, the two ends rounded over rl and rh so the disc is picked up and set
+     down rather than caught. */
+  function ride(g, lo, hi, rl, rh) {
+    var k = Math.min(1, (hi - lo) / Math.max(1, 2 * (rl + rh)));
+    rl *= k; rh *= k;
+    if (rl + rh <= 0) return Math.max(lo, Math.min(hi, g));
+    if (g >= hi + rh) return hi;
+    if (g <= lo - rl) return lo;
+    if (rh > 0 && g > hi - rh) return hi - (hi + rh - g) * (hi + rh - g) / (4 * rh);
+    if (rl > 0 && g < lo + rl) return lo + (g - lo + rl) * (g - lo + rl) / (4 * rl);
+    return g;
+  }
   function doorPage() {
     var ch = document.querySelector('.fw-card-section');
     return DOOR && DOOR_PAGE && !CENTRE && !rimOn() && !!doorHead && !!doorEnd && !!ch && ch.classList.contains('fwx-travel');
@@ -2368,8 +2607,8 @@ gsap.utils.toArray('.slide-right').forEach(function(el) {
       burst = 1 - (1 - t) * (1 - t);
       sl = 1 - smooth(t / 0.32);
       var lean = smooth((t - 0.04) / 0.80);
-      squash = SQUASH_FLAT + (SQUASH_CENTRE - SQUASH_FLAT) * lean;
-      rollNow = ROLL * lean;
+      squash = BANG_SQ + (SQUASH_CENTRE - BANG_SQ) * lean;
+      rollNow = ROLL * (BANG_ROLL + (1 - BANG_ROLL) * lean);
       sysScale = Math.exp(Math.log(openS) + (Math.log(tgtS) - Math.log(openS)) * lean) * pinch;
       var oy = NAV + gh / 2;
       camX = W / 2 + (tgtX - W / 2) * lean; camY = oy + (tgtY - oy) * lean;
@@ -2377,32 +2616,88 @@ gsap.utils.toArray('.slide-right').forEach(function(el) {
       dustGrow = 0.18 + 0.82 * (1 - Math.pow(1 - t, 3));
       dustA = smooth(t / 0.55);
       starsA = smooth((t - 0.18) / 0.62);
-      flashA = s < 0 ? 0 : (s < 0.09 ? s / 0.09 : Math.exp(-(s - 0.09) * 3.2));
-      shock = (s < 0 || s > 1.9) ? -1 : s / 1.9;
+      /* A faint pulse only, and no shock rings: the band opening out is the
+         burst, and nothing is to hide it. */
+      flashA = 0.22 * (s < 0 ? 0 : (s < 0.09 ? s / 0.09 : Math.exp(-(s - 0.09) * 3.2)));
+      shock = -1;
     }
     /* How far into the core: on ?core the clock drives it, through the door
        the scroll past AI-13 does. */
     var ck = -1;
     if (CORE_VIEW) ck = reduce.matches ? 1 : Math.max(0, Math.min(1, (coreT - CORE_HOLD) / CORE_T));
     else if (doorOn() && trav > 12) ck = reduce.matches ? (trav >= 13 ? 1 : 0) : Math.min(1, trav - 12);
+    /* The tiers from above. What was the dive's gap is the climb, the tiers
+       are read from up there, and the dive runs in the gap before the
+       assessment instead, so ck is handed that gap. */
+    var over = ck >= 0 && !CORE_VIEW && overOn(), level = false;
+    armK = 0; armDive = false;
+    if (over) {
+      var syO = window.pageYOffset || document.documentElement.scrollTop || 0;
+      var lyO = syO + NAV + (window.innerHeight - NAV) / 2;
+      var up = ck, tp = up >= 1 ? tierAt(lyO) : 0;
+      var dk = (lyO - DG[0]) / Math.max(1, DG[1] - DG[0]);
+      dk = reduce.matches ? (dk >= 0.5 ? 1 : 0) : Math.max(0, Math.min(1, dk));
+      /* Leaving: in the first third of the dive the marks go and the whole
+         framework relights, as the last tier's words go, and the row stands
+         until they have. Only then does it let go, so what scatters is
+         thirteen plain points and never a mark out of its place. */
+      var stay = 1 - smooth(dk / 0.34);
+      var sqT = SQUASH_OVER + (SQUASH_LOW - SQUASH_OVER) * Math.min(1, tp / Math.max(1, TKY.length - 1));
+      sysScale = Math.exp(Math.log(tgtS) + (Math.log(ovS) - Math.log(tgtS)) * up);
+      camX = tgtX + (ovX - tgtX) * up; camY = tgtY + (ovY - tgtY) * up;
+      squash = SQUASH_CENTRE + (sqT - SQUASH_CENTRE) * up;
+      rollNow = ROLL * (1 - up);
+      armK = up * (1 - smooth((dk - 0.34) / 0.56));
+      armDive = dk > 0;
+      tierLights(tp, stay);
+      ck = dk;
+      level = levelOn();
+      if (level) {
+        /* Down, level with the orbits. The same gap that was the dive's: the
+           view closes, the roll all but stays off and the mark comes up into
+           the left of the frame. Then the disc rides the gap between the two
+           outcomes up to the reading height and a little past it. */
+        if (dk > 0) {
+          var gsO = lvGap - syO, lvY = reduce.matches ? (gsO <= (lvYA + lvYB) / 2 ? lvYB : lvYA) : ride(gsO, lvYC, lvYA, LEVEL_SET, LEVEL_EASE);
+          var lk = Math.max(0, Math.min(1, (lvYA - lvY) / Math.max(1, lvYA - lvYB))), de = smooth(dk);
+          sysScale = Math.exp(Math.log(sysScale) + (Math.log(lvS) - Math.log(sysScale)) * de);
+          camX += (lvX - camX) * de; camY += (lvY - camY) * de;
+          squash += (SQUASH_LEVEL + (SQUASH_LINE - SQUASH_LEVEL) * lk - squash) * de;
+          rollNow += (LEVEL_ROLL * (1 - Math.max(lk, smooth((lvYA - lvY) / LEVEL_EASE))) - rollNow) * de;
+        }
+        /* And the dive, handed the standard's gap. With motion reduced the
+           picture changes where it always did, in the middle of the gap
+           after the last outcome has gone, with no words on screen. */
+        var gkO = (lyO - SD[0]) / Math.max(1, SD[1] - SD[0]);
+        ck = reduce.matches ? ((lyO - SG[0]) / Math.max(1, SG[1] - SG[0]) >= 0.5 ? 1 : 0) : Math.max(0, Math.min(1, gkO));
+      }
+    } else { TT.fill(0); TC.fill(0); }
     if (ck >= 0) {
       /* The dive home. The pan leads and the zoom follows, so the mark is
          centred on its spot before it grows; the roll comes off so the mark
          stands upright; and in the last half the mass relights into the
          hot orb. */
-      var pan = smooth(ck / 0.55), zoom = smooth((ck - 0.12) / 0.88);
+      var pan = divePan(ck), zoom = diveZoom(ck);
       /* On the page the dive lands on the reading frame; ?core and ?centre
          keep the approved framing. */
       var onPage = !CORE_VIEW && doorPage();
       var dS = onPage ? readS : coreS, dX = onPage ? readX : coreX, dY = onPage ? readY : coreY;
-      camX += (dX - camX) * pan; camY += (dY - camY) * pan;
+      /* From above the dive lands on the assessment's frame, the next thing
+         read, and the view comes back down to the centrepiece's as it pans.
+         From the level view it lands on the standard's own frame, and the
+         view opens behind the zoom, so the disc is still thin while the last
+         of the outcomes leaves the top of the column above it. */
+      if (level) { pan = zoom = smooth(ck); dS = s3S; dX = s3X; dY = s3Y; squash += (SQUASH_CENTRE - squash) * smooth((ck - 0.15) / 0.85); rollNow *= 1 - pan; }
+      else if (over) { dS = asS; dX = asX; dY = asY; squash += (SQUASH_CENTRE - squash) * pan; }
+      if (over && ck >= 1) squash = SQUASH_CENTRE;
+      camX += (dX - camX) * (level ? lvPanX(ck) : pan); camY += (dY - camY) * pan;
       sysScale = Math.exp(Math.log(sysScale) + (Math.log(dS) - Math.log(sysScale)) * zoom);
       /* Then, on the page, the small move to the assessment's frame. */
       if (onPage && ck >= 1 && assessHead) {
         var lyA = (window.pageYOffset || document.documentElement.scrollTop || 0) + NAV + (window.innerHeight - NAV) / 2;
         asK = (lyA - AG[0]) / Math.max(1, AG[1] - AG[0]);
         asK = reduce.matches ? (asK >= 0.5 ? 1 : 0) : smooth(asK);
-        if (asK > 0) {
+        if (asK > 0 && !over) {
           sysScale = Math.exp(Math.log(readS) + (Math.log(asS) - Math.log(readS)) * asK);
           camX = readX + (asX - readX) * asK; camY = readY + (asY - readY) * asK;
         }
@@ -2410,14 +2705,27 @@ gsap.utils.toArray('.slide-right').forEach(function(el) {
         if (stdHead) {
           stK = (lyA - SG[0]) / Math.max(1, SG[1] - SG[0]);
           stK = reduce.matches ? (stK >= 0.5 ? 1 : 0) : smooth(stK);
-          if (stK > 0) {
+          if (stK > 0 && !level) {
             sysScale = Math.exp(Math.log(asS) + (Math.log(stS) - Math.log(asS)) * stK);
             camX = asX + (stX - asX) * stK; camY = asY + (stY - asY) * stK;
           }
         }
       }
-      rollNow = ROLL * (1 - smooth(ck / 0.8));
-      sl = smooth((ck - 0.42) / 0.5);
+      /* The standard, read with the core whole. The camera draws back
+         through it, and at the close the core is picked up by the page, as
+         the disc was by the two outcomes, and leaves with it. */
+      if (level && ck >= 1) {
+        var u3 = Math.max(0, Math.min(1, (lyO - S3G[0]) / Math.max(1, S3G[1] - S3G[0])));
+        if (reduce.matches) u3 = u3 >= 0.8 ? 1 : 0;
+        var y3 = s3Y + (s3Y2 - s3Y) * smooth(u3 / 0.4);
+        sysScale = s3S * Math.pow(S3_BACK, Math.pow(u3, 1.5));
+        squash = SQUASH_CENTRE + (S3_SQ - SQUASH_CENTRE) * smooth((u3 - 0.4) / 0.6);
+        camX = s3X;
+        camY = reduce.matches ? (u3 >= 1 ? s3C : y3) : ride(s3Doc - syO, -1e6, y3, 0, Math.max(1, y3 - s3C));
+      }
+      if (!over) rollNow = ROLL * (1 - smooth(ck / 0.8));   /* from above it is already off */
+      /* From the level view the core begins to glow by the middle of the dive. */
+      sl = level ? smooth((ck - 0.2) / 0.7) : smooth((ck - 0.42) / 0.5);
       /* The core breathes slowly: some of the gathered heat, never the
          quickening the orb has just before it goes. */
       heatK = 0.35 * sl;
@@ -2681,7 +2989,7 @@ gsap.utils.toArray('.slide-right').forEach(function(el) {
       /* A read-only hook for checking the journey in a headless browser. */
       stillFrame();
       sceneFrame();
-      window.__fwx = { trav: trav, s: sysScale, x: camX, y: camY, stopY: stopY, bang: bangOn ? bangT : -1 };
+      window.__fwx = { trav: trav, s: sysScale, x: camX, y: camY, sq: squash, roll: rollNow, arm: armK, sl: sl, stopY: stopY, bang: bangOn ? bangT : -1 };
       start();
       return;
     }
@@ -2880,16 +3188,28 @@ gsap.utils.toArray('.slide-right').forEach(function(el) {
     else { g.translate(cx, cy); g.rotate(rollNow); g.translate(-cx, -cy); }
 
     /* ── the orbit fields, split by which side of the star they are on ──── */
-    /* The bang, per orbit. Inner orbits lead; the radius leaves on an ease out
+    /* The bang, per orbit. Outside the opening the inner orbits lead; the radius leaves on an ease out
        so the thirteen are thrown rather than grown, and the light follows. */
-    var exR = [], exA = [], i, j;
+    var exR = [], exA = [], exQ = [], i, j;
     for (i = 0; i < rings.length; i++) {
-      var w = (burst - 0.22 * rings[i].rr) / 0.78;
+      /* The opening: the thirteen are there from the first frame, wound tight
+         round the gold of the mark as one fine band (pk, each band's packed
+         radius as a share of its own), and the burst opens that band out into
+         the orbits, the outer ones leading so no band crosses another. The
+         constellation is the logo unfolded, not a second picture behind a
+         flash. Outside the opening every band grows from the centre as it
+         always did. */
+      var w = bangOn ? (burst - 0.15 * (1 - rings[i].rr)) / 0.85 : (burst - 0.22 * rings[i].rr) / 0.78;
       w = w < 0 ? 0 : (w > 1 ? 1 : w);
       var iw = 1 - w;
-      exR.push(1 - iw * iw * iw);
+      var pk = bangOn ? Math.min(1, (GOLD_A + 5 + 1.25 * i) / (rings[i].rr * R)) : 0;
+      exR.push(pk + (1 - pk) * (1 - iw * iw * iw));
       var wa = Math.min(1, w * 2.5);
-      exA.push(wa * wa * (3 - 2 * wa));
+      exA.push(bangOn ? 0.55 + 0.45 * wa * wa * (3 - 2 * wa) : wa * wa * (3 - 2 * wa));
+      /* While a band is still wound in, its streaks, its body and the
+         flares are held down, so the packed band reads as fine lines and
+         not as glitter; they come up as the band opens. */
+      exQ.push(bangOn ? 0.34 + 0.66 * wa * wa * (3 - 2 * wa) : 1);
     }
     /* The requirements. Each is one streak on its area's orbit: a bright head
        and a tail that fades, moving a little faster than the dust. The area
@@ -2900,7 +3220,7 @@ gsap.utils.toArray('.slide-right').forEach(function(el) {
       var rgS = rings[si], stS = rgS.st;
       if (!stS || !stS.length || exA[si] <= 0.004) continue;
       var litS = active === si, backS = active >= 0 && !litS;
-      var peakS = (TRAVEL ? LV(si, 0.08, 0.30, 0.98, 0.64) : (litS ? 0.95 : (backS ? 0.30 : 0.64))) * exA[si] * bloom;
+      var peakS = (TRAVEL ? LV(si, 0.08, 0.30, 0.98, 0.64) : (litS ? 0.95 : (backS ? 0.30 : 0.64))) * exA[si] * exQ[si] * bloom;
       for (var sj = 0; sj < stS.length; sj++) {
         var sk = stS[sj], head = sk.a + clock * rgS.om * sk.sp;
         var radS = (rgS.rr * R + (sk.lr || 0)) * exR[si];
@@ -3030,13 +3350,33 @@ gsap.utils.toArray('.slide-right').forEach(function(el) {
     screenPos.length = 0;
     var box = cv.getBoundingClientRect(), f = box.width ? (box.width / W) : 1;
     for (i = 0; i < bodies.length; i++) {
-      var bo = bodies[i], a2 = bo.a0 + clock * bo.om, s2 = Math.sin(a2);
+      var bo = bodies[i], a2 = bo.a0 + clock * bo.om, s2;
+      if (bo.h0 == null) bo.h0 = bo.a0;
+      /* The row: the thirteen stand in one arm, in order. A body is taken
+         from where it is when the row starts to form, by the shorter way
+         round, and its orbit resumes from that same place when it is let go. */
+      if (armK > 0) {
+        var rowA = ARM_A + i * ARM_D;
+        if (bo.af == null) bo.af = a2;
+        /* While it still stands in the row at the start of the dive, the
+           place it will go back to is drawn in toward the row, once. Nothing
+           moves when that happens. It is drawn in from where the body's own
+           untouched orbit (h0) would have it now, not from the place it was
+           taken, so a second and a third visit let go as far as the first. */
+        if (armDive && armK >= 1 && !bo.ak) { bo.af = rowA + wrap(bo.h0 + clock * bo.om - rowA) * ARM_BACK; bo.ak = true; }
+        bo.a0 = bo.af - clock * bo.om;
+        a2 = bo.af + wrap(rowA - bo.af) * armK;
+      } else { bo.af = null; bo.ak = false; }
+      s2 = Math.sin(a2);
       var brr = bo.rr * R * exR[i];
       var bx = cx + Math.cos(a2) * brr, by = cy + s2 * brr * sinP;
       bp.push(bx, by, s2);
       if (TRAVEL) {
         var oxp = (bx - cx) * sysScale, oyp = (by - cy) * sysScale;
-        screenPos.push(camX + oxp * cR - oyp * sR, camY + oxp * sR + oyp * cR);
+        /* Level with the orbits every one of them passes behind the mark,
+           and a body nobody can see is not to be pointed at or clicked. */
+        if (s2 < 0 && squash < 0.2 && oxp * oxp + oyp * oyp < MARK_BODY * MARK_BODY * sysScale * sysScale) screenPos.push(NaN, NaN);
+        else screenPos.push(camX + oxp * cR - oyp * sR, camY + oxp * sR + oyp * cR);
       } else {
         var rxp = cx + (bx - cx) * cR - (by - cy) * sR, ryp = cy + (bx - cx) * sR + (by - cy) * cR;
         screenPos.push(box.left + rxp * f, box.top + ryp * f);
@@ -3046,7 +3386,7 @@ gsap.utils.toArray('.slide-right').forEach(function(el) {
     function flares(wantNear) {
       /* One path, so one alpha: tied to the slowest orbit, which stops a flare
          appearing before the dust it belongs to. */
-      var fa = 0.32 * bloom * exA[rings.length - 1];
+      var fa = 0.32 * bloom * exA[rings.length - 1] * exQ[rings.length - 1] * exQ[rings.length - 1];
       if (fa <= 0.004) return;
       g.globalAlpha = fa; g.strokeStyle = WHITE; g.lineWidth = 0.7 * kW;
       g.beginPath();
@@ -3071,19 +3411,53 @@ gsap.utils.toArray('.slide-right').forEach(function(el) {
       var bo = bodies[i], bx = bp[i * 3], by = bp[i * 3 + 1];
       var isHot = hot === bo, isAct = TRAVEL ? LA[i] > 0.5 : active === i, lead = isHot || isAct;
       var dim = (TRAVEL ? LV(i, 0.25, 0.60, 1.0, 1.0) * ((hot && !isHot) ? 0.5 : 1)
-                        : ((active >= 0 && !isAct) ? 0.55 : ((hot && !isHot) ? 0.5 : 1))) * exA[i];
+                        : ((active >= 0 && !isAct) ? 0.55 : ((hot && !isHot) ? 0.5 : 1))) * exA[i] * exQ[i];
+      /* A tier's marks, as its key draws them: a tailored area's body is a
+         dashed ring and a conditional one's a thin ring, each on a spot of
+         night so the lanes do not run through it. The lit point fades out
+         under the ring as the ring comes. */
+      var tkT = TT[i], tkC = TC[i], tk = Math.min(1, tkT + tkC);
+      if (tk > 0.004) {
+        /* The ring is a lit point's size (never under 8px), its line and its
+           nine dashes in step with it. Pointed at, it is the bright one and
+           the others draw back, as the points do. */
+        var rT = Math.max(8 / sysScale, TIER_R * kP), uT = rT / 9.5, perT = TAU * rT / 9;
+        var aT = exA[i] * bloom * ((hot && !isHot) ? 0.5 : 1), hT = isHot ? 1.5 : 1;
+        g.globalAlpha = 0.92 * tk * exA[i] * bloom; g.fillStyle = 'rgb(5,14,28)';
+        g.beginPath(); g.arc(bx, by, rT, 0, TAU); g.fill();
+        if (tkT > 0.004) {
+          g.globalAlpha = 0.95 * tkT * aT; g.strokeStyle = WHITE; g.lineWidth = 1.5 * uT * hT;
+          g.setLineDash([0.54 * perT, 0.46 * perT]);
+          g.beginPath(); g.arc(bx, by, rT, 0, TAU); g.stroke();
+          g.setLineDash([]);
+        }
+        if (tkC > 0.004) {
+          g.globalAlpha = (isHot ? 0.95 : 0.55) * tkC * aT; g.strokeStyle = isHot ? WHITE : COOL; g.lineWidth = 1.1 * uT * hT;
+          g.beginPath(); g.arc(bx, by, rT, 0, TAU); g.stroke();
+        }
+        g.globalAlpha = 1;
+        dim *= 1 - tk;
+      }
       if (dim <= 0.004) return;
-      var rr3 = bo.rad * (lead ? 1.9 : 1) * bloom * kP * (1 - 0.5 * hotK), halo = rr3 * (lead ? 6 : 3.4);
+      /* How far this body wears the lead look (larger, white, flared). At a
+         stop it is a switch, as it always was. On the climb AI-13 gives it up
+         by degrees as its light goes, so the star does not snap to a point. */
+      var ld = lead ? 1 : 0;
+      if (TRAVEL && armK > 0 && !isHot) ld = smooth((LA[i] - 0.5) / 0.5);
+      var rr3 = bo.rad * (1 + 0.9 * ld) * bloom * kP * (1 - 0.5 * hotK), halo = rr3 * (3.4 + 2.6 * ld);
       var gl = g.createRadialGradient(bx, by, 0, bx, by, Math.max(1, halo));
       gl.addColorStop(0, 'rgba(178,212,252,' + (0.66 * dim * bloom).toFixed(3) + ')');
       gl.addColorStop(1, 'rgba(121,168,213,0)');
       g.fillStyle = gl;
       g.fillRect(bx - halo, by - halo, halo * 2, halo * 2);
       g.globalAlpha = dim * bloom;
-      g.fillStyle = lead ? WHITE : (bo.warm ? WARM : COOL);
+      /* In the row a lit point is one colour, as it is in the key: the warm
+         ones turn cool as the row forms (one fill in the mixed colour; a cool
+         disc laid over the warm one let the warm show through). */
+      g.fillStyle = mixc(bo.warm ? mixa([232, 201, 131], [214, 226, 242], armK) : [214, 226, 242], [250, 249, 245], ld);
       g.beginPath(); g.arc(bx, by, Math.max(0.4, rr3), 0, TAU); g.fill();
-      if (lead) {
-        g.globalAlpha = 0.5 * dim; g.strokeStyle = WHITE; g.lineWidth = 1 * kW;
+      if (ld > 0.004) {
+        g.globalAlpha = 0.5 * dim * ld; g.strokeStyle = WHITE; g.lineWidth = 1 * kW;
         var fl = halo * 0.9;
         g.beginPath();
         g.moveTo(bx - fl, by); g.lineTo(bx + fl, by);
@@ -3387,6 +3761,27 @@ gsap.utils.toArray('.slide-right').forEach(function(el) {
           g.ellipse(cx, cy, rl, Math.max(0.01, rl * sinP), 0, a0, a1);
         }
         g.stroke();
+        if (TT[li] > 0.004) {
+          /* Tailored: the band keeps every lane, and one dashed line is laid
+             on the orbit itself. TIER_N dashes fit this half exactly, so the
+             two halves meet without a seam. */
+          var rdT = rgL.rr * R * exR[li], rdB = Math.max(0.01, rdT * sinP);
+          var perT = Math.PI / 2 * (3 * (rdT + rdB) - Math.sqrt((3 * rdT + rdB) * (rdT + 3 * rdB))) / TIER_N;
+          g.save();
+          g.globalAlpha = 0.9 * TT[li] * exA[li] * bloom; g.strokeStyle = WHITE; g.lineWidth = 1.1 * kW;
+          g.setLineDash([perT * 0.56, perT * 0.44]);
+          g.beginPath();
+          if (sgOn && rdT >= sgR0 && rdT <= sgR1 && (wantNear ? sgYB >= cy : sgYA <= cy)) {
+            /* Bent by the sand with the lanes it is laid on. */
+            var nT = Math.max(12, Math.min(72, Math.ceil(Math.PI * Math.sqrt(rdT * sysScale / 2.8))));
+            for (var ti = 0; ti <= nT; ti++) {
+              var aTi = a0 + (a1 - a0) * ti / nT, txT = cx + Math.cos(aTi) * rdT, tyT = cy + Math.sin(aTi) * rdB, toT = sgAt(txT, tyT);
+              if (ti === 0) g.moveTo(txT + toT[0], tyT + toT[1]); else g.lineTo(txT + toT[0], tyT + toT[1]);
+            }
+          } else g.ellipse(cx, cy, rdT, rdB, 0, a0, a1);
+          g.stroke();
+          g.restore();
+        }
       }
       g.globalAlpha = 1;
     }
@@ -3480,13 +3875,18 @@ gsap.utils.toArray('.slide-right').forEach(function(el) {
     return best;
   }
   function setHot(rec) {
+    if (rec && screenPos[rec.i * 2] !== screenPos[rec.i * 2]) rec = null;   /* gone behind the mark while the hover waited */
     if (hot === rec) return;
     hot = rec;
     bg.classList.toggle('has-hot', !!rec);
     if (!rec) { tip.classList.remove('is-on'); start(); return; }
     tipId.textContent = rec.area.id;
     tipName.textContent = rec.area.label;
-    tip.style.left = screenPos[rec.i * 2] + 'px';
+    var tipRow = armK > 0.5, tipX = screenPos[rec.i * 2];
+    tip.classList.toggle('is-row', tipRow);
+    /* In the row the tip also stops short of the words. */
+    if (tipRow && tierCols.length) tipX = Math.min(tipX, tierCols[0].getBoundingClientRect().left - 28 - tip.offsetWidth);
+    tip.style.left = tipX + 'px';
     tip.style.top = screenPos[rec.i * 2 + 1] + 'px';
     tip.classList.add('is-on');
     start();

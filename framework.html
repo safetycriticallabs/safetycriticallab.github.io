@@ -2505,7 +2505,7 @@ gsap.utils.toArray('.slide-right').forEach(function(el) {
      it is never given less than STD_MIN, and ends S3_END ground heights before
      the standard's head is centred (never before the standard's gap SG
      ends), landing on the standard's own frame. */
-  var LEVEL = true, LEVEL_X = 0.0486, LEVEL_RIM = 1.02, LEVEL_FIT = 0.30, MARK_R = 50, MARK_BODY = 40, LEVEL_Y = 0.686, LEVEL_ROW = 0.444, LEVEL_PAST = 0.077;
+  var LEVEL = true, LEVEL_X = 0.0486, LEVEL_RIM = 1.02, LEVEL_FIT = 0.30, MARK_R = 50, LEVEL_Y = 0.686, LEVEL_ROW = 0.444, LEVEL_PAST = 0.077;
   var SQUASH_LEVEL = 0.07, SQUASH_LINE = 0.045, LEVEL_ROLL = -0.03, LEVEL_EASE = 40, LEVEL_SET = 32, STD_HOLD = 0.10, STD_MIN = 0.6, TIP_CLEAR = 12, ROW_CLEAR = 16;
   var lvS = 1, lvX = 0, lvYA = 0, lvYB = 0, lvYC = 0, lvGap = -1, SD = [0, 1];
   function levelOn() { return LEVEL && lvGap >= 0 && !!stdHead; }
@@ -3345,6 +3345,11 @@ gsap.utils.toArray('.slide-right').forEach(function(el) {
       window.__fwxSandLog.push([Math.round(ts), live, Math.round(mx * sysScale)]);
     }
 
+    /* The orb's lens is 34 so it fills more of the gold, as the logo's disc
+       does (24 until 2026-09-27); the core keeps 24. Both are 40 as the mass.
+       It is set here, before the thirteen are placed, because a body behind
+       the mark as it is drawn now is not to be pointed at. */
+    var bodyR = hotK > 0 ? 24 + 16 * (1 - sl) : 34 + 6 * (1 - sl);
     /* ── where the thirteen are, once, for drawing and for pointing at ──── */
     var bp = [];
     screenPos.length = 0;
@@ -3373,15 +3378,20 @@ gsap.utils.toArray('.slide-right').forEach(function(el) {
       bp.push(bx, by, s2);
       if (TRAVEL) {
         var oxp = (bx - cx) * sysScale, oyp = (by - cy) * sysScale;
-        /* Level with the orbits every one of them passes behind the mark,
-           and a body nobody can see is not to be pointed at or clicked. */
-        if (s2 < 0 && squash < 0.2 && oxp * oxp + oyp * oyp < MARK_BODY * MARK_BODY * sysScale * sysScale) screenPos.push(NaN, NaN);
+        /* Seen from lower than the stops are, a body passes behind the mark
+           (bodyR, the mark as drawn now), and a body nobody can see is not to
+           be pointed at or clicked. At the thirteen stops and from above the
+           view is no lower than SQUASH_CENTRE and nothing changes. */
+        if (s2 < 0 && squash < SQUASH_CENTRE && oxp * oxp + oyp * oyp < bodyR * bodyR * sysScale * sysScale) screenPos.push(NaN, NaN);
         else screenPos.push(camX + oxp * cR - oyp * sR, camY + oxp * sR + oyp * cR);
       } else {
         var rxp = cx + (bx - cx) * cR - (by - cy) * sR, ryp = cy + (bx - cx) * sR + (by - cy) * cR;
         screenPos.push(box.left + rxp * f, box.top + ryp * f);
       }
     }
+    /* A body that goes behind the mark while it is pointed at is let go of
+       here, directly: setHot() would ask for a second frame loop. */
+    if (hot && screenPos[hot.i * 2] !== screenPos[hot.i * 2]) { hot = null; bg.classList.remove('has-hot'); tip.classList.remove('is-on'); }
 
     function flares(wantNear) {
       /* One path, so one alpha: tied to the slowest orbit, which stops a flare
@@ -3545,9 +3555,6 @@ gsap.utils.toArray('.slide-right').forEach(function(el) {
        caught by the light of the disk around it, the gold ring round it in
        the plane and the pale bar and eye still across its face, so the mark
        is the thing everything orbits rather than a badge beside it. */
-    /* The orb's lens is 34 so it fills more of the gold, as the logo's disc
-       does (24 until 2026-09-27); the core keeps 24. Both are 40 as the mass. */
-    var bodyR = hotK > 0 ? 24 + 16 * (1 - sl) : 34 + 6 * (1 - sl);
     function mixa(a, b, t) {
       return [a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t, a[2] + (b[2] - a[2]) * t];
     }

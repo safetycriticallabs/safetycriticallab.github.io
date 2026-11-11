@@ -68,6 +68,21 @@
 @media (max-width: 880.98px) {
   .expertise-grid { grid-template-columns: 1fr; gap: 36px; }
 }
+/* Transition bridge to /process */
+.fw-transition-cta {
+  max-width: var(--content-max);
+  margin: 64px auto 0;
+  text-align: center;
+  position: relative;
+  z-index: 1;
+}
+.fw-transition-line {
+  font-size: 17px;
+  color: var(--ink-2);
+  line-height: 1.6;
+  font-weight: 300;
+  margin-bottom: 24px;
+}
 </style>
 </head>
 <body>
@@ -169,6 +184,10 @@
         </div>
       </div>
     </div>
+  </div>
+  <div class="fw-transition-cta">
+    <p class="fw-transition-line">Every determination follows the same four phase process.</p>
+    <a href="/process" class="btn btn-solid">See the process</a>
   </div>
 </section>
 

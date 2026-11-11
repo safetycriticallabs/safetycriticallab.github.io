@@ -38,11 +38,7 @@
   "dateModified": "2026-09-15",
   "inLanguage": "en",
   "license": "https://creativecommons.org/licenses/by-sa/4.0/",
-  "author": {
-    "@type": "Person",
-    "name": "Kevin Williams",
-    "affiliation": { "@type": "Organization", "name": "Safety Critical Labs" }
-  },
+  "author": { "@type": "Organization", "name": "Safety Critical Labs" },
   "publisher": {
     "@type": "Organization",
     "name": "Safety Critical Labs",
@@ -547,7 +543,7 @@ a.fwx-cell:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; 
 /* --ink-2, not the usual label grey: under the walkthrough's 0.75 dim this
    lands at 4.57:1 on cream, where the grey would fall to 3.13:1. */
 .fwx-step-label { font-family: var(--mono); font-size: 11px; font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase; color: var(--ink-2); margin-bottom: 6px; }
-/* Same reason: --ink-3 dims to 2.29:1, which is under AA at 10px. */
+/* Same reason: --ink-3 dimmed to 2.29:1 when this was set, under AA at 10px. */
 .fwx-step .fw-scope { color: var(--ink-2); border-color: rgba(12,34,66,0.45); }
 .fwx-step .fw-card-title { font-size: clamp(26px, 2.6vw, 38px); font-weight: 600; line-height: 1.08; letter-spacing: -0.02em; color: var(--ink); margin: 0 0 16px; }
 .fwx-step-prevents { font-size: clamp(18px, 1.7vw, 22px); font-weight: 500; line-height: 1.4; color: var(--ink); margin: 0 0 18px; max-width: 30em; }
@@ -915,7 +911,7 @@ html.fwx-scene .fwx-key i.conditional { width: 8px; height: 8px; border: 1px sol
 /* ── THE BUTTONS IN THE SCENE'S OWN MARKS (treatment A; ?cards keeps the
    old). No box: a point, the words and a hairline beneath, sized to the
    words. The download and the process carry a lit point, the SSRN paper a
-   ring. Arrows removed 2026-10-05 at Kevin's request. ── */
+   ring. Arrows removed 2026-10-05 at SCL's request. ── */
 html.fwx-door.fwx-scene .pub-standard-rows > .btn, html.fwx-door.fwx-scene .fw-transition-cta .btn {
   display: inline-flex; align-items: center; gap: 12px; align-self: flex-start; width: auto; min-height: 44px; box-sizing: border-box;
   padding: 10px 2px 12px; border: 0; border-radius: 0; box-shadow: none;
@@ -957,7 +953,7 @@ html.fwx-door.fwx-scene .pub-standard-rows > .btn:focus-visible, html.fwx-door.f
   }
   html.fwx-door.fwx-scene .os-item.fwx-notcert::before { background: none; box-shadow: none; border: 1.5px solid #79A8D5; width: 6px; height: 6px; }
 }
-/* ── THE NAV AND THE FOOTER IN THE SCENE'S NIGHT (this page only; Kevin:
+/* ── THE NAV AND THE FOOTER IN THE SCENE'S NIGHT (this page only; SCL:
    "the same dark color just for this page. So it can be seemless"). The
    shell sheet's cream colours are restated for night at the weight
    styles.css gives them, several !important. "Get Certified" becomes the
@@ -1946,7 +1942,7 @@ gsap.utils.toArray('.slide-right').forEach(function(el) {
      opening pose the cloud is about two and a half screens wide and leaves the
      frame on all four sides, which nothing in this scene has ever done. */
   var DUST_R = 780, dustMask = null, dg = dcv && dcv.getContext ? dcv.getContext('2d') : null;
-  /* Off for now: Kevin wants the sky to be stars only. With no mask the dust
+  /* Off for now: SCL wants the sky to be stars only. With no mask the dust
      canvas still carries the pool and the hot disk, which belong to the
      system rather than to the sky. */
   var NEBULA = false;

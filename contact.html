@@ -108,7 +108,7 @@
 .form-label {
   font-family: var(--sans); font-size: 11px;
   font-weight: 500; letter-spacing: 0.04em; text-transform: uppercase;
-  color: var(--ink-2);   /* --ink-3 is 3.16:1 on cream, under AA for 11px text */
+  color: var(--ink-2);   /* --ink-3 was 3.16:1 on cream when this was set, under AA for 11px text */
 }
 
 .form-input,
@@ -304,7 +304,7 @@
           </div>
           <div class="form-field">
             <label class="form-label" for="message">Message</label>
-            <textarea class="form-textarea" id="message" name="message" placeholder="How can we help?"></textarea>
+            <textarea class="form-textarea" id="message" name="message" placeholder="How can we help?" required aria-required="true"></textarea>
           </div>
           <p class="form-note">Submissions are handled by Formspree and forwarded to SCL email; see <a href="/privacy">/privacy</a>. Supporting documents can be sent by email after first contact. Name and email are optional if you are filing a complaint anonymously; without them SCL cannot acknowledge the report or tell you the outcome.</p>
           <div class="form-error" id="formError" role="alert">
@@ -447,8 +447,21 @@ if (form) {
     }
   });
 
+  // The browser's own validation blocks an empty message; mark and focus it
+  const msgField = document.getElementById('message');
+  if (msgField) {
+    msgField.addEventListener('invalid', function() {
+      msgField.setAttribute('aria-invalid', 'true');
+      msgField.focus();
+    });
+    msgField.addEventListener('input', function() {
+      if (msgField.validity.valid) msgField.removeAttribute('aria-invalid');
+    });
+  }
+
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
+    if (!form.checkValidity()) return;
     const submitBtn = form.querySelector('.form-submit');
     const errorEl = document.getElementById('formError');
     if (errorEl) errorEl.classList.remove('visible');

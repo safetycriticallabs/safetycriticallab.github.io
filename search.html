@@ -1943,7 +1943,7 @@
      rule followed whenever the reader was within 260px of the bottom, and that
      made scrolling up during a stream impossible: a wheel tick moves about
      100px, the next token arrived milliseconds later and snapped the list back
-     to the bottom, so the reader could never get out of the band (Kevin,
+     to the bottom, so the reader could never get out of the band (SCL,
      2026-10-02). The reader's intent is now read directly. A wheel up, an up
      key, a press on the scrollbar or a finger on the list pauses following
      before the browser has even scrolled, so no token can race it. Returning

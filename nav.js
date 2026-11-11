@@ -10,13 +10,40 @@
   /* Mobile hamburger menu */
   var ham = document.querySelector('.gn-hamburger');
   var links = document.querySelector('.gn-links');
+  /* One open/close path. While open, main and footer are inert so Tab
+     stays in the menu. */
+  function setMenu(open) {
+    ham.classList.toggle('open', open);
+    links.classList.toggle('open', open);
+    ham.setAttribute('aria-expanded', open);
+    document.body.style.overflow = open ? 'hidden' : '';
+    document.querySelectorAll('main, footer').forEach(function (el) {
+      if (open) el.setAttribute('inert', ''); else el.removeAttribute('inert');
+    });
+    /* Closing the menu also closes any section left open inside it, so it
+       is not found expanded when the menu is opened again. */
+    if (!open) document.querySelectorAll('.gn-dropdown.open').forEach(function (d) {
+      d.classList.remove('open');
+      var m = d.querySelector('.gn-dropdown-menu');
+      if (m) m.style.display = 'none';
+      var t = d.querySelector('.gn-dropdown-toggle');
+      if (t) t.setAttribute('aria-expanded', 'false');
+    });
+  }
+  function menuOpen() { return !!(ham && ham.classList.contains('open')); }
   if (ham && links) {
     ham.addEventListener('click', function () {
-      this.classList.toggle('open');
-      links.classList.toggle('open');
-      this.setAttribute('aria-expanded', this.classList.contains('open'));
-      document.body.style.overflow = this.classList.contains('open') ? 'hidden' : '';
+      setMenu(!menuOpen());
     });
+    /* A followed link closes the menu (also matters on back/forward cache). */
+    links.addEventListener('click', function (e) {
+      if (menuOpen() && e.target.closest('a')) setMenu(false);
+    });
+    /* Resizing to laptop width closes it. */
+    var wide = window.matchMedia('(min-width: 881px)');
+    var onWide = function () { if (wide.matches && menuOpen()) setMenu(false); };
+    if (wide.addEventListener) wide.addEventListener('change', onWide);
+    else if (wide.addListener) wide.addListener(onWide);
   }
 
   /* Mobile menu CTA: the bar's "Get Certified" pill is hidden at phone
@@ -57,9 +84,27 @@
       }
     });
   });
+  /* Laptop: tabbing out of an open dropdown closes it. */
+  var desktop = window.matchMedia('(min-width: 881px)');
+  document.querySelectorAll('.gn-dropdown').forEach(function (dd) {
+    dd.addEventListener('focusout', function (e) {
+      if (!desktop.matches || !dd.classList.contains('open')) return;
+      if (!e.relatedTarget || dd.contains(e.relatedTarget)) return;
+      dd.classList.remove('open');
+      var m = dd.querySelector('.gn-dropdown-menu');
+      if (m) m.style.display = 'none';
+      var t = dd.querySelector('.gn-dropdown-toggle');
+      if (t) t.setAttribute('aria-expanded', 'false');
+    });
+  });
   document.addEventListener('click', closeDropdowns);
   document.addEventListener('keydown', function (e) {
     if (e.key !== 'Escape') return;
+    if (menuOpen()) {
+      setMenu(false);
+      ham.focus();
+      return;
+    }
     var open = document.querySelector('.gn-dropdown.open');
     if (!open) return;
     var t = open.querySelector('.gn-dropdown-toggle');

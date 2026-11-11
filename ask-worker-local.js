@@ -341,7 +341,7 @@ Reference entries follow.`;
    certification-claim rule. Every identity fact and every protection of the
    live set is kept. Wording C of three drafted by isolated writers and judged
    blind on the practice set (ask-eval/improvement-framework.md 6.1, 2026-10-04);
-   Kevin approved it on 2026-10-04.
+   SCL approved it on 2026-10-04.
    Gated exactly like the matched FAQ: the live Worker kept the set above until
    the stage I release flipped RULES_LIVE (2026-10-05.1); since then every
    Worker sends this set. Instruction tokens (Llama 3.1): 1377 normal, 1011
@@ -1074,7 +1074,7 @@ function selectExcerptsSplit(question, fw, qvec, vectors) {
 
    Storage is best-effort and never blocks or fails an answer: no ASK_LOG
    binding, or any write error, and the assistant behaves exactly as before. */
-const CONSENT_VERSION = '2026-10-06'; // stage I release day (Kevin, 2026-10-05: the release date); set to the day of the live paste. Returning visitors are asked again because the privacy notice's description of what is stored changed (explainer and reference identifiers)
+const CONSENT_VERSION = '2026-10-06'; // stage I release day (SCL, 2026-10-05: the release date); set to the day of the live paste. Returning visitors are asked again because the privacy notice's description of what is stored changed (explainer and reference identifiers)
 const MAX_STORED_QUESTION_CHARS = 500;
 
 function scrubForStorage(s) {
@@ -1939,7 +1939,7 @@ async function benchRetrieve(request, env) {
    exhausted, and probing it on every poll would spend the very budget being
    watched, so a live rerank probe runs only on ?deep=1 with the token. The
    result is memoised briefly so a public endpoint cannot be used to hammer the
-   tunnel to Kevin's Mac. ── */
+   tunnel to the SCL workstation. ── */
 const HEALTH_TTL_MS = 30000;
 let healthMemo = { at: 0, body: null };
 

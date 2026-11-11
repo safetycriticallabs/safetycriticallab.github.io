@@ -148,7 +148,7 @@
 }
 .q-radio {
   width: 18px; height: 18px;
-  border-radius: 50%; border: 2px solid var(--rule);
+  border-radius: 50%; border: 2px solid var(--field-border);
   flex-shrink: 0; position: relative;
   transition: border-color 0.2s;
 }
@@ -491,7 +491,7 @@
     <!-- STEP 1: Classification -->
     <div class="assess-step active" id="step-1">
       <div class="step-eyebrow">[ Step 1 of 5: Classification ]</div>
-      <div class="step-title" role="heading" aria-level="2">What kind of system are you building?</div>
+      <div class="step-title" role="heading" aria-level="2" tabindex="-1">What kind of system are you building?</div>
       <div class="step-desc">These questions help determine which classification tier applies and which requirement areas are relevant to your system.</div>
 
       <div class="q-card">
@@ -559,7 +559,7 @@
     <!-- STEP 2: Data & Testing (AI-1, AI-2, AI-3) -->
     <div class="assess-step" id="step-2">
       <div class="step-eyebrow">[ Step 2 of 5: Data and Testing ]</div>
-      <div class="step-title" role="heading" aria-level="2">Training data and test coverage</div>
+      <div class="step-title" role="heading" aria-level="2" tabindex="-1">Training data and test coverage</div>
       <div class="step-desc">These questions map to AI-1 (operational and data foundations), AI-2 (addressing AI bias), and AI-3 (ML test coverage).</div>
 
       <div class="q-card">
@@ -643,7 +643,7 @@
     <!-- STEP 3: Runtime Safety (AI-4, AI-5, AI-6) -->
     <div class="assess-step" id="step-3">
       <div class="step-eyebrow">[ Step 3 of 5: Runtime Safety ]</div>
-      <div class="step-title" role="heading" aria-level="2">Monitoring, confidence, and edge detection</div>
+      <div class="step-title" role="heading" aria-level="2" tabindex="-1">Monitoring, confidence, and edge detection</div>
       <div class="step-desc">These questions map to AI-4 (continuous validation), AI-5 (hallucination prevention), and AI-6 (out of distribution detection).</div>
 
       <div class="q-card">
@@ -727,7 +727,7 @@
     <!-- STEP 4: Advanced Requirements (AI-7, AI-8, AI-9, AI-10) -->
     <div class="assess-step" id="step-4">
       <div class="step-eyebrow">[ Step 4 of 5: Robustness and Oversight ]</div>
-      <div class="step-title" role="heading" aria-level="2">Adversarial testing, explainability, and human teaming</div>
+      <div class="step-title" role="heading" aria-level="2" tabindex="-1">Adversarial testing, explainability, and human teaming</div>
       <div class="step-desc">These requirements apply based on your classification level. Answer based on your current state. If a requirement doesn't apply to your tier, you can select "Not applicable."</div>
       <div class="tier-hint" id="tierHint4"></div>
 
@@ -856,7 +856,7 @@
     <!-- STEP 5: Architecture & Paradigm Requirements (AI-11, AI-12, AI-13) -->
     <div class="assess-step" id="step-5">
       <div class="step-eyebrow">[ Step 5 of 5: Architecture and Paradigm ]</div>
-      <div class="step-title" role="heading" aria-level="2">Multi-model, neural network, and continuous learning</div>
+      <div class="step-title" role="heading" aria-level="2" tabindex="-1">Multi-model, neural network, and continuous learning</div>
       <div class="step-desc">These requirements apply conditionally based on your system's design choices. If your system does not use the indicated architecture or paradigm, select "Not applicable."</div>
       <div class="tier-hint" id="tierHint5"></div>
 
@@ -961,7 +961,7 @@
   <div class="results-inner">
 
     <div class="results-header">
-      <div class="step-eyebrow">[ Your Readiness Report ]</div>
+      <div class="step-eyebrow" id="resultsHeading" role="heading" aria-level="2" tabindex="-1">[ Your Readiness Report ]</div>
       <div class="results-score-ring">
         <svg viewBox="0 0 140 140">
           <circle class="ring-bg" cx="70" cy="70" r="65"/>
@@ -1138,16 +1138,18 @@
 
     var banner = document.createElement('div');
     banner.className = 'assess-error-banner';
+    banner.setAttribute('role', 'alert');
     var heading = missing.length === 1
       ? 'Please answer this question before continuing.'
       : 'Please answer all ' + missing.length + ' questions before continuing.';
     var items = missing.map(function(name) {
       return '<li>' + (questionLabels[name] || name) + '</li>';
     }).join('');
-    banner.innerHTML = '<strong>' + heading + '</strong><ul>' + items + '</ul>';
 
     var firstChild = step.firstChild;
     step.insertBefore(banner, firstChild);
+    /* Filled after insertion so the live region announces it */
+    banner.innerHTML = '<strong>' + heading + '</strong><ul>' + items + '</ul>';
 
     var firstCard = null;
     missing.forEach(function(name) {
@@ -1213,6 +1215,8 @@
       currentStep = n;
       updateProgress();
       window.scrollTo({ top: document.getElementById('assessSection').offsetTop - 20, behavior: 'smooth' });
+      var title = step.querySelector('.step-title');
+      if (title) title.focus({ preventScroll: true });   /* the button that was pressed is now hidden */
     }
   }
 
@@ -1327,6 +1331,8 @@
     document.getElementById('assessSection').style.display = 'none';
     document.getElementById('resultsSection').style.display = 'block';
     window.scrollTo({ top: 0, behavior: 'smooth' });
+    var resultsHeading = document.getElementById('resultsHeading');
+    if (resultsHeading) resultsHeading.focus({ preventScroll: true });
 
     // Classification label
     document.getElementById('resultsClassification').textContent =

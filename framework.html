@@ -3893,6 +3893,10 @@ gsap.utils.toArray('.slide-right').forEach(function(el) {
     tip.classList.toggle('is-row', tipRow);
     /* In the row the tip also stops short of the words. */
     if (tipRow && tierCols.length) tipX = Math.min(tipX, tierCols[0].getBoundingClientRect().left - 28 - tip.offsetWidth);
+    /* Elsewhere it sits centred over its body, and is kept whole inside the
+       window: a body near the left edge, as beside the mark in the level
+       view, had its tip cut off by the edge. */
+    if (!tipRow) { var tipHalf = tip.offsetWidth / 2; tipX = Math.max(12 + tipHalf, Math.min(tipX, window.innerWidth - 12 - tipHalf)); }
     tip.style.left = tipX + 'px';
     tip.style.top = screenPos[rec.i * 2 + 1] + 'px';
     tip.classList.add('is-on');

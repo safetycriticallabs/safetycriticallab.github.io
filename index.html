@@ -1980,6 +1980,22 @@
   .sc-fw-pause svg { display: block; width: 14px; height: 14px; }
   .sc-fw-pause .i-play, .sc-fw-pause.is-paused .i-pause { display: none; }
   .sc-fw-pause.is-paused .i-play { display: block; }
+  /* The page's type is centred (a laptop only; a phone keeps its left edge).
+     The opening paragraph, each section's label, heading and intro, and the
+     record's heading sit on the page's centre line, and the record's list
+     runs in a centred column under its heading and no longer beside it. The
+     tiles, the regulatory cards and the list's own rows are as they were.
+     Kept last in this sheet so it settles the alignment for every rule above. */
+  @media (min-width: 881px) {
+    .sc-hero { text-align: center; max-width: 1080px; margin-left: auto; margin-right: auto; }
+    .sc-hero .sc-eyebrow { text-align: center; }
+    .news-header, .nr-statement { text-align: center; }
+    .news-header .nr-headline, .news-header .news-lead { margin-left: auto; margin-right: auto; }
+    .nr-statement .nr-headline { max-width: none; }
+    .news-rows { display: block; }
+    .nr-statement { margin-bottom: 44px; }
+    .nr-list { max-width: 920px; margin-left: auto; margin-right: auto; }
+  }
 </style>
 </head>
 <body>

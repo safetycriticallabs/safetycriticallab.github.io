@@ -820,6 +820,12 @@
      page; --page-gut is the edge gutter on narrow screens. Was a mismatched
      1080 / 1200 / 1280 before. */
   :root { --page-gut: 40px; }   /* the column itself is --content-max in styles.css */
+  /* On a window wider than 1440 the home page's column grows with it, 120px
+     clear on each side, up to the 1560 the tiles already open to. At 1440
+     and under it is the shared 1200. */
+  @media (min-width: 1441px) {
+    :root { --content-max: clamp(1200px, calc(100vw - 240px), 1560px); }
+  }
   /* Phones: 24px, which is what the hero, sections and footer use on every inner
      page (styles.css 533 to 539). The band below used to keep its own 24 while
      the hero, cards and footer held 40, so the home had two left edges. */
@@ -1018,6 +1024,18 @@
      inner heroes. */
   .sc-hero-lead { font-size:17px; font-weight:300; line-height:1.75; color:var(--ink-2) !important; max-width:44ch; border-left:2px solid #0C2242; padding-left:20px; }
   @media (max-width:880.98px){ .sc-hero { grid-template-columns:1fr; gap:22px; margin-bottom:44px; } .sc-hero-aside { padding-top:0; } .sc-hero-lead { font-size:15px; padding-left:16px; } }
+  /* The opening as one paragraph (a laptop only; a phone keeps the headline
+     over the lead). The headline and the lead run on as one continuous
+     statement across the column: the headline's sentence in navy, the lead
+     following it at the same size in a lighter ink. They are still an h1 and
+     a p; only the way they are set has changed. */
+  @media (min-width: 881px) {
+    .sc-hero { display:block; }
+    .sc-hero-main, .sc-hero-aside { display:contents; }
+    .sc-hero .sc-eyebrow { display:block; margin-bottom:18px; }
+    .sc-hero .sc-heading, .sc-hero .sc-hero-lead { display:inline; font-size:clamp(30px,3.05vw,52px); font-weight:600; line-height:1.16; letter-spacing:-0.022em; max-width:none; margin:0; padding:0; border:0; }
+    .sc-hero .sc-hero-lead { color:#77889E !important; margin-left:0.14em; }   /* 3.4:1 on cream at display size */
+  }
   /* Six columns so the rows run two-over-three: the two artefacts on top at
      half width each, then the three things a visitor can actually DO. Subscribe
      came back 2026-09-13 after being retired 2026-08-26, which is what made a

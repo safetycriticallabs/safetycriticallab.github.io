@@ -1026,15 +1026,15 @@
   @media (max-width:880.98px){ .sc-hero { grid-template-columns:1fr; gap:22px; margin-bottom:44px; } .sc-hero-aside { padding-top:0; } .sc-hero-lead { font-size:15px; padding-left:16px; } }
   /* The opening as one paragraph (a laptop only; a phone keeps the headline
      over the lead). The headline and the lead run on as one continuous
-     statement across the column: the headline's sentence in navy, the lead
-     following it at the same size in a lighter ink. They are still an h1 and
-     a p; only the way they are set has changed. */
+     statement across the column, in one weight and one colour: no heavy
+     first sentence and no faded second one. They are still an h1 and a p;
+     only the way they are set has changed. */
   @media (min-width: 881px) {
     .sc-hero { display:block; }
     .sc-hero-main, .sc-hero-aside { display:contents; }
     .sc-hero .sc-eyebrow { display:block; margin-bottom:18px; }
-    .sc-hero .sc-heading, .sc-hero .sc-hero-lead { display:inline; font-size:clamp(30px,3.05vw,52px); font-weight:600; line-height:1.16; letter-spacing:-0.022em; max-width:none; margin:0; padding:0; border:0; }
-    .sc-hero .sc-hero-lead { color:#77889E !important; margin-left:0.14em; }   /* 3.4:1 on cream at display size */
+    .sc-hero .sc-heading, .sc-hero .sc-hero-lead { display:inline; font-size:clamp(30px,3.05vw,52px); font-weight:400; line-height:1.16; letter-spacing:-0.022em; max-width:none; margin:0; padding:0; border:0; }
+    .sc-hero .sc-hero-lead { color:#0C2242 !important; margin-left:0.12em; }
   }
   /* Six columns so the rows run two-over-three: the two artefacts on top at
      half width each, then the three things a visitor can actually DO. Subscribe
@@ -1980,21 +1980,22 @@
   .sc-fw-pause svg { display: block; width: 14px; height: 14px; }
   .sc-fw-pause .i-play, .sc-fw-pause.is-paused .i-pause { display: none; }
   .sc-fw-pause.is-paused .i-play { display: block; }
-  /* The page's type is centred (a laptop only; a phone keeps its left edge).
-     The opening paragraph, each section's label, heading and intro, and the
-     record's heading sit on the page's centre line, and the record's list
-     runs in a centred column under its heading and no longer beside it. The
-     tiles, the regulatory cards and the list's own rows are as they were.
-     Kept last in this sheet so it settles the alignment for every rule above. */
+  /* Each section opens the way the page does: one plain statement running
+     across the column, in one weight and one colour (a laptop only; a phone
+     keeps the heading over its line). The regulatory heading runs on into
+     its intro, and the record's heading into its link, with the record's
+     list full width beneath and no longer beside it. They are still an h2,
+     a p and a link; only the way they are set has changed. Kept last in
+     this sheet so it settles these for every rule above. */
   @media (min-width: 881px) {
-    .sc-hero { text-align: center; max-width: 1080px; margin-left: auto; margin-right: auto; }
-    .sc-hero .sc-eyebrow { text-align: center; }
-    .news-header, .nr-statement { text-align: center; }
-    .news-header .nr-headline, .news-header .news-lead { margin-left: auto; margin-right: auto; }
-    .nr-statement .nr-headline { max-width: none; }
+    .news-header .nr-headline, .news-header .news-lead, .nr-statement .nr-headline, .nr-statement .nr-all {
+      display: inline; font-family: var(--sans); font-size: clamp(24px, 2.5vw, 42px); font-weight: 400;
+      line-height: 1.18; letter-spacing: -0.02em; color: #0C2242 !important; max-width: none; margin: 0; padding: 0; border: 0;
+    }
+    .news-header .news-lead, .nr-statement .nr-all { margin-left: 0.12em; }
+    .nr-statement .nr-all span { display: inline-block; }   /* so the arrow can still nudge on hover */
     .news-rows { display: block; }
-    .nr-statement { margin-bottom: 44px; }
-    .nr-list { max-width: 920px; margin-left: auto; margin-right: auto; }
+    .nr-statement { margin-bottom: 40px; }
   }
 </style>
 </head>

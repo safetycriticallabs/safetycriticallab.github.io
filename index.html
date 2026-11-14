@@ -1993,9 +1993,29 @@
       line-height: 1.18; letter-spacing: -0.02em; color: #0C2242 !important; max-width: none; margin: 0; padding: 0; border: 0;
     }
     .news-header .news-lead, .nr-statement .nr-all { margin-left: 0.12em; }
+    .nr-statement .nr-all { white-space: nowrap; }   /* the link moves to the next line whole */
     .nr-statement .nr-all span { display: inline-block; }   /* so the arrow can still nudge on hover */
     .news-rows { display: block; }
     .nr-statement { margin-bottom: 40px; }
+  }
+  /* A phone sets them the same way, at its own size: one plain statement in
+     one weight and one colour, each heading running on into its line. */
+  @media (max-width: 880.98px) {
+    .sc-hero { display: block; }
+    .sc-hero-main, .sc-hero-aside { display: contents; }
+    .sc-hero .sc-eyebrow { display: block; margin-bottom: 14px; }
+    .sc-hero .sc-heading, .sc-hero .sc-hero-lead {
+      display: inline; font-size: 22px; font-weight: 400; line-height: 1.24; letter-spacing: -0.015em;
+      color: #0C2242 !important; max-width: none; margin: 0; padding: 0; border: 0;
+    }
+    .sc-hero .sc-hero-lead { margin-left: 0.12em; }
+    .news-header .nr-headline, .news-header .news-lead, .nr-statement .nr-headline, .nr-statement .nr-all {
+      display: inline; font-family: var(--sans); font-size: 20px; font-weight: 400; line-height: 1.26;
+      letter-spacing: -0.012em; color: #0C2242 !important; max-width: none; margin: 0; padding: 0; border: 0;
+    }
+    .news-header .news-lead { margin-left: 0.12em; }
+    .nr-statement .nr-all { white-space: nowrap; }   /* kept whole, and flush left when it takes its own line */
+    .nr-statement .nr-all span { display: inline-block; }
   }
 </style>
 </head>

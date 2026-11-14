@@ -2233,6 +2233,12 @@ gsap.utils.toArray('.slide-right').forEach(function(el) {
            the centre comes in from the left far enough to keep the row's
            first body 24px inside the frame. */
         ovX = Math.max(ovX, 24 - Math.cos(ARM_A) * 90 * ovS);
+        armA = ARM_A; armD = ARM_D;
+        if (phone) {
+          armA = PH_ARM_A; armD = PH_ARM_D;
+          ovS = Math.max(0.5, Math.min(PH_OVER_S * W / 390, (PH_OVER_FOOT * gh + PH_OVER_UP) / (SYS_R * Math.sin(armA + 12 * armD) * SQUASH_OVER)));
+          ovX = PH_OVER_X * W; ovY = NAV - PH_OVER_UP;
+        }
         /* The assessment's frame, level with the orbits: the disc's edge 40px
            left of the column, the mark at the left of the frame. */
         lvYA = NAV + LEVEL_Y * gh; lvYB = NAV + LEVEL_ROW * gh;
@@ -2304,7 +2310,7 @@ gsap.utils.toArray('.slide-right').forEach(function(el) {
              page, and the standard's dive, which starts once they have stood
              at the reading height. */
           lvGap = -1; SD[0] = SG[0]; SD[1] = SG[1];
-          if (overOn() && assessEl && stdHead) {
+          if (overOn() && !phone && assessEl && stdHead) {
             var oRows = assessEl.querySelectorAll('.os-item');
             if (oRows.length >= 2) lvGap = (layTop(oRows[0]) + oRows[0].offsetHeight + layTop(oRows[1])) / 2;
             else if (oRows.length) lvGap = layTop(oRows[0]) + oRows[0].offsetHeight / 2;
@@ -2431,6 +2437,18 @@ gsap.utils.toArray('.slide-right').forEach(function(el) {
      ends where AG ends, as the assessment's first line is about to enter. */
   var OVER = true, OVER_X = -0.02, OVER_Y = 1.10, OVER_GAP = 0.06, OVER_TOP = 0.12, OVER_LIFT = 0.132;
   var SQUASH_OVER = 0.96, SQUASH_LOW = 0.80, ARM_A = -1.2, ARM_D = 0.045, TIER_R = 3.35, TIER_N = 30;
+  /* A phone reads the tiers from above as well, in the upper part of the
+     screen with the words beneath. The system's centre is up under the nav
+     at the left (PH_OVER_X screen widths in, PH_OVER_UP px above the nav's
+     foot), so the bands cross the top of the screen as arcs and the row of
+     thirteen runs down across them: PH_ARM_A is that row's direction and
+     PH_ARM_D its lean per orbit. PH_OVER_S is the scale on a 390px wide
+     screen, and the row's last body comes no lower than PH_OVER_FOOT ground
+     heights. armA and armD are the row in use, set in measure(). The level
+     view and the standard's own frame are a laptop's still: after its tiers
+     a phone dives to the core as it always did. */
+  var PH_OVER_S = 1.35, PH_OVER_X = -0.205, PH_OVER_UP = 32, PH_OVER_FOOT = 0.30, PH_ARM_A = 0.5, PH_ARM_D = 0.012;
+  var armA = ARM_A, armD = ARM_D;
   var DIVE_LEAD = 0.24, ARM_BACK = 0.33, armDive = false;
   var ovS = 1, ovX = 0, ovY = 0, armK = 0, TKY = [], DG = [0, 1], TT = new Float32Array(13), TC = new Float32Array(13);
   var tierCols = tierEl ? [].slice.call(tierEl.querySelectorAll('.struct-col')) : [];
@@ -2444,7 +2462,7 @@ gsap.utils.toArray('.slide-right').forEach(function(el) {
     return k;
   });
   var overOK = tierCols.length > 0 && tierKind.every(function (k) { for (var i = 0; i < 13; i++) if (k[i] === undefined) return false; return true; });
-  function overOn() { return OVER && overOK && sceneOn && !narrow.matches && !!tierHead && !!assessHead && doorPage(); }
+  function overOn() { return OVER && overOK && sceneOn && !!tierHead && !!assessHead && doorPage(); }
   /* Which tier is being read, off the scroll: 0 at the head, then 1 for each
      tier, holding at each and changing in the middle half of the gap between
      two, as the journey's stops do. */
@@ -2630,7 +2648,7 @@ gsap.utils.toArray('.slide-right').forEach(function(el) {
     if (over) {
       var syO = window.pageYOffset || document.documentElement.scrollTop || 0;
       var lyO = syO + NAV + (window.innerHeight - NAV) / 2;
-      var up = ck, tp = up >= 1 ? tierAt(lyO) : 0;
+      var up = ck, tp = up >= 1 ? tierAt(narrow.matches ? syO + window.innerHeight * 0.62 : lyO) : 0;
       var dk = (lyO - DG[0]) / Math.max(1, DG[1] - DG[0]);
       dk = reduce.matches ? (dk >= 0.5 ? 1 : 0) : Math.max(0, Math.min(1, dk));
       /* Leaving: in the first third of the dive the marks go and the whole
@@ -3357,7 +3375,7 @@ gsap.utils.toArray('.slide-right').forEach(function(el) {
          from where it is when the row starts to form, by the shorter way
          round, and its orbit resumes from that same place when it is let go. */
       if (armK > 0) {
-        var rowA = ARM_A + i * ARM_D;
+        var rowA = armA + i * armD;
         if (bo.af == null) bo.af = a2;
         /* While it still stands in the row at the start of the dive, the
            place it will go back to is drawn in toward the row, once. Nothing
@@ -3888,7 +3906,8 @@ gsap.utils.toArray('.slide-right').forEach(function(el) {
     var tipRow = armK > 0.5, tipX = screenPos[rec.i * 2];
     tip.classList.toggle('is-row', tipRow);
     /* In the row the tip also stops short of the words. */
-    if (tipRow && tierCols.length) tipX = Math.min(tipX, tierCols[0].getBoundingClientRect().left - 28 - tip.offsetWidth);
+    if (tipRow && tierCols.length && !narrow.matches) tipX = Math.min(tipX, tierCols[0].getBoundingClientRect().left - 28 - tip.offsetWidth);
+    else if (tipRow) tipX = Math.max(-4, Math.min(tipX, window.innerWidth - 28 - tip.offsetWidth));   /* a phone: kept inside the screen */
     /* Elsewhere it sits centred over its body, and is kept whole inside the
        window: a body near the left edge, as beside the mark in the level
        view, had its tip cut off by the edge. */

@@ -880,6 +880,26 @@ html.fwx-scene .fwx-key i.conditional { width: 8px; height: 8px; border: 1px sol
   /* (html.fwx-door.fwx-scene: the card style's phone rule below paints the
      column a night box, and would win on order at equal weight.) */
   html.fwx-door.fwx-scene .struct-col { margin-bottom: 40svh; background: none; }
+  /* The first tier keeps a tier's distance from the head, so the head and
+     its dark have left the scene before the first tier is read. */
+  html.fwx-door.fwx-scene .struct-grid { margin-top: 40svh; }
+  /* The two outcomes stand apart with no boxes, so the line of light has the
+     space between them. Each keeps a soft dark of its own from one edge of
+     the screen to the other, so the line passes behind the first outcome on
+     its way down to that space. */
+  html.fwx-door.fwx-scene .os-right { gap: 60px; }
+  @media (min-width: 600px) { html.fwx-door.fwx-scene .os-right { gap: 96px; } }   /* a tablet's line is thicker */
+  html.fwx-door.fwx-scene .os-item { background: none; border: 0 !important; border-radius: 0; box-shadow: none; padding: 0; isolation: isolate; }
+  html.fwx-door.fwx-scene .os-item::after {
+    content: ""; position: absolute; left: -24px; right: -24px; top: -10px; bottom: -10px; z-index: -1; pointer-events: none;
+    background: linear-gradient(180deg, rgba(5,14,28,0) 0, rgba(5,14,28,0.92) 10px, rgba(5,14,28,0.92) calc(100% - 10px), rgba(5,14,28,0) 100%);
+  }
+  /* The standard's head keeps its dark close above it, so the core standing
+     over the head is not dimmed by it. */
+  html.fwx-door.fwx-scene .pub-standard-grid > div:first-child::before {
+    inset: -24px -24px -72px;
+    background: linear-gradient(180deg, rgba(5,14,28,0) 0, rgba(5,14,28,0.82) 24px, rgba(5,14,28,0.92) calc(100% - 64px), rgba(5,14,28,0) 100%);
+  }
   /* The standard's two buttons: a soft dark across the foot of the rows,
      reaching the screen's edges and fading out above and below. The rows
      are positioned, so they stay above it. */
@@ -2235,9 +2255,18 @@ gsap.utils.toArray('.slide-right').forEach(function(el) {
         ovX = Math.max(ovX, 24 - Math.cos(ARM_A) * 90 * ovS);
         armA = ARM_A; armD = ARM_D;
         if (phone) {
-          armA = PH_ARM_A; armD = PH_ARM_D;
-          ovS = Math.max(0.5, Math.min(PH_OVER_S * W / 390, (PH_OVER_FOOT * gh + PH_OVER_UP) / (SYS_R * Math.sin(armA + 12 * armD) * SQUASH_OVER)));
-          ovX = PH_OVER_X * W; ovY = NAV - PH_OVER_UP;
+          armD = PH_ARM_D; ovY = NAV - PH_OVER_UP; ovX = -0.3 * W;
+          var endX = PH_OVER_END * W, endY = 0;
+          for (var fit = 0; fit < 8; fit++) {
+            endY = (NAV + PH_OVER_FOOT * gh - ovY) / SQUASH_OVER;
+            ovS = Math.max(0.5, Math.sqrt((endX - ovX) * (endX - ovX) + endY * endY) / SYS_R);
+            armA = Math.atan2(endY, endX - ovX) - 12 * armD;
+            ovX = 24 - Math.cos(armA) * 90 * ovS;
+            /* On a screen wider than it is tall the row lies nearly flat, and
+               the centre comes down far enough to keep its first body clear
+               of the nav. */
+            ovY = Math.max(NAV - PH_OVER_UP, NAV + 14 - Math.sin(armA) * 90 * ovS * SQUASH_OVER);
+          }
         }
         /* The assessment's frame, level with the orbits: the disc's edge 40px
            left of the column, the mark at the left of the frame. */
@@ -2247,10 +2276,22 @@ gsap.utils.toArray('.slide-right').forEach(function(el) {
         /* Where the disc is set down: past the reading height, the mark's
            rings still whole under the nav. */
         lvYC = Math.min(lvYB, Math.max(NAV + (LEVEL_ROW - LEVEL_PAST) * gh, NAV + MARK_R * lvS + 12));
+        if (phone) {
+          lvS = Math.max(0.5, (W - PH_LV_END + 8) / (SYS_R * LEVEL_RIM - MARK_R));
+          lvX = -(MARK_R * lvS + 8);   /* the mark's rings wholly off the left edge */
+          lvYA = NAV + PH_LV_BAND * gh; lvYB = NAV + PH_LV_ROW * gh;
+          phSqA = PH_LV_THICK_A / (SYS_R * lvS); phSqB = PH_LV_THICK_B / (SYS_R * lvS);
+        }
         /* The standard's own frame: the gold whole, left of the column. */
         s3S = Math.max(0.5, Math.min(S3_FIT * gh / (GOLD_B + 2.6), (cLeftO - 64) / (2 * (GOLD_A + 2.6))));
         s3X = Math.max(24 + (GOLD_A + 2.6) * s3S, Math.min(S3_X * W, cLeftO - 40 - (GOLD_A + 2.6) * s3S));
         s3Y = NAV + S3_Y * gh; s3Y2 = s3Y + S3_DROP * gh; s3C = NAV + S3_CLOSE * gh;
+        if (phone) {
+          /* A phone's, until the page is measured below: on the screen's
+             centre line, where the line of light waited. */
+          s3S = Math.max(PH_S3_FLOOR, PH_S3_W * W / (2 * (GOLD_A + 2.6)));
+          s3X = W / 2; s3Y = lvYA; s3Y2 = s3Y; s3C = -2 * gh;
+        }
       }
       SOFT = !!dg;
       /* The stops, as scroll positions of the mid-screen line. On the page
@@ -2293,6 +2334,12 @@ gsap.utils.toArray('.slide-right').forEach(function(el) {
              block, as positions of the mid-screen line. */
           TKY.length = 0;
           DG[0] = AG[0] - DIVE_LEAD * keyH; DG[1] = Math.max(DG[0] + 1, AG[1]);
+          /* A phone's sections sit close together, so that gap is a third
+             of a screen and the dive from above into the core was a lurch.
+             There it starts earlier, once the last tier has been read, and
+             ends after the assessment's first words have come in over their
+             own dark. */
+          if (phone && overOn()) { DG[0] = AG[0] - PH_DIVE_LEAD * keyH; DG[1] = Math.max(DG[0] + 1, AG[1] + PH_DIVE_TAIL * keyH); }
           if (overOn()) {
             TKY.push(layTop(tierHead) + tierHead.offsetHeight / 2);
             for (var tci = 0; tci < tierCols.length; tci++) TKY.push(layTop(tierCols[tci]) + tierCols[tci].offsetHeight / 2);
@@ -2310,11 +2357,33 @@ gsap.utils.toArray('.slide-right').forEach(function(el) {
              page, and the standard's dive, which starts once they have stood
              at the reading height. */
           lvGap = -1; SD[0] = SG[0]; SD[1] = SG[1];
-          if (overOn() && !phone && assessEl && stdHead) {
+          if (overOn() && assessEl && stdHead) {
             var oRows = assessEl.querySelectorAll('.os-item');
             if (oRows.length >= 2) lvGap = (layTop(oRows[0]) + oRows[0].offsetHeight + layTop(oRows[1])) / 2;
             else if (oRows.length) lvGap = layTop(oRows[0]) + oRows[0].offsetHeight / 2;
-            if (lvGap >= 0) {
+            if (lvGap >= 0 && phone) {
+              /* A phone: lvYB is where the space between the outcomes is
+                 when they are read, their block centred on the phone's
+                 reading line. The dive starts when the last outcome has left
+                 under the nav and ends a little before the standard's head
+                 is read. */
+              var osR = assessEl.querySelector('.os-right') || oRows[0], readP = 0.62 * window.innerHeight;
+              lvYB = readP + lvGap - (layTop(osR) + osR.offsetHeight / 2);
+              /* The standard's head and the close, each where it is read. */
+              S3G[0] = layTop(stdHead) + stdHead.offsetHeight / 2;
+              S3G[1] = Math.max(S3G[0] + 1, closeEl ? layTop(closeEl) + closeEl.offsetHeight / 2 : S3G[0] + 2 * keyH);
+              /* The core's size and height from the space above the head
+                 where the head is read, and the place on the page it then
+                 leaves with. */
+              var headTop3 = readP - stdHead.offsetHeight / 2, room3 = headTop3 - PH_S3_GAP - (NAV + 8);
+              s3S = Math.max(PH_S3_FLOOR, Math.min(PH_S3_W * W / (2 * (GOLD_A + 2.6)), room3 / (2 * (GOLD_B + 2.6))));
+              var ring3 = (GOLD_B + 2.6) * s3S;
+              s3Y = Math.max(NAV + 8 + ring3, headTop3 - PH_S3_GAP - ring3); s3Y2 = s3Y;
+              s3Doc = S3G[0] - readP + s3Y;
+              SD[1] = S3G[0] - readP + M0 - PH_S3_END * keyH;
+              SD[0] = Math.min(SG[0] - PH_S3_LEAD * keyH, SD[1] - PH_S3_MIN);
+              SD[1] = Math.max(SD[0] + 1, SD[1]);
+            } else if (lvGap >= 0) {
               /* k0 is how far into the dive the disc's end comes within
                  TIP_CLEAR of the column, and rowOff the position at which
                  the last outcome's foot is ROW_CLEAR above the disc: the
@@ -2439,15 +2508,45 @@ gsap.utils.toArray('.slide-right').forEach(function(el) {
   var SQUASH_OVER = 0.96, SQUASH_LOW = 0.80, ARM_A = -1.2, ARM_D = 0.045, TIER_R = 3.35, TIER_N = 30;
   /* A phone reads the tiers from above as well, in the upper part of the
      screen with the words beneath. The system's centre is up under the nav
-     at the left (PH_OVER_X screen widths in, PH_OVER_UP px above the nav's
-     foot), so the bands cross the top of the screen as arcs and the row of
-     thirteen runs down across them: PH_ARM_A is that row's direction and
-     PH_ARM_D its lean per orbit. PH_OVER_S is the scale on a 390px wide
-     screen, and the row's last body comes no lower than PH_OVER_FOOT ground
-     heights. armA and armD are the row in use, set in measure(). The level
-     view and the standard's own frame are a laptop's still: after its tiers
-     a phone dives to the core as it always did. */
-  var PH_OVER_S = 1.35, PH_OVER_X = -0.205, PH_OVER_UP = 32, PH_OVER_FOOT = 0.30, PH_ARM_A = 0.5, PH_ARM_D = 0.012;
+     at the left (PH_OVER_UP px above the nav's foot), so the bands cross the
+     top of the screen as arcs and the row of thirteen runs down across
+     them. The row is fitted to the screen, whatever its shape: its first
+     body stands 24px in from the left edge and its last PH_OVER_END screen
+     widths across and PH_OVER_FOOT ground heights down, which sets the
+     scale, the centre and the row's direction together in measure().
+     PH_ARM_D is the row's lean per orbit. armA and armD are the row in use.
+     After its tiers a phone comes down to the level view over a longer
+     stretch than the gap between the sections gives it (PH_DIVE_LEAD
+     before, PH_DIVE_TAIL after, in ground heights); where the level view
+     cannot run it is the dive to the core that takes that stretch. */
+  var PH_OVER_UP = 32, PH_OVER_END = 0.86, PH_OVER_FOOT = 0.27, PH_ARM_D = 0.012, PH_DIVE_LEAD = 0.45, PH_DIVE_TAIL = 0.40;
+  /* And the assessment, level with the orbits, on a phone. The system is one
+     line of light across the screen: its centre off the left edge, far
+     enough that the mark's rings are out of sight, its far end PH_LV_END px
+     short of the right. While the
+     head is read it waits above the words (PH_LV_BAND ground heights down).
+     As the two outcomes come up the screen it comes down to meet the space
+     between them PH_LV_PICK px before they reach the height they are read
+     at (PH_LV_ROW is only the height used before the page is measured),
+     starting when that space is PH_LV_LEAD px below the foot of the screen.
+     It then stays in that space and leaves with it, PH_LV_OUT px under the
+     nav's foot. PH_LV_THICK_A and PH_LV_THICK_B
+     are the line's half thickness in px where it is widest, waiting and
+     between the outcomes, which sets the view for any screen size.
+     Then the standard, on a phone: the core is reached once, here, whole,
+     standing just above the standard's head with the words beneath. Its
+     gold is PH_S3_W screen widths across at most, and no taller than the
+     space between the nav and the head where the head is read (never under
+     PH_S3_FLOOR in scale). The dive from the line starts as the last
+     outcome's foot is PH_S3_LEAD ground heights from the nav and ends
+     PH_S3_END ground heights
+     before the head is read, never over less than PH_S3_MIN px. As the
+     head is read and scrolls on, the core is picked up by it and leaves
+     with it, PH_S3_GAP px above its first line, so on a phone the rows of
+     the standard and the close are read on the night alone. */
+  var PH_LV_END = 22, PH_LV_EASE = 20, PH_LV_BAND = 0.172, PH_LV_ROW = 0.45, PH_LV_LEAD = 140, PH_LV_PICK = 60, PH_LV_OUT = 60, PH_LV_THICK_A = 26, PH_LV_THICK_B = 15;
+  var PH_S3_W = 0.50, PH_S3_FLOOR = 1.1, PH_S3_GAP = 12, PH_S3_RH = 40, PH_S3_END = 0.08, PH_S3_LEAD = 0.12, PH_S3_MIN = 420;
+  var phSqA = 0.06, phSqB = 0.036;
   var armA = ARM_A, armD = ARM_D;
   var DIVE_LEAD = 0.24, ARM_BACK = 0.33, armDive = false;
   var ovS = 1, ovX = 0, ovY = 0, armK = 0, TKY = [], DG = [0, 1], TT = new Float32Array(13), TC = new Float32Array(13);
@@ -2674,10 +2773,26 @@ gsap.utils.toArray('.slide-right').forEach(function(el) {
         if (dk > 0) {
           var gsO = lvGap - syO, lvY = reduce.matches ? (gsO <= (lvYA + lvYB) / 2 ? lvYB : lvYA) : ride(gsO, lvYC, lvYA, LEVEL_SET, LEVEL_EASE);
           var lk = Math.max(0, Math.min(1, (lvYA - lvY) / Math.max(1, lvYA - lvYB))), de = smooth(dk);
+          var sqA = SQUASH_LEVEL, sqB = SQUASH_LINE, leanK = Math.max(lk, smooth((lvYA - lvY) / LEVEL_EASE));
+          if (narrow.matches) {
+            /* A phone: the line waits above the words, comes down to meet
+               the space between the outcomes a little before they are read,
+               and stays in that space for as long as they are on the
+               screen, going out under the nav with them, so no word ever
+               crosses it. The two laws join where the ride's own rounding
+               begins, both at rest. */
+            var pickY = lvYB + PH_LV_PICK, outY = NAV - PH_LV_OUT, gMeet = pickY + PH_LV_EASE, gFar = window.innerHeight + PH_LV_LEAD;
+            /* With motion reduced it is placed in the space once, when the
+               outcomes are read, and from then on only moves with the page. */
+            if (reduce.matches) { lk = gsO <= lvYB ? 1 : 0; lvY = lk ? Math.max(outY, gsO) : lvYA; }
+            else if (gsO >= gMeet) { lk = smooth((gFar - gsO) / Math.max(1, gFar - gMeet)); lvY = lvYA + (pickY - lvYA) * lk; }
+            else { lk = 1; lvY = ride(gsO, outY, pickY, LEVEL_SET, PH_LV_EASE); }
+            sqA = phSqA; sqB = phSqB; leanK = lk;
+          }
           sysScale = Math.exp(Math.log(sysScale) + (Math.log(lvS) - Math.log(sysScale)) * de);
           camX += (lvX - camX) * de; camY += (lvY - camY) * de;
-          squash += (SQUASH_LEVEL + (SQUASH_LINE - SQUASH_LEVEL) * lk - squash) * de;
-          rollNow += (LEVEL_ROLL * (1 - Math.max(lk, smooth((lvYA - lvY) / LEVEL_EASE))) - rollNow) * de;
+          squash += (sqA + (sqB - sqA) * lk - squash) * de;
+          rollNow += (LEVEL_ROLL * (1 - leanK) - rollNow) * de;
         }
         /* And the dive, handed the standard's gap. With motion reduced the
            picture changes where it always did, in the middle of the gap
@@ -2704,7 +2819,7 @@ gsap.utils.toArray('.slide-right').forEach(function(el) {
       if (level) { pan = zoom = smooth(ck); dS = s3S; dX = s3X; dY = s3Y; squash += (SQUASH_CENTRE - squash) * smooth((ck - 0.15) / 0.85); rollNow *= 1 - pan; }
       else if (over) { dS = asS; dX = asX; dY = asY; squash += (SQUASH_CENTRE - squash) * pan; }
       if (over && ck >= 1) squash = SQUASH_CENTRE;
-      camX += (dX - camX) * (level ? lvPanX(ck) : pan); camY += (dY - camY) * pan;
+      camX += (dX - camX) * (level && !narrow.matches ? lvPanX(ck) : pan); camY += (dY - camY) * pan;
       sysScale = Math.exp(Math.log(sysScale) + (Math.log(dS) - Math.log(sysScale)) * zoom);
       /* Then, on the page, the small move to the assessment's frame. */
       if (onPage && ck >= 1 && assessHead) {
@@ -2729,13 +2844,17 @@ gsap.utils.toArray('.slide-right').forEach(function(el) {
          through it, and at the close the core is picked up by the page, as
          the disc was by the two outcomes, and leaves with it. */
       if (level && ck >= 1) {
-        var u3 = Math.max(0, Math.min(1, (lyO - S3G[0]) / Math.max(1, S3G[1] - S3G[0])));
+        /* On a phone the core does not draw back: it stands above the
+           standard's head and leaves with it. */
+        var ph3 = narrow.matches;
+        var u3 = ph3 ? 0 : Math.max(0, Math.min(1, (lyO - S3G[0]) / Math.max(1, S3G[1] - S3G[0])));
         if (reduce.matches) u3 = u3 >= 0.8 ? 1 : 0;
         var y3 = s3Y + (s3Y2 - s3Y) * smooth(u3 / 0.4);
         sysScale = s3S * Math.pow(S3_BACK, Math.pow(u3, 1.5));
         squash = SQUASH_CENTRE + (S3_SQ - SQUASH_CENTRE) * smooth((u3 - 0.4) / 0.6);
         camX = s3X;
-        camY = reduce.matches ? (u3 >= 1 ? s3C : y3) : ride(s3Doc - syO, -1e6, y3, 0, Math.max(1, y3 - s3C));
+        if (ph3) camY = reduce.matches ? (s3Doc - syO < y3 - 2 * PH_S3_RH ? s3C : y3) : ride(s3Doc - syO, -1e6, y3, 0, PH_S3_RH);
+        else camY = reduce.matches ? (u3 >= 1 ? s3C : y3) : ride(s3Doc - syO, -1e6, y3, 0, Math.max(1, y3 - s3C));
       }
       if (!over) rollNow = ROLL * (1 - smooth(ck / 0.8));   /* from above it is already off */
       /* From the level view the core begins to glow by the middle of the dive. */

@@ -880,6 +880,10 @@ html.fwx-scene .fwx-key i.conditional { width: 8px; height: 8px; border: 1px sol
   /* (html.fwx-door.fwx-scene: the card style's phone rule below paints the
      column a night box, and would win on order at equal weight.) */
   html.fwx-door.fwx-scene .struct-col { margin-bottom: 40svh; background: none; }
+  /* The route past AI-13 on a phone held upright (see overOn()). Held
+     sideways a phone keeps the dive into the core, and the rules before
+     these. */
+  @media (orientation: portrait) {
   /* The first tier keeps a tier's distance from the head, so the head and
      its dark have left the scene before the first tier is read. */
   html.fwx-door.fwx-scene .struct-grid { margin-top: 40svh; }
@@ -899,6 +903,7 @@ html.fwx-scene .fwx-key i.conditional { width: 8px; height: 8px; border: 1px sol
   html.fwx-door.fwx-scene .pub-standard-grid > div:first-child::before {
     inset: -24px -24px -72px;
     background: linear-gradient(180deg, rgba(5,14,28,0) 0, rgba(5,14,28,0.82) 24px, rgba(5,14,28,0.92) calc(100% - 64px), rgba(5,14,28,0) 100%);
+  }
   }
   /* The standard's two buttons: a soft dark across the foot of the rows,
      reaching the screen's edges and fading out above and below. The rows
@@ -1761,6 +1766,7 @@ gsap.utils.toArray('.slide-right').forEach(function(el) {
   var g = cv.getContext('2d');
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
   var narrow = window.matchMedia('(max-width: 880.98px)');
+  var upright = window.matchMedia('(orientation: portrait)');
   /* The centrepiece view, ?centre or ?center: the system alone, formed,
      centred and full bleed, with the scroll locked. */
   var CENTRE = false;
@@ -2279,19 +2285,16 @@ gsap.utils.toArray('.slide-right').forEach(function(el) {
         if (phone) {
           lvS = Math.max(0.5, (W - PH_LV_END + 8) / (SYS_R * LEVEL_RIM - MARK_R));
           lvX = -(MARK_R * lvS + 8);   /* the mark's rings wholly off the left edge */
-          lvYA = NAV + PH_LV_BAND * gh; lvYB = NAV + PH_LV_ROW * gh;
+          lvYA = NAV + PH_LV_BAND * gh;   /* lvYB, the outcomes' height, is set from the page below */
           phSqA = PH_LV_THICK_A / (SYS_R * lvS); phSqB = PH_LV_THICK_B / (SYS_R * lvS);
         }
         /* The standard's own frame: the gold whole, left of the column. */
         s3S = Math.max(0.5, Math.min(S3_FIT * gh / (GOLD_B + 2.6), (cLeftO - 64) / (2 * (GOLD_A + 2.6))));
         s3X = Math.max(24 + (GOLD_A + 2.6) * s3S, Math.min(S3_X * W, cLeftO - 40 - (GOLD_A + 2.6) * s3S));
         s3Y = NAV + S3_Y * gh; s3Y2 = s3Y + S3_DROP * gh; s3C = NAV + S3_CLOSE * gh;
-        if (phone) {
-          /* A phone's, until the page is measured below: on the screen's
-             centre line, where the line of light waited. */
-          s3S = Math.max(PH_S3_FLOOR, PH_S3_W * W / (2 * (GOLD_A + 2.6)));
-          s3X = W / 2; s3Y = lvYA; s3Y2 = s3Y; s3C = -2 * gh;
-        }
+        /* A phone's core stands on the screen's centre line; its size and
+           height are set from the page below. */
+        if (phone) s3X = W / 2;
       }
       SOFT = !!dg;
       /* The stops, as scroll positions of the mid-screen line. On the page
@@ -2335,10 +2338,10 @@ gsap.utils.toArray('.slide-right').forEach(function(el) {
           TKY.length = 0;
           DG[0] = AG[0] - DIVE_LEAD * keyH; DG[1] = Math.max(DG[0] + 1, AG[1]);
           /* A phone's sections sit close together, so that gap is a third
-             of a screen and the dive from above into the core was a lurch.
-             There it starts earlier, once the last tier has been read, and
-             ends after the assessment's first words have come in over their
-             own dark. */
+             of a screen and the way down from the row to the line of light
+             was a lurch. There it starts earlier, once the last tier has
+             been read, and ends after the assessment's first words have
+             come in over their own dark. */
           if (phone && overOn()) { DG[0] = AG[0] - PH_DIVE_LEAD * keyH; DG[1] = Math.max(DG[0] + 1, AG[1] + PH_DIVE_TAIL * keyH); }
           if (overOn()) {
             TKY.push(layTop(tierHead) + tierHead.offsetHeight / 2);
@@ -2364,23 +2367,51 @@ gsap.utils.toArray('.slide-right').forEach(function(el) {
             if (lvGap >= 0 && phone) {
               /* A phone: lvYB is where the space between the outcomes is
                  when they are read, their block centred on the phone's
-                 reading line. The dive starts when the last outcome has left
-                 under the nav and ends a little before the standard's head
-                 is read. */
+                 reading line. */
               var osR = assessEl.querySelector('.os-right') || oRows[0], readP = 0.62 * window.innerHeight;
               lvYB = readP + lvGap - (layTop(osR) + osR.offsetHeight / 2);
+              /* Where the assessment's head is read, and for PH_LV_HOLD px
+                 of scroll after, the line is PH_LV_CLEAR px above the head's
+                 first line. So it waits no lower than that (on a short
+                 screen partly under the nav), and no more than PH_LV_WAIT px
+                 higher (a tablet's head is read low on its screen), and it
+                 starts down late enough to be clear still. lvHd is the
+                 head's first line above the space, on the page; lvFar where
+                 the space is on the screen as the line starts down. */
+              var hdA = assessHead.offsetHeight, gR = readP + lvGap - (layTop(assessHead) + hdA / 2), yMax = readP - hdA / 2 - PH_LV_CLEAR;
+              var gH = gR - PH_LV_HOLD, yH = yMax - PH_LV_HOLD;
+              lvHd = lvGap - layTop(assessHead);
+              lvYA = Math.max(NAV - PH_LV_OUT, Math.min(Math.max(lvYA, yMax - PH_LV_WAIT), yH));
+              var pick0 = lvYB + PH_LV_PICK, meet0 = pick0 + PH_LV_EASE;
+              var lineAt = function (f) { return lvYA + (pick0 - lvYA) * smooth((f - gH) / Math.max(1, f - meet0)); };
+              lvFar = window.innerHeight + PH_LV_LEAD;
+              if (lineAt(lvFar) > yH) {
+                var fLo = Math.max(meet0 + 1, gH), fHi = lvFar;
+                for (var fi = 0; fi < 30; fi++) { var fM = (fLo + fHi) / 2; if (lineAt(fM) > yH) fHi = fM; else fLo = fM; }
+                lvFar = fLo;
+              }
               /* The standard's head and the close, each where it is read. */
               S3G[0] = layTop(stdHead) + stdHead.offsetHeight / 2;
               S3G[1] = Math.max(S3G[0] + 1, closeEl ? layTop(closeEl) + closeEl.offsetHeight / 2 : S3G[0] + 2 * keyH);
-              /* The core's size and height from the space above the head
-                 where the head is read, and the place on the page it then
-                 leaves with. */
-              var headTop3 = readP - stdHead.offsetHeight / 2, room3 = headTop3 - PH_S3_GAP - (NAV + 8);
-              s3S = Math.max(PH_S3_FLOOR, Math.min(PH_S3_W * W / (2 * (GOLD_A + 2.6)), room3 / (2 * (GOLD_B + 2.6))));
-              var ring3 = (GOLD_B + 2.6) * s3S;
-              s3Y = Math.max(NAV + 8 + ring3, headTop3 - PH_S3_GAP - ring3); s3Y2 = s3Y;
-              s3Doc = S3G[0] - readP + s3Y;
-              SD[1] = S3G[0] - readP + M0 - PH_S3_END * keyH;
+              /* The core's size from the space above the head where the head
+                 is read. Where that is too little for the core at
+                 PH_S3_FLOOR (a short screen, or a long head), the core is
+                 read with the head lower down instead, its first line
+                 PH_S3_GAP px under the core, so the core never stands behind
+                 the words. rd3 is where the head's centre is then, and s3Doc
+                 the place on the page the core leaves with. */
+              var hd3 = stdHead.offsetHeight, rH3 = 2 * (GOLD_B + 2.6);
+              var headTop3 = readP - hd3 / 2, room3 = headTop3 - PH_S3_GAP - (NAV + 8);
+              s3S = Math.max(PH_S3_FLOOR, Math.min(PH_S3_W * W / (2 * (GOLD_A + 2.6)), room3 / rH3));
+              headTop3 = Math.max(headTop3, NAV + 8 + rH3 * s3S + PH_S3_GAP);
+              s3Y = headTop3 - PH_S3_GAP - rH3 * s3S / 2; s3Y2 = s3Y;
+              var rd3 = headTop3 + hd3 / 2;
+              s3Doc = S3G[0] - rd3 + s3Y;
+              /* The dive ends before the head starts to pick the core up.
+                 The window's own centre line, as shape() measures it, not
+                 M0: with the browser's bars shown the two differ, and the
+                 core would jump where the dive hands over. */
+              SD[1] = S3G[0] - rd3 + NAV + (window.innerHeight - NAV) / 2 - Math.max(PH_S3_END * keyH, 2 * PH_S3_RH);
               SD[0] = Math.min(SG[0] - PH_S3_LEAD * keyH, SD[1] - PH_S3_MIN);
               SD[1] = Math.max(SD[0] + 1, SD[1]);
             } else if (lvGap >= 0) {
@@ -2475,8 +2506,8 @@ gsap.utils.toArray('.slide-right').forEach(function(el) {
   var STD_PUSH = 1.36, STD_RISE = 0.06, stS = 1, stX = 0, stY = 0, stK = 0, SG = [0, 1];
   var doorHead = incHead || tierHead, doorEnd = closeEl || stdEl || assessEl || tierEl || incEl;
   var readS = 1, readX = 0, readY = 0;
-  /* The tiers, read from above (a laptop only: a phone reads below the core
-     and keeps the dive). Past AI-13 the camera climbs instead of diving. The
+  /* The tiers, read from above (on a phone held sideways the scene keeps
+     the dive into the core instead, see overOn()). Past AI-13 the camera climbs instead of diving. The
      roll comes off, the orbits open into circles and the mark is pushed past
      the lower left corner, so the thirteen bands cross the frame as arcs. The
      thirteen bodies come to stand in one row, in order, and each tier relights
@@ -2523,33 +2554,38 @@ gsap.utils.toArray('.slide-right').forEach(function(el) {
   /* And the assessment, level with the orbits, on a phone. The system is one
      line of light across the screen: its centre off the left edge, far
      enough that the mark's rings are out of sight, its far end PH_LV_END px
-     short of the right. While the
-     head is read it waits above the words (PH_LV_BAND ground heights down).
-     As the two outcomes come up the screen it comes down to meet the space
-     between them PH_LV_PICK px before they reach the height they are read
-     at (PH_LV_ROW is only the height used before the page is measured),
-     starting when that space is PH_LV_LEAD px below the foot of the screen.
-     It then stays in that space and leaves with it, PH_LV_OUT px under the
-     nav's foot. PH_LV_THICK_A and PH_LV_THICK_B
-     are the line's half thickness in px where it is widest, waiting and
-     between the outcomes, which sets the view for any screen size.
+     short of the right. While the head is read it waits above the words,
+     PH_LV_BAND ground heights down, moved to within PH_LV_WAIT px of the
+     height it must keep and never below it (see measure()). As the two
+     outcomes come up the screen it comes down to meet the space between
+     them PH_LV_PICK px before they reach the height they are read at, over
+     the last PH_LV_EASE px rounded. It starts down when that space is
+     PH_LV_LEAD px below the foot of the screen, or later, so that where the
+     head is read, and for PH_LV_HOLD px of scroll after, the line is still
+     PH_LV_CLEAR px above the head's first line. It then stays in that space
+     and leaves with it, PH_LV_OUT px under the nav's foot. PH_LV_THICK_A and
+     PH_LV_THICK_B are the line's half thickness in px where it is widest,
+     waiting and between the outcomes, which sets the view for any screen
+     size.
      Then the standard, on a phone: the core is reached once, here, whole,
      standing just above the standard's head with the words beneath. Its
      gold is PH_S3_W screen widths across at most, and no taller than the
      space between the nav and the head where the head is read (never under
      PH_S3_FLOOR in scale). The dive from the line starts as the last
      outcome's foot is PH_S3_LEAD ground heights from the nav and ends
-     PH_S3_END ground heights
-     before the head is read, never over less than PH_S3_MIN px. As the
-     head is read and scrolls on, the core is picked up by it and leaves
-     with it, PH_S3_GAP px above its first line, so on a phone the rows of
-     the standard and the close are read on the night alone. */
-  var PH_LV_END = 22, PH_LV_EASE = 20, PH_LV_BAND = 0.172, PH_LV_ROW = 0.45, PH_LV_LEAD = 140, PH_LV_PICK = 60, PH_LV_OUT = 60, PH_LV_THICK_A = 26, PH_LV_THICK_B = 15;
+     PH_S3_END ground heights or 2 PH_S3_RH px before the head is read,
+     whichever is more, never over less than PH_S3_MIN px. It waits
+     PH_S3_RH px below its place, and the head picks it up over the last
+     2 PH_S3_RH px of scroll before the head is read, so that there it is
+     in its place, PH_S3_GAP px above the head's first line, and leaves
+     with the head from there. So on a phone the rows of the standard and
+     the close are read on the night alone. */
+  var PH_LV_END = 22, PH_LV_EASE = 20, PH_LV_BAND = 0.172, PH_LV_CLEAR = 32, PH_LV_HOLD = 24, PH_LV_WAIT = 150, PH_LV_LEAD = 140, PH_LV_PICK = 60, PH_LV_OUT = 60, PH_LV_THICK_A = 26, PH_LV_THICK_B = 15;
   var PH_S3_W = 0.50, PH_S3_FLOOR = 1.1, PH_S3_GAP = 12, PH_S3_RH = 40, PH_S3_END = 0.08, PH_S3_LEAD = 0.12, PH_S3_MIN = 420;
   var phSqA = 0.06, phSqB = 0.036;
   var armA = ARM_A, armD = ARM_D;
   var DIVE_LEAD = 0.24, ARM_BACK = 0.33, armDive = false;
-  var ovS = 1, ovX = 0, ovY = 0, armK = 0, TKY = [], DG = [0, 1], TT = new Float32Array(13), TC = new Float32Array(13);
+  var routeOn = false, ovS = 1, ovX = 0, ovY = 0, armK = 0, TKY = [], DG = [0, 1], TT = new Float32Array(13), TC = new Float32Array(13);
   var tierCols = tierEl ? [].slice.call(tierEl.querySelectorAll('.struct-col')) : [];
   /* Per tier, per area: 0 applies, 1 tailored, 2 conditional. */
   var tierKind = tierCols.map(function (col) {
@@ -2561,7 +2597,9 @@ gsap.utils.toArray('.slide-right').forEach(function(el) {
     return k;
   });
   var overOK = tierCols.length > 0 && tierKind.every(function (k) { for (var i = 0; i < 13; i++) if (k[i] === undefined) return false; return true; });
-  function overOn() { return OVER && overOK && sceneOn && !!tierHead && !!assessHead && doorPage(); }
+  /* A phone held sideways has too little height for the row, the line and
+     the core above the words, and keeps the dive into the core. */
+  function overOn() { return OVER && overOK && sceneOn && !!tierHead && !!assessHead && doorPage() && (!narrow.matches || upright.matches); }
   /* Which tier is being read, off the scroll: 0 at the head, then 1 for each
      tier, holding at each and changing in the middle half of the gap between
      two, as the journey's stops do. */
@@ -2620,7 +2658,7 @@ gsap.utils.toArray('.slide-right').forEach(function(el) {
      ends), landing on the standard's own frame. */
   var LEVEL = true, LEVEL_X = 0.0486, LEVEL_RIM = 1.02, LEVEL_FIT = 0.30, MARK_R = 50, LEVEL_Y = 0.686, LEVEL_ROW = 0.444, LEVEL_PAST = 0.077;
   var SQUASH_LEVEL = 0.07, SQUASH_LINE = 0.045, LEVEL_ROLL = -0.03, LEVEL_EASE = 40, LEVEL_SET = 32, STD_HOLD = 0.10, STD_MIN = 0.6, TIP_CLEAR = 12, ROW_CLEAR = 16;
-  var lvS = 1, lvX = 0, lvYA = 0, lvYB = 0, lvYC = 0, lvGap = -1, SD = [0, 1];
+  var lvS = 1, lvX = 0, lvYA = 0, lvYB = 0, lvYC = 0, lvGap = -1, SD = [0, 1], lvFar = 0, lvHd = 0;
   function levelOn() { return LEVEL && lvGap >= 0 && !!stdHead; }
   /* The dive's two easings. The level dive has its own: it lands on the
      standard's own frame, which is not far in, so pan and zoom go together;
@@ -2743,6 +2781,7 @@ gsap.utils.toArray('.slide-right').forEach(function(el) {
        are read from up there, and the dive runs in the gap before the
        assessment instead, so ck is handed that gap. */
     var over = ck >= 0 && !CORE_VIEW && overOn(), level = false;
+    routeOn = over;
     armK = 0; armDive = false;
     if (over) {
       var syO = window.pageYOffset || document.documentElement.scrollTop || 0;
@@ -2778,13 +2817,15 @@ gsap.utils.toArray('.slide-right').forEach(function(el) {
             /* A phone: the line waits above the words, comes down to meet
                the space between the outcomes a little before they are read,
                and stays in that space for as long as they are on the
-               screen, going out under the nav with them, so no word ever
-               crosses it. The two laws join where the ride's own rounding
-               begins, both at rest. */
-            var pickY = lvYB + PH_LV_PICK, outY = NAV - PH_LV_OUT, gMeet = pickY + PH_LV_EASE, gFar = window.innerHeight + PH_LV_LEAD;
-            /* With motion reduced it is placed in the space once, when the
-               outcomes are read, and from then on only moves with the page. */
-            if (reduce.matches) { lk = gsO <= lvYB ? 1 : 0; lvY = lk ? Math.max(outY, gsO) : lvYA; }
+               screen, going out under the nav with them. On the way down it
+               passes behind the head's dark and the first outcome's. The two
+               laws join where the ride's own rounding begins, both at rest. */
+            var pickY = lvYB + PH_LV_PICK, outY = NAV - PH_LV_OUT, gMeet = pickY + PH_LV_EASE, gFar = Math.max(gMeet + 1, lvFar);
+            /* With motion reduced it never crosses a word: it waits above the
+               head and goes up with it, then is placed in the space once, when
+               the outcomes are read, and from then on only moves with the
+               page. */
+            if (reduce.matches) { lk = gsO <= lvYB ? 1 : 0; lvY = Math.max(outY, lk ? gsO : Math.min(lvYA, gsO - lvHd - PH_LV_CLEAR)); }
             else if (gsO >= gMeet) { lk = smooth((gFar - gsO) / Math.max(1, gFar - gMeet)); lvY = lvYA + (pickY - lvYA) * lk; }
             else { lk = 1; lvY = ride(gsO, outY, pickY, LEVEL_SET, PH_LV_EASE); }
             sqA = phSqA; sqB = phSqB; leanK = lk;
@@ -2816,7 +2857,7 @@ gsap.utils.toArray('.slide-right').forEach(function(el) {
          From the level view it lands on the standard's own frame, and the
          view opens behind the zoom, so the disc is still thin while the last
          of the outcomes leaves the top of the column above it. */
-      if (level) { pan = zoom = smooth(ck); dS = s3S; dX = s3X; dY = s3Y; squash += (SQUASH_CENTRE - squash) * smooth((ck - 0.15) / 0.85); rollNow *= 1 - pan; }
+      if (level) { pan = zoom = smooth(ck); dS = s3S; dX = s3X; dY = s3Y + (narrow.matches ? PH_S3_RH : 0); squash += (SQUASH_CENTRE - squash) * smooth((ck - 0.15) / 0.85); rollNow *= 1 - pan; }
       else if (over) { dS = asS; dX = asX; dY = asY; squash += (SQUASH_CENTRE - squash) * pan; }
       if (over && ck >= 1) squash = SQUASH_CENTRE;
       camX += (dX - camX) * (level && !narrow.matches ? lvPanX(ck) : pan); camY += (dY - camY) * pan;
@@ -2845,7 +2886,9 @@ gsap.utils.toArray('.slide-right').forEach(function(el) {
          the disc was by the two outcomes, and leaves with it. */
       if (level && ck >= 1) {
         /* On a phone the core does not draw back: it stands above the
-           standard's head and leaves with it. */
+           standard's head and leaves with it, picked up as the head comes to
+           be read (with motion reduced, it stands in its place until the
+           head is read and then moves with it). */
         var ph3 = narrow.matches;
         var u3 = ph3 ? 0 : Math.max(0, Math.min(1, (lyO - S3G[0]) / Math.max(1, S3G[1] - S3G[0])));
         if (reduce.matches) u3 = u3 >= 0.8 ? 1 : 0;
@@ -2853,7 +2896,7 @@ gsap.utils.toArray('.slide-right').forEach(function(el) {
         sysScale = s3S * Math.pow(S3_BACK, Math.pow(u3, 1.5));
         squash = SQUASH_CENTRE + (S3_SQ - SQUASH_CENTRE) * smooth((u3 - 0.4) / 0.6);
         camX = s3X;
-        if (ph3) camY = reduce.matches ? (s3Doc - syO < y3 - 2 * PH_S3_RH ? s3C : y3) : ride(s3Doc - syO, -1e6, y3, 0, PH_S3_RH);
+        if (ph3) camY = reduce.matches ? Math.min(y3, s3Doc - syO) : ride(s3Doc - syO, -1e6, y3 + PH_S3_RH, 0, PH_S3_RH);
         else camY = reduce.matches ? (u3 >= 1 ? s3C : y3) : ride(s3Doc - syO, -1e6, y3, 0, Math.max(1, y3 - s3C));
       }
       if (!over) rollNow = ROLL * (1 - smooth(ck / 0.8));   /* from above it is already off */
@@ -4002,7 +4045,7 @@ gsap.utils.toArray('.slide-right').forEach(function(el) {
   /* ── Pointing at a body ───────────────────────────────────────────────── */
   var tip = document.getElementById('fwx-tip');
   var tipId = tip.querySelector('.fwx-tip-id'), tipName = tip.querySelector('.fwx-tip-name');
-  var hot = null, hotTimer = null;
+  var hot = null, hotTimer = null, hotTouch = false, ptrType = '', tapX = 0, tapY = 0;
   function nearest(x, y) {
     /* Until the bang has thrown them out the thirteen are all at the centre,
        unseen, and a click on the orb must not count as a click on one. */
@@ -4036,7 +4079,10 @@ gsap.utils.toArray('.slide-right').forEach(function(el) {
     tip.classList.add('is-on');
     start();
   }
+  bg.addEventListener('pointerdown', function (ev) { ptrType = ev.pointerType; });
   bg.addEventListener('pointermove', function (ev) {
+    if (ev.pointerType === 'touch') return;   /* by touch a swipe is the scroll; a tap is handled below */
+    hotTouch = false;
     var rec = nearest(ev.clientX, ev.clientY);
     /* Cancelled first: a hover still waiting when the cursor has already
        moved off lit the body after the cursor had gone, which a swipe
@@ -4049,15 +4095,33 @@ gsap.utils.toArray('.slide-right').forEach(function(el) {
     if (!rec) { setHot(null); return; }
     hotTimer = setTimeout(function () { setHot(rec); }, rec ? 80 : 120);
   });
-  bg.addEventListener('pointerleave', function () { clearTimeout(hotTimer); setHot(null); });
+  bg.addEventListener('pointerleave', function (ev) { if (ev.pointerType === 'touch') return; clearTimeout(hotTimer); setHot(null); });
+  /* A tap on the words lets a body named by touch go as well. */
+  document.addEventListener('pointerdown', function (ev) { if (hotTouch && ev.target !== bg && !bg.contains(ev.target)) { hotTouch = false; setHot(null); } });
   bg.addEventListener('click', function (ev) {
     var rec = nearest(ev.clientX, ev.clientY);
+    if (ptrType === 'touch') {
+      /* By touch there is no hover. Past AI-13, where a body's place is far
+         up the page, a tap names the body first and a second tap on it goes
+         there; a tap anywhere else, or the page moving, lets it go. The
+         bodies on the line keep moving while the tip stays where it was
+         put, so the second tap counts for the named one when it lands
+         within 40px of that body or of the first tap, even if another has
+         come nearer. */
+      if (routeOn && hot && hotTouch) {
+        var hx = screenPos[hot.i * 2] - ev.clientX, hy = screenPos[hot.i * 2 + 1] - ev.clientY;
+        var fx = tapX - ev.clientX, fy = tapY - ev.clientY;
+        if (hx * hx + hy * hy < 40 * 40 || fx * fx + fy * fy < 40 * 40) rec = hot;
+      }
+      if (routeOn && rec !== hot) { setHot(rec); hotTouch = !!rec; tapX = ev.clientX; tapY = ev.clientY; return; }
+      hotTouch = false; setHot(null);
+    }
     if (!rec) return;
     if (TRAVEL) { jumpTo(stopY(rec.i)); return; }
     var step = document.getElementById(rec.area.id.toLowerCase());
     if (step) step.scrollIntoView({ behavior: reduce.matches ? 'auto' : 'smooth', block: 'center' });
   });
-  document.addEventListener('keydown', function (ev) { if (ev.key === 'Escape' && hot) setHot(null); });
+  document.addEventListener('keydown', function (ev) { if (ev.key === 'Escape' && hot) { hotTouch = false; setHot(null); } });
 
   /* ── Wiring ───────────────────────────────────────────────────────────── */
   var sraf = null;
@@ -4075,7 +4139,11 @@ gsap.utils.toArray('.slide-right').forEach(function(el) {
   }, { passive: true });
   document.documentElement.addEventListener('pointerleave', function () { ptr.on = false; });
   window.addEventListener('blur', function () { ptr.on = false; });
-  function onScroll() { if (bangOn && (window.pageYOffset || 0) > 2) bangEnd(); p = progress(); paint(); face(); }
+  function onScroll() {
+    if (bangOn && (window.pageYOffset || 0) > 2) bangEnd();
+    if (hotTouch) { hotTouch = false; setHot(null); }
+    p = progress(); paint(); face();
+  }
   window.addEventListener('scroll', onScroll, { passive: true });
   document.addEventListener('visibilitychange', function () { if (!document.hidden) { p = progress(); paint(); face(); } });
   window.addEventListener('pageshow', function () { measure(); p = progress(); paint(); face(); });

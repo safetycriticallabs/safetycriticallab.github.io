@@ -464,6 +464,7 @@ html {{ scroll-behavior: auto; }}
 </script>
 <script src="/footer.js" defer></script>
 <script src="/nav.js" defer></script>
+<script src="/area-key.js" defer></script>
 </body>
 </html>
 """

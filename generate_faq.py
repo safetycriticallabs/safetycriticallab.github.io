@@ -175,6 +175,7 @@ page = f"""<!DOCTYPE html>
 
 <script src="/footer.js" defer></script>
 <script src="/nav.js" defer></script>
+<script src="/area-key.js" defer></script>
 </body>
 </html>
 """

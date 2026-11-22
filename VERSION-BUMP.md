@@ -33,6 +33,9 @@ Surface as of 2026-09-15, measured before any v3.7 propagation:
 (b) grep -rn "v3\.6" *.html          and update each of the 25.
 
 (c) grep -rn -i "thirteen" *.html    and re-verify each of the 42 against the new count.
+    If an area was added, renamed or reworded, change the AREAS list in area-key.js too.
+    It is a copy of the AREAS array in framework.html and supplies the card that opens on
+    an area's name on other pages (added 2026-11-21). The two lists must read the same.
 
 (d) grep -rn "zenodo\.21924937" *.html *.json
     Update the standing identifier everywhere EXCEPT certificate-template.html and

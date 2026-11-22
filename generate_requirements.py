@@ -308,6 +308,7 @@ html {{ scroll-behavior: auto; }}
 
 <script src="/footer.js" defer></script>
 <script src="/nav.js" defer></script>
+<script src="/req-rail.js" defer></script>
 </body>
 </html>
 """

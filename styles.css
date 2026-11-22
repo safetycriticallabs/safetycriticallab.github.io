@@ -49,8 +49,9 @@
    1560. At 1440 and under it is the 1200 above. This rule lived on the home
    page alone from 2026-11-12, so the nav and the page narrowed on leaving it;
    it is here now so the nav, the heroes, the sections and the footer of every
-   page stand on the same two edges at every width. A reading column that sets
-   its own narrower measure keeps it. */
+   page stand on the same two edges at every width. The home page keeps its
+   own copy of this rule as well (index.html), so that it is wide even in a
+   browser still holding an older copy of this file: change both together. */
 @media (min-width: 1441px) {
   :root { --content-max: clamp(1200px, calc(100vw - 240px), 1560px); }
 }

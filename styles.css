@@ -44,6 +44,16 @@
   --fail-tint: #FEF5F5;
   --fail-line: var(--bad);
 }
+/* THE COLUMN ON A WIDE WINDOW (every page since 2026-11-21). On a window wider
+   than 1440 the one column grows with it, 120px clear on each side, up to
+   1560. At 1440 and under it is the 1200 above. This rule lived on the home
+   page alone from 2026-11-12, so the nav and the page narrowed on leaving it;
+   it is here now so the nav, the heroes, the sections and the footer of every
+   page stand on the same two edges at every width. A reading column that sets
+   its own narrower measure keeps it. */
+@media (min-width: 1441px) {
+  :root { --content-max: clamp(1200px, calc(100vw - 240px), 1560px); }
+}
 
 /* Base link colour. An anchor that no author rule colours falls through to the
    browser's own defaults, #0000EE unvisited and #551A8B visited, which is where

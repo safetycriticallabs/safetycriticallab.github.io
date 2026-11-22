@@ -40,6 +40,80 @@
   text-align: center;
 }
 .verify-eyebrow { margin-bottom: 20px; }
+
+/* THE CHECK, DRAWN (2026-11-21). The lookup below makes up to four checks,
+   and each one uncovers a ring of the seal: the lettered band when the
+   register is reached, the gold ring when the number is on it, the inner
+   field when its status is read, and the centre only when the certificate
+   stands. The seal is the real artwork, shown in three pieces cut along the
+   white gaps between its rings, each under a cover of the page's own cream;
+   a cover is drawn back from the top, clockwise, when its check passes. A
+   status that is not Valid leaves the inner field covered and draws its
+   three rings over the cover in dashes, and the centre stays covered.
+
+   THE NUMBERS ARE MEASURED FROM THE ARTWORK (img/SCL_Logo_watermark_cert.png,
+   800 by 1200). Its rings are not circles about one centre: each is a little
+   taller than wide and they sit at slightly different heights, so the cuts
+   and covers are ellipses placed ring by ring. The pieces are stacked from
+   the centre outward, each above the cover of the one inside it, so a cover
+   may run wide inward without hiding a ring that is already shown. That
+   holds because the checks always pass from the outside in. If the artwork
+   is replaced, measure it again. The three lengths below are the lengths of
+   the covers' outlines, rounded up. */
+.vs { display: flex; flex-direction: column; align-items: center; gap: 20px; margin: 0 auto 28px; text-align: left; }
+.vs[hidden] { display: none; }
+.vs-seal { flex: none; width: 200px; height: 200px; display: block; }
+.vs-cover { fill: none; stroke: #FAF9F5; }
+.vs-ring { transition: stroke-dashoffset 0.5s cubic-bezier(0.4, 0, 0.2, 1); }
+#vs-a { stroke-dasharray: 1862px 1862px; }
+#vs-b { stroke-dasharray: 1487px 1487px; }
+#vs-c { stroke-dasharray: 980px 980px; }
+.vs.has-a #vs-a { stroke-dashoffset: -1862px; }
+.vs.has-b #vs-b { stroke-dashoffset: -1487px; }
+.vs.has-c #vs-c { stroke-dashoffset: -980px; }
+.vs-core { fill: #FAF9F5; transition: opacity 0.4s ease; }
+.vs.has-core .vs-core { opacity: 0; }
+.vs-held { fill: none; stroke: #1B2B4B; stroke-width: 2.2; stroke-dasharray: 14px 12px; opacity: 0; transition: opacity 0.45s ease; }
+.vs.is-held .vs-held { opacity: 1; }
+.vs.is-held .vs-g-c { opacity: 0; }
+.vs-ghost { fill: none; stroke: rgba(12,34,66,0.22); stroke-width: 2; stroke-dasharray: 4px 9px; transition: opacity 0.3s ease; }
+.vs.has-a .vs-g-a, .vs.has-b .vs-g-b, .vs.has-c .vs-g-c, .vs.has-core .vs-g-core { opacity: 0; }
+.vs-word {
+  font-family: var(--sans); font-size: 50px; font-weight: 600; letter-spacing: 0.22em;
+  text-anchor: middle; fill: var(--warn-text); stroke: #FAF9F5; stroke-width: 16px; paint-order: stroke;
+  opacity: 0; transition: opacity 0.3s ease;
+}
+.vs.is-specimen .vs-word { opacity: 1; }
+/* The lines are as wide as the rows inside the record box below, so their
+   two edges stand on the same two lines down the card. */
+.vs-list { list-style: none; margin: 0; padding: 0; width: 100%; max-width: 372px; }
+.vs-list li {
+  display: flex; align-items: baseline; justify-content: space-between; gap: 18px;
+  padding: 9px 0; border-bottom: 1px solid rgba(46,109,180,0.08);
+  opacity: 0; transform: translateY(3px); transition: opacity 0.3s ease, transform 0.3s ease;
+}
+.vs-list li:last-child { border-bottom: none; }
+.vs-list li.is-in { opacity: 1; transform: none; }
+.vs-k {
+  font-family: var(--mono); font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
+  color: rgba(12,34,66,0.55); white-space: nowrap;
+}
+.vs-k::before { content: ''; display: inline-block; width: 6px; height: 6px; margin-right: 10px; border-radius: 50%; background: #0C2242; vertical-align: 1px; }
+.vs-v { font-family: var(--mono); font-size: 12.5px; color: var(--ink); text-align: right; }
+.vs-list li.is-ok .vs-k::before { background: var(--ok); }
+.vs-list li.is-ok .vs-v { color: var(--ok); }
+.vs-list li.is-warn .vs-k::before { background: var(--warn); }
+.vs-list li.is-warn .vs-v { color: var(--warn-text); }
+.vs-list li.is-bad .vs-k::before { background: var(--bad); }
+.vs-list li.is-bad .vs-v { color: var(--bad); }
+.verify-try { margin: 12px 0 0; font-size: 13px; line-height: 1.5; color: var(--ink-3); }
+.verify-try[hidden] { display: none; }
+@media (max-width: 640px) {
+  .vs-seal { width: 168px; height: 168px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .vs-ring, .vs-core, .vs-held, .vs-ghost, .vs-word, .vs-list li { transition: none; }
+}
 .verify-id-block {
   background: #FAF9F5;
   border: 1px solid var(--card-border);
@@ -254,6 +328,34 @@
       <div class="verify-id-value" id="verify-id"></div>
     </div>
 
+    <div class="vs" id="vs" hidden>
+      <svg class="vs-seal" viewBox="49.5 213.5 704 704" aria-hidden="true" focusable="false">
+        <defs>
+          <clipPath id="vs-in-c"><ellipse cx="401.5" cy="572" rx="219" ry="227"/></clipPath>
+          <clipPath id="vs-in-b"><path clip-rule="evenodd" d="M159,572a242.5,251 0 1,0 485,0a242.5,251 0 1,0 -485,0ZM182.5,572a219,227 0 1,0 438,0a219,227 0 1,0 -438,0Z"/></clipPath>
+          <clipPath id="vs-in-a"><path clip-rule="evenodd" d="M0,0H800V1200H0ZM159,572a242.5,251 0 1,0 485,0a242.5,251 0 1,0 -485,0Z"/></clipPath>
+        </defs>
+        <image href="/img/SCL_Logo_watermark_cert.png" width="800" height="1200" clip-path="url(#vs-in-c)"/>
+        <ellipse class="vs-core" cx="401" cy="568.5" rx="87" ry="91.5"/>
+        <ellipse class="vs-cover vs-ring" id="vs-c" cx="401.25" cy="570" rx="158" ry="153" stroke-width="150" transform="rotate(-90 401.25 570)"/>
+        <g class="vs-held">
+          <ellipse cx="401.5" cy="571.25" rx="211.25" ry="217.75"/>
+          <ellipse cx="401.5" cy="570" rx="152.5" ry="160"/>
+          <ellipse cx="401.5" cy="569.75" rx="108" ry="114"/>
+        </g>
+        <image href="/img/SCL_Logo_watermark_cert.png" width="800" height="1200" clip-path="url(#vs-in-b)"/>
+        <ellipse class="vs-cover vs-ring" id="vs-b" cx="401.5" cy="572" rx="240.5" ry="232" stroke-width="30" transform="rotate(-90 401.5 572)"/>
+        <image href="/img/SCL_Logo_watermark_cert.png" width="800" height="1200" clip-path="url(#vs-in-a)"/>
+        <circle class="vs-cover vs-ring" id="vs-a" cx="401.5" cy="566" r="296" stroke-width="116" transform="rotate(-90 401.5 566)"/>
+        <ellipse class="vs-ghost vs-g-a" cx="401.5" cy="565.5" rx="336" ry="341.5"/>
+        <ellipse class="vs-ghost vs-g-b" cx="401.5" cy="572" rx="232" ry="240.5"/>
+        <ellipse class="vs-ghost vs-g-c" cx="401.5" cy="571.25" rx="211.25" ry="217.75"/>
+        <ellipse class="vs-ghost vs-g-core" cx="401" cy="568.5" rx="82" ry="86.5"/>
+        <text class="vs-word" x="401.5" y="569" dy="0.35em">SPECIMEN</text>
+      </svg>
+      <ul class="vs-list" id="vs-list"></ul>
+    </div>
+
     <div class="verify-status" id="verify-status">Checking register</div>
 
     <p class="verify-body" id="verify-body">
@@ -274,6 +376,7 @@
         <input type="text" name="id" placeholder="SCL-CERT-YYYY-NNN" aria-label="Certificate number" maxlength="64" autocomplete="off" spellcheck="false">
         <button type="submit" class="btn btn-solid">Check</button>
       </div>
+      <p class="verify-try" id="verify-try" hidden>Or try the check with the specimen record, <a href="/verify"></a>.</p>
     </form>
 
     <div class="verify-actions">
@@ -417,6 +520,36 @@
     recordEl.appendChild(row);
   }
 
+  /* What the register says about a record: the word shown, its colour, the
+     sentence under it, and whether the certificate stands. The words are the
+     ones this page has always used; they were moved here unchanged so the
+     verdict and the drawing read them from one place. */
+  function judge(record) {
+    if (record.status === 'valid') {
+      var expired = record.expires && !isNaN(Date.parse(record.expires)) && Date.parse(record.expires) < Date.now();
+      if (expired) {
+        return { word: 'Expired', cls: 'is-warn', expired: true,
+          body: 'This certificate appears in the SCL register but has passed its validity date. Contact Safety Critical Labs for the current status.' };
+      }
+      return { word: 'Valid', cls: 'is-ok', stands: true,
+        body: 'This certificate number appears in the SCL register with status Valid. Confirm that the details below match the certificate in hand. The Certification Determination Document is the binding artifact and governs in case of conflict.' };
+    }
+    if (record.status === 'specimen') {
+      return { word: 'Specimen', cls: 'is-warn', specimen: true,
+        body: 'This number belongs to a specimen record. It demonstrates the certificate format and does not represent an issued certification.' };
+    }
+    if (record.status === 'suspended') {
+      return { word: 'Suspended', cls: 'is-warn',
+        body: 'This certificate is suspended and should not be relied on while the suspension is in effect. Contact Safety Critical Labs for the current status.' };
+    }
+    if (record.status === 'withdrawn') {
+      return { word: 'Withdrawn', cls: 'is-bad',
+        body: 'This certificate has been withdrawn and is no longer valid.' };
+    }
+    return { word: 'On record', cls: 'is-warn',
+      body: 'This certificate number appears in the SCL register. Contact Safety Critical Labs to confirm its current status.' };
+  }
+
   function renderRecord(record) {
     recordEl.textContent = '';
     addRow('System', record.system);
@@ -434,57 +567,127 @@
     }
     recordEl.hidden = false;
 
-    if (record.status === 'valid') {
-      var expired = record.expires && !isNaN(Date.parse(record.expires)) && Date.parse(record.expires) < Date.now();
-      if (expired) {
-        setStatus('Expired', 'is-warn');
-        bodyEl.textContent = 'This certificate appears in the SCL register but has passed its validity date. Contact Safety Critical Labs for the current status.';
-      } else {
-        setStatus('Valid', 'is-ok');
-        bodyEl.textContent = 'This certificate number appears in the SCL register with status Valid. Confirm that the details below match the certificate in hand. The Certification Determination Document is the binding artifact and governs in case of conflict.';
-      }
-    } else if (record.status === 'specimen') {
-      setStatus('Specimen', 'is-warn');
-      bodyEl.textContent = 'This number belongs to a specimen record. It demonstrates the certificate format and does not represent an issued certification.';
-    } else if (record.status === 'suspended') {
-      setStatus('Suspended', 'is-warn');
-      bodyEl.textContent = 'This certificate is suspended and should not be relied on while the suspension is in effect. Contact Safety Critical Labs for the current status.';
-    } else if (record.status === 'withdrawn') {
-      setStatus('Withdrawn', 'is-bad');
-      bodyEl.textContent = 'This certificate has been withdrawn and is no longer valid.';
-    } else {
-      setStatus('On record', 'is-warn');
-      bodyEl.textContent = 'This certificate number appears in the SCL register. Contact Safety Critical Labs to confirm its current status.';
-    }
+    var j = judge(record);
+    setStatus(j.word, j.cls);
+    bodyEl.textContent = j.body;
     window.SCL_VERIFY_RECORD = record;
     document.getElementById('verify-file').hidden = false;
   }
+
+  /* THE CHECK, DRAWN (2026-11-21). What the register answers is worked out at
+     once, as it always was. It is then shown one check at a time: each step
+     uncovers a ring of the seal and writes its line beside it, and the
+     verdict, the sentence and the record follow the last one. If the drawing
+     fails in any way the verdict is still given, and with motion turned off
+     there is no wait. */
+  var vs = document.getElementById('vs'), vsList = document.getElementById('vs-list');
+  var still = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+  var STEP = 520;
+  function draw(cls) { if (vs) vs.classList.add(cls); }
+  function line(label, value, cls) {
+    if (!vsList) return;
+    var li = document.createElement('li'), k = document.createElement('span'), v = document.createElement('span');
+    if (cls) li.className = cls;
+    k.className = 'vs-k';
+    k.textContent = label;
+    v.className = 'vs-v';
+    v.textContent = value;
+    li.appendChild(k);
+    li.appendChild(v);
+    vsList.appendChild(li);
+    void li.offsetWidth;
+    li.classList.add('is-in');
+  }
+  function play(steps, verdict) {
+    var i = 0, said = false;
+    function say() { if (said) return; said = true; verdict(); }
+    function next() {
+      if (i >= steps.length) { say(); return; }
+      try { steps[i](); } catch (e) {}
+      i++;
+      setTimeout(next, still ? 0 : STEP);
+    }
+    try { if (vs && steps.length) vs.hidden = false; next(); } catch (e) { say(); }
+  }
+  /* A way to try the check with nothing in hand: the register's own specimen
+     record, if it holds one. */
+  function offerSpecimen(registry) {
+    var host = document.getElementById('verify-try'), spec = null;
+    (registry.certificates || []).forEach(function (r) { if (!spec && r && r.id && r.status === 'specimen') spec = r; });
+    if (!host || !spec) return;
+    var a = host.querySelector('a');
+    a.textContent = spec.id;
+    a.href = '/verify?id=' + encodeURIComponent(spec.id);
+    host.hidden = false;
+  }
+  /* The artwork is fetched before the first ring is uncovered, so a ring is
+     never drawn back from nothing. It is not waited on for long. */
+  var sealReady = new Promise(function (ready) {
+    var im = new Image();
+    im.onload = im.onerror = function () { ready(); };
+    im.src = '/img/SCL_Logo_watermark_cert.png';
+    setTimeout(ready, 1500);
+  });
 
   fetch('/registry.json', { cache: 'no-store' })
     .then(function (res) {
       if (!res.ok) throw new Error('HTTP ' + res.status);
       return res.json();
     })
+    .then(function (registry) { return sealReady.then(function () { return registry; }); })
     .then(function (registry) {
+      var record = null, verdict, steps = [];
+      if (id) {
+        (registry.certificates || []).forEach(function (r) {
+          if (r && r.id && String(r.id).toUpperCase() === id.toUpperCase()) record = r;
+        });
+      }
+      /* The verdict first, exactly as before. */
       if (!id) {
         var count = (registry.register && typeof registry.register.issued_count === 'number')
           ? registry.register.issued_count : 0;
-        setStatus('Register live');
-        bodyEl.textContent = 'The register is live. Certificates issued to date: ' + count + '. Issued certificates appear here upon publication.';
-        return;
-      }
-      var record = null;
-      (registry.certificates || []).forEach(function (r) {
-        if (r && r.id && String(r.id).toUpperCase() === id.toUpperCase()) record = r;
-      });
-      if (record) {
-        renderRecord(record);
+        verdict = function () {
+          setStatus('Register live');
+          bodyEl.textContent = 'The register is live. Certificates issued to date: ' + count + '. Issued certificates appear here upon publication.';
+          offerSpecimen(registry);
+        };
+      } else if (record) {
+        verdict = function () { renderRecord(record); };
       } else {
-        setStatus('No record', 'is-bad');
-        bodyEl.textContent = 'No certificate with this number appears in the SCL register. Check the number as printed on the certificate, or contact Safety Critical Labs.';
+        verdict = function () {
+          setStatus('No record', 'is-bad');
+          bodyEl.textContent = 'No certificate with this number appears in the SCL register. Check the number as printed on the certificate, or contact Safety Critical Labs.';
+          offerSpecimen(registry);
+        };
       }
+      /* Then the checks that led to it, one ring to a check. With no number
+         given nothing has been checked against the register, so nothing is
+         drawn and the page says only that the register is live. */
+      try {
+        if (id) steps.push(function () { draw('has-a'); line('Register', 'Live'); });
+        if (record) {
+          var j = judge(record);
+          steps.push(function () { draw('has-b'); line('Certificate number', 'On the register'); });
+          steps.push(function () {
+            if (j.specimen) draw('is-specimen');
+            if (record.status === 'valid') draw('has-c'); else draw('is-held');
+            if (j.stands && !record.expires) draw('has-core');
+            line('Status', j.expired ? 'Valid' : j.word, j.expired ? '' : j.cls);
+          });
+          if (record.status === 'valid' && record.expires) {
+            steps.push(function () {
+              if (j.stands) draw('has-core');
+              line('Valid through', record.expires, j.expired ? 'is-warn' : '');
+            });
+          }
+        } else if (id) {
+          steps.push(function () { line('Certificate number', 'No record', 'is-bad'); });
+        }
+      } catch (e) { steps = []; }
+      play(steps, verdict);
     })
     .catch(function () {
+      try { if (vs && id) { vs.hidden = false; line('Register', 'Unavailable', 'is-warn'); } } catch (e) {}
       setStatus('Register unavailable', 'is-warn');
       bodyEl.textContent = 'The register could not be loaded. Certificate authenticity can be confirmed by request. Reference the certificate number above and contact Safety Critical Labs.';
     });

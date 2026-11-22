@@ -820,12 +820,9 @@
      page; --page-gut is the edge gutter on narrow screens. Was a mismatched
      1080 / 1200 / 1280 before. */
   :root { --page-gut: 40px; }   /* the column itself is --content-max in styles.css */
-  /* On a window wider than 1440 the home page's column grows with it, 120px
-     clear on each side, up to the 1560 the tiles already open to. At 1440
-     and under it is the shared 1200. */
-  @media (min-width: 1441px) {
-    :root { --content-max: clamp(1200px, calc(100vw - 240px), 1560px); }
-  }
+  /* The column grows on a window wider than 1440, up to the 1560 the tiles
+     already open to. That rule was written here for the home page alone; it
+     moved to styles.css on 2026-11-21 so every page follows it. */
   /* Phones: 24px, which is what the hero, sections and footer use on every inner
      page (styles.css 533 to 539). The band below used to keep its own 24 while
      the hero, cards and footer held 40, so the home had two left edges. */

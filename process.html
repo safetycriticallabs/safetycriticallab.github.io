@@ -61,7 +61,9 @@
   display: block;
 }
 
-.phases-detail { display: flex; flex-direction: column; gap: 0; }
+/* The phases are read as prose, so they keep the 1200 measure they had when
+   the column grows on a wide window (styles.css, 2026-11-21). */
+.phases-detail { display: flex; flex-direction: column; gap: 0; max-width: 1200px; }
 .phase-block { padding: 48px 0; border-top: 1px solid var(--card-border); }
 .phase-block:first-child { border-top: none; padding-top: 0; }
 .phase-header { display: flex; gap: 20px; align-items: flex-start; margin-bottom: 24px; }

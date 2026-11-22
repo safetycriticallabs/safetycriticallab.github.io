@@ -2018,6 +2018,106 @@
     .nr-statement .nr-all span { display: inline-block; }
   }
 </style>
+<!-- THE WAY INTO THE FRAMEWORK PAGE (2026-11-21). The framework tile is a
+     recording of that page's opening, so going to it the tile itself grows
+     into the page's sky, and coming back the sky closes into the tile again,
+     with the nav changing ground where it stands. The browser does the work
+     (cross-document view transitions: Chrome and Edge 126, Safari 18.2, phones
+     included). A browser without them loads the pages as it always has, and
+     so does a visitor who has asked for reduced motion. Only this page and
+     framework.html opt in; that page carries the other half of this block. -->
+<style>
+@media (prefers-reduced-motion: no-preference) {
+  @view-transition { navigation: auto; }
+}
+/* Nothing here applies outside a journey: the script below sets html.vt-go for
+   the length of one arrival or one departure, and html.vt-fw with it when the
+   tile is on the screen to take part. */
+html.vt-go .global-nav { view-transition-name: site-nav; }
+html.vt-fw #sc-fw { view-transition-name: fw-sky; }
+
+/* COMING BACK. These rules set the journey into this page; the journey out
+   is set by framework.html. The box closes from the sky's place to the
+   tile's, and takes on the tile's rounded corners on the way. Inside it the
+   sky is cropped to the box about its centre, where the mark is, and stays
+   underneath to the end, so the page behind is never seen through the two.
+   The tile's picture keeps its own shape as it comes up over the sky, so on a
+   phone, where the sky is tall and the tile is wide, nothing is stretched.
+   The clip matters: without it the cropped part of the sky is drawn outside
+   the box. */
+html.vt-fw::view-transition-group(fw-sky) { animation-duration: 0.6s; animation-timing-function: cubic-bezier(0.4, 0, 0.1, 1); }
+html.vt-fw::view-transition-image-pair(fw-sky) { overflow: hidden; overflow: clip; animation: vt-fw-round 0.6s cubic-bezier(0.4, 0, 0.1, 1) both; }
+@keyframes vt-fw-round { from { border-radius: 0; } to { border-radius: var(--radius-card, 14px); } }
+html.vt-fw::view-transition-old(fw-sky),
+html.vt-fw::view-transition-new(fw-sky) { width: 100%; height: 100%; mix-blend-mode: normal; }
+html.vt-fw::view-transition-old(fw-sky) { object-fit: cover; animation: none; opacity: 1; }
+html.vt-fw::view-transition-new(fw-sky) { object-fit: contain; animation: vt-fw-tile-in 0.6s linear both; }
+@keyframes vt-fw-tile-in { 0%, 36% { opacity: 0; } 82%, 100% { opacity: 1; } }
+/* No sky came with it (the framework page was left at its foot, where its
+   sky has closed): the tile simply arrives with the page. */
+html.vt-fw::view-transition-new(fw-sky):only-child { animation: vt-fw-arrive 0.25s ease both; }
+@keyframes vt-fw-arrive { from { opacity: 0; } }
+/* The nav stays on top: a tile that lands part way under it must not be
+   drawn over it. */
+html.vt-go::view-transition-group(site-nav) { z-index: 1; }
+/* The page is there at once behind the sky as it lifts. */
+html.vt-fw::view-transition-old(root),
+html.vt-fw::view-transition-new(root) { animation-duration: 0.2s; }
+</style>
+<script>
+(function () {
+  var de = document.documentElement;
+  /* The tile takes part only while it is on the screen, under the nav. From
+     further up or down the page it would fly in from off the screen. */
+  function tileShows() {
+    var t = document.getElementById('sc-fw');
+    if (!t) return false;
+    var r = t.getBoundingClientRect(), H = window.innerHeight || de.clientHeight;
+    return r.width > 0 && r.bottom > 72 + 24 && r.top < H - 24;
+  }
+  function clear() { de.classList.remove('vt-go', 'vt-fw'); }
+  /* A journey that is cut short (a second click, a resized window) ends by
+     rejecting this promise, and a rejection nobody is listening for is
+     written to the console as an error. */
+  function quiet(vt) { if (vt.ready && vt.ready.catch) vt.ready.catch(function () {}); }
+  /* The two pages that take part: this one and the framework page. */
+  function takesPart(url) {
+    try {
+      var p = new URL(url, location.href).pathname.replace(/\/+$/, '');
+      return p === '' || /^\/(index|framework)(\.html)?$/.test(p);
+    } catch (x) { return true; }
+  }
+  window.addEventListener('pagereveal', function (ev) {
+    clear();
+    try { sessionStorage.removeItem('scl-vt-alone'); } catch (x) {}
+    if (!ev.viewTransition) return;
+    quiet(ev.viewTransition);
+    de.classList.add('vt-go');
+    if (tileShows()) de.classList.add('vt-fw');
+    ev.viewTransition.finished.then(clear, clear);
+  });
+  window.addEventListener('pageswap', function (ev) {
+    if (!ev.viewTransition) return;
+    quiet(ev.viewTransition);
+    /* Bound for any other page there is nothing to carry, so no journey is
+       begun. Left alone, Chrome begins one, abandons it when the other page
+       turns out not to take part, and logs an error on that page. */
+    var to = ev.activation && ev.activation.entry && ev.activation.entry.url;
+    if (to && !takesPart(to)) { ev.viewTransition.skipTransition(); return; }
+    /* Word for the framework page when the tile is not coming, so it can
+       bring its sky up plainly, with nothing to grow from. If the word cannot
+       be left (storage turned off) that page keeps to its ordinary rules,
+       which are safe either way. */
+    var shows = tileShows();
+    try {
+      if (shows) sessionStorage.removeItem('scl-vt-alone');
+      else sessionStorage.setItem('scl-vt-alone', '1');
+    } catch (x) {}
+    de.classList.add('vt-go');
+    de.classList.toggle('vt-fw', shows);
+  });
+})();
+</script>
 </head>
 <body>
 <a class="skip-link" href="#main">Skip to content</a>

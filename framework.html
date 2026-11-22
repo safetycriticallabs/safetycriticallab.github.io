@@ -1193,6 +1193,149 @@ body.is-bare .fwx-hero::after { display: none; }
   .fwx-dark .failmode-card:hover, a.fwx-cell:hover { transform: none; }
 }
 </style>
+<!-- THE WAY IN FROM THE HOME PAGE (2026-11-21). The home page's framework tile
+     is a recording of this page's opening, so a visitor who comes from it sees
+     the tile itself grow into this sky, with the nav turning to night where it
+     stands, where before one page simply replaced the other. Going back, the
+     sky closes into the tile again. The browser does the work (cross-document
+     view transitions: Chrome and Edge 126, Safari 18.2, phones included). A
+     browser without them loads the page as it always has, and so does a
+     visitor who has asked for reduced motion. Only this page and the home page
+     opt in; index.html carries the other half of this block.
+     The link below holds the first drawing of the page until the sky's
+     element has been read, so the tile always has something to land on. -->
+<link rel="expect" href="#fw-showcase" blocking="render">
+<style>
+@media (prefers-reduced-motion: no-preference) {
+  @view-transition { navigation: auto; }
+}
+/* Nothing here applies outside a journey: the script below sets html.vt-go for
+   the length of one arrival or one departure, and html.vt-sky with it when
+   the sky is to travel.
+   The nav is its own object, so it keeps its place above whatever is moving
+   and changes ground where it stands. */
+html.vt-go .global-nav { view-transition-name: site-nav; }
+html.vt-sky #fw-showcase { view-transition-name: fw-sky; }
+/* The page's own script gives the sky its box. If the browser draws the page
+   before that script has run, this is the box it is about to be given. */
+html.vt-sky #fw-showcase:not(.is-live) { left: 0; top: 72px; width: 100%; height: calc(100% - 72px); }
+/* On a slow first visit the journey can end before that script has arrived.
+   Until it has, the hero's words stay down, as the script will hold them at
+   the top of the page anyway: left to themselves they showed the moment the
+   journey ended and were taken away again a second later. html.vt-wait is
+   set on arriving and lifted after four seconds whatever happens, so a
+   script that never arrives cannot keep the words hidden. */
+html.vt-wait:not(:has(#fw-showcase.is-live)) .fwx-copy:not(:focus-within) { opacity: 0; }
+
+/* ARRIVING. These rules set the journey into this page; the journey back is
+   set by index.html. The box grows from the tile's place to the sky's, and
+   loses the tile's rounded corners on the way. Inside it the tile's picture
+   keeps its own shape on a ground of the same night, so on a phone, where the
+   tile is wide and the sky is tall, nothing is stretched: the night spreads
+   above and below it. That picture stays whole underneath while the sky comes
+   up over it, so the page behind is never seen through the two. The sky is
+   cropped to the box about its centre, where the mark is. The clip matters:
+   without it the cropped part of the sky is drawn outside the box. */
+html.vt-sky::view-transition-group(fw-sky) { animation-duration: 0.7s; animation-timing-function: cubic-bezier(0.4, 0, 0.1, 1); }
+html.vt-sky::view-transition-image-pair(fw-sky) { overflow: hidden; overflow: clip; animation: vt-sky-square 0.7s cubic-bezier(0.4, 0, 0.1, 1) both; }
+/* The box has its own night from almost the first frame, so nothing shows
+   through it wherever the two pictures leave a gap. */
+@keyframes vt-sky-square {
+  from { border-radius: var(--radius-card, 14px); background-color: rgba(5, 14, 28, 0); }
+  12% { background-color: #050E1C; }
+  to { border-radius: 0; background-color: #050E1C; }
+}
+html.vt-sky::view-transition-old(fw-sky),
+html.vt-sky::view-transition-new(fw-sky) { width: 100%; height: 100%; mix-blend-mode: normal; }
+/* The night behind the tile's picture is a shade lighter above it than below:
+   the recording's own sky is lighter along its top edge than the page's, and
+   a flat ground drew a line across the screen there on a phone. */
+html.vt-sky::view-transition-old(fw-sky) { object-fit: contain; background: linear-gradient(to bottom, #0C1325 30%, #050E1C 70%); animation: none; opacity: 1; }
+html.vt-sky::view-transition-new(fw-sky) { object-fit: cover; animation: vt-sky-in 0.7s linear both; }
+@keyframes vt-sky-in { 0%, 10% { opacity: 0; } 62%, 100% { opacity: 1; } }
+/* The home page holds still behind the tile, and the last of it, the edge the
+   sky has not yet covered, turns to night as it closes over. Held to the end
+   on purpose: cream fading to night passes through a flat grey, and by then
+   only a few pixels of it are left to show. */
+html.vt-sky::view-transition-old(root) { animation: none; opacity: 1; }
+html.vt-sky::view-transition-new(root) { animation: vt-night-in 0.7s linear both; mix-blend-mode: normal; }
+@keyframes vt-night-in { 0%, 70% { opacity: 0; } 100% { opacity: 1; } }
+/* The nav turns to night as the sky reaches it, so the night is seen to take
+   it, and quickly: its cream and its night meet in a grey that its words are
+   hard to read on. */
+html.vt-sky::view-transition-group(site-nav),
+html.vt-sky::view-transition-old(site-nav),
+html.vt-sky::view-transition-new(site-nav) { animation-duration: 0.34s; animation-delay: 0.36s; }
+/* NO TILE CAME (html.vt-alone). It was off the screen when the visitor left
+   the home page, by the nav's own link from further down, so there is
+   nothing to grow from: the sky comes up over the page where it stands and
+   the nav turns with it. Kept after the rules above, which it replaces. */
+html.vt-alone::view-transition-image-pair(fw-sky) { animation: none; }
+html.vt-alone::view-transition-new(fw-sky),
+html.vt-alone::view-transition-new(root) { animation: vt-alone-in 0.45s ease both; }
+@keyframes vt-alone-in { from { opacity: 0; } }
+html.vt-alone::view-transition-group(site-nav),
+html.vt-alone::view-transition-old(site-nav),
+html.vt-alone::view-transition-new(site-nav) { animation-duration: 0.45s; animation-delay: 0s; }
+/* And it stays on top: a tile that sets out from part way under the nav must
+   not be drawn over it. */
+html.vt-go::view-transition-group(site-nav) { z-index: 1; }
+</style>
+<script>
+(function () {
+  var de = document.documentElement;
+  function clear() { de.classList.remove('vt-go', 'vt-sky', 'vt-alone'); }
+  /* A journey that is cut short (a second click, a resized window) ends by
+     rejecting this promise, and a rejection nobody is listening for is
+     written to the console as an error. */
+  function quiet(vt) { if (vt.ready && vt.ready.catch) vt.ready.catch(function () {}); }
+  /* The two pages that take part: this one and the home page. */
+  function takesPart(url) {
+    try {
+      var p = new URL(url, location.href).pathname.replace(/\/+$/, '');
+      return p === '' || /^\/(index|framework)(\.html)?$/.test(p);
+    } catch (x) { return true; }
+  }
+  /* Arriving. The sky travels only while it has the screen to itself, which
+     is the top of the page, where the words wait. Further down there is text
+     over it that would appear all at once when the journey ended. */
+  window.addEventListener('pagereveal', function (ev) {
+    clear();
+    if (!ev.viewTransition) return;
+    quiet(ev.viewTransition);
+    /* The home page leaves word when its tile is not coming (see its script). */
+    var alone = false;
+    try { alone = sessionStorage.getItem('scl-vt-alone') === '1'; sessionStorage.removeItem('scl-vt-alone'); } catch (x) {}
+    de.classList.add('vt-go', 'vt-wait');
+    if ((window.pageYOffset || 0) <= 4) {
+      de.classList.add('vt-sky');
+      if (alone) de.classList.add('vt-alone');
+    }
+    setTimeout(function () { de.classList.remove('vt-wait'); }, 4000);
+    ev.viewTransition.finished.then(clear, clear);
+  });
+  /* Leaving. The sky goes back into the tile only while it is whole: by the
+     foot of the page the script has closed it up and faded it. */
+  window.addEventListener('pageswap', function (ev) {
+    if (!ev.viewTransition) return;
+    quiet(ev.viewTransition);
+    /* Bound for any other page there is nothing to carry, so no journey is
+       begun. Left alone, Chrome begins one, abandons it when the other page
+       turns out not to take part, and logs an error on that page. */
+    var to = ev.activation && ev.activation.entry && ev.activation.entry.url;
+    if (to && !takesPart(to)) { ev.viewTransition.skipTransition(); return; }
+    try { sessionStorage.removeItem('scl-vt-alone'); } catch (x) {}
+    var layer = document.getElementById('fwx-obj'), sky = document.getElementById('fw-showcase'), whole = false;
+    if (layer && sky) {
+      whole = layer.style.visibility !== 'hidden' && !(parseFloat(layer.style.opacity) < 0.99) &&
+              !sky.classList.contains('is-closing') &&
+              sky.getBoundingClientRect().height > window.innerHeight - 72 - 2;
+    }
+    de.classList.add('vt-go');
+    de.classList.toggle('vt-sky', whole);
+  });
+})();
+</script>
 </head>
 <body>
 <a class="skip-link" href="#main">Skip to content</a>

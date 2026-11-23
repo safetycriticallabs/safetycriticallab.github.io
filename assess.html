@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#FAF9F5">
+<meta name="theme-color" content="#050E1C">
 <title>Readiness Assessment | Safety Critical Labs</title>
 <meta name="description" content="Evaluate your AI system's certification readiness against the SCL framework. Free self assessment covering all thirteen requirement areas.">
 <meta property="og:title" content="Readiness Assessment | Safety Critical Labs">
@@ -27,29 +27,128 @@
 <style>
 /* ─── ASSESS PAGE ─────────────────────────────────────────── */
 
-/* Bracketed mono eyebrow + showcase title */
+/* THE PAGE IN THE SKY (2026-11-22). The whole page stands on the framework
+   page's night ground, from the first paint: nothing here waits on a class
+   or a script, so there is no cream first frame. The ground, the nav and
+   the footer are restated for night in this page's own block, the way
+   framework.html restates them in its own. These rules follow the shared
+   sheet's link and win on order; where the shared sheet says !important, so
+   do these. The page's words are light on the night, in the tones that page
+   uses for its own. */
+html, body { background: #050E1C; }
+body { color: #FAF9F5; }
+
+/* The nav and the footer on the night. A copy of the block in framework.html
+   ("THE NAV AND THE FOOTER IN THE SCENE'S NIGHT"); change the two together.
+   The footer stands above the sky's layers (z-index 3), so the system and
+   the stars run out under it at the foot of the page. */
+.global-nav { background: #050E1C; }
+.global-nav .gn-text, .global-nav .gn-text em { color: #FAF9F5; }
+.global-nav .gn-text-abbr { color: #FAF9F5 !important; -webkit-text-fill-color: #FAF9F5 !important; }
+.global-nav .gn-wordmark:hover .gn-text, .global-nav .gn-wordmark:hover .gn-text em { color: #D6E2F2 !important; }
+.global-nav .gn-wordmark:hover .gn-text-abbr { color: #D6E2F2 !important; -webkit-text-fill-color: #D6E2F2 !important; }
+.global-nav .gn-links a, .global-nav .gn-dropdown-toggle, .global-nav .gn-search { color: rgba(250,249,245,0.82); }
+.global-nav .gn-links a.active, .global-nav .gn-dropdown-toggle.has-active { color: #FAF9F5 !important; }
+.global-nav .gn-search:hover { color: #FAF9F5; }
+@media (hover: hover) {
+  .global-nav .gn-links a:hover, .global-nav .gn-links a.active:hover, .global-nav .gn-dropdown-toggle:hover { color: #FAF9F5 !important; }
+}
+.global-nav .gn-cta { background: #FAF9F5 !important; color: #0C2242 !important; border-color: #FAF9F5 !important; }
+.global-nav .gn-cta:hover { background: #EBF1F8 !important; border-color: #EBF1F8 !important; color: #0C2242 !important; }
+.global-nav .gn-hamburger span { background: #FAF9F5; }
+.global-nav a:focus-visible, .global-nav button:focus-visible, .global-nav .gn-dropdown-toggle:focus-visible { outline: 2px solid #79A8D5; outline-offset: 3px; border-radius: 4px; }
+@media (min-width: 881px) {
+  .global-nav .gn-dropdown-menu { background: rgba(5,14,28,0.97); border-color: rgba(250,249,245,0.14); box-shadow: 0 14px 34px rgba(0,0,0,0.45); }
+}
+@media (max-width: 880.98px) {
+  .global-nav .gn-links { background: #050E1C; border-top-color: rgba(250,249,245,0.08); }
+  .global-nav .gn-links > li > a { color: #FAF9F5; border-bottom-color: rgba(250,249,245,0.1); }
+  .global-nav .gn-links > li > a:hover, .global-nav .gn-links > li > a:active { color: #D6E2F2; }
+  .global-nav .gn-dropdown-toggle { color: #FAF9F5; border-bottom-color: rgba(250,249,245,0.1); }
+  .global-nav .gn-dropdown-menu a { color: rgba(250,249,245,0.72) !important; }
+  .global-nav .gn-dropdown-menu a.active { color: #FAF9F5 !important; }
+}
+.site-footer { background: #050E1C; margin-top: 0; position: relative; z-index: 3; }
+
+/* ─── THE SKY ─────────────────────────────────────────────── */
+/* THE STARS BEHIND THE WORDS. One still canvas, fixed under the nav, drawn
+   by the script below from a fixed seed (and again only when the window
+   changes size), to the framework page's own recipe for its loose field:
+   small, and none brighter than 0.35, so the words over them keep their
+   contrast. It lies above the system and under the words, and leaves the
+   system's own box alone, because the system brings its own stars. */
+.as-stars {
+  position: fixed; left: 0; top: 72px; z-index: 1;
+  width: 100%; height: calc(100% - 72px);
+  display: block; pointer-events: none;
+}
 
 /* ─── ASSESSMENT TOOL ─────────────────────────────────────── */
+/* The tool's own tones for the night. The four answer colours are the
+   report's own, lightened to be read on the night ground; they are the ones
+   the system has always drawn its marks in. */
 .assess-section {
-  background: #FAF9F5;
-  padding: 32px 40px 120px;   /* 32 under the 72 nav: the drawing starts where it stays */
+  --lit: #FAF9F5;                      /* headings, names, a chosen answer */
+  --lit-2: rgba(250,249,245,0.80);     /* running words */
+  --lit-3: rgba(214,226,242,0.82);     /* labels and quiet words */
+  --line: rgba(250,249,245,0.16);      /* hairlines */
+  --ring: #79A8D5;                     /* the focus ring, as on the framework page */
+  --q-in: 92px;                        /* a question's words stand under its area's name: 8 + 14 + 12 + 46 + 12 */
+  position: relative;
+  padding: 32px 40px 0;   /* 32 under the 72 nav: the system starts where it stays */
   min-height: 60vh;
+  /* The system runs past this box at its foot. clip, never hidden: clip does
+     not make a scroll container, so the system still sticks to the window
+     and Safari has no box here to latch a trackpad gesture onto (the note on
+     html in styles.css). */
+  overflow: clip;
+  color-scheme: dark;     /* the domain field opens its own menu dark */
 }
+/* The foot of the sky. Where the page ends, the system's lowest orbits and
+   the stars run out into the night above the footer and are not cut by its
+   edge. This lies over the system and the stars and under the words, and it
+   is shorter than the room the system's holder keeps under the mark, so it
+   never dims the mark. */
+.assess-section::after {
+  content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 110px; z-index: 1;
+  background: linear-gradient(rgba(5,14,28,0), rgba(5,14,28,0.6) 55%, #050E1C);
+  pointer-events: none;
+}
+.assess-section .is-strong { --rs-c: #6FE89B; --rs-t: #6FE89B; }
+.assess-section .is-partial { --rs-c: #FFC64F; --rs-t: #FFC64F; }
+.assess-section .is-gap { --rs-c: #FF7D7B; --rs-t: #FF7D7B; }
+.assess-section .is-na { --rs-c: #A9B8CD; --rs-t: #A9B8CD; }
+
 /* THE SYSTEM BESIDE THE QUESTIONS (2026-11-22). The tool is two columns in
    the site's one content column: the requirement areas drawn as a system on
-   the left, the questions on the right, and after the last step the result in
-   the questions' place. The drawing keeps its place while the right-hand
-   column scrolls. Its width is a share of the column, held to what the
-   window's height can show whole (the drawing is 500 by 640, with its key
-   under it), and the questions take the rest. At 880.98px and under, the
-   bound the nav folds at, the drawing is a strip that rides under the nav,
-   above the questions.
+   the left, the questions on the right, and after the last step the result
+   in the questions' place. The system keeps its place while the right-hand
+   column scrolls.
 
-   THE PAGE OPENS ON THE SYSTEM (2026-11-22). This page has no opening band of
-   its own. The breadcrumb, the headline and the lead stand at the top of the
-   right-hand column, so the whole drawing is beside them on the first screen.
-   The grid starts 104 from the top of the window, which is where the drawing
-   sticks, so the drawing does not move from the first screen to the result. */
+   THE PAGE OPENS ON THE SYSTEM. There is no opening band. The breadcrumb,
+   the headline and the lead stand at the top of the right-hand column,
+   beside the system, on the first screen. The grid starts 104 from the top
+   of the window, which is where the system's holder sticks, so the system
+   does not move from the first screen to the result.
+
+   NO BOX (2026-11-22). The system is not in a card. Its holder (.as-side)
+   is a place and a size and nothing more: as wide as the panel it replaced,
+   and as tall as the system from its last body down to a little under its
+   mark. The drawing is laid over that holder a fifth larger than the holder
+   is wide and is let run past it: off the window to the left and at the
+   foot, under the nav at the top. To the right its orbits give way to the
+   night before the words begin; that is drawn inside the drawing itself
+   (the script's "edge"), not with a CSS mask, which Safari would repaint
+   through on every frame of an answer's arrival. Nothing here is
+   overflow: hidden.
+
+   The holder's width (--p) is that panel's: a share of the column, held to
+   what the window's height can show. Everything the drawing needs is worked
+   from it, in CSS, so the system needs no measuring to stand where it
+   should: the mark at 0.185 of --p from the holder's left edge, the last
+   body 60 below the holder's top (less in a very short window). At 880.98px
+   and under, the bound the nav folds at, the system is a strip that rides
+   under the nav, above the questions. */
 .as-grid {
   --as-gap: clamp(40px, 5vw, 72px);
   max-width: var(--content-max);
@@ -60,48 +159,29 @@
   column-gap: var(--as-gap);
   align-items: start;
 }
-.as-head { grid-column: 2; grid-row: 1; min-width: 0; margin: 0 0 56px; }
+/* The words stand above the stars (2 over 1) and the stars above the system (1 over 0). */
+.as-head { grid-column: 2; grid-row: 1; min-width: 0; margin: 0 0 56px; position: relative; z-index: 2; }
+.as-main { grid-column: 2; grid-row: 2; min-width: 0; padding-bottom: 120px; position: relative; z-index: 2; }
+.as-side { grid-column: 1; grid-row: 1 / span 2; }
 /* The headline's type is the shared opening band's (.inner-hero h1 in
    styles.css), repeated here because that rule is scoped to the band. Change
    the two together. The breadcrumb and the lead take their type from their
-   own classes there. */
+   own classes there, and their colours for the night from here. */
 .as-head h1 {
   margin: 0;
   font-family: var(--sans);
   font-size: clamp(38px, 4.5vw, 60px);
   font-weight: 600; line-height: 1.05;
-  color: #0C2242; letter-spacing: -0.025em;
+  color: var(--lit); letter-spacing: -0.025em;
   text-wrap: balance;
 }
-.as-head .inner-hero-lead { margin: 28px 0 0; max-width: 600px; }
-.as-side {
-  grid-column: 1; grid-row: 1 / span 2;
-  position: sticky; top: 104px;   /* the fixed nav is 72 tall */
-  width: max(240px, min(calc((var(--content-max) - 72px) * 0.4255), calc((100vw - 80px - var(--as-gap)) * 0.4255), calc((100vh - 190px) * 0.78125)));
-}
-.as-main { grid-column: 2; grid-row: 2; min-width: 0; }
-
-/* Progress bar */
-.assess-progress {
-  display: flex; align-items: center; gap: 16px;
-  margin-bottom: 48px;
-}
-.assess-progress-bar {
-  flex: 1; height: 4px;
-  background: var(--rule); border-radius: 2px;
-  overflow: hidden;
-}
-.assess-progress-fill {
-  height: 100%; background: var(--blue);
-  border-radius: 2px;
-  transition: width 0.4s ease;
-  width: 0%;
-}
-.assess-progress-label {
-  font-family: var(--sans); font-size: 12px;
-  font-weight: 500; color: var(--ink-3);
-  white-space: nowrap;
-}
+.as-head .inner-hero-breadcrumb { color: var(--lit-3); }
+.as-head .inner-hero-breadcrumb a { color: var(--lit-3); }
+.as-head .inner-hero-breadcrumb a:hover { color: var(--lit); }
+.as-head .inner-hero-breadcrumb span { color: rgba(214,226,242,0.56); }
+.as-head .inner-hero-lead { margin: 28px 0 0; max-width: 600px; color: var(--lit-2); border-left-color: rgba(214,226,242,0.45); }
+.assess-section a:focus-visible, .assess-section .btn:focus-visible { outline: 2px solid var(--ring); outline-offset: 3px; border-radius: 4px; }
+.assess-section .btn:focus-visible { border-radius: 8px; }
 
 /* Step container */
 .assess-step {
@@ -112,65 +192,82 @@
 }
 
 /* Step header */
-.step-eyebrow { margin-bottom: 16px; }   /* type from the shared label rule in styles.css */
+.step-eyebrow { margin-bottom: 16px; color: var(--lit-3); }   /* type from the shared label rule in styles.css */
 .step-title {
   font-family: var(--sans);
   font-size: clamp(24px, 3vw, 34px);
-  font-weight: 600; color: var(--ink);
+  font-weight: 600; color: var(--lit);
   line-height: 1.15; letter-spacing: -0.02em;
   margin-bottom: 12px;
 }
+.step-title:focus-visible { outline: 2px solid var(--ring); outline-offset: 4px; border-radius: 4px; }
 .step-desc {
-  font-size: 15px; color: var(--ink-2);
+  font-size: 15px; color: var(--lit-2);
   line-height: 1.75; font-weight: 300;
   margin-bottom: 36px;
   max-width: 600px;
 }
 
 /* Provisional classification hint (steps 4 and 5) */
-/* .tier-hint carries the shared .note-aside recipe; only its layout is local. */
-.tier-hint { display: none; margin-bottom: 32px; max-width: 600px; }
+/* .tier-hint carries the shared .note-aside recipe; its layout is local, and
+   so are its tones for the night. */
+.tier-hint {
+  display: none; margin-bottom: 32px; max-width: 600px;
+  background: rgba(121,168,213,0.10); border-color: rgba(250,249,245,0.12); border-left-color: var(--ring);
+  color: var(--lit-2);
+}
 
-/* Question card */
+/* A QUESTION IS A RULED ROW. No card: a hairline above, the words on the
+   night. An area's question is set as that area's row in the result: its
+   mark, its number, its name, and once it is answered the word for how. The
+   mark is the one the system draws on that area's orbit, and the two change
+   together. The question and its answers stand under the name. */
 .q-card {
-  background: #FAF9F5;
-  border: 1px solid var(--card-border);
-  border-radius: var(--radius-card);
-  padding: 28px 32px;
-  margin-bottom: 20px;
+  border-top: 1px solid var(--line);
+  padding: 22px 0 26px;
 }
 .q-label {
   font-size: 15px; font-weight: 500;
-  color: var(--ink); line-height: 1.5;
-  margin-bottom: 20px;
+  color: var(--lit); line-height: 1.5;
+  margin-bottom: 16px;
 }
+.q-head {
+  display: grid; grid-template-columns: 14px 46px minmax(0, 1fr) auto; column-gap: 12px; align-items: center;
+  padding: 0 8px; margin: 0 0 8px;
+}
+.q-mark { display: block; width: 14px; height: 14px; }
+.q-id { font-size: 11px; font-weight: 500; letter-spacing: 0.06em; white-space: nowrap; color: var(--lit-3); }
+.q-name { font-size: 17px; font-weight: 600; line-height: 1.3; letter-spacing: -0.005em; color: var(--lit); }
+.q-status { font-size: 10.5px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; white-space: nowrap; color: var(--rs-t); }
 .q-sublabel {
-  font-size: 13px; color: var(--ink-3);
-  line-height: 1.5; margin-top: 6px;
-  font-weight: 300;
+  margin: 0 0 0 var(--q-in);
+  font-size: 14px; color: var(--lit-2);
+  line-height: 1.55; font-weight: 300;
+  max-width: 540px;
 }
+.q-area .q-options { margin-left: var(--q-in); }
 
-/* Radio options */
+/* The answers */
 .q-options {
   display: flex; flex-direction: column; gap: 8px;
 }
 .q-option {
   display: flex; align-items: center; gap: 14px;
-  padding: 14px 18px;
-  border: 1px solid rgba(46,109,180,0.10);
+  padding: 12px 16px;
+  border: 1px solid var(--line);
   border-radius: 4px;
   cursor: pointer;
-  background: var(--cream-2);
+  background: rgba(250,249,245,0.03);
   position: relative;
   transition: border-color 0.2s, background 0.2s;
 }
 .q-option:hover {
-  border-color: rgba(46,109,180,0.3);
-  background: rgba(46,109,180,0.03);
+  border-color: rgba(250,249,245,0.42);
+  background: rgba(250,249,245,0.06);
 }
 .q-option.selected {
-  border-color: var(--blue);
-  background: var(--blue-lt);
+  border-color: rgba(250,249,245,0.72);
+  background: rgba(250,249,245,0.08);
 }
 /* Visually hidden but focusable, so radios stay in the tab order */
 .q-option input {
@@ -181,17 +278,17 @@
   pointer-events: none;
 }
 .q-option:has(input:focus-visible) {
-  outline: 2px solid var(--blue);
+  outline: 2px solid var(--ring);
   outline-offset: 2px;
 }
 .q-radio {
   width: 18px; height: 18px;
-  border-radius: 50%; border: 2px solid var(--field-border);
+  border-radius: 50%; border: 2px solid rgba(234,242,255,0.6);
   flex-shrink: 0; position: relative;
   transition: border-color 0.2s;
 }
 .q-option.selected .q-radio {
-  border-color: var(--blue);
+  border-color: var(--lit);
 }
 .q-option.selected .q-radio::after {
   content: '';
@@ -199,51 +296,73 @@
   top: 3px; left: 3px;
   width: 8px; height: 8px;
   border-radius: 50%;
-  background: var(--blue);
+  background: var(--lit);
 }
+/* AN AREA'S ANSWERS CARRY THE MARKS THEY PLACE: a full body, a broken ring,
+   an open ring, a small point, in place of the plain ring above. They are
+   drawn by the script, by the one function that draws the system's own.
+   Unchosen they are quiet; the chosen one takes its colour. */
+.q-area .q-radio { width: 16px; height: 16px; border: 0; border-radius: 0; }
+.q-area .q-option.selected .q-radio::after { content: none; }
+.q-m { display: block; width: 16px; height: 16px; overflow: visible; --rs-c: rgba(234,242,255,0.58); }
+.q-option.selected .q-m[data-s="strong"] { --rs-c: #6FE89B; }
+.q-option.selected .q-m[data-s="partial"] { --rs-c: #FFC64F; }
+.q-option.selected .q-m[data-s="gap"] { --rs-c: #FF7D7B; }
+.q-option.selected .q-m[data-s="na"] { --rs-c: #A9B8CD; }
+.q-m .rs-m-open, .q-m .rs-m-broken { fill: none; stroke-width: 1.6; }
+.q-option.selected .q-m .rs-m-open, .q-option.selected .q-m .rs-m-broken { stroke-width: 2; }
 .q-option-text {
-  font-size: 14px; color: var(--ink-2);
+  font-size: 14px; color: rgba(250,249,245,0.84);
   line-height: 1.4;
 }
 .q-option.selected .q-option-text {
-  color: var(--ink);
+  color: var(--lit);
   font-weight: 500;
 }
 
 /* Select dropdown */
 .q-select {
   width: 100%;
-  padding: 14px 18px;
-  border: 1px solid rgba(46,109,180,0.10);
+  padding: 14px 44px 14px 18px;
+  border: 1px solid rgba(250,249,245,0.24);
   border-radius: 4px;
   font-family: var(--sans);
   font-size: 14px;
-  color: var(--ink);
-  background-color: var(--cream-2);
+  color: var(--lit);
+  background-color: #0A1626;
   cursor: pointer;
+  -webkit-appearance: none;
   appearance: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%232E6DB4' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23D6E2F2' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-position: right 16px center;
 }
+.q-select option { background: #0A1626; color: #FAF9F5; }
 .q-select:focus {
   outline: none;
-  border-color: var(--blue);
+  border-color: var(--ring);
 }
+.q-select:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
 
-/* Validation / error state */
+/* Validation / error state. An unanswered row is ringed where it stands. */
 .q-card.error {
-  border-color: var(--fail-line);
-  background: var(--fail-tint);
-  box-shadow: 0 0 0 1px var(--fail-line) inset;
+  margin: 0 -16px; padding-left: 16px; padding-right: 16px;
+  border-top-color: transparent;
+  border-radius: 6px;
+  background: rgba(255,125,123,0.07);
+  box-shadow: 0 0 0 1px rgba(255,125,123,0.6) inset;
 }
-.q-card.error .q-label { color: var(--fail-line); }
-/* The frame comes from the shared notice rule in styles.css; only the error
-   text colour and the spacing are local. */
-.assess-error-banner { margin-bottom: 20px; color: #7A1B1E; }
+.q-card.error + .q-card { border-top-color: transparent; }
+.q-card.error .q-label, .q-card.error .q-name { color: #FFB3B1; }
+/* The frame comes from the shared notice rule in styles.css; its tones for
+   the night and the spacing are local. */
+.assess-error-banner {
+  margin-bottom: 20px; color: #FFDAD9;
+  background: rgba(255,125,123,0.08); border-color: rgba(255,125,123,0.36); border-left-color: #FF7D7B;
+}
 .assess-error-banner strong {
   display: block;
-  color: var(--bad);
+  color: #FF9D9B;
   font-size: 14px;
   font-weight: 600;
   margin-bottom: 4px;
@@ -254,17 +373,21 @@
 }
 .assess-error-banner li { margin: 2px 0; }
 
-/* Navigation buttons */
+/* Navigation buttons. The rule above them closes the list of rows. */
 .assess-nav {
   display: flex; justify-content: space-between;
   align-items: center;
-  margin-top: 40px;
   padding-top: 32px;
-  border-top: 1px solid var(--rule);
+  border-top: 1px solid var(--line);
 }
-/* The step navigation uses the shell .btn / .btn-outline / .btn-solid; the
-   private copies that used to sit here said the same thing in different words
-   and rendered 4px shorter than an a.btn. Only the disabled state is local. */
+/* The step navigation uses the shell .btn / .btn-outline / .btn-solid, in
+   their forms for the night: the light button, as "Get Certified" is in the
+   nav above, and a light outline. Only these and the disabled state are
+   local. */
+.assess-section .btn-solid { background: #FAF9F5; border-color: #FAF9F5; color: #0C2242; }
+.assess-section .btn-solid:hover { background: #EBF1F8; border-color: #EBF1F8; color: #0C2242; }
+.assess-section .btn-outline { background: transparent; border-color: rgba(250,249,245,0.5); color: #FAF9F5; }
+.assess-section .btn-outline:hover { background: rgba(250,249,245,0.08); border-color: #FAF9F5; color: #FAF9F5; }
 .btn:disabled {
   opacity: 0.4;
   cursor: not-allowed;
@@ -283,6 +406,7 @@
 .results-header .step-eyebrow {
   text-align: center;
 }
+.results-header .step-eyebrow:focus-visible { outline: 2px solid var(--ring); outline-offset: 4px; border-radius: 4px; }
 .results-score-ring {
   width: 160px; height: 160px;
   margin: 0 auto 24px;
@@ -294,12 +418,12 @@
 }
 .ring-bg {
   fill: none;
-  stroke: var(--rule);
+  stroke: rgba(250,249,245,0.14);
   stroke-width: 8;
 }
 .ring-fill {
   fill: none;
-  stroke: var(--blue);
+  stroke: #8FB8EE;
   stroke-width: 8;
   stroke-linecap: round;
   stroke-dasharray: 408;
@@ -312,50 +436,47 @@
   transform: translate(-50%, -50%);
   font-family: var(--sans);
   font-size: 42px; font-weight: 600;
-  color: var(--ink);
+  color: var(--lit);
 }
 .results-score-num span {
-  font-size: 20px; color: var(--ink-3);
+  font-size: 20px; color: var(--lit-3);
   font-weight: 400;
 }
-.results-score-caption { margin-bottom: 16px; }   /* type from the shared label rule in styles.css */
+.results-score-caption { margin-bottom: 16px; color: var(--lit-3); }   /* type from the shared label rule in styles.css */
 .results-note {
-  font-size: 13px; color: var(--ink-3);
+  font-size: 13px; color: rgba(214,226,242,0.72);
   line-height: 1.6; font-weight: 300;
   max-width: 560px; margin: 12px auto 0;
 }
-.results-classification { margin-bottom: 8px; }   /* type from the shared label rule in styles.css */
+.results-classification { margin-bottom: 8px; color: var(--lit-3); }   /* type from the shared label rule in styles.css */
 .results-summary {
-  font-size: 15px; color: var(--ink-2);
+  font-size: 15px; color: var(--lit-2);
   line-height: 1.75; font-weight: 300;
   max-width: 560px; margin: 0 auto;
 }
 
-/* THE SYSTEM, DRAWN (2026-11-21, beside the questions since 2026-11-22). The
-   requirement areas are shown the way the framework page draws them: the mark
-   as the sun, one orbit to an area, the bodies standing in their row. While
-   the questions are being answered the step's own orbits are lit, the area
-   being asked about is ringed and named, and each answer draws its body at
-   once, in the marks of that page's tier key and with this report's own four
-   words: a full body is Strong, a broken ring Partial, an open ring a Gap, a
-   small dim point Not applicable. At the result every orbit is lit and every
-   body is a link to its area's requirements. The four colours are the
-   report's own, lightened to be read on the night ground. */
-.rs { position: relative; padding: 0 0 4px; border-radius: 18px; overflow: hidden; background: #050E1C; color: #FAF9F5; text-align: left; }
-.rs:empty { display: none; }
-.rs-sky { display: block; width: 100%; height: auto; }
+/* THE SYSTEM, DRAWN (2026-11-21, beside the questions and unboxed since
+   2026-11-22). The requirement areas are shown the way the framework page
+   draws them: the mark as the sun, one orbit to an area, the bodies standing
+   in their row. While the questions are being answered the step's own
+   orbits are lit, the area being asked about is ringed and named, and each
+   answer draws its body at once, in the marks of that page's tier key and
+   with this report's own four words: a full body is Strong, a broken ring
+   Partial, an open ring a Gap, a small dim point Not applicable. At the
+   result every orbit is lit and every body is a link to its area's
+   requirements. The words for the marks are on the answers and on the rows,
+   so the drawing carries no key of its own. */
+.rs { color: #FAF9F5; text-align: left; }
+.rs-sky { display: block; width: 100%; height: auto; pointer-events: none; }   /* the drawing lies over the page's left side; only its bodies take the pointer, once they are links */
+.rs-sky a.rs-b { pointer-events: auto; }
 .rs-orbit { fill: none; }
 .rs-num { font-family: var(--sans); font-weight: 500; fill: #EAF2FF; text-anchor: middle; }
-.rs-step { font-family: var(--sans); font-weight: 500; fill: #D6E2F2; fill-opacity: 0.84; }
 .rs-now { font-family: var(--sans); font-weight: 600; fill: #FAF9F5; stroke: #050E1C; stroke-opacity: 0.9; stroke-linejoin: round; paint-order: stroke; text-anchor: end; }
-.rs .is-strong { --rs-c: #6FE89B; }
-.rs .is-partial { --rs-c: #FFC64F; }
-.rs .is-gap { --rs-c: #FF7D7B; }
-.rs .is-na { --rs-c: #A9B8CD; }
 .rs-m-full { fill: var(--rs-c); }
 .rs-m-open { fill: #050E1C; stroke: var(--rs-c); stroke-width: 2.2; }
 .rs-m-broken { fill: #050E1C; stroke: var(--rs-c); stroke-width: 2.2; stroke-dasharray: 3.4 2.25; }
 .rs-m-point { fill: var(--rs-c); fill-opacity: 0.9; }
+.rs-m-wait { fill: none; stroke: rgba(234,242,255,0.6); stroke-width: 1.2; }
 .rs-halo { fill: var(--rs-c); fill-opacity: 0.5; }
 .rs-hit { fill: transparent; }
 a.rs-b { cursor: pointer; }
@@ -376,39 +497,65 @@ a.rs-b { cursor: pointer; }
 .rs-pulse { fill: none; stroke: var(--rs-c); stroke-width: 1.4; pointer-events: none; animation: rs-ring 0.75s ease-out both; }
 .rs-b.is-next, .rs-now.is-next { animation: rs-in 0.35s ease both; }
 .rs-orbit.is-new { animation: rs-orbit-in 0.6s ease both; }
-.rs-key { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px 24px; margin: 0 20px 6px; padding: 0 0 12px; }
-.rs-key-item { display: flex; align-items: center; gap: 8px; font-size: 11px; font-weight: 500; letter-spacing: 0.04em; text-transform: uppercase; color: rgba(234,242,255,0.94); }
 .rs-mark { flex: none; width: 14px; height: 14px; display: block; overflow: visible; }
+.rs-mark .rs-m-open, .rs-mark .rs-m-broken { fill: none; }
 .rs-cap { display: none; }   /* the strip's one line of words, phone widths only */
+/* Beside the questions: the holder and the drawing laid over it (the note
+   on NO BOX above). These follow the drawing's own rules so that the width
+   set here is the one that holds. The bound is written as the exact
+   opposite of the phone block's, which is also the script's own test
+   (narrow), so there is no width at which the script draws the system
+   beside the questions and these rules do not apply. */
+@media not all and (max-width: 880.98px) {
+  .as-side {
+    --p: max(240px, min(calc((var(--content-max) - 72px) * 0.4255), calc((100vw - 80px - var(--as-gap)) * 0.4255), calc((100vh - 190px) * 0.78125)));
+    position: sticky; top: 104px; z-index: 0;   /* the fixed nav is 72 tall */
+    width: var(--p);
+    /* How far under the holder's top the last body stands: 60, or less in a
+       window too short to show the mark whole beneath it (the mark and its
+       ring end 1.1436 of --p under that body). */
+    --drop: clamp(0px, calc(100vh - 112px - var(--p) * 1.1436), 60px);
+    /* The holder ends 112 under the mark. At the foot of the page the
+       system therefore keeps its place while the footer comes up over its
+       lowest orbits, and moves only once the footer is 112 from the mark, so
+       the bodies stay in view while a step's last question is answered, and
+       the mark stays clear of the page's soft foot (110 tall, above). */
+    height: calc(var(--drop) + var(--p) * 1.1436 + 112px);
+  }
+  .rs { position: absolute; left: 0; top: 0; width: 100%; height: 100%; }
+  .rs-sky {
+    position: absolute;
+    left: calc(var(--p) * -0.0646);
+    top: calc(var(--drop) - var(--p) * 0.2508);
+    width: calc(var(--p) * 1.2);
+    height: auto;
+    overflow: visible;
+  }
+}
 
-/* THE RESULT'S ROWS. One row to an area, on the page's own cream beside the
-   drawing: the area's mark, its number and name, and the word for how it was
-   answered. The words are the ones the result has always used. The marks are
-   the drawing's, in the report's colours as they are on cream. A row and its
-   body light together, and both open that area's requirements in a new tab,
-   because this page keeps the answers only while it is open. */
-.rs-list { margin: 0 0 56px; border-top: 1px solid var(--rule); }
-.rs-list .is-strong { --rs-c: var(--ok); --rs-t: var(--ok); }
-.rs-list .is-partial { --rs-c: var(--warn); --rs-t: var(--warn-text); }
-.rs-list .is-gap { --rs-c: var(--bad); --rs-t: var(--bad); }
-.rs-list .is-na { --rs-c: var(--ink-3); --rs-t: var(--ink-3); }
-.rs-list .rs-m-open, .rs-list .rs-m-broken { fill: none; }
-.rs-row { display: grid; grid-template-columns: 14px 46px minmax(0, 1fr) auto; column-gap: 12px; align-items: center; padding: 13px 8px; border-bottom: 1px solid var(--rule); color: inherit; text-decoration: none; transition: background 0.15s ease; }
-.rs-id { font-size: 11px; font-weight: 500; letter-spacing: 0.06em; white-space: nowrap; color: var(--ink-3); }
-.rs-title { font-size: 15px; font-weight: 500; line-height: 1.35; color: var(--ink); }
+/* THE RESULT'S ROWS. One row to an area, on the night beside the system:
+   the area's mark, its number and name, and the word for how it was
+   answered. The words are the ones the result has always used, the marks and
+   their colours are the system's. A row and its body light together, and
+   both open that area's requirements in a new tab, because this page keeps
+   the answers only while it is open. */
+.rs-list { margin: 0 0 56px; border-top: 1px solid var(--line); }
+.rs-row { display: grid; grid-template-columns: 14px 46px minmax(0, 1fr) auto; column-gap: 12px; align-items: center; padding: 13px 8px; border-bottom: 1px solid var(--line); color: inherit; text-decoration: none; transition: background 0.15s ease; }
+.rs-id { font-size: 11px; font-weight: 500; letter-spacing: 0.06em; white-space: nowrap; color: var(--lit-3); }
+.rs-title { font-size: 15px; font-weight: 500; line-height: 1.35; color: var(--lit); }
 .rs-status { font-size: 10.5px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; white-space: nowrap; color: var(--rs-t); }
-.rs-row:hover, .rs-row.is-on { background: var(--cream-2); }
-.rs-row:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; background: var(--cream-2); }
+.rs-row:hover, .rs-row.is-on { background: rgba(250,249,245,0.07); }
+.assess-section .rs-row:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; border-radius: 0; background: rgba(250,249,245,0.07); }
 @media (prefers-reduced-motion: reduce) {
-  .rs-b .rs-m, .rs-row { transition: none; }
+  .rs-b .rs-m, .rs-row, .q-option, .q-radio { transition: none; }
   .rs-b.is-new .rs-m, .rs-b.is-new .rs-halo, .rs-b.is-next, .rs-now.is-next, .rs-orbit.is-new { animation: none; }
   .rs-pulse { display: none; }
 }
 
-/* CTA band — cream, blue accents */
+/* The closing card, in an outline on the night */
 .results-cta {
-  background: #FAF9F5;
-  border: 1px solid var(--card-border);
+  background: rgba(250,249,245,0.04);
+  border: 1px solid var(--line);
   border-radius: var(--radius-card);
   padding: 48px;
   text-align: center;
@@ -417,40 +564,49 @@ a.rs-b { cursor: pointer; }
   font-family: var(--sans);
   font-size: clamp(24px, 2.4vw, 30px);
   font-weight: 600;
-  color: #0C2242; margin-bottom: 12px;
+  color: var(--lit); margin-bottom: 12px;
   letter-spacing: -0.015em;
 }
 .results-cta p {
-  font-size: 15px; color: var(--ink-2);
+  font-size: 15px; color: var(--lit-2);
   line-height: 1.7; font-weight: 300;
   margin-bottom: 28px;
   max-width: 480px; margin-left: auto; margin-right: auto;
 }
 /* Responsive */
+/* A narrower column: the question and its answers come back under the
+   area's number, so the answers keep their width. */
+@media (max-width: 1180px) {
+  .assess-section { --q-in: 34px; }
+}
 /* Phone: the assess column follows the site's 24px gutter at 880.98px, the
    same ladder verify.html uses. */
 @media (max-width: 880.98px) {
-  .assess-section { padding: 0 24px 88px; }   /* the strip's band starts under the nav, where it stays */
-  .q-card { padding: 24px; }
-  /* The system as a strip. While the questions are being answered it is the
-     first thing under the nav and rides there, above the headline and then
-     above the questions, on a band of the page's own cream so nothing shows
-     round its corners. At the result it is set down between the headline and
-     the result and scrolls with the page. The column is a flex column so the
-     strip can stand first while it rides and after the headline once it is
-     set down; the source order is headline, drawing, questions. */
+  .assess-section { padding: 0 24px 0; }   /* the strip starts under the nav, where it stays */
+  .as-main { padding-bottom: 88px; }
+  /* The system as a strip, the full width of the window. While the questions
+     are being answered it is the first thing under the nav and rides there,
+     above the headline and then above the questions, on a band of the page's
+     own night so the questions pass under it unseen. At the result it is set
+     down between the headline and the result and scrolls with the page. The
+     column is a flex column so the strip can stand first while it rides and
+     after the headline once it is set down; the source order is headline,
+     system, questions. */
   .as-grid { display: flex; flex-direction: column; align-items: stretch; }
   .as-head { margin: 0 0 36px; }
   .as-head h1 { font-size: 32px; line-height: 1.1; letter-spacing: -0.02em; }
   .as-head .inner-hero-lead { margin-top: 20px; max-width: none; }
-  .as-side { order: -1; position: sticky; top: 72px; z-index: 5; width: auto; margin: 0 -24px 22px; padding: 8px 24px 10px; background: #FAF9F5; }
-  .as-side::after { content: ''; position: absolute; left: 0; right: 0; top: 100%; height: 14px; background: linear-gradient(#FAF9F5, rgba(250,249,245,0)); pointer-events: none; }
+  .as-side { order: -1; position: sticky; top: 72px; z-index: 5; margin: 0 -24px 20px; background: #050E1C; }
+  .as-side::after { content: ''; position: absolute; left: 0; right: 0; top: 100%; height: 14px; background: linear-gradient(#050E1C, rgba(5,14,28,0)); pointer-events: none; }
   .as-grid.is-result .as-head { margin-top: 28px; }
   .as-grid.is-result .as-side { order: 0; position: static; }
   .as-grid.is-result .as-side::after { display: none; }
-  .rs { padding: 0; border-radius: 14px; }
-  .rs-key { display: none; }
-  .rs-cap { display: block; position: absolute; left: 14px; right: 14px; top: 10px; font-size: 12px; font-weight: 600; line-height: 1.3; color: #FAF9F5; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-shadow: 0 0 6px #050E1C, 0 0 2px #050E1C; }
+  /* The strip keeps its own layer and its own ground, so it stays above the
+     stars' canvas when it is set down too (a set-down holder is static and
+     has no layer of its own), and none of the canvas's stars show through
+     it. */
+  .rs { position: relative; z-index: 5; background: #050E1C; }
+  .rs-cap { display: block; position: absolute; left: 24px; right: 24px; top: 10px; font-size: 12px; font-weight: 600; line-height: 1.3; color: #FAF9F5; white-space: nowrap; overflow: hidden; overflow: clip; text-overflow: ellipsis; text-shadow: 0 0 6px #050E1C, 0 0 2px #050E1C; }
   .rs-cap.is-step { font-size: 10.5px; font-weight: 500; letter-spacing: 0.16em; text-transform: uppercase; color: rgba(214,226,242,0.84); }
   .rs-cap:empty { display: none; }
 }
@@ -462,12 +618,15 @@ a.rs-b { cursor: pointer; }
   .as-side::after { display: none; }
 }
 @media (max-width: 640px) {
+  .assess-section { --q-in: 30px; }
   .results-cta { padding: 32px 24px; }
-  .rs-row { grid-template-columns: 14px minmax(0, 1fr) auto; row-gap: 2px; padding: 12px 4px; }
-  .rs-row .rs-mark { grid-row: 1 / span 2; }
-  .rs-id { grid-column: 2; }
-  .rs-title { grid-column: 2; grid-row: 2; }
-  .rs-status { grid-column: 3; grid-row: 1 / span 2; }
+  .rs-row, .q-head { grid-template-columns: 14px minmax(0, 1fr) auto; row-gap: 2px; }
+  .rs-row { padding: 12px 4px; }
+  .q-head { padding: 0 4px; }
+  .rs-row .rs-mark, .q-head .q-mark { grid-row: 1 / span 2; }
+  .rs-id, .q-id { grid-column: 2; }
+  .rs-title, .q-name { grid-column: 2; grid-row: 2; }
+  .rs-status, .q-status { grid-column: 3; grid-row: 1 / span 2; }
 }
 </style>
 </head>
@@ -517,9 +676,11 @@ a.rs-b { cursor: pointer; }
 <main id="main" tabindex="-1">
 <div class="page-shell">
 
-<!-- ASSESSMENT TOOL. The page opens on it: the headline stands at the top of
-     the right-hand column, beside the system. -->
+<!-- ASSESSMENT TOOL. The page opens on it, in the framework page's night: the
+     headline stands at the top of the right-hand column, beside the system. -->
 <div class="assess-section" id="assessSection">
+ <!-- The stars behind the words, drawn by the script below, and again when the window changes size -->
+ <canvas class="as-stars" id="asStars" aria-hidden="true"></canvas>
  <div class="as-grid" id="asGrid">
 
   <div class="as-head">
@@ -533,19 +694,12 @@ a.rs-b { cursor: pointer; }
     </p>
   </div>
 
-  <!-- The system, drawn by the script below: beside the headline and the questions, then beside the result -->
+  <!-- The system, drawn by the script below: beside the headline and the questions, then beside the result.
+       This holder is its place and its size; the drawing runs past it (the styles' note NO BOX). -->
   <div class="as-side" id="asSide"><div class="rs" id="asSystem"></div></div>
 
   <div class="as-main">
   <div class="assess-inner" id="assessForm">
-
-    <!-- Progress -->
-    <div class="assess-progress">
-      <div class="assess-progress-bar">
-        <div class="assess-progress-fill" id="progressFill"></div>
-      </div>
-      <div class="assess-progress-label" id="progressLabel">Step 1 of 5</div>
-    </div>
 
     <!-- STEP 1: Classification -->
     <div class="assess-step active" id="step-1">
@@ -621,9 +775,9 @@ a.rs-b { cursor: pointer; }
       <div class="step-title" role="heading" aria-level="2" tabindex="-1">Training data and test coverage</div>
       <div class="step-desc">These questions map to AI-1 (operational and data foundations), AI-2 (addressing AI bias), and AI-3 (ML test coverage).</div>
 
-      <div class="q-card">
+      <div class="q-card q-area">
         <div class="q-label" id="label-q-ai1">
-          AI-1: Operational and data foundations
+          <div class="q-head"><span class="q-mark" aria-hidden="true"></span> <span class="q-id">AI-1</span> <span class="q-name">Operational and data foundations</span> <span class="q-status" aria-hidden="true"></span></div>
           <div class="q-sublabel">Do you maintain documented, separated training, validation, and test datasets with recorded provenance?</div>
         </div>
         <div class="q-options" data-name="q-ai1" role="radiogroup" aria-labelledby="label-q-ai1">
@@ -645,9 +799,9 @@ a.rs-b { cursor: pointer; }
         </div>
       </div>
 
-      <div class="q-card">
+      <div class="q-card q-area">
         <div class="q-label" id="label-q-ai2">
-          AI-2: Addressing AI bias
+          <div class="q-head"><span class="q-mark" aria-hidden="true"></span> <span class="q-id">AI-2</span> <span class="q-name">Addressing AI bias</span> <span class="q-status" aria-hidden="true"></span></div>
           <div class="q-sublabel">Have you tested for performance disparities across user classes, operational contexts, or demographic groups?</div>
         </div>
         <div class="q-options" data-name="q-ai2" role="radiogroup" aria-labelledby="label-q-ai2">
@@ -669,9 +823,9 @@ a.rs-b { cursor: pointer; }
         </div>
       </div>
 
-      <div class="q-card">
+      <div class="q-card q-area">
         <div class="q-label" id="label-q-ai3">
-          AI-3: ML Test Coverage
+          <div class="q-head"><span class="q-mark" aria-hidden="true"></span> <span class="q-id">AI-3</span> <span class="q-name">ML test coverage</span> <span class="q-status" aria-hidden="true"></span></div>
           <div class="q-sublabel">Do you have a defined test matrix covering nominal performance, edge cases, failure mode injection, and distributional boundaries?</div>
         </div>
         <div class="q-options" data-name="q-ai3" role="radiogroup" aria-labelledby="label-q-ai3">
@@ -705,9 +859,9 @@ a.rs-b { cursor: pointer; }
       <div class="step-title" role="heading" aria-level="2" tabindex="-1">Monitoring, confidence, and edge detection</div>
       <div class="step-desc">These questions map to AI-4 (continuous validation), AI-5 (hallucination prevention), and AI-6 (out of distribution detection).</div>
 
-      <div class="q-card">
+      <div class="q-card q-area">
         <div class="q-label" id="label-q-ai4">
-          AI-4: Continuous Validation
+          <div class="q-head"><span class="q-mark" aria-hidden="true"></span> <span class="q-id">AI-4</span> <span class="q-name">Continuous validation</span> <span class="q-status" aria-hidden="true"></span></div>
           <div class="q-sublabel">Do you monitor your model in production for performance drift with defined thresholds and revalidation triggers?</div>
         </div>
         <div class="q-options" data-name="q-ai4" role="radiogroup" aria-labelledby="label-q-ai4">
@@ -729,9 +883,9 @@ a.rs-b { cursor: pointer; }
         </div>
       </div>
 
-      <div class="q-card">
+      <div class="q-card q-area">
         <div class="q-label" id="label-q-ai5">
-          AI-5: Hallucination Prevention
+          <div class="q-head"><span class="q-mark" aria-hidden="true"></span> <span class="q-id">AI-5</span> <span class="q-name">Hallucination prevention</span> <span class="q-status" aria-hidden="true"></span></div>
           <div class="q-sublabel">Does your system bound output confidence and degrade gracefully to human override when confidence is low?</div>
         </div>
         <div class="q-options" data-name="q-ai5" role="radiogroup" aria-labelledby="label-q-ai5">
@@ -753,9 +907,9 @@ a.rs-b { cursor: pointer; }
         </div>
       </div>
 
-      <div class="q-card">
+      <div class="q-card q-area">
         <div class="q-label" id="label-q-ai6">
-          AI-6: Out of Distribution Detection
+          <div class="q-head"><span class="q-mark" aria-hidden="true"></span> <span class="q-id">AI-6</span> <span class="q-name">Out of distribution detection</span> <span class="q-status" aria-hidden="true"></span></div>
           <div class="q-sublabel">Can your system detect when it receives inputs outside its training distribution, and does it log and escalate these events?</div>
         </div>
         <div class="q-options" data-name="q-ai6" role="radiogroup" aria-labelledby="label-q-ai6">
@@ -790,9 +944,9 @@ a.rs-b { cursor: pointer; }
       <div class="step-desc">These requirements apply based on your classification level. Answer based on your current state. If a requirement doesn't apply to your tier, you can select "Not applicable."</div>
       <div class="tier-hint" id="tierHint4"></div>
 
-      <div class="q-card">
+      <div class="q-card q-area">
         <div class="q-label" id="label-q-ai7">
-          AI-7: Adversarial Robustness
+          <div class="q-head"><span class="q-mark" aria-hidden="true"></span> <span class="q-id">AI-7</span> <span class="q-name">Adversarial robustness</span> <span class="q-status" aria-hidden="true"></span></div>
           <div class="q-sublabel">Have you conducted adversarial testing with defined robustness bounds and behavioral requirements under adversarial inputs?</div>
         </div>
         <div class="q-options" data-name="q-ai7" role="radiogroup" aria-labelledby="label-q-ai7">
@@ -819,9 +973,9 @@ a.rs-b { cursor: pointer; }
         </div>
       </div>
 
-      <div class="q-card">
+      <div class="q-card q-area">
         <div class="q-label" id="label-q-ai8">
-          AI-8: Explainability
+          <div class="q-head"><span class="q-mark" aria-hidden="true"></span> <span class="q-id">AI-8</span> <span class="q-name">Explainability</span> <span class="q-status" aria-hidden="true"></span></div>
           <div class="q-sublabel">Can operators access decision reasoning with a traceable decision basis for your AI system's outputs?</div>
         </div>
         <div class="q-options" data-name="q-ai8" role="radiogroup" aria-labelledby="label-q-ai8">
@@ -848,9 +1002,9 @@ a.rs-b { cursor: pointer; }
         </div>
       </div>
 
-      <div class="q-card">
+      <div class="q-card q-area">
         <div class="q-label" id="label-q-ai9">
-          AI-9: Human-AI teaming
+          <div class="q-head"><span class="q-mark" aria-hidden="true"></span> <span class="q-id">AI-9</span> <span class="q-name">Human-AI teaming</span> <span class="q-status" aria-hidden="true"></span></div>
           <div class="q-sublabel">Are AI authority limits, human override requirements, and interaction audit trails formally defined?</div>
         </div>
         <div class="q-options" data-name="q-ai9" role="radiogroup" aria-labelledby="label-q-ai9">
@@ -877,9 +1031,9 @@ a.rs-b { cursor: pointer; }
         </div>
       </div>
 
-      <div class="q-card">
+      <div class="q-card q-area">
         <div class="q-label" id="label-q-ai10">
-          AI-10: Privacy and Data Protection
+          <div class="q-head"><span class="q-mark" aria-hidden="true"></span> <span class="q-id">AI-10</span> <span class="q-name">Privacy and data protection</span> <span class="q-status" aria-hidden="true"></span></div>
           <div class="q-sublabel">If your system processes personal data, are lawful basis, data subject rights, and privacy enhancing techniques implemented and auditable?</div>
         </div>
         <div class="q-options" data-name="q-ai10" role="radiogroup" aria-labelledby="label-q-ai10">
@@ -919,9 +1073,9 @@ a.rs-b { cursor: pointer; }
       <div class="step-desc">These requirements apply conditionally based on your system's design choices. If your system does not use the indicated architecture or paradigm, select "Not applicable."</div>
       <div class="tier-hint" id="tierHint5"></div>
 
-      <div class="q-card">
+      <div class="q-card q-area">
         <div class="q-label" id="label-q-ai11">
-          AI-11: Multi-Model Systems
+          <div class="q-head"><span class="q-mark" aria-hidden="true"></span> <span class="q-id">AI-11</span> <span class="q-name">Multi-model systems</span> <span class="q-status" aria-hidden="true"></span></div>
           <div class="q-sublabel">If your system coordinates multiple AI models, is the multi-model architecture documented with cascading failure mitigation, ensemble coordination, combined confidence representation, and an audit trail?</div>
         </div>
         <div class="q-options" data-name="q-ai11" role="radiogroup" aria-labelledby="label-q-ai11">
@@ -948,9 +1102,9 @@ a.rs-b { cursor: pointer; }
         </div>
       </div>
 
-      <div class="q-card">
+      <div class="q-card q-area">
         <div class="q-label" id="label-q-ai12">
-          AI-12: Neural Network Requirements
+          <div class="q-head"><span class="q-mark" aria-hidden="true"></span> <span class="q-id">AI-12</span> <span class="q-name">Neural network requirements</span> <span class="q-status" aria-hidden="true"></span></div>
           <div class="q-sublabel">If your system uses neural networks, is the architecture documented with confidence calibration, explainability methods, training integrity controls, and deployment transformation validation?</div>
         </div>
         <div class="q-options" data-name="q-ai12" role="radiogroup" aria-labelledby="label-q-ai12">
@@ -977,9 +1131,9 @@ a.rs-b { cursor: pointer; }
         </div>
       </div>
 
-      <div class="q-card">
+      <div class="q-card q-area">
         <div class="q-label" id="label-q-ai13">
-          AI-13: Continuous Learning and Adaptation
+          <div class="q-head"><span class="q-mark" aria-hidden="true"></span> <span class="q-id">AI-13</span> <span class="q-name">Continuous learning and adaptation</span> <span class="q-status" aria-hidden="true"></span></div>
           <div class="q-sublabel">If your system continues learning after deployment, are there defined permission criteria, runtime learning controls, catastrophic forgetting mitigation, rollback procedures, and a continuous learning audit trail?</div>
         </div>
         <div class="q-options" data-name="q-ai13" role="radiogroup" aria-labelledby="label-q-ai13">
@@ -1149,24 +1303,18 @@ a.rs-b { cursor: pointer; }
   };
 
   /* ── Question labels for error messages ───────── */
+  /* The three classification questions are named here. An area's question
+     is named as its own row names it (areaName, below), so the list of
+     unanswered questions and the rows it points at always read the same. */
   var questionLabels = {
     'q-domain': 'Primary domain',
     'q-consequence': 'Worst case consequence of failure',
-    'q-override': 'Human override capability',
-    'q-ai1': 'AI-1: Operational and Data Foundations',
-    'q-ai2': 'AI-2: Addressing AI Bias',
-    'q-ai3': 'AI-3: ML Test Coverage',
-    'q-ai4': 'AI-4: Continuous Validation',
-    'q-ai5': 'AI-5: Hallucination Prevention',
-    'q-ai6': 'AI-6: Out of Distribution Detection',
-    'q-ai7': 'AI-7: Adversarial Robustness',
-    'q-ai8': 'AI-8: Explainability',
-    'q-ai9': 'AI-9: Human and AI Teaming',
-    'q-ai10': 'AI-10: Privacy and Data Protection',
-    'q-ai11': 'AI-11: Multi-Model Systems',
-    'q-ai12': 'AI-12: Neural Network Requirements',
-    'q-ai13': 'AI-13: Continuous Learning and Adaptation'
+    'q-override': 'Human override capability'
   };
+  function questionLabel(name) {
+    var area = /^q-(ai\d+)$/.exec(name);
+    return area ? areaName(area[1]).replace(' ', ': ') : (questionLabels[name] || name);
+  }
 
   function findCardFor(name) {
     var sel = document.getElementById(name);
@@ -1195,7 +1343,7 @@ a.rs-b { cursor: pointer; }
       ? 'Please answer this question before continuing.'
       : 'Please answer all ' + missing.length + ' questions before continuing.';
     var items = missing.map(function(name) {
-      return '<li>' + (questionLabels[name] || name) + '</li>';
+      return '<li>' + questionLabel(name) + '</li>';
     }).join('');
 
     var firstChild = step.firstChild;
@@ -1240,7 +1388,8 @@ a.rs-b { cursor: pointer; }
       opt.classList.add('selected');
       clearCardError(opt.closest('.q-card'));
       updateTierHint();
-      drawSystem();   /* the answer shows in the system at once */
+      syncRows();     /* the area's row takes its mark and its word */
+      drawSystem();   /* and the system draws the same mark at once */
     });
   });
 
@@ -1252,22 +1401,21 @@ a.rs-b { cursor: pointer; }
     });
   }
 
-  /* ── Progress bar ────────────────────────────── */
-  function updateProgress() {
-    var pct = (currentStep / TOTAL_STEPS) * 100;
-    document.getElementById('progressFill').style.width = pct + '%';
-    document.getElementById('progressLabel').textContent = 'Step ' + currentStep + ' of ' + TOTAL_STEPS;
-  }
+  /* ── The step, in words ──────────────────────── */
+  /* There is no progress bar: the step's own heading says where the visitor
+     is, and the system shows what has been answered. These words are the
+     strip's label at phone widths. */
+  function stepWords() { return 'Step ' + currentStep + ' of ' + TOTAL_STEPS; }
 
   /* ── Bringing the tool to the top of the window ── */
   /* The headline stands above the questions in the same column, so a new step
-     or the result is brought up past it. Beside the drawing, the questions
-     (or the result) come level with the drawing's top. On a phone they come
-     up under the strip while it rides; where the strip is set down above them
-     (the result, a phone on its side) the strip itself comes up under the
-     nav. The distances are read from the drawing's own rule in the styles
-     above: its top is 104 beside the questions and 72, the nav's height, on a
-     phone. */
+     or the result is brought up past it. Beside the system, the questions
+     (or the result) come level with the top of the system's holder. On a
+     phone they come up under the strip while it rides; where the strip is
+     set down above them (the result, a phone on its side) the strip itself
+     comes up under the nav. The distances are read from the holder's own
+     rule in the styles above: its top is 104 beside the questions and 72,
+     the nav's height, on a phone. */
   function toTool(el) {
     var side = document.getElementById('asSide');
     if (!el || !side) return;
@@ -1285,7 +1433,6 @@ a.rs-b { cursor: pointer; }
     if (step) {
       step.classList.add('active');
       currentStep = n;
-      updateProgress();
       drawSystem();   /* the step's own orbits light */
       toTool(document.getElementById('assessForm'));
       var title = step.querySelector('.step-title');
@@ -1467,15 +1614,21 @@ a.rs-b { cursor: pointer; }
 
      What a body shows is read from the form each time it is drawn. An
      answered area carries its mark. The first unanswered area of the step in
-     view is ringed and named, in the words of its own question card. The rest
+     view is ringed and named, in the words of its own question's row. The rest
      of that step stand open, and the areas of other steps wait small and dim.
      Once the result is shown every area carries its mark (an unanswered one
      counts as Not applicable, as the score counts it), every orbit is lit,
      and each body opens that area's requirements in a new tab, because this
      page keeps the answers only while it is open.
 
-     Beside the questions the drawing is 500 by 640 and scales with its
-     column. At phone widths it is a strip, drawn at the strip's own size. */
+     Beside the questions the drawing keeps its own 500 by 640 and is laid
+     over its holder, larger than the holder and with no box round it (the
+     styles' note NO BOX): its orbits run off the window. Its place and its
+     size are set in the styles alone, by the rules on .as-side and .rs-sky.
+     The script repeats those rules' numbers in two places, each marked
+     where it stands: the edge in sysLayout and the stars' empty box in
+     drawStars. Change the three together. At phone widths it is a strip,
+     drawn at the strip's own size. */
   var sysHost = document.getElementById('asSystem');
   var sysGrid = document.getElementById('asGrid');
   var areaKeys = Object.keys(reqMeta);
@@ -1485,7 +1638,7 @@ a.rs-b { cursor: pointer; }
   });
   var finished = false;   /* true once the result is shown */
   var narrow = window.matchMedia('(max-width: 880.98px)');
-  var seen = { mode: '', W: 0, ts: 1, now: null, state: {}, line: {}, streak: {} };
+  var seen = { mode: '', w: 0, edgeB: 0, now: null, state: {}, line: {}, streak: {} };
 
   function fx(v) { return (Math.round(v * 100) / 100).toString(); }
   function esc(t) { return String(t).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
@@ -1493,11 +1646,11 @@ a.rs-b { cursor: pointer; }
   function areaHref(key) { return '/requirements#' + reqMeta[key].id.toLowerCase(); }
   function statusFor(v) { return v === 3 ? 'strong' : v === 2 ? 'partial' : v === 1 ? 'gap' : 'na'; }
   function isAnswer(st) { return st === 'strong' || st === 'partial' || st === 'gap' || st === 'na'; }
-  /* An area's name as its question card gives it, so the two always agree. */
+  /* An area's name as its question's row gives it, so the two always agree. */
   function areaName(key) {
     var l = document.getElementById('label-q-' + key);
-    var t = l && l.firstChild && l.firstChild.nodeType === 3 ? l.firstChild.nodeValue : '';
-    t = t.replace(/\s+/g, ' ').replace(/^ | $/g, '').replace(':', '');
+    var id = l && l.querySelector('.q-id'), name = l && l.querySelector('.q-name');
+    var t = id && name ? (id.textContent + ' ' + name.textContent).replace(/\s+/g, ' ').replace(/^ | $/g, '') : '';
     return t || (reqMeta[key].id + ' ' + reqMeta[key].title);
   }
   function wrapWords(text, max) {
@@ -1536,28 +1689,43 @@ a.rs-b { cursor: pointer; }
     return '<svg class="rs-mark is-' + status + '" viewBox="0 0 14 14" aria-hidden="true" focusable="false">' + markOf(status, 7, 7, 0.62, '') + '</svg>';
   }
 
-  /* Where things stand, by the room the drawing has. */
+  /* Where things stand, by the room the system has. */
   function sysLayout() {
     /* The room is read from the holder, which has its width before anything
        is drawn in it. */
     var side = sysHost.parentNode, cs = window.getComputedStyle(side);
     var w = side.clientWidth - (parseFloat(cs.paddingLeft) || 0) - (parseFloat(cs.paddingRight) || 0);
     if (narrow.matches) {
-      /* The strip: the mark at the left, the row running out to the right and
-         a little up. The roll and the reach are worked out from where the
-         mark and the last body should stand. */
-      var W = Math.max(240, Math.round(w)), H = 92, CX = 28, CY = 64, ex = W - 20, ey = 46, SQ = 0.42, ARM = 0.10;
+      /* The strip, the full width of the window: the mark at the left, on
+         the page's own gutter, the row running out to the right and a little
+         up. The roll and the reach are worked out from where the mark and
+         the last body should stand. */
+      var W = Math.max(240, Math.round(w)), H = 92, CX = 42, CY = 64, ex = W - 30, ey = 46, SQ = 0.42, ARM = 0.10;
       var vx = Math.cos(ARM), vy = SQ * Math.sin(ARM);
-      return { strip: true, W: W, H: H, CX: CX, CY: CY, SQ: SQ, ARM: ARM,
+      return { strip: true, w: w, W: W, H: H, CX: CX, CY: CY, SQ: SQ, ARM: ARM,
         ROLL: Math.atan2(ey - CY, ex - CX) - Math.atan2(vy, vx),
         R: Math.sqrt((ex - CX) * (ex - CX) + (ey - CY) * (ey - CY)) / Math.sqrt(vx * vx + vy * vy),
         ts: 1, bs: 0.64, sun: 11, glow: W * 0.95, warm: 84, blur: 2.2, spread: 2.2, lw: 0.8, stars: Math.round(W / 9), big: 4 };
     }
-    /* Beside the questions. Where the column is narrow the words are drawn
-       larger so that they stay readable once the drawing is scaled down. */
-    var k = w / 500, ts = (!k || k >= 0.9) ? 1 : Math.min(1.3, 0.9 / k);
-    return { strip: false, W: 500, H: 640, CX: 104, CY: 536, R: 640, SQ: 0.62, ROLL: -0.40, ARM: -0.75,
-      ts: ts, bs: 1 + (ts - 1) * 0.6, sun: 30, glow: 560, warm: 190, blur: 3.4, spread: 3.4, lw: 1, stars: 70, big: 9 };
+    /* Beside the questions. The drawing keeps its own 500 by 640 and is laid
+       over its holder a fifth larger than the holder is wide, its left edge a
+       little to the left of the holder's (the rule on .rs-sky in the styles:
+       1.2 and 0.0646 there are the 1.2 and 0.0646 here; change them
+       together). So one of the drawing's units is 1.2 w / 500 on the screen.
+       Where that is small the words are drawn larger, so they stay readable.
+
+       The edge. The orbits and the light give way to the night before the
+       words begin: from the holder's right edge to the words' own left
+       edge the drawing fades into the ground, slowly at first, so the last
+       body's number just past the holder's edge keeps nearly all its
+       strength, and past the words' edge it is covered. Both places are
+       worked out here, in the drawing's units, from the holder's width and
+       the gap between the columns. */
+    var k = 1.2 * w / 500, ts = (!k || k >= 0.9) ? 1 : Math.min(1.3, 0.9 / k);
+    var gap = (sysGrid && parseFloat(window.getComputedStyle(sysGrid).columnGap)) || 72, left = 0.0646 * w;
+    return { strip: false, w: w, W: 500, H: 640, CX: 104, CY: 536, R: 640, SQ: 0.62, ROLL: -0.40, ARM: -0.75,
+      ts: ts, bs: 1 + (ts - 1) * 0.6, sun: 30, glow: 560, warm: 190, blur: 3.4, spread: 3.4, lw: 1, stars: 70, big: 9,
+      edgeA: k ? (w + left) / k : 444, edgeB: k ? (w + gap + left) / k : 506 };
   }
 
   /* quiet: draw with nothing moving (the first drawing, and a resized window). */
@@ -1583,7 +1751,7 @@ a.rs-b { cursor: pointer; }
       if (stepOf[key] === currentStep) { if (!now) { now = key; return 'now'; } return 'open'; }
       return 'later';
     });
-    var stepWords = document.getElementById('progressLabel').textContent;
+    var words = stepWords();
 
     s.push('<svg class="rs-sky" viewBox="0 0 ' + W + ' ' + H + '" aria-hidden="true" focusable="false">');
     s.push('<defs>' +
@@ -1591,19 +1759,26 @@ a.rs-b { cursor: pointer; }
       '<radialGradient id="rs-warm" cx="' + CX + '" cy="' + CY + '" r="' + f(L.warm) + '" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#FAE8C4" stop-opacity="0.46"/><stop offset="0.45" stop-color="#ECD6B0" stop-opacity="0.16"/><stop offset="1" stop-color="#ECD6B0" stop-opacity="0"/></radialGradient>' +
       '<radialGradient id="rs-sun" cx="0.36" cy="0.30" r="0.80"><stop offset="0" stop-color="#9CC8F8"/><stop offset="0.34" stop-color="#3F80D0"/><stop offset="0.74" stop-color="#133F7C"/><stop offset="1" stop-color="#081F45"/></radialGradient>' +
       '<linearGradient id="rs-fade" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#050E1C" stop-opacity="0"/><stop offset="1" stop-color="#050E1C"/></linearGradient>' +
+      '<linearGradient id="rs-fade-up" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#050E1C"/><stop offset="1" stop-color="#050E1C" stop-opacity="0"/></linearGradient>' +
+      (L.strip ? '' : '<linearGradient id="rs-edge" gradientUnits="userSpaceOnUse" x1="' + f(L.edgeA) + '" y1="0" x2="' + f(L.edgeB) + '" y2="0"><stop offset="0" stop-color="#050E1C" stop-opacity="0"/><stop offset="0.3" stop-color="#050E1C" stop-opacity="0.12"/><stop offset="0.65" stop-color="#050E1C" stop-opacity="0.56"/><stop offset="1" stop-color="#050E1C"/></linearGradient>') +
       '<filter id="rs-soft" x="-80%" y="-80%" width="260%" height="260%"><feGaussianBlur stdDeviation="' + L.blur + '"/></filter>' +
       '</defs>');
     /* The light: the site's blue through the disk and warm close to the mark,
-       as the framework page lights its own. */
-    s.push('<rect width="' + W + '" height="' + H + '" fill="url(#rs-glow)"/><rect width="' + W + '" height="' + H + '" fill="url(#rs-warm)"/>');
+       as the framework page lights its own. Beside the questions it falls
+       away into the night on every side, past the drawing's own 500 by 640;
+       in the strip it fills the strip. */
+    if (L.strip) s.push('<rect width="' + W + '" height="' + H + '" fill="url(#rs-glow)"/><rect width="' + W + '" height="' + H + '" fill="url(#rs-warm)"/>');
+    else s.push('<rect x="' + f(CX - L.glow) + '" y="' + f(CY - L.glow) + '" width="' + f(2 * L.glow) + '" height="' + f(2 * L.glow) + '" fill="url(#rs-glow)"/>' +
+      '<rect x="' + f(CX - L.warm) + '" y="' + f(CY - L.warm) + '" width="' + f(2 * L.warm) + '" height="' + f(2 * L.warm) + '" fill="url(#rs-warm)"/>');
 
-    /* The sky. The same stars every time: the list is made from a fixed
-       seed. None beside the row, where a star would read as a body, and none
-       under the words. */
+    /* The system's own stars, in its own 500 by 640 (the stars of the rest
+       of the window are the canvas's, below). The same stars every time: the
+       list is made from a fixed seed. None beside the row, where a star
+       would read as a body, and none under the strip's line of words. */
     var rnd = lcg(20261121);
     var ax = Math.cos(ARM) * cr - SQ * Math.sin(ARM) * sr, ay = Math.cos(ARM) * sr + SQ * Math.sin(ARM) * cr, al = Math.sqrt(ax * ax + ay * ay);
     function clear(x, y, by) { return Math.abs((x - CX) * ay - (y - CY) * ax) / al >= by; }
-    function underWords(x, y) { return L.strip ? (y < 30 && x < W - 26) : (x < 156 && y < 60); }
+    function underWords(x, y) { return L.strip && y < 30 && x < W - 26; }
     for (i = 0; i < L.stars; i++) {
       var sx = rnd() * W, sy = rnd() * H, big = rnd() < 0.2, dim = 0.3 + rnd() * 0.4;
       if (!clear(sx, sy, L.strip ? 13 : 30) || underWords(sx, sy)) continue;
@@ -1650,9 +1825,15 @@ a.rs-b { cursor: pointer; }
         ' stroke="#FBEFD2" stroke-opacity="' + f(so) + '" stroke-width="' + f(1.7 * L.lw) + '" stroke-linecap="round" stroke-dasharray="' + f(dash) + ' ' + f(each - dash) + '" stroke-dashoffset="' + f(off) + '"/>');
       line[key] = op; streak[key] = so;
     });
-    /* Beside the questions the sky runs out into the panel's own ground at
-       its foot, so the key below is not under a hard edge. */
-    if (!L.strip) s.push('<rect y="' + (H - 60) + '" width="' + W + '" height="60" fill="url(#rs-fade)"/>');
+    /* Where the system meets the page. Beside the questions the orbits and
+       the light give way to the night before the words begin (the edge
+       worked out in sysLayout), and past the words' edge they are covered;
+       they would run on behind the words otherwise. In the strip the light
+       softens into the band at its head and its foot. The mark and the
+       bodies are drawn after this, so they stay sharp. */
+    if (L.strip) s.push('<rect width="' + W + '" height="14" fill="url(#rs-fade-up)"/><rect y="' + (H - 22) + '" width="' + W + '" height="22" fill="url(#rs-fade)"/>');
+    else s.push('<rect x="' + f(L.edgeA) + '" y="-300" width="' + f(L.edgeB - L.edgeA + 0.5) + '" height="1640" fill="url(#rs-edge)"/>' +
+      '<rect x="' + f(L.edgeB) + '" y="-300" width="' + f(Math.max(0, 820 - L.edgeB)) + '" height="1640" fill="#050E1C"/>');
 
     /* The mark: the sphere with its two pale loops and its gold ring, the ring
        behind it and in front, with its own light round it. */
@@ -1700,9 +1881,10 @@ a.rs-b { cursor: pointer; }
       state[key] = st;
     });
 
-    /* The words. Beside the questions: the step at the head, and the area
-       being asked about named to the left of its body, on as many lines as
-       the room there needs. The strip's one line is set in the page, below. */
+    /* The words. Beside the questions: the area being asked about, named to
+       the left of its body, on as many lines as the room there needs. The
+       step is said by its own heading in the page. The strip's one line is
+       set in the page, below. */
     if (!L.strip) {
       if (now) {
         p = pt(rr(areaKeys.indexOf(now)) * R, ARM);
@@ -1712,20 +1894,102 @@ a.rs-b { cursor: pointer; }
         s.push('<text class="rs-now' + (move && seen.now !== now ? ' is-next' : '') + '" font-size="' + f(size) + '" stroke-width="' + f(6 * size / 14) + '">' +
           lines.map(function (ln, j) { return '<tspan x="' + f(right) + '" y="' + f(y0 + j * lh) + '">' + esc(ln) + '</tspan>'; }).join('') + '</text>');
       }
-      if (!finished) s.push('<text class="rs-step" x="28" y="44" font-size="' + f(11 * ts) + '" letter-spacing="2">' + esc(stepWords.toUpperCase()) + '</text>');
     }
     s.push('</svg>');
 
-    var cap = '<div class="rs-cap' + (now ? '' : ' is-step') + '" aria-hidden="true">' + esc(now ? areaName(now) : finished ? '' : stepWords) + '</div>';
-    var key = '<div class="rs-key" aria-hidden="true">' +
-      '<div class="rs-key-item">' + smallMark('strong') + 'Strong</div>' +
-      '<div class="rs-key-item">' + smallMark('partial') + 'Partial</div>' +
-      '<div class="rs-key-item">' + smallMark('gap') + 'Gap</div>' +
-      '<div class="rs-key-item">' + smallMark('na') + 'Not applicable</div>' +
-      '</div>';
-    sysHost.innerHTML = s.join('') + cap + key;
+    /* The strip's one line: the area being asked about, or the step. The
+       drawing carries no key: the answers and the rows say what its marks
+       mean. */
+    var cap = '<div class="rs-cap' + (now ? '' : ' is-step') + '" aria-hidden="true">' + esc(now ? areaName(now) : finished ? '' : words) + '</div>';
+    sysHost.innerHTML = s.join('') + cap;
     if (sysGrid) sysGrid.classList.toggle('is-result', finished);
-    seen = { mode: mode, W: W, ts: ts, now: now, state: state, line: line, streak: streak };
+    seen = { mode: mode, w: L.w, edgeB: L.edgeB || 0, now: now, state: state, line: line, streak: streak };
+  }
+
+  /* THE ROWS THE QUESTIONS ARE SET AS. Each area's question is headed as its
+     row in the result is: the mark, the number, the name, and the word for
+     how it was answered. The marks are made here, by the function that makes
+     the system's, so an answer, its row and its body always show the same
+     thing; and each answer carries the mark it would place. */
+  var areaWords = { strong: 'Strong', partial: 'Partial', gap: 'Gap identified', na: 'Not applicable' };
+  function waitMark() {
+    return '<svg class="rs-mark is-wait" viewBox="0 0 14 14" aria-hidden="true" focusable="false"><circle class="rs-m-wait" cx="7" cy="7" r="4.4"/></svg>';
+  }
+  function optionMark(status) {
+    return '<svg class="q-m" data-s="' + status + '" viewBox="0 0 16 16" aria-hidden="true" focusable="false">' + markOf(status, 8, 8, 0.75, '') + '</svg>';
+  }
+  function markOptions() {
+    [].forEach.call(document.querySelectorAll('.q-area .q-option'), function (opt) {
+      var input = opt.querySelector('input'), ring = opt.querySelector('.q-radio');
+      if (input && ring) ring.innerHTML = optionMark(statusFor(parseInt(input.value, 10)));
+    });
+  }
+  function syncRows() {
+    [].forEach.call(document.querySelectorAll('.q-area'), function (card) {
+      var head = card.querySelector('.q-head'), mark = card.querySelector('.q-mark'), word = card.querySelector('.q-status');
+      if (!head || !mark || !word) return;
+      var c = card.querySelector('input:checked'), st = c ? statusFor(parseInt(c.value, 10)) : 'wait';
+      if (head.getAttribute('data-s') === st) return;
+      head.setAttribute('data-s', st);
+      head.className = 'q-head is-' + st;
+      mark.innerHTML = c ? smallMark(st) : waitMark();
+      word.textContent = c ? areaWords[st] : '';
+    });
+  }
+
+  /* THE STARS BEHIND THE WORDS. One still canvas under the nav (.as-stars in
+     the styles). The stars are laid out once, from a fixed seed, over a field
+     of 3600 by 2200, and a window shows the part of the field it covers: so
+     they are the same stars every time and none moves when the window
+     changes size. A window larger than the field (a very wide screen, a page
+     zoomed far out) shows the field again beside or below itself. The recipe is the framework page's own for its
+     loose field: one star to about 3400 square pixels, 0.45 to 1.7 in radius,
+     none brighter than 0.35, a few of them gold and a few blue. Beside the
+     questions the system's own box is left empty, where it stands under the
+     nav: the system brings its own stars. */
+  var starCanvas = document.getElementById('asStars'), starField = null, FW = 3600, FH = 2200;
+  function stars() {
+    if (starField) return starField;
+    var n = Math.round(FW * FH / 3400), g = lcg(20261122), a = [], c;
+    for (var i = 0; i < n; i++) {
+      c = g();
+      a.push([g() * FW, g() * FH, 0.45 + g() * 1.25, 0.12 + g() * 0.23, c < 0.07 ? '220,179,75' : c < 0.14 ? '170,205,255' : '214,226,242']);
+    }
+    return (starField = a);
+  }
+  function drawStars() {
+    if (!starCanvas || !starCanvas.getContext) return;
+    var w = starCanvas.clientWidth, h = starCanvas.clientHeight;
+    if (!w || !h) return;
+    var dpr = Math.min(2, window.devicePixelRatio || 1), ctx = starCanvas.getContext('2d');
+    starCanvas.width = Math.round(w * dpr); starCanvas.height = Math.round(h * dpr);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    /* The system's box, from the rules on .as-side and .rs-sky: 1.2 of the
+       holder wide, 0.0646 of it to the left of the holder, its top the
+       holder's drop (60, less in a very short window) less 0.2508 of the
+       holder under the holder's own top, which is 104 down the window; the
+       canvas starts 72 down. */
+    var hole = null, side = sysHost && sysHost.parentNode;
+    if (side && !narrow.matches) {
+      var p = side.clientWidth, drop = Math.max(0, Math.min(60, window.innerHeight - 112 - 1.1436 * p));
+      var x0 = side.getBoundingClientRect().left - 0.0646 * p, y0 = 104 + drop - 0.2508 * p - 72;
+      hole = [x0, y0, x0 + 1.2 * p, y0 + 1.2 * p * 1.28];
+    }
+    /* Behind the column of words the stars are smaller and fainter still, so
+       none can be taken for a mark or a full stop beside a line of type. */
+    var col = document.querySelector('.as-main'), cb = col ? col.getBoundingClientRect() : null;
+    var c0 = cb ? cb.left - 16 : 0, c1 = cb ? cb.right + 16 : 0;
+    var list = stars(), tx, ty, i, st, x, y, quiet;
+    for (tx = 0; tx * FW < w + 2; tx++) for (ty = 0; ty * FH < h + 2; ty++) for (i = 0; i < list.length; i++) {
+      st = list[i]; x = st[0] + tx * FW; y = st[1] + ty * FH;
+      if (x > w + 2 || y > h + 2) continue;
+      if (hole && x > hole[0] && x < hole[2] && y > hole[1] && y < hole[3]) continue;
+      quiet = cb && x > c0 && x < c1;
+      ctx.fillStyle = 'rgba(' + st[4] + ',' + (quiet ? st[3] * 0.6 : st[3]).toFixed(3) + ')';
+      ctx.beginPath();
+      ctx.arc(x, y, quiet ? Math.min(0.9, st[2] * 0.62) : st[2], 0, 6.2832);
+      ctx.fill();
+    }
   }
 
   /* The result's rows: one to an area, in the words the result has always
@@ -1757,15 +2021,21 @@ a.rs-b { cursor: pointer; }
     sysGrid.addEventListener('focusout', function (e) { lightPair(e, false); });
   }
 
-  /* A resized window: draw again only where the drawing itself would differ
-     (the strip is drawn to its own width, the panel's words to its scale). */
+  /* A resized window: the system is drawn again only where the drawing
+     itself would differ. The strip is drawn to its own width. Beside the
+     questions the size of the words follows the holder's width, and the
+     edge follows the holder's width and the gap between the columns, which
+     can change while the holder's width does not (a short window made
+     narrower). The stars are drawn again for the new window: the same
+     stars, more or fewer of them showing. */
   var sysFrame = 0;
   window.addEventListener('resize', function () {
     if (sysFrame || !sysHost) return;
     sysFrame = window.requestAnimationFrame(function () {
       sysFrame = 0;
       var L = sysLayout();
-      if ((L.strip ? 'strip' : 'panel') !== seen.mode || (L.strip ? L.W !== seen.W : Math.abs(L.ts - seen.ts) > 0.02)) drawSystem(true);
+      if ((L.strip ? 'strip' : 'panel') !== seen.mode || Math.abs(L.w - seen.w) > 0.5 || (!L.strip && Math.abs(L.edgeB - seen.edgeB) > 0.5)) drawSystem(true);
+      drawStars();
     });
   });
 
@@ -1791,9 +2061,11 @@ a.rs-b { cursor: pointer; }
   document.getElementById('btn-back-5').addEventListener('click', function() { clearStepErrors(5); showStep(4); });
 
   // Initialize
-  updateProgress();
+  markOptions();
+  syncRows();
   updateTierHint();
   drawSystem(true);
+  drawStars();
 
   // Hero cursor glow
   /* Hero cursor glow driver lives in footer.js (promoted 2026-08-24) */

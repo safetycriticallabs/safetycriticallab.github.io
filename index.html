@@ -1121,11 +1121,13 @@
   /* Cert card-scale sizing (small in card, larger when expanded) */
   #sc-cert-stage .cert-doc { width: 300px; --cert-rest: 0.68; }
   /* Cert card sits on cream (a white cert floating on paper, not on navy). */
-  /* Only the framework tile takes the dark ground. The certificate went dark
-     briefly on 2026-09-13 and came straight back: a white document on cream
-     reads as paper, and the SPECIMEN watermark and the ruled lines depend on
-     that. The burst is the opposite case, a constellation that wants a night
-     sky, so it keeps the dark and its expanded modal now matches it. */
+  /* Two tiles take the dark ground: the framework tile, and since 2026-11-22
+     the Assess tile, whose page moved onto the night (Card 4, below). The
+     certificate does not. It went dark briefly on 2026-09-13 and came
+     straight back: a white document on cream reads as paper, and the
+     SPECIMEN watermark and the ruled lines depend on that. The burst is the
+     opposite case, a constellation that wants a night sky, so it keeps the
+     dark and its expanded modal now matches it. */
   #sc-cert { background:
       radial-gradient(ellipse 54% 46% at 50% 40%, rgba(255,255,255,0.82), rgba(255,255,255,0) 56%),
       radial-gradient(ellipse 98% 94% at 50% 44%, transparent 42%, rgba(12, 34, 66,0.15) 100%),
@@ -1221,18 +1223,20 @@
       radial-gradient(ellipse 100% 96% at 50% 44%, #173A64 0%, #0B1D37 100%)
       !important; border:1px solid rgba(250,249,245,0.06); }
   #sc-fw .sc-label { color:#FAF9F5 !important; }
-  /* Bottom two tiles → cream, the SAME display-box as #sc-cert and #sc-fw.
-     These were navy until 2026-09-13. The reason they are not any more: each
-     tile is a view of the page it opens, and both of those pages are cream
-     #FAF9F5 on navy #0C2242 ink (measured on /search and /assess, not guessed).
-     A navy tile advertising a cream page is a preview of something else. All
-     four cards now carry one treatment and each one's contents carry its own
-     page's real values. */
-  #sc-ask, #sc-assess, #sc-subscribe { background:
+  /* The Ask and Subscribe tiles → cream, the SAME display-box as #sc-cert.
+     The bottom tiles were navy until 2026-09-13. The reason they are not any
+     more: each tile is a view of the page it opens, and the pages these two
+     open are cream #FAF9F5 on navy #0C2242 ink (measured on /search, not
+     guessed). A navy tile advertising a cream page is a preview of something
+     else. Each card's contents carry its own page's real values.
+     The Assess tile stood in this group until 2026-11-22 and left it by the
+     same rule: /assess moved onto the framework page's night, so its tile
+     stands on the night as well (Card 4, below). */
+  #sc-ask, #sc-subscribe { background:
       radial-gradient(ellipse 54% 46% at 50% 40%, rgba(255,255,255,0.82), rgba(255,255,255,0) 56%),
       radial-gradient(ellipse 98% 94% at 50% 44%, transparent 42%, rgba(12, 34, 66,0.15) 100%),
       #FAF9F5 !important; border:1px solid rgba(12, 34, 66,0.12); box-shadow:0 2px 26px rgba(12, 34, 66,0.06); }
-  #sc-ask .sc-label, #sc-assess .sc-label, #sc-subscribe .sc-label { color:#0C2242 !important; }
+  #sc-ask .sc-label, #sc-subscribe .sc-label { color:#0C2242 !important; }
 
   /* ── #sc-ask and #sc-subscribe are not buttons ───────────────────────────
      The other three tiles are: cert and fw open their modal from a click
@@ -1524,63 +1528,121 @@
   @media (max-width: 640px){ .sc-ask-icon{ display:none; } .sc-ask-search{ padding-left:10px; } }
   @media (prefers-reduced-motion: reduce){ .sc-ask-search, .sc-ask-submit{ transition:none; } }
 
-  /* ── Card 4: Readiness assessment — the /assess score ring, ambient ──
-     The ring and three area rows cycle through specimen readiness profiles
-     (JS near </body>); the CTA link is the real path to /assess. */
-  .sc-assess-stage{ width:100%; align-items:stretch; gap:18px; }
-  .sc-assess-demo{ display:flex; align-items:center; justify-content:center; gap:26px; min-height:176px; }
-  .sc-ring{ position:relative; width:150px; height:150px; flex-shrink:0; }
-  .sc-ring svg{ width:100%; height:100%; transform:rotate(-90deg); }
-  .sc-ring-bg{ fill:none; stroke:rgba(12, 34, 66,0.12); stroke-width:9; }
-  .sc-ring-fill{ fill:none; stroke:#0C2242; stroke-width:9; stroke-linecap:round; stroke-dasharray:389.6; stroke-dashoffset:389.6; transition:stroke-dashoffset 1.1s cubic-bezier(.4,0,.2,1); }
-  .sc-ring-num{ position:absolute; inset:0; display:flex; align-items:center; justify-content:center; font-size:33px; font-weight:600; color:#0C2242 !important; }
-  .sc-ring-num span{ font-size:16px; font-weight:400; color:rgba(12, 34, 66,0.66) !important; margin-left:2px; }   /* 5.14:1 */
-  .sc-assess-rows{ display:flex; flex-direction:column; gap:10px; min-width:0; }
-  .sc-assess-row{ display:flex; align-items:center; gap:10px; font-size:13px; color:#0C2242 !important; padding:9px 12px; border-radius:10px; background:rgba(12, 34, 66,0.045); white-space:nowrap; }
-  .sc-assess-id{ font-family:var(--mono); font-size:10.5px; font-weight:600; letter-spacing:.03em; color:rgba(12, 34, 66,0.66) !important; }   /* 5.14:1 */
-  /* Readiness dots ARE the /assess results key, not an approximation of it.
-     They were brightened a step (#3E9E5C / #D9982F / #CE4B50) while this card
-     was navy; the card went cream 2026-09-13 and the reason for the lift went
-     with it, so they are back to the exact published values. If /assess ever
-     restates its key, restate it here, and nowhere in between. */
-  .sc-assess-dot{ width:9px; height:9px; border-radius:50%; margin-left:auto; flex-shrink:0; background:#5B6B84; transition:background .5s ease; }
-  .sc-assess-dot.is-strong{ background:var(--ok); } .sc-assess-dot.is-partial{ background:var(--warn); } .sc-assess-dot.is-gap{ background:var(--bad); }
-  @media (max-width:880.98px){ .sc-assess-rows{ display:none; } }   /* narrow fine-pointer windows: the ring alone */
-  /* The area rows have to fit the card (2026-09-26). On one line beside the
-     150px ring they need a card about 490px wide, and until the scroll widen
-     runs the card is 381px, so they ran off the right edge at every desktop
-     width before the widen, always from 1101 to 1359 (which never widens), and
-     from 881 to about 1085 two across.
-     Three across, the card is taller than it is wide, so the ring goes on top
-     and the rows take the full width under it. The ring follows the stage from
-     88px on the 1101px layout up to 128px, which it reaches on a 378px card,
-     just under the 381px the scroll widen starts from. So while --expand runs
-     only the rows get longer: the ring, the row heights and the start link
-     stay put.
-     Two across (881 to 1100) the card is wider than it is tall, and this tile
-     sets the row height there (334px), so there is no height to stack into.
-     The ring stays beside the rows and takes the width they leave, 150px at
-     1100 down to about 50px at 881. The rows give up 2px of side padding and
-     2px of gap so they fit the 1101px card, the narrowest three across. Card
-     heights are unchanged at every width. */
-  @media (min-width: 881px) {
-    .sc-assess-stage{ container-type:inline-size; }
-    .sc-assess-demo{ --ring:clamp(88px, 100cqi - 200px, 128px); flex-direction:column; gap:16px; }
-    .sc-assess-rows{ align-self:stretch; }
-    .sc-assess-row{ padding:9px 10px; gap:8px; }
-    .sc-ring{ width:var(--ring); height:var(--ring); }
-    .sc-ring-num{ font-size:max(12px, calc(var(--ring) * .22)); }
-    .sc-ring-num span{ font-size:max(9px, calc(var(--ring) * .107)); }
+  /* ── Card 4: Readiness assessment, on the night ──
+     Each tile is a view of the page it opens (the note above the cream
+     tiles). Since 2026-11-22 /assess stands on the framework page's night,
+     with the requirement areas drawn as that page's system, so this tile is
+     the same thing small: the night ground, the system across the top
+     carrying a specimen result's thirteen marks, the score at the foot of
+     it, three of the areas set as that page sets its rows, and the start
+     link in that page's night form. The link is the real path to /assess.
+
+     These ARE /assess's values, not an approximation of them: the ground
+     #050E1C, the status colours, the rows' marks (its smallMark and
+     waitMark), the words for the answers (its areaWords) and the rule the
+     score is worked out by (its calculateResults). If /assess ever restates
+     them, restate them here, and nowhere in between. The rest is this
+     tile's own. The sky follows that page's drawing but is not a copy of
+     it: its tilt, its arm, its light and its foot are set for this size;
+     its bodies take their radii from that page's markOf(), but their line,
+     their dashes and the light under them are set for a body this small;
+     nothing in it uses a filter; and only the bodies the rows name are
+     numbered (the notes in the script near </body>). And the rows' ids
+     keep this page's mono face, as they had before; /assess sets its ids
+     in the sans.
+
+     THE SKY. The system is drawn by the script at the tile's own size, into
+     .sc-assess-sky: one small SVG with no filter in it, laid over the top of
+     the card from edge to edge and behind its words. It is centred on the
+     card and a fixed size in pixels, so the two scroll effects that change
+     this card's width (the widen on a laptop, the spread on a phone) only
+     uncover more of it; they do not redraw or scale it. The script works
+     out the card's narrowest and widest states and keeps the system inside
+     the narrowest. It makes the drawing again when the window's width
+     changes and when the room the sky is seen through moves.
+
+     THE ROOM IT IS SEEN THROUGH. .sc-assess-space stands where the score
+     ring stood until 2026-11-22 and keeps the ring's size at every width,
+     so the card heights, the start link and the tile's name are exactly
+     where they were. Three across (1101 and up) the ring followed the
+     stage, from 88px on the 1101px layout up to 128px, which it reaches on
+     a 378px card, just under the 381px the scroll widen starts from; so
+     while --expand runs nothing in the tile changes height. The rows keep
+     the 136.4px their three boxes and the two gaps between them took (three
+     lines of 20.8px, each with 18px of padding, and two gaps of 10px). Two
+     across and on phones (1100 and
+     under) the tile is 334px tall and has no room for the rows under the
+     sky, so it shows the system, the score and the link. (Until 2026-11-22
+     the rows stood beside the ring from 881 to 1100.)
+
+     THE WORD FOR THE ANSWER stands at the right of each row where the row
+     can hold it: where the stage has 330px or more inside its padding,
+     which is every window from 1276 wide. The longest row needs 324px
+     (measured: AI-1's name with Strong or Partial). The specimens are
+     chosen so that the two long names never meet the two long words (the
+     note at PROFILES in the script): with Gap identified beside it AI-6's
+     row would need 340px and AI-1's 362px, and with Not applicable 346px
+     and 369px. */
+  #sc-assess { isolation: isolate; background: #050E1C !important; border: 1px solid #2B5C94; }
+  /* Phones: the outline fades out as the tile spreads to the screen edge, as
+     the framework tile's does (the note at #sc-fw). */
+  @media (max-width: 640px) { #sc-assess { border-color: rgba(43, 92, 148, calc(1 - var(--tile-x, 0))); } }
+  #sc-assess .sc-label { color: #FAF9F5 !important; }
+  .sc-assess-sky { position: absolute; left: 50%; top: 0; z-index: -1; pointer-events: none; }
+  .sc-assess-sky svg { display: block; width: 100%; height: 100%; }
+  .sc-assess-stage { width: 100%; align-items: stretch; gap: 18px; }
+  .sc-assess-demo { display: flex; flex-direction: column; justify-content: flex-end; gap: 16px; min-height: 176px; }
+  .sc-assess-space { position: relative; flex: none; height: 150px; }
+  /* The score stands at the foot of the sky, on the rows' right-hand edge. */
+  .sc-assess-score { position: absolute; right: 4px; bottom: 0; visibility: hidden; font-size: 40px; font-weight: 600; line-height: 1; letter-spacing: -0.02em; white-space: nowrap; color: #FAF9F5 !important; text-shadow: 0 0 12px #050E1C, 0 0 4px #050E1C; }
+  .sc-assess-score span { color: #FAF9F5 !important; }
+  /* The score comes on show with the sky, once the script has drawn it
+     (.is-drawn): a number alone on an empty tile, where the script does not
+     run, would read as a result. */
+  #sc-assess.is-drawn .sc-assess-score { visibility: visible; }
+  .sc-assess-score .sc-assess-pct { font-size: 17px; font-weight: 400; letter-spacing: 0; margin-left: 2px; color: rgba(214,226,242,0.86) !important; }   /* 10.99:1 */
+  /* The marks. A body in the sky, a row's mark and that row's word take one
+     colour from the answer's class. */
+  #sc-assess .is-strong { --as-c: #6FE89B; }
+  #sc-assess .is-partial { --as-c: #FFC64F; }
+  #sc-assess .is-gap { --as-c: #FF7D7B; }
+  #sc-assess .is-na { --as-c: #A9B8CD; }
+  .as-m-full { fill: var(--as-c); }
+  .as-m-open, .as-m-broken { fill: #050E1C; stroke: var(--as-c); }
+  .as-m-point { fill: var(--as-c); fill-opacity: 0.9; }
+  .as-m-wait { fill: none; stroke: rgba(234,242,255,0.6); }
+  .as-num { font-family: var(--sans); font-weight: 500; fill: #EAF2FF; text-anchor: middle; }
+  /* The rows: ruled lines, as /assess sets its own, not boxes. */
+  .sc-assess-rows { display: none; min-width: 0; border-bottom: 1px solid rgba(250,249,245,0.16); }
+  .sc-assess-row { display: flex; align-items: center; gap: 10px; flex: 1 1 0; min-width: 0; padding: 0 4px; border-top: 1px solid rgba(250,249,245,0.16); font-size: 13px; color: #FAF9F5 !important; white-space: nowrap; }
+  .sc-assess-mark { flex: none; width: 14px; height: 14px; display: block; overflow: visible; }
+  .sc-assess-mark .as-m-open, .sc-assess-mark .as-m-broken { fill: none; }
+  .sc-assess-id { flex: none; min-width: 26px; font-family: var(--mono); font-size: 10.5px; font-weight: 600; letter-spacing: .03em; color: rgba(214,226,242,0.82) !important; }   /* 10.04:1 */
+  .sc-assess-name { color: #FAF9F5 !important; }
+  .sc-assess-word { display: none; flex: none; margin-left: auto; font-size: 9.5px; font-weight: 600; letter-spacing: .07em; text-transform: uppercase; color: var(--as-c) !important; }
+  @media (min-width: 1101px) {
+    .sc-assess-stage { container-type: inline-size; }
+    .sc-assess-space { height: clamp(88px, 100cqi - 200px, 128px); }
+    .sc-assess-rows { display: flex; flex-direction: column; min-height: 136.4px; }
   }
-  @media (min-width: 881px) and (max-width: 1100px) {
-    .sc-assess-demo{ --ring:clamp(40px, 100cqi - 288px, 150px); flex-direction:row; }
-    .sc-assess-rows{ align-self:auto; }
+  @container (min-width: 330px) { .sc-assess-word { display: block; } }
+  /* Forced colours (Windows contrast themes). The ground and the words take
+     the system's colours but a drawing keeps its own, so the night sky would
+     stand as a dark picture across a light card: it is left out there, and
+     the rows' marks are drawn in the text colour. Their shapes still tell
+     them apart. Where there are no rows either (1100 and under) the score
+     goes with the sky, because a number alone would read as a result. */
+  @media (forced-colors: active) {
+    .sc-assess-sky { display: none; }
+    .sc-assess-score { text-shadow: none; }
+    .sc-assess-mark .as-m-full, .sc-assess-mark .as-m-point { fill: CanvasText; }
+    .sc-assess-mark .as-m-open, .sc-assess-mark .as-m-broken, .sc-assess-mark .as-m-wait { stroke: CanvasText; }
   }
-  @media (prefers-reduced-motion: reduce){ .sc-ring-fill{ transition:none; } .sc-assess-dot{ transition:none; } }
-  /* Inverted with the card: a cream pill on a cream ground is invisible. Now it
-     matches the nav's own Get Certified pill, navy on cream. */
-  .sc-assess-cta{ display:flex; align-items:center; justify-content:center; gap:8px; width:100%; background:#0C2242; color:#FAF9F5 !important; border-radius:8px; padding:11px 18px; font-size:14px; font-weight:600; text-decoration:none; transition:background .2s ease; }
-  .sc-assess-cta:hover{ background:#081A34; }
+  @media (forced-colors: active) and (max-width: 1100px) { #sc-assess.is-drawn .sc-assess-score { visibility: hidden; } }
+  /* On the night the link is cream with navy words, as /assess's own buttons
+     are. */
+  .sc-assess-cta{ display:flex; align-items:center; justify-content:center; gap:8px; width:100%; background:#FAF9F5; color:#0C2242 !important; border-radius:8px; padding:11px 18px; font-size:14px; font-weight:600; text-decoration:none; transition:background .2s ease; }
+  .sc-assess-cta:hover{ background:#EBF1F8; }
 
   /* Common-questions tile → mirrors the /search "Ask SCL" page: the seal, the
      eyebrow, the example questions, over the real search bar.
@@ -1713,8 +1775,10 @@
 
        WHY A BROAD WARM FILL IS SAFE HERE, which the previous navy treatment
        was written to avoid. Every warm SIGNAL on this site is saturated:
-       the one status amber, --warn #B5751A (chroma 0.126), which /assess,
-       /evidence, /verify and the readiness dots on this page all now read.
+       the one status amber, --warn #B5751A (chroma 0.126), which /evidence
+       and /verify read and /assess prints in its report. (The readiness
+       dots on this page read it too until 2026-11-22. On the night, /assess
+       and its tile show Partial as #FFC64F.)
        The ladder tops out at 0.062. The rule that keeps
        surface and status apart is chroma, not hue: saturated warm is a claim,
        desaturated warm is paper. Do not raise this card's chroma past ~0.07
@@ -2525,24 +2589,29 @@ html.vt-fw::view-transition-new(root) { animation-duration: 0.2s; }
       </div>
 
       <div class="sc-card" id="sc-assess">
+        <!-- The sky the tile is seen through: /assess's system, drawn by the
+             script near </body> at the tile's own size (THE SKY, at Card 4 in
+             the styles). Decorative, like the demo below. -->
+        <div class="sc-assess-sky" id="sc-assess-sky" aria-hidden="true"></div>
         <div class="sc-stage sc-ask-stage sc-assess-stage">
-          <!-- Ambient readiness demo: the /assess score ring plus three area
-               rows, cycling through CANNED specimen profiles (mirrors the
-               results report; no real scoring runs here). Decorative:
-               aria-hidden; the label, sub-line and the start link carry the
-               accessible meaning. Loop pauses off-screen. -->
+          <!-- Ambient readiness demo: a specimen result as /assess shows one.
+               The score, and three of the thirteen areas set as that page's
+               rows (the mark, the number, the name, the word for the answer),
+               cycling through CANNED specimen results together with the
+               system above (no real scoring runs here; each score is what
+               /assess would give the marks shown). Decorative: aria-hidden;
+               the label and the start link carry the accessible meaning.
+               What is written here is the tile before its first specimen:
+               the rows waiting, and the score at 0, which stays out of sight
+               until the script has drawn the sky. So a tile whose script
+               does not run shows the rows waiting and no number. Loop pauses
+               off-screen. -->
           <div class="sc-assess-demo" aria-hidden="true">
-            <div class="sc-ring">
-              <svg viewBox="0 0 140 140">
-                <circle class="sc-ring-bg" cx="70" cy="70" r="62"/>
-                <circle class="sc-ring-fill" id="sc-ring-fill" cx="70" cy="70" r="62"/>
-              </svg>
-              <div class="sc-ring-num" id="sc-ring-num">0<span>%</span></div>
-            </div>
+            <div class="sc-assess-space"><div class="sc-assess-score"><span id="sc-assess-num">0</span><span class="sc-assess-pct">%</span></div></div>
             <div class="sc-assess-rows">
-              <div class="sc-assess-row"><span class="sc-assess-id">AI-1</span>Operational and data foundations<span class="sc-assess-dot"></span></div>
-              <div class="sc-assess-row"><span class="sc-assess-id">AI-4</span>Continuous validation<span class="sc-assess-dot"></span></div>
-              <div class="sc-assess-row"><span class="sc-assess-id">AI-6</span>Out-of-distribution detection<span class="sc-assess-dot"></span></div>
+              <div class="sc-assess-row is-wait" data-area="1"><svg class="sc-assess-mark" viewBox="0 0 14 14" focusable="false"><circle class="as-m-wait" cx="7" cy="7" r="4.4" stroke-width="1.2"/></svg><span class="sc-assess-id">AI-1</span><span class="sc-assess-name">Operational and data foundations</span><span class="sc-assess-word"></span></div>
+              <div class="sc-assess-row is-wait" data-area="4"><svg class="sc-assess-mark" viewBox="0 0 14 14" focusable="false"><circle class="as-m-wait" cx="7" cy="7" r="4.4" stroke-width="1.2"/></svg><span class="sc-assess-id">AI-4</span><span class="sc-assess-name">Continuous validation</span><span class="sc-assess-word"></span></div>
+              <div class="sc-assess-row is-wait" data-area="6"><svg class="sc-assess-mark" viewBox="0 0 14 14" focusable="false"><circle class="as-m-wait" cx="7" cy="7" r="4.4" stroke-width="1.2"/></svg><span class="sc-assess-id">AI-6</span><span class="sc-assess-name">Out-of-distribution detection</span><span class="sc-assess-word"></span></div>
             </div>
           </div>
           <a class="sc-assess-cta" href="/assess">Start the assessment &rarr;</a>
@@ -3482,43 +3551,349 @@ html.vt-fw::view-transition-new(root) { animation-duration: 0.2s; }
    nothing left to drive: a tile that holds still can be read, and a question
    that cannot fade out mid-click does not need a visibility observer to be
    honest. The chip styling went with it (see the note at the Card 3 CSS). */
-/* Assess tile: ambient readiness demo. The ring, number and area dots cycle
-   through canned specimen profiles (no real scoring runs here). Every step
-   checks visibility and the observer resumes a parked step on re-entry, which
-   is battery politeness. The Ask tile's starter loop used to share this
-   pattern; it was deleted 2026-09-15 when those questions stopped moving, so
-   this is now the only loop of its kind on the page. Reduced motion: the first
-   profile renders once, static. */
+/* Assess tile: a specimen result, as /assess shows one. The system in the sky
+   follows that page's drawing (its drawSystem, at the look it has once every
+   area is answered): the same thirteen orbits at the same spacing and in
+   the same colours, the same mark, and bodies at its markOf radii, placed
+   by the roll and the reach as its strip is. The tilt, the arm, the light
+   and the foot are this tile's own, set for its size and drawn with no
+   filter, and only the bodies the rows name carry their numbers. The
+   specimens cycle: the bodies in the sky, the
+   three rows and the score change together. Every step checks visibility and
+   the observer resumes a parked step on re-entry, which is battery
+   politeness. The Ask tile's starter loop used to share this pattern; it was
+   deleted 2026-09-15 when those questions stopped moving, so this is now the
+   only loop of its kind on the page. Reduced motion: the first specimen is
+   shown once, static. Where this script does not run, the tile stays as the
+   markup has it: the rows waiting where they are shown, no score and no
+   sky. */
 (function () {
-  var fill = document.getElementById('sc-ring-fill');
-  if (!fill) return;
-  var num = document.getElementById('sc-ring-num');
-  var dots = document.querySelectorAll('#sc-assess .sc-assess-dot');
+  var card = document.getElementById('sc-assess');
+  var sky = document.getElementById('sc-assess-sky');
+  var num = document.getElementById('sc-assess-num');
+  if (!card || !sky || !num) return;
+  var grid = document.querySelector('.sc-grid-wide');
+  var space = card.querySelector('.sc-assess-space');
+  var rowsBox = card.querySelector('.sc-assess-rows');
+  var rows = Array.prototype.slice.call(card.querySelectorAll('.sc-assess-row'));
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
-  var C = 389.6;                                    /* 2*pi*r for r=62; matches the CSS dasharray */
-
-  var PROFILES = [
-    { score: 82, dots: ['is-strong', 'is-strong', 'is-partial'] },
-    { score: 54, dots: ['is-strong', 'is-partial', 'is-gap'] },
-    { score: 37, dots: ['is-partial', 'is-gap', 'is-gap'] },
-  ];
+  if (!space) return;
 
   /* pointer convenience like the cert tile's whole-card click: anywhere on the
-     navy is the assessment (the CTA link stays the accessible/keyboard path) */
-  var card = document.getElementById('sc-assess');
+     tile is the assessment (the CTA link stays the accessible/keyboard path) */
   card.addEventListener('click', function (e) {
     if (e.target.closest && e.target.closest('a, button')) return;
     window.location.href = '/assess';
   });
 
-  function paint(p) {
-    fill.style.strokeDashoffset = (C * (1 - p.score / 100)) + 'px';
-    Array.prototype.forEach.call(dots, function (d, i) { d.className = 'sc-assess-dot ' + p.dots[i]; });
+  /* THE SPECIMENS. One letter for each of the thirteen areas, in order:
+     S strong, P partial, G gap, N not applicable. They are canned (no real
+     scoring runs here), but each score is worked out from its own letters by
+     /assess's rule (scoreOf, below), so the number always agrees with the
+     marks: 82, 54 and 38. The third read 37 until 2026-11-22; no thirteen
+     areas that all apply can score 37.
+     The three rows name AI-1, AI-4 and AI-6. The two long words, Gap
+     identified and Not applicable, are kept off AI-1 and AI-6, the two long
+     names, so every row fits its line wherever the word is shown (THE WORD
+     FOR THE ANSWER, at Card 4 in the styles). So AI-1 and AI-6 are never G
+     or N here. (On /assess itself the first six areas have no Not
+     applicable answer.) */
+  var PROFILES = ['SSPSSPGSSPSGS', 'SPGGGPPSGPGGG', 'PGGGGPGGGGGGG'];
+  var STATUS = { S: 'strong', P: 'partial', G: 'gap', N: 'na' };
+  var VALUE = { strong: 3, partial: 2, gap: 1, na: 0 };
+  var WORDS = { strong: 'Strong', partial: 'Partial', gap: 'Gap identified', na: 'Not applicable' };
+  var N = PROFILES[0].length;
+  /* /assess's calculateResults(): the points of the areas that apply, over
+     three points for each of them. */
+  function scoreOf(p) {
+    var sum = 0, n = 0, i, v;
+    for (i = 0; i < p.length; i++) { v = VALUE[STATUS[p.charAt(i)]]; if (v) { sum += v; n++; } }
+    return n ? Math.round(sum / (n * 3) * 100) : 0;
   }
 
-  if (reduce.matches) { paint(PROFILES[0]); num.firstChild.nodeValue = PROFILES[0].score; return; }
+  function fx(v) { return (Math.round(v * 100) / 100).toString(); }
+  function lcg(seed) { return function () { seed = (seed * 1664525 + 1013904223) >>> 0; return seed / 4294967296; }; }
+  function fadeIn(el) { if (el && el.animate) el.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 500, easing: 'ease' }); }
+  function fadeOut(el) { if (el && el.animate) el.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 500, easing: 'ease', fill: 'forwards' }); }
 
-  var visible = false, resume = null, idx = 0, shown = 0;
+  /* THE MARKS, as /assess makes them. A row's mark is that page's small mark
+     (its smallMark and waitMark, in a 14px box). A body in the sky is its
+     markOf at the body's scale, with the body's own light under it; the two
+     rings take their line and their eight dashes from the scale, so a small
+     body keeps them even. Before the first specimen a body is the faint ring
+     that page gives an area not yet reached. */
+  function rowMark(st) {
+    if (st === 'strong') return '<circle class="as-m-full" cx="7" cy="7" r="4.34"/>';
+    if (st === 'partial') return '<circle class="as-m-broken" cx="7" cy="7" r="4.46" stroke-width="2.2" stroke-dasharray="3.4 2.25"/>';
+    if (st === 'gap') return '<circle class="as-m-open" cx="7" cy="7" r="4.46" stroke-width="2.2"/>';
+    if (st === 'na') return '<circle class="as-m-point" cx="7" cy="7" r="1.86"/>';
+    return '<circle class="as-m-wait" cx="7" cy="7" r="4.4" stroke-width="1.2"/>';
+  }
+  function body(st, x, y, k) {
+    var c = ' cx="' + fx(x) + '" cy="' + fx(y) + '"', r = 7.2 * k, w = Math.max(1.5, 2.6 * k), d = 2 * Math.PI * r / 8, lit = '';
+    if (st === 'strong' || st === 'partial' || st === 'gap') lit = '<circle' + c + ' r="' + fx((st === 'strong' ? 20 : 16) * k) + '" fill="url(#sca-h-' + st + ')"/>';
+    if (st === 'strong') return lit + '<circle class="as-m-full"' + c + ' r="' + fx(7 * k) + '"/><circle cx="' + fx(x - 1.6 * k) + '" cy="' + fx(y - 1.8 * k) + '" r="' + fx(2.4 * k) + '" fill="#FFFFFF" fill-opacity="0.75"/>';
+    if (st === 'partial') return lit + '<circle class="as-m-broken"' + c + ' r="' + fx(r) + '" stroke-width="' + fx(w) + '" stroke-dasharray="' + fx(d * 0.6) + ' ' + fx(d * 0.4) + '"/>';
+    if (st === 'gap') return lit + '<circle class="as-m-open"' + c + ' r="' + fx(r) + '" stroke-width="' + fx(w) + '"/>';
+    if (st === 'na') return '<circle class="as-m-point"' + c + ' r="' + fx(3 * k) + '"/>';
+    return '<circle' + c + ' r="' + fx(4.6 * k) + '" fill="#050E1C" stroke="#B8D1F6" stroke-opacity="0.42" stroke-width="1"/>';
+  }
+
+  var state = [];                 /* what each body shows: a status, or 'wait' before the first specimen */
+  var spot = [], scale = 0.74;    /* each body's centre in the drawing, and the bodies' size there */
+  var bodiesEl = null, seen = null;   /* seen: the sizes the drawing was last made for */
+
+  /* The bodies. The first thirteen groups are the bodies as they stand. Where
+     a body has just changed (was: what each changed body showed before), the
+     mark it showed is drawn again after them and fades out while the new one
+     fades in. */
+  function renderBodies(was) {
+    if (!bodiesEl) return;
+    var cross = was && bodiesEl.animate ? was : null, h = '', old = '', i;
+    for (i = 0; i < N; i++) {
+      h += '<g class="as-b is-' + state[i] + '">' + body(state[i], spot[i][0], spot[i][1], scale) + '</g>';
+      if (cross && cross[i] !== undefined) old += '<g class="as-b-old is-' + cross[i] + '" data-i="' + i + '">' + body(cross[i], spot[i][0], spot[i][1], scale) + '</g>';
+    }
+    bodiesEl.innerHTML = h + old;
+    if (!cross) return;
+    Array.prototype.forEach.call(bodiesEl.querySelectorAll('.as-b-old'), function (g) {
+      fadeOut(g);
+      fadeIn(bodiesEl.childNodes[parseInt(g.getAttribute('data-i'), 10)]);
+    });
+  }
+  function setRows(was) {
+    rows.forEach(function (row) {
+      var i = parseInt(row.getAttribute('data-area'), 10) - 1, st = state[i];
+      var mark = row.querySelector('.sc-assess-mark'), word = row.querySelector('.sc-assess-word');
+      if (!mark || !word || st === undefined) return;
+      var old = was && was[i] !== undefined && mark.animate ? was[i] : null;
+      row.className = 'sc-assess-row is-' + st;
+      mark.innerHTML = rowMark(st) + (old ? '<g class="is-' + old + '">' + rowMark(old) + '</g>' : '');
+      word.textContent = WORDS[st] || '';
+      if (old) { fadeIn(mark.firstChild); fadeOut(mark.lastChild); fadeIn(word); }
+    });
+  }
+  /* Show a specimen. quiet: nothing fades (the static first specimen). */
+  function paint(p, quiet) {
+    var was = [], any = false, i, st;
+    for (i = 0; i < N; i++) {
+      st = STATUS[p.charAt(i)];
+      if (state[i] !== st) { was[i] = state[i]; state[i] = st; any = true; }
+    }
+    if (!any) return;
+    renderBodies(quiet ? null : was);
+    setRows(quiet ? null : was);
+  }
+
+  /* THE TILE'S TWO WIDTHS. The grid widens as the page scrolls on a laptop
+     (--expand, 0 to 1) and each tile spreads to the screen's edges on a
+     phone (--tile-x, 0 to 1). Both are tried here, the way the grid's own
+     pin() measures at the contained width, and put back at once, before
+     anything is painted: w0 is the card's inner width at its narrowest and
+     w1 at its widest. With reduced motion neither effect runs, so the card
+     has one width. */
+  function widths() {
+    var ge = grid ? grid.style.getPropertyValue('--expand') : '', tx = card.style.getPropertyValue('--tile-x');
+    function inner(v) {
+      if (grid) grid.style.setProperty('--expand', v);
+      card.style.setProperty('--tile-x', v);
+      return card.getBoundingClientRect().width - 2 * card.clientLeft;
+    }
+    var w0 = inner('0'), w1 = reduce.matches ? w0 : inner('1');
+    if (grid) { if (ge) grid.style.setProperty('--expand', ge); else grid.style.removeProperty('--expand'); }
+    if (tx) card.style.setProperty('--tile-x', tx); else card.style.removeProperty('--tile-x');
+    return { w0: Math.round(w0 * 2) / 2, w1: Math.round(Math.max(w0, w1) * 2) / 2,
+      named: !!rowsBox && window.getComputedStyle(rowsBox).display !== 'none' };
+  }
+  /* THE FOOT OF THE SKY, from the top of the card: 12px under the room the
+     sky is seen through, which is 4px above the rows, or 6px above the link
+     where there are no rows. Read as the tile stands at that moment. */
+  function foot() { return space.getBoundingClientRect().bottom + 12 - (card.getBoundingClientRect().top + card.clientTop); }
+
+  /* THE DRAWING. Made for the sizes above and then left alone: it is as wide
+     as the card at its widest and centred on the card, so the card at its
+     narrowest shows the middle of it, from o to o + w0. The mark is never
+     nearer than 34 to the narrowest card's edge nor than 58 to the widest
+     card's, and the last body never nearer than 14 and 34; where the card
+     keeps one width they stand exactly 58 and 34 in. The roll and the
+     reach are worked out from those two places, as /assess's strip does.
+     The scroll effects do not redraw it. A change in the window's width
+     makes it again, and so does a move of the room (keep: the widths it
+     was made for are kept, and only its foot is read again). */
+  function draw(keep) {
+    var S = keep === true && seen ? { w0: seen.w0, w1: seen.w1, named: seen.named } : widths();
+    S.h = foot();
+    if (!(S.w0 > 80) || !(S.h > 60)) return;        /* not laid out yet (a hidden pane): a later resize or load draws it */
+    if (seen && S.w0 === seen.w0 && S.w1 === seen.w1 && S.named === seen.named && Math.abs(S.h - seen.h) < 0.75) return;
+    seen = S;
+
+    var g = (S.w1 - S.w0) / 2;                       /* how far each edge of the card moves out */
+    var W = Math.ceil(S.w1) + 12, H = Math.round(S.h), o = (W - S.w0) / 2;
+    var CX = o + Math.max(34, 58 - g), EX = o + S.w0 - Math.max(14, 34 - g);
+    var CY = H - Math.min(70, 0.42 * H), EY = Math.min(54, 0.29 * H);
+    var SQ = 0.5, ARM = -0.35;
+    var vx = Math.cos(ARM), vy = SQ * Math.sin(ARM), reach = Math.sqrt((EX - CX) * (EX - CX) + (EY - CY) * (EY - CY));
+    var ROLL = Math.atan2(EY - CY, EX - CX) - Math.atan2(vy, vx), R = reach / Math.sqrt(vx * vx + vy * vy);
+    var cr = Math.cos(ROLL), sr = Math.sin(ROLL), deg = ROLL * 180 / Math.PI;
+    var step = 0.70 * reach / (N - 1);               /* from one body to the next */
+    var sun = Math.max(12, Math.min(16, S.w0 / 24)), su = sun / 30, lw = 0.9, spread = 2.6;
+    var f = fx, s = [], i, p;
+    /* The bodies' size follows the room between them, so they never touch:
+       a ring's outer edge, its line included, stays inside its half of the
+       step down to a step of 6, which a card would have to be under about
+       200px wide to give. */
+    scale = Math.max(0.3, Math.min(0.74, 0.0514 * step));
+    function rr(i) { return 0.30 + (i / (N - 1)) * 0.70; }
+    function pt(rad, th) {
+      var x = rad * Math.cos(th), y = rad * SQ * Math.sin(th);
+      return [CX + x * cr - y * sr, CY + x * sr + y * cr];
+    }
+
+    s.push('<svg viewBox="0 0 ' + W + ' ' + H + '" aria-hidden="true" focusable="false">');
+    s.push('<defs>' +
+      '<radialGradient id="sca-glow" cx="' + f(CX) + '" cy="' + f(CY) + '" r="' + f(1.05 * S.w1) + '" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#4A8FE0" stop-opacity="0.66"/><stop offset="0.28" stop-color="#2E6DB4" stop-opacity="0.36"/><stop offset="0.62" stop-color="#1B4A86" stop-opacity="0.15"/><stop offset="1" stop-color="#050E1C" stop-opacity="0"/></radialGradient>' +
+      '<radialGradient id="sca-warm" cx="' + f(CX) + '" cy="' + f(CY) + '" r="' + f(7.5 * sun) + '" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#FAE8C4" stop-opacity="0.46"/><stop offset="0.45" stop-color="#ECD6B0" stop-opacity="0.16"/><stop offset="1" stop-color="#ECD6B0" stop-opacity="0"/></radialGradient>' +
+      '<radialGradient id="sca-sun" cx="0.36" cy="0.30" r="0.80"><stop offset="0" stop-color="#9CC8F8"/><stop offset="0.34" stop-color="#3F80D0"/><stop offset="0.74" stop-color="#133F7C"/><stop offset="1" stop-color="#081F45"/></radialGradient>' +
+      '<radialGradient id="sca-mk"><stop offset="0" stop-color="#FAE8C4" stop-opacity="0.34"/><stop offset="0.6" stop-color="#FAE8C4" stop-opacity="0.2"/><stop offset="1" stop-color="#FAE8C4" stop-opacity="0"/></radialGradient>' +
+      '<radialGradient id="sca-h-strong"><stop offset="0" stop-color="#6FE89B" stop-opacity="0.5"/><stop offset="0.5" stop-color="#6FE89B" stop-opacity="0.42"/><stop offset="1" stop-color="#6FE89B" stop-opacity="0"/></radialGradient>' +
+      '<radialGradient id="sca-h-partial"><stop offset="0" stop-color="#FFC64F" stop-opacity="0.5"/><stop offset="0.5" stop-color="#FFC64F" stop-opacity="0.42"/><stop offset="1" stop-color="#FFC64F" stop-opacity="0"/></radialGradient>' +
+      '<radialGradient id="sca-h-gap"><stop offset="0" stop-color="#FF7D7B" stop-opacity="0.5"/><stop offset="0.5" stop-color="#FF7D7B" stop-opacity="0.42"/><stop offset="1" stop-color="#FF7D7B" stop-opacity="0"/></radialGradient>' +
+      '<linearGradient id="sca-foot" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#050E1C" stop-opacity="0"/><stop offset="0.7" stop-color="#050E1C" stop-opacity="0.82"/><stop offset="1" stop-color="#050E1C"/></linearGradient>' +
+      '</defs>');
+    /* The light: the site's blue through the disk and warm close to the mark,
+       as /assess lights its own. */
+    s.push('<rect width="' + W + '" height="' + H + '" fill="url(#sca-glow)"/><rect width="' + W + '" height="' + H + '" fill="url(#sca-warm)"/>');
+
+    /* The stars. The same every time: the list is made from a fixed seed.
+       None beside the row of bodies, where a star would read as one. */
+    var rnd = lcg(20261121);
+    var ax = Math.cos(ARM) * cr - SQ * Math.sin(ARM) * sr, ay = Math.cos(ARM) * sr + SQ * Math.sin(ARM) * cr, al = Math.sqrt(ax * ax + ay * ay);
+    function clear(x, y, by) { return Math.abs((x - CX) * ay - (y - CY) * ax) / al >= by; }
+    for (i = 0; i < Math.round(W / 6); i++) {
+      var sx = rnd() * W, sy = rnd() * H, big = rnd() < 0.2, dim = 0.3 + rnd() * 0.4;
+      if (!clear(sx, sy, 15)) continue;
+      s.push('<circle cx="' + f(sx) + '" cy="' + f(sy) + '" r="' + (big ? '1.3' : '0.8') + '" fill="#E4EEFF" fill-opacity="' + f(big ? 0.92 : dim) + '"/>');
+    }
+    for (i = 0; i < 7; i++) {
+      var qx = 16 + rnd() * (W - 32), qy = 14 + rnd() * (H - 70), q = 3 + rnd() * 3;
+      if (!clear(qx, qy, 30) || Math.sqrt((qx - CX) * (qx - CX) + (qy - CY) * (qy - CY)) < sun * 3) continue;
+      s.push('<path d="M' + f(qx) + ' ' + f(qy - q) + 'L' + f(qx + q * 0.16) + ' ' + f(qy - q * 0.16) + 'L' + f(qx + q) + ' ' + f(qy) + 'L' + f(qx + q * 0.16) + ' ' + f(qy + q * 0.16) + 'L' + f(qx) + ' ' + f(qy + q) + 'L' + f(qx - q * 0.16) + ' ' + f(qy + q * 0.16) + 'L' + f(qx - q) + ' ' + f(qy) + 'L' + f(qx - q * 0.16) + ' ' + f(qy - q * 0.16) + 'Z" fill="#F2F7FF" fill-opacity="0.85"/>');
+    }
+
+    /* The orbits, all lit: each a bright line between two fainter ones, warm
+       near the mark and blue further out, with a few short bright streaks on
+       it, each orbit's from its own fixed seed. */
+    var turn = ' transform="rotate(' + f(deg) + ' ' + f(CX) + ' ' + f(CY) + ')"';
+    for (i = 0; i < N; i++) {
+      var t = i / (N - 1), rx = rr(i) * R;
+      var col = t < 0.2 ? '#F6E4BC' : t < 0.42 ? '#DCE4F2' : '#B8D1F6', op = 0.66 - t * 0.22;
+      [-spread, 0, spread].forEach(function (d, j) {
+        s.push('<ellipse fill="none" cx="' + f(CX) + '" cy="' + f(CY) + '" rx="' + f(rx + d) + '" ry="' + f((rx + d) * SQ) + '"' + turn +
+          ' stroke="' + col + '" stroke-opacity="' + f(j === 1 ? op : op * 0.4) + '" stroke-width="' + f((j === 1 ? 1.15 : 0.7) * lw) + '"/>');
+      });
+      var sd = lcg(977 + i * 7919);
+      var round = Math.PI * (3 * (rx + rx * SQ) - Math.sqrt((3 * rx + rx * SQ) * (rx + 3 * rx * SQ)));
+      var each = round / (4 + Math.floor(sd() * 4)), dash = (7 + sd() * 12) * 0.7, off = sd() * each;
+      s.push('<ellipse fill="none" cx="' + f(CX) + '" cy="' + f(CY) + '" rx="' + f(rx) + '" ry="' + f(rx * SQ) + '"' + turn +
+        ' stroke="#FBEFD2" stroke-opacity="0.9" stroke-width="' + f(1.7 * lw) + '" stroke-linecap="round" stroke-dasharray="' + f(dash) + ' ' + f(each - dash) + '" stroke-dashoffset="' + f(off) + '"/>');
+    }
+    /* The foot: the light and the orbits give way to the night before the
+       rows. The mark and the bodies are drawn after this, so they stay sharp. */
+    var fade = Math.min(56, 0.3 * H);
+    s.push('<rect y="' + f(H - fade) + '" width="' + W + '" height="' + f(fade) + '" fill="url(#sca-foot)"/>');
+
+    /* The mark: the sphere with its two pale loops and its gold ring, the ring
+       behind it and in front, with its own light round it. */
+    var GR = sun * 52 / 30, a0 = pt(GR, 0), a1 = pt(GR, Math.PI);
+    var front = 'M' + f(a0[0]) + ' ' + f(a0[1]) + ' A' + f(GR) + ' ' + f(GR * SQ) + ' ' + f(deg) + ' 0 1 ' + f(a1[0]) + ' ' + f(a1[1]);
+    s.push('<circle cx="' + f(CX) + '" cy="' + f(CY) + '" r="' + f(64 * su) + '" fill="url(#sca-mk)"/>');
+    s.push('<ellipse cx="' + f(CX) + '" cy="' + f(CY) + '" rx="' + f(GR) + '" ry="' + f(GR * SQ) + '"' + turn + ' fill="none" stroke="#E8C25E" stroke-opacity="0.7" stroke-width="' + f(Math.max(1.6, 3 * su)) + '"/>');
+    s.push('<circle cx="' + f(CX) + '" cy="' + f(CY) + '" r="' + f(sun) + '" fill="url(#sca-sun)" stroke="#DCEBFF" stroke-opacity="0.55" stroke-width="' + f(Math.max(0.7, su)) + '"/>');
+    s.push('<ellipse cx="' + f(CX - 9 * su) + '" cy="' + f(CY - 12 * su) + '" rx="' + f(10 * su) + '" ry="' + f(5.5 * su) + '" transform="rotate(-32 ' + f(CX - 9 * su) + ' ' + f(CY - 12 * su) + ')" fill="#FFFFFF" fill-opacity="0.30"/>');
+    s.push('<ellipse cx="' + f(CX) + '" cy="' + f(CY) + '" rx="' + f(39 * su) + '" ry="' + f(15 * su) + '" transform="rotate(64 ' + f(CX) + ' ' + f(CY) + ')" fill="none" stroke="#EAF2FF" stroke-opacity="0.72" stroke-width="' + f(Math.max(0.7, 1.1 * su)) + '"/>');
+    s.push('<ellipse cx="' + f(CX) + '" cy="' + f(CY) + '" rx="' + f(39 * su) + '" ry="' + f(19 * su) + '" transform="rotate(18 ' + f(CX) + ' ' + f(CY) + ')" fill="none" stroke="#EAF2FF" stroke-opacity="0.5" stroke-width="' + f(Math.max(0.6, su)) + '"/>');
+    s.push('<path d="' + front + '" fill="none" stroke="#F5D98A" stroke-opacity="0.3" stroke-width="' + f(Math.max(3, 6 * su)) + '" stroke-linecap="round"/>');
+    s.push('<path d="' + front + '" fill="none" stroke="#E8C25E" stroke-width="' + f(Math.max(1.6, 3 * su)) + '" stroke-linecap="round"/>');
+
+    /* The bodies' places, and beside the bodies the rows name, their numbers
+       (only where the rows are shown). */
+    var nx = -ay / al, ny = ax / al, labels = '';
+    if (ny < 0) { nx = -nx; ny = -ny; }
+    spot = [];
+    for (i = 0; i < N; i++) spot.push(pt(rr(i) * R, ARM));
+    if (S.named) rows.forEach(function (row) {
+      var k = parseInt(row.getAttribute('data-area'), 10);
+      if (!(k >= 1 && k <= N)) return;
+      p = spot[k - 1];
+      labels += '<text class="as-num" x="' + f(p[0] + nx * 13) + '" y="' + f(p[1] + ny * 13 + 3.4) + '" font-size="9.5" fill-opacity="0.95" stroke="#050E1C" stroke-width="2.4" stroke-opacity="0.85" stroke-linejoin="round" paint-order="stroke">' + k + '</text>';
+    });
+    s.push('<g class="as-bodies"></g>' + labels + '</svg>');
+
+    sky.style.width = W + 'px';
+    sky.style.height = H + 'px';
+    sky.style.marginLeft = (-W / 2) + 'px';
+    sky.innerHTML = s.join('');
+    card.classList.add('is-drawn');
+    bodiesEl = sky.querySelector('.as-bodies');
+    renderBodies(null);
+  }
+
+  /* Before the first specimen the bodies are unlit (the faint ring /assess
+     gives an area not yet reached), the rows wait and the score is 0, which
+     is how the markup has the rows and the score. With reduced motion the
+     first specimen stands from the start. */
+  var still = reduce.matches, shown = still ? scoreOf(PROFILES[0]) : 0, b;
+  for (b = 0; b < N; b++) state[b] = still ? STATUS[PROFILES[0].charAt(b)] : 'wait';
+  num.textContent = shown;
+  setRows(null);
+
+  /* WHEN IT IS DRAWN. At once, as this script runs: the markup above it is
+     laid out by then, and the page may already be on show while the scripts
+     held back for later are still arriving. Again a turn after the page has
+     been read and after it has loaded, behind the grid's own scripts, which
+     pin the tiles' heights then (both when the page has been read, the phone
+     script once more when it has loaded; they stand after this script, so
+     their listeners run after this one's), and when the fonts are in. A
+     drawing whose sizes have not changed is left as it is.
+     When the window's WIDTH changes the drawing keeps up with it, once a
+     frame, so a window being dragged never shows a sky too narrow or too
+     wide for its tile, and it is made once more 220ms after the last such
+     change. A change of height alone starts nothing: iPhone Safari fires
+     resize whenever its address bar grows or shrinks mid-scroll (the note
+     in the phone script below). */
+  draw();
+  function soon() { setTimeout(function () { draw(); }, 0); }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', soon);
+  window.addEventListener('load', soon);
+  if (document.fonts && document.fonts.ready && document.fonts.ready.then) document.fonts.ready.then(function () { draw(); });
+  var seenW = window.innerWidth, frame = 0, rz;
+  function settle() { clearTimeout(rz); rz = setTimeout(function () { draw(); }, 220); }
+  window.addEventListener('resize', function () {
+    if (window.innerWidth === seenW) return;
+    seenW = window.innerWidth;
+    if (!frame && window.requestAnimationFrame) frame = requestAnimationFrame(function () { frame = 0; draw(); });
+    settle();
+  }, { passive: true });
+  if (reduce.addEventListener) reduce.addEventListener('change', settle);
+  /* WHEN THE ROOM MOVES. The tiles' heights are not this script's. The grid's
+     scripts pin them as the page is read and again after the window has been
+     resized, the fonts move the link by a pixel or two, and on a phone under
+     about 300px wide the link goes from two lines to one as the tile
+     spreads. So the card is watched. The observer is told of every change in
+     the card's size, the widen's and the spread's among them, and each time
+     it reads where the foot of the sky should be and does nothing more
+     unless that has moved; then the sky is made again at its new height,
+     with the widths it has. So the scroll effects on their own do not
+     redraw it. (One case apart: if reduced motion is switched off while the
+     page is open, the grid widens without having pinned its heights, the
+     room moves as it does, and the sky follows it.) */
+  if (window.ResizeObserver) new ResizeObserver(function () {
+    if (seen && Math.abs(foot() - seen.h) >= 0.75) draw(true);
+  }).observe(card);
+
+  if (still) return;
+
+  var visible = false, resume = null, idx = 0;
 
   function schedule(fn, ms) {
     setTimeout(function () {
@@ -3530,13 +3905,13 @@ html.vt-fw::view-transition-new(root) { animation-duration: 0.2s; }
   function cycle() {
     var p = PROFILES[idx % PROFILES.length];
     idx++;
-    paint(p);
-    var from = shown, steps = 22, i = 0;
-    shown = p.score;
+    paint(p, false);
+    var from = shown, to = scoreOf(p), steps = 22, i = 0;
+    shown = to;
     (function tick() {
       i++;
-      var t = 1 - Math.pow(1 - i / steps, 3);       /* easeOutCubic, tracks the ring's CSS ease */
-      num.firstChild.nodeValue = Math.round(from + (p.score - from) * t);
+      var t = 1 - Math.pow(1 - i / steps, 3);       /* easeOutCubic over 1.1s, most of it within the marks' 0.5s fade */
+      num.textContent = Math.round(from + (to - from) * t);
       if (i < steps) { schedule(tick, 50); return; }
       schedule(cycle, 3400);
     })();
@@ -3646,8 +4021,9 @@ html.vt-fw::view-transition-new(root) { animation-duration: 0.2s; }
        cannot desync it. Size and strength carry that one real distinction.
        This replaces a 300 degree hue sweep that was pure decoration and that
        put AI-8 at #BA5B4F and AI-9 at #BA854F, a hair from the published
-       Partial swatch --warn #B5751A, in the same 2x2 as the tile that teaches
-       that key. Colour on this page means conformity state or it means nothing. */
+       Partial swatch --warn #B5751A, in the same 2x2 as the tile that then
+       taught that key (the Assess tile, which showed it until 2026-11-22).
+       Colour on this page means conformity state or it means nothing. */
     var conditional = !!AREAS[i].tier;
     var size = conditional ? 7 : 9;
     var dotCol = conditional ? 'rgba(121,168,213,0.55)' : '#79A8D5';
